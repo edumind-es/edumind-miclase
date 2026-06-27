@@ -1,0 +1,651 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "economia-y-emprendimiento",
+    "curso": "4º",
+    "fuente": "iDoceo_economia-y-emprendimiento_4º.xlsx",
+    "generado": "2026-06-27"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al tiempo que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual. y."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Formula y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50064 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. de aprender a aprender. a aprender implica la capacidad de aceptarse y promover un crecimiento información eficazmente; colaborar con otros y gestionar el aprendizaje a lo largo de la frente a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir y de las demás personas, desarrollando halo rodea a través de la corresponsabilidad; C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50066 así como expresar empatía y abordar los operativos."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. que alumnas y alumnos puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y polítimundiales y el compromiso activo mundial. Incluye la alfabetización cívica, de una cultura democrática fundada en el crítica sobre los grandes problemas éticos de C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50067 de vida sostenible acorde con los objetivos de 2030. operativos."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. un enfoque vital dirigido a actuar soespecíficos necesarios para geAcerca estrategias que permiten adaptar la entrenar el pensamiento para analizar utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos para aprender, a arriesgar y a afronC.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50068 decisiones basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas expuestas a la acproyectos sostenible de valor social, cultural y operativos y."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Analizar y valorar las fortalezas y las debilidades propias y las de los demás, reflexionando sobre las aptitudes, gestionando de forma eficaz las emociones y las destrezas necesarias que promuevan una actitud vital creadora para adaptarse a entornos cambiantes y diseñar un proyecto personal único, con una actitud emprendedora que genere valor para los demás.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CC1",
+        "CE2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Utilizar estrategias de conformación de equipos, así como habilidades sociales, de comunicación e innovación ágil, aplicándolas con autonomía y motivación a las dinámicas de trabajo en distintos contextos, para constituir grupos de trabajo eficaces y descubrir el valor de cooperar con otras personas durante el proceso de ideación y desarrollo de soluciones emprendedoras.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE2"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Elaborar, con sentido ético y solidario, ideas y soluciones innovadoras y sostenibles que den respuesta a las necesidades locales y globales detectadas, utilizando metodologías ágiles de ideación y analizando tanto sus puntos fuertes y débiles como el impacto que puedan generar esas ideas en el entorno, para lograr la superación de retos relacionados con la preservación y con el cuidado del entorno natural, social, cultural y artística.",
+      "descriptores_ids": [
+        "STEM3",
+        "CC4",
+        "CE1",
+        "CE2",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Seleccionar y reunir los recursos disponibles en el proceso de desarrollo de la idea o solución creativa propuesta, conociendo los medios de producción y las fuentes financieras que proporcionan estos recursos y aplicando estrategias de captación de estos para poner en marcha el proyecto que lleve a la realidad la solución emprendedora.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD2",
+        "CE1",
+        "CE2"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Presentar y exponer ideas y soluciones creativas utilizando estrategias comunicativas ágiles y valorando la importancia de una comunicación efectiva y respetuosa para transmitir mensajes convincentes adecuados al contexto y a los objetivos concretos de cada situación y validar las ideas y las soluciones presentadas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CD3",
+        "CPSAA1",
+        "CC1",
+        "CE1",
+        "CE2"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Comprender aspectos básicos de la economía y de las finanzas, valorando críticamente el problema de la escasez de recursos y la necesidad de elegir, así como los principios de interacción social desde el punto de vista económico, para relacionar dichos aspectos con la búsqueda y planificación de los recursos necesarios en el desarrollo de la idea o de la solución emprendedora que afronte el reto expuesto de manera eficaz, equitativa y sostenible.",
+      "descriptores_ids": [
+        "CC1",
+        "CE1",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ7",
+      "descripcion": "Construir y analizar de manera cooperativa, autónoma y ágil prototipos innovadores y sostenibles, aplicando estrategias eficaces de diseño y ejecución, evaluando todas las fases del proceso de manera crítica y ética y validando los resultados obtenidos tanto para la mejora y perfeccionamiento de los prototipos creados como para el aprendizaje y el desarrollo personal y colectivo.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD5",
+        "CPSAA3",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Adaptarse a entornos complejos y crear un proyecto personal original y generador de valor, partiendo del autoconocimiento y tomando conciencia de que el proceso emprendedor constituye una forma de enriquecimiento y crecimiento personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Utilizar estrategias de análisis razonada de las fortalezas y debilidades personales y de la iniciativa y creatividad propia y de la de los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Gestionar de forma eficaz las emociones y las destrezas personales, promoviendo y desarrollando actitudes creativas, asumiendo el riesgo que supone un proyecto innovador y aprendiendo de los errores que cometemos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Poner en práctica las habilidades sociales de la persona emprendedora, de comunicación abierta, motivación, liderazgo y de cooperación e innovación ágil, tanto de manera presencial como a distancia, en distintos contextos de trabajo en equipo, valorando, respetando y asumiendo las aportaciones de los demás en las distintas dinámicas de trabajo en grupo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Superar los retos propuestos a partir de ideas y soluciones innovadoras y sostenibles, evaluando su impacto en la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Construir ideas creativas y sostenibles aplicando metodologías ágiles que faciliten la superación de los retos expuestos con sentido ético y solidario.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Validar las ideas y soluciones utilizando estrategias comunicativas ágiles adaptadas a cada situación comunicativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Presentar y exponer, con claridad y coherencia, las ideas y soluciones creativas, adquiriendo habilidades y técnicas de expresión oral con apoyo audiovisual en la puesta en común de estas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Adaptarse a entornos complejos y crear un proyecto personal original y generador de valor, partiendo de la valoración crítica sobre las propias aptitudes y las posibilidades creativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Gestionar de forma eficaz las emociones y las destrezas personales promoviendo y desarrollando actitudes creativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Preservar y cuidar el entorno natural, social, cultural y artística a partir de propuestas y actuaciones locales y globales que promuevan el desarrollo sostenible, con visión creativa, emprendedora y comprometida.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Proponer ideas y soluciones innovadoras y sostenibles, evaluando el impacto que puedan generar en el ámbito personal y en el entorno y aplicando metodologías ágiles para la obtención de soluciones a las necesidades detectadas con sentido ético y solidario.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Afrontar los retos en distintos contextos y situaciones, reales o simuladas, transfiriendo los conocimientos económicos y financieros necesarios y siendo consciente de la importancia para la persona emprendedora de la capacidad de anticipación a los cambios del entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Valorar críticamente el problema económico de la escasez de recursos, la necesidad de elegir y la propuesta de soluciones que supongan un mejor aprovechamiento de los recursos y la reutilización circular de los destrozos generados que contribuyan a la sostenibilidad del sistema.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Constituir equipos de trabajo basados en principios de equidad, coeducación e igualdad entre hombres y mujeres, actitud participativa y visualización de metas comunes, utilizando estrategias que faciliten la identificación y la optimización de los recursos humanos necesarios que conduzcan a la consecución del reto propuesto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Poner en práctica habilidades sociales, de comunicación abierta, motivación, liderazgo y de cooperación en distintos contextos de trabajo en equipo, valorando las aportaciones de los demás en las distintas dinámicas de trabajo y respetando las decisiones tomadas de forma colectiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Planificar y poner en marcha un proyecto viable que lleve a la realidad una solución emprendedora, seleccionando y reuniendo los recursos materiales, inmateriales y digitales más adecuados a nuestro proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar con autonomía estrategias de captación y gestión de recursos conociendo sus características y aplicándolas al proceso de conversión de las ideas y soluciones en acciones y planificando con coherencia su organización, distribución, uso y optimización.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Presentar y exponer, con claridad y coherencia, ideas y soluciones creativas, con el fin de captar recursos para la financiación y el mecenazgo de este.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Desarrollar una idea o una solución emprendedora viendo la relación entre los conocimientos adquiridos y los recursos necesarios y disponibles que permitan su desarrollo, identificando los más adecuados en distintos contextos y situaciones, reales o simuladas y aplicando los conocimientos económicos y financieros necesarios.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Adaptarse a entornos complejos con un proyecto personal original y generador de valor, logrando progresivamente el control consciente de las emociones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Superar los retos propuestos a partir de ideas y soluciones innovadoras y sostenibles, evaluando su impacto en el ámbito personal y en el entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Poner en marcha un proyecto viable analizando los recursos materiales, inmateriales y digitales disponibles en el proceso de ideación creativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar con autonomía estrategias de captación y de gestión de recursos conociendo sus características y aplicándolas al proceso de conversión de las ideas y soluciones en acciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Validar las ideas y las soluciones presentadas mediante mensajes convincentes y adecuados, con el fin de presentar y exponer, con claridad y coherencia, las ideas y las soluciones creativas, manteniendo una comunicación eficaz y respetuosa a lo largo de todo el proceso llevado a cabo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Desarrollar una idea o una solución emprendedora a partir de los conocimientos, destrezas y actitudes adquiridos desde el ámbito de la economía y de las finanzas, viendo la relación entre estos y los recursos necesarios y disponibles que permitan su desarrollo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.7",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Conocer y comprender con precisión los contenidos necesarios del ámbito económico y financiero aplicándolos con coherencia a situaciones, actividades o proyectos concretos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.8",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Afrontar los retos de manera eficaz, equitativa y sostenible, en distintos contextos aplicando los conocimientos económicos y financieros necesarios.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.9",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Utilizar estrategias eficaces de diseño y ejecución del prototipo final utilizando métodos de trabajo ágiles, cooperativos y autónomos, analizando de manera crítica el proceso de diseño y ejecución llevado a cabo y valorando su viabilidad y adecuación empleada en la construcción de este.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. El perfil de la persona emprendedora, iniciativa y creatividad"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. El entorno como fuente de ideas y de oportunidades"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Recursos para llevar a cabo un proyecto emprendedor"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. La realización del proyecto emprendedor"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La importancia económica y social de la persona emprendedora.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "El perfil de la persona emprendedora: habilidades.",
+      "criterios_ids": [
+        "CE1.4",
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "– Autoconfianza, autoconocimiento, empatía, perseverancia, iniciativa y resiliencia.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "– Técnicas de diagnóstico de debilidades y fortalezas internas. Análisis DAFO de la persona emprendedora.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "– Creatividad, ideas y soluciones. La innovación ágil.",
+      "criterios_ids": [
+        "CE1.7",
+        "CE1.5",
+        "CE3.5",
+        "CE4.2",
+        "CE4.4",
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "– Comunicación, motivación y liderazgo de la persona emprendedora. Habilidades sociales. Dinámicas de trabajo en grupo.",
+      "criterios_ids": [
+        "CE1.4",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "– Gestión de emociones. La importancia de la motivación para emprender. Estrategias de gestión de la incertidumbre y toma de decisiones en contextos cambiantes. El error y la validación como oportunidades para aprender.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La economía como ciencia. La perspectiva económica del entorno. El problema económico: la escasez de recursos y la necesidad de elegir. La elección en economía: costes, análisis marginal, incentivos. El comportamiento de las personas en las decisiones.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "El entorno económico-empresarial. Los agentes económicos y el flujo circular de la renta.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "El funcionamiento de los mercados. Comercio, bienestar y desigualdades.",
+      "criterios_ids": [
+        "CE4.9"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "El mercado y las oportunidades de negocio: análisis del entorno general o macroentorno; análisis del entorno específico o microentorno. Análisis DAFO de proyectos empresariales. Estrategias de exploración del entorno. Búsqueda y gestión de la información.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "El sistema financiero.",
+      "criterios_ids": [
+        "CE4.7"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La empresa y su responsabilidad social. La decisión empresarial y la innovación como fuente de transformación social.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "El impacto de la actividad empresarial: la responsabilidad social corporativa. El entorno social, cultural y ambiental desde una perspectiva económica. La economía colaborativa. La huella ecológica y la economía circular. La economía social y solidaria. Los objetivos de desarrollo sostenible (ODS) y el desarrollo local.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Sectores productivos y géneros del entorno cultural y artístico. Agentes que apoyan la creación de proyectos culturales emprendedores.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La visión emprendedora.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Misión, visión y valores de la empresa o entidad: la cultura empresarial. La organización y la gestión de las entidades emprendedoras. Funciones de la empresa.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Los equipos en las empresas y organizaciones. Estrategias ágiles de trabajo en equipo. Formación y funcionamiento de equipos de trabajo. Estrategias de comunicación, negociación y solución de conflictos.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE1.7",
+        "CE4.9"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Las finanzas de la persona emprendedora: control y gestión del dinero. Fuentes y control de ingresos y gastos. Recursos financieros a corto y a largo plazo y su relación con el bienestar financiero. El endeudamiento. Fuentes de financiación y captación de recursos financieros. La gestión del riesgo financiero y los seguros.",
+      "criterios_ids": [
+        "CE4.6",
+        "CE3.6",
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "El reto o el desafío como objetivo.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Planificación, gestión y ejecución de un proyecto emprendedor. Del reto al prototipo.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Desarrollo ágil del producto.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas y herramientas de prototipado rápido.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Métodos de análisis de la competencia. Estrategias competitivas.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Mercadotecnia del producto. Presentación e introducción del prototipo en el entorno. Estrategias de difusión.",
+      "criterios_ids": [
+        "CE4.9"
+      ]
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Validación y testeo de prototipos. Valoración del proceso de trabajo. Innovación ágil.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Estudio de viabilidad del producto y elección de forma jurídica.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "El usuario como destinatario final del prototipo. La toma de decisiones de los usuarios. El usuario como consumidor. Derechos y obligaciones de los consumidores.",
+      "criterios_ids": [
+        "CE4.9"
+      ]
+    }
+  ]
+}

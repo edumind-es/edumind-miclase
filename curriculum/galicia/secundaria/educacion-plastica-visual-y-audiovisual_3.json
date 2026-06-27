@@ -1,0 +1,513 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "educacion-plastica-visual-y-audiovisual",
+    "curso": "3º",
+    "fuente": "iDoceo_educacion-plastica-visual-y-audiovisual_3º.xlsx",
+    "generado": "2026-06-27"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al tiempo que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Formula y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50064 operativos."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50065 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. de aprender a aprender. a aprender implica la capacidad de aceptarse y promover un crecimiento información eficazmente; colaborar con otros y gestionar el aprendizaje a lo largo de la frente a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir y de las demás personas, desarrollando halo rodea a través de la corresponsabilidad; C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50066 así como expresar empatía y abordar los operativos."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. que alumnas y alumnos puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y polítimundiales y el compromiso activo mundial. Incluye la alfabetización cívica, de una cultura democrática fundada en el crítica sobre los grandes problemas éticos de C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50067 de vida sostenible acorde con los objetivos de 2030. operativos."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y contraria a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan. y."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II las materias etapa de la educación secundaria obligatoria del Medio Natural, Social y Cultural el desarrollo de la curiosidad y la actitud crítiC.494-1998 https://www.xunta.gal/diario-oficial-galicia."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Comprender la importancia que tuvieron en el desarrollo del ser humano algunos ejemplos seleccionados de las distintas manifestaciones culturales y artísticas, mostrando interés por el patrimonio como parte de la propia cultura, para entender cómo se convierten en el testimonio de los valores y de las convicciones de cada persona y de la sociedad en su conjunto, y para reconocer la necesidad de su protección y de su conservación.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Explicar las producciones plásticas, visuales y audiovisuales propias, comparándolas con las de sus iguales y con algunas de las que conforman el patrimonio cultural y artístico, justificando las opiniones y teniendo en cuenta el progreso desde la intención hasta la realización, para valorar el intercambio, las experiencias compartidas y el diálogo intercultural, así como para superar estereotipos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Analizar diferentes propuestas plásticas, visuales y audiovisuales, mostrando respeto y desarrollando la capacidad de observación e interiorización de la experiencia y de la satisfacción estética, para enriquecer la cultura artística individual y alimentar el imaginario propio.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD1",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Explorar las técnicas, los lenguajes y las intenciones de diferentes producciones culturales y artísticas, analizando, de forma abierta y respetuosa tanto el proceso como el producto final, su recepción y su contexto, para descubrir las posibilidades que ofrecen como fuente generadora de ideas y respuestas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Realizar producciones artísticas individuales o colectivas con creatividad e imaginación, seleccionando y aplicando herramientas, técnicas y soportes en función de la intencionalidad, para expresar la visión del mundo, las emociones y los sentimientos propios, así como para mejorar la capacidad de comunicación y desarrollar la reflexión crítica y la autoconfianza.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Apropiarse de las referencias culturales y artísticas del entorno, identificando sus singularidades, para enriquecer las creaciones propias y desarrollar la identidad personal, cultural y social.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ7",
+      "descripcion": "Aplicar las técnicas, los recursos y las convenciones principales de los lenguajes artísticos, incorporando de forma creativa las posibilidades que ofrecen las tecnologías, para integrarlas y enriquecer el diseño y la realización de un proyecto artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM3",
+        "CD1",
+        "CD5",
+        "CC1",
+        "CC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ8",
+      "descripcion": "Compartir producciones y manifestaciones artísticas, adaptando el proyecto a la intención y a las características del público destinatario, para valorar distintas oportunidades de desarrollo personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer los factores históricos y sociales que rodean las producciones plásticas, visuales y audiovisuales más relevantes, así como su función y su finalidad, y describir sus particularidades y su papel como transmisoras de conceptos, valores y convicciones, con interés y respeto, desde una perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Valorar la importancia de la conservación del patrimonio cultural y artístico universal y gallego a través del conocimiento y el análisis guiado de obras de arte.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Analizar diversas producciones artísticas y culturales, incluidas las propias y las de sus iguales, desarrollando con interés una visual estética hacia el mundo y respetando la diversidad de las expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Seleccionar y describir propuestas plásticas, visuales y audiovisuales de diversos tipos y épocas, analizarlas con curiosidad y respeto desde una perspectiva de género, e incorporarlas a su cultura personal y su imaginario propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Argumentar la satisfacción producida por la recepción del arte en todas sus formas y vertientes, compartiendo con respeto impresiones y emociones, y expresar la opinión personal de forma abierta.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Explicar su pertenencia a un contexto cultural concreto, a través del análisis de los aspectos formales y de los factores sociales que determinan diversas producciones culturales y artísticas actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Analizar de manera guiada las especificidades de los lenguajes de diferentes producciones culturales y artísticas, estableciendo conexiones entre ellas, e incorporarlas con creatividad en las producciones propias.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Expresar conceptos, ideas y sentimientos en diferentes producciones plásticas y visuales, a través de la experimentación con diversas herramientas, técnicas y soportes, desarrollando la capacidad de comunicación y la reflexión crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Explicar, de forma razonada, la importancia del proceso que media entre la realidad, lo imaginario y la producción, superando estereotipos y mostrando un comportamiento respetuoso con la diversidad cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Realizar un proyecto gráfico-plástico, con creatividad y de manera consciente, ajustándose al objetivo propuesto, experimentando con distintas técnicas visuales en la generación de mensajes propios, y mostrando iniciativa en el empleo de lenguajes, materiales, soportes y herramientas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Reconocer los rasgos particulares de diversas técnicas y lenguajes artísticos, así como sus procesos y resultados en función de los contextos sociales, históricos, geográficos y tecnológicos, procurando y analizando la información con interés y eficacia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Expresar conceptos, ideas y sentimientos en diferentes producciones plásticas y visuales, a través de la experimentación con diversas herramientas, técnicas y soportes, desarrollando la capacidad de comunicación y la reflexión crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Utilizar con creatividad referencias culturales y artísticas del entorno en la elaboración de producciones propias, mostrando una visión personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Realizar un proyecto artístico, con creatividad y de manera consciente, ajustándose al objetivo propuesto, experimentando con distintas técnicas visuales en la generación de mensajes propios, y mostrando iniciativa en el empleo de lenguajes, materiales, soportes y herramientas de creación gráfico-plástica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Exponer los procesos de elaboración y el resultado final de producciones gráfico-plásticas, realizadas de forma individual o colectiva, reconociendo los errores, procurando las soluciones y las estrategias más adecuadas para mejorarlas, y valorando las oportunidades de desarrollo personal que ofrecen.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Analizar de manera guiada diversas producciones visuales y audiovisuales, incluidas las propias y las de sus iguales, desarrollando con interés una visual estética hacia el mundo y respetando la diversidad de las expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Reconocer los rasgos particulares de diversas técnicas y lenguajes visuales y audiovisuales, así como sus procesos y resultados en función de los contextos sociales, históricos, geográficos y tecnológicos, procurando y analizando la información con interés y eficacia.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Utilizar con creatividad referencias culturales y artísticas del entorno en la elaboración de producciones audiovisuales propias, mostrando una visión personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Realizar un proyecto audiovisual con creatividad y de manera consciente, ajustándose al objetivo propuesto, experimentando con distintas técnicas visuales o audiovisuales en la generación de mensajes propios, y mostrando iniciativa en el empleo de lenguajes, materiales, soportes y herramientas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Reconocer los diferentes usos y las funciones de las producciones y de las manifestaciones visuales y audiovisuales, y argumentar de forma individual o colectiva sus conclusiones acerca de las oportunidades que pueden generar, con una actitud abierta y con interés por conocer su importancia en la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Exponer los procesos de elaboración y el resultado final de producciones audiovisuales, realizadas de forma individual o colectiva, reconociendo los errores, buscando las soluciones y las estrategias más adecuadas para mejorarlas, y valorando las oportunidades de desarrollo personal que ofrecen.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Patrimonio artístico y cultural."
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Elementos formales de la imagen y del lenguaje visual. La expresión gráfica"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Expresión gráfico-plástica y técnica: fundamentos y procedimientos"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Imagen y comunicación visual y audiovisual"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Los géneros artísticos.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Manifestaciones culturales y artísticas clave a lo largo de la historia, incluidas las contemporáneas y las pertenecientes al patrimonio local: análisis de sus aspectos formales y de su contexto histórico. Particularidades del patrimonio artístico gallego.",
+      "criterios_ids": [
+        "CE1.6",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Las formas geométricas en el arte y en el entorno: geometría en la naturaleza, la arquitectura y el diseño de objetos cotidianos.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Posibilidades expresivas y comunicativas de los elementos visuales: elementos básicos, forma, color y textura.",
+      "criterios_ids": [
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La percepción visual. Introducción a los principios perceptivos, elementos y factores.",
+      "criterios_ids": [
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La composición. Conceptos de equilibrio, proporción y ritmo aplicados a la organización de formas en el plano y en el espacio.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas básicas de expresión gráfico-plástica en dos dimensiones. Técnicas secas y húmedas. Su uso en el arte y sus características expresivas.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas básicas de expresión gráfico-plástica en tres dimensiones. Su uso en el arte y sus características expresivas.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "El proceso creativo a través de operaciones plásticas: manipular, reproducir, aislar, transformar y asociar.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Introducción a los sistemas de representación. Sistema diédrico: vistas. El croquis isométrico.",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Factores y etapas del proceso creativo. Elección de materiales y técnicas, realización. El croquis.",
+      "criterios_ids": [
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Imágenes visuales y audiovisuales: lectura y análisis.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE1.4",
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Imagen en movimiento. Características, origen y evolución. El cine y la animación.",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas básicas para la realización de producciones audiovisuales sencillas, de manera individual o en grupo. Experimentación en entornos virtuales de aprendizaje.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE2.2",
+        "CE4.1",
+        "CE4.6",
+        "CE4.5",
+        "CE4.4"
+      ]
+    }
+  ]
+}

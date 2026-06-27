@@ -1,0 +1,568 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "tecnologia",
+    "curso": "4º",
+    "fuente": "iDoceo_tecnologia_4º.xlsx",
+    "generado": "2026-06-27"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual. y."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones coy nocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y replanteando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, haciéndose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica sobre el alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Formula y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50064 operativos."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostracioy nes, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esy quemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemáticoformal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. saludable, sostenible, crítico y responsable para el trabajo y para la participación en la y datos, la comunicación y la colaboración, la digitales (incluida la programación), la serelacionadas con la ciberseguridigital, la privacidad, la propiedad intelectual, computacional y crítico. operativos."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50065 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medio ambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. de aprender a aprender. a aprender implica la capacidad de aceptarse y promover un crecimiento información eficazmente; colaborar con otros y gestionar el aprendizaje a lo largo de la frente a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir y de las demás personas, desarrollando halo rodea a través de la corresponsabilidad; C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50066 así como expresar empatía y abordar los operativos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. que alumnas y alumnos puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y polítimundiales y el compromiso activo mundial. Incluye la alfabetización cívica, de una cultura democrática fundada en el crítica sobre los grandes problemas éticos de C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50067 de vida sostenible acorde con los objetivos de 2030. operativos."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. un enfoque vital dirigido a actuar soespecíficos necesarios para geAcerca estrategias que permiten adaptar la entrenar el pensamiento para analizar utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos para aprender, a arriesgar y a afronC.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50068 decisiones basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas expuestas a la acproyectos sostenible de valor social, cultural y operativos y."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II las materias etapa de la educación secundaria obligatoria del Medio Natural, Social y Cultural el desarrollo de la curiosidad y la actitud crítiC.494-1998 https://www.xunta.gal/diario-oficial-galicia."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Identificar y proponer problemas tecnológicos con iniciativa y creatividad, estudiando las necesidades de su entorno próximo y aplicando estrategias y procesos colaborativos e iterativos relativos a proyectos, para idear y planificar soluciones de manera eficiente, accesible, sostenible e innovadora.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Aplicar de forma apropiada y segura distintas técnicas y conocimientos interdisciplinarios utilizando procedimientos y recursos tecnológicos, al tiempo que se analiza el ciclo de vida de productos para fabricar soluciones tecnológicas accesibles y sostenibles que den respuesta a las necesidades expuestas.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD2",
+        "CPSAA4",
+        "CC4",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Expresar, comunicar y difundir ideas, propuestas o soluciones tecnológicas en diferentes foros de manera efectiva con un lenguaje inclusivo y no sexista, empleando los recursos disponibles y aplicando los elementos y las técnicas necesarias para intercambiar la información de manera responsable y fomentar el trabajo en equipo.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM4",
+        "CD3",
+        "CPSAA3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Desarrollar soluciones automatizadas a problemas expuestos aplicando los conocimientos necesarios e incorporando tecnologías emergentes para diseñar y construir sistemas de control programables y robóticos.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Aprovechar y emplear de manera responsable las posibilidades de las herramientas digitales, adaptándolas a sus necesidades, configurándolas y aplicando conocimientos interdisciplinarios para la resolución de tareas de una manera más eficiente.",
+      "descriptores_ids": [
+        "CP2",
+        "CD2",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Analizar procesos tecnológicos, teniendo en cuenta su impacto en la sociedad y el entorno aplicando criterios de sostenibilidad y accesibilidad, para hacer un uso ético y ecosocialmente responsable de la tecnología.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Idear y planificar soluciones tecnológicas emprendedoras que generen un valor para la comunidad a partir de la observación y del análisis del entorno más próximo, estudiando sus necesidades, requisitos y posibilidades de mejora.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Aplicar con iniciativa estrategias colaborativas de gestión de proyectos con una perspectiva interdisciplinaria y siguiendo un proceso iterativo de validación desde la fase de ideación hasta la difusión de la solución.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Abordar la gestión del proyecto de forma creativa, aplicando estrategias y técnicas colaborativas idóneas, así como métodos de investigación para la ideación de soluciones lo más eficientes, accesibles e innovadoras posibles.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Analizar el diseño de un producto que dé respuesta a una necesidad expuesta, evaluando su demanda, evolución y previsión de fin de ciclo de vida, con un criterio ético, responsable e inclusivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Intercambiar información y fomentar el trabajo en equipo de manera asertiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Analizar los beneficios que, en el cuidado del entorno, acercan la arquitectura bioclimática y el eco-transporte, valorando la contribución de las tecnologías al desarrollo sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Identificar y valorar la repercusión y los beneficios del desarrollo de proyectos tecnológicos de carácter social por medio de comunidades abiertas, acciones de voluntariado o proyectos de servicio a la comunidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Fabricar productos y soluciones tecnológicas aplicando herramientas de diseño asistido, técnicas de elaboración manual, mecánica y digital y utilizando los materiales y recursos mecánicos, eléctricos, electrónicos y digitales adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Hacer un uso responsable de la tecnología, mediante el análisis y la aplicación de criterios de sostenibilidad y accesibilidad en la selección de los materiales y en su diseño, así como en los procesos de fabricación de productos tecnológicos, minimizando el impacto negativo sobre la sociedad y el medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Diseñar, construir, controlar y/o simular sistemas automáticos o robots que sean capaces de realizar tareas de forma autónoma, aplicando conocimientos de mecánica, electrónica, neumática y componentes de los sistemas de control, así como otros conocimientos interdisciplinarios.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Utilizar vocabulario técnico, símbolos y esquemas de sistemas tecnológicos apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Automatizar procesos, máquinas y sistemas, mediante el análisis, la programación de robots y los sistemas de control.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar, con sentido crítico y ético, aplicaciones informáticas y tecnologías digitales de control y simulación como el internet de las cosas, el big data y/o la inteligencia artificial.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Resolver tareas propuestas de manera eficiente mediante el uso y la configuración de diferentes aplicaciones y herramientas digitales, aplicando conocimientos interdisciplinarios con autonomía.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Crear contenidos, elaborar materiales y difundirlos en distintas plataformas, configurando correctamente las herramientas digitales habituales del entorno de aprendizaje, ajustándolas a sus necesidades y respetando los derechos de autor.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Presentar y difundir las propuestas o soluciones tecnológicas de manera efectiva, empleando la entonación, expresión, gestión del tiempo y adaptación adecuado del discurso, así como un lenguaje inclusivo y no sexista.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Organizar la información de manera estructurada aplicando técnicas de almacenamiento seguro.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. El proyecto tecnológico"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Diseño y fabricación"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Elementos de máquinas, sistemas y robots"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Programación, automatización y robótica"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque 5. Documentación y comunicación digital"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Aplicación de técnicas de ideación, estrategias de gestión de proyectos colaborativos y técnicas de resolución de problemas iterativas utilizando vocabulario técnico acomodado.",
+      "criterios_ids": [
+        "CE1.3",
+        "CE1.2",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estudio de necesidades del centro, locales, regionales, etc. Diseño de proyectos colaborativos o cooperativos.",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Emprendimiento, perseverancia, iniciativa y creatividad en la resolución de problemas desde una perspectiva interdisciplinaria de la actividad tecnológica y satisfacción e interés por el trabajo y la calidad de este.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Ciclo de vida de un producto y sus fases. Análisis sencillos.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Tecnología sostenible: ahorro energético en el transporte y en las edificaciones. Arquitectura bioclimática.",
+      "criterios_ids": [
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Comunidades abiertas, voluntariado tecnológico y proyectos de servicio a la comunidad.",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de selección de materiales en base a sus propiedades o requisitos.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Sostenibilidad y accesibilidad en la selección de materiales y en el diseño de procesos, productos y sistemas tecnológicos.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas de diseño asistido por ordenador en tres dimensiones en la representación y/o fabricación de piezas aplicadas a proyectos.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas de fabricación manual y mecánica. Aplicaciones prácticas.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas de fabricación digital. Impresión en tres dimensiones y corte. Aplicaciones prácticas.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Electrónica analógica. Componentes básicos, simbología, análisis de circuitos elementales.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Electrónica digital básica. Componentes básicos. Resolución de problemas lógicos y circuitos.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Neumática básica. Componentes y circuitos básicos.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Diseño, montaje físico y/o simulado de circuitos electrónicos y/o neumáticos elementales, enfocado a la resolución de problemas técnicos y proyectos.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Componentes de sistemas de control programado: controladores, sensores y actuadores. Elementos mecánicos, electrónicos y neumáticos aplicados a la robótica.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Diseño y montaje físico o simulado de un sistema automático o robot.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "El ordenador y los dispositivos móviles como elementos de programación y control.",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Trabajo con simuladores informáticos en la verificación y comprobación del funcionamiento de los sistemas diseñados.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Robótica. Control de robots sencillos de manera física o simulada.",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Telecomunicaciones en sistemas de control digital. El internet de las cosas: elementos, comunicaciones y control. Aplicaciones prácticas.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Iniciación a la inteligencia artificial y al big data: aplicaciones prácticas. Espacios compartidos y discos virtuales.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Vocabulario técnico apropiado.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Presentación y difusión del proyecto empleando herramientas digitales y audiovisuales. Elementos, técnicas y herramientas.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE4.3",
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Comunicación efectiva: entonación, expresión, gestión del tiempo, adaptación del discurso y uso de un lenguaje inclusivo, libre de estereotipos sexistas.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Propiedad intelectual.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Técnicas de tratamiento, organización y almacenamiento seguro de la información. Copias de seguridad.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    }
+  ]
+}

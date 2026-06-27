@@ -1,0 +1,882 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "biologia-y-geologia",
+    "curso": "3º",
+    "fuente": "iDoceo_biologia-y-geologia_3º.xlsx",
+    "generado": "2026-06-27"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al tiempo que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50062 distintas lenguas, orales o signadas, de fory la comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre lenmantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e y respetar la diversidad lingüística y cultural de democrática. operativos."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones coy nocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y replanteando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, haciéndose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica sobre el alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Formula y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50064 operativos."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostracioy nes, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esy quemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemáticoformal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. saludable, sostenible, crítico y responsable para el trabajo y para la participación en la y datos, la comunicación y la colaboración, la digitales (incluida la programación), la serelacionadas con la ciberseguridigital, la privacidad, la propiedad intelectual, computacional y crítico. operativos."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50065 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medio ambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. de aprender a aprender. a aprender implica la capacidad de aceptarse y promover un crecimiento información eficazmente; colaborar con otros y gestionar el aprendizaje a lo largo de la frente a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir y de las demás personas, desarrollando halo rodea a través de la corresponsabilidad; C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50066 así como expresar empatía y abordar los operativos."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de y vida saludable en los ámbitos físico y mental, recoo noce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. que alumnas y alumnos puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y polítimundiales y el compromiso activo mundial. Incluye la alfabetización cívica, de una cultura democrática fundada en el crítica sobre los grandes problemas éticos de C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50067 de vida sostenible acorde con los objetivos de 2030. operativos."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y contraria a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. un enfoque vital dirigido a actuar soespecíficos necesarios para geAcerca estrategias que permiten adaptar la entrenar el pensamiento para analizar utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos para aprender, a arriesgar y a afronC.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50068 decisiones basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas expuestas a la acproyectos sostenible de valor social, cultural y operativos y."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II las materias etapa de la educación secundaria obligatoria del Medio Natural, Social y Cultural el desarrollo de la curiosidad y la actitud crítiC.494-1998 https://www.xunta.gal/diario-oficial-galicia."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Interpretar y transmitir información y datos científicos argumentando sobre ellos y utilizando diferentes formatos para analizar conceptos y procesos de las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Identificar, localizar y seleccionar información, contrastando su veracidad, organizándola y evaluándola críticamente para resolver preguntas relacionadas con las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Planificar y desarrollar proyectos de investigación, siguiendo los pasos de las metodologías científicas y cooperando cuándo sea necesario para indagar en aspectos relacionados con las ciencias geológicas y biológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Utilizar el razonamiento y el pensamiento computacional, analizando críticamente las respuestas y soluciones y replanteando el procedimiento, si es necesario, para resolver problemas o dar explicación a procesos de la vida cotidiana relacionados con la biología y con la geología.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD5",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Analizar los efectos de determinadas acciones sobre el medio ambiente y la salud basándose en los fundamentos de las ciencias biológicas y de la Tierra para promover y adoptar hábitos que eviten o minimicen los impactos ambientales negativos, que sean compatibles con un desarrollo sostenible y que permitan mantener y mejorar la salud individual y colectiva.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CC4",
+        "CE1",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Analizar los elementos de un paisaje concreto valorándolo como patrimonio natural y utilizando conocimientos sobre geología y ciencias de la Tierra para explicar su historia geológica, proponer acciones encaminadas a su protección e identificar posibles riesgos naturales.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Analizar y explicar conceptos y procesos biológicos y geológicos interpretando la información obtenida en diferentes formatos (modelos, gráficos, tablas, diagramas, fórmulas, esquemas, símbolos, páginas web...), manteniendo una actitud crítica y llegando a conclusiones fundamentadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Resolver cuestiones sobre biología y geología localizando, seleccionando y organizando información mediante la citación y el uso correctos de distintas fuentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Exponer preguntas e hipótesis e intentar realizar predicciones sobre fenómenos biológicos o geológicos que puedan ser respondidas o contrastadas utilizando métodos científicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Reconocer la información sobre temas biológicos y geológicos con base científica distinguiéndola de pseudociencias, bulos, teorías conspiradoras y creencias infundadas... y manteniendo una actitud escéptica ante estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Diseñar y realizar la experimentación, la toma de datos y el análisis de fenómenos biológicos y geológicos de modo que permitan responder preguntas concretas y contrastar una hipótesis expuesta.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Presentar las conclusiones del proyecto de investigación mediante las herramientas digitales y el formato adecuado (tablas, gráficos, informes...) interpretando los resultados y la información obtenida a través de la experimentación y de la observación de campo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Cooperar dentro de un proyecto científico asumiendo responsablemente una función concreta, utilizando espacios virtuales cuando sea necesario, respetando la diversidad y la igualdad de género y favoreciendo la inclusión.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Valorar la contribución de la ciencia a la sociedad y la labor de personas dedicadas a ella con independencia de su etnia, sexo o cultura, destacando y reconociendo el papel de las mujeres científicas y entendiendo la investigación como una labor colectiva e interdisciplinar en constante evolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Clasificar los riesgos empleando como criterio las causas naturales que los producen.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Analizar los riesgos naturales a través de los factores de riesgo valorando la importancia de las medidas de predicción y prevención.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Explicar el origen y la distribución de la actividad sísmica y volcánica en la Tierra y los tipos de erupciones volcánicas, integrándolas con la teoría de la tectónica de placas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Valorar la importancia del análisis del riesgo sísmico y volcánico y las medidas de predicción y prevención para minimizar sus efectos, buscando y aportando ejemplos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Localizar las áreas con riesgo sísmico en Galicia seleccionando información mediante el uso correcto de diferentes fuentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Analizar y comprender la información sobre procesos biológicos o trabajos científicos transmitiéndola de forma clara y utilizando la terminología y el formato adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer la célula como la unidad estructural y funcional de los seres vivos a través del conocimiento de los postulados de la teoría celular.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Diferenciar las estructuras básicas de los diferentes tipos de células utilizando diferentes estrategias de observación y comparación y relacionándolas con sus funciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Describir los virus como formas acelulares causantes de algunas patologías en los humanos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Resolver problemas o explicar procesos biológicos utilizando conocimientos, datos e información proporcionados, el razonamiento lógico, el pensamiento computacional o recursos digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Analizar críticamente la solución a un problema sobre fenómenos biológicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar los aparatos y sistemas que participan en la función de nutrición.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reflexionar sobre la importancia de la alimentación y de la nutrición para el buen funcionamiento del organismo reconociendo las diferencias entre alimentación y nutrición y diferenciando los nutrientes y sus funciones básicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Explicar los procesos fundamentales de la nutrición relacionándolos con las estructuras de los aparatos y de los sistemas que intervienen en ella.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer los órganos, aparatos y sistemas que intervienen en la función de relación estableciendo las diferencias y las funciones de cada uno y describiendo los principales procesos, órganos y estructura implicadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.7",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comprender la relación funcional entre el sistema nervioso y el sistema endócrino.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.8",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer los procesos de la reproducción humana identificando las estructuras del aparato reproductor y endócrino implicadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.9",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Reflexionar sobre la reproducción y la sexualidad valorando su propia sexualidad y la de las personas de su entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Resolver cuestiones relacionadas con hábitos de vida saludables localizando, seleccionando y organizando información mediante la citación y el uso correctos de distintas fuentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Reconocer la información con base científica sobre cuestiones relacionadas con la salud humana distinguiéndola de pseudociencias, boatos, teorías conspiradoras y creencias infundadas... y manteniendo una actitud escéptica ante estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Analizar críticamente la solución a un problema relacionado con la alimentación saludable, con las drogas y con la sexualidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reflexionar sobre la importancia de la adquisición de hábitos y estilos de vida saludables como método de prevención de dolencias ejemplificando con situaciones próximas al alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Analizar la importancia de una buena alimentación y actividad física percibiéndolos como hábitos saludables para el individuo y la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.6",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reconocer el sexo y la sexualidad desde la perspectiva de la igualdad entre hombres y mujeres y respetando la diversidad sexual.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.7",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reconocer las drogas (incluidas las de curso legal) considerándolas como causa de perjuicios no solo para las personas que las consumen, sino también para las que están en su entorno próximo.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Analizar conceptos y procesos relacionados con la salud y con la enfermedad interpretando información en diferentes formatos (modelos, gráficos, tablas, diagramas, fórmulas, esquemas, símbolos, páginas web…), manteniendo una actitud crítica y obteniendo conclusiones fundamentadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Reconocer la información con base científica en relación con la salud y con la enfermedad distinguiéndola de pseudociencias, boatos, teorías conspiradoras y creencias infundadas... y manteniendo una actitud escéptica ante estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Comparar las enfermedades infecciosas y no infecciosas identificando las medidas de prevención y los tratamientos que existen hasta el momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Analizar el funcionamiento y las estructuras que comprende el sistema inmunitario reconociendo su papel en la prevención y superación de las enfermedades infecciosas.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Proyecto científico"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Los riesgos geológicos internos"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. La célula"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Las funciones vitales en el ser humano"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque 5. Hábitos saludables"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque 6. Salud y enfermedad"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias para la elaboración del proyecto científico:",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "– Planteamiento de preguntas, hipótesis y conjeturas científicas.",
+      "criterios_ids": [
+        "CE1.3",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "– Estrategias de utilización de herramientas digitales para la búsqueda de información, la colaboración y la comunicación de procesos, resultados o ideas científicas: herramientas digitales y formatos de uso frecuente en ciencia (presentación, gráfica, vídeo, póster, informe...).",
+      "criterios_ids": [
+        "CE1.6",
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "– Reconocimiento y utilización de fuentes fidedignas de información científica.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE1.2",
+        "CE5.1",
+        "CE6.2",
+        "CE1.4",
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "– Métodos de observación y de toma de datos de fenómenos naturales.",
+      "criterios_ids": [
+        "CE1.5",
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "– Diseño de controles experimentales (positivos y negativos) y argumentación sobre su esencialidad para obtener resultados objetivos y fiables en un experimento.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "– La respuesta a cuestiones científicas mediante la experimentación y el trabajo de campo: utilización de los instrumentos y espacios necesarios (laboratorio, aulas, entorno...) de forma adecuada.",
+      "criterios_ids": [
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "– Métodos de análisis de resultados. Diferenciación entre correlación y causalidad.",
+      "criterios_ids": [
+        "CE4.7"
+      ]
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "– Modelado como método de representación y comprensión de procesos o elementos de la naturaleza.",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "La labor científica y las personas dedicadas a la ciencia: contribución a las ciencias biológicas y geológicas e importancia social. El papel de las mujeres en la ciencia.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Riesgos naturales:",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "– Definición y clasificación.",
+      "criterios_ids": [
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "– Análisis y planificación.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Actividad sísmica y volcánica en la Tierra en relación con la teoría de la tectónica de placas:",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "– Origen y distribución global de los terremotos y del vulcanismo en la Tierra.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "– Tipos de erupciones volcánicas.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Análisis del riesgo sísmico y volcánico. Medidas de predicción y prevención. El riesgo sísmico en Galicia.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La teoría celular. Reconocimiento de la célula como unidad estructural y funcional de los seres vivos:",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "– Estructura básica de la célula. Tipos de células: procariotas y eucariotas (animales y vegetales).",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Observación y comparación de tipos de células al microscopio y otros medios (vídeos, fotografías...) mediante distintas estrategias y destrezas.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Formas acelulares.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Función de nutrición: aparatos digestivo, respiratorio, circulatorio y excretor.",
+      "criterios_ids": [
+        "CE4.3"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "– Importancia de la nutrición y relación entre la anatomía y la fisiología básica de los aparatos que participan en ella.",
+      "criterios_ids": [
+        "CE4.3",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Función de relación: receptores sensoriales, centros de coordinación y órganos efectores.",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "– Análisis y visión general de la función de relación.",
+      "criterios_ids": [
+        "CE4.6",
+        "CE4.3",
+        "CE4.7"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Función de reproducción: aparato reproductor y sistema endócrino.",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "– Relación entre la anatomía y la fisiología básicas del aparato reproductor.",
+      "criterios_ids": [
+        "CE4.7",
+        "CE4.8",
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "– Reproducción y sexualidad.",
+      "criterios_ids": [
+        "CE4.9"
+      ]
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Cuestiones y problemas prácticos relacionados con conocimientos de fisiología y anatomía de los principales sistemas y aparatos del organismo implicados en las funciones de nutrición, relación y reproducción.",
+      "criterios_ids": [
+        "CE4.6",
+        "CE4.3",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Hábitos saludables con relación a la alimentación. Características de una dieta saludable y análisis de su importancia.",
+      "criterios_ids": [
+        "CE5.5"
+      ]
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Sexo y sexualidad desde la perspectiva de la igualdad entre los hombres y las mujeres y el respeto a la diversidad sexual. Importancia de la educación sexual integral como parte de un desarrollo armónico:",
+      "criterios_ids": [
+        "CE5.6"
+      ]
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "– Infecciones de transmisión sexual (ITS).",
+      "criterios_ids": [
+        "CE5.6"
+      ]
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "– Métodos de anticoncepción y prácticas sexuales responsables. La asertividad y el autocuidado.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "– Las relaciones afectivo-sexuales: ideas preconcebidas y estereotipos sexuales.",
+      "criterios_ids": [
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Efectos perjudiciales de las drogas legales e ilegales, tanto para los consumidores como para quien está en su entorno próximo.",
+      "criterios_ids": [
+        "CE5.7"
+      ]
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Hábitos encaminados a la conservación de la salud física, mental y social (higiene del sueño, hábitos posturales, uso responsable de las nuevas tecnologías, actividad física, autorregulación emocional, cuidado y corresponsabilidad...).",
+      "criterios_ids": [
+        "CE5.5"
+      ]
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Enfermedades infecciosas y no infecciosas:",
+      "criterios_ids": [
+        "CE6.3",
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "– Diferenciación en base a su etiología.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "– Medidas de prevención y tratamiento de enfermedades infecciosas.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "– El uso adecuado de los antibióticos.",
+      "criterios_ids": [
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Sistema inmunitario: análisis de los diferentes tipos de barreras y mecanismos de defensa que dificultan la entrada de patógenos al organismo.",
+      "criterios_ids": [
+        "CE6.4",
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "– Relación entre el sistema inmunitario y la prevención y superación frente a las enfermedades infecciosas.",
+      "criterios_ids": [
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Importancia de la vacunación en la prevención de enfermedades y en la mejora de la calidad de la vida humana.",
+      "criterios_ids": [
+        "CE5.4",
+        "CE6.3",
+        "CE2.2",
+        "CE6.4",
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Importancia de los trasplantes y de la donación de órganos.",
+      "criterios_ids": [
+        "CE5.5"
+      ]
+    }
+  ]
+}
