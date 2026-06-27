@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
+import QRModal from '@/components/QRModal'
 
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
@@ -136,6 +137,10 @@ function DetalleGrupo() {
   const { id } = useParams()
   const [grupo, setGrupo] = useState<any>(null)
   const [cargando, setCargando] = useState(true)
+  const [qrVisible, setQrVisible] = useState(false)
+  const [modoAnon, setModoAnon] = useState(() =>
+    localStorage.getItem(`miclase_anon_${id}`) === '1'
+  )
 
   useEffect(() => {
     fetch(`/api/grupos/${id}`)
@@ -143,35 +148,78 @@ function DetalleGrupo() {
       .then(d => { setGrupo(d); setCargando(false) })
   }, [id])
 
+  const toggleAnon = () => {
+    const nuevo = !modoAnon
+    setModoAnon(nuevo)
+    localStorage.setItem(`miclase_anon_${id}`, nuevo ? '1' : '0')
+  }
+
   if (cargando) return <p>Cargando grupo…</p>
   if (!grupo) return <p>Grupo no encontrado.</p>
 
+  const qrUrl = `https://miclase.edumind.es/evaluacion?grupo_id=${id}`
+
   return (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-        <Link to="/grupos" style={{ color: 'var(--gris-600)', fontSize: 20 }}>←</Link>
-        <div>
-          <h1 className="page-title" style={{ marginBottom: 2 }}>{grupo.nombre}</h1>
-          <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
-            {grupo.etapa} · Curso {grupo.curso}º · {grupo.curso_escolar}
+      {qrVisible && (
+        <QRModal
+          url={qrUrl}
+          titulo={`Evaluación ${grupo.nombre} — acceso móvil`}
+          onClose={() => setQrVisible(false)}
+        />
+      )}
+
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Link to="/grupos" style={{ color: 'var(--gris-600)', fontSize: 20 }}>←</Link>
+          <div>
+            <h1 className="page-title" style={{ marginBottom: 2 }}>{grupo.nombre}</h1>
+            <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
+              {grupo.etapa} · Curso {grupo.curso}º · {grupo.curso_escolar}
+            </div>
           </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            onClick={toggleAnon}
+            className={modoAnon ? 'btn-primary' : 'btn-secondary'}
+            style={{ fontSize: 13 }}
+            title="Oculta los nombres reales y muestra solo el código. Útil al proyectar en clase."
+          >
+            {modoAnon ? '🔐 Anon. activa' : '🔓 Anonimizar'}
+          </button>
+          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setQrVisible(true)}>
+            📱 QR acceso móvil
+          </button>
         </div>
       </div>
 
       <div className="card" style={{ marginBottom: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <h2 style={{ fontSize: 16, fontWeight: 600 }}>Alumnado ({grupo.alumnos?.length || 0})</h2>
-          <Link to={`/alumnos/nuevo?grupo_id=${id}`} style={{ fontSize: 14, fontWeight: 600, color: 'var(--azul-500)' }}>
-            + Añadir alumno
+          <Link to={`/alumnos?grupo_id=${id}`} style={{ fontSize: 14, fontWeight: 600, color: 'var(--azul-500)' }}>
+            + Gestionar alumnado
           </Link>
         </div>
         {grupo.alumnos?.length === 0 && (
           <p style={{ color: 'var(--gris-600)', fontSize: 14 }}>No hay alumnos en este grupo todavía.</p>
         )}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
+        {modoAnon && grupo.alumnos?.length > 0 && (
+          <div style={{ fontSize: 12, color: 'var(--azul-700)', background: 'var(--azul-100)', padding: '6px 12px', borderRadius: 6, marginBottom: 12 }}>
+            Modo privacidad activo — se muestran solo códigos
+          </div>
+        )}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
           {grupo.alumnos?.map((a: any) => (
-            <div key={a.id} style={{ padding: '10px 14px', background: 'var(--gris-100)', borderRadius: 8, fontSize: 14 }}>
-              <div style={{ fontWeight: 600 }}>{a.apellidos}, {a.nombre}</div>
+            <div key={a.id} style={{ padding: '8px 12px', background: 'var(--gris-100)', borderRadius: 8, fontSize: 14 }}>
+              {modoAnon ? (
+                <div style={{ fontWeight: 700, fontFamily: 'monospace', color: 'var(--azul-700)', letterSpacing: 1 }}>
+                  {a.codigo_cifrado || '—'}
+                </div>
+              ) : (
+                <div style={{ fontWeight: 600 }}>{a.apellidos}, {a.nombre}</div>
+              )}
               {a.neae ? <span style={{ fontSize: 11, color: 'var(--ambar-500)', fontWeight: 600 }}>NEAE</span> : null}
             </div>
           ))}

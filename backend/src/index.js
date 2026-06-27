@@ -27,6 +27,15 @@ db.pragma('foreign_keys = ON')
 const schema = readFileSync(join(__dirname, 'db/schema.sql'), 'utf8')
 db.exec(schema)
 
+// Migraciones en caliente (idempotentes)
+try { db.prepare('ALTER TABLE alumnos ADD COLUMN codigo_cifrado TEXT').run() } catch {}
+try { db.prepare('CREATE UNIQUE INDEX IF NOT EXISTS idx_alumnos_codigo ON alumnos(codigo_cifrado)').run() } catch {}
+
+// Docente por defecto en primera ejecución
+if (!db.prepare('SELECT id FROM docentes LIMIT 1').get()) {
+  db.prepare("INSERT INTO docentes (nombre, email) VALUES ('Docente Principal', NULL)").run()
+}
+
 const app = Fastify({ logger: { level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' } })
 
 await app.register(cors, {
