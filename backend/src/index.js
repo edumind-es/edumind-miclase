@@ -12,6 +12,9 @@ import asignaturasRoutes from './routes/asignaturas.js'
 import calificacionesRoutes from './routes/calificaciones.js'
 import curriculumRoutes from './routes/curriculum.js'
 import sesionesRoutes from './routes/sesiones.js'
+import authRoutes from './routes/auth.js'
+import backupRoutes from './routes/backup.js'
+import authPlugin from './plugins/auth.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ROOT = resolve(__dirname, '../..')
@@ -48,7 +51,12 @@ await app.register(cors, {
 // Inyectar DB en todas las rutas
 app.decorate('db', db)
 
+// Auth plugin (proporciona app.getDocente)
+await app.register(authPlugin)
+
 // Rutas
+await app.register(authRoutes, { prefix: '/api/auth' })
+await app.register(backupRoutes, { prefix: '/api/backup' })
 await app.register(gruposRoutes, { prefix: '/api/grupos' })
 await app.register(alumnosRoutes, { prefix: '/api/alumnos' })
 await app.register(asignaturasRoutes, { prefix: '/api/asignaturas' })
