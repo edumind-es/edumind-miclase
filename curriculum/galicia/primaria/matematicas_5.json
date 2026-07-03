@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "primaria",
     "asignatura": "matematicas",
-    "curso": "5º",
+    "ciclo_origen": "5º",
     "fuente": "iDoceo_matematicas_5º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "5º"
   },
   "competencias": [
     {

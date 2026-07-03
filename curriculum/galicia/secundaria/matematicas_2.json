@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "matematicas",
-    "curso": "2º",
+    "ciclo_origen": "2º",
     "fuente": "iDoceo_matematicas_2º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "2º"
   },
   "competencias": [
     {

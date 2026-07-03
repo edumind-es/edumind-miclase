@@ -1,0 +1,401 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "educaci-n-pl-stica-visual-y-audiovisual",
+    "ciclo_origen": "1-eso",
+    "fuente": "iDoceo_07_educaci_n_pl_stica_visual_y_audiovisual_1-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender la importancia que algunos ejemplos seleccionados de las distintas manifestaciones culturales y artísticas han tenido en el desarrollo del ser humano, mostrando interés por el patrimonio como parte de la propia cultura, para entender cómo se convierten en el testimonio de los valores y convicciones de cada persona y de la sociedad en su conjunto, y para reconocer la necesidad de su protección y conservación.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explicar las producciones plásticas, visuales y audiovisuales propias, comparándolas con las de sus iguales y con algunas de las que conforman el patrimonio cultural y artístico, justificando sus opiniones y teniendo en cuenta el progreso desde la intención hasta la realización, para valorar el intercambio, las experiencias compartidas y el diálogo intercultural, así como para superar estereotipos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Analizar diferentes propuestas plásticas, visuales y audiovisuales, mostrando respeto y desarrollando la capacidad de observación e interiorización de la experiencia y del disfrute estético, para construir la cultura artística individual y alimentar el imaginario.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD1",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Explorar las técnicas, los lenguajes y las intenciones de diferentes producciones culturales y artísticas, analizando, de forma abierta y respetuosa, tanto el proceso como el producto final, su recepción y su contexto, para descubrir las diversas posibilidades que ofrecen como fuente generadora de ideas y respuestas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Realizar producciones artísticas individuales o colectivas con creatividad e imaginación, seleccionando y aplicando herramientas, técnicas y soportes en función de la intencionalidad, para expresar la visión del mundo, las emociones y los sentimientos propios, así como para mejorar la capacidad de comunicación y desarrollar la reflexión crítica y la autoconfianza.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Apropiarse de las referencias culturales y artísticas del entorno, identificando sus singularidades, para enriquecer las creaciones propias y desarrollar la identidad personal, cultural y social.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Aplicar las principales técnicas, recursos y convenciones de los lenguajes artísticos, incorporando, de forma creativa, las posibilidades que ofrecen las diversas tecnologías, para integrarlos y enriquecer el diseño y la realización de un proyecto artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM3",
+        "CD1",
+        "CD5",
+        "CC1",
+        "CC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Compartir producciones y manifestaciones artísticas, adaptando el proyecto a la intención y a las características del público destinatario, para valorar distintas oportunidades de desarrollo personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Buscar información para reconocer los factores históricos y sociales que rodean a las producciones plásticas más relevantes, del Paleolítico al Renacimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir la función y finalidad de diferentes obras de arte, del Paleolítico al Renacimiento, con interés y respeto.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Reproducir de forma guiada alguna obra de arte o de diseño introduciendo modificaciones que persigan modificar su función.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar la importancia de la conservación del patrimonio cultural y artístico, a través del conocimiento y el análisis guiado de obras de arte, del Paleolítico al Renacimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Describir, de forma guiada, diversas producciones artísticas, incluidas las propias y las de sus iguales, desarrollando con interés una mirada estética hacia el mundo y respetando la diversidad de las expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Explicar de forma razonada, la importancia del proceso que media entre la realidad, el imaginario y la producción.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Realizar de forma guiada composiciones básicas aplicando de forma gradual los elementos configuradores de la imagen: punto, línea, plano, textura y color.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer las técnicas básicas para la creación de bocetos que permitan expresar ideas sencillas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar y analizar los diferentes niveles de iconicidad de la imagen gráfica elaborando dibujos esquemáticos, analíticos y miméticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar y describir propuestas plásticas, visuales y audiovisuales de diversos tipos y épocas, analizándolas con curiosidad y respeto, e incorporándolas a su cultura personal y su imaginario propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer las principales técnicas grafico-plásticas secas, húmedas y mixtas y aplicar técnicas básicas en la realización de composiciones de diferente índole, evitando la representación de estereotipos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Observar y analizar de forma guiada los rasgos particulares de diversas técnicas y lenguajes artísticos, así como sus distintos procesos, buscando y analizando la información con interés y eficacia.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar los elementos configuradores de la imagen.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Diferenciar las distintas técnicas empleadas en la elaboración de distintas obras plásticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Experimentar con las diferentes técnicas analizando los resultados obtenidos en función de la intencionalidad perseguida.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "CE4",
+      "descripcion": "Establecer conexiones entre diferentes tipos de lenguajes plásticos, visuales y audiovisuales (fotografía, cómic, cine, publicidad, etc.), a través de un análisis guiado de las soluciones aportadas en cada caso.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "CE4",
+      "descripcion": "Componer un banco de imágenes seleccionando entre diferentes tipos de lenguajes plásticos, visuales y audiovisuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.7",
+      "objetivo_id": "CE4",
+      "descripcion": "Describir una imagen distinguiendo los aspectos denotativos y connotativos de la misma.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.8",
+      "objetivo_id": "CE4",
+      "descripcion": "Diseñar elementos visuales propios de un cómic, anuncio, objeto, cartel, producción audiovisual y composición artística.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Expresar ideas y sentimientos en diferentes producciones plásticas, visuales y audiovisuales, a través de la experimentación con diversas herramientas, técnicas y soportes, desarrollando la capacidad de comunicación y la reflexión crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Expresar sentimientos realizando composiciones que transmitan emociones básicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Aplicar métodos creativos para la elaboración de diseño gráfico, de producto, moda y sus múltiples aplicaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Explicar su pertenencia a un contexto cultural concreto, a través del análisis de los aspectos formales y de los factores sociales que determinan diversas producciones culturales y artísticas actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Diferenciar los aspectos formales de las producciones visuales y audiovisuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Realizar un proyecto artístico con creatividad y de forma consciente, ajustándose al objetivo propuesto, experimentando con distintas técnicas visuales o audiovisuales en la generación de mensajes propios, y mostrando iniciativa en el empleo de lenguajes, materiales, soportes y herramientas.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconocer los diferentes usos y funciones de las producciones y manifestaciones artísticas, argumentando de forma individual o colectiva sus conclusiones acerca de las oportunidades que pueden generar, con una actitud abierta y con interés por conocer su importancia en la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Desarrollar proyectos de forma guiada con una intención comunicativa, aproximándose a las distintas funciones y recursos que tiene el lenguaje visual y audiovisual.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Patrimonio artístico y cultural. Apreciación estética y análisis"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Elementos formales de la imagen y del lenguaje visual. La expresión gráfica"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Expresión artística y gráfico-plástica: técnicas y procedimientos"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Imagen y comunicación visual y audiovisual"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Los géneros artísticos a lo largo de la historia del arte: del paleolítico al renacimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Manifestaciones culturales y artísticas más importantes a lo largo de la historia, del paleolítico al renacimiento: análisis de sus aspectos formales y de su relación con el contexto histórico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Las formas geométricas en el arte y en el entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Elementos básicos del lenguaje visual: el punto, la línea y el plano. (cid:2) Posibilidades expresivas y comunicativas. (cid:2) El entorno comunicativo: iconicidad y abstracción. (cid:2) Análisis de las imágenes: denotación y connotación. (cid:2) Lectura objetiva y subjetiva de una imagen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Elementos visuales, conceptos y posibilidades expresivas: forma, color y textura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La percepción visual. Introducción a los principios perceptivos, elementos y factores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Conceptos de equilibrio, proporción y ritmo aplicados a la organización de formas en el plano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Construcción estructuras modulares y aplicaciones al arte y el diseño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "El color: mezcla aditiva y sustractiva, colores complementarios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas básicas de expresión gráfico-plástica en dos dimensiones. Técnicas secas y húmedas. Su uso en el arte y sus características expresivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "El proceso creativo a través de operaciones plásticas: reproducir, aislar, transformar y asociar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Factores y etapas del proceso creativo. Realización de bocetos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Útiles para el dibujo técnico: empleo de la escuadra y cartabón, representación de ángulos con el juego de escuadras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Introducción a la geometría plana y trazados geométricos básicos: (cid:2) Operaciones con segmentos: trazar un segmento igual a otro, suma y resta de segmentos. (cid:2) Trazado de perpendiculares y paralelas con escuadra y cartabón y con compás. (cid:2) Ángulos: Clasificación, operaciones con ángulos. Suma, resta, divisiones. (cid:2) Proporcionalidad: división de un segmento mediante el Teorema de Thales. (cid:2) Lugares geométricos definición y trazados mediatriz, bisectriz, circunferencia, esfera, rectas paralelas, planos paralelos. (cid:2) Resolución de trazados con rectas y curvas. (cid:2) Los triángulos: clasificación y trazados: el baricentro, el incentro o el circuncentro. (cid:2) Los cuadriláteros: clasificación, trazados. (cid:2) Los Polígonos: tipos de polígonos, concepto de polígono regular. Construcción dado radio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "El lenguaje y la comunicación visual. Finalidades: informativa, comunicativa, expresiva y estética.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Imágenes visuales y audiovisuales: identificación de los principales elementos expresivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Imagen fija: origen y evolución. Introducción a las diferentes características del cómic y la fotografía.",
+      "criterios_ids": []
+    }
+  ]
+}

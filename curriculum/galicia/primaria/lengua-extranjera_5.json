@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "primaria",
     "asignatura": "lengua-extranjera",
-    "curso": "5º",
+    "ciclo_origen": "5º",
     "fuente": "iDoceo_lengua-extranjera_5º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "5º"
   },
   "competencias": [
     {

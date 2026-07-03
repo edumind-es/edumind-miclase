@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { generarPKCE } from './crypto'
+import { useAppStore } from '@/store/useAppStore'
 
 interface AuthConfig {
   enabled: boolean
@@ -83,6 +84,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
     window.location.href = `${authConfig.authorize_url}?${params}`
   }
+
+  // Sincronizar token con el store global (para que useAppStore pueda usarlo en fetch)
+  const setStoreToken = useAppStore(s => s._setToken)
+  useEffect(() => { setStoreToken(token) }, [token, setStoreToken])
 
   const guardarSesion = (t: string, n: string) => {
     sessionStorage.setItem(TOKEN_KEY, t)

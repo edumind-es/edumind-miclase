@@ -1,0 +1,419 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "musica-y-danza",
+    "ciclo_origen": "sexto-curso",
+    "fuente": "iDoceo_musica-y-danza_sexto-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "6º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Descubrir propuestas musicales, de lenguaje corporal, escénico y/o performativo de diferentes géneros, estilos, estéticas, épocas y culturas, a través de la recepción activa, CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP3",
+        "STEM1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Investigar sobre manifestaciones musicales, de lenguaje corporal, escénico y/o performativo, y sus contextos, empleando diversos canales, medios y técnicas, para desarrollar interés y aprecio por las mismas, disfrutar de ellas, entender su valor y empezar a desarrollar una sensibilidad artística propia.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "STEM2",
+        "CD1",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Expresar y comunicar de manera creativa ideas, sentimientos y emociones a través de diferentes lenguajes, técnicas, instrumentos, medios y soportes, experimentando con las posibilidades del sonido, el cuerpo y los medios digitales, desarrollando la autoconfianza y una visión crítica y empática de las posibilidades comunicativas y expresivas, para producir e interpretar obras propias y ajenas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CD2",
+        "CD4",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC2",
+        "CE1",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Participar activamente del diseño, la elaboración y la difusión de producciones musicales, de lenguaje corporal, escénico y/o performativo, individuales o colectivas, poniendo en valor el proceso a desarrollar, asumiendo diferentes funciones en la consecución de un resultado final, respetando su propia labor y la de sus compañeros, para desarrollar la creatividad, la noción de autoría, el sentido de la pertenencia, el compromiso en experiencias colaborativas y el espíritu emprendedor.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CC2",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Ejercitar una conciencia corporal y una propiocepción a través del uso de la voz y la práctica y estudio del movimiento, favoreciendo la atención y la escucha, buscando la corrección postural en las interpretaciones musicales, de lenguaje corporal, escénico y/o performativo y el conocimiento de las emociones y su autogestión, para desarrollar la propia personalidad y utilizar el arte como mecanismo de paz e interacción social.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Distinguir, comparar y valorar propuestas musicales, de lenguaje corporal, escénico y/o performativo de diferentes géneros, estilos, estéticas, épocas y culturas, a través de la búsqueda, la recepción activa en diferentes contextos y/o la interpretación, mostrando curiosidad, placer y apertura por el descubrimiento de lo nuevo y respeto por las mismas. (CCL1, CP3, CD1, CPSAA1, CPSAA3, CC3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir y debatir acerca de las manifestaciones musicales, de lenguaje corporal, escénico y/o performativo, explorando y analizando sus características con actitud CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48553 abierta e interés, estableciendo relaciones entre ellas, valorando positivamente y respetando la diversidad que las genera. (CCL1, STEM1, CD1, CPSAA3, CC1, CC3, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar el vocabulario específico del lenguaje musical, corporal, escénico y performativo, en diversos contextos de recepción, análisis, creación e interpretación planteados en el aula, expresando opiniones y valoraciones de manera fundamentada, con una actitud abierta y respetuosa hacia las manifestaciones artísticas. (CCL1, CD1, CC3, CE2, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar y aplicar estrategias para la búsqueda de información sobre manifestaciones musicales, de lenguaje corporal, escénico y/o performativo, a través de diversos canales y medios de acceso, tanto de forma individual como cooperativa, disfrutando tanto en las tareas de búsqueda como de las manifestaciones encontradas, reflexionando y valorando la información obtenida, mostrando interés, aprecio y respeto por las mismas. (CCL3, CP3, STEM2, CD1, CPSAA1, CAPSAA3, CPSAA4, CC3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Comparar y comunicar el significado, los elementos característicos y la intencionalidad de distintas manifestaciones musicales, de lenguaje corporal, escénico y/o performativo que forman parte del patrimonio cultural y artístico, analizando los canales, medios y técnicas vinculados a ellas, así como sus diferencias y similitudes, entendiendo su valor y desarrollando criterios de valoración propios, con actitud abierta y respetuosa. (CCL3, CP3, STEM2, CD1, CPSAA1, CPSAA3, CC3, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar y comunicar las sensaciones y emociones producidas por diferentes manifestaciones musicales, de lenguaje corporal, escénico y/o performativo, desde la recepción activa, a partir de su análisis, comprensión y disfrute, mostrando respeto por las emociones compartidas por los compañeros, reconociendo progresivamente el papel que desempeñan en el desarrollo personal y social. (CP3, CPSAA1, CPSAA3, CPSAA4, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Producir obras propias básicas de carácter musical, de lenguaje corporal, escénico y/o performativo, de forma individual y en grupo, utilizando las posibilidades expresivas de la voz, el cuerpo, los instrumentos musicales y los medios digitales básicos, mostrando control y confianza en las capacidades creativas propias y desarrollando una CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48554 visión crítica y empática de las posibilidades comunicativas y expresivas. (CCL5, CD2, CD4, CPSAA3, CPSAA5, CC2, CE1, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Expresar con creatividad y de forma autónoma, ideas, sentimientos y emociones a través de la interpretación de diversas manifestaciones musicales, de lenguaje corporal, escénico y/o performativo, utilizando los diferentes lenguajes artísticos, por medio de la voz, el cuerpo, los instrumentos musicales y otros materiales, mostrando confianza en las propias capacidades y perfeccionando la ejecución. (CCL1, CPSAA1, CPSAA5, CE1, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar de manera individual o grupal diversas manifestaciones musicales, de lenguaje corporal, escénico y/o performativo utilizando la voz, el cuerpo, los instrumentos musicales u otros materiales desarrollando una actitud cooperativa, de escucha, compromiso y coordinación con el grupo. (CCL1, CCL5, CPSAA3, CC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Planificar y diseñar producciones musicales, de lenguaje corporal, escénico y/o performativo colectivas, trabajando de forma cooperativa en la consecución de un resultado final, poniendo en valor el proceso, asumiendo diferentes funciones, desde la igualdad y el respeto a la diversidad y desarrollando el espíritu emprendedor. (CCL1, CCL5, CP3, STEM3, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar activamente en el proceso cooperativo de elaboración de producciones musicales, de lenguaje corporal, escénico y/o performativo, de forma creativa, respetuosa y comprometida, utilizando elementos de los diferentes lenguajes y técnicas artísticas, disfrutando tanto del proceso de elaboración como del resultado final, respetando la propia labor y la de los compañeros. (CCL1, CCL5, STEM3, CPSAA3, CPSAA4, CC2, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Compartir los proyectos creativos musicales, de lenguaje corporal, escénico y/o performativo o experiencias creativas e interpretativas, empleando diferentes estrategias comunicativas y a través de diversos medios, explicando el proceso y el resultado final obtenido, y respetando y valorando las experiencias y opiniones propias y de los demás. (CCL1, CCL5, CP3, CD2, CD3, CPSAA3, CPSAA4, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Comprender e identificar los diversos usos y propiedades de la voz, así como la importancia de su cuidado como instrumento y recurso expresivo y comunicativo, poniendo en práctica conocimientos de técnica vocal, de forma hablada y cantada, y CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48555 adoptando en su vida cotidiana hábitos saludables para un cuidado adecuado de la misma. (STEM5, CPSAA2, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Observar, identificar y reconocer el estado del propio cuerpo y las posibilidades motrices, controlando el equilibrio, la coordinación y la alineación, a través de la práctica de ejercicios coreográficos, individuales y en grupo, sencillos y dirigidos, correspondientes a diferentes estilos de danza. (STEM2, STEM5, CPSAA2, CC2, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Manejar correctamente diferentes técnicas de respiración, reconociéndola como una de las funciones principales del organismo y como mecanismo para el correcto uso de la voz, a través de ejercicios de interpretación vocal, instrumental y corporal, mostrando control sobre la misma, relajación y una correcta gestión de las emociones. (CCL5, CPSAA1, CPSAA2, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Evidenciar la relajación del cuerpo en la interpretación vocal, instrumental y de movimiento a través del control de la respiración adquirida mediante diferentes técnicas. (CCL5, CPSAA1, CPSAA2, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer y analizar los estados anímicos y su expresión a través de herramientas artísticas buscando la adecuación de la emoción con las técnicas vocales, instrumentales y de movimiento y consiguiendo la creación y la interpretación artística. (CCL5, STEM2, CPSAA1, CPSAA2, CC2, CCEC3)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Recepción, análisis y reflexión"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Experimentación, creación e interpretación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Propuestas musicales vocales e instrumentales, de lenguaje corporal, escénico y performativo, de diferentes géneros, estilos, corrientes estéticas, procedencias y épocas producidas por creadoras y creadores locales, regionales, nacionales e internacionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Aproximación a las épocas de la Historia de la Música. Principales compositores de las diferentes épocas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de recepción activa y crítica que favorezcan el análisis, la valoración y la reflexión. Construcción del propio gusto y referente creativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Normas de comportamiento y actitud abierta, crítica y positiva en la recepción de propuestas musicales, de lenguaje corporal, escénico y performativo en CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48556 diferentes espacios. El silencio como fórmula de respeto y elemento y condición indispensable para el mantenimiento de la atención durante la recepción.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Vocabulario específico de la música, la danza y las artes escénicas y performativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Recursos digitales de uso común para la música, la danza y las artes escénicas y performativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de análisis crítico de propuestas musicales, de lenguaje corporal, escénico y performativo, desde una perspectiva de género. El papel de la mujer en estas artes y en las propuestas contemporáneas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "La música descriptiva y programática como medio de evocación de ideas, sentimientos e imágenes extra-musicales y de fomento de la percepción auditiva y de la creatividad. La música en el cine: las bandas sonoras. La música como creadora de ambientes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Paisajes sonoros de diferentes entornos. La contaminación y las agresiones acústicas. La salud auditiva, mental y emocional y su contribución activa para el bienestar personal y colectivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "El sonido y sus cualidades: intensidad, duración, altura, timbre, forma y carácter. Discriminación e identificación visual y auditiva, clasificación y representación de diversidad de sonidos y estructuras rítmico-melódicas a través de diferentes grafías.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Voces masculinas y femeninas en función de su tesitura. Las agrupaciones vocales. Clasificación, identificación visual y auditiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Los instrumentos musicales. Los instrumentos populares de Castilla y León, de otras regiones y culturas, contemporáneos, digitales y no convencionales. Familias y agrupaciones. Clasificación según el material vibrante.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Cotidiáfonos. Identificación y clasificación visual y auditiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "El carácter, el tempo, el compás, los géneros musicales, la forma, la textura y la armonía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Aproximación a los géneros escénicos. Espacios destinados a su recepción. Valoración de la importancia de la interpretación dramática en el proceso artístico y del patrimonio vinculado a las artes escénicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Elementos de la representación escénica: roles, materiales y espacios. Teatralidad. Estructura dramática básica. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48557",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Fases del proceso creativo de propuestas musicales, de lenguaje corporal, escénico   y    performativo:   planificación,   interpretación,   experimentación, comunicación y evaluación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Profesiones vinculadas con la música, el lenguaje corporal, escénico y performativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Actitud activa e interés tanto por el proceso como por el producto final en producciones musicales, de lenguaje corporal, escénico y performativo. Evaluación y valoración de ambos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo del espíritu crítico y empático.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Uso responsable de bancos de imágenes y sonidos: respeto a las licencias de uso y distribución de contenidos generados por otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Plagio y derechos de autor.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación, improvisación y composición a partir de sus posibilidades sonoras y expresivas. La percusión corporal y posibilidades sonoras del propio cuerpo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Construcción de instrumentos. La vibración y sonoridad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "El cuidado de la voz hablada y cantada como instrumento y recurso expresivo y comunicativo. Conocimientos de técnica vocal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Lenguajes musicales: aplicación de sus conceptos fundamentales en la interpretación y en la improvisación y composición de propuestas musicales vocales e instrumentales. El silencio como elemento expresivo en la música.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Aplicaciones informáticas de grabación, edición de audio y edición de partituras: utilización en la audición, conocimiento, interpretación, grabación, reproducción, improvisación y creación de obras diversas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "El cuerpo y sus posibilidades motrices, dramáticas y creativas: interés en la experimentación y la exploración a través de ejecuciones individuales y grupales vinculadas con el movimiento, la danza, la dramatización y la representación teatral como medio de expresión y diversión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Movimiento orgánico del cuerpo. Equilibrio, coordinación y alineación en ejercicios coreográficos de diferentes estilos de danza. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                               Viernes, 30 de septiembre de 2022                         Pág. 48558",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas básicas dramáticas y dancísticas. Nociones elementales de biomecánica. Lenguajes expresivos. Introducción a los métodos interpretativos. Experimentación con actos performativos. Técnicas de improvisación guiada y creativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Capacidades expresivas y creativas de la expresión corporal y dramática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Repertorio de piezas vocales e instrumentales, danzas y coreografías de diferentes corrientes estéticas, culturas, géneros musicales y épocas que incluya las tradicionales de Castilla y León.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "La relajación del cuerpo en la interpretación vocal, instrumental y de movimiento. Técnicas de respiración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "Los estados anímicos y su expresión a través de herramientas artísticas. Adecuación de la emoción con las técnicas vocales, instrumentales y de movimiento para la creación e interpretación artística intencionada.",
+      "criterios_ids": []
+    }
+  ]
+}

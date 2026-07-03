@@ -1,0 +1,412 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "primaria",
+    "asignatura": "ciencias-sociales",
+    "ciclo_origen": "primer-ciclo",
+    "fuente": "iDoceo_02_ciencias_sociales_primer-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o claridad y adecuación a diferentes contextos cotidianos de su entorno interacciones de comunicación, tanto para intercambiar información personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados y educativo, con acompañamiento puntual, para participar en contextos"
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, adoptando un punto de vista creativo, crítico y personal."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su desarrollo madurativo, intereses; reconoce el patrimonio literario como fuente de disfrute construir y compartir su interpretación de las obras y para crear textos"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia, derechos de todas las personas, para favorecer un uso eficaz y no b) Competencia plurilingüe (CP) Descriptores"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua propia, comunicativas sencillas y predecibles, de manera adecuada tanto cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce las diferentes lenguas realizar transferencias sencillas entre distintas lenguas para comunicarse lenguaje."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la variedad de las lenguas presentes en de diálogo, para mejorar la convivencia. BOCM BOLETÍN OFICIAL Pág.30 LUNES18DEJULIODE2022 c) Competencia matemática y competencia en ciencia, tecnología Descriptores"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y conocidas, y selecciona y emplea algunas estrategias para resolver"
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar de herramientas e instrumentos adecuados, planteándose preguntas"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando ante la incertidumbre, para generar un producto creativo con un"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes tecnológicos de forma clara y veraz, utilizando la terminología científica gráficos, símbolos…) y aprovechando de forma crítica y responsable conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para vivos. d) Competencia digital (CD) Descriptores"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias (palabras clave, selección de información relevante, organización obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos informático...) mediante el uso de diferentes herramientas digitales la propiedad intelectual y los derechos de autor de los contenidos"
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades y/o proyectos escolares mediante construir nuevo conocimiento, comunicarse, trabajar en grupo, y y supervisados de manera segura y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, proteger los dispositivos, los datos personales, la salud y el medioambiente, las mismas."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas programación informática por bloques, robótica educativa…) para creativa, solicitando ayuda en caso necesario. e) Competencia personal, social y de aprender a aprender (CPSAA) Descriptores"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos en situaciones de tensión o conflicto, adaptándose a los cambios"
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos busca apoyo ante situaciones negativas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las responsabilidades individuales asignadas y emplea estrategias"
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje y evaluación conjunta, reconociendo sus limitaciones y sabiendo BOCM BOLETÍN OFICIAL B.O.C.M.Núm.169 LUNES18DEJULIODE2022 f) Competencia ciudadana (CC) Descriptores"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes convivencia, y las aplica de manera constructiva, dialogante e inclusiva"
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades de su entorno cercano, en la toma de y respetuosa con los principios y valores de la Unión Europea y la el valor a la diversidad y de la igualdad entre hombres y mujeres, acordados por la ONU."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas de la actualidad, y creencias, cuidar el entorno, de rechazar prejuicios, y de oponerse"
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones entre las acciones humanas y el para conservar la biodiversidad. g) Competencia emprendedora (CE) Descriptores"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades inherentes a los retos que debe afrontar tomando conciencia de las consecuencias y efectos que las ideas valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias elementos económicos y financieros básicos, aplicándolos a situaciones"
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas planifica tareas, colabora con otros y en equipo, cabo iniciativas de emprendimiento, y considera la experiencia como h) Competencia en conciencia y expresión culturales (CCEC) Descriptores"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del culturales y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce especificidades e intencionalidades de las patrimonio, y se interesa por ellas, identificando los medios y soportes, caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones culturales, integrando su propio cuerpo, interactuando con el entorno"
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural y natural, conservarlo y mejorarlo.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Identificar las causas y consecuencias de la intervención humana en el entorno, desde los puntos de vista social, económico, cultural, tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar en su resolución fomentando el respeto, el cuidado y la protección de las personas y del planeta.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Observar, comprender e interpretar continuidades y cambios del medio, analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Reconocer y valorar la pluralidad mostrando empatía y respeto por otras culturas para contribuir a la mejora de una sociedad en continua transformación y al logro de los valores de integración europea.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Participar en el entorno y la vida social de forma eficaz y constructiva desde el respeto a los valores democráticos, los derechos humanos y de la infancia y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad ciudadana.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer las características, la organización y las propiedades de los elementos del medio a través de la indagación, utilizando las herramientas y procesos adecuados de forma pautada.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer conexiones sencillas y directas entre diferentes elementos del medio a través de la observación, la manipulación y la experimentación.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar actitudes de respeto ante el patrimonio natural y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Mostrar estilos de vida adecuados y valorar la importancia del respeto, los cuidados, y la protección de los elementos y seres del planeta, identificando la relación de la vida de las personas con sus acciones sobre los elementos y recursos del medio, como el suelo y el agua.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Ordenar temporalmente hechos del entorno cercano, empleando nociones básicas de medida y sucesión.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer personas y grupos sociales relevantes de la historia, así como formas de vida del pasado y sus creencias, incorporando referentes de - igualdad entre hombres y mujeres. -",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Recoger información acerca de manifestaciones culturales del entorno, mostrando respeto, valorando su diversidad y riqueza, y apreciándolas como fuente de aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Mostrar actitudes que fomenten la igualdad, el respeto, la libertad y todas las conductas no discriminatorias, reconociendo modelos positivos en el entorno cercano e identificar las cualidades individuales adecuadas para vivir en sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Establecer acuerdos de forma democrática como parte de la sociedad, identificando las responsabilidades individuales y empleando un lenguaje respetuoso.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar instituciones cercanas, señalando y valorando las funciones que realizan en pro de una buena convivencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer e interiorizar normas básicas para la convivencia en el uso de los espacios públicos, especialmente como peatones o como usuarios de los medios de locomoción, tomando conciencia de la importancia de la movilidad segura y saludable tanto para las personas como para el planeta.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Saberes"
+    },
+    {
+      "id": "B2",
+      "titulo": "Retos del mundo actual"
+    },
+    {
+      "id": "B3",
+      "titulo": "A. Sociedades y"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La Tierra en el universo. Elementos, movimientos y dinámicas relacionados con la Tierra y el universo y sus consecuencias en la vida diaria y en el entorno. Secuencias temporales y cambios estacionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La vida en la Tierra. Fenómenos atmosféricos y su repercusión en los ciclos biológicos y en la vida diaria. Observación y registro de datos atmosféricos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Existencia y distribución del agua en la Tierra: océanos, mares, ríos y lagos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Identificación de las principales unidades del relieve: isla, archipiélago, península, montaña, cordillera, llanura, meseta, valle, río…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La Comunidad de Madrid: situación, relieve, ríos…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Retos sobre situaciones cotidianas. Funciones básicas del pensamiento espacial y temporal para la interacción con el medio y la resolución de situaciones de la vida cotidiana. Itinerarios y trayectos, puntos cardinales, desplazamientos y viajes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La percepción del tiempo. Medida del tiempo en la vida cotidiana: año, mes, semana, día y hora. El ciclo vital y las relaciones intergeneracionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Uso de objetos y artefactos de la vida cotidiana como fuentes para reflexionar sobre el cambio y la continuidad, las causas y consecuencias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Recursos y medios analógicos y digitales. Las fuentes orales. La historia local y la biografía familiar; mujeres y hombres como sujetos de la historia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Las expresiones y producciones artísticas a través del tiempo. El patrimonio material e inmaterial local. Principales monumentos de la Comunidad de Madrid.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Acercamiento a los hitos históricos, costumbres y tradiciones de la Comunidad de Madrid.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La vida en sociedad. La familia. Compromisos, participación y normas en el entorno familiar, vecinal y escolar. Prevención, gestión y resolución dialogada de conflictos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "La vida en sociedad. Espacios, recursos y servicios del entorno. Formas y modos 8 de interacción social en espacios públicos con referentes de igualdad entre 7 hombres y mujeres. Relaciones humanas. 2",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Ciudades y pueblos más importantes de la Comunidad de Madrid. 2",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,501 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "primaria",
+    "asignatura": "lengua-extranjera-ingl-s",
+    "ciclo_origen": "tercer-ciclo",
+    "fuente": "iDoceo_06_lengua_extranjera_ingl_s_tercer-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "6º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o claridad y adecuación a diferentes contextos cotidianos de su entorno interacciones de comunicación, tanto para intercambiar información personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados y educativo, con acompañamiento puntual, para participar en contextos"
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, adoptando un punto de vista creativo, crítico y personal."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su desarrollo madurativo, intereses; reconoce el patrimonio literario como fuente de disfrute construir y compartir su interpretación de las obras y para crear textos"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia, derechos de todas las personas, para favorecer un uso eficaz y no b) Competencia plurilingüe (CP) Descriptores"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua propia, comunicativas sencillas y predecibles, de manera adecuada tanto cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce las diferentes lenguas realizar transferencias sencillas entre distintas lenguas para comunicarse lenguaje."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la variedad de las lenguas presentes en de diálogo, para mejorar la convivencia. BOCM BOLETÍN OFICIAL Pág.30 LUNES18DEJULIODE2022 c) Competencia matemática y competencia en ciencia, tecnología Descriptores"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y conocidas, y selecciona y emplea algunas estrategias para resolver"
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar de herramientas e instrumentos adecuados, planteándose preguntas"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando ante la incertidumbre, para generar un producto creativo con un"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes tecnológicos de forma clara y veraz, utilizando la terminología científica gráficos, símbolos…) y aprovechando de forma crítica y responsable conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para vivos. d) Competencia digital (CD) Descriptores"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias (palabras clave, selección de información relevante, organización obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos informático...) mediante el uso de diferentes herramientas digitales la propiedad intelectual y los derechos de autor de los contenidos"
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades y/o proyectos escolares mediante construir nuevo conocimiento, comunicarse, trabajar en grupo, y y supervisados de manera segura y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, proteger los dispositivos, los datos personales, la salud y el medioambiente, las mismas."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas programación informática por bloques, robótica educativa…) para creativa, solicitando ayuda en caso necesario. e) Competencia personal, social y de aprender a aprender (CPSAA) Descriptores"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos en situaciones de tensión o conflicto, adaptándose a los cambios"
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos busca apoyo ante situaciones negativas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las responsabilidades individuales asignadas y emplea estrategias"
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje y evaluación conjunta, reconociendo sus limitaciones y sabiendo BOCM BOLETÍN OFICIAL B.O.C.M.Núm.169 LUNES18DEJULIODE2022 f) Competencia ciudadana (CC) Descriptores"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes convivencia, y las aplica de manera constructiva, dialogante e inclusiva"
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades de su entorno cercano, en la toma de y respetuosa con los principios y valores de la Unión Europea y la el valor a la diversidad y de la igualdad entre hombres y mujeres, acordados por la ONU."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas de la actualidad, y creencias, cuidar el entorno, de rechazar prejuicios, y de oponerse"
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones entre las acciones humanas y el para conservar la biodiversidad. g) Competencia emprendedora (CE) Descriptores"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades inherentes a los retos que debe afrontar tomando conciencia de las consecuencias y efectos que las ideas valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias elementos económicos y financieros básicos, aplicándolos a situaciones"
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas planifica tareas, colabora con otros y en equipo, cabo iniciativas de emprendimiento, y considera la experiencia como h) Competencia en conciencia y expresión culturales (CCEC) Descriptores"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del culturales y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce especificidades e intencionalidades de las patrimonio, y se interesa por ellas, identificando los medios y soportes, caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones culturales, integrando su propio cuerpo, interactuando con el entorno"
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender el sentido general e información específica y predecible de textos breves y sencillos, expresados de forma clara y en la lengua estándar, haciendo uso de diversas estrategias y recurriendo, cuando sea necesario, al uso de distintos tipos de apoyo, para desarrollar el repertorio del lenguaje y para responder a necesidades comunicativas cotidianas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Producir textos sencillos de manera comprensible y estructurada, mediante el empleo de estrategias como la planificación o la compensación, para expresar mensajes breves relacionados con necesidades inmediatas y responder a propósitos comunicativos cotidianos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interactuar con otras personas usando expresiones cotidianas, recurriendo a estrategias de colaboración y empleando recursos analógicos y digitales, para responder a necesidades inmediatas de su interés en intercambios comunicativos respetuosos con las normas de cortesía.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Participar en situaciones predecibles, usando estrategias y conocimientos para procesar y transmitir información básica y sencilla, con el fin de facilitar la comunicación.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconocer y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando sobre su funcionamiento e identificando las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas en situaciones conocidas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Apreciar y respetar la diversidad de otros contextos a partir de la lengua extranjera, identificando y valorando las diferencias y semejanzas entre lenguas y culturas, para aprender a gestionar situaciones entre diferentes culturas.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer, interpretar y analizar el sentido global, así como palabras y frases específicas de textos orales, escritos y multimodales breves y sencillos sobre temas frecuentes y cotidianos de relevancia personal y ámbitos próximos a su experiencia, así como de textos literarios adecuados al nivel de desarrollo del alumnado, expresados de forma comprensible, clara y en lengua estándar a través de distintos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar, organizar y aplicar, de forma guiada, estrategias y conocimientos adecuados en situaciones comunicativas cotidianas y de relevancia para el alumnado para captar el sentido global y procesar informaciones explícitas en textos diversos en lengua inglesa. - -",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar oralmente textos breves y sencillos, previamente preparados, sobre asuntos cotidianos y de relevancia para el alumnado, utilizando, de forma guiada, recursos verbales y no verbales, y usando formas y estructuras básicas y de uso frecuente propias de la lengua extranjera.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Organizar y redactar textos breves y sencillos, previamente preparados, con adecuación a la situación comunicativa propuesta, a través de herramientas analógicas y digitales, y usando estructuras y léxico básico de uso común sobre asuntos cotidianos y frecuentes, de relevancia personal para el alumnado y próximos a su experiencia en lengua inglesa.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar, organizar y aplicar, de forma guiada, conocimientos y estrategias para preparar y producir textos en inglés, adecuados a las intenciones comunicativas, las características contextuales y la tipología textual, usando, con ayuda, recursos físicos o digitales en función de la tarea y las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Planificar y participar en situaciones interactivas breves y sencillas sobre temas cotidianos, de relevancia personal y próximos a su experiencia, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado o el lenguaje no verbal, y mostrando respeto por la cortesía del lenguaje y la etiqueta digital, así como por las diferentes necesidades, ideas y motivaciones de los interlocutores e interlocutoras.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar, organizar y utilizar, de forma guiada y en situaciones cotidianas, estrategias elementales para saludar, despedirse y presentarse; formular y contestar preguntas sencillas; expresar mensajes, e iniciar y terminar la comunicación en lengua inglesa.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Inferir y explicar textos, conceptos y comunicaciones breves y sencillas, de forma guiada, en situaciones en las que atender a la diversidad, mostrando respeto por los interlocutores e interlocutoras y por las lenguas empleadas, e interés por participar en la solución de problemas de comprensión y de entendimiento en su entorno próximo, apoyándose en diversos recursos y soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Seleccionar y aplicar, de forma guiada, estrategias básicas que ayuden a crear puentes, faciliten la comprensión, la producción de información y la comunicación, adecuadas a las intenciones comunicativas, usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Comparar y contrastar las similitudes y diferencias entre distintas lenguas reflexionando de manera progresivamente autónoma sobre aspectos básicos de su funcionamiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar y diferenciar de forma autónoma los conocimientos y estrategias de mejora de su capacidad de comunicar y de aprender la lengua extranjera, con apoyo de otros participantes y de soportes analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Registrar y utilizar, de manera guiada, los avances y dificultades en el proceso de aprendizaje de la lengua extranjera, reconociendo los aspectos que ayudan a mejorar y realizando actividades de autoevaluación y coevaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL) o en un diario de aprendizaje. - -",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Actuar con aprecio y respeto en situaciones entre diferentes culturas, construyendo vínculos entre las diversas lenguas y culturas, y mostrando rechazo ante cualquier tipo de discriminación y prejuicio en contextos comunicativos cotidianos y habituales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Aceptar y respetar la diversidad de otros países donde se habla la lengua extranjera como fuente de enriquecimiento personal, mostrando interés por comprender elementos de su lengua y su cultura, que fomenten el respeto por los recursos naturales y la democracia.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Seleccionar y aplicar, de forma guiada, estrategias básicas para entender y apreciar la diversidad de la lengua, la cultura y el arte.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "D. Contenidos sintáctico-"
+    },
+    {
+      "id": "B2",
+      "titulo": "A. Comunicación"
+    },
+    {
+      "id": "B3",
+      "titulo": "B. Plurilingüismo"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "lógicas: Conjunción (and); disyunción (or); oposición (but); causa (to-infinitive, eg. I did it to help her). sentences; Yes (+tag). + noun (e.g. What fun!); How + Adjective (e.g. How exciting!); exclamatory rainbows!). sentences with not, never; No (adj.) nobody, nothing. No (+ negative tag). questions; Auxiliary verbs in questions: to do, to be, to have. presente (simple present; present continuous), pasado (simple past); futuro puntual (simple tenses); durativo (present continuous); habitual (simple always, everyday]); incoativo (start-ing); terminativo (finish-ing). factualidad (declarative sentences); capacidad (can); obligación (have sugerencia (should); permiso (can); intención (going to). (to be; there is/there are); la entidad (nouns, pronouns, articles, cualidad (very + Adj.); la comparación (comparatives and superlatives: as Adj. smallest). singular/plural; cardinal numbers up to three digits; ordinal numbers up many, all, some, many, a lot, (a) little, more, half, a bottle/cup/glass/piece prepositions, prepositional phrases, adverbs of location, position, distance, origin. points (e.g. quarter past five); divisions (e.g. half an hour, summer), and (e.g. now, tomorrow (morning); duration (e.g. for two days); anteriority (before); sequence (first, then...); frequency (e.g. sometimes, on Fridays); prepositions, and adverbs of time. Adv. of manner (e.g. slowly, well, quickly, carefully). I have got (I’ve got); preposición of; genitivo sajón (‘s); possessives. y preferencias: I like/I don’t like; I like verb- ing; I love.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Autoconfianza. El error como instrumento de mejora como parte del proceso de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas para la comprensión, la planificación y la producción (vuelve a leer el texto, usa su conocimiento previo, lee entre líneas, piensa en voz alta, resume, ubica las palabras clave, hace predicciones, visualiza, analiza imágenes y fotos, identifica la información general y los detalles específicos, inferencia el significado de palabras y frases nuevas según el contexto, imita, repite…) de textos orales (instrucciones, explicaciones, conversaciones…) escritos y multimodales breves, sencillos y contextualizados en lengua inglesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Conocimientos, destrezas y actitudes que permiten iniciarse en actividades de participación en situaciones cotidianas básicas en las que se utilicen estrategias comunicativas que ayuden a resolver conflictos, mejorar la comunicación o servir de enlace entre varios interlocutores en la misma o en diferentes lenguas, crear relaciones, llegar a acuerdos, salvar las diferencias culturales…fomentando actitudes de respeto y colaboración mutua.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Funciones comunicativas básicas adecuadas al ámbito y al contexto: saludar, despedirse, disculparse, agradecer, pedir u ofrecer ayuda, presentar y presentarse, expresar los gustos y las preferencias, el acuerdo o desacuerdo, el sentimiento, la intención; describir personas, actividades; situar eventos en el tiempo, situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre cuestiones cotidianas; describir rutinas; dar indicaciones e instrucciones; expresar la pertenencia y la cantidad en lengua inglesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "relación con personas de otros países, como para conocer culturas y modos de vida realidades sociales y culturales, de otras por el interlocutor, sus costumbres, valores y su cultura. y comunicarse a través de diferentes medios videoconferencias, presentaciones, co- de la lengua extranjera. Valoración del personas pertenecientes a otras culturas. a las costumbres, la vida cotidiana y las de uso común, el lenguaje no verbal, la países donde se habla la lengua extranjera. identidad cultural y vehículo motivador de lenguas, artes y culturas, a partir de La realidad de las lenguas del aula como fuente lenguaje verbal y no verbal. disyunción (or); oposición (but); causa her); relaciones temporales (when; before; + Adjective, e.g. How lovely! Exclamatory nobody, nothing; No (+ negative tag). to do, to be, to have, will. continuous); pasado (simple past); futuro (present continuous); habitual (simple terminativo (finish-ing). capacidad (can); obligación (have to). are); la entidad (nouns, pronouns, articles, (comparatives and superlatives: as Adj. up to four digits; ordinal numbers up to (too) much, half, a bottle/cup/glass/piece phrases and adverbs of location, position, divisions (e.g. half an hour, summer), and (e.g. for two days); anteriority (before); (at the same time); frequency (e.g. phrases and adverbs of time. quickly, carefully).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "of; genitivo sajón (‘s); possessives. 1 I like verb- ing; I love/I hate.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Expresiones cotidianas de uso frecuente en conversaciones dirigidas y espontáneas de temática variada con fluidez, utilizando frases más largas y conectores simples. Estrategias para formular y contestar a preguntas. Normas de cortesía básica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Modelos contextuales y géneros discursivos básicos en la comprensión, producción y coproducción (con relativa corrección fonética, utilizando conectores sencillos, cuidando y revisando su presentación) de textos orales, escritos y multimodales, breves y sencillos, literarios (cuentos, fábulas, leyendas, canciones, poemas, obras de teatro, rimas…) y no literarios (noticias, biografías, recetas, normas, avisos publicitarios, comics, cartas, emails….) en inglés: características y reconocimiento del contexto, organización y estructuración según la estructura interna.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Unidades del lenguaje básicos y significados asociados a dichas unidades, tales como expresión de la entidad y sus propiedades, cantidad y número, el espacio y las relaciones espaciales, el tiempo, la afirmación, la negación, la interrogación y la exclamación, relaciones lógicas elementales propias de la lengua inglesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Léxico básico y de interés para el alumnado, relativo a identificación personal, relaciones interpersonales próximas, (familiares, amistad, escolares…) lugares y entornos cercanos, ocio y tiempo libre, vida cotidiana. Emisión de palabras clave, oraciones, mensajes, expresiones",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "cotidianas de uso frecuente con una pronunciación, acentuación, entonación y ritmo correctos 1 utilizando conectores simples en lengua inglesa. 0",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "0 Patrones sonoros, acentuales, rítmicos y de entonación básicos, y funciones comunicativas",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "generales asociadas a dichos patrones. Aspectos fonológicos: sonidos, ritmo, entonación y acentuación de palabras en frases de uso frecuente en el aula, a través de canciones, rimas, C trabalenguas, chistes, adivinanzas, poesías, quintillas cómicas (Limerick)… acompañados de gestos faciales, corporales y mímica. Lectura, deletreo, reconocimiento y emisión de palabras que comparten un patrón común, palabras que rimen y fonemas finales. Comprensión de mensajes producidos con distintos acentos de la lengua inglesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Convenciones ortográficas básicas de la lengua inglesa y significados asociados a los formatos y elementos gráficos. Uso correcto de la puntuación y los apóstrofes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Convenciones y estrategias conversacionales básicas verbales o no verbales (gestos, contacto físico, expresiones faciales, posturas corporales...) de uso común, en formato síncrono (cara a cara, por teléfono, video llamada, videoconferencia…) o asíncrono o en las que se establece contacto social (plataformas, apps, redes sociales), para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, pedir y dar aclaraciones y explicaciones, comparar y contrastar, colaborar, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Recursos para el aprendizaje y estrategias para la búsqueda guiada de información en medios analógicos y digitales. (Contexto, conocimiento previo, identificación de información básica, filtrar resultados, elegir los términos precisos, utilizar la búsqueda avanzada, completar y contrastar los datos, valorar y seleccionar la información...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Propiedad intelectual de las fuentes consultadas y contenidos utilizados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas analógicas y digitales básicas para la comprensión, producción y coproducción oral, escrita y multimodal, y plataformas virtuales de interacción y colaboración educativa (aulas virtuales, videoconferencias, herramientas digitales colaborativas...) para el aprendizaje, la comunicación y el desarrollo de proyectos con hablantes o estudiantes de la lengua extranjera. Uso guiado, limitado y responsable de las herramientas digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias y técnicas de compensación de las carencias comunicativas (petición de repetición, aclaración, búsqueda de recursos para entender el discurso, descripciones, comunicación no verbal...) para responder eficazmente a una necesidad concreta, a pesar de las limitaciones derivadas del nivel de competencia en la lengua extranjera y en las demás lenguas. Interés y curiosidad por las lenguas, conocimiento de su funcionamiento desde el respeto, la tolerancia y la empatía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias básicas para identificar, organizar, retener, recuperar y utilizar unidades del lenguaje (léxico, morfosintaxis, patrones sonoros, etc.) uso de imágenes, diagramas, pósteres, fichas de vocabulario, diccionarios personales de imágenes, mapas mentales, canciones…a partir de la comparación de las lenguas como por ejemplo mediante la transferencia y aplicación de estrategias de la lengua castellana y variedades que conforman el repertorio del lenguaje personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias y herramientas básicas de evaluación de uno mismo y de los demás, analógicas y digitales, individuales y grupales. Rúbricas, diarios de clase, porfolios, escalas de estimación, bloc de autoevaluación, listas de cotejo…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Léxico y expresiones básicos de uso común para comprender enunciados sobre la comunicación, la lengua, el aprendizaje y las herramientas de comunicación y aprendizaje (metalenguaje). Estrategias metalingüísticas de inferencia a partir de las pistas contextuales, tales como el tema general; otras palabras del discurso (redundancias, anáforas, paralelismos); la estructura gramatical; la morfología (análisis de los prefijos, sufijos, composición, etc.); la entonación (habla) y la puntuación (escritura).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Comparación elemental entre lenguas a partir de elementos de la lengua extranjera y otras lenguas: origen y parentescos. Interés y curiosidad por las lenguas, conocimiento de su funcionamiento desde el respeto y la tolerancia.",
+      "criterios_ids": []
+    }
+  ]
+}

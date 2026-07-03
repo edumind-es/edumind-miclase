@@ -1,0 +1,438 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "geograf-a-e-historia",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_12_geograf_a_e_historia_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre temas relevantes del presente y del pasado, usando críticamente fuentes históricas y geográficas, para adquirir conocimientos, elaborar y expresar contenidos en varios formatos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar y elaborar productos propios sobre problemas geográficos, históricos y sociales que resulten relevantes en la actualidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los principales desafíos a los que se han enfrentado distintas sociedades a lo largo del tiempo, identificando las causas y consecuencias de los cambios producidos y los problemas a los que se enfrentan en la actualidad, mediante el desarrollo de proyectos de investigación y el uso de fuentes fiables.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar y analizar los elementos del paisaje y su articulación en sistemas complejos naturales, rurales y urbanos, así como su evolución en el tiempo, interpretando las causas de las transformaciones y valorando el grado de equilibrio existente en los distintos ecosistemas, para promover su conservación, mejora y uso sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar de forma crítica planteamientos históricos y geográficos explicando la construcción de los sistemas democráticos y los principios constitucionales que rigen la vida en comunidad, así como asumiendo los deberes y derechos propios de nuestro marco de convivencia, para promover la participación ciudadana y la cohesión social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender los procesos geográficos, históricos y culturales que han conformado la realidad multicultural en la que vivimos, conociendo y difundiendo la historia y cultura de las minorías étnicas presentes en nuestro país y valorando sus aportaciones.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar los fundamentos que sostienen las diversas identidades propias y las ajenas, a través del conocimiento y puesta en valor del patrimonio material e inmaterial que compartimos para conservarlo y respetar los sentimientos de pertenencia, así como para favorecer procesos que contribuyan a la cohesión y solidaridad territorial en orden a los valores del europeísmo y de la Declaración Universal de los Derechos Humanos.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Tomar conciencia del papel de los ciclos demográficos, el ciclo vital, las formas de vida y las relaciones intergeneracionales y de dependencia en la sociedad actual y su evolución a lo largo del tiempo, analizándolas de forma crítica, para promover alternativas saludables, sostenibles, enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Conocer y valorar la importancia de la seguridad integral ciudadana en la cultura de convivencia nacional e internacional, reconociendo la contribución del Estado, sus instituciones y otras entidades sociales a la ciudadanía global, a la paz, a la cooperación internacional, para promover la consecución de un mundo más seguro, solidario y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar contenidos propios en distintos formatos, mediante métodos de recogida y representación de datos más complejas, usando y contrastando críticamente fuentes fiables, tanto analógicas como digitales, de la historia contemporánea, identificando la desinformación y la manipulación.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Transferir adecuadamente la información y el conocimiento geográfico e histórico por medio de exposiciones orales apoyadas en medios digitales, generando posteriormente un debate sobre lo expuesto.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar trabajos originales y creativos mediante la reelaboración de conocimientos previos a través de herramientas de investigación que permitan explicar problemas presentes de la humanidad a distintas escalas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Razonamiento oral y por escrito.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar los principales problemas, retos y desafíos a los que se ha enfrentado la humanidad a lo largo del siglo XX, analizándolos desde una perspectiva política, económica, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Entender y afrontar, desde un enfoque geopolítico, problemas y desafíos del siglo XX, actuales o futuros de las sociedades contemporáneas teniendo en cuenta sus relaciones de interdependencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar procesos de cambio histórico y comparar casos de la historia y la geografía a través del uso de fuentes de información diversas, teniendo en cuenta las transformaciones de corta y larga duración (coyuntura y estructura), las continuidades y permanencias en diferentes períodos y lugares.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar los elementos del entorno y comprender su funcionamiento como un sistema complejo por medio del análisis de sus relaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer, valorar y ejercitar responsabilidades, derechos y deberes y actuar en favor de su desarrollo y afirmación, a través del conocimiento de nuestro ordenamiento jurídico y constitucional.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer los movimientos y causas que promueven la cohesión social.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Contribuir al bienestar individual y colectivo a través de iniciativas orientadas a promover un compromiso activo con los valores de nuestra sociedad, la investigación científico-tecnológica y la información y lectura de la prensa plural..",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Reconocer los rasgos que van conformando la identidad propia a través de la investigación y el análisis de sus fundamentos geográficos, históricos, artísticos, ideológicos y lingüísticos, y el reconocimiento de sus expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Conocer y contribuir a conservar el patrimonio material e inmaterial común.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconocer las iniciativas de la sociedad civil, tanto española como europea por el cuidado de los mayores.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Interpretar y explicar de forma argumentada la conexión de España con los grandes procesos históricos de los siglos XX y XXI, valorando lo que han supuesto para su evolución y señalando las aportaciones de sus habitantes, así como las aportaciones del Estado y sus instituciones a la cultura europea y mundial.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Contribuir a la consecución de un mundo más seguro, justo, libre, a través del análisis geoestratégico de los principales conflictos del presente y el reconocimiento de las instituciones del Estado, y de las instituciones que garantizan la seguridad integral y la convivencia social, así como de los compromisos internacionales de nuestro país en favor de la paz, la seguridad, la cooperación, la sostenibilidad, los valores democráticos y los Objetivos de Desarrollo Sostenible.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Historia del Mundo contemporáneo: de la Primera Guerra Mundial al desmoronamiento"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Historia de España: del reinado de Alfonso XIII a nuestros días"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Geopolítica y Globalización"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Retos del mundo actual"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Sociedades y territorios"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Compromiso cívico local y global"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "de la URSS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Guerras, crisis y totalitarismos. El mundo entre 1914-1945: (cid:2) La Primera Guerra Mundial (1914-1918). Causas. Características y desarrollo del conflicto. Consecuencias. Los tratados de paz. (cid:2) La Revolución rusa y la creación de la URSS. De Lenin a Stalin. El modelo comunista. (cid:2) El crack del 29 y la Gran Depresión. Consecuencias. Intentos de solución. (cid:2) La crisis de las democracias y el auge de los totalitarismos. El fascismo italiano. La Alemania nazi. Regímenes comunistas. Características de las ideologías y regímenes fascistas. Causas y consecuencias de la expansión de las ideologías totalitarias. (cid:2) La Segunda Guerra Mundial (1939-1945). Causas y etapas. Principales escenarios y evolución del conflicto. Crímenes contra la Humanidad. Consecuencias de la Guerra. La creación de la ONU. (cid:2) Panorama general del arte en la primera mitad del siglo XX.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Un mundo bipolar. Las relaciones internacionales entre 1945-1991: (cid:2) El surgimiento de la política de bloques y de la Guerra Fría. Sistemas de alianzas y tensiones. Evolución del conflicto y principales escenarios. La carrera armamentística. (cid:2) Capitalismo, socialismo y comunismo. Diferencias políticas, económicas, sociales y culturales entre ambos bloques. (cid:2) Los conflictos de la descolonización en Asia y en África. Fases. El Tercer Mundo. Hispanoamérica en la segunda mitad del siglo XX. (cid:2) El fin de la Guerra Fría y del bloque soviético. Caída del muro de Berlín y fin de los regímenes comunistas en Europa. (cid:2) Panorama general del arte en la segunda mitad del siglo XX.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "El reinado de Alfonso XIII: el problema de Marruecos. La crisis de 1917. La dictadura de Primo de Rivera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La Segunda República.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La Guerra Civil.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La dictadura franquista.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "La Transición. La constitución de 1978 y sus valores democráticos como norma fundamental del Estado de Derecho Español. Principios. Derechos y deberes fundamentales y sus implicaciones. Ordenamiento normativo autonómico, constitucional y supranacional como garante del desarrollo de derechos y libertades para el ejercicio de la ciudadanía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Los gobiernos de la democracia. La integración europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "El terrorismo de ETA.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Instituciones actuales del Estado que garantizan la seguridad integral y la convivencia social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La Edad de Plata de la cultura española.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Geopolítica: (cid:2) Factores y elementos geográficos en el análisis geopolítico. (cid:2) La organización política de las sociedades: el Estado. (cid:2) La organización política y territorial de España. (cid:2) Los fundamentos geoestratégicos desde la segunda mitad del siglo XX hasta la actualidad: orden bipolar, unipolar y multipolar. El nuevo orden mundial. Las nuevas potencias mundiales y regionales. Las amenazas a la libertad. China y Rusia. (cid:2) Alianzas e instituciones internacionales. El papel de los organismos internacionales, mediación y misiones de paz. (cid:2) Guerras y terrorismo. (cid:2) Los compromisos internacionales de nuestro país en favor de la paz, la seguridad y la cooperación internacional. Injerencia humanitaria y Justicia Universal. (cid:2) La importancia de las Tecnologías de la Información Geográfica en las relaciones internacionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "El proceso de construcción europea: (cid:2) Integración económica y monetaria: de la CEE a la Unión Europea. (cid:2) Las instituciones europeas. Estados miembros. (cid:2) El futuro de Europa. (cid:2) Ciudadanía europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Un mundo globalizado: (cid:2) La globalización y la mundialización del capitalismo. (cid:2) Nuevas subordinaciones económicas y culturales. (cid:2) Problemas políticos y sociales en el mundo actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Sociedad de la información: (cid:2) Búsqueda, tratamiento de la información, uso de datos en entornos digitales y evaluación y contraste de la fiabilidad de las fuentes. (cid:2) Cultura mediática. El problema de la desinformación y de la sobrecarga de información. El Big Data.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Las relaciones sociedad-naturaleza en el mundo actual. (cid:2) Procesos de degradación del mundo natural y sus causas. (cid:2) Prevención de riesgos naturales y de catástrofes humanitarias. (cid:2) La Geografía como disciplina y profesión centrada en la sostenibilidad y la ordenación del territorio. (cid:2) Técnicas, tecnologías y métodos para el diagnóstico de problemas y crisis de naturaleza geográfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Igualdad y diversidad: (cid:2) Actitudes y comportamientos sexistas. (cid:2) Historia y reconocimiento del pueblo gitano y otras minorías étnicas de nuestro país. (cid:2) La pluralidad en las sociedades libres (cid:2) Los problemas sociales del presenta a través de la lectura de prensa plural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "El conocimiento histórico: (cid:2) Las fuentes históricas como base para la construcción del conocimiento sobre el pasado contemporáneo. Contraste entre interpretaciones de historiadores. (cid:2) Conciencia histórica. Elaboración de juicios propios y argumentados ante problemas de actualidad contextualizados históricamente. Defensa y exposición crítica de los mismos a través de presentaciones y debates. (cid:2) Métodos y técnicas de las Ciencias Sociales: análisis de textos, interpretación y elaboración de mapas, esquemas y síntesis, representación de gráficos e interpretación de imágenes a través de medios digitales accesibles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Política: (cid:2) Las democracias liberales y los orígenes de los totalitarismos. La defensa de la verdad y la libertad (cid:2) La acción de los movimientos sociales en el mundo contemporáneo. (cid:2) Origen, evolución y adaptación de los sistemas liberales en el mundo a través de las fuentes. (cid:2) Las relaciones internacionales y estudio crítico y comparativo de conflictos y violencias de la primera mitad del siglo XX. Genocidios y crímenes contra la humanidad en el siglo XX. El Holocausto. Situación y evolución del pueblo judío a partir del Holocausto. (cid:2) La transformación de la España contemporánea .",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Sociedad: (cid:2) La acción de los movimientos feministas y sufragistas. Mujeres relevantes de la historia contemporánea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Patrimonio: (cid:2) Las manifestaciones artísticas a lo largo del siglo XX.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Ciencia y tecnología: (cid:2) Los Objetivos de Desarrollo Sostenible y los avances tecnológicos. (cid:2) Las transformaciones científicas y tecnológicas. Dimensión ética de la ciencia y la tecnología. Cambios culturales y movimientos sociales. Los medios de comunicación y las redes sociales. (cid:2) La exploración del espacio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Dignidad humana y derechos universales. Declaración Universal de los Derechos Humanos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Ciudadanía ética digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Compromiso cívico y participación ciudadana Apoyo a las víctimas de la violencia y del terrorismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Solidaridad, cohesión social y cooperación para el desarrollo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "La igualdad de oportunidades de mujeres y hombres. La conquista de derechos en las sociedades democráticas contemporáneas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Empleo y trabajo en la sociedad de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Los valores del europeísmo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Iniciativas para mostrar respeto y sensibilidad por la conservación del patrimonio material e inmaterial. Importancia y cuidado del espacio público.",
+      "criterios_ids": []
+    }
+  ]
+}

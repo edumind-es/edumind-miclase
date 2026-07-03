@@ -1,0 +1,813 @@
+{
+  "meta": {
+    "comunidad": "Canarias",
+    "etapa": "primaria",
+    "asignatura": "matem-ticas",
+    "ciclo_origen": "primer-ciclo",
+    "fuente": "iDoceo_08_matem_ticas_primer-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario https://sede.gobiernodecanarias.org/boc como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. 5 Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia en Competencia matemática y competencia La competencia matemática y competencia e ingeniería en ciencia, por sus siglas en inglés) entraña la comprensión pensamiento y representación matemáticos, la tecnología La competencia matemática y competencia transformar el entorno de forma comprometida, (competencia matemática permite STEM desarrollar por sus siglas y aplicar en la inglés) perspectiva resolver diversos problemas en diferentes contextos. los métodos científicos, el pensamiento y representación comprensión y explicación del entorno natural y social, métodos de la ingeniería para transformar el entorno metodologías, incluidas la observación y la experimentación, 6 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45543 y sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolver La competencia en ciencia conlleva la comprensión social, utilizando un conjunto de conocimientos y la experimentación, con el fin de plantear pruebas para poder interpretar y transformar competencia en tecnología e ingeniería comprende metodologías propios de las ciencias para transformar las necesidades o deseos de las personas en sostenibilidad. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. 8 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45544 Competencia La competencia digital implica el uso seguro, de las tecnologías digitales para el aprendizaje, la sociedad, así como la interacción con estas. datos, la comunicación y la colaboración, la educación digitales (incluida la programación), la seguridad competencias relacionadas con la ciberseguridad), digital, la privacidad, la propiedad intelectual, computacional y crítico. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario. Competencia personal, social y de Competencia personal, social y de La competencia personal, social y de aprender a aprender uno mismo para autoconocerse, aceptarse y promover La competencia personal, social y de aprender el tiempo y la información eficazmente; colaborar reflexionar resiliencia; y sobre gestionar uno el mismo aprendizaje para a autoconocerse, lo largo de personal frente a la constante; incertidumbre gestionar y a la el complejidad; tiempo y la adaptarse información 10 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45545 de forma constructiva; mantener la resiliencia; vida. Incluye también la capacidad de hacer adaptarse a los cambios; aprender a gestionar conductas contrarias a la convivencia y desarrollar al bienestar físico, mental y emocional propio habilidades para cuidarse a sí mismo y a quienes procesos metacognitivos; identificar conductas contrarias ser capaz de llevar una vida orientada al futuro; para abordarlas; contribuir al bienestar físico, mental conflictos desarrollando en un habilidades contexto para integrador cuidarse y de a apoyo. sí mismo corresponsabilidad; ser capaz de llevar una vida orientada abordar los conflictos en un contexto integrador y de Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento. Competencia ciudadana Competencia ciudadana La competencia ciudadana contribuye a que alumnos responsable y participar plenamente en la vida social La competencia ciudadana contribuye a conceptos y las estructuras sociales, económicas, jurídicas ciudadanía responsable y participar plenamente de los acontecimientos mundiales y el compromiso comprensión de los conceptos y las estructuras ciudadanía mundial. Incluye la alfabetización cívica, así como en el conocimiento de los acontecimientos la sostenibilidad y el logro de una ciudadanía 11 la adopción consciente de los valores propios respeto a los derechos humanos, la reflexión crítica de nuestro tiempo y el desarrollo de un estilo de Desarrollo Sostenible planteados en la Agenda https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45546 de una cultura democrática fundada en el respeto a de los grandes problemas éticos de nuestro tiempo acorde con los Objetivos de Desarrollo Sostenible Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia Competencia emprendedora emprendedora La competencia emprendedora implica desarrollar oportunidades La competencia e ideas, emprendedora utilizando los conocimientos implica desarrollar sobre de valor oportunidades para otras personas. e ideas, utilizando Aporta estrategias los conocimientos necesidades y oportunidades; entrenar el pensamiento resultados de valor para otras personas. Aporta replantear ideas utilizando la imaginación, la creatividad, para detectar necesidades y oportunidades; entrenar entorno, y crear y replantear ideas utilizando la 12 estratégico y la reflexión ética, crítica y constructiva innovación; ética, crítica y y despertar constructiva la disposición dentro de los a aprender, procesos disposición a aprender, a arriesgar y a afrontar Asimismo, implica tomar decisiones basadas en decisiones basadas en la información y el conocimiento de manera ágil con otras personas, con motivación, personas, con motivación, empatía y habilidades de negociación, para llevar las ideas planteadas ideas planteadas a la acción mediante la planificación de social,cultural proyectos sostenibles y económico-financiero. de valor social,cultural Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros https://sede.gobiernodecanarias.org/boc básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresión culturales las ideas, las opiniones, los sentimientos y las emociones creativa en distintas culturas y por medio de una culturales. Implica también un compromiso con la ideas propias y del sentido del lugar que se ocupa 13 ética, crítica y constructiva dentro de los procesos disposición a aprender, a arriesgar y a afrontar decisiones basadas en la información y el conocimiento personas, con motivación, empatía y habilidades ideas planteadas a la acción mediante la planificación social,cultural y económico-financiero. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. https://sede.gobiernodecanarias.org/boc 13"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar situaciones de la vida cotidiana, proporcionando una representación matemática de las mismas mediante conceptos, herramientas y estrategias, para analizar la información más relevante. de las mismas mediante conceptos, herramientas y estrategias, para analizar la información más relevante. de las mismas mediante conceptos, herramientas y estrategias, para analizar la información más relevante.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CD2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Resolver situaciones problematizadas, aplicando diferentes técnicas, estrategias y formas de razonamiento, para explorar distintas maneras de proceder, obtener soluciones y asegurar su validez desde un punto de vista formal y en relación con el contexto planteado. razonamiento, para explorar distintas maneras de proceder, obtener soluciones y asegurar su validez desde un punto de vista formal y en relación con el contexto planteado. razonamiento, para explorar distintas maneras de proceder, obtener soluciones y asegurar su validez desde un punto de vista formal y en relación con el contexto planteado.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Explorar, formular y comprobar conjeturas sencillas o plantear problemas de tipo matemático en situaciones basadas en la vida cotidiana, de forma guiada, reconociendo el valor del razonamiento y la argumentación, para contrastar su validez, adquirir e integrar nuevo conocimiento. matemático en situaciones basadas en la vida cotidiana, de forma guiada, reconociendo el valor del razonamiento y la argumentación, para contrastar su validez, adquirir e integrar nuevo conocimiento. matemático en situaciones basadas en la vida cotidiana, de forma guiada, reconociendo el valor del razonamiento y la argumentación, para contrastar su validez, adquirir e integrar nuevo conocimiento.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "CE3",
+        "CD1",
+        "CD3",
+        "CD5"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilizar el pensamiento computacional, organizando datos, descomponiendo en partes, reconociendo patrones, generalizando e interpretando, modificando y creando algoritmos de forma guiada, para modelizar y automatizar situaciones de la vida cotidiana. reconociendo patrones, generalizando e interpretando, modificando y creando algoritmos de forma guiada, para modelizar y automatizar situaciones de la vida cotidiana. reconociendo patrones, generalizando e interpretando, modificando y creando algoritmos de forma guiada, para modelizar y automatizar situaciones de la vida cotidiana.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD5",
+        "CE3",
+        "CD3",
+        "CD1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconocer y utilizar conexiones entre las diferentes ideas matemáticas, así como identificar las matemáticas implicadas en otras áreas o en la vida cotidiana, interrelacionando conceptos y procedimientos, para interpretar situaciones y contextos diversos. matemáticas implicadas en otras áreas o en la vida cotidiana, interrelacionando conceptos y procedimientos, para interpretar situaciones y contextos diversos. matemáticas implicadas en otras áreas o en la vida cotidiana, interrelacionando conceptos y procedimientos, para interpretar situaciones y contextos diversos.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CC4",
+        "CCEC1",
+        "CD3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comunicar y representar, de forma individual y colectiva, conceptos, procedimientos y resultados matemáticos, utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología apropiados, para dar significado y permanencia a las ideas matemáticas. resultados matemáticos, utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología apropiados, para dar significado y permanencia a las ideas matemáticas. resultados matemáticos, utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología apropiados, para dar significado y permanencia a las ideas matemáticas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CE3",
+        "CD1",
+        "CD5",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Desarrollar destrezas personales que ayuden a identificar y gestionar emociones al enfrentarse a retos matemáticos, fomentando la confianza en las propias posibilidades, aceptando el error como parte del proceso de aprendizaje y adaptándose a las situaciones de incertidumbre, para mejorar la perseverancia y disfrutar en el aprendizaje de las matemáticas. a retos matemáticos, fomentando la confianza en las propias posibilidades, aceptando el error como parte del proceso de aprendizaje y adaptándose a las situaciones de incertidumbre, para mejorar la perseverancia y disfrutar en el aprendizaje de las matemáticas. a retos matemáticos, fomentando la confianza en las propias posibilidades, aceptando el error como parte del proceso de aprendizaje y adaptándose a las situaciones de incertidumbre, para mejorar la perseverancia y disfrutar en el aprendizaje de las matemáticas.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC2",
+        "CC3",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Desarrollar destrezas sociales, reconociendo y respetando las emociones, las experiencias de los demás y el valor de la diversidad y participando activamente en equipos de trabajo heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y crear relaciones saludables. los demás y el valor de la diversidad y participando activamente en equipos de trabajo heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y crear relaciones saludables. los demás y el valor de la diversidad y participando activamente en equipos de trabajo heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y crear relaciones saludables.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CPSAA3",
+        "CC2",
+        "CC3",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Entender y describir la situación planteada, discriminando la información relevante y el objetivo a conseguir para lograr la comprensión de la situación, y elaborando dibujos o diagramas que ayuden en la búsqueda de estrategias para su resolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer alguna estrategia que resuelva problemas aritméticos, geométricos, lógicos y aplicarla para obtener las posibles soluciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Elegir y utilizar las operaciones pertinentes para la resolución de problemas que involucren la estructura aditiva; plantear problemas coherentes que se resuelvan con operaciones dadas, utilizando la calculadora cuando las cantidades lo precisen; ofrecer representaciones gráficas adecuadas y explicarlas con un vocabulario matemático apropiado a su nivel.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Revisar la validez de las soluciones del problema y su coherencia con la pregunta expresando oralmente el proceso seguido.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar conjeturas matemáticas sencillas de forma guiada, investigando patrones, propiedades y relaciones, utilizando materiales manipulativos, representaciones gráficas o la calculadora, para extraer conclusiones, comunicarlas de forma verbal, manipulativa o gráfica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar problemas en situaciones cotidianas que se resuelven matemáticamente, revisar la adecuación de los pasos seguidos para ver las conexiones entre las matemáticas y las situaciones cercanas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Describir rutinas sencillas de la vida cotidiana que se realicen paso a paso, identificando patrones a partir de regularidades, utilizando secuencias numéricas o gráficas y reorganizando algoritmos sencillos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Resolver problemas que impliquen secuencias o patrones, de forma guiada, utilizando las herramientas adecuadas, entre ellas las tecnológicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer conexiones entre todos los sentidos y entre las matemáticas implicadas en las diferentes áreas, movilizando conocimientos y experiencias propias, para una mejor comprensión de los aprendizajes adquiridos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer algunas conexiones entre las matemáticas y la vida cotidiana para interpretar problemas en contextos no matemáticos, mostrando actitudes que favorezcan su resolución desde un punto de vista sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer y comprender el lenguaje matemático sencillo presente en la vida cotidiana, en diferentes formatos, adquiriendo vocabulario básico, para transmitir información matemática.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Comunicar de forma verbal o gráfica ideas y procesos matemáticos, utilizando lenguaje matemático adecuado e intercambiando información, para dar significado y permanencia a las ideas matemáticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Reconocer las emociones propias, desarrollando así la autoconfianza, empleando actitudes positivas, tales como la responsabilidad, ante nuevos retos matemáticos y valorando el error como una oportunidad de aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Participar en el trabajo en equipo, desarrollando la escucha activa y la resolución pacífica de conflictos y cumpliendo las responsabilidades individuales para la consecución de objetivos compartidos.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "I. Sentido numérico"
+    },
+    {
+      "id": "B2",
+      "titulo": "II. Sentido de la medida"
+    },
+    {
+      "id": "B3",
+      "titulo": "III. Sentido espacial"
+    },
+    {
+      "id": "B4",
+      "titulo": "IV. Sentido algebraico"
+    },
+    {
+      "id": "B5",
+      "titulo": "V. Sentido estocástico"
+    },
+    {
+      "id": "B6",
+      "titulo": "VI. Sentido socioafectivo"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Elección y puesta en práctica de estrategias variadas de conteo y recuento sistemático en situaciones de la vida cotidiana en cantidades hasta el 999.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Construcción y comprensión de los órdenes de unidades (agrupamientos de 10 elementos) del sistema de numeración decimal mediante la composición y descomposición, con materiales manipulativos, hasta 999.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Uso comprensivo de la decena y la centena como agrupación de 10 unidades del orden anterior.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Lectura y escritura de los números hasta el 999 e interpretación del valor posicional de sus cifras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Representación de números naturales hasta el 999 de distintas formas (manipulativa, gráfica y simbólica con la recta numérica y otros materiales). Elección de la representación adecuada para cada situación o problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Estimación razonada de cantidades en contextos de resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Uso de la estructura aditiva en la resolución de problemas aritméticos, organizando la información para elegir la operación adecuada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Comprensión y utilización de estrategias flexibles de cálculo para la suma con números naturales hasta 999 (al menos dos algoritmos diferentes).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Composición y descomposición de los 10 primeros números y su generalización al 100.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Uso de los dobles hasta el 10+10 y su generalización al 100 para las sumas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Suma de números de una o dos cifras, descomponiendo, componiendo o completando a la decena o centena, y en la recta numérica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Análisis de las relaciones entre los sumandos (dobles más 1, doble menos 1, parejas de sumandos que sumen 10, agrupar decenas completas, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Comprensión y utilización de estrategias flexibles de cálculo para la resta con números naturales hasta 999: resta de una unidad, dos unidades y decenas completas a números de dos y tres cifras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Uso de la resta como acción de quitar de manera sucesiva, descomponiendo de manera conveniente tanto el minuendo como el sustraendo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Uso de la resta como acción de completar a los órdenes de unidades desde el sustraendo hasta el minuendo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Uso de la resta en modelos manipulativos: recta de cuentas, recta numérica, tabla del 100.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Uso de la resta de números naturales, con flexibilidad, comprensión y sentido, con al menos dos algoritmos basados en las propiedades del sistema de numeración decimal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Redondeo a la decena más cercana para el cálculo estimativo posterior.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Obtención y memorización de los dobles y mitades de las decenas completas hasta el 100, utilizando materiales manipulativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Cálculo de la mitad de números por descomposición, primero con decenas y unidades pares, con materiales manipulativos y hasta el 100.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de la calculadora en la investigación, el cálculo del resultado exacto cuando las cantidades lo precisen y en la comprobación de resultados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "Conocimiento del sistema de numeración de base 10 y aplicación de las relaciones (10 elementos de un orden generan un elemento de un orden superior).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "Uso de números naturales en contextos de la vida cotidiana: comparación y ordenación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "Comprensión y aplicación de la estructura aditiva: relaciones entre las partes y el todo en la suma y la resta, y aplicación en contextos cotidianos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "Conocimiento del sistema monetario europeo: monedas (1 y 2 euros) y billetes de euro (5, 10, 20, 50 y 100), valor y equivalencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Magnitud",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Identificación de los atributos mensurables de los objetos (longitud, masa, capacidad), distancias y tiempos. Percepción de la magnitud por comparación directa con una unidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Reconocimiento y utilización de las unidades no convencionales y convencionales (cm, m, g, kg y l) en situaciones de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Uso de las unidades de medida del tiempo (año, mes, semana, día, hora y minuto) en situaciones de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Estimación, medición y relaciones",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Conocimiento y aplicación de procesos para medir mediante repetición de una unidad no convencional o convencional, y mediante la utilización de instrumentos convencionales (reglas, cintas métricas, balanzas, calendarios, etc.) en contextos familiares.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de estrategias de comparación directa e indirecta, y ordenación de medidas de la misma magnitud: cuál es mayor y cuántas veces mayor.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Estimación de medidas (distancias, tamaños, masas, capacidades…) por comparación directa con otras medidas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de las figuras planas sencillas contenidas en objetos de la vida cotidiana: identificación y enumeración de cualidades, semejanzas y diferencias, representación y clasificación atendiendo a sus elementos (vértices y lados).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Utilización de estrategias y técnicas de construcción de figuras geométricas sencillas de dos o tres dimensiones de forma manipulativa. Composición y descomposición de figuras planas para formar otras diferentes con material manipulativo (tangram, mosaicos, policubos, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Adquisición de vocabulario geométrico básico: descripción verbal de los elementos (vértice, lado, arista, cara).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Identificación de la posición relativa de objetos en el espacio e interpretación de movimientos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Descripción de la posición en referencia a uno mismo a través de vocabulario adecuado (arriba, abajo, delante, detrás, entre, más cerca que, menos cerca que, más lejos que, menos lejos que, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Apreciar la simetría y la regularidad en dibujos sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Utilización de modelos geométricos en la resolución de problemas relacionados con los otros sentidos (diagramas de barras, distribuciones rectangulares, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de relaciones geométricas presentes en el entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Empleo de estrategias para la identificación, descripción oral, descubrimiento de elementos ocultos o secuencias a partir de las regularidades en una colección de números, figuras o imágenes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Ejecución de un proceso guiado de modelización (dibujos, esquemas, diagramas, objetos manipulables, etc.) en la comprensión y resolución de problemas de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Planificación en cuatro fases de la resolución de problemas: comprender la situación, pensar y seleccionar una estrategia, ejecutar la estrategia elegida y responder, comprobando previamente las soluciones obtenidas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Resolución de problemas aritméticos (acciones de componer, descomponer, completar y comparar), geométricos, lógicos, de patrones; y planteamiento de nuevos problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Conocimiento y uso de estrategias de resolución de problemas (modelización, ensayo y error, organización de la información, búsqueda de patrones).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Empleo de diagramas partes-todo, tablas simples, diagramas de barras, diagramas en árbol.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Expresión de relaciones de igualdad y desigualdad mediante los signos = y ≠ entre expresiones que incluyan operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Representación de la igualdad como expresión de una relación de equivalencia entre dos elementos y obtención de datos sencillos desconocidos (representados por medio de un símbolo) en cualquiera de los dos elementos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Expresión matemática de las relaciones establecidas y deducidas del trabajo manipulativo o de situaciones problemáticas, haciendo uso de símbolos numéricos y no numéricos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Discusión sobre la veracidad o falsedad entre expresiones que incluyan operaciones, valorando si se puede afirmar o negar que una es mayor, menor o igual que otra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Reconocimiento de algoritmos sencillos (rutinas, instrucciones con pasos ordenados, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Resolución de retos con actividades desenchufadas y manipulativas para el desarrollo del pensamiento computacional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Reconocimiento de los principales elementos y extracción de la información relevante de gráficos estadísticos sencillos de la vida cotidiana (pictogramas y gráficas de barras).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Uso de estrategias sencillas para la recogida, clasificación y recuento de datos cualitativos y cuantitativos en muestras pequeñas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Representación de datos obtenidos a través de recuentos mediante diagrama de barras y recursos manipulativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Acercamiento intuitivo al azar y la probabilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Desarrollo de lenguaje de uso común para expresar incertidumbre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Gestión emocional: identificación y expresión de las propias emociones ante las matemáticas. Curiosidad e iniciativa en el aprendizaje de las matemáticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Identificación y rechazo de actitudes discriminatorias ante las diferencias individuales presentes en el aula. Actitudes inclusivas y aceptación de la diversidad del grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Participación activa en el trabajo en equipo: interacción positiva y respeto por el trabajo de las demás personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Contribución de las matemáticas a los distintos ámbitos del conocimiento humano desde una perspectiva de género.",
+      "criterios_ids": []
+    }
+  ]
+}

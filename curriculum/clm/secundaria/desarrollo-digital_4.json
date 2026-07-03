@@ -1,0 +1,353 @@
+{
+  "meta": {
+    "comunidad": "CLM",
+    "etapa": "secundaria",
+    "asignatura": "desarrollo-digital",
+    "ciclo_origen": "toda-la-etapa",
+    "fuente": "iDoceo_desarrollo-digital_toda-la-etapa.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. de 2022 24490"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. crítico y responsable de las tecnologías digitales en la sociedad, así como la interacción con estas. y la colaboración, la educación mediática, la creación (incluido el bienestar digital y las competencias con la ciudadanía digital, la privacidad, la propiedad y crítico. completar la enseñanza básica, el alumno o la Realiza búsquedas en internet atendiendo a de validez, calidad, actualidad y fiabilidad, los resultados de manera crítica y para recuperarlos, referenciarlos y respetando la propiedad intelectual. Gestiona y utiliza su entorno personal digital aprendizaje para construir conocimiento y contenidos digitales, mediante estrategias tratamiento de la información y el uso de herramientas digitales, seleccionando configurando la más adecuada en función de tarea y de sus necesidades de aprendizaje de 2022 24491 Se comunica, participa, colabora e interactúa contenidos, datos e información herramientas o plataformas virtuales, gestiona de manera responsable sus acciones, y visibilidad en la red, para ejercer una digital activa, cívica y reflexiva. Identifica riesgos y adopta medidas al usar las tecnologías digitales para los dispositivos, los datos personales, la y el medioambiente, y para tomar conciencia la importancia y necesidad de hacer un uso legal, seguro, saludable y sostenible de tecnologías. Desarrolla aplicaciones informáticas sencillas soluciones tecnológicas creativas y sostenibles resolver problemas concretos o responder a propuestos, mostrando interés y curiosidad la evolución de las tecnologías digitales y por desarrollo sostenible y uso ético. implica la capacidad de reflexionar sobre uno mismo personal constante; gestionar el tiempo y la información mantener la resiliencia; y gestionar el aprendizaje a lo a la incertidumbre y a la complejidad; adaptarse a identificar conductas contrarias a la convivencia físico, mental y emocional propio y de las demás y a quienes lo rodean a través de la corresponsabilidad; expresar empatía y abordar los conflictos en un contexto Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas. de 2022 24492"
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. alumnas puedan ejercer una ciudadanía responsable y en la comprensión de los conceptos y las estructuras el conocimiento de los acontecimientos mundiales y el ciudadanía mundial. Incluye la alfabetización cívica, democrática fundada en el respeto a los derechos éticos de nuestro tiempo y el desarrollo de un estilo Sostenible planteados en la Agenda 2030. Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial. de 2022 24493"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. vital dirigido a actuar sobre oportunidades e ideas, generar resultados de valor para otras personas. Aporta necesidades y oportunidades; entrenar el pensamiento utilizando la imaginación, la creatividad, el pensamiento de los procesos creativos y de innovación; y despertar la Asimismo, implica tomar decisiones basadas en la otras personas, con motivación, empatía y habilidades a la acción mediante la planificación y gestión completar la enseñanza básica, el alumno o la Analiza necesidades y oportunidades afronta retos con sentido crítico, haciendo de su sostenibilidad, valorando el que puedan suponer en el entorno, para ideas y soluciones innovadoras, éticas sostenibles, dirigidas a crear valor en el ámbito social, educativo y profesional. Evalúa las fortalezas y debilidades propias, uso de estrategias de autoconocimiento autoeficacia, y comprende los elementos de la economía y las finanzas, conocimientos económicos y financieros actividades y situaciones concretas, utilizando que favorezcan el trabajo colaborativo en equipo, para reunir y optimizar los recursos que lleven a la acción una experiencia que genere valor. de 2022 24494 Desarrolla el proceso de creación de ideas soluciones valiosas y toma decisiones, de razonada, utilizando estrategias ágiles planificación y gestión, y reflexiona sobre proceso realizado y el resultado obtenido, llevar a término el proceso de creación de innovadores y de valor, considerando experiencia como una oportunidad para comprender y respetar el modo en que las ideas, las y se comunican de forma creativa en distintas culturas y culturales. Implica también un compromiso con propias y del sentido del lugar que se ocupa o del papel comprensión de la propia identidad en evolución y del así como la toma de conciencia de que el arte y de mirar el mundo y de darle forma. completar la enseñanza básica, el alumno o la Conoce, aprecia críticamente y respeta patrimonio cultural y artístico, implicándose en conservación y valorando el enriquecimiento a la diversidad cultural y artística. Disfruta, reconoce y analiza con las especificidades e intencionalidades las manifestaciones artísticas y culturales destacadas del patrimonio, distinguiendo medios y soportes, así como los lenguajes y técnicos que las caracterizan. Expresa ideas, opiniones, sentimientos y por medio de producciones culturales artísticas, integrando su propio cuerpo y la autoestima, la creatividad y el del lugar que ocupa en la sociedad, con actitud empática, abierta y colaborativa. Conoce, selecciona y utiliza con diversos medios y soportes, así técnicas plásticas, visuales, audiovisuales, o corporales, para la creación de productos y culturales, tanto de forma individual colaborativa, identificando oportunidades desarrollo personal, social y laboral, así como emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Realizar una configuración avanzada del entorno personal digital de aprendizaje, a través de plataformas digitales y entornos virtuales, interactuando con los demás y aprovechando los recursos del ámbito digital, para construir conocimiento de forma colaborativa.",
+      "descriptores_ids": [
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Seleccionar información y contenidos digitales reutilizables, de forma crítica e informada, atendiendo a criterios de validez, calidad, actualidad y fiabilidad, además de respetando la propiedad intelectual, para desarrollar una ciudadanía digital activa y responsable.",
+      "descriptores_ids": [
+        "CD1",
+        "CD3",
+        "CD4",
+        "CPSAA2",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Utilizar, con destreza y solvencia, el entorno personal digital de aprendizaje, seleccionando y configurando las herramientas informáticas más adecuadas, en función de las tareas y necesidades de aprendizaje, para crear contenidos digitales y compartirlos.",
+      "descriptores_ids": [
+        "CD2",
+        "CD3",
+        "CD5",
+        "CPSAA3",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Crear aplicaciones informáticas sencillas y soluciones tecnológicas originales y sostenibles, desarrollando algoritmos mediante herramientas digitales, para resolver problemas concretos o responder a retos propuestos.",
+      "descriptores_ids": [
+        "STEM1",
+        "CD2",
+        "CD5",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar los métodos de acceso a un entorno virtual de aprendizaje, utilizando contraseñas seguras y realizando su recuperación, en caso de ser necesario.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer las opciones básicas y avanzadas en la configuración del entorno personal digital de aprendizaje, haciendo uso de ellas para acceder a los contenidos y a las tareas, entre otras finalidades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Interactuar en el entorno virtual, comunicándose con el resto de usuarios de una forma activa, eficaz y respetuosa.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer las herramientas que permiten realizar búsquedas en Internet y sus parámetros de configuración, identificando las más adecuadas para obtener diferentes tipos de información y comparando los resultados obtenidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar las diferentes fuentes de información disponibles en Internet, diferenciando las más fiables y seleccionando las que son más útiles.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la autenticidad de la información obtenida en Internet, contrastándola con otras fuentes y ofreciendo herramientas que permitan corroborar su veracidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el uso de las herramientas digitales óptimas que permitan crear contenidos y presentaciones que incluyan, entre otros, textos, imágenes y sonidos, reconociendo los formatos más utilizados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar herramientas que permitan la edición de imágenes, retocando sus parámetros básicos para ajustar su tamaño, calidad y otros defectos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar edición básica de vídeos, conociendo y aplicando distintas herramientas y los formatos más utilizados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer el entorno de programación y las herramientas visuales disponibles, ofreciendo las opciones necesarias para crear un programa y ejecutarlo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar el orden en el que se ejecuta un programa, comprendiendo las instrucciones condicionales y repetitivas que permiten cambiar dicho orden.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Diseñar programas sencillos que resuelvan tareas simples, desarrollando estrategias de colaboración para el trabajo en equipo y comparando diferentes soluciones para un mismo problema. AÑO XLI Núm. 134 14 de julio de 2022 24525",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Uso de entornos virtuales en el aula"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Búsquedas en Internet"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Diseño y producción digital"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Programación creativa"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Presentación del entorno. Seguridad de las contraseñas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Acceso a los contenidos de las aulas virtuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Actividades, tareas y otros recursos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Comunicaciones y mensajería.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Motores de búsqueda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Configuraciones avanzadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Credibilidad y contraste de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Propiedad intelectual en el ámbito digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Procesadores de textos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Elaboración de presentaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Programas de edición de imagen, sonido y vídeo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Introducción a la programación. Entornos y herramientas de programación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Tipos de instrucciones en un programa. Secuencia de ejecución.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Cambio en la ejecución de un programa: sentencias condicionales y repetitivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Sentencias para el manejo de imágenes, sonidos y animación de objetos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Colaboración en el desarrollo de proyectos de programación. AÑO XLI Núm. 134 14 de julio de 2022 24526",
+      "criterios_ids": []
+    }
+  ]
+}

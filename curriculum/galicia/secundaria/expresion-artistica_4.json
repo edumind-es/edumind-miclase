@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "expresion-artistica",
-    "curso": "4º",
+    "ciclo_origen": "4º",
     "fuente": "iDoceo_expresion-artistica_4º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "4º"
   },
   "competencias": [
     {

@@ -2,10 +2,22 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import QRModal from '@/components/QRModal'
+import AsignaturasPanel from '@/components/AsignaturasPanel'
+import ProgramacionPanel from '@/components/ProgramacionPanel'
 
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
 const CURSOS_ESO = ['1','2','3','4']
+
+const COMUNIDADES = [
+  { value: 'Galicia',   label: 'Galicia' },
+  { value: 'MADRID',    label: 'Comunidad de Madrid' },
+  { value: 'Aragon',    label: 'Aragón' },
+  { value: 'Canarias',  label: 'Canarias' },
+  { value: 'CyL',       label: 'Castilla y León' },
+  { value: 'CLM',       label: 'Castilla-La Mancha' },
+  { value: 'Valencia',  label: 'Comunitat Valenciana' },
+]
 
 export default function GruposPage() {
   return (
@@ -60,7 +72,7 @@ function NuevoGrupo() {
   const navigate = useNavigate()
   const crearGrupo = useAppStore(s => s.crearGrupo)
   const [form, setForm] = useState({
-    nombre: '', etapa: 'primaria', curso: '3', curso_escolar: '2025-2026', color: COLORES[0]
+    nombre: '', etapa: 'primaria', curso: '3', comunidad: 'Galicia', curso_escolar: '2025-2026', color: COLORES[0]
   })
   const [guardando, setGuardando] = useState(false)
 
@@ -108,6 +120,13 @@ function NuevoGrupo() {
           </div>
 
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14, fontWeight: 500 }}>
+            Comunidad autónoma
+            <select value={form.comunidad} onChange={e => set('comunidad', e.target.value)}>
+              {COMUNIDADES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </label>
+
+          <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 14, fontWeight: 500 }}>
             Curso escolar
             <input value={form.curso_escolar} onChange={e => set('curso_escolar', e.target.value)}
               placeholder="2025-2026" />
@@ -135,6 +154,8 @@ function NuevoGrupo() {
 
 function DetalleGrupo() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const eliminarGrupo = useAppStore(s => s.eliminarGrupo)
   const [grupo, setGrupo] = useState<any>(null)
   const [cargando, setCargando] = useState(true)
   const [qrVisible, setQrVisible] = useState(false)
@@ -152,6 +173,12 @@ function DetalleGrupo() {
     const nuevo = !modoAnon
     setModoAnon(nuevo)
     localStorage.setItem(`miclase_anon_${id}`, nuevo ? '1' : '0')
+  }
+
+  const handleEliminar = async () => {
+    if (!confirm(`¿Eliminar el grupo "${grupo?.nombre}" y todos sus datos? Esta acción no se puede deshacer.`)) return
+    await eliminarGrupo(Number(id))
+    navigate('/grupos')
   }
 
   if (cargando) return <p>Cargando grupo…</p>
@@ -192,6 +219,13 @@ function DetalleGrupo() {
           <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setQrVisible(true)}>
             📱 QR acceso móvil
           </button>
+          <button
+            onClick={handleEliminar}
+            style={{ fontSize: 13, padding: '6px 12px', background: 'none', border: '1px solid var(--rojo-500)', color: 'var(--rojo-500)', borderRadius: 8, cursor: 'pointer' }}
+            title="Eliminar grupo"
+          >
+            🗑 Eliminar grupo
+          </button>
         </div>
       </div>
 
@@ -226,14 +260,20 @@ function DetalleGrupo() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 12 }}>
+      <AsignaturasPanel grupoId={id!} etapa={grupo.etapa} curso={grupo.curso} comunidad={grupo.comunidad || 'Galicia'} />
+
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Link to={`/evaluacion?grupo_id=${id}`}
           style={{ padding: '10px 20px', background: 'var(--azul-700)', color: 'white', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
-          📋 Ir al calificador
+          📋 Calificador
+        </Link>
+        <Link to={`/sesiones?grupo_id=${id}`}
+          style={{ padding: '10px 20px', background: 'var(--verde-500)', color: 'white', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
+          ✅ Asistencia
         </Link>
         <Link to={`/seguimiento?grupo_id=${id}`}
           style={{ padding: '10px 20px', background: 'var(--gris-100)', color: 'var(--gris-600)', border: '1px solid var(--gris-300)', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
-          📈 Ver seguimiento
+          📈 Seguimiento
         </Link>
       </div>
     </>

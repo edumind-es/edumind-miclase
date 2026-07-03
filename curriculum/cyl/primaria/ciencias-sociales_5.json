@@ -1,0 +1,435 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "ciencias-sociales",
+    "ciclo_origen": "quinto-curso",
+    "fuente": "iDoceo_ciencias-sociales_quinto-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "5º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Utilizar dispositivos, recursos digitales y entornos personales y/o virtuales de aprendizaje de forma segura, responsable y eficiente, para buscar información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital sobre las sociedades y los territorios de acuerdo con las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA2",
+        "CPSAA4",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas sobre las sociedades y los territorios, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio social y cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CP2",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD4",
+        "CPSAA4",
+        "CPSAA5",
+        "CC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio social y cultural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, compartiendo e intercambiando la información obtenida, para reconocer el valor del patrimonio cultural, conservarlo, mejorarlo, y emprender acciones para su uso responsable y contribuir a una cultura para la sostenibilidad.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar las causas y consecuencias de la intervención humana en el entorno, desde los puntos de vista social, económico, cultural y tecnológico, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución, y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Observar, comprender e interpretar continuidades y cambios del medio social y cultural, analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos y asumir un compromiso responsable frente a retos futuros.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Reconocer y valorar la diversidad y la igualdad de género, mostrando empatía y respeto por otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de la integración europea.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Participar en el entorno y la vida social de forma eficaz y constructiva desde el respeto a los valores democráticos, los derechos humanos y de la infancia y los principios y CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Buscar, analizar y organizar información sobre las sociedades y territorios utilizando recursos digitales de acuerdo con las necesidades del contexto educativo, en entornos personales y/o virtuales de aprendizaje, de forma segura y eficiente. (CCL3, STEM4, CD1, CD3, CD4, CPSAA2, CPSAA4)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reelaborar y crear contenidos digitales sencillos sobre las sociedades y territorios, empleando aplicaciones y recursos digitales, comunicándose y trabajando de forma individual, en equipo y/o en red. (CCL1, CCL3, STEM4, CD2, CD3, CD5, CPSAA4, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Cooperar y colaborar activamente en la utilización de recursos digitales de forma responsable, respetuosa y cívica, indagando sobre las sociedades y los territorios. (CCL1, CD2, CD3, CD4, CD5, CPSAA2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Formular preguntas y realizar predicciones razonadas sobre el social y cultural, mostrando y manteniendo curiosidad, respeto y sentido crítico. (CCL1, STEM2, CPSAA4, CC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar, seleccionar y contrastar información, de diferentes fuentes seguras y fiables, utilizándola en investigaciones relacionadas con el medio social y cultural y adquiriendo léxico científico básico. (CCL2, CCL3, CD1, CD4) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48468",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Proponer posibles respuestas a las preguntas planteadas sobre las sociedades y los territorios, a través del análisis y la interpretación de la información y los resultados obtenidos, comparándolos con las predicciones realizadas. (CCL1, CCL2, CCL3, STEM2, CD1, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Comunicar los resultados de las investigaciones sobre el medio social y cultural, en diferentes formatos, adaptando el mensaje a la audiencia a la que va dirigido, utilizando el lenguaje científico y explicando los pasos seguidos. (CCL1, CP2, STEM2, STEM4, CD2, CD4, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y analizar críticamente las características, la organización y las propiedades de los elementos o sistemas del medio social y cultural a través de la indagación utilizando las herramientas y procesos adecuados y compartiendo e intercambiando la información obtenida. (CCL1, CCL4 STEM1, STEM2, STEM4, CD1, CPSAA4, CE1, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Establecer conexiones sencillas entre diferentes elementos o sistemas del medio social y cultural mostrando respeto y comprensión de las relaciones que se establecen. (STEM5, CPSAA4, CC3, CC4, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar, proteger y mostrar actitudes de conservación y mejora del patrimonio cultural a través de propuestas y acciones que reflejen compromisos y conductas en favor de la sostenibilidad. (CCL4, STEM5, CC3, CC4, CE1, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Poner en práctica estilos de vida sostenible y consecuentes con el respeto, los cuidados, la corresponsabilidad y la protección de las personas y del planeta y el uso sostenible de los recursos naturales, a partir del análisis de la intervención humana en el entorno desde los puntos de vista social, económico, cultural y tecnológico, y contribuyendo a una conciencia individual o colectiva. (CCL5, STEM2, STEM5, CPSAA4, CC1, CC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar con actitud emprendedora de forma individual y/o cooperativa en la búsqueda de propuestas para afrontar problemas ecosociales y actuar para su resolución, a partir del análisis de las causas y consecuencias de la intervención humana en el entorno social, económico, cultural y tecnológico. (CCL5, STEM2, STEM5, CPSAA4, CC1, CC3, CC4, CE1, CE3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48469",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar relaciones de causalidad, simultaneidad y sucesión entre diferentes elementos del medio social y cultural de la Edad Media, situando cronológicamente los hechos. (CCL3, STEM2, STEM4, CPSAA4, CC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer personas, grupos sociales relevantes y formas de vida de la sociedad de la Edad Media, incorporando la perspectiva de género, situándolas cronológicamente e identificando rasgos significativos sociales en esta época de la historia, explorando diferentes fuentes y recursos. (CCL3, STEM4, CPSAA4, CC1, CC3, CE2, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Comprender y valorar con actitud crítica los elementos culturales de la Edad Media a partir del acercamiento experiencial o virtual a museos, monumentos arquitectónicos y/o exposiciones y/u otros espacios. (CD3, CPSAA4, CC1, CC3, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Diseñar y elaborar producciones artísticas de forma creativa y colaborativa, relacionadas con la Edad Media usando técnicas plásticas, sonoras, visuales y audiovisuales. (STEM4, CD2, CPSAA3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar el pasado histórico, para interpretar al presente, asumiendo un compromiso responsable y de respeto a los retos del futuro. (CC3, CE2, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar los procesos geográficos, históricos y culturales que han conformado la sociedad actual, valorando la diversidad etnocultural o afectivo-sexual y la cohesión social y mostrando empatía y respeto por otras culturas y la igualdad de género y desarrollando conductas prosociales ante la desigualdad en el mundo. (CP3, CPSAA1, CPSAA3, CC1, CC2, CC3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Promover actitudes de igualdad de género y conductas no sexistas, analizando diferentes modelos en nuestra sociedad, y poniéndolas en práctica en su actividad diaria. (CP3, CPSAA1, CPSAA3, CC1, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Favorecer la resolución de forma pacífica y dialogada los conflictos, promoviendo una interacción respetuosa y equitativa a partir de un lenguaje inclusivo y no violento, explicando y ejercitando las principales normas, derechos, deberes, y libertades que forman parte de la Constitución española, y de la de Unión Europea, y conociendo la función que el Estado y sus instituciones desempeñan en el mantenimiento de la paz, la seguridad integral ciudadana y el reconocimiento de las víctimas de violencia. (CCL5, CP3, CPSAA1, CPSAA3, CC1, CC2, CC3, CCEC1) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48470",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Explicar el funcionamiento general de los órganos de gobierno del municipio, de las comunidades autónomas y del Estado español, valorando, sus funciones y la gestión de los servicios públicos para la ciudadanía a través de críticas constructivas. (CC1, CC2, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Interiorizar normas básicas para la convivencia en el uso de los espacios públicos como peatones o como usuarios de los medios de locomoción, analizando las señales de tráfico y tomando conciencia de la importancia de una movilidad segura, saludable y sostenible tanto para las personas como para el planeta. (CC1, CC2, CCEC1)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Cultura científica"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Tecnología y digitalización"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Sociedades y territorios"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Fases de la investigación científica (observación, formulación de preguntas y predicciones, planificación y realización de experimentos, recogida y análisis de información y datos, comunicación de resultados...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Instrumentos y dispositivos apropiados para realizar observaciones y mediciones precisas de acuerdo con las necesidades de la investigación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Vocabulario científico básico relacionado con las diferentes investigaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Fomento de la curiosidad, la iniciativa, la constancia y el sentido de la responsabilidad en la realización de las diferentes investigaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "1. Digitalización del entorno personal de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Dispositivos y recursos digitales de acuerdo con las necesidades del contexto educativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de búsquedas de información seguras y eficientes en Internet (valoración, discriminación, selección, organización y propiedad intelectual).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de recogida, almacenamiento y representación de datos para facilitar su comprensión y análisis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Reglas básicas de seguridad y privacidad para navegar por Internet y para proteger el entorno digital personal de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Recursos y plataformas digitales restringidas y seguras para comunicarse con otras personas. Etiqueta digital, reglas básicas de cortesía y respeto y CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                            Pág. 48471 estrategias para resolver problemas en la comunicación digital. Entornos Virtuales de Aprendizaje seguros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para fomentar el bienestar digital físico y mental. Reconocimiento de los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales (tiempo excesivo de uso, ciberacoso, dependencia tecnológica, acceso a contenidos inadecuados, etc.), y estrategias de actuación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "El futuro de la Tierra y del universo. Los fenómenos físicos relacionados con la Tierra y el universo y su repercusión en la vida diaria en el entorno. La exploración espacial y la observación del cielo: la contaminación lumínica. La basura espacial: causas y consecuencias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Las capas de la Tierra: Atmósfera, Hidrosfera y Geosfera, y las catástrofes naturales que se originan en ellas. Factores de contaminación y alteración antrópica de las distintas capas. Medidas para reducir la contaminación y promover la protección de las capas de la tierra en diferentes ámbitos (escuela, hogar y entorno próximo).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Los principales ecosistemas y sus paisajes. El paisaje: elementos que lo forman. Tipos de paisajes. Características de los principales paisajes de Castilla y León.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "El entorno natural. La diversidad geográfica de España Representación gráfica, visual y cartográfica a través de medios y recursos analógicos y digitales usando las Tecnologías de la Información Geográfica (TIG).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Igualdad, violencia de género y conductas no sexistas. Crítica de los estereotipos, roles y segregación en los distintos ámbitos: académico, profesional, social y cultural. Acciones para la igualdad efectiva entre mujeres y hombres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Las fuentes históricas: clasificación y utilización de las distintas fuentes (orales, escritas, patrimoniales).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Temas de relevancia en la historia (Edad Medieval) el papel representado por los sujetos históricos (individuales y colectivos), acontecimientos y procesos. Características sociales, políticas, económicas y culturales en la Edad Medieval. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                             Viernes, 30 de septiembre de 2022                          Pág. 48472",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Iniciación a la investigación y a los métodos de trabajo para la realización de proyectos, que analicen hechos, asuntos y temas de relevancia actual con perspectiva histórica, contextualizándolos en la edad Medieval.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Las expresiones artísticas y culturales medievales y su contextualización histórica desde una perspectiva de género. La función del arte y la cultura en el mundo medieval.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "El patrimonio natural y cultural como bien y recurso, cuidado y conservación. Conocimiento, uso y disfrute del patrimonio natural y cultural de Castilla y León. Costumbres y tradiciones. El camino de Santiago.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Historia y cultura de las minorías étnicas presentes en nuestro país, particularmente las propias del pueblo gitano. Reconocimiento de la diversidad cultural y lingüística de España.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "La cultura de paz y no violencia. El pensamiento crítico como herramienta para el análisis de los conflictos de intereses. El reconocimiento de las víctimas de la violencia. Entidades y organizaciones en favor de derechos humanos del entorno próximo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "La organización política. Principales entidades políticas y administrativas del entorno nacional en España. Sistemas de representación y de participación política.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "España. Las principales instituciones de España, de sus valores y de sus funciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Responsabilidad ecosocial. Ecodependencia, interdependencia e interrelación entre personas, sociedades y medio natural. La dignidad humana, solidaridad, justicia social y la reducción de las desigualdades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "El cambio y la emergencia climática de lo local a lo global: causas y consecuencias naturales y sociales. El papel del consumo, la movilidad y la dieta alimenticia en el cambio climático. Medidas de mitigación y adaptación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "Los Objetivos de Desarrollo Sostenible. Análisis crítico y Contribución personal al cumplimiento de los Objetivos de desarrollo sostenible. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                           Pág. 48473",
+      "criterios_ids": []
+    }
+  ]
+}

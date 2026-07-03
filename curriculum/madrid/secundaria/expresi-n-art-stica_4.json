@@ -1,0 +1,283 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "expresi-n-art-stica",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_08_expresi_n_art_stica_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Analizar manifestaciones artísticas, contextualizándolas, describiendo sus aspectos esenciales y valorando el proceso de creación y el resultado final, para educar la mirada, alimentar el imaginario, reforzar la confianza y ampliar las posibilidades de disfrute del patrimonio cultural y artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas gráfico-plásticas, empleando distintos medios, soportes, herramientas y lenguajes, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las más adecuadas a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD2",
+        "CPSAA1",
+        "CC1",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes medios, técnicas y formatos audiovisuales, decodificando sus lenguajes, identificando las herramientas y distinguiendo sus fines, para incorporarlos al repertorio personal de recursos y desarrollar el criterio de selección de los más adecuados a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD5",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Crear producciones artísticas, realizadas con diferentes técnicas y herramientas, a partir de un motivo o intención previos, adaptando el diseño y el proceso a las necesidades e indicaciones de realización y teniendo en cuenta las características del público destinatario, para compartirlas y valorar las oportunidades que puedan derivarse de esta actividad.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar manifestaciones artísticas de diferentes épocas y culturas contextualizándolas, describiendo sus aspectos esenciales, valorando el proceso de creación del resultado final, y evidenciando una actitud de apertura, interés y respeto en su recepción.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar críticamente los hábitos, los gustos y los referentes artísticos de diferentes épocas y culturas, reflexionando sobre su evolución y sobre su relación con los del presente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Participar, con iniciativa, confianza y creatividad, en la exploración de diferentes técnicas gráfico-plásticas, empleando herramientas, medios, soportes y lenguajes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar producciones gráfico-plásticas de forma creativa, determinando las intenciones expresivas y seleccionando con corrección las herramientas, medios, soportes y lenguajes más adecuados de entre los que conforman el repertorio personal de recursos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Participar, con iniciativa, confianza y creatividad, en la exploración de diferentes medios, técnicas y formatos audiovisuales, decodificando sus lenguajes, identificando las herramientas y distinguiendo sus fines.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar producciones audiovisuales, individuales o colaborativas, asumiendo diferentes funciones; incorporando el uso de las tecnologías digitales con una intención expresiva; buscando un resultado final ajustado al proyecto preparado previamente; y seleccionando y empleando, con corrección y de forma creativa, las herramientas y medios disponibles más adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Crear un producto artístico, diseñando las fases del proceso y seleccionando las técnicas y herramientas más adecuadas para conseguir un resultado adaptado a una intención y a un público determinados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Exponer el resultado final de la creación de un producto artístico, individual o grupal, poniendo en común y valorando críticamente el desarrollo de su elaboración, las dificultades encontradas, los procesos realizados y los logros alcanzados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar oportunidades relacionadas con el ámbito artístico, comprendiendo su valor añadido y expresando la opinión personal de forma razonada y respetuosa.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Técnicas gráfico-plásticas"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Diseño y publicidad"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Fotografía, lenguaje audiovisual y multimedia"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Los efectos del gesto y del instrumento: herramientas, medios y soportes. Cualidades plásticas y efectos visuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de dibujo, ilustración y pintura: (cid:2) Técnicas secas: lápices, carboncillo, pastel. Fijadores. (cid:2) Técnicas húmedas: tinta, rotulador, acuarela, acrílico, témpera. (cid:2) Selección del soporte adecuado en función de la técnica empleada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas mixtas y alternativas de las vanguardias artísticas. Posibilidades expresivas y contexto histórico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de estampación: (cid:2) Mononotipia plana. (cid:2) Procedimientos directos, aditivos, sustractivos y mixtos. (cid:2) El grabado, contexto histórico: Durero, Mantegna y Rembrant (s.XVI) Piranesi y Goya (s.XVIII), Toulouse-Lautrec (s.XIX), Matisse, Picasso y Joan Miró (s.XX), entre otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Pintura mural. Desde las pinturas rupestres a los murales de Diego Ribera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "El Graffiti como elemento de expresión artística: Keith Haring, Jean Michel Basquiat y Bansky, entre otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Ejemplos de aplicación de técnicas gráfico-plásticas en diferentes manifestaciones artísticas y en el ámbito del diseño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas básicas de modelado de volúmenes: (cid:2) Generar un volumen por adición o sustracción de material. (cid:2) El molde y el vaciado. (cid:2) Modelado a mano. (cid:2) El torno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "El arte del reciclaje: (cid:2) Productos ecológicos, sostenibles e innovadores en la práctica artística. (cid:2) Arte y naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Seguridad, toxicidad e impacto de los diferentes materiales artísticos en técnicas gráfico- plásticas. Prevención y gestión responsable de los residuos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "El proceso de creación. Fases de realización y seguimiento: (cid:2) Identificación del objetivo. (cid:2) Selección y recopilación de información. Fuentes de información. (cid:2) Experimentación y aproximación mediante la elaboración de bocetos. (cid:2) Concreción del guion o proyecto. (cid:2) Presentación final y evaluación (autorreflexión, autoevaluación y evaluación colectiva).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La forma bidimensional y tridimensional. Geometría aplicada al diseño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de los sistemas de representación en el diseño (sistemas diédrico, axonométrico y cónico).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Elementos y principios básicos del lenguaje visual y de la percepción: color y composición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Campos y ramas del diseño: gráfico, de producto, moda, interiores, escenografía. Iniciación al diseño inclusivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Publicidad: (cid:2) Recursos formales, lingüísticos y persuasivos. (cid:2) Funciones y tipología de la publicidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Narrativa de la imagen fija: (cid:2) Encuadre y planificación, puntos de vista y angulación. (cid:2) La imagen secuenciada: el cómic y la fotonovela.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Fotografía analógica: cámara oscura. Fotografía sin cámara (fotogramas).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas fotográficas experimentales: cianotipia o antotipia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Fotografía digital. El fotomontaje digital y tradicional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La imagen secuenciada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad, toxicidad e impacto medioambiental de los diferentes materiales artísticos en la fotografía. Prevención y gestión responsable de los residuos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Narrativa audiovisual: (cid:2) Fotograma, secuencia, escena, toma, plano y montaje. (cid:2) El guion y el story-board. (cid:2) Técnicas básicas de animación: stop-motion.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Recursos digitales para la realización de proyectos de vídeo-arte.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS c_bloques (
 
 CREATE TABLE IF NOT EXISTS c_saberes (
   id          TEXT NOT NULL,
-  bloque_id   TEXT NOT NULL,
+  bloque_id   TEXT,          -- puede ser NULL si la comunidad no organiza por bloques
   asignatura  TEXT NOT NULL,
   curso       TEXT NOT NULL,
   etapa       TEXT NOT NULL,
@@ -184,6 +184,31 @@ CREATE TABLE IF NOT EXISTS asistencia (
   alumno_id   INTEGER NOT NULL REFERENCES alumnos(id) ON DELETE CASCADE,
   estado      TEXT NOT NULL CHECK(estado IN ('presente','ausente','justificado','tarde')),
   PRIMARY KEY (sesion_id, alumno_id)
+);
+
+-- ------------------------------------------------------------
+-- PROGRAMACIÓN DIDÁCTICA
+-- ------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS unidades (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  asignatura_id   INTEGER NOT NULL REFERENCES asignaturas(id) ON DELETE CASCADE,
+  nombre          TEXT NOT NULL,
+  tipo            TEXT NOT NULL DEFAULT 'unidad',  -- 'unidad' | 'situacion' | 'proyecto' | 'secuencia' | 'bloque'
+  descripcion     TEXT,
+  orden           INTEGER NOT NULL DEFAULT 0,
+  trimestre       INTEGER CHECK(trimestre IS NULL OR trimestre IN (1,2,3)),
+  fecha_inicio    TEXT,
+  fecha_fin       TEXT,
+  activa          INTEGER NOT NULL DEFAULT 1,
+  created_at      TEXT DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS unidad_criterios (
+  unidad_id   INTEGER NOT NULL REFERENCES unidades(id) ON DELETE CASCADE,
+  criterio_id TEXT NOT NULL,
+  peso        REAL NOT NULL DEFAULT 1.0,
+  PRIMARY KEY (unidad_id, criterio_id)
 );
 
 -- ------------------------------------------------------------

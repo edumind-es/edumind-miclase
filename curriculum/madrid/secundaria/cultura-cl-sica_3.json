@@ -1,0 +1,414 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "cultura-cl-sica",
+    "ciclo_origen": "3-eso",
+    "fuente": "iDoceo_03_cultura_cl_sica_3-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar el marco geográfico en el que se desarrolló la historia de Grecia y Roma, los períodos más relevantes de estas y sus acontecimientos y figuras más destacados.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Conocer los elementos esenciales de la cultura clásica, percibir su pervivencia en el mundo actual y valorar su contribución a la formación de la cultura y civilización occidentales.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer la contribución del griego clásico a las lenguas de cultura y el origen latino del español y de las lenguas romances, propiciando el dominio de la lengua española culta, oral y escrita, así como facilitando el aprendizaje y perfeccionamiento de otras lenguas romances del repertorio lingüístico del alumnado.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP2",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Aproximarse a la literatura y a las obras de arte clásicas apreciando su valor intrínseco y su influencia a lo largo de la historia de la literatura y del arte.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CCL4",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Conocer las instituciones políticas y sociales de la Antigüedad griega y romana, valorarlas críticamente e identificar las semejanzas y diferencias con las actuales.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL5",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir los diferentes marcos geográficos en los que se desarrollan las civilizaciones griega y romana a lo largo de su historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar ejes cronológicos en los que se señalen los principales períodos de Grecia y Roma.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Distinguir los diferentes períodos de la historia de Grecia y Roma, situando en el tiempo los acontecimientos y personajes más relevantes de cada uno de ellos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Enumerar los principales dioses y héroes de la mitología grecolatina, sus características, denominaciones y hechos que se les atribuyeron, así como sus representaciones pictóricas y escultóricas más conocidas en la Historia del Arte.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Sintetizar las características de la religión griega y romana, así como la expansión del cristianismo en el imperio romano, identificando las repercusiones que esta expansión tuvo en la sociedad romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Describir las fiestas, los espectáculos, las manifestaciones deportivas y otras formas de vivir el ocio en la civilización griega y romana, valorarlos críticamente e identificar sus semejanzas y diferencias con los usuales en nuestra sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir las características fundamentales de arte clásico y su evolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Explicar el urbanismo antiguo y las grandes obras públicas e infraestructuras romanas, explicando su importancia para el desarrollo humano y su influencia en modelos urbanísticos posteriores.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Definir los rasgos esenciales de la estructura familiar en Grecia y en Roma, y, en especial, la evolución del papel de la mujer en la sociedad romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.7",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir las características y evolución de la economía antigua, con especial atención al comercio como factor que contribuyó al enriquecimiento cultural de las sociedades griega y romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.8",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la contribución del pensamiento filosófico y científico de la Antigüedad clásica en la formación de la cultura y la ciencia actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Comprender el origen común de la mayoría de las lenguas europeas actuales, identificando las principales ramas de la familia de las lenguas indoeuropeas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Constatar el origen común de las lenguas romances, identificando sus semejanzas y las diferencias más evidentes con otras lenguas del repertorio lingüístico de los alumnos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar la existencia de diversos tipos de escritura y sus orígenes.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el alfabeto griego clásico y la forma de escribirlo en los procesadores de textos más usuales, así como la transcripción latina de las palabras griegas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el origen y la evolución del alfabeto latino.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar el léxico común, técnico y científico de origen griego o latino en español y otras lenguas del repertorio lingüístico del alumnado, señalar su relación con las palabras latinas o griegas originarias e identificar sus componentes más sencillos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Sintetizar las principales características de los géneros de la literatura clásica y su influencia en la literatura posterior.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer los autores y obras esenciales de las literaturas griega y latina y su influjo en la literatura de la cultura europea y occidental.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Comprender la configuración política de las polis griegas y la estratificación social en Atenas y en Esparta.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Explicar el surgimiento de la democracia en Atenas e identificar las semejanzas y diferencias con la democracia actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Comprender la configuración política de la República romana, las magistraturas y los diferentes tipos de comicios, así como la estratificación social en los distintos períodos de la historia de Roma.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Describir las relaciones intrafamiliares en Grecia y Roma, en especial la evolución del papel de la mujer en la sociedad romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "CE5",
+      "descripcion": "Explicar los principales hitos en la formación del Derecho de Atenas y de Roma, así como la administración de justicia en ambos estados.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El marco geográfico e histórico"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. El griego, el latín y su pervivencia"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. La sociedad y la vida cotidiana en Grecia y Roma"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Mitología y religión"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. La literatura, el arte y la ingeniería en Grecia y Roma"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La cuenca mediterránea en la Antigüedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "El marco geográfico de la civilización griega.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Principales períodos de la historia de Grecia en la Antigüedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "El marco geográfico de la civilización romana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Orígenes míticos de Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Principales períodos de la historia de Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Las lenguas indoeuropeas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "El latín y las lenguas romances.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La escritura: (cid:2) Orígenes de la escritura. (cid:2) El alfabeto griego. (cid:2) El alfabeto latino.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Pervivencia de elementos lingüísticos grecolatinos en el español.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Las polis griegas. El surgimiento de la democracia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Roma. Instituciones políticas de la República romana y su evolución durante el Imperio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Los grupos sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La familia en Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La economía y el trabajo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "El ocio, las fiestas y los espectáculos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Mitos griegos y romanos: dioses y héroes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Religión y sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "La expansión del cristianismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Géneros literarios y figuras fundamentales de la literatura clásica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "El arte griego y romano: pervivencia de los modelos clásicos en el mundo actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "El urbanismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "La ingeniería civil romana.",
+      "criterios_ids": []
+    }
+  ]
+}

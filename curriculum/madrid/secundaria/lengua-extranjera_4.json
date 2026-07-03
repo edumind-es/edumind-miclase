@@ -1,0 +1,392 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "lengua-extranjera",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_15_lengua_extranjera_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender e interpretar el sentido general y los detalles más relevantes de textos expresados de forma clara y en la lengua estándar, buscando fuentes fiables y haciendo uso de estrategias como la inferencia de significados, para responder a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA5",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Producir textos originales, de extensión media, sencillos y con una organización clara, usando estrategias tales como la planificación, la compensación o la autorreparación, para expresar de forma creativa, adecuada y coherente mensajes relevantes y responder a propósitos comunicativos concretos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interactuar con otras personas con creciente autonomía, usando estrategias de cooperación y empleando recursos analógicos y digitales, para responder a propósitos comunicativos concretos en intercambios respetuosos con las normas de cortesía.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Mediar en situaciones cotidianas entre distintas lenguas, usando estrategias y conocimientos sencillos orientados a explicar conceptos o simplificar mensajes, para transmitir información de manera eficaz, clara y responsable.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Ampliar y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando de forma crítica sobre su funcionamiento y tomando conciencia de las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA5",
+        "CD2"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística, cultural y artística a partir de la lengua extranjera, identificando y compartiendo las semejanzas y las diferencias entre lenguas y culturas, para actuar de forma empática y respetuosa en situaciones interculturales.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Extraer y analizar el sentido global y las ideas principales, y seleccionar información pertinente de textos orales, escritos y multimodales sobre temas cotidianos, de relevancia personal o de interés público próximos a la experiencia del alumnado, expresados de forma clara y en la lengua estándar a través de diversos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Interpretar y valorar el contenido y los rasgos discursivos de textos progresivamente más complejos propios de los ámbitos de las relaciones interpersonales, de los medios de comunicación social y del aprendizaje, así como de textos literarios adecuados al nivel de madurez del alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar, organizar y aplicar las estrategias y conocimientos más adecuados en cada situación comunicativa para comprender el sentido general, la información esencial y los detalles más relevantes de los textos; inferir significados e interpretar elementos no verbales; y buscar, seleccionar y gestionar información veraz.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar oralmente textos progresivamente más complejos, estructurados, comprensibles, coherentes y adecuados a la situación comunicativa sobre asuntos cotidianos, de relevancia personal o de interés público próximo a la experiencia del alumnado, con el fin de describir, narrar, argumentar e informar, en diferentes soportes, utilizando recursos verbales y no verbales, así como estrategias de planificación, control, compensación y cooperación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Redactar y difundir textos de extensión más prolongada con aceptable claridad, coherencia, cohesión, corrección y adecuación a la situación comunicativa propuesta, a la tipología textual y a las herramientas analógicas y digitales utilizadas, sobre asuntos cotidianos, de relevancia personal o de interés público próximos a la experiencia del alumnado, respetando la propiedad intelectual y evitando el plagio.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar, organizar y aplicar conocimientos y estrategias más complejas para planificar, producir, revisar y cooperar en la elaboración de textos coherentes, cohesionados y adecuados a las intenciones comunicativas, las características contextuales, los aspectos socioculturales y la tipología textual, usando los recursos físicos o digitales más adecuados en función de la tarea y de las necesidades del interlocutor potencial a quien se dirige el texto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Planificar, participar y colaborar activamente, de forma autónoma, a través de diversos soportes, en situaciones interactivas sobre temas cotidianos, de relevancia personal o de interés público cercanos a la experiencia del alumnado, mostrando iniciativa, empatía y respeto por la cortesía lingüística y la etiqueta digital, así como por las diferentes necesidades, ideas, inquietudes, iniciativas y motivaciones de los interlocutores.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar, organizar y utilizar estrategias adecuadas más complejas para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, solicitar y formular aclaraciones y explicaciones, reformular, comparar y contrastar, resumir, colaborar, debatir, resolver problemas y gestionar situaciones comprometidas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Inferir y explicar textos, conceptos y comunicaciones de mayor longitud y complejidad en situaciones en las que atender a la diversidad, mostrando respeto y empatía por los interlocutores y por las lenguas empleadas, y participando activamente en la solución de problemas de intercomprensión y de entendimiento en el entorno, apoyándose en diversos recursos y soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Aplicar estrategias más elaboradas que ayuden a crear puentes, faciliten la comunicación y sirvan para explicar y simplificar textos, conceptos y mensajes, y que sean adecuadas a las intenciones comunicativas, las características contextuales y la tipología textual, usando recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Comparar y argumentar las similitudes y diferencias entre distintas lenguas reflexionando de manera progresivamente autónoma sobre su funcionamiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar de forma creativa estrategias y conocimientos de mejora de su capacidad de comunicar y de aprender la lengua extranjera, con apoyo de otros participantes y de soportes analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Registrar y analizar sobre los progresos y dificultades de aprendizaje de la lengua extranjera, seleccionando las estrategias más eficaces para superar esas dificultades y consolidar su aprendizaje, realizando actividades cada vez más elaboradas de planificación del propio aprendizaje, autoevaluación y coevaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL) o en un diario de aprendizaje, haciendo esos progresos y dificultades explícitos y compartiéndolos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Actuar de forma adecuada, empática y respetuosa en situaciones interculturales, construyendo vínculos cada vez más complejos entre las diferentes lenguas y culturas, rechazando cualquier tipo de discriminación, prejuicio y estereotipo en contextos comunicativos cotidianos y proponiendo vías de solución cada vez más elaboradas a aquellos factores socioculturales que dificulten la comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar críticamente en relación con los derechos humanos y adecuarse a la diversidad lingüística, cultural y artística propia de países donde se habla la lengua extranjera, favoreciendo activamente el desarrollo de una cultura compartida y una ciudadanía comprometida con la sostenibilidad y los valores democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Aplicar estrategias de forma cada vez más autónoma para defender y apreciar la diversidad lingüística, cultural y artística, atendiendo a valores democráticos y respetando los principios de justicia, equidad e igualdad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Plurilingüismo"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Interculturalidad"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Comunicación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Profundización en las estrategias y técnicas para responder eficazmente y con niveles crecientes de fluidez, adecuación y corrección a una necesidad comunicativa concreta a pesar de las limitaciones derivadas del nivel de competencia en la lengua extranjera y en las demás lenguas del repertorio lingüístico propio. (cid:2) Desarrollo de estrategias cada vez más elaboradas de comunicación para superar las interrupciones y lapsos comunicativos y para iniciar y concluir los intercambios informativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Aplicación de las estrategias de uso común para identificar, organizar, retener, recuperar y utilizar creativamente unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal. (cid:2) Sistematización y organización de las unidades lingüísticas utilizando el conocimiento previo de la lengua materna y otras lenguas, en su caso, con el fin de facilitar la comunicación en la lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Aplicación eficaz de las estrategias y herramientas de uso común para la autoevaluación, la coevaluación y la autorreparación, analógicas y digitales, individuales y cooperativas. (cid:2) Identificación de las áreas de mejora para la realización de futuras tareas. (cid:2) Participación, cada vez más autónoma, en tareas de evaluación conjunta para ganar una perspectiva general de la evolución del proceso de aprendizaje de sus iguales, más allá del suyo propio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Ampliación de expresiones y léxico específico de uso común para intercambiar ideas sobre la comunicación, la lengua, el aprendizaje y las herramientas de comunicación y aprendizaje (metalenguaje).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Comparación más compleja entre lenguas a partir de elementos gramaticales de la lengua extranjera y otras lenguas: origen y parentescos. (cid:2) Reconocimiento de la interconexión entre lenguas del repertorio lingüístico personal del alumno y comparación entre las mismas, llegando a conclusiones a partir de observaciones sistemáticas de elementos sintácticos y semánticos adecuados a su nivel de competencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La lengua extranjera como medio de comunicación interpersonal e internacional, fuente de información, y como herramienta de participación social y de enriquecimiento personal. (cid:2) Apreciación de la lengua extranjera como puente hacia el conocimiento de personas y culturas diferentes a la suya propia, así como instrumento necesario para la participación en eventos internacionales, de manera presencial o remota, que trascienden su entorno próximo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Interés e iniciativa en la realización de intercambios comunicativos a través de diferentes medios con hablantes o estudiantes de la lengua extranjera, proyectos internacionales, inmersiones lingüísticas, intercambios culturales, entre otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Aspectos socioculturales y sociolingüísticos de uso común relativos a la vida cotidiana, las condiciones de vida y las relaciones interpersonales; convenciones sociales de uso común; lenguaje no verbal, cortesía lingüística y etiqueta digital; cultura, normas, actitudes, costumbres y valores propios de países donde se habla la lengua extranjera. (cid:2) Realización de proyectos de búsqueda de información y presentaciones en distintos soportes (multimodal) sobre la cultura y costumbres propias de países donde se habla la lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de uso común para entender y apreciar la diversidad lingüística, cultural y artística, atendiendo a valores democráticos. (cid:2) Ampliación del conocimiento de los rasgos históricos, geopolíticos y culturales de los países donde se habla la lengua extranjera, obteniendo la información a través de diferentes fuentes en soportes tradicionales y digitales y realización de presentaciones de mayor longitud y complejidad sobre los datos obtenidos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de uso común de detección y actuación ante usos discriminatorios del lenguaje verbal y no verbal: tratamientos de cortesía inadecuados, el uso del género femenino para descalificar y hacer alusiones peyorativas, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Autoconfianza e iniciativa. El error como parte integrante del proceso de aprendizaje. (cid:2) Análisis de los errores en las producciones propias e iniciación a las estrategias de autorreparación y autoevaluación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Profundización en las estrategias de uso común para la planificación, ejecución, control y reparación de la comprensión, la producción y la coproducción de textos orales, escritos y multimodales. (cid:2) Distinción de tipos de comprensión (sentido general, información esencial, puntos principales, detalles relevantes) y adecuación del texto al destinatario, contexto y canal, aplicando el registro y la estructura de discurso adecuados a cada caso. (cid:2) Inferencia y formulación de hipótesis sobre significados, contenido y contexto a partir de la comprensión de elementos significativos, lingüísticos y paralingüísticos. Reformulación de hipótesis a partir de la comprensión de nuevos elementos. (cid:2) Uso de estrategias de comprensión de los mensajes: contexto verbal y no verbal, conocimientos previos sobre la situación, identificación de palabras clave, identificación de la actitud e intención del hablante.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Conocimientos, destrezas y actitudes que permitan llevar a cabo actividades de mediación en situaciones cotidianas. (cid:2) Ofrecimiento de información, indicaciones y aclaraciones con el fin de favorecer el entendimiento entre los interlocutores",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Utilización eficaz de los modelos contextuales y géneros discursivos de uso común en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios: características y reconocimiento del contexto (participantes y situación), expectativas generadas por el contexto; organización y estructuración según el género y la función textual. (cid:2) Comprensión, de forma individual o colectiva, de textos orales, escritos y multimodales de mayor extensión. (cid:2) Lectura comentada y recitado de poemas, reconociendo el valor simbólico del lenguaje poético y el sentido de los recursos retóricos más importantes. (cid:2) Producción de textos de mayor complejidad de géneros discursivos sencillos, en papel o en formato digital, integrando diversos tipos de contenido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Aplicación eficaz de unidades lingüísticas más complejas y significados asociados a dichas unidades tales como expresión de la entidad y sus propiedades, cantidad y cualidad, el espacio y las relaciones espaciales, el tiempo y las relaciones temporales, la afirmación, la negación, la interrogación y la exclamación, relaciones lógicas habituales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Léxico más sofisticado de interés para el alumnado relativo a identificación personal, relaciones interpersonales, lugares y entornos, ocio y tiempo libre, salud y actividad física, vida cotidiana, vivienda y hogar, clima y entorno natural, tecnologías de la información y la comunicación, sistema escolar y formación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Convenciones ortográficas de uso común y significados e intenciones comunicativas asociados a los formatos, patrones y elementos gráficos. (cid:2) Elección apropiada de las convenciones ortográficas más complejas según no solo el canal comunicativo, sino el tipo de contexto (formal o informal).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Aplicación de convenciones y estrategias conversacionales de uso común, en formato síncrono o asíncrono, reformular, comparar y contrastar, resumir, colaborar, debatir, en textos orales de mayor extensión, guardando las propiedades textuales, de forma autónoma, con pronunciación y entonación adecuadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Conocimiento y utilización autónoma de recursos para el aprendizaje y estrategias de uso común de búsqueda y selección de información: diccionarios, libros de consulta, bibliotecas, recursos digitales e informáticos, etc. (cid:2) Conocimiento y utilización selectiva de fuentes de información analógicas y digitales fiables apropiadas a su edad, intereses y necesidades que faciliten cierta autonomía en el proceso de aprendizaje. (cid:2) Elección selectiva de los recursos de búsqueda de información analógicos y digitales más adecuados según cada contexto de aprendizaje con el asesoramiento adecuado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Respeto de la propiedad intelectual y derechos de autor sobre las fuentes consultadas y contenidos utilizados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Utilización eficaz de herramientas analógicas y digitales de uso común para la comprensión, producción y coproducción oral, escrita y multimodal; y plataformas virtuales de interacción, cooperación y colaboración educativa (aulas virtuales, videoconferencias, herramientas digitales colaborativas, etc.) para el aprendizaje, la comunicación y el desarrollo de proyectos con hablantes o estudiantes de la lengua extranjera. (cid:2) Participación en proyectos e intercambios personales o virtuales con estudiantes de países de lengua extranjera a través de herramientas digitales colaborativas que incidan favorablemente en las relaciones personales y académicas. ALEMÁN.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Funciones comunicativas de uso común y más específico adecuadas al ámbito y al contexto comunicativo: ampliar el reportorio de formas para saludar y despedirse, presentar y presentarse; describir con propiedad personas, objetos, lugares, fenómenos y acontecimientos; situar con precisión eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre una mayor variedad de cuestiones cotidianas; dar y pedir específicamente instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes, y enunciar sucesos futuros con información detallada; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones detalladas; expresar la incertidumbre y la duda; reformular y resumir. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. Uso adecuado de estructuras y funciones asociadas a diferentes situaciones de comunicación: formal / informal; presencial / remoto; analógico / digital; oral / escrito… (cid:2) Conectores dobles: sowohl… als auch, entweder… oder, weder… noch, nicht nur…. sondern auch, je… desto / umso. (cid:2) Narrar hechos ocurridos en el pasado. Conjugación del Plusquamperfekt. Uso del Perfekt con verbos modales. Adverbios y preposiciones temporales. Oraciones subordinadas con (immer) wenn / als / nachdem / bevor / während. Expresión de la secuencia temporal en la narración (Vor-, Nach- und Gleichzeitigkeit). (cid:2) Verbos compuestos con prefijos separables e inseparables (trennbare und nicht trennbare Verben). Orden de los elementos en la oración. (cid:2) Expresar motivación o desmotivación, miedo, importancia, dificultad, interés… (cid:2) Uso de la construcción zu + Infinitiv. Lassen + Infinitiv. (cid:2) Verbos con complemento preposicional. Adverbios preposicionales (dafür, darüber, davon….) e interrogativas con adverbios preposicionales (wofür, worüber, wovon…). (cid:2) Expresión de la finalidad: um … zu y damit. (cid:2) Expresión del modo: Modalsätze / Modaladverbien / Modalpartikeln. (cid:2) Uso del Futur I. (cid:2) Uso de elementos referenciales de afirmación y negación (ich auch, ich auch nicht, ich nicht, ich schon…) (cid:2) Expresar acciones impersonales. Pronombres es y man. Verbos impersonales. (cid:2) Expresar irrealidad, deseo, hipótesis y solicitar algo con cortesía: El Konjunktiv II. Uso de würde + Infinitiv. Uso de las formas wäre, hätte, wüsste. Uso de las formas de los verbos modales müsste, sollte y könnte. Frases comparativas irreales: als ob + Konjunktiv II. (cid:2) Oraciones condiciones y optativas sin conjunción (Wäre ich an deiner Stelle…). (cid:2) Oraciones subordinadas con pronombres relativos: wo / was. (cid:2) Expresión del aspecto incoativo (anfangen / beginnen zu + Infinitiv) y terminativo (aufhören zu Infinitiv). (cid:2) Diferentes usos del estilo indirecto: Indirekte Rede (Redewiedergabe, Vorschläge, Aufforderungen, Befehle). (cid:2) Preposiciones con genitivo: wegen, innerhalb, außerhalb, während. (cid:2) Uso de la voz pasiva en presente y pretérito. (cid:2) N-Deklination (cid:2) Partículas interrogativas: worauf / worüber…? y pronombres con preposiciones: darauf / darüber. (cid:2) Oraciones consecutivas: sodass / so… dass (cid:2) Limitaciones con zwar… aber.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones. (cid:2) Reconocimiento y producción de patrones básicos de ritmo, entonación y acentuación de palabras y frases. (cid:2) Pronunciación de n, nn, ng, nk, schwaches <e>. Grupos con varias consonantes. Vocales al inicio de palabra / sílaba. (cid:2) Entonación de frases con dobles conectores y con partículas modales. Enfatizar algunas partes de la frase. FRANCÉS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Funciones comunicativas de uso común y más específico adecuadas al ámbito y al contexto comunicativo: ampliar el reportorio de formas para saludar y despedirse, presentar y presentarse; describir con propiedad personas, objetos, lugares, fenómenos y acontecimientos; situar con precisión eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre una mayor variedad de cuestiones cotidianas; dar y pedir específicamente instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes, y enunciar sucesos futuros con información detallada; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones detalladas; expresar la incertidumbre y la duda; reformular y resumir. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. (cid:2) Dar órdenes con cortesía, expresar opinión, intención, deseo, aconsejar, hacer hipótesis. Expresión de la condición. Si + imperfecto + condicional simple. Pronombres demostrativos (revisión). Expresiones con avoir. (cid:2) Relatar acontecimientos pasados, cronología, frecuencia. Imperfecto. Valores del passé composé y del imperfecto (revisión). Repaso y profundización de los pronombres en, y. Utilización de los pronombres demostrativos + qui/que/de. Expresar la anterioridad, la simultaneidad y la posterioridad. (cid:2) Pedir y dar información. Repaso de las tres modalidades de la frase interrogativa. La frase exclamativa. Adjetivos y pronombres indefinidos. Adjetivos y pronombres interrogativos. Adjetivos exclamativos. (cid:2) Expresar la causa, la concesión, la consecuencia y la finalidad. Argumentar, mostrar acuerdo y desacuerdo. La restricción y la excepción. Conectores que estructuran el discurso o la argumentación: D’abord/puis/ensuite/enfin. La doble negación: Ne… ni ... ni. (cid:2) Expresar la comparación. Uso de los superlativos en diferentes contextos de comunicación. (cid:2) Uso adecuado de pronombres personales, pronombres COD y COI. Proposiciones adjetivas introducidas por où, dont.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones. (cid:2) Reconocimiento y profundización en el uso de los símbolos fonéticos y pronunciación de fonemas de especial dificultad. (cid:2) Reconocimiento y producción autónoma de diferentes patrones de ritmo, entonación (exclamación, expresión de emociones, sentimientos, certeza, etc.) y acentuación de palabras y frases (acentos tónicos, acentuación del discurso). INGLÉS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "Funciones comunicativas de uso común y más específico adecuadas al ámbito y al contexto comunicativo: ampliar el reportorio de formas para saludar y despedirse, presentar y presentarse; describir con propiedad personas, objetos, lugares, fenómenos y acontecimientos; situar con precisión eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre una mayor variedad de cuestiones cotidianas; dar y pedir específicamente instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes, y enunciar sucesos futuros con información detallada; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones detalladas; expresar la incertidumbre y la duda; reformular y resumir. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. (cid:2) Uso adecuado de estructuras y funciones asociadas a diferentes situaciones de comunicación y contextos: formal vs informal, presencial vs remoto, analógico vs digital,… (cid:2) Describir y comparar hábitos y estilos de vida con acciones en curso. Presente simple y continuo. Used to + infinitivo. Pronombres interrogativos. (cid:2) Expresar hechos pasados vinculados con el presente o con un pasado anterior. Pasado simple y continuo. Presente perfecto: for, since, already, yet, etc. Preguntas sujeto y objeto. Marcadores del discurso. (cid:2) Hacer predicciones y expresar intenciones. Expresar certeza y probabilidad. Will. Be going to/Presente continuo. Oraciones temporales y condicionales (tipo I). May/might/can/can't, etc. (cid:2) Dar instrucciones y órdenes: modo imperativo. (cid:2) Expresar gusto, interés, emoción y opiniones: Hacer invitaciones y responder a las mismas.I love/like/enjoy/don’t like/hate/It’s too…, etc. Conectores: and, because, but, so, such, both, etc. Adjetivos en grado comparativo y superlativo. (cid:2) Expresar hipótesis y dar consejos y hacer sugerencias. Oraciones condicionales (tipo II). Should/ Shouldn’t. (cid:2) Expresar procesos y cambios. Voz pasiva. (cid:2) Transmitir las opiniones e ideas de otros. Estilo indirecto. Expresiones temporales. Describir, identificar y ubicar cosas, lugares y personas. Pronombres relativos. Oraciones de relativo especificativas. Compuestos de some/any. (cid:2) Relaciones temporales, afirmación, exclamación, negación, interrogación, expresión del tiempo pasado, expresión del aspecto. (cid:2) Reformular ideas y resumirlas: In other words, that´s to say, in short, summing up, to put in a nutshell…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones. (cid:2) Reconocimiento y profundización en el uso de los símbolos fonéticos y pronunciación de fonemas de especial dificultad. (cid:2) Reconocimiento y producción autónoma de diferentes patrones de ritmo, entonación y acentuación de palabras y frases (acentos tónicos, acentuación del discurso). (cid:2) Pronunciación de fonemas de especial dificultad. ITALIANO.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.18",
+      "bloque_id": "B3",
+      "descripcion": "Funciones comunicativas de uso común y más específico adecuadas al ámbito y al contexto comunicativo: ampliar el reportorio de formas para saludar y despedirse, presentar y presentarse; describir con propiedad personas, objetos, lugares, fenómenos y acontecimientos; situar con precisión eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre una mayor variedad de cuestiones cotidianas; dar y pedir específicamente instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes, y enunciar sucesos futuros con información detallada; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones detalladas; expresar la incertidumbre y la duda; reformular y resumir. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. (cid:2) Descripción de cualidades físicas y abstractas de personas, objetos, lugares y actividades. (cid:2) Narración de acontecimientos pasados puntuales y habituales, descripción de estados y situaciones presentes, y expresión de sucesos futuros. (cid:2) Expresión del conocimiento, la certeza, la duda y la conjetura. (cid:2) Desarrollo de la expresión escrita de forma guiada, completando o modificando frases y párrafos sencillos. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. (cid:2) Expresar opiniones y puntos de vista. Acuerdo y desacuerdo. Credo di + infinitivo (repaso). Credo (cid:2) che+ subjuntivo presente. Presente de subjuntivo de essere. (cid:2) Felicitar a alguien, dar el pésame y la enhorabuena, saber responder en esas situaciones. (cid:2) Fórmulas. Che + adjetivo/sustantivo en frases exclamativas. (cid:2) Preguntar por alguien, pedir noticias. Saber reaccionar ante las mismas, mostrar interés/desinterés. Contraste passato prossimo/ imperfecto. Adjetivos y sustantivos para (cid:2) reaccionar ante una noticia. Otras expresiones de respuestas. (cid:2) Expresar opiniones sobre los demás. Presente de subjuntivo. Mi piace/non mi piace, che + subjuntivo. El comparativo. Periodo hipotético: Se + presente (presente en la subordinada) (cid:2) Quando + presente, presente. (cid:2) Dar y recibir consejos. Elementos para dar consejos. El condicional simple: verbos regulares e irregulares más frecuentes. Uso de ci vuole/ci vogliono. Expresión se fossi in te... El imperativo negativo. (cid:2) Expresar hipótesis. Sueños y deseos. Uso del condicional en la frase principal. Imperfecto de subjuntivo: introducción. Se + imperfecto subjuntivo + condicional. (cid:2) Preguntar el tiempo transcurrido o la duración de una acción. Expresiones. Da quanto tempo...?, da molto che...? Elementos para responder a estas preguntas: per la prima, seconda ...volta, di nuovo, ancora, un’altra volta mai, da sempre, etc. Expresar sensaciones y estados de ánimo. (cid:2) Algunas expresiones (repaso). Mi preocupa + che + subjuntivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.19",
+      "bloque_id": "B3",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones. (cid:2) Patrones sonoros, acentuales, rítmicos y de entonación. (cid:2) Reconocimiento progresivo de los símbolos fonéticos y la pronunciación de fonemas de especial dificultad. (cid:2) Reconocimiento y producción de patrones básicos de ritmo, entonación y acentuación de palabras y frases. (cid:2) Reconocimiento y contraste entre consonantes simples y dobles. PORTUGUÉS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.20",
+      "bloque_id": "B3",
+      "descripcion": "Funciones comunicativas de uso común y más específico adecuadas al ámbito y al contexto comunicativo: ampliar el reportorio de formas para saludar y despedirse, presentar y presentarse; describir con propiedad personas, objetos, lugares, fenómenos y acontecimientos; situar con precisión eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre una mayor variedad de cuestiones cotidianas; dar y pedir específicamente instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes, y enunciar sucesos futuros con información detallada; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones detalladas; expresar la incertidumbre y la duda; reformular y resumir. (cid:2) Consolidación y uso de estructuras y funciones asociadas a diferentes situaciones de comunicación. (cid:2) Describir y comparar hábitos y estilos de vida. Expresar deseos dependientes de una condición. Condicional presente de los verbos regulares. Conjunciones de subordinación: porque, porquanto, pois. Derivación por prefijación: des-, in- (im-), i- (ir-). Pronombres demostrativos: o mesmo, aquele, o outro. (cid:2) Narrar hechos del pasado. Hablar de acciones pasadas vinculadas con un pasado anterior. Participios regulares: verbos en -ar, -er, -ir. Pretérito mais-que-perfeito composto do indicativo: ter (imperfeito) + particípio passado. Estilo directo-estilo indirecto. Locuciones preposicionales: antes de, depois de, a fim de. (cid:2) Transmitir opiniones e ideas adoptando un estilo propio. Perífrasis de: ir + gerundio. Derivación por sufijación: -aria. Adverbios: definitivamente, certamente, decerto. (cid:2) Describir e identificar cosas, lugares y personas. Confirmar preguntando. Hacer sugerencias. Definir colectivos. Futuro imperfecto de indicativo de los verbos irregulares. Frases interrogativas de confirmación. Conjunciones de coordinación: ou... ou, quer... quer, não só... mas também. Adverbios: aquí, atrás, aí, longe. (cid:2) Expresar hipótesis y hacer recomendaciones. Expresar el aspecto durativo de una acción. Expresar el resultado de una acción. Pretérito perfecto compuesto de indicativo: ter (presente do indicativo) + particípio passado. Voz pasiva: ser + particípio passado, estar + particípio passado. Oraciones condicionales. Conjunciones y locuciones de coordinación: por conseguinte, logo, por tanto. (cid:2) Evaluar situaciones. Expresar certeza, incertidumbre, probabilidad e indignación. Infinitivo (forma no personal). Contracción de los pronombres personales complemento directo con complemento indirecto. Locuciones de subordinación: visto que, já que, logo que, uma vez que, ainda que, mesmo que. Futuro imperfecto de indicativo en frases interrogativas. (cid:2) Expresar preferencias y opiniones. Aceptar y rechazar opiniones. Considerar un hecho como posible. Futuro de subjuntivo. Preposiciones: conforme, consoante, perante. Locuciones de subordinación: já que, para que, no caso que. Pronombres relativos invariables. (cid:2) Expresar procesos y cambios. Localizar acciones futuras en el tiempo. Dar sugerencias y hacer planes. Conjunciones y locuciones de coordinación: nem, pois, por tanto, por conseguinte, por consequência. Pronombres relativos invariables. La colocación del pronombre posesivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.21",
+      "bloque_id": "B3",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones. (cid:2) Pronunciación. Fonemas de especial dificultad. Fonemas de la terminación de palabras en formas de tiempos verbales. (cid:2) Acentuación de palabras. (cid:2) Entonación (tipos y formas de la frase). (cid:2) Ritmo.",
+      "criterios_ids": []
+    }
+  ]
+}

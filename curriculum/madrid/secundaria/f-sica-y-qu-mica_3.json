@@ -1,0 +1,324 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "f-sica-y-qu-mica",
+    "ciclo_origen": "3-eso",
+    "fuente": "iDoceo_10_f_sica_y_qu_mica_3-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender y relacionar los motivos por los que ocurren los principales fenómenos fisicoquímicos del entorno, explicándolos en términos de las leyes y teorías científicas adecuadas para resolver problemas con el fin de aplicarlas para mejorar la calidad de vida humana.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Expresar las observaciones realizadas por el alumnado en forma de preguntas, formulando hipótesis para explicarlas y demostrando dichas hipótesis a través de la experimentación científica, la indagación y la búsqueda de evidencias, para desarrollar los razonamientos propios del pensamiento científico y mejorar las destrezas en el uso de las metodologías científicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Manejar con soltura las reglas y normas básicas de la física y la química en lo referente al lenguaje de la IUPAC, al lenguaje matemático, al empleo de unidades de medida correctas, al uso seguro del laboratorio y a la interpretación y producción de datos e información en diferentes formatos y fuentes para reconocer el carácter universal y transversal del lenguaje científico y la necesidad de una comunicación fiable en investigación y ciencia entre diferentes países y culturas.",
+      "descriptores_ids": [
+        "STEM4",
+        "STEM5",
+        "CD3",
+        "CPSAA2",
+        "CC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilizar de forma crítica, eficiente y segura plataformas digitales y recursos variados, tanto para el trabajo individual como en equipo, para fomentar la creatividad, el desarrollo personal y el aprendizaje, mediante la consulta de información, la creación de materiales y la comunicación efectiva en los diferentes entornos de aprendizaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Utilizar las estrategias propias del trabajo en grupo, como base emprendedora de una comunidad científica crítica, ética y eficiente, para comprender la importancia de la ciencia en la mejora de la sociedad, las aplicaciones y repercusiones de los avances científicos, la preservación de la salud y la conservación sostenible del medio ambiente.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "STEM5",
+        "CD3",
+        "CPSAA3",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender y valorar la ciencia como una construcción en continuo cambio y evolución, en la que no solo participan las personas dedicadas a ella, sino que también requiere de una interacción con el resto de la sociedad, para obtener resultados que repercutan en el avance en distintos ámbitos.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA4",
+        "CC4",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprender y explicar los fenómenos fisicoquímicos cotidianos más relevantes a partir de los principios, teorías y leyes científicas adecuadas, expresándolos, de manera argumentada, utilizando diversidad de soportes y medios de comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Resolver los problemas fisicoquímicos planteados en este curso utilizando las leyes y teorías científicas adecuadas, razonando los procedimientos utilizados para encontrar la solución o soluciones y expresando adecuadamente los resultados.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar en el entorno inmediato situaciones problemáticas reales de índole científica y emprender iniciativas en las que la ciencia, y en particular la física y la química, pueden contribuir a su solución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Emplear las metodologías propias de la ciencia en la identificación y descripción de fenómenos a partir de cuestiones a las que se pueda dar respuesta a través de la indagación, la deducción, el trabajo experimental y el razonamiento lógico-matemático, diferenciándolas de aquellas pseudocientíficas que no admiten comprobación experimental.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar, de acuerdo con la naturaleza de las cuestiones que se traten, la mejor manera de comprobar o refutar las hipótesis formuladas, diseñando estrategias de indagación y búsqueda de evidencias que permitan obtener conclusiones y respuestas ajustadas a la naturaleza de la pregunta formulada.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Aplicar las leyes y teorías científicas conocidas al formular cuestiones e hipótesis, siendo coherente con el conocimiento científico existente y diseñando los procedimientos experimentales o deductivos necesarios para resolverlas o comprobarlas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Emplear datos en diferentes formatos para interpretar y comunicar información relativa a un proceso fisicoquímico concreto, relacionando entre sí lo que cada uno de ellos contiene, y extrayendo en cada caso lo más relevante para la resolución de un problema.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar adecuadamente las reglas básicas de la física y la química, incluyendo el uso de unidades de medida, las herramientas matemáticas y las reglas de nomenclatura, consiguiendo una comunicación efectiva con toda la comunidad científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Poner en práctica las normas de uso de los espacios específicos de la ciencia, como el laboratorio de física y química, asegurando la salud, la conservación del medio ambiente y el cuidado de las instalaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Utilizar recursos variados, tradicionales y digitales, mejorando el aprendizaje autónomo y la interacción con otros miembros de la comunidad educativa, con respeto hacia docentes y estudiantes y analizando críticamente las aportaciones de cada participante.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Trabajar de forma adecuada y versátil con medios variados, tradicionales y digitales en la consulta de información y la creación de contenidos, seleccionando e interpretando con criterio las fuentes más fiables y desechando las menos adecuadas y mejorando el aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Cooperar como forma de construir un medio de trabajo eficiente en la ciencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Desarrollar, empleando la metodología adecuada, proyectos científicos que involucren al alumnado en la mejora de la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer y valorar, a través del análisis histórico de los avances científicos logrados por la humanidad, que la ciencia es un proceso en permanente construcción y que existen repercusiones mutuas de la ciencia actual con la tecnología, la sociedad y el medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar en el entorno las necesidades tecnológicas, ambientales, económicas y sociales más importantes que demanda la sociedad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Las destrezas científicas básicas"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. La materia"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. El cambio"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. La interacción"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. La energía"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de metodologías de la investigación científica para la identificación y formulación de cuestiones, la elaboración de hipótesis y la comprobación experimental de las mismas. Aplicación del método científico a experiencias sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Empleo de diversos entornos y recursos de aprendizaje científico, como el laboratorio o los entornos virtuales, utilizando de forma correcta los materiales, sustancias y herramientas tecnológicas y atendiendo a las normas de uso de cada espacio, asegurando y protegiendo así la salud propia y comunitaria, la seguridad en redes y el respeto hacia el medio ambiente. (cid:2) El trabajo en el laboratorio. (cid:2) Estrategias de uso correcto de herramientas tecnológicas en el entorno científico. (cid:2) Normas de seguridad en un laboratorio. (cid:2) Identificación e interpretación del etiquetado de productos químicos. (cid:2) Reciclaje y eliminación de residuos en el laboratorio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Realización de trabajo experimental sencillo y de proyectos de investigación de forma guiada para desarrollar estrategias en la resolución de problemas mediante el uso de la experimentación, la indagación, la deducción, la búsqueda de evidencias y el razonamiento lógico-matemático haciendo inferencias válidas de las observaciones y obteniendo conclusiones para aplicarlas a nuevos escenarios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Uso del lenguaje científico, incluyendo el manejo adecuado de sistemas de unidades y herramientas matemáticas básicas en diferentes escenarios científicos y de aprendizaje. (cid:2) Magnitudes derivadas. Sistema Internacional de Unidades. Cambio de unidades. Factores de conversión (cid:2) Notación científica. Cifras significativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de interpretación y producción de información científica utilizando diferentes formatos y diferentes medios: desarrollo del criterio propio basado en lo que el pensamiento científico aporta a la mejora de la sociedad para hacerla más justa, equitativa e igualitaria. (cid:2) Registro de datos y resultados empleando tablas, gráficos y expresiones matemáticas. (cid:2) Introducción a la elaboración de un informe científico. (cid:2) Selección e interpretación de la información relevante de un texto de divulgación científica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Profundización en el modelo cinético-molecular de la materia y su relación con los cambios de estado. (cid:2) Leyes de los gases. (cid:2) Modelo cinético-molecular de la materia. (cid:2) Cambios de estado de la materia. (cid:2) Realización de experimentos de forma guiada relacionados con los sistemas materiales: conocimiento y descripción de sus propiedades, su composición y su clasificación. Mezclas y disoluciones. Concentración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de los conocimientos sobre la estructura atómica de la materia para entender la formación de iones, la existencia, formación y propiedades de los isótopos y ordenación de los elementos de la tabla periódica. (cid:2) Estructura atómica de la materia. Isótopos. (cid:2) Tabla periódica y propiedades de los elementos. (cid:2) Átomos e iones. Masa atómica y masa molecular. (cid:2) Introducción al enlace químico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Principales compuestos químicos: su formación y sus propiedades físicas y químicas, así como la valoración de sus aplicaciones. (cid:2) Elementos y compuestos de especial interés con aplicaciones industriales, tecnológicas y biomédicas. (cid:2) Aproximación al concepto de mol.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Nomenclatura: participación de un lenguaje científico común y universal formulando y nombrando sustancias simples, iones monoatómicos y compuestos binarios mediante las reglas de nomenclatura de la IUPAC.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Interpretación microscópica de las reacciones químicas: explicación de las relaciones de la química con el medio ambiente, la tecnología y la sociedad. (cid:2) Ajuste de reacciones químicas sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Aplicación de la ley de conservación de la masa (Ley de Lavoisier) y de la ley de las proporciones definidas (Ley de Proust): aplicación de estas leyes como evidencias experimentales que permitan validar el modelo atómico-molecular de la materia. (cid:2) Cálculos estequiométricos sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Análisis de los factores que afectan a las reacciones químicas: predicción cualitativa de la evolución de las reacciones, entendiendo su importancia en la resolución de problemas actuales por parte de la ciencia. (cid:2) Análisis cualitativo de la influencia de la temperatura y la concentración en una reacción química.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Predicción de movimientos sencillos a partir de los conceptos de la cinemática, formulando hipótesis comprobables sobre valores futuros de estas magnitudes, validándolas a través del cálculo numérico, la interpretación de gráficas o el trabajo experimental. (cid:2) Tipos de magnitudes escalares y vectoriales. (cid:2) Concepto de posición, trayectoria y espacio recorrido. (cid:2) Velocidad media, velocidad instantánea y aceleración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Las fuerzas como agentes de cambio: relación de los efectos de las fuerzas, tanto en el estado de movimiento o de reposo de un cuerpo como produciendo deformaciones en los sistemas que actúan. (cid:2) Fuerza y movimiento. (cid:2) Ley de Hooke. (cid:2) Cálculo de la resultante de varias fuerzas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Aplicación de las leyes de Newton: observación de situaciones cotidianas o de laboratorio que permiten entender cómo se comportan los sistemas materiales ante la acción de las fuerzas y predecir el efecto de estas en situaciones cotidianas y de seguridad vial. (cid:2) Introducción a la Ley de la Gravitación Universal. (cid:2) Maquinas simples.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Fenómenos gravitatorios, eléctricos y magnéticos: experimentos sencillos que evidencian la relación con las fuerzas de la naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Diseño y comprobación experimental de hipótesis relacionadas con el uso doméstico e industrial de la energía en sus distintas formas y las transformaciones entre ellas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Elaboración fundamentada de hipótesis sobre el medio ambiente, a partir de las diferencias entre fuentes de energía. Concienciación sobre la necesidad del ahorro energético y conservación del medio ambiente. (cid:2) Uso racional de la energía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Naturaleza eléctrica de la materia: electrización de los cuerpos y los circuitos eléctricos. (cid:2) La fuerza eléctrica: analogías y diferencias con la fuerza gravitatoria. (cid:2) La electricidad como movimiento de cargas eléctricas. Ley de Ohm. (cid:2) Circuitos eléctricos básicos. Asociación de resistencias. (cid:2) Aplicaciones de la electricidad en la vida diaria.",
+      "criterios_ids": []
+    }
+  ]
+}

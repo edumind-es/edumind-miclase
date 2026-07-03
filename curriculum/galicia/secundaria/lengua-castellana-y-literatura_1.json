@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "lengua-castellana-y-literatura",
-    "curso": "1º",
+    "ciclo_origen": "1º",
     "fuente": "iDoceo_lengua-castellana-y-literatura_1º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "1º"
   },
   "competencias": [
     {

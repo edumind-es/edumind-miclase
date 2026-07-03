@@ -1,0 +1,254 @@
+import { useEffect, useState } from 'react'
+import { useSearchParams, Link } from 'react-router-dom'
+import { getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion, getAsistencia, saveAsistencia } from '@/db/queries'
+
+type Alumno  = { id: number; nombre: string; apellidos: string }
+type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null }
+type Estado  = 'presente' | 'ausente' | 'justificada' | 'retraso'
+
+const ESTADOS: { value: Estado; label: string; color: string; bg: string }[] = [
+  { value: 'presente',    label: 'P', color: '#166534', bg: '#dcfce7' },
+  { value: 'ausente',     label: 'A', color: '#991b1b', bg: '#fee2e2' },
+  { value: 'justificada', label: 'J', color: '#92400e', bg: '#fef3c7' },
+  { value: 'retraso',     label: 'R', color: '#1e40af', bg: '#dbeafe' },
+]
+
+function estadoSiguiente(actual: Estado | null): Estado {
+  const orden: Estado[] = ['presente', 'ausente', 'justificada', 'retraso']
+  if (!actual) return 'presente'
+  return orden[(orden.indexOf(actual) + 1) % orden.length]
+}
+
+function hoy() { return new Date().toISOString().slice(0, 10) }
+
+export default function SesionesPage() {
+  const [params] = useSearchParams()
+  const grupoId = params.get('grupo_id')
+
+  const [grupos, setGrupos] = useState<any[]>([])
+  const [grupoSelId, setGrupoSelId] = useState(grupoId || '')
+  const [alumnos, setAlumnos] = useState<Alumno[]>([])
+  const [sesiones, setSesiones] = useState<Sesion[]>([])
+  const [sesionActiva, setSesionActiva] = useState<number | null>(null)
+  const [asistencia, setAsistencia] = useState<Record<number, Estado>>({})
+  const [guardando, setGuardando] = useState(false)
+  const [formNueva, setFormNueva] = useState(false)
+  const [nuevaSesion, setNuevaSesion] = useState({ fecha: hoy(), tipo: 'clase', notas: '' })
+
+  useEffect(() => {
+    getGrupos().then(data => {
+      setGrupos(data)
+      if (!grupoSelId && data[0]) setGrupoSelId(String(data[0].id))
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!grupoSelId) return
+    Promise.all([
+      getAlumnosByGrupo(Number(grupoSelId)),
+      getSesiones(Number(grupoSelId)),
+    ]).then(([als, ses]) => {
+      setAlumnos(als as Alumno[])
+      setSesiones(ses as Sesion[])
+      setSesionActiva(null)
+      setAsistencia({})
+    })
+  }, [grupoSelId])
+
+  const cargarAsistencia = async (sesionId: number) => {
+    setSesionActiva(sesionId)
+    const datos = await getAsistencia(sesionId)
+    const mapa: Record<number, Estado> = {}
+    for (const d of datos) mapa[d.alumno_id] = d.estado as Estado
+    setAsistencia(mapa)
+  }
+
+  const toggleEstado = (alumnoId: number) => {
+    setAsistencia(prev => ({ ...prev, [alumnoId]: estadoSiguiente(prev[alumnoId] || null) }))
+  }
+
+  const marcarTodos = (estado: Estado) => {
+    const nuevo: Record<number, Estado> = {}
+    for (const a of alumnos) nuevo[a.id] = estado
+    setAsistencia(nuevo)
+  }
+
+  const guardarAsistencia = async () => {
+    if (!sesionActiva) return
+    setGuardando(true)
+    const registros = alumnos.map(a => ({ alumno_id: a.id, estado: asistencia[a.id] || 'presente' }))
+    await saveAsistencia(sesionActiva, registros)
+    setGuardando(false)
+  }
+
+  const handleCrearSesion = async () => {
+    if (!nuevaSesion.fecha || !grupoSelId) return
+    setGuardando(true)
+    const id = await dbCrearSesion({
+      grupo_id: Number(grupoSelId),
+      fecha: nuevaSesion.fecha,
+      tipo: nuevaSesion.tipo,
+      notas: nuevaSesion.notas || undefined,
+    })
+    setFormNueva(false)
+    setNuevaSesion({ fecha: hoy(), tipo: 'clase', notas: '' })
+    const ses = await getSesiones(Number(grupoSelId))
+    setSesiones(ses as Sesion[])
+    cargarAsistencia(id)
+    setGuardando(false)
+  }
+
+  if (!grupoSelId && grupos.length === 0) {
+    return (
+      <div className="card" style={{ textAlign: 'center', padding: 48 }}>
+        <p style={{ color: 'var(--gris-600)', marginBottom: 16 }}>Crea un grupo primero.</p>
+        <Link to="/grupos/nuevo" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Crear grupo →</Link>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
+        <h1 className="page-title" style={{ marginBottom: 0 }}>Sesiones y asistencia</h1>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)}>
+            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
+          </select>
+          <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => setFormNueva(true)}>
+            + Nueva sesión
+          </button>
+        </div>
+      </div>
+
+      {formNueva && (
+        <div className="card" style={{ marginBottom: 20, background: 'var(--azul-100)', border: '1px solid var(--azul-300)' }}>
+          <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14, color: 'var(--azul-700)' }}>Nueva sesión</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '160px 140px 1fr', gap: 10, marginBottom: 12 }}>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, display: 'block', marginBottom: 4 }}>Fecha *</label>
+              <input type="date" value={nuevaSesion.fecha}
+                onChange={e => setNuevaSesion(s => ({ ...s, fecha: e.target.value }))}
+                style={{ width: '100%' }} />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, display: 'block', marginBottom: 4 }}>Tipo</label>
+              <select value={nuevaSesion.tipo}
+                onChange={e => setNuevaSesion(s => ({ ...s, tipo: e.target.value }))}
+                style={{ width: '100%' }}>
+                <option value="clase">Clase</option>
+                <option value="excursion">Excursión</option>
+                <option value="examen">Examen</option>
+                <option value="taller">Taller</option>
+                <option value="evento">Evento</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 500, display: 'block', marginBottom: 4 }}>Notas (opcional)</label>
+              <input value={nuevaSesion.notas}
+                onChange={e => setNuevaSesion(s => ({ ...s, notas: e.target.value }))}
+                placeholder="Tema, actividad…" style={{ width: '100%' }} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn-primary" style={{ fontSize: 13 }} onClick={handleCrearSesion} disabled={guardando}>
+              {guardando ? 'Guardando…' : 'Crear y pasar lista'}
+            </button>
+            <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setFormNueva(false)}>Cancelar</button>
+          </div>
+        </div>
+      )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 20, alignItems: 'start' }}>
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--gris-200)', fontWeight: 600, fontSize: 14, color: 'var(--azul-700)' }}>
+            Historial ({sesiones.length})
+          </div>
+          {sesiones.length === 0 && (
+            <div style={{ padding: '20px 14px', color: 'var(--gris-600)', fontSize: 13 }}>Sin sesiones. Crea la primera.</div>
+          )}
+          <div style={{ maxHeight: 500, overflowY: 'auto' }}>
+            {sesiones.map(s => (
+              <div key={s.id} onClick={() => cargarAsistencia(s.id)}
+                style={{
+                  padding: '10px 14px', cursor: 'pointer', borderBottom: '1px solid var(--gris-100)',
+                  background: sesionActiva === s.id ? 'var(--azul-100)' : 'transparent',
+                }}>
+                <div style={{ fontWeight: sesionActiva === s.id ? 700 : 500, fontSize: 14 }}>
+                  {new Date(s.fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--gris-600)', display: 'flex', gap: 8, marginTop: 2 }}>
+                  <span style={{ textTransform: 'capitalize' }}>{s.tipo}</span>
+                  {s.notas && <span style={{ fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 130 }}>· {s.notas}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {sesionActiva ? (
+          <div className="card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 600 }}>
+                Pase de lista — {sesiones.find(s => s.id === sesionActiva)?.fecha}
+              </h3>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {ESTADOS.map(e => (
+                  <button key={e.value} onClick={() => marcarTodos(e.value)}
+                    style={{ padding: '4px 10px', borderRadius: 6, fontSize: 12, cursor: 'pointer', fontWeight: 700, background: e.bg, color: e.color, border: `1px solid ${e.color}30` }}>
+                    Todos {e.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 12 }}>
+              Toca el nombre para cambiar: P=Presente · A=Ausente · J=Justificada · R=Retraso
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginBottom: 16 }}>
+              {alumnos.map(a => {
+                const estado = asistencia[a.id] || null
+                const info = ESTADOS.find(e => e.value === estado)
+                return (
+                  <div key={a.id} onClick={() => toggleEstado(a.id)}
+                    style={{
+                      padding: '10px 12px', borderRadius: 8, cursor: 'pointer',
+                      border: `2px solid ${info ? info.color + '50' : 'var(--gris-200)'}`,
+                      background: info ? info.bg : 'var(--gris-100)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    }}>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: 13 }}>{a.apellidos}</div>
+                      <div style={{ fontSize: 12, color: 'var(--gris-600)' }}>{a.nombre}</div>
+                    </div>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', fontWeight: 800, fontSize: 15,
+                      background: info ? info.color : 'var(--gris-400)', color: 'white',
+                    }}>
+                      {info ? info.label : '?'}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+              <button className="btn-primary" onClick={guardarAsistencia} disabled={guardando}>
+                {guardando ? 'Guardando…' : '✓ Guardar asistencia'}
+              </button>
+              <div style={{ fontSize: 12, color: 'var(--gris-600)' }}>
+                {alumnos.filter(a => (asistencia[a.id] || 'presente') === 'presente').length}/{alumnos.length} presentes
+                {Object.values(asistencia).filter(e => e === 'ausente').length > 0 &&
+                  ` · ${Object.values(asistencia).filter(e => e === 'ausente').length} ausentes`}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="card" style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)' }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
+            <p>Selecciona una sesión del historial para hacer el pase de lista.</p>
+          </div>
+        )}
+      </div>
+    </>
+  )
+}

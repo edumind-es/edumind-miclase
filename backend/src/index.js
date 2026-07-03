@@ -12,6 +12,7 @@ import asignaturasRoutes from './routes/asignaturas.js'
 import calificacionesRoutes from './routes/calificaciones.js'
 import curriculumRoutes from './routes/curriculum.js'
 import sesionesRoutes from './routes/sesiones.js'
+import unidadesRoutes from './routes/unidades.js'
 import authRoutes from './routes/auth.js'
 import backupRoutes from './routes/backup.js'
 import authPlugin from './plugins/auth.js'
@@ -63,6 +64,7 @@ await app.register(asignaturasRoutes, { prefix: '/api/asignaturas' })
 await app.register(calificacionesRoutes, { prefix: '/api/calificaciones' })
 await app.register(curriculumRoutes, { prefix: '/api/curriculum' })
 await app.register(sesionesRoutes, { prefix: '/api/sesiones' })
+await app.register(unidadesRoutes, { prefix: '/api/unidades' })
 
 app.get('/api/health', async () => ({ status: 'ok', version: '0.1.0' }))
 

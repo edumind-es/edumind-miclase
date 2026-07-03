@@ -1,0 +1,225 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "primaria",
+    "asignatura": "proyecto-competencial-todos-os",
+    "ciclo_origen": "cursos",
+    "fuente": "iDoceo_proyecto-competencial_Todos_os_cursos.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Concretar un plan de trabajo para la realización de un proyecto o la resolución de un problema a través de la definición de objetivos y de las acciones para conseguirlos, teniendo en cuenta las necesidades del entorno.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Desarrollar el proyecto según la planificación prevista movilizando conjuntamente las competencias transversales que se requieran.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Presentar los resultados asociados al proyecto competencial empleando de una manera respetuosa estrategias y herramientas de comunicación adecuadas con un lenguaje verbal y corporal positivo, control de las emociones negativas y, en su caso, con el uso de recursos informáticos y audiovisuales.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer la importancia de la temática del proyecto que se pretende abordar.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Valorar los recursos y materiales necesarios para la realización del proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar y seleccionar la información que se precisa.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Realizar, de manera guiada, la secuencia y la temporalización de las actuaciones necesarias para la ejecución del proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Prever las incidencias que se puedan producir en el desarrollo de las actuaciones del proyecto y proponer posibles soluciones a estas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Ejecutar las actuaciones asociadas con la secuencia y la temporalización prevista.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Aplicar los conocimientos idóneos y movilizar las competencias con los niveles de calidad requeridos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Emplear, en su caso los recursos y materiales previstos para la ejecución de las actuaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Resolver, dentro de su nivel de autonomía, o comunicar las incidencias surgidas durante la ejecución de las actuaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Valorar los resultados logrados al término de la ejecución del proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Presentar el proyecto realizado y, en su caso, los productos finales obtenidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Emplear un lenguaje verbal con corrección y claridad, para ensalzar la expresividad y eficacia del discurso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Emplear un lenguaje corporal y la presencia escénica como códigos comunicativos para ensalzar la expresividad y eficacia del discurso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Potenciar las emociones positivas en la exposición y controlar, en su caso, la conducta asociada a las emociones negativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Emplear recursos digitales, audiovisuales o plásticos como apoyo en la presentación del proyecto.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Definición de proyectos"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Ejecución de proyectos"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Presentación de proyectos"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Búsqueda y selección de información relacionada con los proyectos",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Planificación: secuenciación y temporalización",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Ejecución de proyectos: dinámicas y roles",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Presentación de proyectos: la expresión verbal y corporal; control de las emociones y de la conducta",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Uso de recursos digitales, audiovisuales o plásticos de apoyo a la comunicación para la presentación del proyecto. 11.4",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.3",
+        "CE3.5"
+      ]
+    }
+  ]
+}

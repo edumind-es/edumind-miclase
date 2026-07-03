@@ -1,0 +1,227 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "m-sica",
+    "ciclo_origen": "3-eso",
+    "fuente": "iDoceo_17_m_sica_3-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Analizar obras de diferentes épocas y culturas, identificando sus principales rasgos estilísticos y estableciendo relaciones con su contexto, para valorar el patrimonio musical y dancístico como fuente de disfrute y enriquecimiento personal.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas musicales y dancísticas, a través de actividades de improvisación, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las técnicas más adecuadas a la intención expresiva.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interpretar piezas musicales y dancísticas, gestionando adecuadamente las emociones y empleando diversos métodos y técnicas vocales, corporales o instrumentales, para ampliar las posibilidades de expresión personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Elaborar obras artístico-musicales, empleando la voz, el cuerpo, instrumentos musicales y herramientas tecnológicas, para potenciar la creatividad e identificar oportunidades de desarrollo personal, social, académico y profesional.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar los principales rasgos estilísticos de obras musicales y dancísticas de culturas desde el Medievo hasta la Edad Contemporánea, evidenciando una actitud de apertura, interés y respeto en la escucha o el visionado de las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Explicar, con actitud abierta y respetuosa, las funciones desempeñadas por determinadas producciones musicales y dancísticas, relacionándolas con las principales características de su situación histórica, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Establecer conexiones entre manifestaciones musicales y dancísticas de diferentes culturas a lo largo de la Edad Media, Moderna, valorando su influencia sobre la música y la danza de la Edad contemporánea y de la actualidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar ideas, sentimientos y emociones en actividades pautadas de improvisación, seleccionando las técnicas más adecuadas de entre las que conforman el repertorio personal de recursos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Leer partituras, identificando los elementos básicos del lenguaje musical, con o sin apoyo de la audición.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar con corrección piezas musicales y dancísticas sencillas, individuales y grupales, dentro y fuera del aula, gestionando de forma guiada la ansiedad y el miedo escénico, y manteniendo la concentración.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar activamente en la planificación y en la ejecución de propuestas artístico- musicales colaborativas, valorando las aportaciones del resto de integrantes del grupo y descubriendo oportunidades de desarrollo personal, social, académico y profesional.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Escucha y percepción"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Interpretación, improvisación y creación escénica"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Contextos y culturas"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo de unas normas de comportamiento básicas en la recepción musical promoviendo el respeto, mediante la utilización de un adecuado vocabulario referente al estilo, ritmo, compás, tímbrica, formas musicales, dinámicas, texturas y cualidades expresivas de la música.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Obras musicales y dancísticas desde el Medievo hasta la Edad Moderna: análisis, descripción y valoración de sus características básicas. Su influencia sobre la música en la Edad Contemporánea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Géneros de la música y la danza desde el Medievo hasta la actualidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de recursos para la comprensión de la música escuchada: visualización y análisis básico de las obras a través de medios audiovisuales; realización de ostinatos y ritmos sencillos con percusión corporal o instrumental; uso de la voz para acompañamientos o melodías; musicogramas, partituras sencillas y otras representaciones gráficas para seguir las audiciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Mitos, estereotipos y roles de género trasmitidos a través de la música y la danza a lo largo de la Edad Media, la Edad Moderna y la Edad Contemporánea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Herramientas digitales para la recepción musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Conciertos, actuaciones musicales y otras manifestaciones artístico-musicales en vivo y registradas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Compositores y compositoras, artistas e intérpretes internacionales, nacionales, regionales y locales desde la Edad Media hasta la Edad Contemporánea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La partitura: profundización en el conocimiento del lenguaje musical y su práctica. Grafías convencionales y no convencionales: conocimiento, identificación y aplicación de grafías, lectura y escritura musical como base para la interpretación y la creación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas digitales para la creación musical. Elaboración de arreglos utilizando herramientas digitales, como secuenciadores y editores de partituras, para el desarrollo de materiales audiovisuales en un ambiente colaborativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Interpretación elemental de un repertorio limitado de piezas vocales, instrumentales o corporal individual o grupal de distintos tipos de música del patrimonio musical propio y de otras culturas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Proyectos musicales y audiovisuales: empleo de la voz, el cuerpo, los instrumentos musicales, los medios y las aplicaciones tecnológicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Normas de comportamiento y participación en actividades musicales desde un ambiente cooperativo y de respeto para la creación musical conjunta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La propiedad intelectual y cultural: planteamientos éticos y responsables del uso de la música. Hábitos de consumo musical responsable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La música y la danza occidental en la Edad Media, la Edad Moderna y la Edad Contemporánea: periodos, características, géneros, voces, instrumentos y agrupaciones. (cid:2) La música religiosa y profana en el Medievo. (cid:2) La música en el Renacimiento. (cid:2) El barroco musical. (cid:2) La música en el Clasicismo. (cid:2) La música en el Romanticismo. (cid:2) La música en el siglo XX.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "El sonido y la música en los medios audiovisuales y las tecnologías digitales.",
+      "criterios_ids": []
+    }
+  ]
+}

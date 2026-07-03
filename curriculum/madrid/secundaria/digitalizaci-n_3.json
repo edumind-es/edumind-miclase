@@ -1,0 +1,409 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "digitalizaci-n",
+    "ciclo_origen": "toda-la-etapa",
+    "fuente": "iDoceo_04_digitalizaci_n_toda-la-etapa.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar y resolver problemas técnicos sencillos, conectar y configurar ordenadores y dispositivos móviles a redes domésticas, aplicando los conocimientos de hardware y sistemas operativos para gestionar las herramientas e instalaciones informáticas y de comunicación de uso cotidiano.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD4",
+        "CD5",
+        "CPSAA1",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Configurar el entorno personal de aprendizaje, interactuando y aprovechando los recursos del ámbito digital, para optimizar y gestionar el aprendizaje permanente.",
+      "descriptores_ids": [
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Desarrollar hábitos que fomenten el bienestar digital aplicando medidas preventivas y correctivas, para proteger dispositivos, datos personales y la propia salud.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM5",
+        "CD1",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Ejercer una ciudadanía digital crítica conociendo las posibles acciones que realizar en la red, e identificando sus repercusiones, para hacer un uso activo, responsable y ético de la tecnología.",
+      "descriptores_ids": [
+        "CD3",
+        "CD4",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Conectar dispositivos y gestionar redes locales aplicando los conocimientos y procesos asociados a sistemas de comunicación alámbrica e inalámbrica con una actitud proactiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Instalar y mantener sistemas operativos configurando sus características en función de sus necesidades personales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar y resolver problemas técnicos sencillos analizando componentes y funciones de los dispositivos digitales, evaluando las soluciones de manera crítica y reformulando el procedimiento, en caso necesario.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Gestionar el aprendizaje en el ámbito digital, configurando el entorno personal de aprendizaje mediante la integración de recursos digitales de manera autónoma.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar, seleccionar y archivar información relevante y fiable en función de sus necesidades haciendo uso de las herramientas del entorno personal de aprendizaje con sentido crítico y siguiendo normas básicas de seguridad en la red.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Crear, programar, integrar y reelaborar contenidos digitales de forma individual o colectiva, seleccionando las herramientas más apropiadas para generar nuevo conocimiento y contenidos digitales de manera creativa, respetando derechos de autor y licencias de uso.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Interactuar en espacios virtuales de comunicación y plataformas de aprendizaje colaborativo, haciendo uso de herramientas colaborativas, compartiendo y publicando información y datos, adaptándose a diferentes audiencias con una actitud participativa y respetuosa.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Proteger los datos personales y la huella digital generada en internet, configurando las condiciones de privacidad de las redes sociales y espacios virtuales de trabajo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Configurar y actualizar, contraseñas, sistemas operativos, antivirus y copias de seguridad de forma periódica en los distintos dispositivos digitales de uso habitual.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y saber reaccionar ante situaciones que representan una amenaza en la red escogiendo la mejor solución entre diversas opciones, desarrollando prácticas saludables y seguras, y valorando el bienestar físico y mental, tanto personal como colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar la importancia creciente de la ciberseguridad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Hacer un uso ético de los datos y las herramientas digitales, aplicando las normas de etiqueta digital y respetando la privacidad y las licencias de uso y propiedad intelectual en la comunicación, colaboración y participación activa en la red.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer las aportaciones de las tecnologías digitales en las gestiones administrativas y el comercio electrónico, siendo consciente de la brecha social de acceso, uso y aprovechamiento de dichas tecnologías para diversos colectivos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar la importancia de la oportunidad, facilidad y libertad de expresión que suponen los medios digitales conectados, analizando de forma crítica los mensajes que se reciben y transmiten teniendo en cuenta su objetividad, ideología, intencionalidad, sesgos y caducidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar la necesidad y los beneficios globales de un uso y desarrollo responsable de las tecnologías digitales, teniendo en cuenta criterios de accesibilidad, sostenibilidad e impacto.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer cómo autentificar la identidad en el mundo digital, seleccionando los medios más adecuados en función del entorno en que deba practicarse.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Dispositivos digitales, sistemas operativos y de comunicación"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Digitalización del entorno personal de aprendizaje"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Seguridad y bienestar digital"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Ciudadanía digital crítica"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Arquitectura de ordenadores: elementos, montaje, configuración y resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Dispositivos móviles: elementos, configuración y resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Sistemas operativos: instalación y configuración de usuario. Sistemas operativos libres: MAX",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Sistemas de comunicación e internet.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Dispositivos de red y funcionamiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Procedimiento de configuración de una red doméstica y conexión de dispositivos. Comunicaciones inalámbricas entre dispositivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Dispositivos conectados (IoT y wearables): configuración y conexión de dispositivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Búsqueda, selección y archivo de información relevante y fiable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Edición y creación de contenidos:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Aplicaciones de productividad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Fundamentos de HTML y CSS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Conceptos básicos de lenguajes de programación para el desarrollo de aplicaciones sencillas para dispositivos móviles y web: variables, operadores, condicionales y eventos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Realidad virtual, aumentada y mixta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Comunicación y colaboración en red. Herramientas colaborativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Publicación y difusión responsable en redes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Introducción a la ciberseguridad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad de dispositivos:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Medidas preventivas y correctivas para hacer frente a riesgos, amenazas y ataques a dispositivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Software antivirus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Copias de seguridad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad de dispositivos conectados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad y protección de datos:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Identidad, reputación, privacidad y huella digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Medidas preventivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Configuración en redes sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Gestión de identidades virtuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Legislación en materia de Protección de Datos (LOPD): derechos y deberes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad en la salud física (ergonomía) y mental. Riesgos, amenazas al bienestar personal. Opciones de respuesta y prácticas de uso saludable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Situaciones de violencia y de riesgo en la red (ciberacoso, sextorsión, acceso a contenidos inadecuados, dependencia tecnológica, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Interactividad en la red:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "El derecho a la libertad de expresión. Límites de la libertad de expresión y delitos de expresión en la red.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Etiqueta digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Propiedad intelectual: derechos de autor, licencias de uso y creative commons.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Educación mediática: periodismo digital, blogosfera, estrategias comunicativas y uso crítico de la red, herramientas para detectar noticias falsas y fraudes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Gestiones administrativas: servicios públicos en línea, registros digitales y certificados oficiales. El DNI electrónico. El Código Seguro de Verificación (CSV). La firma electrónica. Los metadatos en los documentos electrónicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Comercio electrónico: compras seguras, facturas digitales, formas de pago y criptomonedas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Ética en el uso de datos y herramientas digitales: inteligencia artificial, sesgos, obsolescencia programada, soberanía tecnológica y digitalización sostenible.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "educaci-n-f-sica",
+    "ciclo_origen": "2-eso",
+    "fuente": "iDoceo_06_educaci_n_f_sica_2-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Adoptar un estilo de vida activo y saludable, seleccionando e incorporando intencionalmente actividades físicas y deportivas en las rutinas diarias, a partir de un análisis crítico de los modelos corporales y del rechazo de las prácticas que carezcan de base científica, para hacer un uso saludable y autónomo de su tiempo libre y así mejorar su calidad de vida.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Adaptar, con progresiva autonomía en su ejecución, las capacidades físicas, perceptivo-motrices y coordinativas, así como las habilidades y destrezas motrices, aplicando procesos de percepción, decisión y ejecución adecuados a la lógica interna y a los objetivos de diferentes situaciones con dificultad variable, para resolver situaciones de carácter motor vinculadas con distintas actividades físicas, funcionales, deportivas, expresivas y recreativas, y consolidar actitudes de superación, crecimiento y resiliencia al enfrentarse a desafíos físicos.",
+      "descriptores_ids": [
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Compartir espacios de práctica físico-deportiva con independencia de cualquier diferencia, priorizando el respeto entre participantes y las reglas sobre los resultados, adoptando una actitud crítica ante comportamientos antideportivos y desarrollando procesos que canalicen el fracaso y el éxito en estas situaciones.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Practicar, analizar y valorar distintas manifestaciones de la cultura motriz aprovechando las posibilidades y recursos expresivos que ofrecen el cuerpo y el movimiento y profundizando en las consecuencias del deporte como fenómeno social, analizando críticamente sus manifestaciones desde la perspectiva de género y desde los intereses económico-políticos que lo rodean, para alcanzar una visión más realista, contextualizada y justa de la motricidad en el marco de las sociedades actuales.",
+      "descriptores_ids": [
+        "CC2",
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Adoptar un estilo de vida sostenible y responsable aplicando medidas de seguridad en la práctica físico-deportiva según el entorno, para contribuir activamente a la conservación del medio natural y urbano.",
+      "descriptores_ids": [
+        "STEM5",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Fijar y organizar secuencias sencillas de actividad física orientada al concepto integral de salud y al estilo de vida activo, partiendo de una valoración del nivel inicial y respetando la propia realidad e identidad corporal.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Incorporar progresivamente y con autonomía procesos de activación corporal, dosificación del esfuerzo, alimentación saludable, educación postural, relajación e higiene durante la práctica de actividades motrices, interiorizando las rutinas propias de una práctica motriz saludable y responsable.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Adoptar de manera responsable y con progresiva autonomía medidas generales para la prevención de lesiones antes, durante y después de la práctica de actividad física, aprendiendo a reconocer situaciones de riesgo para actuar preventivamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Actuar de acuerdo a los protocolos de intervención ante accidentes derivados de la práctica de actividad física y deportiva, aplicando medidas básicas de primeros auxilios.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar y valorar de manera crítica la incidencia que ciertas prácticas y comportamientos tienen en nuestra salud y en la convivencia, valorando su impacto y evitando activamente su reproducción.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Emplear recursos y aplicaciones digitales variados, reconociendo su potencial, así como sus riesgos para su uso en el ámbito de la actividad física y el deporte.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Desarrollar proyectos motores de carácter individual, cooperativo o colaborativo, estableciendo mecanismos para reconducir los procesos de trabajo, incluyendo estrategias de autoevaluación y coevaluación tanto del proceso como del resultado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Interpretar y actuar correctamente en contextos motrices variados, aplicando principios básicos de toma de decisiones en situaciones lúdicas, juegos modificados y actividades deportivas a partir de la anticipación, adecuándose a las demandas motrices, a la actuación de los compañeros y de la persona oponente (si lo hubiera) y a la lógica interna en contextos reales o simulados de actuación, reflexionando sobre las soluciones y los resultados obtenidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Evidenciar control y dominio corporal al emplear los componentes cualitativos y cuantitativos de la motricidad de manera eficiente y creativa, haciendo frente a las demandas de resolución de problemas en situaciones motrices transferibles a su espacio vivencial con progresiva autonomía.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Practicar una gran variedad de actividades motrices, valorando las implicaciones éticas de las actitudes antideportivas, actuando con deportividad al asumir los roles de público, participante u otros.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Cooperar o colaborar en la práctica de diferentes producciones motrices para alcanzar el logro individual y grupal, participando en la toma de decisiones y asumiendo distintos roles asignados y responsabilidades.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Emplear con autonomía habilidades sociales, diálogo en la resolución de conflictos y respeto ante la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Organizar y gestionar la participación en juegos motores y otras manifestaciones artístico- expresivas vinculadas tanto con la cultura propia como con otras, favoreciendo su conservación y valorando sus orígenes, evolución e influencia en las sociedades contemporáneas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Clasificar y analizar objetivamente las diferentes actividades y modalidades deportivas según sus características y requerimientos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar activamente en la creación y representación de composiciones de expresión corporal individuales o colectivas con y sin base musical, utilizando intencionadamente y con progresiva autonomía el cuerpo como herramienta de expresión y comunicación a través de diversas técnicas expresivas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Participar en actividades físico-deportivas en entornos naturales, terrestres o acuáticos, disfrutando del entorno de manera sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Practicar y colaborar en la organización de actividades físico-deportivas en el medio natural y urbano, aplicando normas de seguridad individuales y colectivas.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Vida activa y saludable"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Organización y gestión de la actividad física"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Resolución de problemas en situaciones motrices"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Emociones y relaciones sociales"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Manifestaciones de la cultura motriz"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Interacción eficiente y sostenible con el entorno"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Salud física. (cid:2) Refuerzo de determinados conceptos relacionados con la salud, como son la tasa mínima de actividad física diaria y semanal, o la relación entre salud y alimentación. Adaptación del volumen, la intensidad y la frecuencia de la actividad física a las características personales y aproximación a una dieta adaptada a consideraciones individuales. (cid:2) Educación postural: técnicas básicas de descarga postural y relajación. Musculatura del núcleo central del cuerpo (core; zona media o lumbo-pélvica) y su relación con el mantenimiento de la postura. (cid:2) Cuidado del cuerpo: diseño de un calentamiento general autónomo. (cid:2) Desarrollo y aplicación de pautas para prevenir y tratar el dolor muscular de origen retardado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Salud social. (cid:2) Análisis crítico de cualquier estereotipo. Comportamientos violentos e incitación al odio en el deporte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Salud mental. (cid:2) La actividad física como fuente de disfrute, liberación de tensiones, cohesión social y superación personal. (cid:2) Reflexión sobre actitudes negativas hacia la actividad física derivadas de ideas preconcebidas, prejuicios, estereotipos o experiencias negativas. (cid:2) Trastornos alimenticios asociados a la práctica de la actividad física y deporte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Elección de la práctica física. (cid:2) Consolidación de técnicas de gestión aplicadas a situaciones de competición basadas en base a criterios de lógica, respeto al rival y motivación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Preparación de la práctica motriz. (cid:2) Autoconstrucción de materiales como complemento y alternativa en la práctica de actividad física y deporte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Planificación y autorregulación de proyectos motores. (cid:2) Afianzamiento de los mecanismos de autoevaluación para reconducir los procesos de trabajo. (cid:2) Profundización en el uso de herramientas y recursos digitales para la gestión de la actividad física.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Prevención de accidentes en las prácticas motrices. (cid:2) Aplicación y diseño de medidas de seguridad en actividades físicas dentro y fuera del centro educativo. (cid:2) Calzado deportivo, ropa y ergonomía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Repaso de las actuaciones básicas ante accidentes durante la práctica de actividades físicas. (cid:2) Técnica PAS (proteger, ayudar, socorrer). (cid:2) Protocolo 112. (cid:2) Soporte vital básico (SVB).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Toma de decisiones. (cid:2) Planificación de pautas grupales para optimizar los recursos motrices del grupo de cara a la resolución de la acción/tarea en situaciones cooperativas diversas. (cid:2) Análisis de movimientos y patrones motores del adversario para actuar en consecuencia en situaciones motrices de persecución y de interacción con un móvil. (cid:2) Adecuación de los movimientos propios a las acciones del contrario en situaciones de oposición. Delimitación de estrategias previas de ataque y defensa en función de las características de los integrantes del equipo en situaciones motrices de colaboración- oposición de persecución y de interacción con un móvil.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Capacidades perceptivo-motrices en contexto de práctica: (cid:2) Integración del esquema corporal. (cid:2) Integración de los diferentes aspectos coordinativos, espaciales y temporales en secuencias motrices y/o deportivas diversas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Capacidades condicionales. (cid:2) Desarrollo de las capacidades físicas básicas. Principios básicos del acondicionamiento físico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Habilidades motrices específicas asociadas a la técnica en actividades físico-deportivas: (cid:2) Deportes y actividades individuales: habilidades gimnásticas y acrobáticas. (cid:2) Deportes de red y muro: bossaball o futvoley. (cid:2) Deportes de combate: lucha, judo, karate, kickboxing o taekwondo. (cid:2) Deportes de invasión: fútbol o fútbol gaélico. (cid:2) Deportes y juegos de blanco y diana: boccia, bolos, minigolf o petanca.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Creatividad motriz. (cid:2) Resolución de retos y situaciones-problema, con incremento progresivo de su dificultad, de forma original, tanto individualmente como en grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Actitud crítica ante elementos del entorno que supongan obstáculos a la accesibilidad universal y la movilidad activa, autónoma, saludable y segura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Gestión emocional. (cid:2) El estrés. Sensaciones, indicios y manifestaciones. (cid:2) Estrategias de autorregulación colectiva del esfuerzo y la capacidad de superación para afrontar desafíos. (cid:2) Perseverancia y tolerancia a la frustración en contextos físico-deportivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Habilidades sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Respeto a las reglas. (cid:2) Las reglas de juego como elemento de integración social. (cid:2) Funciones de arbitraje deportivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Identificación y rechazo de conductas contrarias a la convivencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Práctica de actividades rítmico-musicales con carácter artístico-expresivo. (cid:2) Acrosport: figuras, acrobacias y coreografía musical. (cid:2) La danza como manifestación y patrimonio cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Deporte y género. (cid:2) Visibilidad y tratamiento en los medios de comunicación. (cid:2) Promoción del deporte en igualdad. Comprensión de los retos inclusivos a que se enfrenta la actividad física a fin de que todo el mundo pueda practicarla. (cid:2) Presencia y relevancia de figuras del deporte. Análisis crítico. Igualdad de género en las profesiones asociadas al deporte (comentaristas, periodistas, deportistas, técnicos y técnicas, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Influencia del deporte en la cultura actual. (cid:2) Análisis crítico del deporte como fenómeno de masas. Impacto social, aspectos positivos y negativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "La práctica de la bicicleta como medio de transporte habitual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Nuevos espacios y prácticas deportivas: características, requisitos, condicionantes, medidas de seguridad, de cuidado y de conservación del entorno de práctica. (cid:2) Utilización de espacios naturales desde la motricidad. Escalda y rapel. (cid:2) Utilización de espacios urbanos desde la motricidad. Parkour, skate u otras manifestaciones similares. (cid:2) Diseño de actividades físicas en el medio natural y urbano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Análisis del riesgo en las prácticas físico-deportivas en el medio natural y urbano: adopción crítica de medidas de seguridad en actividades de los distintos entornos con posibles consecuencias graves en los mismos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Consumo responsable. (cid:2) Autoconstrucción y reciclaje de materiales para la práctica motriz.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Cuidado del entorno próximo como servicio a la comunidad, durante la práctica de actividad física en entornos naturales y urbanos.",
+      "criterios_ids": []
+    }
+  ]
+}

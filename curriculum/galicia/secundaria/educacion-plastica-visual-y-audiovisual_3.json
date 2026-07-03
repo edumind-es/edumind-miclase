@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "educacion-plastica-visual-y-audiovisual",
-    "curso": "3º",
+    "ciclo_origen": "3º",
     "fuente": "iDoceo_educacion-plastica-visual-y-audiovisual_3º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "3º"
   },
   "competencias": [
     {

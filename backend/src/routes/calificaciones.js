@@ -3,7 +3,7 @@ export default async function calificacionesRoutes(app) {
 
   // Calificador completo: todos los alumnos × todos los criterios × trimestre
   app.get('/calificador', async (req, reply) => {
-    const { asignatura_id, trimestre } = req.query
+    const { asignatura_id, trimestre, unidad_id } = req.query
     if (!asignatura_id) return reply.status(400).send({ error: 'asignatura_id requerido' })
 
     const asig = db.prepare('SELECT * FROM asignaturas WHERE id = ?').get(asignatura_id)
@@ -17,11 +17,26 @@ export default async function calificacionesRoutes(app) {
       ORDER BY a.apellidos, a.nombre
     `).all(asig.grupo_id)
 
-    const criterios = db.prepare(`
-      SELECT * FROM c_criterios
-      WHERE asignatura = ? AND curso = ? AND etapa = ? AND comunidad = ?
-      ORDER BY id
-    `).all(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad)
+    // La BD almacena curso con º (ej: "3º"); normalizar por si el grupo tiene "3"
+    const cursoNorm = grupo.curso.replace('º', '').replace('ª', '') + 'º'
+
+    let criterios
+    if (unidad_id) {
+      // Filtrar solo los criterios de la unidad seleccionada
+      criterios = db.prepare(`
+        SELECT cc.* FROM c_criterios cc
+        JOIN unidad_criterios uc ON uc.criterio_id = cc.id
+        WHERE uc.unidad_id = ?
+          AND cc.asignatura = ? AND cc.curso = ? AND cc.etapa = ? AND cc.comunidad = ?
+        ORDER BY uc.peso DESC, cc.id
+      `).all(unidad_id, asig.nombre, cursoNorm, grupo.etapa, asig.comunidad)
+    } else {
+      criterios = db.prepare(`
+        SELECT * FROM c_criterios
+        WHERE asignatura = ? AND curso = ? AND etapa = ? AND comunidad = ?
+        ORDER BY id
+      `).all(asig.nombre, cursoNorm, grupo.etapa, asig.comunidad)
+    }
 
     const instrumentos = db.prepare(
       'SELECT * FROM instrumentos WHERE asignatura_id = ? ORDER BY orden'

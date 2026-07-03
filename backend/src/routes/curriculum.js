@@ -18,8 +18,9 @@ export default async function curriculumRoutes(app) {
     if (!asignatura || !curso) {
       return reply.status(400).send({ error: 'asignatura y curso son obligatorios' })
     }
-    // normalizar curso (puede venir con º o sin él)
-    const cursoNorm = curso.replace('º', '').replace('ª', '')
+    // La BD almacena el curso con º (ej: "3º"); añadirlo si viene sin él
+    const base = curso.replace('º', '').replace('ª', '')
+    const cursoNorm = base + 'º'
     const criterios = db.prepare(`
       SELECT * FROM c_criterios
       WHERE asignatura = ? AND curso = ? AND etapa = ? AND comunidad = ?
@@ -34,7 +35,7 @@ export default async function curriculumRoutes(app) {
     if (!asignatura || !curso) {
       return reply.status(400).send({ error: 'asignatura y curso son obligatorios' })
     }
-    const cursoNorm = curso.replace('º', '').replace('ª', '')
+    const cursoNorm = curso.replace('º', '').replace('ª', '') + 'º'
     const bloques = db.prepare(`
       SELECT * FROM c_bloques
       WHERE asignatura = ? AND curso = ? AND etapa = ? AND comunidad = ?

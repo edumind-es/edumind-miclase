@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "primaria",
     "asignatura": "musica-danza",
-    "curso": "6º",
+    "ciclo_origen": "6º",
     "fuente": "iDoceo_musica-danza_6º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "6º"
   },
   "competencias": [
     {

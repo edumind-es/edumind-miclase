@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "educacion-fisica",
-    "curso": "1º",
+    "ciclo_origen": "1º",
     "fuente": "iDoceo_educacion-fisica_1º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "1º"
   },
   "competencias": [
     {

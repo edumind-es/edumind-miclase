@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
+import { crearAlumno as dbCrearAlumno } from '@/db/queries'
 
 // ─── Parser de importación masiva ───────────────────────────────────────────
 
@@ -96,8 +97,7 @@ export default function AlumnosPage() {
         <FormNuevoAlumno
           grupoIdInicial={grupoId ? Number(grupoId) : undefined}
           onGuardar={async (datos: Record<string, any>) => {
-            const alumnoId = await crearAlumno(datos)
-            if (grupoId) await fetch(`/api/grupos/${grupoId}/alumnos/${alumnoId}`, { method: 'POST' })
+            await crearAlumno({ ...datos, grupo_id: grupoId ? Number(grupoId) : 1 })
             recargar()
             setModal(null)
           }}
@@ -209,13 +209,15 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
     if (validos.length === 0) return
     setGuardando(true)
     try {
-      const res = await fetch('/api/alumnos/bulk', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ alumnos: validos, grupo_id: grupoId ? Number(grupoId) : undefined }),
-      })
-      const data = await res.json()
-      setResultado(data)
+      let insertados = 0
+      for (const al of validos) {
+        await dbCrearAlumno({
+          nombre: al.nombre, apellidos: al.apellidos,
+          neae: 0, etiquetas: '[]',
+        }, grupoId ? Number(grupoId) : 1)
+        insertados++
+      }
+      setResultado({ insertados, errores: [] })
       onCompletado()
     } finally {
       setGuardando(false)

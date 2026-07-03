@@ -1,0 +1,347 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "tecnolog-a-y-digitalizaci-n",
+    "ciclo_origen": "2-eso",
+    "fuente": "iDoceo_19_tecnolog_a_y_digitalizaci_n_2-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Buscar y seleccionar la información adecuada proveniente de diversas fuentes, de manera crítica y segura, aplicando procesos de investigación, métodos de análisis de productos y experimentando con herramientas de simulación, para definir problemas tecnológicos e iniciar procesos de creación de soluciones a partir de la información obtenida.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM2",
+        "CD1",
+        "CD4",
+        "CPSAA4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Abordar problemas tecnológicos con autonomía y actitud creativa, aplicando conocimientos interdisciplinares y trabajando en grupo, para diseñar y planificar soluciones a un problema o necesidad de forma eficaz e innovadora.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Aplicar de forma apropiada y segura distintas técnicas y conocimientos interdisciplinares utilizando operadores, sistemas tecnológicos y herramientas, teniendo en cuenta la planificación y el diseño previo para construir o fabricar soluciones tecnológicas adecuadas que den respuesta a necesidades en diferentes contextos.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM3",
+        "STEM5",
+        "CD5",
+        "CPSAA1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Describir, representar e intercambiar ideas o soluciones a problemas tecnológicos o digitales, utilizando medios de representación, simbología y vocabulario adecuados, así como los instrumentos y recursos disponibles y valorando la utilidad de las herramientas digitales para comunicar y difundir información y propuestas.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM4",
+        "CD3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Desarrollar algoritmos y aplicaciones informáticas en distintos entornos, aplicando los principios del pensamiento computacional e incorporando las tecnologías emergentes, para crear soluciones a problemas concretos, automatizar procesos y aplicarlos en sistemas de control o en robótica.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender los fundamentos del funcionamiento de los dispositivos y aplicaciones habituales de su entorno digital de aprendizaje, analizando sus componentes y funciones y ajustándolos a sus necesidades para hacer un uso más eficiente y seguro de los mismos y para detectar y resolver problemas técnicos sencillos.",
+      "descriptores_ids": [
+        "CP2",
+        "CD2",
+        "CD4",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Hacer un uso responsable de la tecnología, mostrando interés por un desarrollo equilibrado, identificando sus repercusiones y valorando la contribución de las tecnologías emergentes, para identificar las aportaciones y el impacto del desarrollo tecnológico.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Definir problemas o necesidades planteadas, buscando y contrastando información de forma guiada procedente de diferentes fuentes de manera crítica y segura.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprender y examinar productos tecnológicos de uso habitual a través del análisis de objetos y sistemas cotidianos, empleando el método científico y utilizando herramientas de simulación adecuadas al nivel del alumnado que faciliten la construcción de conocimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Idear y describir soluciones originales a problemas definidos sencillos, aplicando conceptos, técnicas y procedimientos interdisciplinares, así como criterios de sostenibilidad con actitud emprendedora, perseverante y creativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar, planificar y organizar los materiales y herramientas, así como establecer de forma guiada la secuencia de las tareas necesarias para la construcción de una solución a un problema planteado, trabajando individualmente o en grupo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Fabricar objetos o modelos mediante la manipulación y conformación de materiales, empleando herramientas y máquinas adecuadas, aplicando los fundamentos de estructuras, mecanismos y electricidad y respetando las normas de seguridad y salud.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Estimar cualitativamente las transformaciones de velocidades y fuerzas en mecanismos simples.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar las magnitudes eléctricas básicas, su relación y su efecto en circuitos sencillos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar las fases del proceso de creación de un producto desde su diseño hasta su difusión.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer y elaborar de forma guiada la documentación técnica y gráfica básica, utilizando la simbología y el vocabulario técnico adecuados, tanto presencialmente como en remoto.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Describir, interpretar y diseñar soluciones a problemas informáticos a través de algoritmos básicos y diagramas de flujo sencillos, aplicando los elementos y técnicas de programación de manera creativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Programar aplicaciones sencillas, de forma guiada con una finalidad concreta y definida, para distintos dispositivos (ordenadores, dispositivos móviles y otros) aplicando herramientas de edición y empleando los elementos de programación por bloques de manera apropiada.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Usar de manera eficiente y segura los dispositivos digitales de uso cotidiano en la resolución de problemas sencillos, conociendo los riesgos y adoptando medidas de seguridad para la protección de datos y equipos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Crear contenidos y elaborar materiales sencillos y estructurados, configurando correctamente las herramientas digitales habituales del entorno de aprendizaje, ajustándolas a sus necesidades y respetando los derechos de autor y la etiqueta digital.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Organizar la información de manera estructurada, aplicando técnicas de almacenamiento seguro y haciendo uso de los formatos de ficheros más apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Reconocer la influencia de la actividad tecnológica en la sociedad y en el entorno a lo largo de su historia.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Proceso de resolución de problemas"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Comunicación y difusión de ideas"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Pensamiento computacional, programación y robótica"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Digitalización del entorno personal de aprendizaje"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Tecnología sostenible"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Introducción a las estrategias, técnicas y marcos de resolución de problemas en diferentes contextos y sus fases.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Introducción a la búsqueda crítica de información durante la investigación y definición de problemas planteados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estructuras para la construcción de modelos: (cid:2) Resistencia, estabilidad y rigidez de estructuras. (cid:2) Esfuerzos estructurales: compresión, tracción, flexión, torsión y cortante. (cid:2) Materiales técnicos en estructuras industriales y arquitectónicas. (cid:2) Diseño de elementos de soporte y estructuras de apoyo. (cid:2) Estructuras de barras, triangulación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Sistemas mecánicos básicos: (cid:2) Montajes físicos o uso de simuladores. (cid:2) Palancas de primer, segundo y tercer grado. Ley de la palanca. (cid:2) Análisis cualitativo de sistemas poleas y engranajes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Electricidad básica para el montaje de esquemas y circuitos físicos o simulados: (cid:2) Elementos de un circuito eléctrico básico. (cid:2) Magnitudes fundamentales eléctricas: concepto y unidades de medida. (cid:2) Simbología normalizada de circuitos. Interpretación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Materiales tecnológicos y su impacto ambiental.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Herramientas y técnicas de manipulación y mecanizado básicas de materiales en la construcción de objetos y prototipos. Respeto de las normas de seguridad e higiene.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades básicas de comunicación interpersonal. Pautas de conducta propias del entorno virtual (etiqueta digital).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas de representación gráfica: (cid:2) Boceto y croquis. (cid:2) Proyección cilíndrica ortogonal para la representación de objetos: vistas normalizadas de una pieza. (cid:2) Acotación normalizada de piezas sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Introducción al software de diseño gráfico en dos dimensiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas digitales para la elaboración y presentación de documentación técnica e información multimedia relativa a proyectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Algorítmia y diagramas de flujo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Aplicaciones informáticas sencillas para ordenador y dispositivos móviles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Uso de herramientas de programación por bloques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Autoconfianza e iniciativa: el error, la reevaluación y la depuración de errores como parte del proceso de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Dispositivos digitales: (cid:2) Elementos del hardware y del software. (cid:2) Identificación y resolución de problemas técnicos sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Sistemas de comunicación digital de uso común.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Uso seguro y responsable de internet: búsqueda de información, correo electrónico, mensajería instantánea, redes sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Herramientas y plataformas de aprendizaje: configuración, mantenimiento y uso crítico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas de tratamiento, organización y almacenamiento seguro de la información. Formatos de ficheros. Copias de seguridad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Seguridad en la red: (cid:2) Riesgos, amenazas y ataques. (cid:2) Medidas de protección de datos y de información: antivirus, cortafuegos, servidores proxy, entre otros. (cid:2) Buen uso digital: prácticas seguras y riesgos (ciberacoso, sextorsión, vulneración de la propia imagen y de la intimidad, acceso a contenidos inadecuados, adicciones, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Desarrollo tecnológico: creatividad, innovación, investigación, obsolescencia e impacto.",
+      "criterios_ids": []
+    }
+  ]
+}

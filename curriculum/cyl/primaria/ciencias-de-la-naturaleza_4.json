@@ -1,0 +1,402 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "ciencias-de-la-naturaleza",
+    "ciclo_origen": "cuarto-curso",
+    "fuente": "iDoceo_ciencias-de-la-naturaleza_cuarto-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Utilizar dispositivos, recursos digitales y entornos personales y/o virtuales de aprendizaje de forma segura, responsable y eficiente, para buscar información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital sobre el medio natural de acuerdo con las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CP2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA2",
+        "CPSAA4",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas sobre el medio natural, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD4",
+        "CPSAA4",
+        "CPSAA5",
+        "CC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Resolver problemas a través de proyectos interdisciplinares de diseño y de la aplicación del pensamiento computacional, para generar cooperativamente un producto creativo e innovador que responda a necesidades concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD4",
+        "CD5",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer y tomar conciencia del propio cuerpo, así como de las emociones y sentimientos propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC3",
+        "CE2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio natural, analizando su organización y propiedades, y estableciendo relaciones entre los mismos, compartiendo e intercambiando la información obtenida, para reconocer el valor del patrimonio natural, conservarlo, mejorarlo, y emprender acciones para su uso responsable y contribuir a una cultura para la sostenibilidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CPSAA4",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Identificar las causas y consecuencias de la intervención humana en el entorno, desde los puntos de vista tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución, y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Buscar y organizar información sobre el medio natural utilizando dispositivos y recursos digitales en entornos personales y/o virtuales de aprendizaje de acuerdo con las necesidades del contexto educativo de forma segura. (CCL3, CD1, CD3, CD4, CPSAA2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reelaborar y crear contenidos digitales sencillos sobre el medio natural a través de aplicaciones y recursos digitales, comunicándose y trabajando de forma individual y en equipo. (CCL1, CCL3, CD2, CD3, CD5, CPSAA4, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Cooperar activamente en la utilización de recursos digitales de forma responsable y respetuosa, indagando sobre el medio natural. (CCL1, CD2, CD3, CD4, CD5)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Formular preguntas y realizar predicciones razonadas, demostrando curiosidad y respeto por el medio natural cercano. (CCL1, STEM2, CC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar y seleccionar información de diferentes fuentes seguras y fiables, utilizándola en investigaciones relacionadas con el medio natural y adquiriendo léxico científico básico. (CCL2, CCL3, CD1, CD4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Realizar experimentos guiados, cuando la investigación lo requiera, utilizando diferentes técnicas de indagación y modelos, empleando de forma segura instrumentos y dispositivos, realizando observaciones y mediciones precisas y registrándolas correctamente. (STEM 1, STEM 2, STEM4, CPSAA4, CPSAA5, CC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Proponer posibles respuestas a las preguntas planteadas sobre el medio natural, a través de la interpretación de la información y los resultados obtenidos, comparándolos con las predicciones realizadas. (CCL1, CCL2, CCL3, STEM2, CD1, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Presentar los resultados de las investigaciones sobre el medio natural, en diferentes formatos, utilizando lenguaje científico básico y explicando los pasos seguidos. (CCL1, CP2, STEM2, STEM4, CD2, CD4, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Construir en equipo un producto final sencillo que dé solución a un problema de diseño, proponiendo posibles soluciones, probando diferentes prototipos y utilizando de CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48415 forma segura las herramientas, técnicas y materiales adecuados. (STEM1, STEM3, CPSAA3, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Presentar el producto final de los proyectos de diseño en diferentes formatos y explicando los pasos seguidos. (CCL1, STEM2, STEM4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Resolver, de forma guiada, problemas sencillos de programación, modificando algoritmos de acuerdo con los principios básicos del pensamiento computacional. (STEM1, CD5, CPSAA4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Mostrar actitudes que fomenten el bienestar emocional y social, reconociendo las emociones propias y las de los demás, mostrando empatía y estableciendo relaciones afectivas saludables. (STEM5, CPSAA1, CPSAA2, CPSAA3, CC3, CE2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Desarrollar estilos de vida saludables reconociendo la importancia de una alimentación variada, equilibrada y sostenible, el ejercicio físico, el contacto con la naturaleza, el descanso, la higiene, la prevención de enfermedades y el uso adecuado de nuevas tecnologías. (STEM5, CD4, CPSAA2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar y analizar las características, la organización y las propiedades de los elementos o sistemas del medio natural a través de la indagación y utilizando las herramientas y procesos adecuados y compartiendo e intercambiando la información obtenida. (CCL1, CCL4 STEM1, STEM2, STEM4, CD1, CE1, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar conexiones sencillas entre diferentes elementos o sistemas del medio natural mostrando respeto y comprensión de las relaciones que se establecen. (STEM5, CPSAA4, CC3, CC4, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Proteger el patrimonio natural y valorarlo como un bien común, adoptando conductas respetuosas para su disfrute y proponiendo acciones para su conservación y mejora en favor de la sostenibilidad. (STEM5, CC3, CC4, CE1, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Poner en práctica estilos de vida sostenible, reconociendo comportamientos respetuosos de cuidado, corresponsabilidad y protección de elementos y seres del planeta y uso sostenible de los recursos naturales, y expresando los cambios positivos y negativos causados en el medio por la acción humana desde los puntos de vista tecnológico y ambiental, y contribuyendo a una conciencia individual o colectiva. (CCL5, STEM2, STEM5, CD4, CPSAA4, CC1, CC4) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48416",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Identificar y analizar de forma individual y/o cooperativa problemas ecosociales a partir del reconocimiento de las causas y consecuencias de la intervención humana en el entorno tecnológico y ambiental, y proponiendo posibles soluciones. (CCL5, STEM2, STEM5, CD4, CC1, CC3, CC4, CE1, CE3)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Cultura científica"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Tecnología y digitalización"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Conciencia ecosocial"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Procedimientos de indagación adecuados a las necesidades de la investigación (observación en el tiempo, identificación y clasificación, búsqueda de patrones, creación de modelos, investigación a través de búsqueda de información, experimento con control de variables…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Instrumentos y dispositivos apropiados para realizar observaciones y mediciones precisas de acuerdo con las necesidades de la investigación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Vocabulario científico básico relacionado con las diferentes investigaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Fomento de la curiosidad, la iniciativa y la constancia en la realización de las diferentes investigaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "La importancia del uso de la ciencia y la tecnología para ayudar a comprender las causas de las propias acciones, tomar decisiones razonadas y realizar tareas de forma más eficiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Avances en el pasado relacionados con la ciencia y la tecnología que han contribuido a transformar nuestra sociedad mostrando modelos que incorporen una perspectiva de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La biodiversidad en nuestro entorno más próximo. Estudios vivenciales y experimentales de biodiversidad en el entorno cercano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Los ecosistemas como lugar donde intervienen factores bióticos y abióticos, manteniéndose        un    equilibrio   entre   los   diferentes   elementos      y recursos. Importancia de la biodiversidad. Las funciones y servicios de los ecosistemas e importancia de su preservación. El contacto con la naturaleza a través de los ecosistemas y espacios naturales cercanos y propios de Castilla y León. Interés y gusto por actividades en el medio natural. Práctica de hábitos de cuidado, respeto y conservación de los seres vivos. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                               Viernes, 30 de septiembre de 2022                            Pág. 48417",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Relación del ser humano con los ecosistemas para cubrir las necesidades de la sociedad. Ejemplos de buenos y malos usos de los recursos naturales de nuestro planeta y sus consecuencias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Acciones saludables relacionadas con el bienestar físico del ser humano: higiene, alimentación variada y equilibrada (importancia de la calidad y etiquetado correcto de los alimentos), ejercicio físico, contacto con la naturaleza, descanso, ocio y cuidado del cuerpo como medio para prevenir posibles enfermedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Acciones saludables relacionadas con el bienestar emocional y social: Estrategias de identificación, aceptación, etiquetado y gestión de las propias emociones y respeto por las de los demás. Importancia de tener relaciones sociales y prácticas de ocio positivas en sus entornos más cercanos. Sensibilidad y aceptación de la diversidad presente en el aula y en la sociedad. Educación afectivo-sexual. 3. Materia, fuerzas y energía",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Fuerzas de contacto y a distancia. Las fuerzas y sus efectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Propiedades de las máquinas simples y compuestas y su efecto sobre las fuerzas.     Aplicaciones   y   usos   en   la   vida   cotidiana. Construcción   de estructuras sencillas. Seguridad personal. Importantes descubrimientos e inventos que mejoran la vida de las personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "1. Digitalización del entorno personal de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Dispositivos y recursos digitales de acuerdo con las necesidades del contexto educativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de búsquedas guiadas de información seguras y eficientes en internet (valoración, discriminación, selección y organización).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Reglas básicas de seguridad y privacidad para navegar por internet y para proteger el entorno digital persona del aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Recursos y plataformas digitales restringidas y seguras para comunicarse con otras personas. Etiqueta digital, reglas básicas de cortesía y respeto y estrategias para resolver problemas en la comunicación digital. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                        Pág. 48418",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para fomentar el bienestar digital, físico y mental. Reconocimiento de los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales (tiempo excesivo de uso, ciberacoso, acceso a contenidos inadecuados, publicidad, y correos no deseados, etc.) y estrategias de actuación. 2. Proyectos de diseño y pensamiento computacional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Fases de los proyectos de diseño: diseño, prototipado, prueba y comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Materiales, herramientas y objetos adecuados a la consecución de un proyecto de diseño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas cooperativas sencillas para el trabajo en equipo y estrategias para la gestión de conflictos y promoción de conductas empáticas e inclusivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Iniciación en la programación a través de recursos analógicos (actividades desenchufadas) o digitales (plataformas digitales de iniciación en la programación, aplicaciones de programación por bloques, robótica educativa…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Responsabilidad ecosocial: la transformación y la degradación de los ecosistemas naturales por la acción humana conservación y protección de la naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "La transformación y la degradación de los ecosistemas naturales por la acción humana. Acciones para la conservación y protección de la naturaleza.          El maltrato animal y su prevención.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Los Objetivos de Desarrollo Sostenible: contribución personal al cumplimiento de los mismos. Estilos de vida sostenible. El consumo y la producción responsables, la alimentación equilibrada y sostenible, el uso eficiente del agua y la energía, la movilidad segura, saludable y sostenible, y la prevención y la gestión de los residuos. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48419",
+      "criterios_ids": []
+    }
+  ]
+}

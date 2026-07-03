@@ -1,0 +1,930 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "revisar-idoceo-matematicas",
+    "ciclo_origen": "2o-ciclo",
+    "fuente": "REVISAR_iDoceo_matematicas_2o-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para l generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir. l"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medioambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solici- l tando ayuda en caso necesario. l"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Interpretar problemas de la vida cotidiana proporcionando una representación matemática de los mismos mediante conceptos, herramientas y estrategias para analizar la información más relevante. Para la evaluación de esta competencia, en cada ciclo, se plantean dos criterios, vinculados entre sí. El primero de ellos está relacionado con la interpretación y comprensión de los problemas o las situaciones a explorar, mientras que el segundo de ellos está dedicado a evaluar el uso que hace el alumnado de las representaciones matemáticas en el modelizado inicial de estas situaciones y problemas. El vínculo entre los criterios es claro, ya que un buen uso de representaciones para modelizar la situación facilita la comprensión e interpretación de esta, y viceversa. Con el objetivo de evaluar la interpretación de problemas y la comprensión de situaciones que sean cercanas y significativas para el alumnado (Criterio 1.1) será necesario considerar diferentes formas de comunicación: verbal, gestual, en general, mediante representaciones de distinto tipo. Resulta evidente que en el primer ciclo ha de haber un necesario énfasis en la oralidad. Sin embargo, es importante no dejar de lado la verbalización en ciclos posteriores. Las conversaciones en pequeño y gran grupo son esenciales en la construcción de conocimiento y proporcionan excelentes oportunidades para la evaluación formativa. En lo que se refiere a la interpretación de las situaciones, mediante estas conversaciones, interviniendo con las preguntas adecuadas, el profesorado puede identificar la evolución en este aspecto. Así mismo, el criterio también se puede evaluar analizando la coherencia del discurso matemático del alumnado con la utilización que hace del material manipulativo o con el uso de gráficos y diagramas o la justificación de las acciones que realiza en juegos (si comprende las instrucciones). Se trata de identificar aquellos momentos de la situación de aprendizaje donde se puede valorar si la interpretación es adecuada o si, por el contrario, debe actuarse planteando nuevas preguntas que conduzcan a la profundización. Para evaluar adecuadamente este criterio es indispensable que las situaciones y problemas sean variados, incluyendo tareas de respuesta cerrada, abierta, con múltiples caminos posibles de resolución, etc. En ningún caso debe marcarse como referencia para la evaluación la mera identificación de los datos de un problema, sino que debe considerarse la interpretación global. El alumnado debe justificar, de forma adecuada a cada ciclo, si en una situación es necesario utilizar números, qué tipo de números y su significado, qué magnitudes están relacionadas con la situación, etc. Igualmente, debe valorar si es necesaria una solución exacta, una aproximación o basta con hacer una estimación. En lo que respecta al criterio que se enfoca en el uso de representaciones (Criterio 1.2). Cuando el alumnado interpreta una situación o un problema, el profesorado y el resto de sus compañeros o compañeras «acceden» a esa interpretación, que toma la forma de representaciones internas, por medio de las representaciones externas (espontáneas o convencionales) que produce el alumnado. Los diferentes tipos de representaciones (materiales manipulables, dibujos, imágenes, figuras geométricas, esquemas, palabras, tablas, gráficos, signos y símbolos) muestran diversas interpretaciones y niveles de abstracción de los conceptos y las relaciones matemáticas por parte del alumnado y se convierten en una fuente de información muy relevante que permite evaluar el desarrollo de esta competencia. Una situación de aprendizaje muy adecuada para aplicar estos criterios consiste en explicar un problema en lenguaje propio, usando materiales, dibujos, esquemas o expresiones aritméticas, empleando estrategias personales y herramientas matemáticas elementales. Es conveniente tener en cuenta la distinción entre representaciones espontáneas y representaciones convencionales. Estas últimas juegan un papel imprescindible en el aprendizaje de las matemáticas. Son ejemplos: signos y expresiones aritméticas, la recta numérica, tablas de doble entrada para recoger relaciones numéricas, coordenadas cartesianas, etc. Sin embargo, deben introducirse de tal forma que pueda evaluarse su conexión con representaciones espontáneas y la evolución de los significados personales del alumnado. Finalmente, en la evaluación de esta competencia también es necesario proponer un contexto conocido o de otra área e invitar a desgranar qué matemáticas hay allí. El punto de partida puede ser una fotografía, una noticia, una narración, un fragmento de una serie de dibujos animados o de una película, un meme, etc. También se puede pedir al alumnado que ponga ejemplos de situaciones en las que se usa un determinado concepto, como las fracciones, o una operación aritmética, y el porqué.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM4",
+        "STEM5",
+        "CPSAA1",
+        "CPSAA3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Resolver situaciones problematizadas, aplicando diferentes técnicas, estrategias y formas de razonamiento, para explorar distintas maneras de proceder, obtener soluciones, reflexionar sobre estas y el proceso seguido para incorporar nuevos saberes a la red de conocimientos y competencias del alumnado, y asegurar su validez e implicaciones desde un punto de vista formal y en relación con el contexto planteado. Como se ha ido mencionando, todas las competencias específicas de matemáticas están relacionadas en mayor o menor grado. Sin embargo, es tal la importancia del proceso de resolución de problemas que puede decirse que la CE.M2 es el punto de encuentro de todas ellas. Esta competencia está relacionada con todas las dimensiones de la competencia matemática: el razonamiento y la prueba, las conexiones, la comunicación y representación y las destrezas socioafectivas. Para evaluar el desarrollo de esta competencia se plantean tres criterios. Sintetizando, el Criterio 2.1 se enfoca al proceso de elección de la estrategia, el Criterio 2.2 al proceso de implementación de la estrategia y el Criterio 2.3 a la reflexión sobre la idoneidad de la solución o, en el caso de ser un problema abierto o la exploración de una situación, la pertinencia, relevancia y alcance de las conclusiones. Conviene resaltar que el proceso de resolución de problemas es, esencialmente, el mismo a lo largo de los tres ciclos de la Educación Primaria. Se trata de considerar el lenguaje y los diferentes tipos de representaciones adecuados para cada ciclo, así como los saberes matemáticos sobre los que se articulen las situaciones de aprendizaje (sentido numérico, sentido de la medida, sentido espacial, sentido algebraico y pensamiento computacional, sentido estocástico). Ya se ha mencionado la relevancia que tiene la resolución de problemas en este currículo, pues es el proceso sobre el que se construye el conocimiento y se desarrollan las competencias. A lo largo de toda la etapa se debe proporcionar un andamiaje adecuado. Se trata de que, en efecto, el profesorado actúa de guía en ese proceso. Es preferible hablar en términos de andamiaje que de guía, para subrayar que no consiste en decirle al alumnado qué debe hacer exactamente, sino de plantear preguntas ricas y abiertas, y diseñar las actividades y tareas a realizar de manera que puedan poner en juego sus conocimientos previos. Será la evaluación formativa la que permitirá desarrollar esta competencia (todas, en realidad), proporcionando información al alumnado para la mejora, así como evidencias que permitan adaptar los procesos de enseñanza y aprendizaje. También es indispensable tener claro que no todas las tareas con enunciado que se proponen al alumnado son situaciones-problema. El carácter de problema lo otorga, principalmente, el hecho de que la estrategia de resolución o exploración no tiene que resultar obvia de forma inmediata. Además, el alumnado tiene que implicarse personalmente en la tarea. Si no ocurre esto último, difícilmente se podrá hablar de aprendizaje activo. En este sentido, que la situación sea cercana y significativa para el alumnado facilita esta implicación. Puede ser una situación de la vida cotidiana, pero también una situación matemática sin contexto que resulte familiar para el alumnado y que conecte con experiencias matemáticas previas. Para llevar a cabo la evaluación de esta competencia es imprescindible el dejar tiempo al alumnado, así como facilitar espacios para la comunicación, que no debe referirse solamente a la solución o conclusión, sino al proceso seguido. Es necesario empoderar desde la evaluación formativa el proceso, darle valor, frente a la solución en sí. En ocasiones, puede resultar relevante realizar una estimación de cuál o cuáles podrían ser las soluciones (o conclusiones o resultados de la exploración de una situación) antes de empezar el proceso de resolución del problema, y contrastar la solución final con la conjetura inicial. La resolución de problemas en el aula encuentra su ambiente idóneo en el trabajo en pequeño grupo y posterior puesta en común con el gran grupo, aunque también puede haber momentos de reflexión individual. Un buen problema, muchas veces, no termina con la expresión oral o escrita de su solución, sino que abre la puerta a explorar nuevas situaciones. ¿Qué pasaría si…? Ese tipo de preguntas permite, de nuevo, evaluar los procesos de resolución y el alcance de las estrategias compartidas.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CPSAA5",
+        "CE2",
+        "CE3",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Explorar, formular y comprobar conjeturas sencillas o plantear problemas de tipo matemático en situaciones cercanas y significativas para el alumnado, reconociendo el valor del razonamiento y la argumentación para contrastar su validez, integrar y comprender nuevo conocimiento. Para la evaluación del progreso de esta competencia se plantean tres criterios. El Criterio 3.1 está enfocado a identificar el progreso del alumnado en la formulación de conjeturas; el Criterio 3.2, el progreso en la invención de problemas; y el Criterio 3.3, el avance en la argumentación y justificación de conjeturas, soluciones y conclusiones en torno a situaciones-problemas, siempre de acuerdo al lenguaje y objetos matemáticos propios de cada ciclo. Hacer conjeturas forma parte del proceso de abstracción que implica el descubrimiento y la expresión de relaciones, propiedades, patrones, regularidades. Conviene recordar que desde Educación Infantil, cuando el alumnado tiene el primer contacto con los números, ya se inicia el trabajo con entidades abstractas. En el caso del número, de hecho, esta abstracción se inicia antes incluso que la representación simbólica. Las conjeturas pueden surgir en actividades como seguir series de repetición y de crecimiento, tanto numéricas como geométricas; observación de patrones en tablas y gráficos; descubrimiento de estrategias de cálculo mental, propiedades de las operaciones; observación de números y operaciones (números primos, compuestos, múltiplos de…, si multiplicas por 50 es como si..., si multiplico por 0,5 es como si...); observación de patrones en figuras geométricas (relación entre el número de diagonales y los polígonos regulares…); la observación de una colección ordenada de datos en gráficos y tablas también provoca la expresión de conjeturas, recogida continua de temperaturas. La aplicación del Criterio 3.1 es sencilla en un ambiente de resolución de problemas. Es cuestión de identificar el progreso del alumnado en este aspecto, dejando tiempo para que las conjeturas sean formuladas por él y no por el profesorado. El impacto de la evaluación formativa en el aprendizaje es claro, y en esta competencia se concreta en desarrollar la actitud de hacer preguntas e inventar problemas. De esta manera, se completa el proceso de resolución de problemas, ya que estas preguntas y los argumentos que se emplean para defender y poner a prueba las conjeturas son esenciales en la construcción de los saberes, además de proporcionar un significado rico a los objetos de aprendizaje. Cualquier problema es susceptible de ser evaluado en los términos que establece esta competencia. En la discusión de un problema pueden aparecer preguntas alternativas al problema (¿qué pasaría si…?) y cuando el problema es complejo, cabe plantearse su simplificación a partir de formularse preguntas y lanzar conjeturas. Sin embargo, hay situaciones de aprendizaje donde de manera natural se hacen preguntas. Por ejemplo, en un proyecto de investigación, como los de estadística, donde la fase del planteamiento de preguntas de investigación es fundamental y constituye un resultado de aprendizaje explícito. La invención de problemas es un tipo de tarea que debe incluirse necesariamente en las secuencias didácticas de todos los saberes y que ofrece excelentes oportunidades para la evaluación formativa. Las producciones del alumnado en estas situaciones, tanto orales como escritas, pueden consistir en crear nuevos problemas a partir de otros propuestos anteriormente; diseñar nuevos problemas cambiando los números, las figuras, las operaciones; se puede dar una parte del problema y que el alumnado tenga que completar el resto; dar una o varias operaciones como resolución e inventar el problema; redactar dos problemas distintos con la misma solución; dar un gráfico a partir del cual es necesario plantear el problema; imponer un contexto determinado, unas unidades de medida específicas; etc. Para llevar a cabo la evaluación formativa aplicando estos criterios a partir de las situaciones de aprendizaje alrededor de los diferentes sentidos matemáticos, es necesario que el alumnado se sienta en un ambiente propicio, de confianza, que facilite la espontaneidad e inspire seguridad. En definitiva, se trata de empoderar que hacer preguntas, en Matemáticas (y en todas las áreas), es valioso. Cuando se evalúa la argumentación, dependiendo de la situación, será importante tener en cuenta no solo la expresión verbal, sino la coherencia de esta con el uso de materiales manipulativos, dibujos concretos, gráficos con mayor o menor grado de abstracción. Todos estos detalles permiten que el profesorado identifique el progreso en el desarrollo de la capacidad de argumentación.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "CD3",
+        "CD5",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Utilizar el pensamiento computacional organizando datos, descomponiendo en partes, reconociendo patrones, generalizando e interpretando, modificando y creando algoritmos, en situaciones de aprendizaje con el andamiaje adecuado, para modelizar y automatizar situaciones cercanas y significativas para el alumnado. Esta competencia puede interpretarse como la competencia «espejo» de la competencia en resolución de problemas, pero adaptada a situaciones propias del pensamiento computacional. Tal y como se indica en la descripción de la competencia y dentro de los saberes del sentido algebraico y pensamiento computacional, el proceso de resolución de problemas en matemáticas y el proceso de resolución computacional tienen muchos puntos en común, pero no son lo mismo. Los solapamientos los encontramos en el reconocimiento de patrones, la descomposición del problema en otros más simples, la búsqueda de generalizaciones y abstracciones, la importancia de la modelización son elementos comunes a ambos. Sin embargo, no son los únicos, pues también podemos considerar aspectos afectivos y de carácter metacognitivo, como el desarrollo de una actitud de perseverancia, aprendizaje a través del ensayo y error, flexibilidad, etc. Sin embargo, el pensamiento computacional implica cierto diseño iterativo y un proceso de reflexión en busca de la optimización. También tiende a confundirse la programación con el pensamiento computacional. La programación es la escritura de código que pueda ser interpretado por un ordenador para realizar una serie de acciones, mientras que el pensamiento computacional se relaciona más con la resolución de problemas, es un modo de pensamiento. De hecho, el pensamiento computacional puede desarrollarse sin necesidad de utilizar ordenadores. Para la evaluación de esta competencia se plantean dos criterios que, de nuevo, se encuentran muy relacionados. El Criterio 4.1 está más enfocado a la descripción y automatización de acciones, mientras que el Criterio 4.2 abarca la parte más creativa de modificación y diseño de nuevos algoritmos o variantes. Las situaciones de aprendizaje que permiten desplegar técnicas de evaluación formativa implican, como en el resto de competencias, mucha comunicación entre el alumnado y entre este y el profesorado. Hemos de remitirnos a las orientaciones para la enseñanza dentro del sentido algebraico y pensamiento computacional, donde se sugieren unas líneas generales. De esta manera, en el primer ciclo las situaciones para aplicar estos criterios pueden ser las que se realizan en conexión con el sentido espacial, de planificar un recorrido a partir de una serie de acciones determinadas. Observemos que la descripción de esas acciones, así como la automatización inicial de las mismas, sería lo que se trata de evaluar con el Criterio 4.1. Si se propone modificar dicho algoritmo o estudiar y analizar posibles variantes con eventuales condicionantes es cuando entraría en acción el Criterio 4.2. Lo mismo puede decirse de los algoritmos de las operaciones hacia el final del segundo ciclo y en el tercer ciclo.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD3",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Reconocer y utilizar conexiones entre las diferentes ideas matemáticas, así como identificar las matemáticas implicadas en otras áreas o en la vida cotidiana, interrelacionando conceptos y procedimientos para interpretar situaciones y contextos diversos. La idea de que las matemáticas son un cuerpo interconectado de sentidos y saberes debería estar presente a lo largo de toda la etapa. De hecho, cuando el alumnado comienza el primer ciclo, gran parte de sus experiencias matemáticas previas no estaban compartimentadas y más aún, tenían lugar en los más variados contextos. Conectar los diferentes objetos matemáticos entre sí y con otros campos y contextos es imprescindible para aprender y es necesario planificar tareas o subtareas específicas para ello. Para evaluar el desarrollo de esta competencia se plantean esencialmente dos criterios de evaluación. El primero de ellos (Criterio 5.1) está enfocado al reconocimiento y establecimiento de conexiones dentro de los propios saberes matemáticos, tanto del curso actual como con experiencias previas. El segundo (Criterio 5.2) tiene como objetivo evaluar las conexiones que realiza el alumnado con contextos en situaciones cercanas para el alumnado y con otras áreas. De nuevo, ambos criterios están estrechamente vinculados y será habitual que una situación de aprendizaje contemple conexiones de los dos tipos al mismo tiempo. Por ejemplo, una situación de medida para construir el significado de la notación fraccionaria del número racional, pone en juego conexiones en un plano formal, entre representaciones matemáticas y con un uso del contexto que nunca deja de ser matemático. Como siempre, la gradación por ciclos de los criterios es simplemente una cuestión de matices. El proceso de establecer conexiones intra y extra-matemáticas es esencialmente el mismo a lo largo de toda la etapa. Lo único que cambia son los saberes correspondientes y la variedad de contextos. De esta forma, una conexión matemática esencial en el primer ciclo es la conexión de las técnicas de conteo con la resolución de situaciones aditivas concretas de una etapa y, posteriormente, con las operaciones formales de suma y resta. La observación de las producciones del alumnado junto con charlas de aula en el seno de una situación de aprendizaje sobre esta cuestión permitirá evaluar el progreso en el desarrollo de esta competencia (p. ej., afronta las situaciones aditivas «de suma» contando desde el primer sumando siempre, tiene en cuenta empezar por el mayor, efectúa conteos regresivos, argumenta por qué suma o resta a partir de si el conteo es progresivo o regresivo, etc.). Una conexión muy importante en tercer ciclo es la que empieza a tener lugar entre la notación fraccionaria y la notación decimal del número racional, que no se verá completada hasta bien avanzada la Educación Secundaria, pero que aquí establece importantes puntos de unión a través de los contextos que proporcionan el modelo de aprendizaje en las secuencias didácticas. Otros ejemplos de conexiones, por nombrar algunas, las encontramos entre la multiplicación y la división, el sistema de numeración decimal posicional y el sistema métrico decimal, las figuras planas y los cuerpos en el espacio. Algunos ejemplos de situaciones de aprendizaje que facilitan el establecimiento de conexiones entre diferentes saberes matemáticos y su evaluación (la evaluación formativa va de la mano del aprendizaje): descubrir estrategias de cálculo teniendo en cuenta las conexiones entre las operaciones y sus propiedades (introducir la división a partir del reparto equitativo y relacionarla con restas sucesivas; divisiones sucesivas considerando los factores del divisor, p.ej. para calcular 300:15, primero hacemos 300:5=60 y luego 60:3=20); presentar la idoneidad de los números decimales para expresar cantidades de magnitud; representar los cuadrados y cubos de forma geométrica con policubos como unidad de área y de volumen -como cuadrado y como cubo-; representar sobre la recta numérica expresiones como 0,5 y 1/2, para ver que coinciden en el mismo punto; representar gráficamente las alturas de una muestra recogida en forma de tabla. Se pueden encontrar matemáticas en la prensa, a través de noticias, infografías estadísticas; en series dibujos animados (tanto en series específicas de contenido matemático como en otras) y películas; en el deporte; en la naturaleza, como al identificar la forma hexagonal en un panal de abejas; en el arte, como las teselaciones del mudéjar propio de nuestra comunidad; la música, al reconocer los patrones rítmicos de las canciones; en sus propias vivencias en situaciones de compras, viajes y desplazamientos, salud, etc. y que favorecerá la progresiva matematización de la realidad. Las diferencias entre ciclos pueden obedecer a una mayor abstracción o complejidad de los contextos.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD3",
+        "CD5",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Comunicar y representar, de forma individual y colectiva, conceptos, procedimientos y resultados matemáticos utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología matemática apropiada, para dar significado y permanencia a las ideas matemáticas. Para evaluar el desarrollo de esta competencia alrededor de los procesos de comunicación y representación se plantean dos criterios estrechamente interrelacionados. El Criterio 6.1 está más centrado en el proceso de representación. Se refiere al reconocimiento, interpretación y uso del lenguaje matemático (en todas sus formas de expresión, no solo simbólicas) en situaciones cercanas y significativas para el alumnado. Estas situaciones están muy vinculadas con los procesos de modelización inicial, como los que tienen lugar al representar un problema con manipulativos, con un dibujo o con una representación más abstracta. Todas estas situaciones implican el desarrollo de vocabulario específico, en consonancia con gestos y otras representaciones, por lo que se trata de evaluar el progreso en este sentido. En cuanto al Criterio 6.2, está más enfocado en el proceso de comunicación. Sin embargo, la relación con las representaciones es clara. Cuando el alumnado trata de argumentar y explicar sus razonamientos o justificar sus conjeturas, se ve obligado a jugar con sus representaciones internas de los objetos matemáticos y a expresarse a partir de ellas. Serán los saberes de cada sentido en cada ciclo los que permitirán articular situaciones de aprendizaje en las que el alumnado deba argumentar y comunicar sus razonamientos. La evaluación formativa proporciona múltiples maneras de aplicar estos criterios. El alumnado necesita que las situaciones de aprendizaje ofrezcan oportunidades para poner a prueba sus ideas dentro de un ambiente matemático de resolución de problemas orientado a la construcción compartida del conocimiento, con el objetivo de comprobar si comprenden y si sus argumentos son suficientemente sólidos (esto último es un objetivo fundamental que debería trabajarse a lo largo de todos los ciclos). Por ello, una vía para desarrollar esta competencia es potenciar la conversación sobre las matemáticas, tanto en pequeño grupo como en el grupo-clase. Primero, mediante el lenguaje verbal natural, para luego, de forma progresiva, ir introduciendo vocabulario específico de las matemáticas y otras representaciones. La evolución de las formas externas de representación también es clara a lo largo de los ciclos e, incluso, dentro de un mismo curso. Inicialmente se parte de representaciones informales y espontáneas que conectan con las intuiciones del alumnado (dibujos, construcciones con materiales manipulable, etc.) y, posteriormente, evolucionan de manera coherente hacia modelos más convencionales o formales, que son puestos sobre la mesa por el profesorado: signos de igualdad y comparación, tablas, gráficas estándar. El profesorado, para evaluar el uso y articulación de representaciones, debe animar al alumnado a realizar todo tipo de representaciones, sin restricciones. La introducción de representaciones más convencionales corresponde al profesorado. Sin embargo, esto puede hacerse también de forma dialogante, a partir de una charla de aula. Por ejemplo, cuando se presenta un nuevo tipo de gráfico estadístico, sin haber recibido instrucción previa, y se discute cómo puede interpretarse. La expresión escrita (verbal y simbólica) también es objeto de evaluación. En particular, las representaciones simbólicas (números, expresiones aritméticas, etc.) que emplee el alumnado deben ser coherentes con el discurso gráfico, uso del manipulativo o el lenguaje verbal. Es importante no centrar exclusivamente la evaluación en comunicación en la representación escrita, así como ser pacientes y no imponer lenguaje formal antes de tiempo. La oralidad siempre debe preceder a lo escrito. Los matices en la evaluación de esta competencia no se limitan a los saberes de cada ciclo. Aunque la conversación en pequeño y gran grupo es algo esencial a lo largo de toda la etapa, es evidente que para el alumnado de primer ciclo será tremendamente importante, ya que parte de él se encuentra aprendiendo a leer y a escribir. Es fundamental, por ejemplo, tener claro que el número no se limita a su representación simbólica. Además, el alumnado en primer ciclo seguramente precise de un andamiaje específico para clarificar sus expresiones verbales y aprender a comprender el punto de vista de sus compañeros o compañeras. La gestión del aula, por parte del docente o la docente, mientras se desarrolla el diálogo, es primordial y debe integrar la evaluación formativa de los procesos de comunicación y representación. Se debe ofrecer el tiempo necesario para pensar y/o describir individualmente, después en pequeño grupo y, finalmente, en gran grupo. Las preguntas que se hagan deben ser abiertas y provocadoras de conocimiento: explica cómo lo has hecho, ¿cómo lo has pensado?, ¿con qué podrías relacionarlo?, ¿por qué lo has hecho así?, ¿cómo podrías representar esto?, ¿y si…? Conviene tener en cuenta el uso de herramientas tecnológicas en la evaluación de esta competencia, de manera complementaria al uso de materiales manipulables físicos y otros recursos visuales, ya que proporcionan nuevos tipos de representaciones y posibilidad de interconexión y son importantes para el aprendizaje matemático. Por ejemplo, la recogida y representación de datos estadísticos y elaboración de tablas y gráficos con una hoja de cálculo involucra saberes relacionados con la resolución de problemas y la representación de información. También es claro el papel de las herramientas tecnológicas digitales en la visualización de las figuras geométricas y las relaciones espaciales, con una mención especial a los programas y applets de geometría dinámica, pues posibilitan acciones que no se pueden reproducir con lápiz y papel. La calculadora, por otro lado, facilita situaciones aprendizaje en las que se exploren operaciones, algoritmos no estándar, al mismo tiempo que agiliza el proceso de cálculo y permite experimentar relaciones numéricas. En el seno de todas estas situaciones tienen lugar procesos de comunicación y representación sobre los que aplicar estos criterios. En general, puede decirse que en un ambiente de aprendizaje a través de la resolución de problemas el alumnado está constantemente comunicando y articulando representaciones.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ7",
+      "descripcion": "Desarrollar destrezas personales que ayuden a identificar y gestionar emociones al enfrentarse a retos matemáticos, fomentando la confianza en las propias posibilidades, apreciando el error y aceptando el bloqueo como parte del proceso de aprendizaje y adaptándose ante situaciones de incertidumbre, para desarrollar actitudes como la perseverancia y disfrutar en el aprendizaje de las matemáticas. Tanto la competencia CE.M7 como la CE.M8 se enfocan en la dimensión socioafectiva de los procesos de enseñanza y aprendizaje de las matemáticas y están íntimamente relacionadas, ya que el dominio afectivo del alumnado se desarrolla en un contexto social. No obstante, puede decirse que la CE.M7 está centrada en la evolución del dominio afectivo del propio estudiante, mientras que la CE.M8 mira hacia las interacciones en el plano social. Para la evaluación de la CE.M7 se plantean dos criterios. La aplicación del Criterio 7.1 trata de evaluar el progreso del alumnado en la identificación y regulación de sus emociones, especialmente, ante el proceso de resolución de problemas, pero en cualquier otra situación relacionada con las matemáticas. El Criterio 7.2 se centra en el progreso en las actitudes del alumnado hacia las matemáticas y hacia el aprendizaje de estas. Estos criterios ponen de manifiesto, más que nunca, el carácter formativo de la evaluación. Se trata de que la evaluación del dominio afectivo permita que el alumnado reciba información sobre cómo desarrollar afectos positivos hacia las matemáticas y apreciar que los bloqueos y desesperaciones forman parte natural de la resolución de problemas. La relación de lo afectivo con lo cognitivo es clara, y un adecuado tratamiento exige la creación de un clima afectivo de seguridad en el aula. Para la aplicación del Criterio 7.1 se pueden emplear instrumentos específicos, como el mapa de humor de los problemas (Gómez-Chacón, 2000a, 2000b), de manera que el alumnado exprese con un pictograma su estado emocional. Esto permite que el alumnado tome conciencia de sí mismo como resolutor de problemas, al mismo tiempo que se recogen evidencias de aprendizaje que pueden resultar de utilidad para organizar charlas de aula y adaptar las secuencias de enseñanza y aprendizaje. En cuanto al desarrollo de actitudes, conviene tener en cuenta que se trata de un proceso complejo y que se extiende en el tiempo. Así como las emociones son afectos inestables e inmediatos (que se ven favorecidas por la actitud y las creencias), la formación de las actitudes y las creencias implica un trabajo continuo en lo emocional. Por ejemplo, si el alumnado experimenta sensaciones positivas en la resolución de problemas de forma continuada y aprende a asumir los bloqueos y a tomar la iniciativa en su superación, las actitudes que termina desarrollando son la de perseverancia, indagación, etc. En un ambiente de resolución de problemas, donde prima la interacción, se pueden emplear listas de observación para evaluar el Criterio 7.2, que resulten manejables en el entorno de aula, donde se recojan, entre otros aspectos, la perseverancia en la resolución de problemas, la aceptación del error, la capacidad de comunicar los procesos seguidos, la confianza en sus capacidades, etc.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA4",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ8",
+      "descripcion": "Desarrollar destrezas sociales reconociendo y respetando las emociones, las experiencias de los demás y el valor de la diversidad, participando activamente en equipos de trabajo heterogéneos que promuevan la interacción y la implicación de todos para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y crear relaciones saludables. Las competencias CE.M7 y CE.M8 se enfocan en la dimensión socioafectiva de los procesos de enseñanza y aprendizaje de las matemáticas y están íntimamente relacionadas, ya que el dominio afectivo del alumnado se desarrolla en un contexto social. Mientras que la CE.M7 está centrada en la evolución del dominio afectivo del propio estudiante, la CE.M8 atiende a las interacciones en el plano social. Para comprender las implicaciones de esta competencia es necesario considerar que la resolución de problemas en matemáticas debe formar parte activa de la construcción de conocimiento. Para ello es imprescindible la creación de un clima de aula que fomente la interacción tanto en pequeño como gran grupo. Por lo tanto, se trata de hacer explícita la importancia de ejercitar destrezas y habilidades sociales, valorando la diversidad, por medio de las estrategias puestas en juego en la conversación y el razonamiento. En la evaluación de esta competencia se pueden emplear técnicas similares a las de la CE.M7, siempre en el marco de una evaluación de carácter formativo que proporcione indicaciones, tanto para el alumnado como para el profesorado. Al primero de ellos, para desarrollar la competencia en relación con los diferentes saberes que se ponen en juego en las situaciones de aprendizaje. Al segundo, con el objetivo de adaptar las secuencias didácticas y alinear los procesos de enseñanza y aprendizaje. Será conveniente la utilización de listas de observación, en el sentido que se refleja en las orientaciones para la evaluación, en las que se recoja, entre otros aspectos, la aceptación de puntos de vista ajenos.",
+      "descriptores_ids": [
+        "CP3",
+        "STEM3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC2",
+        "CC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Interpretar, de forma verbal o gráfica, problemas cercanos y significativos para el alumnado, comprendiendo las preguntas planteadas a través de diferentes estrategias o herramientas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Mostrar representaciones matemáticas, a través de esquemas o diagramas, que ayuden en la resolución de una situación problematizada.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Comparar entre diferentes estrategias, propias o de otros, para resolver un problema, compartiendo las reflexiones en torno a dichas estrategias en un ambiente con el andamiaje adecuado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Obtener posibles soluciones o conclusiones de un problema siguiendo alguna estrategia conocida, argumentando el proceso.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Argumentar la corrección matemática de las soluciones o pertinencia de las conclusiones de un problema y su coherencia en el contexto planteado.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Formular conjeturas matemáticas sencillas investigando patrones, propiedades y relaciones en situaciones de aprendizaje con el andamiaje adecuado.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Dar ejemplos e inventar problemas sobre situaciones cercanas y significativas para el alumnado que se pueden abordar matemáticamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Argumentar la validez de conjeturas y de soluciones de un problema en términos matemáticos y en coherencia con el contexto planteado.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Automatizar situaciones sencillas de la vida cotidiana que se realicen paso a paso o sigan una rutina utilizando principios básicos del pensamiento computacional en situaciones de aprendizaje con el andamiaje adecuado.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Modificar algoritmos dados de antemano, propios o creados por otros, así como diseñar nuevos algoritmos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Realizar conexiones entre los diferentes elementos matemáticos aplicando conocimientos y experiencias propios.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Interpretar situaciones en contextos diversos reconociendo las conexiones entre las matemáticas y la vida cotidiana.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Reconocer lenguaje matemático sencillo presente en situaciones cercanas y significativas para el alumnado en diferentes formatos, adquiriendo vocabulario específico básico y mostrando comprensión del mensaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Explicar los procesos e ideas matemáticas, los pasos seguidos en la resolución de un problema o los resultados obtenidos utilizando lenguaje matemático sencillo y diferentes registros y formas de representación.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Identificar las emociones propias al abordar nuevos retos matemáticos, aceptando el bloqueo en la resolución de problemas y asumiendo la iniciativa de superarlos, desarrollando así la autoconfianza.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Expresar actitudes positivas ante nuevos retos matemáticos tales como la perseverancia y la flexibilidad, valorando el error como una oportunidad de aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Colaborar activa y respetuosamente en el trabajo en equipo comunicándose adecuadamente, respetando la diversidad del grupo y estableciendo relaciones saludables basadas en la tolerancia, la igualdad y la resolución pacífica de conflictos.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Aceptar la tarea propuesta e implicarse en la exploración compartida de la situación o resolución del problema, respetando los argumentos de otros, poniéndolos a prueba, participando de la construcción del conocimiento y contribuyendo a las discusiones y puestas en común.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "A.1. Conteo y cantidad",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias variadas de conteo, recuento En este ciclo, el conocimiento sistemático y adaptación del conteo al magnitud de los números. tamaño de los números en situaciones de la de la que se anota en vida cotidiana en cantidades hasta las decenas, etc. La representación unidades de millar. como facilitador del",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "A.1.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias y técnicas de interpretación y ayuda a comprender manipulación del orden de magnitud de los grupo. Las cantidades números (decenas, centenas y millares). presentar progresivamente",
+      "criterios_ids": [
+        "CE8.1"
+      ]
+    },
+    {
+      "id": "A.1.3",
+      "bloque_id": null,
+      "descripcion": "Estimaciones y aproximaciones razonadas ellas; reflexionar sobre de cantidades en contextos de resolución de etc. ; dar algún punto problemas. ayuden a imaginarlos.",
+      "criterios_ids": [
+        "CE7.1",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.1.4",
+      "bloque_id": null,
+      "descripcion": "Lectura, representación (incluida la recta El conteo no se agota numérica y con materiales manipulativos), situaciones en las que composición, descomposición y («enumerar») los elementos recomposición de números naturales hasta banderas de dos franjas las unidades de millar. verde, rojo y amarillo?»",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.1.5",
+      "bloque_id": null,
+      "descripcion": "Fracciones con denominadores contarlas. Este tipo manejables en contextos cercanos al asequibles para el alumnado alumnado. adquirir unos conocimientos de las matemáticas de cuentas, es el arte de objetivo es que el combinando determinados obtener cierto número Ejemplo: ¿cuántos rectángulos Ejemplo: Ana, Marisa, las posibilidades de orden A las fracciones se les por lo que nos remitimos",
+      "criterios_ids": [
+        "CE5.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "A.2. Sentido de las operaciones",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.2.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias de cálculo mental con que es necesario asegurar números naturales y fracciones. importante asegurarse",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "A.2.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias de reconocimiento de qué y se utiliza la estrategia operaciones simples (suma, resta, lo podremos evaluar multiplicación, división) son útiles para cuando buscan los números resolver situaciones contextualizadas. está el número pedido",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "A.2.3",
+      "bloque_id": null,
+      "descripcion": "Construcción de las tablas de multiplicar del primer ciclo; es decir, apoyándose en número de veces, suma 17 + 3 =20 y 20+20 repetida o disposición en cuadrículas. multiplicación.",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "A.2.4",
+      "bloque_id": null,
+      "descripcion": "Suma, resta, multiplicación y división de Suma y resta números naturales resueltas con flexibilidad Ambas se han introducido y sentido: utilidad en situaciones conteo. Durante este contextualizadas, estrategias y herramientas utilizar estrategias para de resolución y propiedades. y de modelizaciones contando cuántos faltan descontando y preguntando regresivo). La modelización explorar las dos situaciones. a) Pensando cuántos b) Yendo hasta el 26,",
+      "criterios_ids": [
+        "CE3.1",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.5",
+      "bloque_id": null,
+      "descripcion": "A.5. Educación financiera",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.5.1",
+      "bloque_id": null,
+      "descripcion": "Cálculo y estimación de cantidades y los presentados en A.4) debería cambio (euros y céntimos de euro) en la vida Financiera. Por ejemplo, el cálculo cotidiana: ingresos, gastos y ahorro. (como en el ejemplo de los rotuladores) Decisiones de compra responsable. También hay que tener presente de hecho, se han podido utilizar desarrollo de los saberes del manipulativo para explorar el (sin los billetes de base auxiliar tener cuidado con algunos aspectos: de euro. Aunque los decimales momento para verbalizar aparecer cuando aparecen posteriormente, en el desarrollo",
+      "criterios_ids": [
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "B.1. Magnitud y medida",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1.1",
+      "bloque_id": null,
+      "descripcion": "Fracciones como forma de expresar el pero muy pocas veces nos paramos resultado de un proceso de medida (una Poner en evidencia todas y cada cantidad de magnitud). involucradas en el proceso de",
+      "criterios_ids": [
+        "CE7.2"
+      ]
+    },
+    {
+      "id": "B.1.2",
+      "bloque_id": null,
+      "descripcion": "Atributos mensurables de los objetos encuentra el alumnado al abordar (longitud, masa, capacidad, superficie, secuencias de enseñanza y aprendizaje. volumen y amplitud del ángulo). Además de los tipos de situaciones",
+      "criterios_ids": [
+        "CE3.2",
+        "CE6.1",
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B.1.3",
+      "bloque_id": null,
+      "descripcion": "Unidades convencionales (km, m, cm, bloque, conviene recordar que mm; kg, g; l y ml) y no convencionales en actividades para desarrollar situaciones de la vida cotidiana. ampliar el vocabulario relacionado",
+      "criterios_ids": [
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B.1.4",
+      "bloque_id": null,
+      "descripcion": "Medida del tiempo (año, mes, semana, instrumentos de medida. Cada día, hora y minutos) y determinación de la distintos. Con la capacidad, duración de periodos de tiempo. etc., mientras que las unidades",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE6.1",
+        "CE6.2",
+        "CE7.1",
+        "CE7.2",
+        "CE8.1",
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "B.1.5",
+      "bloque_id": null,
+      "descripcion": "Estrategias para realizar mediciones con las técnicas de medir capacidades instrumentos y unidades no convencionales experiencial es adecuada y se (repetición de una unidad, uso de Naturalez. Es importante plantear cuadrículas y materiales manipulativos) y y cambien otras magnitudes, convencionales. Una enseñanza de las fracciones",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "B.1.6",
+      "bloque_id": null,
+      "descripcion": "Procesos de medición mediante obstaculiza la comprensión de instrumentos convencionales (regla, cinta número, pero número, al fin métrica, balanzas, reloj analógico y digital). permite introducir las fracciones artificial entre fracciones propias discurso de una manera extraña todo surge de un proceso de forma de expresar una pareja propiedades de estos a las fracciones. La representación fraccionaria de medida de una cantidad",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "B.2. Estimación y relaciones",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.2.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias de comparación y ordenación de situaciones de estimación, de medidas de la misma magnitud (km, m, tratar de abordar las magnitudes cm, mm; kg, g; l y ml): aplicación de referentes. No se trata de adivinar equivalencias entre unidades en problemas estimación en el sentido numérico de la vida cotidiana que impliquen convertir que discutir qué técnicas pueden en unidades más pequeñas. exploración que permite múltiples",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.2.2",
+      "bloque_id": null,
+      "descripcion": "Estimación de medidas de longitud, masa Una tarea, aparentemente y capacidad por comparación. recipiente, establece conexiones",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "B.2.3",
+      "bloque_id": null,
+      "descripcion": "Evaluación de resultados de mediciones y relaciones entre magnitudes estimaciones o cálculos de medidas. sentido espacial (depende de llevarse a cabo en cualquiera que surgen en cada momento https://dgafprofesorado.catedu.es/2019/05/22/una-de-estimacion-en-clase-de- matematicas-con-arroz/",
+      "criterios_ids": [
+        "CE8.1"
+      ]
+    },
+    {
+      "id": "C.1",
+      "bloque_id": null,
+      "descripcion": "C.1. Formas geométricas de dos y tres dimensiones",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.1.1",
+      "bloque_id": null,
+      "descripcion": "Formas geométricas de dos o tres apariencia física, es necesario dimensiones en objetos de la vida cotidiana: diversos ámbitos de la actividad identificación y clasificación atendiendo a artístico, etc. sus elementos y a las relaciones entre ellos. Las situaciones de aprendizaje",
+      "criterios_ids": [
+        "CE3.1",
+        "CE5.2",
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "C.1.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias y técnicas de construcción de planas atendiendo características formas geométricas de dos dimensiones por concavidad y convexidad, paralelismo, composición y descomposición, mediante cada vez más complejas y poner materiales manipulables, instrumentos de círculo merecen una atención dibujo (regla y escuadra) y aplicaciones convencional en 360 º y como informáticas. Se debe poner en juego el razonamiento",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "C.1.3",
+      "bloque_id": null,
+      "descripcion": "Vocabulario geométrico: descripción los de obtención de polígonos verbal de los elementos y las propiedades de de regularidades reconocidas. formas geométricas sencillas. Conviene considerar que descomponer",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "C.1.4",
+      "bloque_id": null,
+      "descripcion": "Propiedades de formas geométricas de análisis: el cuadrado descompuesto dos y tres dimensiones: exploración propiedades acerca de sus mediante materiales manipulables triángulos, etc.; un cilindro se (cuadrículas, geoplanos, policubos, etc.) y el descomposiciones permite hacer manejo de herramientas digitales Hacer el desarrollo plano de (programas de geometría dinámica, realidad de poner de manifiesto los polígonos aumentada, robótica educativa, etc.). los diferentes desarrollos compañeros o compañeras. La manipulación de materiales policubos, tangrams…; así como Estas actividades tendrán que de verbalizaciones que detallen conclusiones.",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "C.2",
+      "bloque_id": null,
+      "descripcion": "C.2. Localización y sistemas de representación",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.2.1",
+      "bloque_id": null,
+      "descripcion": "Descripción de la posición relativa de situaciones de aprendizaje. objetos en el espacio o representaciones elementos conocidos (edificios, suyas utilizando vocabulario geométrico Este saber da pie a conexiones adecuado (paralelo, perpendicular, oblicuo, áreas. Por ejemplo, diseñar derecha, izquierda, etc.) necesidades, en función de",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "C.2.2",
+      "bloque_id": null,
+      "descripcion": "Descripción verbal e interpretación de cuenta las direcciones de las movimientos, en relación a uno mismo o a por un sitio determinado, etc. otros puntos de referencia utilizando contextualizado con mapas, vocabulario geométrico adecuado. aplicación MathCityMap (https://mathcitymap.eu/es/),",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "C.2.3",
+      "bloque_id": null,
+      "descripcion": "Interpretación de itinerarios en planos la creación de rutas matemáticas. utilizando soportes físicos y virtuales.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "C.3",
+      "bloque_id": null,
+      "descripcion": "C.3. Movimientos y transformaciones",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.3.1",
+      "bloque_id": null,
+      "descripcion": "Identificación de figuras transformadas diferentes tangrams mediante traslaciones y simetrías en diferenciadores situaciones de la vida cotidiana. análisis.",
+      "criterios_ids": [
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "C.3.2",
+      "bloque_id": null,
+      "descripcion": "Generación de figuras transformadas a La presencia de partir de simetrías y traslaciones de un permitirá descubrir patrón inicial y predicción del resultado. características de ciclo).",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE6.1",
+        "CE6.2",
+        "CE7.1",
+        "CE7.2",
+        "CE8.1",
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "C.4",
+      "bloque_id": null,
+      "descripcion": "C.4. Visualización, razonamiento y modelización",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.4.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias para el cálculo de perímetros pueden tener diferente de figuras planas y utilización en la localizaciones reales resolución de problemas de la vida cotidiana. exploración de la",
+      "criterios_ids": [
+        "CE8.2",
+        "CE7.1",
+        "CE3.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "C.4.2",
+      "bloque_id": null,
+      "descripcion": "Modelos geométricos en la resolución de Es esencial desarrollar problemas relacionados con los otros geométricos entre sentidos. visualizar un mayor",
+      "criterios_ids": [
+        "CE7.1"
+      ]
+    },
+    {
+      "id": "C.4.3",
+      "bloque_id": null,
+      "descripcion": "Reconocimiento de relaciones aspecto que termina geométricas en campos ajenos a la clase de incontables dificultades. matemáticas, como el arte, las ciencias y la Finalmente, el sentido vida cotidiana. los saberes matemáticos: mundo del arte, Numerosos pintores pueden ser objeto simetrías, giros,",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "D.1",
+      "bloque_id": null,
+      "descripcion": "D.1. Patrones, relaciones, clasificaciones y",
+      "criterios_ids": []
+    },
+    {
+      "id": "D.1.1",
+      "bloque_id": null,
+      "descripcion": "Identificación, descripción verbal, dadas, así como representación y predicción razonada de configuraciones términos a partir de las regularidades en una elemento, sino uno colección de números, figuras o imágenes. de cómo se razona",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "D.1.2",
+      "bloque_id": null,
+      "descripcion": "Clasificaciones de objetos atendiendo a una secuencia de cualidades determinadas y diferentes forman la base experiencial criterios, incluso de forma combinada. Las clasificaciones",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE6.1",
+        "CE6.2",
+        "CE7.1",
+        "CE7.2",
+        "CE8.1",
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "D.1.3",
+      "bloque_id": null,
+      "descripcion": "Relaciones de igualdad y desigualdad y criterios sobre la uso de los signos = y ≠ entre expresiones que objetos en función incluyan operaciones y sus propiedades. como x o como no",
+      "criterios_ids": [
+        "CE8.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "D.1.4",
+      "bloque_id": null,
+      "descripcion": "La igualdad como expresión de una relación de equivalencia entre dos elementos y obtención de datos sencillos desconocidos (representados por medio de un símbolo) en cualquiera de los dos elementos.",
+      "criterios_ids": [
+        "CE8.1"
+      ]
+    },
+    {
+      "id": "D.1.5",
+      "bloque_id": null,
+      "descripcion": "Representación de la relación “mayor que” y “menor que”, y uso de los signos < y En paralelo a la >. desarrollando la",
+      "criterios_ids": [
+        "CE7.1"
+      ]
+    },
+    {
+      "id": "D.1.6",
+      "bloque_id": null,
+      "descripcion": "Apreciación del cambio en distintos tipos forma de indicar de situaciones, tanto numéricas como signos (y sus verbalizaciones geométricas. objetivo de enriquecer signos, específicamente relaciones, se consigue Conviene seguir el alumnado deba (p. ej., escribir 2+8 que expresen cantidades Se deberían incorporar ejemplo, inventa En conexión con transformación. con dos o más cambios las diferencias con",
+      "criterios_ids": [
+        "CE6.1",
+        "CE3.2",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "E.1",
+      "bloque_id": null,
+      "descripcion": "E.1. Distribución e inferencia",
+      "criterios_ids": []
+    },
+    {
+      "id": "E.1.1",
+      "bloque_id": null,
+      "descripcion": "Gráficos estadísticos de la vida cotidiana que se realicen deben seguir (pictogramas, gráficas de barras, esencial partir del problema histogramas...): lectura e interpretación. un proyecto estadístico, con",
+      "criterios_ids": [
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "E.1.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias sencillas para la recogida, algo más amplias, llegando hasta clasificación y organización de datos El trabajo debe ir orientado a cualitativos o cuantitativos discretos en En el primer ciclo se ha empezado muestras pequeñas mediante calculadora y interpretación de gráficos es aplicaciones informáticas sencillas. los datos. Hay que recuperar Frecuencia absoluta: interpretación. otros tipos de gráficos. Una",
+      "criterios_ids": [
+        "CE8.1"
+      ]
+    },
+    {
+      "id": "E.1.3",
+      "bloque_id": null,
+      "descripcion": "Gráficos estadísticos sencillos (diagrama conjunto de datos forma una de barras y pictogramas) para representar empieza a trabajar con medidas datos seleccionando el más conveniente, resumir el conjunto de datos mediante recursos tradicionales y procedimientos aislados de cálculo, aplicaciones informáticas sencillas. La moda no es algo extraño",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "E.1.4",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las medidas de tendencia surgir en el primer ciclo de central: moda y mediana. recuento de las frecuencias que existen tantos datos con",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE6.1",
+        "CE6.2",
+        "CE7.1",
+        "CE7.2",
+        "CE8.1",
+        "CE8.2"
+      ]
+    },
+    {
+      "id": "F.1",
+      "bloque_id": null,
+      "descripcion": "F.1. Creencias, actitudes y emociones propias",
+      "criterios_ids": []
+    },
+    {
+      "id": "F.1.1",
+      "bloque_id": null,
+      "descripcion": "Gestión emocional: estrategias de matemáticos. En las orientaciones identificación y manifestación de las propias se han ido sugiriendo estrategias emociones ante las matemáticas. Iniciativa y construcción de los saberes, tolerancia ante la frustración en el de estrategias personales en aprendizaje de las matemáticas previos e intuiciones; plantear",
+      "criterios_ids": [
+        "CE7.1",
+        "CE7.2"
+      ]
+    },
+    {
+      "id": "F.1.2",
+      "bloque_id": null,
+      "descripcion": "Fomento de la autonomía y estrategias momento y que su solución para la toma de decisiones en situaciones de razonamientos matemáticos, resolución de problemas. resolución de problemas, etc…",
+      "criterios_ids": [
+        "CE7.1",
+        "CE3.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "F.2",
+      "bloque_id": null,
+      "descripcion": "F.2. Trabajo en equipo, inclusión, respeto y",
+      "criterios_ids": []
+    },
+    {
+      "id": "F.2.1",
+      "bloque_id": null,
+      "descripcion": "Sensibilidad y respeto ante las diferencias tenga que afrontar solo al problema individuales presentes en el aula: ideas en condiciones de igualdad. identificación y rechazo de actitudes un producto final que hay de discriminatorias. interactuar, de conversar entre",
+      "criterios_ids": [
+        "CE7.2",
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "F.2.2",
+      "bloque_id": null,
+      "descripcion": "Participación activa en el trabajo en acuerdos. Cuando la cultura equipo, escucha activa y respeto por el interacciones, las estrategias trabajo de los demás. espontánea se ven ampliadas",
+      "criterios_ids": [
+        "CE8.1"
+      ]
+    },
+    {
+      "id": "F.2.3",
+      "bloque_id": null,
+      "descripcion": "Reconocimiento y comprensión de las lenguaje matemático (en sentido emociones y experiencias de los demás ante lenguaje oral hasta el simbólico-numérico, las matemáticas. comprendan los compañeros",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "F.2.4",
+      "bloque_id": null,
+      "descripcion": "Valoración de la contribución de la propia comprensión. geometría a los distintos ámbitos del El profesorado debe asumir conocimiento humano desde una abiertas al alumnado, preguntas perspectiva de género. ideas y las de los demás y problema. Es vital dejar tiempo del alumnado. No es suficiente desvelar la respuesta. El profesorado La forma de concebir la enseñanza resolución de problemas lleva matemático: perseverancia, superación de bloqueos, confianza y disposición positiva a la reflexión planteamiento de preguntas otras situaciones y en distintos el trabajo en pequeño y gran Cabe mencionar materiales además de tener un sentido socioafectivos.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1",
+        "CE8.2",
+        "CE3.2"
+      ]
+    }
+  ]
+}

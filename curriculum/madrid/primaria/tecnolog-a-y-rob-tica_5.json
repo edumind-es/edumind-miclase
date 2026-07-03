@@ -1,0 +1,543 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "primaria",
+    "asignatura": "tecnolog-a-y-rob-tica",
+    "ciclo_origen": "toda-la-etapa",
+    "fuente": "iDoceo_10_tecnolog_a_y_rob_tica_toda-la-etapa.xlsx",
+    "generado": "2026-06-29",
+    "curso": "5º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o claridad y adecuación a diferentes contextos cotidianos de su entorno interacciones de comunicación, tanto para intercambiar información personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados y educativo, con acompañamiento puntual, para participar en contextos"
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, adoptando un punto de vista creativo, crítico y personal."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su desarrollo madurativo, intereses; reconoce el patrimonio literario como fuente de disfrute construir y compartir su interpretación de las obras y para crear textos"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia, derechos de todas las personas, para favorecer un uso eficaz y no b) Competencia plurilingüe (CP) Descriptores"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua propia, comunicativas sencillas y predecibles, de manera adecuada tanto cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce las diferentes lenguas realizar transferencias sencillas entre distintas lenguas para comunicarse lenguaje."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la variedad de las lenguas presentes en de diálogo, para mejorar la convivencia. BOCM BOLETÍN OFICIAL Pág.30 LUNES18DEJULIODE2022 c) Competencia matemática y competencia en ciencia, tecnología Descriptores"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y conocidas, y selecciona y emplea algunas estrategias para resolver"
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar de herramientas e instrumentos adecuados, planteándose preguntas"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando ante la incertidumbre, para generar un producto creativo con un"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes tecnológicos de forma clara y veraz, utilizando la terminología científica gráficos, símbolos…) y aprovechando de forma crítica y responsable conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para vivos. d) Competencia digital (CD) Descriptores"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias (palabras clave, selección de información relevante, organización obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos informático...) mediante el uso de diferentes herramientas digitales la propiedad intelectual y los derechos de autor de los contenidos"
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades y/o proyectos escolares mediante construir nuevo conocimiento, comunicarse, trabajar en grupo, y y supervisados de manera segura y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, proteger los dispositivos, los datos personales, la salud y el medioambiente, las mismas."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas programación informática por bloques, robótica educativa…) para creativa, solicitando ayuda en caso necesario. e) Competencia personal, social y de aprender a aprender (CPSAA) Descriptores"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos en situaciones de tensión o conflicto, adaptándose a los cambios"
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos busca apoyo ante situaciones negativas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las responsabilidades individuales asignadas y emplea estrategias"
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje y evaluación conjunta, reconociendo sus limitaciones y sabiendo BOCM BOLETÍN OFICIAL B.O.C.M.Núm.169 LUNES18DEJULIODE2022 f) Competencia ciudadana (CC) Descriptores"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes convivencia, y las aplica de manera constructiva, dialogante e inclusiva"
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades de su entorno cercano, en la toma de y respetuosa con los principios y valores de la Unión Europea y la el valor a la diversidad y de la igualdad entre hombres y mujeres, acordados por la ONU."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas de la actualidad, y creencias, cuidar el entorno, de rechazar prejuicios, y de oponerse"
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones entre las acciones humanas y el para conservar la biodiversidad. g) Competencia emprendedora (CE) Descriptores"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades inherentes a los retos que debe afrontar tomando conciencia de las consecuencias y efectos que las ideas valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias elementos económicos y financieros básicos, aplicándolos a situaciones"
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas planifica tareas, colabora con otros y en equipo, cabo iniciativas de emprendimiento, y considera la experiencia como h) Competencia en conciencia y expresión culturales (CCEC) Descriptores"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del culturales y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce especificidades e intencionalidades de las patrimonio, y se interesa por ellas, identificando los medios y soportes, caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones culturales, integrando su propio cuerpo, interactuando con el entorno"
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Utilizar el pensamiento computacional para la resolución de problemas, generando un producto creativo y original que responda a cada uno de los retos planteados o generados a través de la observación del entorno.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Resolver problemas planteados aplicando los conocimientos de mecánica, electricidad, diseño y programación, desarrollando soluciones automatizadas, diseñando o construyendo sistemas de control programables y/o robóticos adecuados a su nivel.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Observar, comprender e interpretar las distintas situaciones del entorno para identificar problemas y buscar soluciones, actuando de manera individual y en grupo en su resolución, poniendo en práctica la interconexión digital de dispositivos con internet.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer y valorar las posibilidades que tiene la inteligencia artificial para actuar con las máquinas o sistemas de manera que faciliten el trabajo y lo mejoren gradualmente.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Manejar los dispositivos y herramientas de forma segura y responsable para trabajar de forma individual o conjunta de acuerdo a las necesidades del contexto educativo.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Conocer y utilizar los distintos sistemas y aplicaciones de realidad virtual o aumentada para explorar el entorno y disfrutar de un aprendizaje interactivo y enriquecedor.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer los fundamentos básicos de la programación por bloques.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Realizar un conjunto de operaciones sistemáticas o algoritmos que cumplan un patrón previamente fijado para el funcionamiento correcto del programa.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Recabar información del entorno que nos permita obtener datos necesarios para generar un producto que dé una solución tecnológica sobre una situación concreta.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Aplicar los conocimientos elementales de electricidad y mecánica para el montaje de artefactos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Realizar, de forma guiada, un producto final sencillo que dé solución a un problema de diseño, probando en equipo, diferentes prototipos y utilizando de forma segura los materiales de mecánica, electricidad o programación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Mostrar de forma oral o gráfica el producto final de los proyectos de diseño, explicando los pasos seguidos y la finalidad del proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Desarrollar diseños en 2D o en 3D utilizando técnicas de prototipado o distintas aplicaciones informáticas para construir un objeto determinado.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer los procesos que permiten conectar elementos físicos a internet.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar el volumen de datos que generan los dispositivos conectados para realizar un análisis de estos y utilizar esta información.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer aplicaciones informáticas o tecnológicas digitales emergentes sobre la inteligencia artificial.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Integrar programaciones en las máquinas o sistemas que permitan su autonomía de forma responsable. - -",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar los dispositivos y las herramientas de forma segura de acuerdo con las necesidades del contexto educativo.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Buscar de forma segura y eficiente información para crear contenidos digitales, trabajando de manera individual y conjunta.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Utilizar los distintos sistemas de realidad virtual o aumentada para facilitar los procesos de aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Crear proyectos en los que incluyan la realidad virtual o aumentada como recurso.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Saberes"
+    },
+    {
+      "id": "B2",
+      "titulo": "A. Pensamiento"
+    },
+    {
+      "id": "B3",
+      "titulo": "B. Mecánica–"
+    },
+    {
+      "id": "B4",
+      "titulo": "B. Mecánica– Ingeniería (Diseño)"
+    },
+    {
+      "id": "B5",
+      "titulo": "C. Electricidad"
+    },
+    {
+      "id": "B6",
+      "titulo": "D. Inteligencia artificial"
+    },
+    {
+      "id": "B7",
+      "titulo": "D. Inteligencia artificial (IA)"
+    },
+    {
+      "id": "B8",
+      "titulo": "E. Internet de las"
+    },
+    {
+      "id": "B9",
+      "titulo": "F. Realidad virtual o"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación a la programación a través de recursos analógicos (actividades desenchufadas) y de recursos digitales (plataformas digitales de programación por bloques) adaptados al nivel lector del alumnado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Interpretación y ejecución de algoritmos sencillos (rutinas, instrucciones con pasos ordenados, reglas de juegos, instrucciones, secuencias, patrones repetitivos, programación por bloques).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Fundamentos de la programación: bucles, condicionales, operadores, mensajes, variables, funciones, eventos, depuración (debugging).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Extensiones de programación por bloques y aplicación a la robótica educativa (música, dibujo, sensor de vídeo, texto a voz, traductor…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Fases del pensamiento computacional: Descomposición de una tarea en partes más sencillas, reconocimiento de patrones y creación de algoritmos sencillos para la resolución del problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Proceso de modelización de forma guiada (dibujos, esquemas, diagramas, objetos manipulables, dramatizaciones...) en la comprensión y resolución de problemas de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Mostrar interés por el pensamiento computacional participando en la resolución de problemas de programación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias básicas de trabajo en equipo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas y útiles necesarios para la fabricación y montaje de artefactos. Funcionamiento de engranajes y poleas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas de diseño y fabricación manual y mecánica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas de diseño y fabricación digital. Impresión 3D y corte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Herramientas de diseño asistido por dispositivo tecnológico, para la representación en 2D y 3D y/o fabricación de piezas aplicadas a proyectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Diseño y construcción de robots sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas sencillas para el trabajo en equipo y estrategias para la gestión de conflictos. Respeto de las normas y cuidado en el uso de las herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Electricidad y electrónica básica: cables y conectores, actuadores, circuitos, sensores, motores, baterías (fuentes de energía).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Energía y movimiento. Energías renovables y su influencia en la contribución al desarrollo de la sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Primeros diseños y aplicación en proyectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Fomento de la curiosidad, interés, motivación e iniciativa en el desarrollo y la realización de las actividades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "La inteligencia artificial como respuesta del aprendizaje a través de la obtención de datos y creación de patrones. Principios para la utilización de la IA.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "Estrategias para el aprendizaje automático o aprendizaje de las máquinas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "Uso de aplicaciones informáticas sencillas para ordenador y dispositivos móviles e introducción a la inteligencia artificial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.1",
+      "bloque_id": "B8",
+      "descripcion": "Funcionamiento de la red. Reglas básicas para la utilización de los recursos de forma segura y eficiente trabajando de forma individual, en equipo y en red y estrategias para resolver problemas en la comunicación digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.2",
+      "bloque_id": "B8",
+      "descripcion": "Dispositivos conectables. Pautas para la instalación de dispositivos que puedan conectarse entre sí y controlarse de forma centralizada desde un ordenador, tablet o móvil.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.3",
+      "bloque_id": "B8",
+      "descripcion": "Sistemas de control programado y uso de simuladores y dispositivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.1",
+      "bloque_id": "B9",
+      "descripcion": "Uso de aplicaciones y software específico que permita recrear la realidad y dar vida a los objetos para su estudio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.2",
+      "bloque_id": "B9",
+      "descripcion": "Iniciación a la edición y creación de códigos QR o contenidos con realidad aumentada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.3",
+      "bloque_id": "B9",
+      "descripcion": "Desarrollo de marcadores para aplicaciones de realidad virtual, aumentada y mixta.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,440 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "biolog-a-y-geolog-a",
+    "ciclo_origen": "1-eso",
+    "fuente": "iDoceo_01_biolog_a_y_geolog_a_1-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar y transmitir información y datos científicos, argumentando sobre ellos y utilizando diferentes formatos, para analizar conceptos y procesos de las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Identificar, localizar y seleccionar información, contrastando su veracidad, organizándola y evaluándola críticamente, para resolver preguntas relacionadas con las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Planificar y desarrollar proyectos de investigación, siguiendo los pasos de las metodologías científicas y cooperando cuando sea necesario, para indagar en aspectos relacionados con las ciencias geológicas y biológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilizar el razonamiento y el pensamiento computacional, analizando críticamente las respuestas y soluciones y reformulando el procedimiento, si fuera necesario, para resolver problemas o dar explicación a procesos de la vida cotidiana relacionados con la biología y la geología.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD5",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar los efectos de determinadas acciones sobre el medio ambiente y la salud, basándose en los fundamentos de las ciencias biológicas y de la Tierra, para promover y adoptar hábitos que eviten o minimicen los impactos medioambientales negativos, sean compatibles con un desarrollo sostenible y permitan mantener y mejorar la salud.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CC4",
+        "CE1",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Analizar los elementos de un paisaje concreto valorándolo como patrimonio natural y utilizando conocimientos sobre geología y ciencias de la Tierra para explicar su historia geológica, proponer acciones encaminadas a su protección e identificar posibles riesgos naturales.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar de forma sencilla, conceptos y procesos biológicos y geológicos, interpretando información en diferentes formatos (modelos, gráficos, tablas, diagramas, fórmulas, esquemas, símbolos, páginas web, etc.).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Transmitir de forma comprensible información relacionada con los contenidos de la materia de Biología y Geología, utilizando la terminología y el formato adecuados (modelos, gráficos, tablas, vídeos, informes, diagramas, fórmulas, esquemas, símbolos, contenidos digitales, etc.).",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Resolver cuestiones relacionadas con los contenidos de la materia de Biología y Geología mediante el uso de fuentes diversas, científicas y veraces.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Localizar y seleccionar información y citar correctamente las fuentes consultadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la contribución de la ciencia a la sociedad y la labor de las personas dedicadas a ella con independencia de su etnia, sexo o cultura, reconociendo el papel de las mujeres científicas y entendiendo la investigación como una labor interdisciplinar en constante evolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Plantear preguntas e hipótesis sobre fenómenos biológicos o geológicos que puedan ser respondidas o contrastadas utilizando métodos científicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar un trabajo experimental sencillo y de forma guiada y tomar datos cuantitativos o cualitativos sobre fenómenos biológicos y geológicos utilizando los instrumentos, herramientas o técnicas adecuadas a su edad con corrección.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar los resultados obtenidos en los trabajos experimentales y proyectos de investigación.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Cooperar dentro de un proyecto científico asumiendo responsablemente una función concreta, utilizando espacios virtuales cuando sea.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Resolver problemas o dar explicación a procesos biológicos o geológicos utilizando conocimientos, datos e informaciones aportadas o recursos digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar la solución a un problema sobre fenómenos biológicos y geológicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Relacionar con fundamentos científicos la preservación de la biodiversidad, la conservación del medio ambiente, la protección de los seres vivos del entorno, el desarrollo sostenible y la calidad de vida.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Entender y adoptar hábitos sostenibles analizando las actividades propias y ajenas, a partir de los propios razonamientos y de la información adquirida.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Proponer y adoptar hábitos saludables, analizando las acciones propias y ajenas en el ámbito de la vida personal y en base a los conocimientos adquiridos en la materia.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Interpretar el paisaje analizando sus elementos y reflexionando sobre los problemas provocados por determinadas acciones humanas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer las propiedades y características de los minerales y de las rocas, utilizando criterios razonados que permitan diferenciarlos y clasificarlos, y destacar su importancia económica y la gestión sostenible de los mismos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar y predecir los riesgos geológicos naturales y los riesgos geológicos derivados la actividad humana.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Proyecto científico"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Geología"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. La célula"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Seres vivos"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Ecología y sostenibilidad"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Hábitos saludables"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación y características básicas de la metodología científica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Formulación de preguntas, hipótesis y conjeturas científicas básicas y adecuadas a la edad del alumnado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de utilización de herramientas digitales básicas para la búsqueda de información, la colaboración y la comunicación de resultados e ideas en diferentes formatos (presentación, gráfica, vídeo, póster, informe, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Realización de pequeños trabajos experimentales sencillos y de forma guiada para responder a una cuestión científica determinada utilizando instrumentos y espacios necesarios (laboratorio, aulas, entorno, etc.) de forma adecuada a su edad. (cid:2) Obtención y selección de información a partir de datos experimentales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Uso de modelos básicos para la representación y comprensión de procesos o elementos de la naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Introducción a los métodos de observación y de toma de datos de fenómenos naturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La labor científica y las personas dedicadas a la ciencia: contribución a las ciencias biológicas y geológicas e importancia social..",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Conceptos de roca y mineral: características y propiedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de clasificación de las rocas: sedimentarias, metamórficas e ígneas. El ciclo de las rocas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Rocas y minerales relevantes o del entorno: identificación. (cid:2) Identificación mediante claves de rocas y minerales, a partir de sus propiedades, utilizando diversos instrumentos (navaja, lima, ácido, balanza, lupa, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Análisis de la estructura básica de la geosfera. (cid:2) La geosfera. Estructura y composición de corteza, manto y núcleo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La célula como unidad estructural y funcional de los seres vivos. (cid:2) Reconocimiento de que los seres vivos están constituidos por células y determinar las características que los diferencian de la materia inerte. (cid:2) Establecimiento comparativo de analogías y diferencias entre célula procariota y eucariota, y entre célula animal y vegetal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Estudio y reconocimiento de la célula procariota y sus partes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estudio y reconocimiento de la célula eucariota animal y sus partes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Estudio y reconocimiento de la célula eucariota vegetal y sus partes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias y destrezas de observación y comparación de muestras microscópicas. (cid:2) Observación, y descripción de seres unicelulares y células vegetales y animales, mediante preparaciones, utilizando el microscopio óptico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Los seres vivos: diferenciación y clasificación en los principales reinos: arqueas, bacterias, protoctista, fungi, vegetal y animal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Descripción de las funciones comunes a todos los seres vivos, diferenciando entre nutrición autótrofa y heterótrofa. (cid:2) Reconocimiento del papel de las plantas y el proceso de la nutrición autótrofa, relacionándolo con su importancia para el conjunto de todos los seres vivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Animales vertebrados e invertebrados. Clasificación y características.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Observación de especies representativas del entorno. (cid:2) Identificación de ejemplares de plantas y animales del entorno o de interés especial por ser especies en peligro de extinción o endémicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Identificación de las características distintivas de los principales grupos de seres vivos. (cid:2) Aplicación de criterios de clasificación de los seres vivos, relacionando los animales y plantas más comunes con su grupo taxonómico. (cid:2) Discriminación de las características generales y singulares de cada grupo taxonómico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias de reconocimiento de las especies más comunes de los ecosistemas del entorno (guías, claves dicotómicas, herramientas digitales, visu, etc.). (cid:2) Identificación de los principales grupos taxonómicos a los que pertenecen animales y plantas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Los animales como seres que sienten: semejanzas y diferencias con los seres no sienten.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Análisis de los ecosistemas del entorno y reconocimiento de sus elementos integrantes, así como los tipos de relaciones intraespecíficas e interespecíficas. (cid:2) Componentes abióticos y bióticos en los ecosistemas. (cid:2) Ecosistemas terrestres y acuáticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Reconocimiento de la importancia de la conservación de los ecosistemas, la biodiversidad y la implantación de un modelo de desarrollo sostenible. (cid:2) Acciones que favorecen la conservación del medio ambiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Análisis de las funciones de la atmósfera y la hidrosfera y su papel esencial para la vida en la Tierra. (cid:2) Composición, características y contaminación de la atmósfera. Principales contaminantes. Efecto invernadero. (cid:2) La hidrosfera. Agua dulce y salada, importancia para los seres vivos. Contaminación de la hidrosfera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Descripción de las interacciones entre atmósfera, hidrosfera, geosfera y biosfera, su papel en la edafogénesis y en el modelado del relieve y su importancia para la vida. Las funciones del suelo. (cid:2) El suelo como resultado de la interacción entre los componentes bióticos y abióticos y como recurso no renovable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Análisis de las causas del cambio climático y de sus consecuencias sobre los ecosistemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Interpretación y relación de los principales contaminantes con los problemas causados y con su origen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Valoración de la importancia de los hábitos sostenibles (consumo responsable, prevención y gestión de residuos, respeto al medio ambiente, etc.). (cid:2) Pautas y hábitos que contribuyen a paliar los problemas ambientales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "La relación entre la salud medioambiental, humana y de otros seres vivos: one health (una sola salud).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Identificación de los elementos y características propios de una dieta saludable y análisis de su importancia. (cid:2) Dietas equilibradas. Los nutrientes y los alimentos. (cid:2) Trastornos de la conducta alimentaria. Influencias externas sobre los conceptos de salud e imagen corporal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Educación afectivo-sexual, de una manera adecuada a la edad del alumno, promoviendo las relaciones de buen trato, desde la perspectiva de la igualdad entre personas valorando la importancia del respeto hacia la libertad y la diversidad sexual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Análisis sobre las drogas legales e ilegales: sus efectos perjudiciales sobre la salud de los consumidores y de quienes están en su entorno próximo. (cid:2) Situaciones de riesgo y efectos nocivos para la salud relacionadas con el consumo de sustancias tóxicas y estimulantes como tabaco, alcohol, drogas, etc. Medidas de prevención y control.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Valoración del desarrollo de hábitos saludables y su importancia en la conservación de la salud física, mental y social (alimentación saludable, reducción del sedentarismo, higiene del sueño, hábitos posturales, uso responsable de las nuevas tecnologías, actividad física, cuidado y corresponsabilidad, etc…). (cid:2) Análisis de los efectos positivos de unos hábitos saludables hacia la salud, el crecimiento y la actividad académica.",
+      "criterios_ids": []
+    }
+  ]
+}

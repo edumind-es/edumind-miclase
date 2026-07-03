@@ -1,0 +1,556 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "lat-n",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_13_lat_n_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Valorar el papel de la civilización latina en el origen de la cultura europea, comparando y reconociendo las semejanzas y diferencias entre lenguas y culturas, para analizar críticamente el presente.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Conocer los aspectos básicos de la lengua latina, comparándola con las lenguas de enseñanza y con otras lenguas del repertorio individual del alumnado, para valorar los rasgos comunes y apreciar la diversidad lingüística como muestra de riqueza cultural.",
+      "descriptores_ids": [
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Leer e interpretar textos latinos para identificar su carácter clásico y fundamental.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender textos originales latinos, traduciendo del latín a la lengua de enseñanza y desarrollando métodos de acceso al significado de un enunciado sencillo en lengua latina, para alcanzar y justificar la traducción propia de un pasaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CD2",
+        "STEM1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Descubrir, conocer y valorar el patrimonio cultural, arqueológico y artístico romano, apreciándolo y reconociéndolo como producto de la creación humana y como testimonio de la historia, para identificar las fuentes de inspiración y distinguir los procesos de construcción, preservación, conservación y restauración.",
+      "descriptores_ids": [
+        "CP3",
+        "CD1",
+        "CD3",
+        "CC1",
+        "CC4",
+        "CCEC1",
+        "CCEC2"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer el marco geográfico en el que Roma ejerció su dominio e influencia política y cultural en distintos períodos de su historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer los orígenes de las lenguas de Europa y, en especial, de España.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar los periodos de la historia de Roma, los principales acontecimientos y personajes históricos y legendarios, sabiendo distinguir unos de otros.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar la evolución de los aspectos de la civilización romana, de su organización política, social, familiar, militar y religiosa en su contexto histórico, relacionando los datos con referentes actuales y aplicando los conocimientos adquiridos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Estudiar el influjo de la Antigüedad clásica en la cultura occidental.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar los modos de vida, costumbres y actitudes de la sociedad romana en comparación con los de nuestras sociedades a partir del contenido de fuentes latinas en diferentes soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer el sistema fonológico del latín, así como el alfabeto latino, su origen y evolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer y aplicar las normas básicas de pronunciación del latín clásico.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar los distintos formantes de las palabras en latín y en español.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer los prefijos y sufijos latinos más frecuentes y su significado, identificándolos en palabras del español y de otras lenguas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir las clases de palabras, sus diferencias formales y funciones sintácticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer cómo se enuncian los distintos tipos de palabras del latín, distinguiendo los tipos de palabras a partir de su enunciado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.7",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer la declinación de los nombres, adjetivos y pronombres personales del latín.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.8",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer la conjugación del verbo sum y de los verbos regulares en sus formas personales e impersonales más frecuentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.9",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer las principales funciones que desempeñan en la oración los casos latinos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.10",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer los tipos de oración simple.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.11",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer los medios para expresar la coordinación copulativa, disyuntiva y adversativa en latín.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.12",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar las construcciones concertadas de infinitivo y de participio de perfecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.13",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer la evolución fonética, morfológica y sintáctica del latín al español y, en menor medida, a otras lenguas romances.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.14",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la diversidad lingüística a la que da origen el latín, identificando y explicando semejanzas y diferencias entre los elementos lingüísticos del entorno, relacionándolos con los de la propia cultura.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.15",
+      "objetivo_id": "CE2",
+      "descripcion": "Inferir significados de términos latinos aplicando los conocimientos léxicos y fonéticos de otras lenguas del repertorio individual propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.16",
+      "objetivo_id": "CE2",
+      "descripcion": "Ampliar el caudal léxico y mejorar la expresión oral y escrita, incorporando latinismos y locuciones usuales de origen latino de manera coherente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.17",
+      "objetivo_id": "CE2",
+      "descripcion": "Producir definiciones etimológicas de términos cotidianos, científicos y técnicos, reconociendo los elementos latinos en diferentes contextos lingüísticos y estableciendo, si procede, la relación semántica entre un término patrimonial y un cultismo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Explicar de forma oral, escrita o multimodal el carácter clásico y humanista de las diversas manifestaciones literarias y artísticas de la civilización latina utilizando un vocabulario correcto y una expresión adecuada.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Comprender el sentido y las ideas principales y secundarias de un texto, contextualizándolo e identificando las referencias históricas, sociales, políticas o religiosas que aparecen en él, y sirviéndose de conocimientos sobre personajes, acontecimientos históricos, instituciones y formas de vida ya estudiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar el contenido de textos latinos de dificultad adecuada, atendiendo la situación en la que se produjeron, conectándolos con la experiencia propia y valorando cómo contribuyen a entender los modos de vida, costumbres y actitudes de nuestra sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los aspectos morfológicos, sintácticos y léxicos elementales de la lengua latina, identificándolos y comparándolos con los de la lengua familiar.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Traducir al español, textos breves y sencillos con términos adecuados y expresión correcta, justificando la traducción y manifestando la correspondencia entre el análisis y la versión realizada.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Producir mediante retroversión oraciones simples utilizando las estructuras propias de la lengua latina.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Saber consultar el diccionario latino-español, conociendo cómo incluyen los diccionarios las distintas clases de palabras.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer la transmisión de los textos antiguos desde la Antigüedad a nuestros días en diferentes tipos de soporte.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer y explicar los elementos, personajes, autores y obras literarias de la civilización latina, especialmente los relacionados con la historia de Roma y la mitología clásica, identificándolos como fuente de inspiración de manifestaciones literarias y artísticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer las huellas de la romanización en el patrimonio cultural y arqueológico del entorno mundial, y en especial, de España, identificando los procesos de preservación, conservación y restauración como un aspecto fundamental para el cuidado de su legado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Exponer de forma oral o escrita las conclusiones obtenidas a partir de la investigación, individual o colectiva, del legado material e inmaterial de la civilización romana y su pervivencia en el presente a través de soportes analógicos y digitales, seleccionando información, contrastándola y organizándola a partir de criterios de validez, calidad y fiabilidad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El presente de la civilización latina"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Latín y plurilingüismo"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. El texto latino y la traducción"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Legado y patrimonio"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Aspectos geográficos, históricos, culturales, políticos y lingüísticos de la civilización latina presentes en la noción actual de Europa y de su cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La civilización romana. Su importancia y pervivencia en la identidad europea actual y en la cultura occidental. (cid:2) El marco geográfico. (cid:2) Períodos de su historia. (cid:2) Organización política y social. (cid:2) La familia romana. (cid:2) Evolución del papel de la mujer en la sociedad romana. Grandes mujeres en la historia de Roma. (cid:2) El derecho. (cid:2) La religión, la mitología y otros aspectos culturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "La pervivencia del latín en las lenguas modernas. (cid:2) Las lenguas romances. (cid:2) Influencia del latín en lenguas no romances.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias y herramientas para relacionar el pasado y el presente a partir de los conocimientos adquiridos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Obras fundamentales de la literatura latina: (cid:2) Contexto histórico en el que se crearon. (cid:2) Su transmisión y pervivencia en nuestra cultura a través de la tradición clásica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Importancia de la civilización romana en la configuración, reconocimiento y análisis crítico de nuestra identidad como sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "El léxico latino jurídico, político, religioso, humanístico… Evolución de los conceptos fundamentales de la civilización latina (civis, populus, sacer, homo, etc.) y de su significado en consonancia con los cambios acontecidos desde la antigua Roma hasta la actualidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Métodos para la comprensión, interpretación y comentario de textos latinos a la luz de los conocimientos adquiridos sobre la lengua latina y la cultura clásica en relación con la experiencia propia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "La condición humana en los textos clásicos latinos. Análisis de las semejanzas y diferencias. Importancia de los textos clásicos latinos como testimonio de aquellos aspectos constitutivos de nuestra condición humana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "El papel del humanismo y su presencia en la sociedad actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "El sistema fonológico latino.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "El abecedario y la pronunciación del latín. Su permanencia e influencia en las lenguas del repertorio lingüístico individual del alumnado: lenguas romances y otras lenguas modernas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Explicación de los cambios fonéticos más frecuentes desde el latín culto y el latín vulgar a la lengua castellana y a otras lenguas romances.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Identificación de palabras con lexemas, sufijos y prefijos de origen latino en textos escritos en las lenguas de enseñanza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Procedimientos de composición y derivación latinos en la elaboración de familias de palabras en latín y español.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Palabras procedentes del latín: iniciación al significado etimológico y cambio semántico de las palabras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Métodos fundamentales para la inferencia del significado de palabras menos frecuentes, del léxico especializado y de nueva aparición a partir de la identificación de formantes latinos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Latinismos y locuciones latinas más frecuentes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "El léxico latino de raíz común entre las distintas lenguas del repertorio lingüístico individual. Técnicas de reconocimiento, organización e incorporación por el alumno a sus producciones verbales: escritas, orales o multimodales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Las lenguas indoeuropeas y lenguas romances. Comparación entre lenguas a partir de su origen y parentescos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Importancia del latín como herramienta de mejora de la expresión escrita y oral en las distintas lenguas del repertorio lingüístico individual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Recursos y herramientas analógicas y digitales para el aprendizaje de la lengua latina y estrategias que lo propician.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Aportación del aprendizaje del latín al aprendizaje de otras lenguas. Reflexión de la lengua latina como vínculo e impulso para el aprendizaje de otras lenguas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Funciones sintácticas y funciones semánticas. Procedimientos que emplean diversas lenguas para marcarlas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Las clases de palabras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Concepto de declinación. Los casos latinos y sus principales valores sintácticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La flexión nominal: (cid:2) Los casos latinos y sus principales valores sintácticos. (cid:2) La declinación de los nombres latinos. (cid:2) El adjetivo y sus grados: comparativo de igualdad, de superioridad y de inferioridad y superlativo. (cid:2) La flexión pronominal: Los pronombres personales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La flexión verbal: (cid:2) La expresión en latín del número, la persona, la voz, el tiempo y el modo. (cid:2) El enunciado de los verbos latinos. (cid:2) La flexión de los verbos regulares: los modos indicativo e imperativo en voz activa, el modo indicativo en voz pasiva, el infinitivo de presente y el participio de perfecto. (cid:2) El verbo sum: modos indicativo e imperativo y el infinitivo de presente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La concordancia y el orden de palabras en latín.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Estructuras oracionales básicas. La oración simple: oraciones atributivas y predicativas. Introducción a las oraciones de infinitivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "La coordinación copulativa, disyuntiva y adversativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Métodos fundamentales para la identificación, análisis y traducción de unidades lingüísticas latinas (léxico, morfosintaxis) a partir del conocimiento del latín y la comparación entre lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Recursos para el aprendizaje y estrategias básicas de adquisición de lenguas, tales como el Portfolio Europeo de las Lenguas, glosarios o diccionarios. Iniciación en el empleo del diccionario latino-español y español-latino.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Reflexión y justificación de la traducción ofrecida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Iniciación a las técnicas de traducción y retroversión a partir del análisis morfosintáctico y de la compatibilidad semántica de oraciones sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Pervivencia del legado material de la cultura y la civilización romanas: sitios arqueológicos, arte, ingeniería civil, inscripciones, construcciones monumentales…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Pervivencia del legado inmaterial de la cultura y la civilización romanas: mitología clásica, instituciones políticas y sociales, oratoria, derecho, rituales y celebraciones, ocio y espectáculos...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "La transmisión textual y los soportes de escritura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Características del patrimonio cultural romano y del proceso de romanización.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Interés e iniciativa en participar en procesos destinados al conocimiento, conservación, preservación y difusión del patrimonio arqueológico del entorno de origen romano, con especial atención al conservado en España.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Herramientas analógicas y digitales para la comprensión, producción y coproducción oral, escrita y multimodal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Respeto de la propiedad intelectual y derechos de autor sobre las fuentes consultadas y los contenidos utilizados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias y herramientas, analógicas y digitales, para evaluación.",
+      "criterios_ids": []
+    }
+  ]
+}

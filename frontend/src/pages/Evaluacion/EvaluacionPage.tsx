@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { getGrupos, getAsignaturas, getUnidades, getCalificadorBase, saveCalificaciones } from '@/db/queries'
+import { useAppStore } from '@/store/useAppStore'
 
 type Alumno = { id: number; nombre: string; apellidos: string; neae: number }
 type Criterio = { id: string; descripcion: string; objetivo_id: string; peso: number }
@@ -8,81 +10,125 @@ type CalIndex = Record<string, number | null>
 
 function calColor(v: number | null | undefined) {
   if (v == null) return 'cal-vacio'
-  const n = Math.round(v)
-  return `cal-${n}`
+  return `cal-${Math.round(v)}`
 }
 
 export default function EvaluacionPage() {
   const [params] = useSearchParams()
   const grupoId = params.get('grupo_id')
+  const asignaturaIdParam = params.get('asignatura_id')
+  const unidadIdParam = params.get('unidad_id')
+  const headers = useAppStore(s => s._headers)
+
   const [trimestre, setTrimestre] = useState(2)
   const [grupos, setGrupos] = useState<any[]>([])
+  const [grupoSelId, setGrupoSelId] = useState<string>('')
   const [asignaturas, setAsignaturas] = useState<any[]>([])
   const [asignaturaId, setAsignaturaId] = useState<string>('')
-  const [calificador, setCalificador] = useState<any>(null)
+  const [unidades, setUnidades] = useState<any[]>([])
+  const [unidadId, setUnidadId] = useState<string>(unidadIdParam || '')
+  const [instrumentoId, setInstrumentoId] = useState<number | null>(null)
+  const [calBase, setCalBase] = useState<any>(null)
+  const [criterios, setCriterios] = useState<Criterio[]>([])
   const [cargando, setCargando] = useState(false)
   const [cambiosPendientes, setCambiosPendientes] = useState<CalIndex>({})
 
   useEffect(() => {
-    fetch('/api/grupos').then(r => r.json()).then(setGrupos)
+    getGrupos().then(data => {
+      setGrupos(data)
+      const gid = grupoId || (data[0]?.id ? String(data[0].id) : '')
+      setGrupoSelId(gid)
+    })
   }, [])
 
   useEffect(() => {
-    const gid = grupoId || (grupos[0]?.id)
-    if (!gid) return
-    fetch(`/api/asignaturas?grupo_id=${gid}`).then(r => r.json()).then(d => {
+    if (grupoId) setGrupoSelId(grupoId)
+  }, [grupoId])
+
+  useEffect(() => {
+    if (!grupoSelId) return
+    getAsignaturas(Number(grupoSelId)).then(d => {
       setAsignaturas(d)
-      if (d.length > 0) setAsignaturaId(String(d[0].id))
+      const preferred = asignaturaIdParam ? asignaturaIdParam : (d[0]?.id ? String(d[0].id) : '')
+      setAsignaturaId(preferred)
     })
-  }, [grupoId, grupos])
+  }, [grupoSelId])
+
+  useEffect(() => {
+    if (!asignaturaId) { setUnidades([]); return }
+    getUnidades(Number(asignaturaId)).then(d => {
+      setUnidades(Array.isArray(d) ? d : [])
+      if (unidadIdParam && !unidadId) setUnidadId(unidadIdParam)
+    })
+  }, [asignaturaId])
 
   useEffect(() => {
     if (!asignaturaId) return
     setCargando(true)
-    fetch(`/api/calificaciones/calificador?asignatura_id=${asignaturaId}&trimestre=${trimestre}`)
-      .then(r => r.json())
-      .then(d => { setCalificador(d); setCargando(false) })
-      .catch(() => setCargando(false))
-  }, [asignaturaId, trimestre])
 
-  const getCal = (alumnoId: number, criterioId: string, instrumentoId: number) => {
+    getCalificadorBase(Number(asignaturaId), trimestre).then(async base => {
+      if (!base) { setCargando(false); return }
+      setCalBase(base)
+      if (base.instrumentos.length > 0) setInstrumentoId(base.instrumentos[0].id!)
+      else setInstrumentoId(null)
+
+      // Criterios vienen del servidor (currículo público — no son datos personales)
+      const cursoNorm = base.grupo.curso.replace('º', '').replace('ª', '') + 'º'
+      const critsUrl = `/api/curriculum/criterios?asignatura=${encodeURIComponent(base.asig.nombre)}&curso=${cursoNorm}&etapa=${base.grupo.etapa}&comunidad=${encodeURIComponent(base.asig.comunidad)}`
+      const allCrits: Criterio[] = await fetch(critsUrl, { headers: headers() })
+        .then(r => r.json()).catch(() => [])
+
+      if (unidadId) {
+        // Filtrar criterios de esta unidad
+        const ucs = await getUnidades(Number(asignaturaId))
+        const u = ucs.find(u => String(u.id) === unidadId)
+        const ucSet = new Set(u?.criterios.map(c => c.criterio_id) || [])
+        setCriterios(allCrits.filter(c => ucSet.has(c.id)))
+      } else {
+        setCriterios(allCrits)
+      }
+
+      setCargando(false)
+    }).catch(() => setCargando(false))
+  }, [asignaturaId, trimestre, unidadId])
+
+  const getCal = (alumnoId: number, criterioId: string) => {
+    if (!instrumentoId) return null
     const key = `${alumnoId}:${criterioId}:${instrumentoId}:${trimestre}`
     if (key in cambiosPendientes) return cambiosPendientes[key]
-    const cal = calificador?.calificaciones?.[key]
-    return cal?.valor ?? null
+    return calBase?.calificaciones?.[key]?.valor ?? null
   }
 
-  const setCal = (alumnoId: number, criterioId: string, instrumentoId: number, val: string) => {
+  const setCal = (alumnoId: number, criterioId: string, val: string) => {
+    if (!instrumentoId) return
     const key = `${alumnoId}:${criterioId}:${instrumentoId}:${trimestre}`
     const v = val === '' ? null : Math.min(10, Math.max(0, parseFloat(val)))
     setCambiosPendientes(p => ({ ...p, [key]: isNaN(v as number) ? null : v }))
   }
 
   const guardar = async () => {
-    if (Object.keys(cambiosPendientes).length === 0) return
-    const asig = asignaturas.find(a => String(a.id) === asignaturaId)
-    const grupo = grupos.find(g => String(g.id) === (grupoId || String(grupos[0]?.id)))
+    if (!calBase || Object.keys(cambiosPendientes).length === 0) return
     const items = Object.entries(cambiosPendientes).map(([key, valor]) => {
       const [alumno_id, criterio_id, instrumento_id, trim] = key.split(':')
       return {
-        alumno_id: Number(alumno_id), criterio_id, instrumento_id: Number(instrumento_id),
-        trimestre: Number(trim), valor,
-        asignatura: asig?.nombre, curso: grupo?.curso,
-        etapa: grupo?.etapa, comunidad: asig?.comunidad || 'Galicia',
+        alumno_id: Number(alumno_id), criterio_id,
+        instrumento_id: Number(instrumento_id), trimestre: Number(trim),
+        valor: valor as number | null,
+        asignatura: calBase.asig.nombre, curso: calBase.grupo.curso,
+        etapa: calBase.grupo.etapa, comunidad: calBase.asig.comunidad || 'Galicia',
       }
     })
-    await fetch('/api/calificaciones/batch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
-    })
+    await saveCalificaciones(items)
     setCambiosPendientes({})
-    // Recargar calificador
-    const d = await fetch(`/api/calificaciones/calificador?asignatura_id=${asignaturaId}&trimestre=${trimestre}`).then(r => r.json())
-    setCalificador(d)
+    // Recargar solo las calificaciones
+    const base = await getCalificadorBase(Number(asignaturaId), trimestre)
+    if (base) setCalBase(base)
   }
 
-  if (!grupoId && grupos.length === 0) {
+  const nPendientes = Object.keys(cambiosPendientes).length
+  const instrumentos: Instrumento[] = calBase?.instrumentos || []
+
+  if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
         <p style={{ color: 'var(--gris-600)', marginBottom: 16 }}>Crea un grupo primero para poder evaluar.</p>
@@ -93,51 +139,90 @@ export default function EvaluacionPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <select value={asignaturaId} onChange={e => setAsignaturaId(e.target.value)}>
-            {asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)} style={{ minWidth: 120 }}>
+            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
           </select>
+          <select value={asignaturaId} onChange={e => setAsignaturaId(e.target.value)} disabled={asignaturas.length === 0} style={{ minWidth: 160 }}>
+            {asignaturas.length === 0
+              ? <option value="">Sin asignaturas</option>
+              : asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)
+            }
+          </select>
+          {unidades.length > 0 && (
+            <select value={unidadId} onChange={e => { setUnidadId(e.target.value); setCambiosPendientes({}) }} style={{ minWidth: 140 }}>
+              <option value="">Todos los criterios</option>
+              {unidades.map((u: any) => (
+                <option key={u.id} value={u.id}>{u.nombre}{u.trimestre ? ` (T${u.trimestre})` : ''}</option>
+              ))}
+            </select>
+          )}
           <select value={trimestre} onChange={e => setTrimestre(Number(e.target.value))}>
             <option value={1}>1er trimestre</option>
             <option value={2}>2º trimestre</option>
             <option value={3}>3er trimestre</option>
           </select>
-          <button className="btn-primary" onClick={guardar} disabled={Object.keys(cambiosPendientes).length === 0}>
-            {Object.keys(cambiosPendientes).length > 0 ? `Guardar (${Object.keys(cambiosPendientes).length})` : 'Guardado'}
+          <button className="btn-primary" onClick={guardar} disabled={nPendientes === 0}>
+            {nPendientes > 0 ? `Guardar (${nPendientes})` : 'Guardado'}
           </button>
         </div>
       </div>
 
       {asignaturas.length === 0 && (
         <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
-          No hay asignaturas configuradas para este grupo. Configúralas desde Ajustes del grupo.
+          No hay asignaturas configuradas para este grupo.{' '}
+          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Ir al grupo →</Link>
         </div>
       )}
 
-      {cargando && <p>Cargando calificador…</p>}
+      {instrumentos.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+          {instrumentos.map(ins => (
+            <button key={ins.id}
+              onClick={() => { setInstrumentoId(ins.id); setCambiosPendientes({}) }}
+              style={{
+                padding: '6px 14px', borderRadius: 20, fontSize: 13, cursor: 'pointer', fontWeight: 600,
+                border: '2px solid',
+                borderColor: instrumentoId === ins.id ? 'var(--azul-700)' : 'var(--gris-300)',
+                background: instrumentoId === ins.id ? 'var(--azul-700)' : 'white',
+                color: instrumentoId === ins.id ? 'white' : 'var(--gris-600)',
+              }}>
+              {ins.nombre}
+              <span style={{ marginLeft: 6, fontWeight: 400, opacity: .8, fontSize: 11 }}>{ins.peso}%</span>
+            </button>
+          ))}
+        </div>
+      )}
 
-      {calificador && !cargando && (
-        <CalificadorGrid
-          alumnos={calificador.alumnos}
-          criterios={calificador.criterios}
-          instrumentos={calificador.instrumentos}
-          getCal={getCal}
-          setCal={setCal}
-        />
+      {instrumentos.length === 0 && asignaturas.length > 0 && !cargando && (
+        <div className="card" style={{ padding: 24, color: 'var(--gris-600)' }}>
+          Esta asignatura no tiene instrumentos de evaluación.{' '}
+          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Añadir instrumentos →</Link>
+        </div>
+      )}
+
+      {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
+
+      {calBase && !cargando && instrumentoId && (
+        <CalificadorGrid alumnos={calBase.alumnos} criterios={criterios} getCal={getCal} setCal={setCal} />
       )}
     </>
   )
 }
 
-function CalificadorGrid({ alumnos, criterios, instrumentos, getCal, setCal }: {
-  alumnos: Alumno[]; criterios: Criterio[]; instrumentos: Instrumento[];
-  getCal: (a: number, c: string, i: number) => number | null
-  setCal: (a: number, c: string, i: number, v: string) => void
+function CalificadorGrid({ alumnos, criterios, getCal, setCal }: {
+  alumnos: Alumno[]; criterios: Criterio[]
+  getCal: (a: number, c: string) => number | null
+  setCal: (a: number, c: string, v: string) => void
 }) {
   if (!alumnos?.length || !criterios?.length) {
-    return <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>Configura instrumentos y añade alumnos para usar el calificador.</div>
+    return (
+      <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+        Configura instrumentos y añade alumnos para usar el calificador.
+      </div>
+    )
   }
 
   return (
@@ -145,15 +230,18 @@ function CalificadorGrid({ alumnos, criterios, instrumentos, getCal, setCal }: {
       <table style={{ borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
         <thead>
           <tr>
-            <th style={{ background: 'var(--azul-900)', color: 'white', padding: '10px 14px', textAlign: 'left', position: 'sticky', left: 0, zIndex: 2, minWidth: 160 }}>
-              Alumno
-            </th>
+            <th style={{
+              background: 'var(--azul-900)', color: 'white', padding: '10px 14px',
+              textAlign: 'left', position: 'sticky', left: 0, zIndex: 2, minWidth: 160,
+            }}>Alumno</th>
             {criterios.map(cr => (
-              <th key={cr.id} title={cr.descripcion}
-                style={{ background: 'var(--azul-700)', color: 'white', padding: '8px 10px', textAlign: 'center', minWidth: 90, maxWidth: 120, fontWeight: 600 }}>
+              <th key={cr.id} title={cr.descripcion} style={{
+                background: 'var(--azul-700)', color: 'white', padding: '8px 10px',
+                textAlign: 'center', minWidth: 80, maxWidth: 110, fontWeight: 600,
+              }}>
                 <div style={{ fontSize: 12, fontWeight: 700 }}>{cr.id}</div>
                 <div style={{ fontSize: 10, opacity: .75, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 90 }}>
-                  {cr.descripcion.substring(0, 30)}…
+                  {cr.descripcion?.substring(0, 28)}…
                 </div>
               </th>
             ))}
@@ -162,26 +250,22 @@ function CalificadorGrid({ alumnos, criterios, instrumentos, getCal, setCal }: {
         <tbody>
           {alumnos.map((al, i) => (
             <tr key={al.id} style={{ background: i % 2 === 0 ? 'white' : 'var(--gris-100)' }}>
-              <td style={{ padding: '8px 14px', fontWeight: 500, position: 'sticky', left: 0, background: 'inherit', borderRight: '2px solid var(--gris-300)' }}>
+              <td style={{
+                padding: '8px 14px', fontWeight: 500, position: 'sticky', left: 0,
+                background: 'inherit', borderRight: '2px solid var(--gris-300)',
+              }}>
                 {al.apellidos}, {al.nombre}
                 {al.neae ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
               </td>
               {criterios.map(cr => {
-                const instrId = instrumentos[0]?.id
-                const val = getCal(al.id, cr.id, instrId)
-                const cls = calColor(val)
+                const val = getCal(al.id, cr.id)
                 return (
                   <td key={cr.id} style={{ textAlign: 'center', padding: 2 }}>
-                    <input
-                      type="number" min={0} max={10} step={0.1}
+                    <input type="number" min={0} max={10} step={0.1}
                       value={val === null ? '' : val}
-                      onChange={e => setCal(al.id, cr.id, instrId, e.target.value)}
-                      className={cls}
-                      style={{
-                        width: 58, textAlign: 'center', border: 'none', borderRadius: 4,
-                        padding: '5px 4px', fontSize: 13, fontWeight: 600,
-                        cursor: 'text',
-                      }}
+                      onChange={e => setCal(al.id, cr.id, e.target.value)}
+                      className={calColor(val)}
+                      style={{ width: 56, textAlign: 'center', border: 'none', borderRadius: 4, padding: '5px 4px', fontSize: 13, fontWeight: 600 }}
                     />
                   </td>
                 )

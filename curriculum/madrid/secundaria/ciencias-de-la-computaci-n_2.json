@@ -1,0 +1,281 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "ciencias-de-la-computaci-n",
+    "ciclo_origen": "2-eso",
+    "fuente": "iDoceo_02_ciencias_de_la_computaci_n_2-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Entender y utilizar algoritmos que lleven a la resolución de problemas concretos, aplicando los principios del pensamiento computacional y el razonamiento lógico.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM1",
+        "STEM3",
+        "CD2",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Diseñar, escribir y depurar aplicaciones informáticas, en entornos de programación gráfica y textual, que den solución a problemas concretos, incluyendo el control de sistemas físicos y robóticos.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD5",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los elementos componentes, tanto hardware como software, de los distintos sistemas informáticos, valorando la importancia de su mantenimiento y actualización, así como la manera en la que la información es tratada y almacenada en ellos.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM3",
+        "CD2",
+        "CD4",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender cómo los equipos informáticos se comunican entre sí formando redes, desde las más pequeñas hasta internet, para compartir información, servicios y recursos, siendo conscientes de las amenazas que esto conlleva y de la importancia de la ciberseguridad.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM5",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Entender el funcionamiento de algoritmos sencillos para la búsqueda y ordenación de datos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Diseñar y representar algoritmos que resuelvan problemas sencillos y que incluyan secuencias, decisiones e iteraciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Entender los fundamentos de la lógica booleana, utilizar tablas de verdad y funciones lógicas con los operadores lógicos AND, OR y NOT para resolver problemas sencillos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Implementar funciones lógicas sencillas mediante puertas AND, OR y NOT.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Ser capaz de transformar números naturales en el sistema decimal a los sistemas de numeración binario y hexadecimal, así como convertirlos de un sistema a otro.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer cómo cualquier tipo de información puede ser codificada en binario: números, píxeles e imágenes, caracteres de la tabla ASCII (American Standard Code for Information Interchange).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer aplicaciones de la Inteligencia Artificial en el día a día, citando ejemplos y valorando, con actitud crítica, las aportaciones y problemas que plantea su presencia creciente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar un lenguaje de programación textual para resolver problemas variados, haciendo un uso correcto de los tipos de datos y seleccionando las estructuras apropiadas, así como valorando la importancia de documentarlos suficientemente para facilitar la depuración de errores y la reusabilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir la función de cada uno de los elementos de un sistema de control programado (sensores, microcontrolador y actuadores), seleccionando los que resulten más apropiados para proyectos sencillos de computación física.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Programar tarjetas programables para controlar el comportamiento de dispositivos electrónicos y electromecánicos como diodos leds, zumbadores, relés basándose en los datos obtenidos a partir de sensores de todo tipo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Ser capaz de programar los movimientos de un robot móvil para que se desplace evitando obstáculos o siguiendo una línea.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Describir los elementos del modelo de Von Neumann de una computadora y conocer cómo es tratada la información en él.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Ser capaz de estimar el volumen de datos que ocupan los distintos tipos de archivos, así como la capacidad de almacenamiento de dispositivos como discos duros, pendrives, o los servicios de almacenamiento en la nube.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer el significado de dirección IP (Internet Protocol) de una computadora conectada a una red, cuál es su estructura y cómo es asignada; obtener la dirección IP de un dispositivo conectado a una red.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer y entender los peligros a los que están expuestos los sistemas informáticos y la información que procesan y almacenan, haciendo un uso seguro de los mismos y valorando la importancia de la ciberseguridad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Pensamiento computacional"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Programación"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Computadores"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Redes"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Algoritmos de ordenación y de búsqueda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Elección entre algoritmos alternativos para la resolución de un mismo problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Lógica booleana: puertas lógicas AND, OR y NOT, circuitos lógicos simples, tablas de verdad. Aplicación de operadores lógicos en tablas de verdad para la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Representación binaria de datos de todo tipo: numéricos, texto, sonido e imágenes. Conversión entre binario, decimal y hexadecimal. Tabla ASCII de caracteres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Introducción a la Inteligencia Artificial: concepto de IA; diferencias entre IA, Machine Learning y Deep Learning; ejemplos de IA en actividades cotidianas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Lenguajes de programación de alto y de bajo nivel. Código máquina y compiladores: definición y fundamentos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Lenguajes de programación textuales. Estructura, tipos y estructuras de datos (enteros, booleanos, reales, carácter, cadenas, arrays, listas), sintaxis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Resolución de problemas haciendo uso de un lenguaje de programación textual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Documentación de programas: importancia para la depuración y corrección de errores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Programación modular y reusabilidad de procedimientos o funciones. Programación de subrutinas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Computación física: sensores, actuadores y microcontroladores. Uso de tarjetas programables para el control de proyectos sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Programación de robots para tareas básicas como desplazamientos, detección de obstáculos, seguimiento de líneas o resolución de laberintos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Hardware: arquitectura de computadoras, modelo de Von Neumann.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Almacenamiento de la información en los sistemas informáticos y en la nube.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Cálculo de capacidades de almacenamiento para distintos tipos de información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Protocolos de redes: Ethernet, TCP (Transmission Control Protocol), IP.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Ciberseguridad: (cid:2) Seguridad en internet. (cid:2) Tipos de ataques. (cid:2) Identificación de vulnerabilidades y amenazas. (cid:2) Software para la protección frente a ciberataques.",
+      "criterios_ids": []
+    }
+  ]
+}

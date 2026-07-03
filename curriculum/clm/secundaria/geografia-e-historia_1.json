@@ -1,0 +1,692 @@
+{
+  "meta": {
+    "comunidad": "CLM",
+    "etapa": "secundaria",
+    "asignatura": "geografia-e-historia",
+    "ciclo_origen": "cursos-primero-y-segundo",
+    "fuente": "iDoceo_geografia-e-historia_cursos-primero-y-segundo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. de 2022 24490"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. crítico y responsable de las tecnologías digitales en la sociedad, así como la interacción con estas. y la colaboración, la educación mediática, la creación (incluido el bienestar digital y las competencias con la ciudadanía digital, la privacidad, la propiedad y crítico. completar la enseñanza básica, el alumno o la Realiza búsquedas en internet atendiendo a de validez, calidad, actualidad y fiabilidad, los resultados de manera crítica y para recuperarlos, referenciarlos y respetando la propiedad intelectual. Gestiona y utiliza su entorno personal digital aprendizaje para construir conocimiento y contenidos digitales, mediante estrategias tratamiento de la información y el uso de herramientas digitales, seleccionando configurando la más adecuada en función de tarea y de sus necesidades de aprendizaje de 2022 24491 Se comunica, participa, colabora e interactúa contenidos, datos e información herramientas o plataformas virtuales, gestiona de manera responsable sus acciones, y visibilidad en la red, para ejercer una digital activa, cívica y reflexiva. Identifica riesgos y adopta medidas al usar las tecnologías digitales para los dispositivos, los datos personales, la y el medioambiente, y para tomar conciencia la importancia y necesidad de hacer un uso legal, seguro, saludable y sostenible de tecnologías. Desarrolla aplicaciones informáticas sencillas soluciones tecnológicas creativas y sostenibles resolver problemas concretos o responder a propuestos, mostrando interés y curiosidad la evolución de las tecnologías digitales y por desarrollo sostenible y uso ético. implica la capacidad de reflexionar sobre uno mismo personal constante; gestionar el tiempo y la información mantener la resiliencia; y gestionar el aprendizaje a lo a la incertidumbre y a la complejidad; adaptarse a identificar conductas contrarias a la convivencia físico, mental y emocional propio y de las demás y a quienes lo rodean a través de la corresponsabilidad; expresar empatía y abordar los conflictos en un contexto Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas. de 2022 24492"
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. alumnas puedan ejercer una ciudadanía responsable y en la comprensión de los conceptos y las estructuras el conocimiento de los acontecimientos mundiales y el ciudadanía mundial. Incluye la alfabetización cívica, democrática fundada en el respeto a los derechos éticos de nuestro tiempo y el desarrollo de un estilo Sostenible planteados en la Agenda 2030. Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial. de 2022 24493"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. vital dirigido a actuar sobre oportunidades e ideas, generar resultados de valor para otras personas. Aporta necesidades y oportunidades; entrenar el pensamiento utilizando la imaginación, la creatividad, el pensamiento de los procesos creativos y de innovación; y despertar la Asimismo, implica tomar decisiones basadas en la otras personas, con motivación, empatía y habilidades a la acción mediante la planificación y gestión completar la enseñanza básica, el alumno o la Analiza necesidades y oportunidades afronta retos con sentido crítico, haciendo de su sostenibilidad, valorando el que puedan suponer en el entorno, para ideas y soluciones innovadoras, éticas sostenibles, dirigidas a crear valor en el ámbito social, educativo y profesional. Evalúa las fortalezas y debilidades propias, uso de estrategias de autoconocimiento autoeficacia, y comprende los elementos de la economía y las finanzas, conocimientos económicos y financieros actividades y situaciones concretas, utilizando que favorezcan el trabajo colaborativo en equipo, para reunir y optimizar los recursos que lleven a la acción una experiencia que genere valor. de 2022 24494 Desarrolla el proceso de creación de ideas soluciones valiosas y toma decisiones, de razonada, utilizando estrategias ágiles planificación y gestión, y reflexiona sobre proceso realizado y el resultado obtenido, llevar a término el proceso de creación de innovadores y de valor, considerando experiencia como una oportunidad para comprender y respetar el modo en que las ideas, las y se comunican de forma creativa en distintas culturas y culturales. Implica también un compromiso con propias y del sentido del lugar que se ocupa o del papel comprensión de la propia identidad en evolución y del así como la toma de conciencia de que el arte y de mirar el mundo y de darle forma. completar la enseñanza básica, el alumno o la Conoce, aprecia críticamente y respeta patrimonio cultural y artístico, implicándose en conservación y valorando el enriquecimiento a la diversidad cultural y artística. Disfruta, reconoce y analiza con las especificidades e intencionalidades las manifestaciones artísticas y culturales destacadas del patrimonio, distinguiendo medios y soportes, así como los lenguajes y técnicos que las caracterizan. Expresa ideas, opiniones, sentimientos y por medio de producciones culturales artísticas, integrando su propio cuerpo y la autoestima, la creatividad y el del lugar que ocupa en la sociedad, con actitud empática, abierta y colaborativa. Conoce, selecciona y utiliza con diversos medios y soportes, así técnicas plásticas, visuales, audiovisuales, o corporales, para la creación de productos y culturales, tanto de forma individual colaborativa, identificando oportunidades desarrollo personal, social y laboral, así como emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre temas relevantes del presente y del pasado, usando críticamente fuentes históricas y geográficas, para adquirir conocimientos, elaborar y expresar contenidos en varios formatos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar y elaborar productos propios sobre problemas geográficos, históricos y sociales que resulten relevantes en la actualidad, desde lo local a lo global, para desarrollar un pensamiento crítico, respetuoso con las diferencias, que contribuya a la construcción de la propia identidad y a enriquecer el acervo común.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los principales desafíos a los que se han enfrentado distintas sociedades a lo largo del tiempo, identificando las causas y consecuencias de los cambios producidos y los problemas a los que se enfrentan en la actualidad, mediante el desarrollo de proyectos de investigación y el uso de fuentes fiables, para realizar propuestas que contribuyan al desarrollo sostenible.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar y analizar los elementos del paisaje y su articulación en sistemas complejos naturales, rurales y urbanos, así como su evolución en el tiempo, interpretando las causas de las transformaciones y valorando el grado de equilibrio existente en los distintos ecosistemas, para promover su conservación, mejora y uso sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar de forma crítica planteamientos históricos y geográficos explicando la construcción de los sistemas democráticos y los principios constitucionales que rigen la vida en comunidad, así como asumiendo los deberes y derechos propios de nuestro marco de convivencia, para promover la participación ciudadana y la cohesión social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender los procesos geográficos, históricos y culturales que han conformado la realidad multicultural en la que vivimos, conociendo y difundiendo la historia y cultura de las minorías étnicas presentes en nuestro país y valorando la aportación de los movimientos en defensa de la igualdad y la inclusión, para reducir estereotipos, evitar cualquier tipo de discriminación y violencia, y reconocer la riqueza de la diversidad.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar los fundamentos que sostienen las diversas identidades propias y las ajenas, a través del conocimiento y puesta en valor del patrimonio material e inmaterial que compartimos para conservarlo y respetar los sentimientos AÑO XLI Núm.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Tomar conciencia del papel de los ciclos demográficos, el ciclo vital, las formas de vida y las relaciones intergeneracionales y de dependencia en la sociedad actual y su evolución a lo largo del tiempo, analizándolas de forma crítica, para promover alternativas saludables, sostenibles, enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Conocer y valorar la importancia de la seguridad integral ciudadana en la cultura de convivencia nacional e internacional, reconociendo la contribución del Estado, sus instituciones y otras entidades sociales a la ciudadanía global, a la paz, a la cooperación internacional y al desarrollo sostenible, para promover la consecución de un mundo más seguro, solidario, sostenible y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar, expresar y presentar contenidos propios en forma de esquemas, tablas informativas y otros formatos mediante el desarrollo de estrategias de búsqueda, selección y tratamiento de información relativas a procesos y acontecimientos relevantes del presente y del pasado.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Contrastar y argumentar sobre temas y acontecimientos de la Prehistoria, la Edad Antigua, la Edad Media y la Edad Moderna, localizando y analizando de forma crítica fuentes primarias y secundarias como pruebas históricas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar, valorar y mostrar interés por los principales problemas que afectan a la sociedad, adoptando una posición crítica y proactiva hacia los mismos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Argumentar de forma crítica sobre problemas de actualidad a través de conocimientos geográficos e históricos, contrastando y valorando fuentes diversas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Incorporar y utilizar adecuadamente términos, conceptos y acontecimientos relacionados con la geografía, la historia y otras disciplinas de las ciencias sociales, a través de intervenciones orales, textos escritos y otros productos, mostrando planteamientos originales y propuestas creativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar juicios argumentados, respetando las opiniones de los demás y enriqueciendo el acervo común en el contexto del mundo actual, sus retos y sus conflictos desde una perspectiva sistémica y global.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Adquirir y construir conocimiento relevante del mundo actual y de la historia, a través de procesos inductivos, de la investigación y del trabajo por proyectos, retos o problemas, mediante la elaboración de productos que reflejen la comprensión de los fenómenos y problemas abordados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar los principales problemas, retos y desafíos a los que se ha enfrentado la humanidad a lo largo de la historia, los cambios producidos, sus causas y consecuencias, así como los que, en la actualidad, debemos plantear y resolver en torno a los Objetivos de Desarrollo Sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Representar adecuadamente información geográfica e histórica a través de diversas formas de representación gráfica, cartográfica y visual.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar una secuencia cronológica con objeto de examinar la relación entre hechos y procesos en diferentes períodos y lugares históricos (simultaneidad y duración), utilizando términos y conceptos apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar procesos de cambio histórico de relevancia a través del uso de diferentes fuentes de información, teniendo en cuenta las continuidades y permanencias en diferentes periodos y lugares. AÑO XLI Núm. 134 14 de julio de 2022 24596",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Interpretar el entorno desde una perspectiva sistémica e integradora, a través del concepto de paisaje, identificando sus principales elementos y las interrelaciones existentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar el grado de sostenibilidad y de equilibrio de los diferentes espacios y desde distintas escalas, y analizar su transformación y degradación a través del tiempo por la acción humana en la explotación de los recursos, su relación con la evolución de la población y las estrategias desarrolladas para su control y dominio y los conflictos que ha provocado.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Argumentar la necesidad de acciones de defensa, protección, conservación y mejora del entorno (natural, rural y urbano) a través de propuestas e iniciativas que reflejen compromisos y conductas en favor de la sostenibilidad y del reparto justo y solidario de los recursos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar, interpretar y analizar los mecanismos que han regulado la convivencia y la vida en común a lo largo de la historia, desde el origen de la sociedad a las distintas civilizaciones que se han ido sucediendo, señalando los principales modelos de organización social, política, económica y religiosa que se han gestado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Señalar y explicar aquellas experiencias históricas más destacables, y anteriores a la época contemporánea, en las que se logró establecer sistemas políticos que favorecieron el ejercicio de derechos y libertades de los individuos y de la colectividad, considerándolas como antecedentes de las posteriores conquistas democráticas y referentes históricos de las libertades actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Mostrar actitudes pacíficas y respetuosas y asumir las normas como marco necesario para la convivencia, demostrando capacidad crítica e identificando y respondiendo de manera asertiva ante las situaciones de injusticia y desigualdad.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Situar el nacimiento y desarrollo de distintas civilizaciones y ubicarlas en el espacio y en el tiempo, integrando los elementos históricos, culturales, institucionales y religiosos que las han conformado, explicando la realidad multicultural generada a lo largo del tiempo e identificando sus aportaciones más relevantes a la cultura universal.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer las desigualdades sociales existentes en épocas pasadas y los mecanismos de dominación y control que se han aplicado, identificando aquellos grupos que se han visto sometidos y silenciados, destacando la presencia de mujeres y de personajes pertenecientes a otros colectivos discriminados.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar la diversidad social y cultural, argumentando e interviniendo en favor de la inclusión, así como rechazando y actuando en contra de cualquier actitud o comportamiento discriminatorio o basado en estereotipos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Argumentar e intervenir acerca de la igualdad real de hombres y mujeres actuando en contra de cualquier actitud y comportamiento discriminatorio por razón de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Relacionar las culturas y civilizaciones que se han desarrollado a lo largo de la historia antigua, medieval y moderna con las diversas identidades colectivas que se han ido construyendo hasta la actualidad, reflexionando sobre los múltiples significados que adoptan y sus aportaciones a la cultura humana universal.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Identificar el origen histórico de distintas identidades colectivas que se han desarrollado en España, interpretando el uso que se ha hecho de las mismas y mostrando una actitud de respeto hacia los diferentes sentidos de pertenencia, promoviendo la solidaridad y la cohesión social.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Señalar los fundamentos de la idea de Europa a través de las diferentes experiencias históricas del pasado e identificar el legado histórico, institucional, artístico y cultural como patrimonio común de la ciudadanía europea. AÑO XLI Núm. 134 14 de julio de 2022 24597",
+      "peso": 1
+    },
+    {
+      "id": "CE7.4",
+      "objetivo_id": "CE7",
+      "descripcion": "Valorar, proteger y conservar el patrimonio artístico, histórico y cultural como fundamento de la identidad colectiva local, autonómica, nacional, europea y universal, considerándolo un bien para el disfrute recreativo y cultural y un recurso para el desarrollo de los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Conocer e interpretar los comportamientos demográficos de la población, los cambios que ha experimentado y sus ciclos, identificando y analizando los principales problemas y retos a los que nos enfrentamos en el mundo y en España.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Tomar conciencia del ciclo vital y analizar cómo han cambiado sus características, necesidades y obligaciones en distintos momentos históricos, así como las raíces de la distribución por motivos de género del trabajo doméstico, asumiendo las responsabilidades y compromisos propios de la edad en el ámbito familiar, en el entorno escolar y en la comunidad, y valorando la riqueza que aportan las relaciones intergeneracionales.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.3",
+      "objetivo_id": "CE8",
+      "descripcion": "Relacionar los cambios en los estilos de vida tradicional y contrastarlos con los que son saludables y sostenibles en el entorno, a través de comportamientos respetuosos con la salud propia, con la de los demás y con otros seres vivos, tomando conciencia de la importancia de promover el propio desarrollo personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar e interpretar la conexión de España con los grandes procesos históricos (de las épocas antigua, medieval y moderna), valorando lo que han supuesto para su evolución y señalando las aportaciones de sus habitantes a lo largo de la historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Interpretar desde la perspectiva del desarrollo sostenible y la ciudadanía global los principales desafíos del mundo actual, expresando la importancia de implicarse en la búsqueda de soluciones y en el modo de concretarlos desde su capacidad de acción tanto local como global, valorando la contribución del Estado, sus instituciones y las asociaciones civiles en programas y misiones dirigidos por organismos nacionales e internacionales para el logro de la paz, la seguridad integral, la convivencia social y la cooperación entre los pueblos.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Retos del mundo actual"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Sociedades y territorios"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Compromiso cívico"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Sociedad del conocimiento. Introducción a los objetivos y estrategias de las Ciencias Sociales y al uso de sus procedimientos, términos y conceptos. Uso de plataformas digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Tecnologías de la información. Manejo y utilización de dispositivos, aplicaciones informáticas y plataformas digitales. Búsqueda, tratamiento de la información y elaboración de conocimiento. Uso seguro de las redes de comunicación. Lectura crítica de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Objetivos de Desarrollo Sostenible. La visión de los dilemas del mundo actual, punto de partida para el pensamiento crítico y el desarrollo de juicios propios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Ubicación espacial: representación del espacio, orientación y escalas. Utilización de recursos digitales e interpretación y elaboración de mapas, esquemas, imágenes y representaciones gráficas. Tecnologías de la Información Geográfica (TIG).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Emergencia climática: elementos y factores que condicionan el clima y el impacto de las actividades humanas. Principales medios naturales y su distribución geográfica. Métodos de recogida de datos meteorológicos e interpretación de gráficos. Riesgos y catástrofes climáticas en el presente, en el pasado y en el futuro. Vulnerabilidad, prevención y resiliencia de la población ante las catástrofes naturales y los efectos del cambio climático.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Biodiversidad. Dinámicas y amenazas de los ecosistemas planetarios. Formas y procesos de modificación de la superficie terrestre: el relieve.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Las relaciones entre naturaleza y sociedad: paisajes naturales y humanizados. Riqueza y valor del patrimonio natural. La influencia humana en la alteración de los ecosistemas en el pasado y la actualidad. Conservación y mejora del entorno local y global. Parques Nacionales y espacios protegidos en España y Castilla-La Mancha.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Desafíos demográficos en el mundo actual. Movimientos naturales y espaciales de la población. Causalidad y comparación en el estudio de la diversidad social y cultural y de las estructuras demográficas a distintas escalas (local, regional, nacional, europea y planetaria). Tendencias y problemas demográficos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Aglomeraciones urbanas y ruralidad. El fenómeno urbano: evolución, funciones, estructura y redes. La despoblación y el sostenimiento del mundo rural. El problema de la España vaciada y su repercusión en Castilla-La Mancha. AÑO XLI Núm. 134 14 de julio de 2022 24598 El desarrollo urbano sostenible: la ciudad, espacio de convivencia. Modos y estilos de vida en el contexto de la globalización.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Igualdad. Situaciones discriminatorias de las niñas y de las mujeres en el mundo. Roles de género y su manifestación en todos los ámbitos de la sociedad y la cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Estudio geográfico de la organización política actual de los continentes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Geopolítica. Competencia y conflicto por los recursos y el territorio. Mercados regionales, políticas comerciales y movimientos migratorios. Tensiones internacionales, choques y alianzas entre civilizaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Geografía de la desigualdad. Concentración y distribución de la riqueza. Formas y modos de percibir y representar la desigualdad. Líneas de acción para un reparto justo. La cuestión del mínimo vital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Métodos básicos de investigación para la construcción del conocimiento de la Geografía y la Historia. Metodologías del pensamiento geográfico y del pensamiento histórico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Las fuentes históricas y arqueológicas como base para la construcción del conocimiento histórico. Objetos y artefactos como fuente para la historia y el legado inmaterial. El significado de los archivos, bibliotecas y museos y del legado histórico y cultural como patrimonio colectivo. Las fuentes primarias en el entorno local y regional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Tiempo histórico: construcción e interpretación de líneas de tiempo a través de la linealidad, cronología, simultaneidad y duración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Análisis interdisciplinar del origen del ser humano y del nacimiento de la sociedad. Grandes migraciones humanas y nacimiento de las primeras culturas. Del proceso de hominización a las grandes civilizaciones fluviales. La Prehistoria en los territorios de la actual Castilla-La Mancha.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Complejidad social y nacimiento de la autoridad: familia, clan, tribu, casta, linaje y estamento. Desigualdad social y disputa por el poder desde la Prehistoria y la Antigüedad hasta la Edad Moderna. Formación de oligarquías, la imagen del poder y la evolución de la aristocracia. Del clan a la sociedad estamental.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Las personas invisibilizadas de la historia: mujeres, esclavos y extranjeros desde la Prehistoria a la Edad Moderna. Marginación, segregación, control y sumisión en la historia de la humanidad. Personajes femeninos en el relato de la historia. La resistencia a la opresión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Condicionantes geográficos e interpretaciones históricas del surgimiento de las civilizaciones. Las grandes rutas comerciales y las estrategias por el control de los recursos: talasocracias e imperios, conquista y colonización. Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Violencia y conflictos armados en la Antigüedad, en el Medievo y en la Modernidad. El crecimiento de los ejércitos y la evolución del armamento desde los hoplitas a los tercios. Los civiles durante las guerras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La organización política del ser humano y las formulaciones estatales en el mundo antiguo, medieval y moderno: democracias, repúblicas, imperios y reinos. El Estado Moderno y el Absolutismo. Evolución de la teoría del poder.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "España en el tiempo y su conexión con los grandes procesos de la historia de la humanidad. El legado histórico y el acervo cultural en la formación de las identidades colectivas. Pueblos prerromanos, Hispania y el reino visigodo de Toledo. La evolución de los reinos cristianos medievales de la península ibérica. Al-Ándalus. El Estado Moderno de los Reyes Católicos y de los Austrias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Las raíces clásicas de la cultura occidental. La construcción de las identidades culturales, de la idea de Europa y del eurocentrismo, a través del pensamiento, la mitología y del arte grecolatino, islámico y andalusí. La influencia de las civilizaciones judía e islámica en la cultura europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "La obra de arte: interpretación y análisis. Significado y función de las expresiones artísticas y culturales en las distintas civilizaciones. Diversidad y riqueza cultural. Respeto y conservación del patrimonio material e inmaterial. Arte prehistórico y en la Antigüedad. Arte andalusí, Románico, Gótico. Renacimiento y Barroco. Principales manifestaciones locales, en Castilla-La Mancha, España y Europa. El arte Íbero.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "El papel de la religión en la organización social, la legitimización del poder y la formación de identidades: politeísmo, monoteísmo y el surgimiento de las grandes religiones. Herejías, persecuciones y guerras de religión en la Antigüedad, en el Medievo y en la Modernidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "La transformación humana del territorio y la distribución desigual de los recursos y del trabajo. Evolución de los sistemas económicos, de los ciclos demográficos, de los modos de vida y de los modelos de organización social. La lucha por la supervivencia y el estatus social desde la Prehistoria y la Antigüedad hasta la Edad Moderna.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Interpretación del territorio y del paisaje. La ciudad y el mundo rural a lo largo de la historia: polis, urbes, ciudades, villas y aldeas. La huella humana y la protección del patrimonio ambiental, histórico, artístico y cultural, tanto local como regional, nacional y mundial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Viajes, descubrimientos y sistemas de intercambio en la formación de una economía mundial. La disputa por la hegemonía y la geopolítica en el nacimiento y evolución de la Modernidad. AÑO XLI Núm. 134 14 de julio de 2022 24599",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Ciencia, medicina y avances tecnológicos. La lucha contra epidemias y pandemias. Racionalismo y empirismo en la explicación de la realidad frente a las supersticiones. De la astronomía, medicina e ingeniería en la Antigüedad al método científico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Dignidad humana y derechos universales. Convención sobre los Derechos del Niño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Alteridad: respeto y aceptación del otro. Comportamientos no discriminatorios y contrarios a cualquier actitud segregadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Igualdad de género. Manifestaciones y conductas no sexistas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Interés ante los retos y problemas de actualidad en el entorno local y global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Las redes sociales. Seguridad y prevención ante los riegos y peligros del uso de las tecnologías de la información y de la comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Convivencia cívica y cultura democrática. Incorporación e implicación de la sociedad civil en procesos democráticos. Participación en proyectos comunitarios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Conciencia ambiental. Respeto, protección y cuidado de los seres vivos y del planeta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Conservación y defensa del patrimonio histórico, artístico y cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Solidaridad, empatía y acciones de apoyo a colectivos en situaciones de pobreza, vulnerabilidad y exclusión social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Identificación y gestión de las emociones y su repercusión en comportamientos individuales y colectivos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Ciclos vitales, uso del tiempo libre y hábitos de consumo. Diferencias y cambios en las formas de vida en las sociedades actuales y en las del pasado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "La contribución del Estado y sus instituciones a la paz, a la seguridad integral ciudadana y a la convivencia social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Ciudadanía europea. Ideas y actitudes en el proyecto de construcción de una identidad común. La seguridad y la cooperación internacional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Seguridad vial y movilidad segura, saludable y sostenible. El espacio público.",
+      "criterios_ids": []
+    }
+  ]
+}

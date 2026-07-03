@@ -1,0 +1,435 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "lengua-extranjera-frances",
+    "ciclo_origen": "1er-ciclo",
+    "fuente": "iDoceo_lengua-extranjera-frances_1er-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, por lo menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Comprender el sentido general e información específica y predecible de textos breves y sencillos, expresados de forma clara y en la lengua estándar, haciendo uso de diversas estrategias y recurriendo, cuando sea necesario, al uso de distintos tipos de apoyo, para desarrollar el repertorio lingüístico y para responder a necesidades comunicativas cotidianas. El desarrollo de la comprensión de textos orales, escritos y multimodales es esencial en la competencia comunicativa del alumnado. A medida que esta se desarrolla, el alumnado necesitará realizar menor esfuerzo para comprender, pudiendo llegar a inferir significados del contexto al término de la etapa. En los primeros cursos, la decodificación de textos hará que la lectura y escritura en un segundo idioma sea costosa y exigente. Se iniciará trabajando la palabra y expresiones sencillas en textos breves para pasar posteriormente a trabajar con textos de mayor extensión y complejidad. En segundo ciclo, el alumnado podrá apoyarse en mayor medida en sus conocimientos previos y será capaz de identificar el tema y sentido global del texto para trabajar en tercer ciclo informaciones específicas. Se partirá de textos breves y con temas cercanos a los intereses del alumnado introduciendo posteriormente los textos de ficción en segundo ciclo e introduciendo en el tercero la lectura de los textos literarios. Se guiará al alumnado en el uso de estrategias elementales de comprensión de lenguaje verbal y no verbal para satisfacer diferentes propósitos comunicativos haciendo uso de diferentes recursos analógicos y digitales. El desarrollo de la comprensión oral, escrita y multimodal, será necesaria para construir comunidades de aprendizaje y aprender de manera colaborativa.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA5",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Producir textos sencillos de manera comprensible y estructurada, mediante el empleo de estrategias como la planificación o la compensación, para expresar mensajes breves relacionados con necesidades inmediatas y responder a propósitos comunicativos cotidianos. La adquisición de la producción resulta complementaria a la comprensión y tendrá lugar simultáneamente. En cuanto a producción de textos, se partirá de la frase avanzando en complejidadhacia el texto. Especialmente en el primer ciclo se facilitarán modelos que sirvan de andamiaje de los diferentes tipos de textos orales, escritos y multimodales. Así mismo, debe hacerse explícita la finalidad comunicativa perseguida. Se trabajarán temas cercanos al alumnado adecuando los textos en su extensión. Se utilizarán estrategias de planificación (uso de guías para escribir diferentes tipos de textos, establecer objetivo comunicativo de la tarea, utilizar borradores, hacer lluvia de ideas …) y se introducirá el uso de herramientas analógicas y digitales como apoyo. En segundo ciclo, a medida que el alumnado adquiere mayor destreza, se avanzará en la creación de textos con menos apoyo adecuándose a finalidades establecidas de antemano e introduciendo estructuras y léxico de mayor complejidad. En el tercer ciclo, el alumnado será capaz tanto de producir como de organizar sus producciones adecuándose a las intenciones comunicativas, las características contextuales y la tipología textual.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Interactuar con otras personas usando expresiones cotidianas, recurriendo a estrategias de cooperación y empleando recursos analógicos y digitales, para responder a necesidades inmediatas de su interés en intercambios comunicativos respetuosos con las normas de cortesía. La interacción que se produce en el aula será la base del aprendizaje del alumnado. En este contexto de comunicación y relaciones, el alumnado aprenderá a usar el lenguaje con un propósito comunicativo mediante el que satisfacer necesidades. En primer ciclo las interacciones serán predominantemente orales, guiadas y asistidas. Será necesario apoyarse en recursos verbales y no verbales para transmitir y recibir mensajes mostrando respeto y empatía hacia sus interlocutores. De este modo el alumnado aprenderá a participar en situaciones comunicativas básicas del aula en su día a día. En el segundo ciclo, el alumnado será más autónomo y podrá participar en situaciones de mayor complejidad preparadas previamente, seleccionando estrategias y teniendo en cuenta el contexto y normas de cortesía elementales. En tercer ciclo, el alumnado será capaz de anticipar las necesidades derivadas de una situación comunicativa pudiendo seleccionar y aplicar estrategias para participar en ellas. Será capaz de ajustar su participación atendiendo a las necesidades, ideas y motivaciones de los interlocutores.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3",
+        "CC3",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Mediar en situaciones predecibles, usando estrategias y conocimientos para procesar y transmitir información básica y sencilla, con el fin de facilitar la comunicación. Las características de la competencia en la etapa viene marcada por el desarrollo cognitivo del alumnado de manera que su capacidad de mediación aumentará a medida que su desarrollo cognitivo evolucione, así como sus competencias comunicativas en comprensión, producción e interacción. En la mediación, el alumnado debe actuar como agente social encargado de crear puentes y ayudar a construir o expresar mensajes de forma dialógica o expositiva, no sólo entre lenguas distintas, sino también entre distintas modalidades o registros dentro de una misma lengua. En primer ciclo de primaria, la mediación será bastante básica o inexistente debido a la falta de madurez del alumnado. En el segundo ciclo, el alumnado alcanza una mayor competencia comunicativa. La mayor competencia en comprensión, producción e interacción hará que la competencia en mediar y transmitir información facilitando la comunicación se pueda iniciar de manera básica en primer lugar y pueda ir aumentando a lo largo del ciclo. El alumnado será capaz de interpretar y explicar textos y comunicaciones breves y sencillas, además de aplicar y seleccionar estrategias elementales que ayuden a crear puentes. En tercer ciclo se consolida su pensamiento lógico concreto y evoluciona su capacidad de análisis y síntesis; todo ello unido a una mayor competencia comunicativa hará que su competencia en mediar en diferentes situaciones sea mucho mayor que en los dos ciclos precedentes. Aquí el alumnado será competente en inferir y explicar textos sencillos y tendrá interés en resolver problemas de intercomprensión apoyándose en diferentes recursos; también seleccionará y aplicará estrategias básicas que ayuden a crear puentes adecuadas a las intenciones comunicativas.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Reconocer y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando sobre su funcionamiento e identificando las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas en situaciones conocidas. Las experiencias del alumnado con las lenguas que conoce sirven de base para la ampliación y mejora del aprendizaje de lenguas nuevas y lo ayudan a enriquecer su repertorio lingüístico plurilingüe. En Primaria el alumnado se inicia en la reflexión sobre las lenguas y empieza a establecer las relaciones entre las distintas lenguas de sus repertorios individuales, analizando semejanzas y diferencias. Con todo ello, el alumnado en primer ciclo, llevará a cabo una fase inicial al respecto, ya que la experiencia en su propia lengua es básica. En este ciclo comparará y contrastará similitudes y diferencias sobre aspectos elementales de su funcionamiento, así como identificará y aplicará de forma guiada conocimientos y estrategias de mejora de su capacidad de comunicar, será capaz de identificar y explicar de forma guiada progresos y dificultades elementales de aprendizaje. En segundo ciclo el alumnado será más competente de forma progresiva; comparará y contrastará similitudes y diferencias sobre aspectos básicos, utilizará y diferenciará de forma guiada conocimientos y estrategias. En tercer ciclo su competencia mejora ya que gana en autonomía, por tanto, compara y contrasta las similitudes y diferencias entre las lenguas reflexionando de forma autónoma sobre aspectos básicos, utiliza y diferencia de forma progresivamente autónoma los conocimientos y estrategias de mejora de su capacidad de comunicar y de aprender y registra y utiliza de manera guiada los progresos y dificultades de aprendizaje realizando actividades de autoevaluación y coevaluación.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Apreciar y respetar la diversidad lingüística, cultural y artística a partir de la lengua extranjera identificando y valorando las diferencias y semejanzas entre lenguas y culturas, para aprender a gestionar situaciones interculturales. El alumnado a lo largo de los tres ciclos evolucionará en el desarrollo de esta competencia. A medida que su pensamiento madure, sea más autónomo y más competente en comunicación lingüística, el grado de desarrollo de la misma aumentará. En el primer ciclo el alumnado mostrará interés, identificará de forma guiada las discriminaciones en situaciones cotidianas y reconocerá y apreciará la diversidad lingüística y cultural relacionada con la lengua extranjera. En segundo ciclo, ha adquirido más madurez y actuará con respeto en situaciones interculturales, identificando y comparando las lenguas y culturas y mostrando rechazo ante las discriminaciones; además reconocerá y apreciará la diversidad lingüística, cultural y artística de países donde se habla la lengua extranjera, mostrando interés por comprender elementos culturales y lingüísticos que fomenten la convivencia pacífica. Además, seleccionarán y aplicarán estrategias básicas para entender y apreciar aspectos relevantes de la diversidad lingüística. En tercer ciclo, su grado de madurez y competencia comunicativa ha aumentado considerablemente, actuarán con aprecio y respeto en situaciones interculturales mostrando rechazo ante cualquier discriminación, aceptarán y respetarán la diversidad lingüística, cultural y artística mostrando interés en aspectos de sostenibilidad y democracia, por último, seleccionarán y aplicarán estrategias básicas para entender y apreciar la diversidad lingüística, cultural y artística.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer e interpretar palabras y expresiones habituales en textos orales, escritos y multimodales breves y sencillos sobre temas frecuentes y cotidianos de relevancia personal y próximos a su experiencia, expresados de forma comprensible, clara, sencilla y directa, y en lengua estándar.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Seleccionar y aplicar de forma guiada estrategias elementales en situaciones comunicativas cotidianas y de relevancia para el alumnado con el fin de captar la idea global e identificar elementos específicos con ayuda de elementos lingüísticos y no lingüísticos del contexto y el cotexto.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Expresar oralmente frases cortas y sencillas con información básica sobre asuntos cotidianos y de relevancia para el alumnado, utilizando de forma guiada recursos verbales y no verbales, recurriendo a modelos y estructuras previamente presentados y prestando atención al ritmo, la acentuación y la entonación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Escribir palabras, expresiones conocidas y frases a partir de modelos y con una finalidad específica, a través de herramientas analógicas y digitales, usando estructuras y léxico elemental sobre asuntos cotidianos y de relevancia personal para el alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Seleccionar y aplicar de forma guiada estrategias básicas para producir mensajes breves y sencillos adecuados a las intenciones comunicativas usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Participar, de forma guiada, en situaciones interactivas elementales sobre temas cotidianos, preparadas previamente, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado o el lenguaje no verbal, y mostrando empatía.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Seleccionar y utilizar, de forma guiada y en entornos próximos, estrategias elementales para saludar, despedirse y",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Interpretar y explicar información básica de conceptos, comunicaciones y textos breves y sencillos, de forma guiada, en situaciones en las que atender a la diversidad, mostrando empatía e interés por las y los interlocutores y por los problemas de entendimiento en su entorno inmediato, apoyándose en diversos recursos y soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Comparar y contrastar similitudes y diferencias evidentes entre distintas lenguas",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Mostrar interés por la comunicación intercultural, identificando y analizando, de forma guiada, las discriminaciones, los prejuicios y los estereotipos más comunes, en situaciones cotidianas y habituales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Reconocer y apreciar la diversidad lingüística y cultural relacionada con la lengua extranjera, mostrando interés por conocer sus elementos culturales y lingüísticos elementales.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A",
+      "bloque_id": null,
+      "descripcion": "A. Comunicación",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "Autoconfianza en el uso de la lengua extranjera.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las estrategias elementales para la comprensión y la producción de textos orales, escritos y multimodales breves, sencillos y contextualizados.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.3",
+      "bloque_id": null,
+      "descripcion": "Funciones comunicativas elementales adecuadas al ámbito y al contexto: saludar (Salut, bonjour, aurevoir, à bientôt), despedirse, presentar y presentarse; identificar las características de personas, objetos y lugares; responder a preguntas concretas sobre cuestiones cotidianas; expresar el tiempo, la cantidad y el espacio. Expresión del gusto (j’aime, j’adore) y la preferencia ( mon animal préféré). Descripción de personas, animales y objetos.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.4",
+      "bloque_id": null,
+      "descripcion": "Modelos contextuales elementales en la comprensión y producción de textos orales, escritos y multimodales, breves y sencillos, tales como felicitaciones, notas, listas o avisos.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.5",
+      "bloque_id": null,
+      "descripcion": "Unidades lingüísticas elementales y significados asociados a dichas estructuras tales como expresión de la entidad y sus propiedades, cantidad y número, afirmación, exclamación, negación, interrogación.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE3.1",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.6",
+      "bloque_id": null,
+      "descripcion": "Léxico elemental y de interés para el alumnado relativo a relaciones interpersonales básicas, vivienda, lugares y entornos cercano.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.7",
+      "bloque_id": null,
+      "descripcion": "Iniciación a patrones sonoros y acentuales elementales.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.8",
+      "bloque_id": null,
+      "descripcion": "Iniciación a convenciones ortográficas elementales.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.9",
+      "bloque_id": null,
+      "descripcion": "Convenciones y estrategias conversacionales elementales, en formato síncrono o asíncrono, para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, preguntar y responder, normas de cortesía (merci, s’ilvousplaît). Actitudes (interés y respeto por las particularidades de la francofonía)",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1",
+        "CE3.2",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.10",
+      "bloque_id": null,
+      "descripcion": "Herramientas analógicas y digitales elementales para la comprensión y producción oral, escrita y multimodal.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B",
+      "bloque_id": null,
+      "descripcion": "B. Plurilingüismo",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias y técnicas elementales de detección de las carencias comunicativas y las limitaciones derivadas del nivel de competencia en la lengua extranjera y en las lenguas familiares.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE1.2",
+        "CE3.2",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las estrategias elementales para identificar y utilizar unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": [
+        "CE1.2",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "C",
+      "bloque_id": null,
+      "descripcion": "C. Interculturalidad",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.1",
+      "bloque_id": null,
+      "descripcion": "La lengua extranjera como medio de comunicación y relación con personas de otros países.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "C.2",
+      "bloque_id": null,
+      "descripcion": "Aspectos socioculturales y sociolingüísticos elementales y más significativos relativos a las costumbres y la vida cotidiana en países donde se habla la lengua extranjera.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "C.3",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las estrategias básicas de uso común para entender y apreciar la diversidad lingüística, cultural y artística, atendiendo a valores ecosociales y democráticos.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    }
+  ]
+}

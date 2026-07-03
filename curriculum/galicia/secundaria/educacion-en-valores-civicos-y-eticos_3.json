@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "educacion-en-valores-civicos-y-eticos",
-    "curso": "3º",
+    "ciclo_origen": "3º",
     "fuente": "iDoceo_educacion-en-valores-civicos-y-eticos_3º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "3º"
   },
   "competencias": [
     {

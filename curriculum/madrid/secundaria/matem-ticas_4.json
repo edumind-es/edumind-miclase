@@ -1,0 +1,709 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "matem-ticas",
+    "ciclo_origen": "4-eso-matem-ticas-b",
+    "fuente": "iDoceo_16_matem_ticas_4-eso-matem-ticas-b.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar, modelizar y resolver problemas de la vida cotidiana y propios de las matemáticas, aplicando diferentes estrategias y formas de razonamiento para explorar distintas maneras de proceder y obtener soluciones posibles.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD2",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Analizar las soluciones de un problema usando diferentes técnicas y herramientas, evaluando las respuestas obtenidas, para verificar su validez e idoneidad desde un punto de vista lógico y su repercusión global.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD2",
+        "CPSAA4",
+        "CC3",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Formular y comprobar conjeturas sencillas o plantear problemas de forma autónoma, reconociendo el valor del razonamiento y la argumentación para generar nuevo conocimiento.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilizar los principios del pensamiento computacional organizando datos, descomponiendo en partes, reconociendo patrones, interpretando, modificando y creando algoritmos, para modelizar situaciones y resolver problemas de forma eficaz.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconocer y utilizar conexiones entre los diferentes elementos matemáticos interconectando conceptos y procedimientos para desarrollar una visión de las matemáticas como un todo integrado.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Identificar las matemáticas implicadas en otras materias y en situaciones reales susceptibles de ser abordadas en términos matemáticos, interrelacionando conceptos y procedimientos, para aplicarlos en situaciones diversas.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD3",
+        "CD5",
+        "CC4",
+        "CE2",
+        "CE3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Representar, de forma individual y colectiva, conceptos, procedimientos y resultados matemáticos usando diferentes tecnologías, para visualizar ideas y estructurar procesos matemáticos.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Comunicar de forma individual y colectiva conceptos, procedimientos y argumentos matemáticos usando lenguaje oral, escrito o gráfico, utilizando la terminología matemática apropiada, para dar significado y coherencia a las ideas matemáticas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CP1",
+        "STEM2",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Desarrollar destrezas personales, identificando y gestionando emociones, poniendo en práctica estrategias de aceptación del error como parte del proceso de aprendizaje y adaptándose ante situaciones de incertidumbre, para mejorar la perseverancia en la consecución de objetivos y el disfrute en el aprendizaje de las matemáticas.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE10",
+      "descripcion": "Desarrollar destrezas sociales reconociendo y respetando las emociones y experiencias de los demás, participando activa y reflexivamente en proyectos en equipos heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y grupal y crear relaciones saludables.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reformular de forma verbal y gráfica problemas matemáticos, interpretando los datos, las relaciones entre ellos y las preguntas planteadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar y seleccionar diferentes herramientas y estrategias elaboradas para resolver un mismo problema valorando su eficiencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Obtener todas las posibles soluciones matemáticas de un problema movilizando los conocimientos y utilizando las herramientas tecnológicas necesarias.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprobar la corrección matemática de las soluciones de un problema.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Justificar las soluciones óptimas de un problema desde diferentes perspectivas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Formular, comprobar e investigar conjeturas de forma guiada.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Plantear variantes de un problema que lleven a una generalización.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Emplear herramientas tecnológicas adecuadas en la investigación y comprobación de conjeturas o problemas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Generalizar patrones y proporcionar una representación computacional de situaciones problematizadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Modelizar situaciones y resolver problemas de forma eficaz interpretando, modificando, generalizando y creando algoritmos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Deducir relaciones entre los conocimientos y experiencias matemáticas, formando un todo coherente.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar y poner en práctica conexiones entre diferentes procesos matemáticos aplicando conocimientos y experiencias previas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Proponer situaciones susceptibles de ser formuladas y resueltas mediante herramientas y estrategias matemáticas, estableciendo y aplicando conexiones entre el mundo real y las matemáticas, y usando los procesos inherentes a la investigación científica y matemática: inferir, medir, comunicar, clasificar y predecir.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar y aplicar conexiones coherentes entre las matemáticas y otras materias realizando un análisis crítico.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar la aportación de las matemáticas al progreso de la humanidad y su contribución a la superación de los retos que demanda la sociedad actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Representar matemáticamente la información más relevante de un problema, conceptos, procedimientos y resultados matemáticos visualizando ideas y estructurando procesos matemáticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Seleccionar entre diferentes herramientas, incluidas las digitales, y formas de representación (pictórica, gráfica, verbal o simbólica) valorando su utilidad para compartir información.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Comunicar ideas, conclusiones, conjeturas y razonamientos matemáticos, utilizando diferentes medios, incluidos los digitales, con coherencia, claridad y terminología apropiada.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconocer y emplear el lenguaje matemático presente en la vida cotidiana y en diversos contextos comunicando mensajes con contenido matemático con precisión y rigor.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar y gestionar las emociones propias y desarrollar el autoconcepto matemático generando expectativas positivas ante nuevos retos matemáticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Mostrar una actitud positiva y perseverante al hacer frente a las diferentes situaciones de aprendizaje de las matemáticas aceptando la crítica razonada.",
+      "peso": 1
+    },
+    {
+      "id": "CE10.1",
+      "objetivo_id": "CE10",
+      "descripcion": "Colaborar activamente y construir relaciones trabajando con las matemáticas en equipos heterogéneos, respetando diferentes opiniones, comunicándose de manera efectiva, pensando de forma crítica y creativa, tomando decisiones y realizando juicios informados.",
+      "peso": 1
+    },
+    {
+      "id": "CE10.2",
+      "objetivo_id": "CE10",
+      "descripcion": "Gestionar el reparto de tareas en el trabajo en equipo, aportando valor, favoreciendo la inclusión, la escucha activa, responsabilizándose del rol asignado y de la propia contribución al equipo.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Números y operaciones"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Medida y geometría"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Geometría en el plano y el espacio"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Álgebra"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Estadística"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Actitudes y aprendizaje"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Realización de estimaciones en diversos contextos analizando y acotando el error cometido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Expresión de cantidades mediante números reales en contextos cotidianos con la precisión requerida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Diferentes representaciones de una misma cantidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Uso de las propiedades de las operaciones aritméticas con números reales en la resolución de situaciones contextualizadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Propiedades y relaciones inversas de las operaciones: cálculos con números reales, incluyendo este con herramientas digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Utilización correcta de las propiedades de los números reales y de la jerarquía de las operaciones para la realización de cálculos aritméticos combinados en papel.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Expresión de los números irracionales como potencias de exponente racional. Racionalización, propiedades de los radicales y aplicaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Logaritmos: definición y propiedades. Aplicación a contextos sencillos como la escala de pH o la escala Ritcher, valorando el concepto de orden de magnitud.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Algunos números irracionales en situaciones de la vida cotidiana. La importancia del número pi y de la proporción aurea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Los conjuntos numéricos (naturales, enteros, racionales y reales): relaciones entre ellos y propiedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Orden en la recta numérica. Representación de números irracionales sobre ella. Intervalos (abiertos, cerrados, mixtos y semirrectas).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Situaciones de proporcionalidad directa e inversa en diferentes contextos: desarrollo y análisis de métodos para la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Reconocimiento de las razones trigonométricas de un ángulo agudo: aplicación a la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Medida de ángulos en el sistema sexagesimal y en radianes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Relaciones métricas en los triángulos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Razones trigonométricas completas y funciones trigonométricas inversas: seno, coseno, tangente, secante, cosecante, cotangente, arcoseno, arcocoseno y arcotangente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Teoría del seno y del coseno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Estudio gráfico del crecimiento y decrecimiento de funciones en contextos de la vida cotidiana diversos con el apoyo de herramientas tecnológicas: tasas de variación absoluta, relativa y media.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Propiedades geométricas de objetos matemáticos y de la vida cotidiana: investigación con programas de geometría dinámica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Razón entre longitudes, áreas y volúmenes de cuerpos semejantes; aplicación a la resolución de problemas geométricos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Relaciones trigonométricas de un ángulo cualquiera: comprensión y reducción al estudio de un ángulo agudo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Figuras y objetos geométricas de dos dimensiones: representación y análisis de sus propiedades utilizando la geometría analítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Coordenadas, puntos y vectores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Conocimiento de las diferentes expresiones algebraicas de una recta: selección de la más adecuada en función de la situación a resolver.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Estudio y discusión analítica de las diferentes posiciones relativas de un par de rectas en el plano: incidencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Transformaciones elementales en la vida cotidiana: investigación con herramientas tecnológicas como programas de geometría dinámica, realidad aumentada… 4. Visualización, razonamiento y modelización geométrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Modelos geométricos: representación y explicación de relaciones numéricas y algebraicas en situaciones diversas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Modelización de elementos geométricos con herramientas tecnológicas como programas de geometría dinámica, realidad aumentada…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Elaboración y comprobación de conjeturas sobre propiedades geométricas mediante programas de geometría dinámica u otras herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Patrones, pautas y regularidades: observación, generalización y término general en casos sencillos. Profundización en la resolución de problemas que impliquen series numéricas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Introducción intuitiva al concepto de límite. El número irracional e.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Modelización y resolución de problemas de la vida cotidiana mediante representaciones matemáticas y lenguaje algebraico, haciendo uso de distintos tipos de funciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias de deducción y análisis de conclusiones razonables de una situación de la vida cotidiana a partir de un modelo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Variables: asociación de expresiones simbólicas al contexto del problema y diferentes usos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Relaciones entre cantidades y sus tasas de cambio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Uso del álgebra simbólica: representación de relaciones funcionales en contextos diversos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Profundización en el cálculo con polinomios. (cid:2) Cálculo de potencias de exponente mayor que dos de un binomio. (cid:2) Fracciones algebraicas: simplificación y operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Búsqueda activa de formas equivalentes de expresiones algebraicas en la resolución de ecuaciones, sistemas de ecuaciones e inecuaciones lineales y no lineales sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias de discusión y búsqueda de soluciones en ecuaciones lineales y no lineales sencillas en situaciones de la vida cotidiana. (cid:2) Resolución de ecuaciones polinómicas de grado superior a dos. Ecuaciones bicuadradas. (cid:2) Otro tipo de ecuaciones: planteamiento y resolución de ecuaciones que contienen radicales o fracciones algebraicas. Estrategias para la resolución de ecuaciones exponenciales y logarítmicas sencillas. (cid:2) Inecuaciones de primer y segundo grado: interpretación gráfica de las soluciones. (cid:2) Sistemas de inecuaciones sencillos con una y dos variables: interpretación gráfica según corresponda sobre la recta o el plano. (cid:2) Sistemas de ecuaciones no lineales: Planteamiento y resolución de problemas de contexto real mediante sistemas de ecuaciones no lineales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Ecuaciones, sistemas e inecuaciones: resolución mediante el uso de la tecnología.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Relaciones cuantitativas en situaciones de la vida cotidiana y las clases de funciones que las modelizan.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.13",
+      "bloque_id": "B4",
+      "descripcion": "Relaciones lineales y no lineales: identificación y comparación de diferentes modos de representación, tablas, gráficas o expresiones algebraicas, y sus propiedades a partir de ellas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.14",
+      "bloque_id": "B4",
+      "descripcion": "Representación de funciones: interpretación de sus propiedades en situaciones de la vida cotidiana y otros contextos. (cid:2) Dominio de definición e imagen de una función. (cid:2) Crecimiento y decrecimiento: máximos y mínimos. (cid:2) Simetría. Funciones pares e impares. (cid:2) Tasa de variación media como medida de la variación de una función en un intervalo. (cid:2) Funciones lineales, cuadráticas y de proporcionalidad inversa. (cid:2) Funciones definidas a trozos a partir de funciones lineales y cuadráticas. (cid:2) Funciones exponenciales y logarítmicas. (cid:2) Funciones trigonométricas: identificación de funciones periódicas y sus parámetros. Periodo y frecuencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.15",
+      "bloque_id": "B4",
+      "descripcion": "Aproximación a la derivación de funciones. Derivación de constantes, potencias, logaritmos, polinomios, funciones trigonométricas, funciones arco, sumas, productos y cocientes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.16",
+      "bloque_id": "B4",
+      "descripcion": "Resolución de problemas mediante la descomposición en partes, la automatización y el pensamiento algorítmico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.17",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias en la interpretación, modificación y creación de algoritmos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.18",
+      "bloque_id": "B4",
+      "descripcion": "Formulación y análisis de problemas de la vida cotidiana mediante programas y otras herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias de recogida y organización de datos de situaciones de la vida cotidiana que involucren una variable estadística bidimensional, discreta o continua. Tablas de contingencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Análisis e interpretación de tablas y gráficos estadísticos de una y dos variables cualitativas, cuantitativas discretas y cuantitativas continuas en contextos reales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Medidas de localización y dispersión: interpretación y análisis de la variabilidad. (cid:2) Profundización en su análisis y aplicación a la resolución de problemas cotidianos: media, moda, mediana, rango o recorrido, desviación típica y varianza. (cid:2) Parámetros de posición: obtención e interpretación. Mediana y cuartiles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Gráficos estadísticos de una y dos variables: representación mediante diferentes tecnologías (calculadora, hoja de cálculo, aplicaciones…), análisis, interpretación y obtención de conclusiones razonadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Interpretación de la relación entre dos variables, valorando gráficamente con herramientas tecnológicas la pertinencia de realizar una regresión lineal. Ajuste lineal con herramientas tecnológicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Experimentos compuestos: planificación, realización y análisis de la incertidumbre asociada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Probabilidad: cálculo aplicando la regla de Laplace y técnicas de recuento en experimentos simples y compuestos (mediante diagramas de árbol, tablas…) y aplicación a la toma de decisiones fundamentadas. Hallar el espacio muestral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Álgebra de conjuntos: unión, intersección y complementario.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Diferentes etapas del diseño de estudios estadísticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias y herramientas de presentación e interpretación de datos relevantes en investigaciones estadísticas mediante herramientas digitales adecuadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "Análisis del alcance de las conclusiones de un estudio estadístico valorando la representatividad de la muestra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Números combinatorios: variaciones, permutaciones y combinaciones. Aplicación a la resolución de problemas. 4. Planificación y realización de experiencias compuestas para estudiar el comportamiento de fenómenos de azar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "Sucesos dependientes e independientes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.14",
+      "bloque_id": "B5",
+      "descripcion": "Tablas de contingencia y diagramas de árbol para la asignación de probabilidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.15",
+      "bloque_id": "B5",
+      "descripcion": "Probabilidad condicionada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Gestión emocional: emociones que intervienen en el aprendizaje de las matemáticas. Autoconciencia y autorregulación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias de fomento de la flexibilidad cognitiva: apertura a cambios de estrategia y transformación del error en oportunidad de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Asunción de responsabilidades y participación activa, optimizando el trabajo en equipo. Estrategias de gestión de conflictos: pedir, dar y gestionar ayuda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Métodos para la gestión y la toma de decisiones adecuadas en la resolución de situaciones propias del quehacer matemático en el trabajo en equipo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "La contribución de las matemáticas al desarrollo de los distintos ámbitos del conocimiento humano.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "primaria",
     "asignatura": "ciencias-naturales",
-    "curso": "2º",
+    "ciclo_origen": "2º",
     "fuente": "iDoceo_ciencias-naturales_2º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "2º"
   },
   "competencias": [
     {

@@ -1,0 +1,591 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "ciencias-sociales",
+    "ciclo_origen": "2o-ciclo",
+    "fuente": "iDoceo_ciencias-sociales_2o-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medioambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio social y cultural, analizando su organización y propiedades, y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural, conservarlo, mejorarlo y emprender acciones para un uso responsable. Los niños y niñas tienen un conjunto de ideas e interpretaciones de la realidad que le rodea que les van a servir de base para la incorporación de nuevos saberes a lo largo de la etapa de Educación Primaria, debido al contacto cotidiano con el medio social y cultural. En primer ciclo, el alumnado puede reconocer las características, organización y propiedades de los elementos del medio social y cultural; así como las conexiones sencillas y directas entre diferentes elementos del medio. Asimismo, se valora que muestre actitudes de respeto para el disfrute del patrimonio cultural, reconociéndolo como un bien común. En segundo ciclo, el alumnado ya puede identificar las características y conexiones anteriores permitiéndole mostrar comprensión de las relaciones que se establecen y valorar y proteger el patrimonio natural y cultural, considerándolo un bien común, adoptando conductas respetuosas para su disfrute y proponiendo acciones para su conservación y mejora. En tercer ciclo, el alumnado ya está preparado para establecer conexiones sencillas entre los elementos del medio, así como comprender y proteger el patrimonio cultural y natural a favor de la sostenibilidad.",
+      "descriptores_ids": [
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Analizar críticamente las causas y consecuencias de la intervención humana en el entorno, integrando los planos social, económico, cultural, tecnológico y ambiental, para favorecer la capacidad para afrontar problemas, buscar soluciones y actuar de manera individual y colaborativa en su resolución, poniendo en práctica hábitos de vida sostenibles y consecuentes con el respeto, cuidado y protección de las personas y del planeta. La enseñanza de la sostenibilidad en el aula permite desarrollar en el alumnado los valores y las habilidades que necesita para hacer contribuciones positivas en el lugar donde vive. A lo largo de la etapa de Educación Primaria se ha de responder a las necesidades e intereses del alumnado y ofrecer oportunidades para explorar temas de la vida real, en contextos locales, relacionados con los globales. En primer ciclo se valora el reconocimiento de elementos y recursos fundamentales del medio físico, social y cultural y su relación con la vida de las personas tomando conciencia de la necesidad de un uso responsable y respetuoso del mismo. En segundo ciclo, el alumnado está preparado para identificar y recoger datos utilizando aparatos de medida; así como establecer relaciones entre algunos factores del medio físico y las formas de vida y actuaciones de las personas y valorar el patrimonio cultural y natural. En tercer ciclo, el alumnado está capacitado para concretar ejemplos en los que el comportamiento humano influya de manera positiva o negativa en el medioambiente, describir algunos efectos de la contaminación sobre las personas, animales, plantas y sus entornos, señalando alternativas para prevenirla o reducirla, así como ejemplo de derroche de recursos.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Observar, comprender e interpretar continuidades y cambios del medio social y cultural, analizando relaciones de causalidad, simultaneidad y sucesión para explicar y valorar las relaciones entre diferentes elementos y acontecimientos. Los saberes relacionados con esta competencia se desarrollan a lo largo de los tres ciclos de Educación Primaria y permiten al alumnado, a medida que adquiera los aprendizajes, ampliar su capacidad para resolver sus dudas y conocer mejor el contexto cultural e histórico en el que vive. Se trata de un proceso continuado. Así, la adquisición de nociones espacio-tiempo, la orientación respecto al tiempo y su orientación les hará llegar a comprender la sucesión de los acontecimientos y a tener una noción del tiempo histórico. La percepción del alumnado cuando llega a primaria está ligada a unos ritmos subjetivos internos y externos característicos de la vida de las personas, que debe completar hasta alcanzar la comprensión de conceptos como sucesión, frecuencia, regularidad, ordenación temporal o simultaneidad al finalizar la etapa de educación primaria. La construcción de noción de tiempo histórico en Educación Primaria va ligada a la construcción del concepto de tiempo histórico. Así, en primer ciclo el alumnado comienza a tomar conciencia de la regularidad de las actividades cotidianas, apareciendo la capacidad de ordenar elementos temporales a pequeña escala. Además, se alcanza progresivamente los principales sistemas de medición del tiempo (horas, días, meses…). En segundo ciclo, numerosas capacidades nuevas van apareciendo: la aparición de los aspectos cíclicos, la coordinación de los distintos sistemas, y la utilización de marcas convencionales como soporte de razonamientos temporales. En tercer ciclo, se produce la adquisición de tiempo histórico con la seriación cronológica de acontecimientos entendida como la capacidad de secuencias acontecimientos del más lejano en el tiempo al más cercano y la adquisición de las nociones complejas del tiempo histórico (cambio y causalidad).",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Reconocer y valorar la diversidad y la igualdad de género, mostrando empatía y respeto por otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de la integración europea. El fomento de la igualdad de género y la diversidad desde las aulas, especialmente con los niños y las niñas de Educación Primaria, es imprescindible para eliminar la discriminación en un futuro cercano. En primer ciclo, se valora que el alumnado agrupe información acerca de manifestaciones culturales del propio entorno y muestre actitudes que fomentan la igualdad de género y las conductas no sexistas reconociendo modelos positivos en el entorno cercano. En segundo ciclo, el alumnado puede contribuir al bienestar individual y colectivo de la sociedad, analizando la importancia demográfica, cultural y económica de las migraciones en la actualidad, valorando la diversidad cultural y la igualdad de género y mostrando empatía y respeto por las étnico-culturas, así como valorar positivamente las acciones que fomentan la igualdad de género y las conductas no sexistas reconociendo modelos positivos a lo largo de la historia. En tercer ciclo, se valora que los niños y niñas contribuyan al bienestar individual y colectivo y al logro de los valores de la integración europea a través del conocimiento de los procesos geográficos, históricos y culturales que han conformado la sociedad actual, valorando la diversidad étnico-cultural o afectivo-sexual, la cohesión social, y mostrando empatía y respeto por las minorías y por la igualdad de género; así como adoptar actitudes de igualdad de género y conductas no sexistas, analizando y contrastando diferentes modelos en nuestra sociedad.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Participar en el entorno y la vida social de forma eficaz y constructiva desde el respeto a los valores democráticos, los derechos humanos y de la infancia y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad para generar interacciones respetuosas y equitativas, y promover la resolución pacífica y dialogada de los conflictos. En la etapa de Educación Primaria, es esencial que el alumnado profundice en el conocimiento de las principales instituciones y organizaciones del medio local, provincial y nacional y sus funciones básicas. Asimismo, se promueve el conocimiento de las relaciones entre las personas, las necesidades y las instituciones, enfocando la atención en las instituciones que pueden intervenir en diferentes situaciones de la vida cotidiana.‚ En primer ciclo, el alumnado puede identificar y conocer responsabilidades, instituciones cercanas y normas básicas de circulación vial que promueven una buena convivencia. En segundo ciclo, los niños y niñas están preparados para participar en las actividades de la comunidad escolar de forma dialogada y democrática, conocer de forma crítica las funciones de las instituciones identificadas en el ciclo anterior y tomar conciencia de la importancia de la movilidad sostenible para desplazarnos por el entorno. En tercer ciclo, el alumnado es capaz de explicar y ejercitar las principales normas, derechos, deberes y libertades que forman parte de la Constitución española y de la de Unión Europea empleando un lenguaje inclusivo y no violento. Asimismo, los niños y niñas de final de etapa están capacitados para tomar conciencia de la importancia de la movilidad sostenible de las personas en el entorno.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas, relacionadas con las Ciencias Sociales, utilizando diferentes fuentes, técnicas, instrumentos y habilidades propias del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural. El desarrollo del pensamiento científico en el alumnado de Educación Primaria se inicia con la exploración del entorno a partir de la observación sistemática del mismo. Las fuentes utilizadas para el desarrollo de habilidades de pensamiento histórico o geográfico deben ser sencillas y adecuadas al nivel de madurez del alumnado en los diferentes ciclos. En el primer ciclo se enfatiza en la formulación de preguntas que promuevan la curiosidad por el entorno que les rodea, incluyendo aspectos geográficos e históricos de su localidad y su entorno y con especial interés por el patrimonio cultural. En segundo ciclo, el alumnado ya pueden sobrepasare los límites de lo físicamente accesible, ampliándolo en el espacio y en el tiempo (a todas las etapas de la historia) para plantear indagaciones, búsqueda de información, deducción de información a partir de fuentes de diferente naturaleza, etc. pero limitadas a cuestiones comprensibles para niños y niñas en su rango de edad, atendiendo para ello a los saberes básicos de cada ciclo.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar las características, organización y propiedades de los elementos del medio social y cultural a través de la observación del entorno y de otros recursos y utilizando las herramientas y procesos adecuados de forma pautada.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar conexiones sencillas entre diferentes elementos del medio social y cultural mostrando comprensión de las relaciones que se establecen.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Valorar y proteger el patrimonio cultural material e inmaterial, considerándolo un bien común, adoptando conductas respetuosas para su disfrute y proponiendo acciones para su conservación y mejora.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Identificar problemas ecosociales, proponer posibles soluciones y poner en práctica estilos de vida sostenible, reconociendo comportamientos respetuosos de cuidado, corresponsabilidad y protección del entorno y uso sostenible de los recursos naturales, y expresando los cambios positivos y negativos causados en el medio por la acción humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Localizar y analizar espacialmente, utilizando nociones básicas de cartografía y representación del espacio mediante mapas, proyecciones y modelos digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Identificar hechos del entorno social y cultural y ordenarlos temporalmente empleando las nociones de causalidad, simultaneidad y sucesión y utilizando representaciones gráficas adecuadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Conocer personas, grupos sociales relevantes y formas de vida de las sociedades históricas desde la Prehistoria hasta la actualidad, incorporando la perspectiva de género y ubicándolas en su etapa cronológica, distinguiendo simultaneidad-sucesión y cambio- permanencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Extraer información de fuentes históricas de diferente naturaleza",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Localizar los hitos geográficos principales de su localidad y de Aragón, analizando sus fuentes de información, sus modelos y estructuras espaciales (de localización, distribución, extensión, relación…).",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Analizar la importancia demográfica, cultural y económica de las migraciones en la actualidad, valorando con respeto y empatía el aporte de la diversidad cultural al bienestar individual y colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Valorar positivamente las acciones que fomentan la igualdad de género y las conductas no sexistas reconociendo modelos positivos a lo largo de la historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Realizar actividades en el contexto de la comunidad escolar, asumiendo responsabilidades y estableciendo acuerdos de forma dialogada y democrática y empleando un lenguaje inclusivo y no violento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Conocer los principales órganos de gobierno y funciones de diversas administraciones y servicios públicos, valorando de forma crítica su funcionamiento y gestión para la seguridad integral ciudadana y la participación democrática.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Interiorizar las normas básicas para el uso de espacios públicos como peatones y usuarios de los medios de locomoción, identificando las principales señales de tráfico y tomando conciencia de la importancia de la movilidad segura, saludable y sostenible tanto para las personas como para el planeta.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Formular preguntas mostrando curiosidad por el medio natural, social y cultural cercano.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Buscar información sencilla de forma guiada procedente de recursos específicos de las Ciencias Sociales, utilizándola en trabajos relacionados con el medio natural, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Utilizar fuentes de diferente naturaleza para realizar tareas sencillas de indagación, sobre aspectos geográficos o históricos de culturas representativas de las diferentes etapas cronológicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Presentar los resultados de las indagaciones o trabajos escolares sobre ciencias sociales de forma oral o escrita utilizando léxico específico básico de las disciplinas de Ciencias Sociales.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A",
+      "bloque_id": null,
+      "descripcion": "A. Cultura científica",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "Iniciación a la investigación y a los métodos de trabajo para la realización de proyectos, que analicen hechos, asuntos y temas de la vida cotidiana o de relevancia actual desde una perspectiva histórica, contextualizándolos en la época correspondiente desde la Prehistoria a la Edad Contemporánea, como son la supervivencia y la alimentación, la vivienda, los intercambios comerciales (de dónde viene el dinero, los trabajos no remunerados), la explotación de bienes comunes y recursos, los avances técnicos.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "Las fuentes históricas: clasificación y utilización de las distintas fuentes (orales, escritas, patrimoniales) como vía para el análisis de los cambios y permanencias en la localidad a lo largo de la historia. Las huellas de la historia en lugares, edificios, objetos, oficios o tradiciones de la localidad.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.4",
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "A.3",
+      "bloque_id": null,
+      "descripcion": "La representación gráfica del espacio y del tiempo. Comparación de mapas y planos de diferentes escalas. Representaciones gráficas y visuales del clima y los paisajes. Las Tecnologías de la Información Geográfica (TIG).",
+      "criterios_ids": [
+        "CE2.2",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "B.1. Retos del mundo actual",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1.1",
+      "bloque_id": null,
+      "descripcion": "El clima y el paisaje. gráfica. Relación entre las zonas climáticas y la diversidad de paisajes. El medio físico de Aragón. Distribución territorial de Aragón.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B.1.2",
+      "bloque_id": null,
+      "descripcion": "Retos demográficos. Ocupación y distribución de la población en el espacio y análisis de los principales problemas y retos demográficos. Representación gráfica y cartográfica de la población. La organización del territorio en Aragón y rasgos básicos de España y en Europa.",
+      "criterios_ids": [
+        "CE3.4",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B.1.3",
+      "bloque_id": null,
+      "descripcion": "Desigualdad social y acceso a los recursos. Usos del espacio por el ser humano y evolución de las actividades productivas. El valor, el control del dinero y medios de pago. De la supervivencia a la sobreproducción.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "B.2. Sociedades en el tiempo",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.2.1",
+      "bloque_id": null,
+      "descripcion": "El tiempo histórico. Nociones temporales y cronología. Representación gráfica del tiempo (líneas del tiempo y ejes cronológicos).",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B.2.2",
+      "bloque_id": null,
+      "descripcion": "Ubicación temporal de las grandes etapas históricas en ejes cronológicos. Características civilizaciones y sociedades representativas de las grandes etapas cronológicas, profundizando en las referentes a España y Aragón.",
+      "criterios_ids": [
+        "CE6.3",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.2.3",
+      "bloque_id": null,
+      "descripcion": "La acción de las mujeres y los hombres como sujetos en la historia. Interpretación del papel de los individuos y de los distintos grupos sociales, relaciones, conflictos, creencias y condicionantes en",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.2.4",
+      "bloque_id": null,
+      "descripcion": "Introducción a las expresiones artísticas y culturales y su contextualización histórica, incluyendo una perspectiva de género. La función del arte y la cultura en el mundo a lo largo de las diferentes etapas históricas.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "B.2.5",
+      "bloque_id": null,
+      "descripcion": "Ejemplos destacados del patrimonio natural y cultural de Aragón. Los espacios protegidos, culturales y naturales, parques culturales y elementos patrimoniales protegidos. Patrimonio material e inmaterial. Su uso, cuidado y conservación.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B.3",
+      "bloque_id": null,
+      "descripcion": "B.3. Alfabetización cívica",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.3.1",
+      "bloque_id": null,
+      "descripcion": "Compromisos y normas para la vida en sociedad.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "B.3.2",
+      "bloque_id": null,
+      "descripcion": "Las costumbres, tradiciones y manifestaciones etnoculturales del entorno. Respeto por la diversidad cultural, los derechos humanos y la cohesión social. La cultura de paz y no violencia.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1",
+        "CE1.1",
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B.3.3",
+      "bloque_id": null,
+      "descripcion": "La organización política y territorial de Aragón y rasgos básicos de España.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B.3.4",
+      "bloque_id": null,
+      "descripcion": "Organización y funcionamiento de la sociedad. Las principales instituciones y entidades del entorno local, regional y nacional y los servicios públicos que prestan. Estructura administrativa de Aragón y aspectos básicos de la España.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B.3.5",
+      "bloque_id": null,
+      "descripcion": "Seguridad vial. La ciudad como espacio de convivencia. Normas de circulación, señales y marcas viales. Movilidad segura, saludable y sostenible como peatones y usuarios de los medios de locomoción.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "B.4",
+      "bloque_id": null,
+      "descripcion": "B.4. Conciencia ecosocial",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.4.1",
+      "bloque_id": null,
+      "descripcion": "Riesgos ambientales y el cambio climático. Introducción a las causas y consecuencias del cambio climático y los riesgos ambientales, y su impacto en los paisajes de la Tierra. Medidas de mitigación y adaptación.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.4.2",
+      "bloque_id": null,
+      "descripcion": "Responsabilidad ecosocial. Ecodependencia e interdependencia entre personas, sociedades y medio natural.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.4.3",
+      "bloque_id": null,
+      "descripcion": "Ciudadanía geográfica espacial.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE2.1",
+        "CE2.2",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE6.1",
+        "CE6.2",
+        "CE6.3",
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B.4.4",
+      "bloque_id": null,
+      "descripcion": "Desequilibrios territoriales",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE2.1",
+        "CE2.2",
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE4.1",
+        "CE4.2",
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE6.1",
+        "CE6.2",
+        "CE6.3",
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B.4.5",
+      "bloque_id": null,
+      "descripcion": "La transformación y la degradación de los ecosistemas naturales por acción humana. Conservación y protección de la naturaleza. El maltrato animal y su prevención.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B.4.6",
+      "bloque_id": null,
+      "descripcion": "Estilos de vida sostenible. El consumo responsable, el uso del agua y la energía, la movilidad sostenible y la gestión de los residuos.",
+      "criterios_ids": [
+        "CE5.3",
+        "CE2.1"
+      ]
+    }
+  ]
+}

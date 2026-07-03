@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "segunda-lengua-extranjera",
-    "curso": "4º",
+    "ciclo_origen": "4º",
     "fuente": "iDoceo_segunda-lengua-extranjera_4º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "4º"
   },
   "competencias": [
     {

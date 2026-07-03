@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "ambito-linguistico-y-social",
-    "curso": "2º",
+    "ciclo_origen": "2º",
     "fuente": "iDoceo_ambito-linguistico-y-social_2º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "2º"
   },
   "competencias": [
     {

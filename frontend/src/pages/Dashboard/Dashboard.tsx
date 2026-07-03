@@ -8,6 +8,9 @@ export default function Dashboard() {
   useEffect(() => { cargarGrupos() }, [cargarGrupos])
 
   const hoy = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
+  const mes = new Date().getMonth() + 1
+  const trimestre = mes >= 9 || mes <= 12 ? 1 : mes <= 3 ? 2 : 3
+  const trimestreLabel = trimestre === 1 ? '1er' : trimestre === 2 ? '2º' : '3er'
 
   return (
     <>
@@ -17,7 +20,7 @@ export default function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>
         <StatCard label="Grupos activos" value={grupos.length} icon="👥" color="var(--azul-700)" />
         <StatCard label="Alumnado total" value={grupos.reduce((s, g) => s + (g.num_alumnos || 0), 0)} icon="🎒" color="var(--verde-500)" />
-        <StatCard label="Trimestre actual" value="2º" icon="📅" color="var(--ambar-500)" />
+        <StatCard label="Trimestre actual" value={trimestreLabel} icon="📅" color="var(--ambar-500)" />
       </div>
 
       <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 14, color: 'var(--azul-700)' }}>Mis grupos</h2>

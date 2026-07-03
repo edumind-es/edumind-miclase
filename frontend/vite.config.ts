@@ -9,6 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
+        maximumFileSizeToCacheInBytes: 7_000_000,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
@@ -37,6 +38,19 @@ export default defineConfig({
   ],
   resolve: {
     alias: { '@': resolve(__dirname, 'src') },
+  },
+  optimizeDeps: {
+    exclude: ['@mlc-ai/web-llm'],
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('@mlc-ai/web-llm')) return 'web-llm'
+        },
+      },
+    },
+    chunkSizeWarningLimit: 3000,
   },
   server: {
     port: 5173,

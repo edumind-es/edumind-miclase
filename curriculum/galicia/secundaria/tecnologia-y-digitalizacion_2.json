@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "tecnologia-y-digitalizacion",
-    "curso": "2º",
+    "ciclo_origen": "2º",
     "fuente": "iDoceo_tecnologia-y-digitalizacion_2º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "2º"
   },
   "competencias": [
     {

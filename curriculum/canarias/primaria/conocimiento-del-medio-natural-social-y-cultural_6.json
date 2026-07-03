@@ -1,0 +1,817 @@
+{
+  "meta": {
+    "comunidad": "Canarias",
+    "etapa": "primaria",
+    "asignatura": "conocimiento-del-medio-natural-social-y-cultural",
+    "ciclo_origen": "tercer-ciclo",
+    "fuente": "iDoceo_01_conocimiento_del_medio_natural_social_y_cultural_tercer-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "6º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario https://sede.gobiernodecanarias.org/boc como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. 5 Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia en Competencia matemática y competencia La competencia matemática y competencia e ingeniería en ciencia, por sus siglas en inglés) entraña la comprensión pensamiento y representación matemáticos, la tecnología La competencia matemática y competencia transformar el entorno de forma comprometida, (competencia matemática permite STEM desarrollar por sus siglas y aplicar en la inglés) perspectiva resolver diversos problemas en diferentes contextos. los métodos científicos, el pensamiento y representación comprensión y explicación del entorno natural y social, métodos de la ingeniería para transformar el entorno metodologías, incluidas la observación y la experimentación, 6 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45543 y sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolver La competencia en ciencia conlleva la comprensión social, utilizando un conjunto de conocimientos y la experimentación, con el fin de plantear pruebas para poder interpretar y transformar competencia en tecnología e ingeniería comprende metodologías propios de las ciencias para transformar las necesidades o deseos de las personas en sostenibilidad. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. 8 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45544 Competencia La competencia digital implica el uso seguro, de las tecnologías digitales para el aprendizaje, la sociedad, así como la interacción con estas. datos, la comunicación y la colaboración, la educación digitales (incluida la programación), la seguridad competencias relacionadas con la ciberseguridad), digital, la privacidad, la propiedad intelectual, computacional y crítico. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario. Competencia personal, social y de Competencia personal, social y de La competencia personal, social y de aprender a aprender uno mismo para autoconocerse, aceptarse y promover La competencia personal, social y de aprender el tiempo y la información eficazmente; colaborar reflexionar resiliencia; y sobre gestionar uno el mismo aprendizaje para a autoconocerse, lo largo de personal frente a la constante; incertidumbre gestionar y a la el complejidad; tiempo y la adaptarse información 10 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45545 de forma constructiva; mantener la resiliencia; vida. Incluye también la capacidad de hacer adaptarse a los cambios; aprender a gestionar conductas contrarias a la convivencia y desarrollar al bienestar físico, mental y emocional propio habilidades para cuidarse a sí mismo y a quienes procesos metacognitivos; identificar conductas contrarias ser capaz de llevar una vida orientada al futuro; para abordarlas; contribuir al bienestar físico, mental conflictos desarrollando en un habilidades contexto para integrador cuidarse y de a apoyo. sí mismo corresponsabilidad; ser capaz de llevar una vida orientada abordar los conflictos en un contexto integrador y de Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento. Competencia ciudadana Competencia ciudadana La competencia ciudadana contribuye a que alumnos responsable y participar plenamente en la vida social La competencia ciudadana contribuye a conceptos y las estructuras sociales, económicas, jurídicas ciudadanía responsable y participar plenamente de los acontecimientos mundiales y el compromiso comprensión de los conceptos y las estructuras ciudadanía mundial. Incluye la alfabetización cívica, así como en el conocimiento de los acontecimientos la sostenibilidad y el logro de una ciudadanía 11 la adopción consciente de los valores propios respeto a los derechos humanos, la reflexión crítica de nuestro tiempo y el desarrollo de un estilo de Desarrollo Sostenible planteados en la Agenda https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45546 de una cultura democrática fundada en el respeto a de los grandes problemas éticos de nuestro tiempo acorde con los Objetivos de Desarrollo Sostenible Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia Competencia emprendedora emprendedora La competencia emprendedora implica desarrollar oportunidades La competencia e ideas, emprendedora utilizando los conocimientos implica desarrollar sobre de valor oportunidades para otras personas. e ideas, utilizando Aporta estrategias los conocimientos necesidades y oportunidades; entrenar el pensamiento resultados de valor para otras personas. Aporta replantear ideas utilizando la imaginación, la creatividad, para detectar necesidades y oportunidades; entrenar entorno, y crear y replantear ideas utilizando la 12 estratégico y la reflexión ética, crítica y constructiva innovación; ética, crítica y y despertar constructiva la disposición dentro de los a aprender, procesos disposición a aprender, a arriesgar y a afrontar Asimismo, implica tomar decisiones basadas en decisiones basadas en la información y el conocimiento de manera ágil con otras personas, con motivación, personas, con motivación, empatía y habilidades de negociación, para llevar las ideas planteadas ideas planteadas a la acción mediante la planificación de social,cultural proyectos sostenibles y económico-financiero. de valor social,cultural Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros https://sede.gobiernodecanarias.org/boc básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresión culturales las ideas, las opiniones, los sentimientos y las emociones creativa en distintas culturas y por medio de una culturales. Implica también un compromiso con la ideas propias y del sentido del lugar que se ocupa 13 ética, crítica y constructiva dentro de los procesos disposición a aprender, a arriesgar y a afrontar decisiones basadas en la información y el conocimiento personas, con motivación, empatía y habilidades ideas planteadas a la acción mediante la planificación social,cultural y económico-financiero. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. https://sede.gobiernodecanarias.org/boc 13"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Utilizar dispositivos y recursos digitales, de forma segura, responsable y eficiente, para buscar información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital de acuerdo con las necesidades digitales del contexto educativo. información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital de acuerdo con las necesidades digitales del contexto educativo. información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital, de acuerdo con las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CE1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural. instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural. instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Resolver problemas a través de proyectos de diseño y de la aplicación del pensamiento computacional, para generar cooperativamente un producto creativo e innovador que responda a necesidades concretas. computacional, para generar cooperativamente un producto creativo e innovador que responda a necesidades concretas. computacional, para generar cooperativamente un producto creativo e innovador que responda a necesidades concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD3",
+        "CD5",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer y tomar conciencia del propio cuerpo, así como de las emociones y sentimientos propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social. propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social. propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio natural, social y cultural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural y natural, conservarlo, mejorarlo y emprender acciones para su uso responsable. cultural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural y natural, conservarlo, mejorarlo y emprender acciones para su uso responsable. cultural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural y natural, conservarlo, mejorarlo y emprender acciones para su uso responsable.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Identificar las causas y consecuencias de la intervención humana en el entorno, desde los puntos de vista social, económico, cultural, tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución, y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta. puntos de vista social, económico, cultural, tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución, y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta. puntos de vista social, económico, cultural, tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución, y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Observar, comprender e interpretar continuidades y cambios del medio social y cultural, analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos. analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos. analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "STEM4",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Reconocer y valorar la diversidad y la igualdad de género, mostrando empatía y respeto por otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de integración europea. otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de integración europea. otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de integración europea.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Participar en el entorno y la vida social de forma eficaz y constructiva desde el respeto a los valores democráticos, los derechos humanos y de la infancia y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad integral ciudadana, para generar interacciones respetuosas y equitativas y promover la resolución pacífica y dialogada de los conflictos. valores democráticos, los derechos humanos y de la infancia, y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad integral ciudadana, para generar interacciones respetuosas y equitativas y promover la resolución pacífica y dialogada de los conflictos. valores democráticos, los derechos humanos y de la infancia y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad integral ciudadana, para generar interacciones respetuosas y equitativas y promover la resolución pacífica y dialogada de los conflictos.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar dispositivos y recursos digitales, de forma segura, responsable, eficiente, saludable y sostenible, de acuerdo con las necesidades del contexto educativo, para buscar información, evaluando su fiabilidad y utilidad, y respetando la propiedad intelectual, para comunicarse y compartir datos y contenido, en plataformas digitales restringidas y seguras, usando la terminología científica apropiada, y para trabajar cooperativamente en equipo y en red.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reelaborar y crear contenidos digitales sencillos, de forma individual, en equipo y en red, para construir, comunicar y compartir nuevos conocimientos de forma creativa, y para resolver problemas concretos o retos, de acuerdo a las necesidades digitales del contexto educativo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Formular preguntas y realizar predicciones razonadas sobre cuestiones científicas sencillas del medio natural, social y cultural, local y global, demostrando y manteniendo la curiosidad; y participar en interacciones comunicativas para intercambiar información, interpretar y valorar el sentido de diversos tipos de textos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar, seleccionar y contrastar información de diferentes fuentes, seguras y fiables, incluidas las digitales, de forma guiada, usando los criterios de fiabilidad de fuentes, adquiriendo léxico científico básico y utilizándola en investigaciones relacionadas con el medio natural, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Diseñar y realizar experimentos guiados, utilizando diferentes técnicas de indagación y modelos, empleando de forma segura las herramientas digitales, los instrumentos y dispositivos apropiados, realizando observaciones y mediciones precisas, y registrándolas correctamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Proponer posibles respuestas a las preguntas planteadas, en diversos textos, a través del análisis y la interpretación de la información y de los resultados obtenidos, valorar la coherencia de las posibles soluciones y compararlas con las predicciones realizadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Comunicar los resultados de las investigaciones, de manera creativa, personal y crítica, adaptando el mensaje y el formato a la audiencia a la que va dirigido, utilizando el lenguaje científico apropiado y explicando los pasos seguidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Plantear, cooperativamente, problemas de diseño que se resuelvan con la creación de un prototipo o solución digital sencilla y sostenible, evaluando las necesidades del entorno, adoptando posturas críticas en los procesos de reflexión guiados y estableciendo objetivos concretos y compartidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Diseñar posibles soluciones, creativas y sostenibles, a los problemas planteados, de acuerdo con técnicas sencillas de los proyectos de diseño y del pensamiento computacional, mediante estrategias básicas de gestión de proyectos cooperativos, teniendo en cuenta los recursos necesarios y estableciendo criterios concretos para participar en procesos de auto y coevaluación de los proyectos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Desarrollar un producto final, creativo e innovador, que dé solución a un problema de diseño, probando en equipo diferentes prototipos o soluciones digitales, y utilizando, de forma segura, las herramientas, los dispositivos, las técnicas, los materiales y los recursos digitales adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Comunicar el diseño de un producto final, adaptando el mensaje y el formato a la audiencia, utilizando la terminología científica apropiada, explicando los pasos seguidos, valorando el proceso realizado y el resultado obtenido, justificando por qué ese prototipo o solución digital cumple con los requisitos del proyecto, y proponiendo posibles retos para futuros proyectos con iniciativa emprendedora.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Promover actitudes que fomenten el bienestar físico, emocional y social, reconociendo y tomando conciencia del propio cuerpo y de los cambios que conlleva la pubertad y la adolescencia, desde la percepción, el reconocimiento y la comprensión emocional, el autocontrol impulsivo, el ajuste afectivo y la responsabilidad emocional, la compensación emocional y la empatía y la comunicación emocional, para establecer relaciones afectivas y sociales saludables.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Adoptar estilos de vida saludables, aplicando el conocimiento científico y los principios de ética y seguridad, valorando la importancia de una alimentación variada, equilibrada y sostenible, la higiene, el ejercicio físico, el contacto con la naturaleza, el descanso, la prevención de enfermedades, los riesgos más relevantes para la salud y los usos de la tecnología y la gestión del tiempo libre, a través de la reflexión y el diálogo.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar y analizar las características, la organización y las propiedades de los elementos del medio natural, social y cultural, partiendo de la biodiversidad del archipiélago canario, a través de la indagación, la búsqueda guiada de la información evaluando su fiabilidad y utilidad, y el pensamiento científico, utilizando las herramientas, los instrumentos y los procesos adecuados para transmitir y compartir los conocimientos en diferentes formatos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Establecer conexiones sencillas entre diferentes elementos del medio natural, social y cultural, reconociendo la formación de las islas Canarias, mostrando comprensión de las relaciones sistémicas que se establecen entre las acciones humanas y el entorno, a nivel mundial y local.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Valorar, proteger y mostrar actitudes de conservación y mejora del patrimonio cultural y del natural, especialmente de Canarias, reconociendo las necesidades y los retos a afrontar, y diseñando propuestas y acciones que reflejen compromisos y conductas en favor de la sostenibilidad en el entorno cercano.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Promover y adoptar estilos de vida sostenibles y consecuentes con el respeto, los cuidados, la corresponsabilidad y la protección de las personas y del planeta, a partir del análisis de las causas y consecuencias de la intervención humana en el entorno, utilizando el pensamiento científico para favorecer un modelo de isla sostenible para Canarias.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Participar, con actitud emprendedora, en la búsqueda, el contraste y la evaluación de propuestas fundamentadas científicamente, para afrontar problemas ecosociales recogidos en los ODS y los retos de la Comunidad Autónoma de Canarias, buscar soluciones y actuar de manera individual y cooperativa en su resolución.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Analizar, adoptando una postura crítica, relaciones de causalidad, simultaneidad y sucesión entre diferentes elementos del medio social y cultural, desde la Edad Media hasta la actualidad, situando cronológicamente los hechos para comunicarlos, adoptando un punto de vista creativo.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Conocer personas, grupos sociales relevantes y formas de vida de las sociedades desde la Edad Media hasta la actualidad, identificando, seleccionando, contrastando la información y transmitiendo rasgos sociales significativos de las distintas épocas de la historia, visibilizando las aportaciones y representación de las mujeres en ellas, incluyendo la sociedad indígena canaria y su modo de vida.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Analizar los procesos geográficos, históricos y culturales que han conformado la sociedad actual y su reflejo en Canarias, valorando la diversidad cultural y la cohesión social, mostrando empatía y respeto por otras culturas, y apreciando la riqueza que aportan a la sociedad canaria.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Promover acciones para la igualdad efectiva entre mujeres y hombres, para evitar las conductas sexistas y para respetar la diversidad afectivo-sexual, analizando y contrastando diferentes modelos en nuestra sociedad, y reflexionando y aplicando las normas de convivencia de manera inclusiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Resolver, de forma pacífica y comunicativa, los conflictos, promoviendo una interacción respetuosa y equitativa, a partir del lenguaje inclusivo y no violento, explicando y ejercitando las principales normas, derechos, deberes y libertades que forman parte de la Constitución española de 1978, y de la Unión Europea, y reconociendo la función que el Estado y sus instituciones desempeñan en el mantenimiento de la paz, la seguridad integral ciudadana y el reconocimiento de las víctimas de violencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Explicar el funcionamiento general de los órganos de gobierno del municipio, de las comunidades autónomas, del Estado español y de la Unión Europea, valorando sus funciones y la gestión de los servicios públicos para la ciudadanía.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "I. Cultura científica"
+    },
+    {
+      "id": "B2",
+      "titulo": "II. Tecnología y digitalización"
+    },
+    {
+      "id": "B3",
+      "titulo": "III. Sociedades y territorios"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación a la investigación científica (observación, formulación de preguntas y predicciones, diseño y realización de experimentos guiados, recogida y análisis de información y datos, comunicación de resultados…) para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Fomento de la curiosidad, la iniciativa, la constancia y el sentido de la responsabilidad en la realización de las diferentes investigaciones a partir de estrategias cooperativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de instrumentos, dispositivos y herramientas digitales apropiados, para realizar observaciones y mediciones precisas de acuerdo con las necesidades de la investigación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Uso del vocabulario científico apropiado relacionado con las diferentes investigaciones para comunicar, compartir y construir nuevos conocimientos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Valoración de la ciencia, la tecnología y la ingeniería como actividades humanas: las profesiones STEM en la actualidad evitando estereotipos sexistas. Desarrollo de la ciencia en Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de la relación entre los avances en matemáticas, ciencia, ingeniería y tecnología, y la evolución de la sociedad en el ámbito científico-tecnológico para divulgar esos conocimientos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Clasificación básica de rocas y minerales. Usos y explotación sostenible de los recursos geológicos, especialmente en Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Identificación de los procesos geológicos básicos de formación y modelado del relieve, aplicando el conocimiento al medio natural canario. Reconocimiento de las particularidades geológicas de formación de las islas Canarias con respecto a otros procesos geológicos (tectónica, sedimentología, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Protección del entorno a partir del reconocimiento y la valoración de los principales ecosistemas y sus paisajes. Acercamiento a la fragilidad de los ecosistemas canarios y el impacto antrópico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Descripción de las funciones vitales básicas del ser humano desde una perspectiva integrada: obtención de energía, relación con el entorno y perpetuación de la especie.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de los cambios físicos, emocionales y sociales que conllevan la pubertad y la adolescencia, para favorecer su aceptación de forma positiva desde la educación afectivo-sexual, adaptada a su nivel madurativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo de pautas para una alimentación saludable y sostenible: diseño de menús saludables, sostenibles y equilibrados. La importancia de la cesta de la compra y del etiquetado de los productos alimenticios para conocer sus nutrientes y su aporte energético.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Adopción de estilos de vida saludables a través de pautas que fomenten una salud física, emocional y social adecuadas: higiene del sueño, prevención y consecuencias del consumo de drogas (legales e ilegales), gestión saludable del ocio y del tiempo libre, contacto con la naturaleza, uso adecuado de las tecnologías.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Conocimiento de actuaciones básicas de primeros auxilios y pautas para la prevención de riesgos y accidentes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Aplicación de estilos de vida saludables relacionados con el bienestar emocional y social: conciencia emocional (percepción, reconocimiento y comprensión emocional de alegría, tristeza, miedo, enfado, asco, sorpresa, culpa, vergüenza, ansiedad, seguridad y amor), regulación emocional (autocontrol impulsivo, ajuste afectivo y responsabilidad emocional), cambio emocional (compensación emocional) y vinculación emocional (empatía y comunicación emocional). Estrategias para el fomento de relaciones afectivas y sociales saludables y de los cuidados de las personas desde la corresponsabilidad e inclusión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de instrumentos para calcular la masa, el volumen y la capacidad de un objeto. El concepto de densidad y su relación con la flotabilidad de un objeto en un líquido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Identificación de las formas de energía, las fuentes y las transformaciones, describiendo las fuentes de energías renovables y no renovables, y su influencia en la contribución al desarrollo sostenible de la sociedad. Reconocimiento del modelo de isla sostenible en Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Uso en la vida cotidiana de la energía eléctrica: fuentes, transformaciones, transferencia, circuitos eléctricos y estructuras robotizadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación a los principios básicos del vuelo a través del conocimiento de diferentes artefactos voladores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Utilización de dispositivos y recursos del entorno digital de aprendizaje de acuerdo con las necesidades del contexto educativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de estrategias de búsqueda de información seguras, responsables y eficientes en internet (valoración, discriminación, selección y organización). Reconocimiento de la autoría y respeto por la propiedad intelectual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Empleo de estrategias de recogida, almacenamiento y representación de datos en diversos formatos, para facilitar su comprensión y análisis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Adopción de reglas básicas de seguridad y privacidad para navegar por internet y para proteger el entorno digital personal de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Reconocimiento de recursos y participación en plataformas digitales restringidas y seguras para comunicarse con otras personas, trabajar cooperativamente, compartir datos y contenidos supervisados de manera segura, a partir del uso de la etiqueta digital, reglas básicas de cortesía y respeto, y estrategias para resolver problemas en la comunicación digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo de estrategias de actuación para fomentar el bienestar digital físico y mental a través del reconocimiento de los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales (tiempo excesivo de uso, ciberacoso, dependencia tecnológica, acceso a contenidos inadecuados, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de las fases de los proyectos de diseño: identificación de necesidades, diseño, prototipado, prueba, evaluación y comunicación, para dar respuesta a un reto o problema del entorno físico, natural, social, cultural o tecnológico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Utilización de herramientas, dispositivos, técnicas, materiales y recursos digitales (programación por bloques, sensores, motores, simuladores, impresoras 3D…), seguros y adecuados a la consecución del proyecto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de las fases del pensamiento computacional (descomposición de una tarea en partes más sencillas, reconocimiento de patrones y creación de algoritmos sencillos para la resolución…) para dar respuesta a un reto o problema del entorno físico, natural, social, cultural o tecnológico, de forma sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo de estrategias creativas en situaciones de incertidumbre (detección de necesidades y oportunidades, adaptación y cambio de propuesta cuando sea necesario, valoración del error propio y ajeno como fuente de aprendizaje, valoración de la diversidad como enriquecimiento en el desempeño cooperativo).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Análisis del futuro de la Tierra y del universo a través de la identificación de los fenómenos físicos y su repercusión en la vida diaria y en el entorno, la exploración espacial, la observación del cielo en Canarias y la contaminación lumínica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Explicación del cambio climático: introducción a la dinámica atmosférica y a las grandes áreas climáticas del mundo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Valoración del entorno natural, de la diversidad geográfica de la España continental e insular, y de Europa. Representación gráfica, visual y cartográfica a través de medios y recursos analógicos y digitales, usando las Tecnologías de la Información Geográfica (TIG).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Conocimiento y aprecio de la diversidad cultural, y en especial en el entorno insular, a través del análisis de los movimientos migratorios, teniendo en cuenta particularmente los que afectan a Canarias; las principales variables demográficas y su representación gráfica; los comportamientos de la población y su evolución; el contraste entre zonas urbanas y despoblación rural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Desarrollo de la ciudadanía activa: fundamentos y principios para la organización política y gestión del territorio en España, y para la participación social y ciudadana europea, nacional y local.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Promoción de la igualdad y conductas no sexistas, a través del desarrollo del pensamiento crítico de los estereotipos y roles en los distintos ámbitos (académico, profesional, social y cultural), y de acciones para la igualdad efectiva entre mujeres y hombres, valorando las mujeres referentes en el contexto del patrimonio social, cultural e histórico canario, y de las mujeres rurales de Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Identificación y aplicación de estrategias para el desarrollo universal: inclusión, equidad y accesibilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Clasificación y utilización de las distintas fuentes históricas (orales, escritas, patrimoniales y museísticas), para identificar y relacionar las acciones y hechos más destacados en la historia (Edad Media, Edad Moderna y Edad Contemporánea), así como el papel representado por los sujetos históricos (individuales y colectivos), acontecimientos y procesos. La sociedad indígena canaria y su modo de vida y la conquista de las islas Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Valoración de los principales movimientos en defensa de los derechos de las mujeres, analizando la situación actual y los retos de futuro en la igualdad de oportunidades entre mujeres y hombres, a nivel mundial, nacional y en Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Importancia de la memoria democrática: análisis multicausal del proceso de construcción de la democracia en España, la constitución española de 1978 y fórmulas para la participación de la ciudadanía en la vida pública.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Identificación de las expresiones artísticas y culturales medievales, modernas y contemporáneas, su contextualización histórica, y su reflejo en Canarias. La función del arte y la cultura en el mundo medieval, moderno y contemporáneo, visibilizando las aportaciones y representación de las mujeres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Valoración del patrimonio cultural y natural de las islas Canarias, como bien y recurso; su uso, cuidado y conservación. Aprecio por la herencia cultural local, nacional y europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de la diversidad cultural y lingüística de España, valorando especialmente el español de Canarias como variedad de prestigio adecuada a todas las situaciones comunicativas. Respeto y valoración de la historia y cultura de minorías étnicas presentes en nuestro país, particularmente las propias del pueblo gitano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Reflexión y análisis de los principios y valores de los derechos humanos y de la infancia y la Constitución española de 1978, derechos y deberes de la ciudadanía así como de la contribución del Estado y sus instituciones, nacionales y locales, a la paz, la seguridad integral y la cooperación internacional para el desarrollo democrático.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Aplicación de la cultura de paz y no violencia a través del pensamiento crítico como herramienta para el análisis de los conflictos de intereses y el reconocimiento de las víctimas de la violencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de la organización política: las principales entidades políticas y administrativas del entorno local, autonómico y nacional en España, sistemas de representación y de participación política.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de las principales instituciones de España y de la Unión Europea, de sus valores, de sus funciones, de sus ámbitos de acción y su repercusión en el entorno cercano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.18",
+      "bloque_id": "B3",
+      "descripcion": "Análisis del cambio climático, de Canarias al mundo: causas, consecuencias, medidas de mitigación y adaptación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.19",
+      "bloque_id": "B3",
+      "descripcion": "Fomento de la responsabilidad ecosocial: ecodependencia, interdependencia e interrelación entre personas, sociedades y medio natural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.20",
+      "bloque_id": "B3",
+      "descripcion": "Reflexión sobre el desarrollo sostenible, el impacto de la actividad humana sobre el espacio y la explotación de los recursos, y la actividad económica y la distribución de la riqueza: desigualdad social en el mundo y en España, atendiendo especialmente a la realidad canaria. Promoción de los ODS y los retos de nuestra Comunidad Autónoma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.21",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de la Agenda Urbana Canaria y el desarrollo urbano sostenible y medidas para desarrollar la ciudad como espacio de convivencia, accesible e igualitaria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.22",
+      "bloque_id": "B3",
+      "descripcion": "Análisis de la economía verde, la influencia de los mercados (de bienes, financiero y laboral) en la vida de la ciudadanía, los agentes económicos y los derechos laborales de mujeres y hombres, el valor social de los impuestos, la responsabilidad social y ambiental de las empresas, la publicidad, el consumo responsable (necesidades y deseos) y los derechos del consumo, de los principales sectores económicos en Canarias y de la repercusión de la fragmentación y aislamiento del archipiélago en el comercio canario.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.23",
+      "bloque_id": "B3",
+      "descripcion": "Identificación de estilos de vida sostenibles para favorecer un modelo de isla sostenible en Canarias. Análisis de los límites del planeta, el agotamiento de recursos y la huella ecológica. EDUCACIÓN ARTÍSTICA Introducción.",
+      "criterios_ids": []
+    }
+  ]
+}

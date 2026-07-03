@@ -1,0 +1,571 @@
+{
+  "meta": {
+    "comunidad": "Canarias",
+    "etapa": "primaria",
+    "asignatura": "educaci-n-art-stica",
+    "ciclo_origen": "segundo-ciclo",
+    "fuente": "iDoceo_02_educaci_n_art_stica_segundo-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario https://sede.gobiernodecanarias.org/boc como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. 5 Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia en Competencia matemática y competencia La competencia matemática y competencia e ingeniería en ciencia, por sus siglas en inglés) entraña la comprensión pensamiento y representación matemáticos, la tecnología La competencia matemática y competencia transformar el entorno de forma comprometida, (competencia matemática permite STEM desarrollar por sus siglas y aplicar en la inglés) perspectiva resolver diversos problemas en diferentes contextos. los métodos científicos, el pensamiento y representación comprensión y explicación del entorno natural y social, métodos de la ingeniería para transformar el entorno metodologías, incluidas la observación y la experimentación, 6 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45543 y sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolver La competencia en ciencia conlleva la comprensión social, utilizando un conjunto de conocimientos y la experimentación, con el fin de plantear pruebas para poder interpretar y transformar competencia en tecnología e ingeniería comprende metodologías propios de las ciencias para transformar las necesidades o deseos de las personas en sostenibilidad. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. 8 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45544 Competencia La competencia digital implica el uso seguro, de las tecnologías digitales para el aprendizaje, la sociedad, así como la interacción con estas. datos, la comunicación y la colaboración, la educación digitales (incluida la programación), la seguridad competencias relacionadas con la ciberseguridad), digital, la privacidad, la propiedad intelectual, computacional y crítico. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario. Competencia personal, social y de Competencia personal, social y de La competencia personal, social y de aprender a aprender uno mismo para autoconocerse, aceptarse y promover La competencia personal, social y de aprender el tiempo y la información eficazmente; colaborar reflexionar resiliencia; y sobre gestionar uno el mismo aprendizaje para a autoconocerse, lo largo de personal frente a la constante; incertidumbre gestionar y a la el complejidad; tiempo y la adaptarse información 10 https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45545 de forma constructiva; mantener la resiliencia; vida. Incluye también la capacidad de hacer adaptarse a los cambios; aprender a gestionar conductas contrarias a la convivencia y desarrollar al bienestar físico, mental y emocional propio habilidades para cuidarse a sí mismo y a quienes procesos metacognitivos; identificar conductas contrarias ser capaz de llevar una vida orientada al futuro; para abordarlas; contribuir al bienestar físico, mental conflictos desarrollando en un habilidades contexto para integrador cuidarse y de a apoyo. sí mismo corresponsabilidad; ser capaz de llevar una vida orientada abordar los conflictos en un contexto integrador y de Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento. Competencia ciudadana Competencia ciudadana La competencia ciudadana contribuye a que alumnos responsable y participar plenamente en la vida social La competencia ciudadana contribuye a conceptos y las estructuras sociales, económicas, jurídicas ciudadanía responsable y participar plenamente de los acontecimientos mundiales y el compromiso comprensión de los conceptos y las estructuras ciudadanía mundial. Incluye la alfabetización cívica, así como en el conocimiento de los acontecimientos la sostenibilidad y el logro de una ciudadanía 11 la adopción consciente de los valores propios respeto a los derechos humanos, la reflexión crítica de nuestro tiempo y el desarrollo de un estilo de Desarrollo Sostenible planteados en la Agenda https://sede.gobiernodecanarias.org/boc Boletín Oficial de Canarias núm. 231 45546 de una cultura democrática fundada en el respeto a de los grandes problemas éticos de nuestro tiempo acorde con los Objetivos de Desarrollo Sostenible Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia Competencia emprendedora emprendedora La competencia emprendedora implica desarrollar oportunidades La competencia e ideas, emprendedora utilizando los conocimientos implica desarrollar sobre de valor oportunidades para otras personas. e ideas, utilizando Aporta estrategias los conocimientos necesidades y oportunidades; entrenar el pensamiento resultados de valor para otras personas. Aporta replantear ideas utilizando la imaginación, la creatividad, para detectar necesidades y oportunidades; entrenar entorno, y crear y replantear ideas utilizando la 12 estratégico y la reflexión ética, crítica y constructiva innovación; ética, crítica y y despertar constructiva la disposición dentro de los a aprender, procesos disposición a aprender, a arriesgar y a afrontar Asimismo, implica tomar decisiones basadas en decisiones basadas en la información y el conocimiento de manera ágil con otras personas, con motivación, personas, con motivación, empatía y habilidades de negociación, para llevar las ideas planteadas ideas planteadas a la acción mediante la planificación de social,cultural proyectos sostenibles y económico-financiero. de valor social,cultural Descriptores Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros https://sede.gobiernodecanarias.org/boc básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresión culturales las ideas, las opiniones, los sentimientos y las emociones creativa en distintas culturas y por medio de una culturales. Implica también un compromiso con la ideas propias y del sentido del lugar que se ocupa 13 ética, crítica y constructiva dentro de los procesos disposición a aprender, a arriesgar y a afrontar decisiones basadas en la información y el conocimiento personas, con motivación, empatía y habilidades ideas planteadas a la acción mediante la planificación social,cultural y económico-financiero. Descriptores Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. https://sede.gobiernodecanarias.org/boc 13"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Descubrir propuestas artísticas de diferentes géneros, estilos, épocas y culturas, a través de la recepción activa, para desarrollar la curiosidad y el respeto por la diversidad. recepción activa, para desarrollar la curiosidad y el respeto por la diversidad. recepción activa, para desarrollar la curiosidad y el respeto por la diversidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD1",
+        "CC1",
+        "CCEC1",
+        "CCEC2",
+        "CCL2",
+        "CP3",
+        "CP2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Investigar sobre manifestaciones culturales y artísticas y sus contextos, empleando diversos canales, medios y técnicas, para disfrutar de ellas, entender su valor y empezar a desarrollar una sensibilidad artística propia. canales, medios y técnicas, para disfrutar de ellas, entender su valor y empezar a desarrollar una sensibilidad artística propia. canales, medios y técnicas, para disfrutar de ellas, entender su valor y empezar a desarrollar una sensibilidad artística propia.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCL2",
+        "CD4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Expresar y comunicar de manera creativa ideas, sentimientos y emociones, experimentando con las posibilidades del sonido, la imagen, el cuerpo y los medios digitales, para producir obras propias. con las posibilidades del sonido, la imagen, el cuerpo y los medios digitales, para producir obras propias. con las posibilidades del sonido, la imagen, el cuerpo y los medios digitales, para producir obras propias.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CP3",
+        "CD3",
+        "CPSAA5",
+        "CE1",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Participar del diseño, la elaboración y la difusión de producciones culturales y artísticas individuales o colectivas, poniendo en valor el proceso y asumiendo diferentes funciones en la consecución de un resultado final, para desarrollar la creatividad, la noción de autoría y el sentido de pertenencia. individuales o colectivas, poniendo en valor el proceso y asumiendo diferentes funciones en la consecución de un resultado final, para desarrollar la creatividad, la noción de autoría y el sentido de pertenencia. individuales o colectivas, poniendo en valor el proceso y asumiendo diferentes funciones en la consecución de un resultado final, para desarrollar la creatividad, la noción de autoría y el sentido de pertenencia.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CD2",
+        "CPSAA4",
+        "CC1",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4",
+        "CD3",
+        "CPSAA5",
+        "CC2"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer propuestas artísticas de diferentes géneros, estilos, épocas y culturas, a través de la recepción activa, con el objetivo de desarrollar la curiosidad y comprender las diferencias culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir manifestaciones culturales y artísticas de diferentes géneros, estilos, épocas y culturas, explorando sus características con actitud abierta e interés y estableciendo relaciones básicas entre ellas para desarrollar la curiosidad y el respeto por la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar y aplicar estrategias para la búsqueda guiada de información sobre manifestaciones culturales y artísticas, a través de canales y medios de acceso, tanto de forma individual como cooperativa, con el fin de desarrollar un pensamiento propio, la autoconfianza y la capacidad de cooperar.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir elementos característicos básicos de distintas manifestaciones culturales y artísticas que forman parte del patrimonio de Canarias y de otras culturas, con actitud de interés y respeto, indicando los canales, los medios y las técnicas utilizados, y analizando sus diferencias y similitudes, con el fin de desarrollar un sentido progresivo de pertenencia e identidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir las sensaciones y emociones producidas por diferentes manifestaciones culturales y artísticas, a partir de su análisis y comprensión, para disfrutar de ellas y empezar a desarrollar una sensibilidad artística propia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Experimentar con los elementos básicos de los distintos lenguajes e instrumentos artísticos, con creatividad y actitud abierta, con el fin de entender sus posibilidades comunicativas y expresivas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Producir obras propias sencillas, utilizando las posibilidades expresivas del cuerpo, el sonido, la imagen y los medios digitales básicos, y mostrando confianza en las propias capacidades, para expresar y comunicar de manera creativa ideas, sentimientos y emociones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar de manera guiada en el diseño de producciones culturales y artísticas, trabajando de forma cooperativa en la consecución de un resultado final planificado y asumiendo diferentes funciones, desde la igualdad y el respeto a la diversidad, para desarrollar la creatividad y el sentido emprendedor.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar en el proceso cooperativo de producciones culturales y artísticas, con actitud abierta y respetuosa, utilizando elementos básicos de diferentes lenguajes y técnicas artísticas, con el fin de desarrollar la aceptación y comprensión del trabajo cooperativo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Compartir los proyectos creativos, empleando estrategias comunicativas básicas, explicando el proceso y el resultado final obtenido, y respetando y valorando las experiencias propias y ajenas, como estrategia para el desarrollo de la creatividad, la noción de autoría y el sentido de pertenencia.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "I. Recepción y análisis"
+    },
+    {
+      "id": "B2",
+      "titulo": "II. Creación e interpretación"
+    },
+    {
+      "id": "B3",
+      "titulo": "III. Artes plásticas, visuales y audiovisuales"
+    },
+    {
+      "id": "B4",
+      "titulo": "IV. Música y artes escénicas y performativas"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Análisis de propuestas del patrimonio cultural y artístico de Canarias, de diferentes corrientes estéticas, procedencias y épocas, producidas por creadores y creadoras locales, regionales y nacionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Adquisición de estrategias de recepción activa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Valoración del silencio como elemento y condición indispensable. Asimilación de las normas comunes de comportamiento y actitud positiva ante el hecho artístico. Valoración del silencio como condición indispensable para la adecuada recepción de propuestas artísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Empleo de vocabulario específico, de uso común, en las artes plásticas y visuales, las artes audiovisuales, la música y las artes escénicas y performativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Utilización de recursos digitales en las artes plásticas y visuales, las artes audiovisuales, la música y las artes escénicas y performativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Adquisición de estrategias básicas de análisis de propuestas artísticas desde una perspectiva de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de las fases del proceso creativo: planificación, interpretación y experimentación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Reconocimiento de profesiones vinculadas con las artes plásticas y visuales, las artes audiovisuales, la música y las artes escénicas y performativas: artesanía, pintura, música, escultura, maquetación, diseño gráfico, iluminación y sonido, realización…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Valoración e interés tanto por el proceso como por el producto final en producciones plásticas, visuales, audiovisuales, musicales, escénicas y performativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de las manifestaciones artísticas del patrimonio cultural de Canarias: pintura, escultura, arquitectura, cerámica y artesanía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Iniciación a la cultura visual. Uso de técnicas y estrategias básicas de lectura e interpretación de la imagen en el mundo actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Empleo de elementos configurativos básicos del lenguaje visual y sus posibilidades expresivas: punto, línea, plano, textura, color, forma y espacio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Utilización de materiales, instrumentos, soportes y técnicas de uso común utilizados en la expresión plástica y visual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Uso de medios, soportes y materiales de expresión plástica y visual. Empleo de técnicas bidimensionales y tridimensionales en dibujos y modelados sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de técnicas, materiales y recursos informáticos y tecnológicos básicos. Aplicación para la captura y manipulación de producciones plásticas y visuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Registro y edición básica de elementos audiovisuales: conceptos, tecnologías, técnicas y recursos elementales y de manejo sencillo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Aplicación de estrategias y técnicas de uso común para la composición de historias audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Identificación del cine como forma de narración audiovisual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Acercamiento a géneros y formatos de producciones audiovisuales: cortometraje, videoclip, documental, spot, reportaje…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Aproximación a las herramientas y técnicas básicas de animación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Descubrimiento de las características elementales del lenguaje audiovisual multimodal: texto, audio, imagen…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Iniciación a la realización de producciones multimodales con diversas herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Identificación visual y auditiva, clasificación y representación elemental del sonido, de sus cualidades y de estructuras rítmico-melódicas, a través de grafías convencionales y no convencionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Identificación visual y auditiva de los instrumentos musicales convencionales, objetos sonoros, cotidiáfonos, así como de los de la música tradicional y popular canaria. Clasificación de la voz y los instrumentos en familias y agrupaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Experimentación y reconocimiento del carácter, el tempo, el compás y el género musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Práctica instrumental, vocal y corporal de manifestaciones propias del patrimonio cultural y artístico de Canarias y de diferentes estilos, épocas y culturas: experimentación, exploración creativa, interpretación e improvisación a partir de sus posibilidades sonoras y expresivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Construcción guiada de instrumentos musicales con materiales de uso común, reutilizados y del entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Aplicación de conceptos básicos de lenguajes musicales en la interpretación y en la improvisación de propuestas musicales vocales e instrumentales. Valoración del silencio como elemento indispensable en la música.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Utilización de herramientas digitales básicas de grabación y edición de audio en la audición y conocimiento de obras diversas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Experimentación y exploración del cuerpo y sus posibilidades motrices y creativas en ejecuciones individuales y grupales vinculadas con el movimiento, la danza, la dramatización y la representación teatral como medios de expresión, diversión e interacción social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Aplicación de técnicas dramáticas, dancísticas y de elementos básicos de lenguajes expresivos. Experimentación con actos performativos elementales e improvisación guiada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Experimentación, exploración e interpretación de danzas tradicionales y populares de Canarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Exploración de las posibilidades expresivas y creativas de uso común de la expresión corporal y dramática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Reconocimiento de los elementos básicos de la representación escénica: roles, materiales y espacios.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -3,9 +3,10 @@
     "comunidad": "Galicia",
     "etapa": "secundaria",
     "asignatura": "geografia-y-historia",
-    "curso": "3º",
+    "ciclo_origen": "3º",
     "fuente": "iDoceo_geografia-y-historia_3º.xlsx",
-    "generado": "2026-06-27"
+    "generado": "2026-06-29",
+    "curso": "3º"
   },
   "competencias": [
     {
