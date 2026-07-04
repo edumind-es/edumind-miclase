@@ -1,13 +1,12 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { cifrarExport, descifrarExport, descargarBlob, type ExportCifrado } from '@/auth/crypto'
-import { useAuth } from '@/auth/AuthProvider'
+import { exportarDatos, importarDatos } from '@/db/queries'
 
 interface Props { onClose: () => void }
 
 type Paso = 'menu' | 'exportar' | 'importar' | 'importar_preview'
 
 export default function ExportImport({ onClose }: Props) {
-  const { headers } = useAuth()
   const [paso, setPaso] = useState<Paso>('menu')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -15,6 +14,12 @@ export default function ExportImport({ onClose }: Props) {
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [datosImport, setDatosImport] = useState<any>(null)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
 
   // ── EXPORTAR ──────────────────────────────────────────────────────
 
@@ -25,9 +30,8 @@ export default function ExportImport({ onClose }: Props) {
     setTrabajando(true)
     setMsg(null)
     try {
-      const res = await fetch('/api/backup/export', { headers: headers() })
-      if (!res.ok) throw new Error('Error al obtener datos del servidor')
-      const datos = await res.json()
+      // Los datos viven en IndexedDB (local-first): se exportan directamente del navegador
+      const datos = JSON.parse(await exportarDatos())
 
       const cifrado = await cifrarExport(datos, password)
       const fecha = new Date().toISOString().slice(0, 10)
@@ -66,19 +70,12 @@ export default function ExportImport({ onClose }: Props) {
     setTrabajando(true)
     setMsg(null)
     try {
-      const datos = await descifrarExport(datosImport, password)
-
-      const res = await fetch('/api/backup/import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...headers() },
-        body: JSON.stringify(datos),
-      })
-      const result = await res.json()
-      if (!res.ok) throw new Error(result.error || 'Error al importar')
+      const datos: any = await descifrarExport(datosImport, password)
+      await importarDatos(JSON.stringify(datos))
 
       setMsg({
         tipo: 'ok',
-        texto: `Importación completada: ${result.importados?.grupos || 0} grupos, ${result.importados?.alumnos || 0} alumnos, ${result.importados?.calificaciones || 0} calificaciones.`,
+        texto: `Importación completada: ${datos.grupos?.length || 0} grupos, ${datos.alumnos?.length || 0} alumnos, ${datos.calificaciones?.length || 0} calificaciones.`,
       })
     } catch (e: any) {
       if (e.name === 'OperationError') {
@@ -95,25 +92,26 @@ export default function ExportImport({ onClose }: Props) {
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      className="modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="card" style={{ width: 460, padding: 32 }}>
+      <div className="card" role="dialog" aria-modal="true" aria-label="Exportar o importar datos" style={{ width: 460, padding: 32 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
             {paso === 'menu' && '📦 Exportar / Importar datos'}
             {paso === 'exportar' && '⬇️ Exportar backup cifrado'}
             {(paso === 'importar' || paso === 'importar_preview') && '⬆️ Importar backup'}
           </h2>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: 'var(--gris-600)' }}>✕</button>
+          <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 
         {/* MENÚ PRINCIPAL */}
         {paso === 'menu' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 4, lineHeight: 1.6 }}>
-              Exporta todos tus datos cifrados con contraseña. El archivo resultante puede importarse en cualquier dispositivo.
-              <br /><strong>Nadie puede leer el backup sin la contraseña — ni el servidor.</strong>
+              Tus datos viven solo en este navegador. Exporta un backup cifrado con contraseña
+              e impórtalo en cualquier otro dispositivo.
+              <br /><strong>Nadie puede leer el backup sin la contraseña — los datos nunca pasan por el servidor.</strong>
             </div>
             <button className="btn-primary" onClick={() => { setPaso('exportar'); setMsg(null); setPassword(''); setConfirm('') }}>
               ⬇️ Exportar mis datos (cifrado con contraseña)
@@ -164,7 +162,8 @@ export default function ExportImport({ onClose }: Props) {
               Archivo cargado correctamente. Introduce la contraseña para descifrar.
             </div>
             <div style={{ fontSize: 12, background: 'var(--ambar-100)', color: 'var(--ambar-500)', padding: '8px 12px', borderRadius: 6 }}>
-              ⚠️ Los datos importados se <strong>añadirán</strong> a los existentes (no se borran datos actuales).
+              ⚠️ La importación <strong>reemplaza</strong> todos los datos actuales de este navegador
+              por los del backup. Si tienes datos aquí que quieras conservar, expórtalos antes.
             </div>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="Contraseña del backup" style={{ width: '100%' }} autoFocus />

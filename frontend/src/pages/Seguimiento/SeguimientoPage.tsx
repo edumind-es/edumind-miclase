@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { getAsignaturas, getResumenPorCriterio } from '@/db/queries'
 
 export default function SeguimientoPage() {
   const [params] = useSearchParams()
@@ -12,26 +13,20 @@ export default function SeguimientoPage() {
 
   useEffect(() => {
     if (!grupoId) return
-    fetch(`/api/asignaturas?grupo_id=${grupoId}`)
-      .then(r => r.json())
+    getAsignaturas(Number(grupoId))
       .then(d => { setAsignaturas(d); if (d[0]) setAsignaturaId(String(d[0].id)) })
   }, [grupoId])
 
   useEffect(() => {
     if (!asignaturaId) return
     setCargando(true)
-    Promise.all([
-      fetch(`/api/calificaciones/resumen-grupo?asignatura_id=${asignaturaId}&trimestre=1`).then(r => r.json()),
-      fetch(`/api/calificaciones/resumen-grupo?asignatura_id=${asignaturaId}&trimestre=2`).then(r => r.json()),
-      fetch(`/api/calificaciones/resumen-grupo?asignatura_id=${asignaturaId}&trimestre=3`).then(r => r.json()),
-    ]).then(([t1, t2, t3]) => {
-      // Agrupa por criterio
+    getResumenPorCriterio(Number(asignaturaId)).then(rows => {
+      // Agrupa por criterio: { criterio, 1T, 2T, 3T }
       const map: Record<string, any> = {}
-      const add = (rows: any[], label: string) => rows.forEach(r => {
+      for (const r of rows) {
         if (!map[r.criterio_id]) map[r.criterio_id] = { criterio: r.criterio_id }
-        map[r.criterio_id][label] = parseFloat(r.media?.toFixed(1) || '0')
-      })
-      add(t1, '1T'); add(t2, '2T'); add(t3, '3T')
+        map[r.criterio_id][`${r.trimestre}T`] = Math.round(r.media * 10) / 10
+      }
       setDatos(Object.values(map))
       setCargando(false)
     })

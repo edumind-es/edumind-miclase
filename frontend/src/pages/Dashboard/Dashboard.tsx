@@ -9,12 +9,15 @@ export default function Dashboard() {
 
   const hoy = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
   const mes = new Date().getMonth() + 1
-  const trimestre = mes >= 9 || mes <= 12 ? 1 : mes <= 3 ? 2 : 3
+  // Curso escolar: sep-dic → 1º, ene-mar → 2º, abr-ago → 3º
+  const trimestre = mes >= 9 ? 1 : mes <= 3 ? 2 : 3
   const trimestreLabel = trimestre === 1 ? '1er' : trimestre === 2 ? '2º' : '3er'
+  const hora = new Date().getHours()
+  const saludo = hora < 13 ? 'Buenos días' : hora < 20 ? 'Buenas tardes' : 'Buenas noches'
 
   return (
     <>
-      <h1 className="page-title">Buenos días 👋</h1>
+      <h1 className="page-title">{saludo} 👋</h1>
       <p style={{ color: 'var(--gris-600)', marginBottom: 28, textTransform: 'capitalize' }}>{hoy}</p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 32 }}>

@@ -43,8 +43,18 @@ function now() {
   return new Date().toISOString()
 }
 
-function generarCodigo(): string {
-  return Math.random().toString(36).substring(2, 6).toUpperCase()
+// Caracteres sin ambigüedad visual (sin 0/O ni 1/I/L)
+const CODIGO_CHARS = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+
+async function generarCodigo(): Promise<string> {
+  for (let intento = 0; intento < 20; intento++) {
+    let codigo = ''
+    for (let i = 0; i < 5; i++) codigo += CODIGO_CHARS[Math.floor(Math.random() * CODIGO_CHARS.length)]
+    const existe = await db.alumnos.where('codigo_cifrado').equals(codigo).count()
+    if (!existe) return codigo
+  }
+  // Salida de emergencia si hubiera 20 colisiones seguidas (prácticamente imposible)
+  return Date.now().toString(36).toUpperCase().slice(-5)
 }
 
 // ─── GRUPOS ───────────────────────────────────────────────────────────────────
@@ -125,7 +135,7 @@ export async function crearAlumno(
   alumno: Omit<Alumno, 'id' | 'created_at'>,
   grupo_id: number
 ): Promise<number> {
-  const codigo_cifrado = alumno.codigo_cifrado || generarCodigo()
+  const codigo_cifrado = alumno.codigo_cifrado || await generarCodigo()
   const id = await db.alumnos.add({
     ...alumno, codigo_cifrado, created_at: now(),
   }) as number
@@ -233,6 +243,31 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
         await db.calificaciones.add({ ...item, fecha: now() })
       }
     }
+  })
+}
+
+// Media por criterio y trimestre de una asignatura (para las gráficas de seguimiento)
+export async function getResumenPorCriterio(asignatura_id: number): Promise<
+  { criterio_id: string; trimestre: number; media: number }[]
+> {
+  const instrumentos = await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray()
+  const instrIds = instrumentos.map(i => i.id!)
+  if (!instrIds.length) return []
+
+  const cals = await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+    .filter(c => c.valor != null).toArray()
+
+  const acc = new Map<string, { suma: number; n: number }>()
+  for (const c of cals) {
+    const key = `${c.criterio_id}::${c.trimestre}`
+    const e = acc.get(key) || { suma: 0, n: 0 }
+    e.suma += c.valor!
+    e.n++
+    acc.set(key, e)
+  }
+  return [...acc.entries()].map(([key, { suma, n }]) => {
+    const [criterio_id, trimestre] = key.split('::')
+    return { criterio_id, trimestre: Number(trimestre), media: suma / n }
   })
 }
 

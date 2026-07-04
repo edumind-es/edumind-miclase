@@ -17,6 +17,7 @@
   --ambar-100: #fef3e2;
   --gris-900:  #1a1a1a;
   --gris-600:  #4a4a4a;
+  --gris-500:  #6e6e6e;
   --gris-300:  #c4c4c4;
   --gris-100:  #f5f5f5;
   --blanco:    #ffffff;
@@ -109,6 +110,27 @@ input:focus, select:focus, textarea:focus {
   font-size: 12px;
   font-weight: 600;
 }
+
+/* Modales */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--gris-600);
+  padding: 4px;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--gris-900); }
 
 /* Color semáforo para celdas del calificador */
 .cal-10, .cal-9 { background: var(--cal-sobresaliente); color: white; }

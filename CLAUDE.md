@@ -1,15 +1,16 @@
 # edumind_miclase — Contexto del proyecto
 
 ## Qué es
-App EDUmind MiClase. Backend Node/Fastify + SQLite (better-sqlite3), auth dual (local + Authentik OIDC) y exportación cifrada AES-256. Frontend React/Vite + TypeScript. Incluye currículum educativo por comunidad autónoma (aragon, canarias, clm, cyl...).
+App EDUmind MiClase. **Local-first**: todos los datos de aula (grupos, alumnado, calificaciones, asistencia, unidades, rúbricas) viven en el navegador del docente (IndexedDB vía Dexie) — el servidor NO almacena datos personales de nadie. El backend Node/Fastify + SQLite solo sirve el currículo (datos públicos) y la auth (local + Authentik OIDC). Backup: exportación cifrada AES-256 hecha en el navegador. Frontend React/Vite + TypeScript. Incluye currículum educativo por comunidad autónoma (aragon, canarias, clm, cyl...).
 
 ## Arquitectura
 edumind_miclase/
-├── backend/          ← Fastify (Node ESM). Entrada: src/index.js
-│   ├── data/         ← SQLite (miclase.db)
+├── backend/          ← Fastify (Node ESM). Entrada: src/index.js. Solo /api/curriculum + /api/auth
+│   ├── data/         ← SQLite (miclase.db): currículo seeded + tabla docentes (auth)
 │   ├── src/plugins/auth.js  ← auth dual local + Authentik OIDC
 │   └── src/routes/auth.js
 ├── frontend/         ← React + Vite + TypeScript
+│   └── src/db/       ← localDb.ts (esquema Dexie) + queries.ts — única fuente de verdad de los datos
 ├── curriculum/       ← currículum por CCAA
 ├── scripts/
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos

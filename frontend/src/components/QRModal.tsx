@@ -16,6 +16,12 @@ export default function QRModal({ url, titulo, onClose }: Props) {
       .then(setDataUrl)
   }, [url])
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
+
   const descargar = () => {
     const a = document.createElement('a')
     a.href = dataUrl
@@ -25,10 +31,10 @@ export default function QRModal({ url, titulo, onClose }: Props) {
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      className="modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="card" style={{ width: 340, textAlign: 'center', padding: 32 }}>
+      <div className="card" role="dialog" aria-modal="true" aria-label={titulo || 'Acceso desde móvil'} style={{ width: 340, textAlign: 'center', padding: 32 }}>
         <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--azul-700)', marginBottom: 4 }}>
           {titulo || 'Acceso desde móvil'}
         </div>

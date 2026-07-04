@@ -13,7 +13,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /^http:\/\/127\.0\.0\.1:3270\/api\//,
+            // Las llamadas al API son same-origin (/api/... vía proxy o nginx)
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/api/'),
             handler: 'NetworkFirst',
             options: { cacheName: 'api-cache', expiration: { maxAgeSeconds: 3600 } },
           },

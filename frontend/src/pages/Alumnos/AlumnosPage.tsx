@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
-import { crearAlumno as dbCrearAlumno } from '@/db/queries'
+import { crearAlumno as dbCrearAlumno, getAlumnosByGrupo } from '@/db/queries'
 
 // ─── Parser de importación masiva ───────────────────────────────────────────
 
@@ -42,8 +42,8 @@ function parsearTexto(texto: string): ParsedAlumno[] {
 
 async function exportarCodigos(grupoId: string | null) {
   if (!grupoId) return
-  const datos = await fetch(`/api/alumnos/codigos/${grupoId}`).then(r => r.json())
-  const csv = ['Código,Apellidos,Nombre', ...datos.map((d: any) => `${d.codigo_cifrado},"${d.apellidos}","${d.nombre}"`)]
+  const datos = await getAlumnosByGrupo(Number(grupoId))
+  const csv = ['Código,Apellidos,Nombre', ...datos.map(d => `${d.codigo_cifrado || ''},"${d.apellidos}","${d.nombre}"`)]
   const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' })
   const a = document.createElement('a')
   a.href = URL.createObjectURL(blob)

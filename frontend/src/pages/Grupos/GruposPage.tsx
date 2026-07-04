@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
+import { getGrupoDetalle } from '@/db/queries'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import ProgramacionPanel from '@/components/ProgramacionPanel'
@@ -164,9 +165,8 @@ function DetalleGrupo() {
   )
 
   useEffect(() => {
-    fetch(`/api/grupos/${id}`)
-      .then(r => r.json())
-      .then(d => { setGrupo(d); setCargando(false) })
+    getGrupoDetalle(Number(id))
+      .then(d => { setGrupo(d ?? null); setCargando(false) })
   }, [id])
 
   const toggleAnon = () => {

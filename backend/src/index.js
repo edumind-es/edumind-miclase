@@ -6,22 +6,24 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import Database from 'better-sqlite3'
 
-import gruposRoutes from './routes/grupos.js'
-import alumnosRoutes from './routes/alumnos.js'
-import asignaturasRoutes from './routes/asignaturas.js'
-import calificacionesRoutes from './routes/calificaciones.js'
+// Local-first: los datos del docente viven en el navegador (IndexedDB).
+// El servidor solo sirve currículo (datos públicos) y autenticación.
 import curriculumRoutes from './routes/curriculum.js'
-import sesionesRoutes from './routes/sesiones.js'
-import unidadesRoutes from './routes/unidades.js'
 import authRoutes from './routes/auth.js'
-import backupRoutes from './routes/backup.js'
 import authPlugin from './plugins/auth.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ROOT = resolve(__dirname, '../..')
 
-const PORT = parseInt(process.env.PORT || '3210', 10)
+const PORT = parseInt(process.env.PORT || '3270', 10)
 const DB_PATH = process.env.DB_PATH || join(ROOT, 'data/miclase.db')
+
+// En producción el JWT de sesión debe firmarse con un secreto propio,
+// nunca con el valor por defecto que está en el repositorio
+if (process.env.NODE_ENV === 'production' && (process.env.JWT_SECRET || '').length < 32) {
+  console.error('ERROR: falta JWT_SECRET (mínimo 32 caracteres) en backend/.env — no se puede arrancar en producción')
+  process.exit(1)
+}
 
 const db = new Database(DB_PATH)
 db.pragma('journal_mode = WAL')
@@ -30,10 +32,6 @@ db.pragma('foreign_keys = ON')
 // Aplicar schema si la DB es nueva
 const schema = readFileSync(join(__dirname, 'db/schema.sql'), 'utf8')
 db.exec(schema)
-
-// Migraciones en caliente (idempotentes)
-try { db.prepare('ALTER TABLE alumnos ADD COLUMN codigo_cifrado TEXT').run() } catch {}
-try { db.prepare('CREATE UNIQUE INDEX IF NOT EXISTS idx_alumnos_codigo ON alumnos(codigo_cifrado)').run() } catch {}
 
 // Docente por defecto en primera ejecución
 if (!db.prepare('SELECT id FROM docentes LIMIT 1').get()) {
@@ -57,14 +55,7 @@ await app.register(authPlugin)
 
 // Rutas
 await app.register(authRoutes, { prefix: '/api/auth' })
-await app.register(backupRoutes, { prefix: '/api/backup' })
-await app.register(gruposRoutes, { prefix: '/api/grupos' })
-await app.register(alumnosRoutes, { prefix: '/api/alumnos' })
-await app.register(asignaturasRoutes, { prefix: '/api/asignaturas' })
-await app.register(calificacionesRoutes, { prefix: '/api/calificaciones' })
 await app.register(curriculumRoutes, { prefix: '/api/curriculum' })
-await app.register(sesionesRoutes, { prefix: '/api/sesiones' })
-await app.register(unidadesRoutes, { prefix: '/api/unidades' })
 
 app.get('/api/health', async () => ({ status: 'ok', version: '0.1.0' }))
 

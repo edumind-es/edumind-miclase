@@ -13,6 +13,12 @@ function calColor(v: number | null | undefined) {
   return `cal-${Math.round(v)}`
 }
 
+// Trimestre del curso escolar según la fecha: sep-dic → 1º, ene-mar → 2º, abr-ago → 3º
+function trimestreActual(): number {
+  const mes = new Date().getMonth() + 1
+  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
+}
+
 export default function EvaluacionPage() {
   const [params] = useSearchParams()
   const grupoId = params.get('grupo_id')
@@ -20,7 +26,7 @@ export default function EvaluacionPage() {
   const unidadIdParam = params.get('unidad_id')
   const headers = useAppStore(s => s._headers)
 
-  const [trimestre, setTrimestre] = useState(2)
+  const [trimestre, setTrimestre] = useState(trimestreActual)
   const [grupos, setGrupos] = useState<any[]>([])
   const [grupoSelId, setGrupoSelId] = useState<string>('')
   const [asignaturas, setAsignaturas] = useState<any[]>([])
@@ -31,7 +37,24 @@ export default function EvaluacionPage() {
   const [calBase, setCalBase] = useState<any>(null)
   const [criterios, setCriterios] = useState<Criterio[]>([])
   const [cargando, setCargando] = useState(false)
+  const [errorCurriculo, setErrorCurriculo] = useState(false)
   const [cambiosPendientes, setCambiosPendientes] = useState<CalIndex>({})
+
+  const nPendientes = Object.keys(cambiosPendientes).length
+
+  // Al cambiar de grupo o asignatura los cambios pendientes dejan de ser válidos:
+  // pedir confirmación antes de descartarlos
+  const confirmarDescarte = () =>
+    nPendientes === 0 ||
+    confirm(`Tienes ${nPendientes} calificación(es) sin guardar. ¿Descartarlas?`)
+
+  // Aviso del navegador si se cierra o recarga con cambios sin guardar
+  useEffect(() => {
+    if (nPendientes === 0) return
+    const avisar = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
+    window.addEventListener('beforeunload', avisar)
+    return () => window.removeEventListener('beforeunload', avisar)
+  }, [nPendientes])
 
   useEffect(() => {
     getGrupos().then(data => {
@@ -54,6 +77,9 @@ export default function EvaluacionPage() {
     })
   }, [grupoSelId])
 
+  // Los cambios pendientes solo son válidos dentro de la misma asignatura
+  useEffect(() => { setCambiosPendientes({}) }, [asignaturaId])
+
   useEffect(() => {
     if (!asignaturaId) { setUnidades([]); return }
     getUnidades(Number(asignaturaId)).then(d => {
@@ -75,8 +101,18 @@ export default function EvaluacionPage() {
       // Criterios vienen del servidor (currículo público — no son datos personales)
       const cursoNorm = base.grupo.curso.replace('º', '').replace('ª', '') + 'º'
       const critsUrl = `/api/curriculum/criterios?asignatura=${encodeURIComponent(base.asig.nombre)}&curso=${cursoNorm}&etapa=${base.grupo.etapa}&comunidad=${encodeURIComponent(base.asig.comunidad)}`
-      const allCrits: Criterio[] = await fetch(critsUrl, { headers: headers() })
-        .then(r => r.json()).catch(() => [])
+      const allCrits: Criterio[] | null = await fetch(critsUrl, { headers: headers() })
+        .then(r => { if (!r.ok) throw new Error(); return r.json() })
+        .catch(() => null)
+
+      if (allCrits === null) {
+        // Distinguir "sin criterios" de "no se pudo cargar el currículo"
+        setErrorCurriculo(true)
+        setCriterios([])
+        setCargando(false)
+        return
+      }
+      setErrorCurriculo(false)
 
       if (unidadId) {
         // Filtrar criterios de esta unidad
@@ -125,7 +161,6 @@ export default function EvaluacionPage() {
     if (base) setCalBase(base)
   }
 
-  const nPendientes = Object.keys(cambiosPendientes).length
   const instrumentos: Instrumento[] = calBase?.instrumentos || []
 
   if (grupos.length === 0) {
@@ -142,17 +177,18 @@ export default function EvaluacionPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)} style={{ minWidth: 120 }}>
+          <select value={grupoSelId} onChange={e => { if (confirmarDescarte()) setGrupoSelId(e.target.value) }} style={{ minWidth: 120 }}>
             {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
           </select>
-          <select value={asignaturaId} onChange={e => setAsignaturaId(e.target.value)} disabled={asignaturas.length === 0} style={{ minWidth: 160 }}>
+          <select value={asignaturaId} onChange={e => { if (confirmarDescarte()) setAsignaturaId(e.target.value) }} disabled={asignaturas.length === 0} style={{ minWidth: 160 }}>
             {asignaturas.length === 0
               ? <option value="">Sin asignaturas</option>
               : asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)
             }
           </select>
+          {/* Los pendientes sobreviven al cambio de unidad/instrumento: la clave incluye instrumento y trimestre */}
           {unidades.length > 0 && (
-            <select value={unidadId} onChange={e => { setUnidadId(e.target.value); setCambiosPendientes({}) }} style={{ minWidth: 140 }}>
+            <select value={unidadId} onChange={e => setUnidadId(e.target.value)} style={{ minWidth: 140 }}>
               <option value="">Todos los criterios</option>
               {unidades.map((u: any) => (
                 <option key={u.id} value={u.id}>{u.nombre}{u.trimestre ? ` (T${u.trimestre})` : ''}</option>
@@ -181,7 +217,7 @@ export default function EvaluacionPage() {
         <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
           {instrumentos.map(ins => (
             <button key={ins.id}
-              onClick={() => { setInstrumentoId(ins.id); setCambiosPendientes({}) }}
+              onClick={() => setInstrumentoId(ins.id)}
               style={{
                 padding: '6px 14px', borderRadius: 20, fontSize: 13, cursor: 'pointer', fontWeight: 600,
                 border: '2px solid',
@@ -204,6 +240,13 @@ export default function EvaluacionPage() {
       )}
 
       {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
+
+      {errorCurriculo && !cargando && (
+        <div className="card" style={{ padding: 24, background: 'var(--ambar-100)', color: 'var(--ambar-500)' }}>
+          ⚠️ No se pudo cargar el currículo del servidor. Comprueba que el backend está
+          arrancado y vuelve a intentarlo — tus calificaciones no se han perdido.
+        </div>
+      )}
 
       {calBase && !cargando && instrumentoId && (
         <CalificadorGrid alumnos={calBase.alumnos} criterios={criterios} getCal={getCal} setCal={setCal} />
