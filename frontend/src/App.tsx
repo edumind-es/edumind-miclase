@@ -8,6 +8,7 @@ import EvaluacionPage from '@/pages/Evaluacion/EvaluacionPage'
 import SeguimientoPage from '@/pages/Seguimiento/SeguimientoPage'
 import InformesPage from '@/pages/Informes/InformesPage'
 import SesionesPage from '@/pages/Sesiones/SesionesPage'
+import EscanearPage from '@/pages/Escanear/EscanearPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
 import ExportImport from '@/components/ExportImport'
 
@@ -16,6 +17,7 @@ const NAV = [
   { to: '/grupos',      label: 'Mis grupos',  icon: '👥' },
   { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
   { to: '/evaluacion',  label: 'Evaluación',  icon: '📋' },
+  { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
   { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
   { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
   { to: '/informes',    label: 'Informes',    icon: '📄' },
@@ -102,6 +104,7 @@ function Layout() {
           <Route path="/grupos/*"      element={<GruposPage />} />
           <Route path="/alumnos/*"     element={<AlumnosPage />} />
           <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
+          <Route path="/escanear"      element={<EscanearPage />} />
           <Route path="/sesiones/*"    element={<SesionesPage />} />
           <Route path="/seguimiento"   element={<SeguimientoPage />} />
           <Route path="/informes"      element={<InformesPage />} />

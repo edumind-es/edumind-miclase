@@ -1,17 +1,29 @@
 import { useEffect, useRef, useState } from 'react'
 import jsPDF from 'jspdf'
-import { getGrupos, getCalificacionesPorGrupo, exportarDatos, importarDatos } from '@/db/queries'
+import { getGrupos, getCalificacionesPorGrupo, getEvidenciasAlumno, exportarDatos, importarDatos } from '@/db/queries'
+import type { Alumno } from '@/db/localDb'
 
 type Grupo = { id: number; nombre: string; etapa: string; curso: string; curso_escolar: string }
+
+function blobADataURL(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(blob)
+  })
+}
 
 export default function InformesPage() {
   const [grupos, setGrupos] = useState<Grupo[]>([])
   const [grupoId, setGrupoId] = useState('')
-  const [nAlumnos, setNAlumnos] = useState(0)
+  const [alumnos, setAlumnos] = useState<Alumno[]>([])
+  const [alumnoSelId, setAlumnoSelId] = useState('')
   const [nAsigs, setNAsigs] = useState(0)
   const [generando, setGenerando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const importRef = useRef<HTMLInputElement>(null)
+  const nAlumnos = alumnos.length
 
   useEffect(() => {
     getGrupos().then(d => {
@@ -24,7 +36,8 @@ export default function InformesPage() {
     if (!grupoId) return
     getCalificacionesPorGrupo(Number(grupoId)).then(({ asignaturas, alumnos }) => {
       setNAsigs(asignaturas.length)
-      setNAlumnos(alumnos.length)
+      setAlumnos(alumnos)
+      setAlumnoSelId(alumnos[0]?.id ? String(alumnos[0].id) : '')
     })
   }, [grupoId])
 
@@ -171,6 +184,153 @@ export default function InformesPage() {
     } finally { setGenerando(false) }
   }
 
+  // ── PDF informe individual (detalle por criterio + evidencias) ─────────
+
+  const generarInformeIndividual = async () => {
+    if (!grupoId || !alumnoSelId) return
+    setGenerando(true); setMsg(null)
+    try {
+      const grupo = grupos.find(g => String(g.id) === grupoId)!
+      const alumno = alumnos.find(a => String(a.id) === alumnoSelId)
+      if (!alumno) throw new Error('Selecciona un alumno.')
+
+      const { asignaturas, calificaciones } = await getCalificacionesPorGrupo(Number(grupoId))
+      const instrToAsig = new Map<number, number>()
+      for (const a of asignaturas) {
+        for (const i of a.instrumentos) {
+          if (i.id != null && a.id != null) instrToAsig.set(i.id, a.id)
+        }
+      }
+      const propias = calificaciones.filter(c => c.alumno_id === alumno.id && c.valor != null)
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+      const W = 210, M = 18
+      let y = 0
+
+      const cabecera = () => {
+        pdf.setFillColor(15, 45, 74)
+        pdf.rect(0, 0, W, 28, 'F')
+        pdf.setTextColor(255, 255, 255)
+        pdf.setFontSize(16); pdf.setFont('helvetica', 'bold')
+        pdf.text('EDUmind MiClase', M, 12)
+        pdf.setFontSize(10); pdf.setFont('helvetica', 'normal')
+        pdf.text(`Informe individual — ${grupo.curso_escolar}`, M, 20)
+        pdf.text(`${grupo.nombre} · ${grupo.etapa} · ${grupo.curso}º`, W - M, 20, { align: 'right' })
+        y = 42
+      }
+      const saltoSiHaceFalta = (alto: number) => {
+        if (y + alto > 278) { pdf.addPage(); y = 20 }
+      }
+
+      cabecera()
+      pdf.setTextColor(15, 45, 74)
+      pdf.setFontSize(14); pdf.setFont('helvetica', 'bold')
+      pdf.text(`${alumno.apellidos}, ${alumno.nombre}`, M, y)
+      y += 10
+
+      // Detalle por asignatura → criterio → trimestres
+      for (const asig of asignaturas) {
+        const instrIds = new Set(asig.instrumentos.map(i => i.id))
+        const deAsig = propias.filter(c => instrIds.has(c.instrumento_id))
+        if (!deAsig.length) continue
+
+        saltoSiHaceFalta(20)
+        pdf.setFontSize(11); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(42, 90, 140)
+        pdf.text(asig.nombre_display, M, y)
+        y += 6
+
+        // medias por criterio y trimestre
+        const porCriterio = new Map<string, Record<number, { suma: number; n: number }>>()
+        for (const c of deAsig) {
+          if (!porCriterio.has(c.criterio_id)) porCriterio.set(c.criterio_id, {})
+          const t = porCriterio.get(c.criterio_id)!
+          if (!t[c.trimestre]) t[c.trimestre] = { suma: 0, n: 0 }
+          t[c.trimestre].suma += c.valor!
+          t[c.trimestre].n++
+        }
+
+        const COL = [M, 120, 140, 160, 182]
+        pdf.setFillColor(230, 238, 248)
+        pdf.rect(M - 2, y - 4, W - 2 * M + 4, 7, 'F')
+        pdf.setFontSize(8.5); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(15, 45, 74)
+        ;['Criterio', 'T1', 'T2', 'T3', 'Media'].forEach((h, i) =>
+          pdf.text(h, COL[i], y, { align: i === 0 ? 'left' : 'right' }))
+        y += 6
+
+        for (const [criterio, trims] of [...porCriterio.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+          saltoSiHaceFalta(8)
+          const vals = [1, 2, 3].map(t => trims[t] ? Math.round(trims[t].suma / trims[t].n * 10) / 10 : null)
+          const con = vals.filter(v => v != null) as number[]
+          const media = con.length ? Math.round(con.reduce((a, b) => a + b, 0) / con.length * 10) / 10 : null
+          pdf.setFontSize(8.5); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(40, 50, 60)
+          pdf.text(criterio, COL[0], y)
+          ;[...vals, media].forEach((v, i) => {
+            const c = v == null ? [150, 150, 150] : v >= 5 ? [22, 101, 52] : [153, 27, 27]
+            pdf.setTextColor(c[0], c[1], c[2])
+            if (i === 3) pdf.setFont('helvetica', 'bold')
+            pdf.text(v != null ? String(v) : '—', COL[i + 1], y, { align: 'right' })
+            pdf.setFont('helvetica', 'normal')
+          })
+          y += 5.5
+        }
+        y += 4
+      }
+
+      // Observaciones registradas
+      const conObs = propias.filter(c => c.observacion?.trim())
+      if (conObs.length) {
+        saltoSiHaceFalta(16)
+        pdf.setFontSize(11); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(42, 90, 140)
+        pdf.text('Observaciones', M, y)
+        y += 6
+        pdf.setFontSize(8.5); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(40, 50, 60)
+        for (const c of conObs) {
+          const linea = `[${c.criterio_id} · T${c.trimestre}] ${c.observacion}`
+          const partes = pdf.splitTextToSize(linea, W - 2 * M) as string[]
+          saltoSiHaceFalta(partes.length * 4.5 + 2)
+          pdf.text(partes, M, y)
+          y += partes.length * 4.5 + 2
+        }
+        y += 4
+      }
+
+      // Evidencias fotográficas (hasta 6)
+      const evidencias = await getEvidenciasAlumno(alumno.id!)
+      if (evidencias.length) {
+        saltoSiHaceFalta(60)
+        pdf.setFontSize(11); pdf.setFont('helvetica', 'bold'); pdf.setTextColor(42, 90, 140)
+        pdf.text(`Evidencias de aprendizaje (${evidencias.length})`, M, y)
+        y += 6
+        const ANCHO = 55, ALTO = 42, GAP = 5
+        let col = 0
+        for (const ev of evidencias.slice(0, 6)) {
+          if (col === 3) { col = 0; y += ALTO + GAP }
+          saltoSiHaceFalta(ALTO + 8)
+          const dataUrl = await blobADataURL(ev.blob)
+          const x = M + col * (ANCHO + GAP)
+          try {
+            pdf.addImage(dataUrl, 'JPEG', x, y, ANCHO, ALTO)
+            pdf.setFontSize(7); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(120, 120, 120)
+            pdf.text(
+              `${new Date(ev.fecha).toLocaleDateString('es-ES')}${ev.criterio_id ? ' · ' + ev.criterio_id : ''}`,
+              x, y + ALTO + 3.5,
+            )
+          } catch { /* imagen ilegible: continuar con las demás */ }
+          col++
+        }
+        y += ALTO + 10
+      }
+
+      pdf.setFontSize(8); pdf.setFont('helvetica', 'italic'); pdf.setTextColor(150, 150, 150)
+      pdf.text(`Generado por EDUmind MiClase · ${new Date().toLocaleDateString('es-ES')}`, W / 2, 288, { align: 'center' })
+
+      pdf.save(`informe-${alumno.apellidos.replace(/\s+/g, '_')}-${grupo.curso_escolar}.pdf`)
+      setMsg({ tipo: 'ok', texto: `Informe de ${alumno.nombre} generado.` })
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message || 'Error al generar el informe.' })
+    } finally { setGenerando(false) }
+  }
+
   // ── Backup / Restore ─────────────────────────────────────────────────
 
   const handleExportarBackup = async () => {
@@ -238,7 +398,23 @@ export default function InformesPage() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 16, marginBottom: 16 }}>
+        <div className="card">
+          <div style={{ fontSize: 36, marginBottom: 12 }}>👤</div>
+          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: 'var(--azul-700)' }}>Informe individual</h2>
+          <p style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 12, lineHeight: 1.6 }}>
+            PDF detallado de un alumno: notas por criterio y trimestre, observaciones y evidencias fotográficas.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <select value={alumnoSelId} onChange={e => setAlumnoSelId(e.target.value)} style={{ flex: 1, minWidth: 150 }}>
+              {alumnos.map(a => <option key={a.id} value={a.id}>{a.apellidos}, {a.nombre}</option>)}
+            </select>
+            <button className="btn-primary" onClick={generarInformeIndividual} disabled={generando || !alumnoSelId}>
+              {generando ? 'Generando…' : '👤 Generar'}
+            </button>
+          </div>
+        </div>
+
         <div className="card">
           <div style={{ fontSize: 36, marginBottom: 12 }}>📊</div>
           <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8, color: 'var(--azul-700)' }}>Exportar calificaciones</h2>

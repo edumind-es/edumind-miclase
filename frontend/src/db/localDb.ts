@@ -118,6 +118,37 @@ export interface Rubrica {
   created_at?: string
 }
 
+// Evidencia de aprendizaje (foto de una producción, etc.) — el blob vive en IndexedDB
+export interface Evidencia {
+  id?: number
+  alumno_id: number
+  asignatura_id?: number | null
+  criterio_id?: string | null
+  trimestre?: number | null
+  tipo: string           // 'foto' (futuro: 'audio', 'video')
+  mime: string
+  blob: Blob
+  descripcion?: string
+  fecha: string
+}
+
+// Plano de clase: dimensiones de la cuadrícula por grupo
+export interface Plano {
+  id?: number
+  grupo_id: number
+  filas: number
+  cols: number
+}
+
+// Asiento de un alumno dentro del plano de su grupo
+export interface Asiento {
+  id?: number
+  grupo_id: number
+  alumno_id: number
+  fila: number
+  col: number
+}
+
 class MiClaseDB extends Dexie {
   grupos!: Table<Grupo>
   alumnos!: Table<Alumno>
@@ -130,6 +161,9 @@ class MiClaseDB extends Dexie {
   unidades!: Table<Unidad>
   unidad_criterios!: Table<UnidadCriterio>
   rubricas!: Table<Rubrica>
+  evidencias!: Table<Evidencia>
+  planos!: Table<Plano>
+  asientos!: Table<Asiento>
 
   constructor() {
     super('miclase_db')
@@ -147,6 +181,11 @@ class MiClaseDB extends Dexie {
     })
     this.version(2).stores({
       rubricas: '++id, instrumento_id',
+    })
+    this.version(3).stores({
+      evidencias: '++id, alumno_id, criterio_id, [alumno_id+criterio_id]',
+      planos:     '++id, grupo_id',
+      asientos:   '++id, grupo_id, [grupo_id+alumno_id], [grupo_id+fila+col]',
     })
   }
 }

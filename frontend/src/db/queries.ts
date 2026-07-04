@@ -2,6 +2,7 @@ import { db } from './localDb'
 import type {
   Grupo, Alumno, GrupoAlumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, UnidadCriterio, Rubrica,
+  Evidencia, Plano, Asiento,
 } from './localDb'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
@@ -147,6 +148,19 @@ export async function actualizarAlumno(id: number, data: Partial<Alumno>): Promi
   await db.alumnos.update(id, data)
 }
 
+// Búsqueda por código de anonimización (lo que contiene el QR de la mesa)
+export async function getAlumnoPorCodigo(codigo: string): Promise<Alumno | undefined> {
+  return db.alumnos.where('codigo_cifrado').equals(codigo.toUpperCase().trim()).first()
+}
+
+// Grupos activos a los que pertenece un alumno
+export async function getGruposDeAlumno(alumno_id: number): Promise<Grupo[]> {
+  const gasoc = await db.grupo_alumnos.where('alumno_id').equals(alumno_id).toArray()
+  const ids = gasoc.filter(ga => ga.activo).map(ga => ga.grupo_id)
+  if (!ids.length) return []
+  return db.grupos.where('id').anyOf(ids).toArray()
+}
+
 export async function eliminarAlumno(alumno_id: number, grupo_id: number): Promise<void> {
   await db.grupo_alumnos
     .where('[grupo_id+alumno_id]').equals([grupo_id, alumno_id])
@@ -226,6 +240,16 @@ export async function getCalificadorBase(
   }
 
   return { alumnos, instrumentos, calificaciones, asig, grupo }
+}
+
+// Nota actual de un alumno en un criterio/instrumento/trimestre concretos
+export async function getCalificacionUnica(
+  alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number
+): Promise<Calificacion | undefined> {
+  return db.calificaciones
+    .where('[alumno_id+instrumento_id+criterio_id+trimestre]')
+    .equals([alumno_id, instrumento_id, criterio_id, trimestre])
+    .first()
 }
 
 export async function saveCalificaciones(items: CalItem[]): Promise<void> {
@@ -310,6 +334,11 @@ export async function getSesiones(grupo_id: number): Promise<Sesion[]> {
 
 export async function crearSesion(data: Omit<Sesion, 'id' | 'created_at'>): Promise<number> {
   return db.sesiones.add({ ...data, created_at: now() }) as Promise<number>
+}
+
+// Edición del diario de sesión (notas, tipo, fecha)
+export async function actualizarSesion(id: number, data: Partial<Sesion>): Promise<void> {
+  await db.sesiones.update(id, data)
 }
 
 export async function getAsistencia(sesion_id: number): Promise<AsistenciaRec[]> {
@@ -462,11 +491,114 @@ export async function eliminarRubrica(instrumento_id: number): Promise<void> {
   await db.rubricas.where('instrumento_id').equals(instrumento_id).delete()
 }
 
+// ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
+
+/**
+ * Comprime una imagen a JPEG (máx. 1600px de lado) antes de guardarla,
+ * para que las fotos de la cámara no llenen la cuota de IndexedDB.
+ */
+export async function comprimirImagen(file: Blob, maxLado = 1600, calidad = 0.8): Promise<Blob> {
+  const bitmap = await createImageBitmap(file)
+  const escala = Math.min(1, maxLado / Math.max(bitmap.width, bitmap.height))
+  const w = Math.round(bitmap.width * escala)
+  const h = Math.round(bitmap.height * escala)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = w
+  canvas.height = h
+  canvas.getContext('2d')!.drawImage(bitmap, 0, 0, w, h)
+  bitmap.close()
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(b => b ? resolve(b) : reject(new Error('No se pudo comprimir la imagen')), 'image/jpeg', calidad)
+  })
+}
+
+export async function crearEvidencia(data: Omit<Evidencia, 'id' | 'fecha'>): Promise<number> {
+  return db.evidencias.add({ ...data, fecha: now() }) as Promise<number>
+}
+
+export async function getEvidenciasAlumno(alumno_id: number): Promise<Evidencia[]> {
+  const evs = await db.evidencias.where('alumno_id').equals(alumno_id).toArray()
+  evs.sort((a, b) => b.fecha.localeCompare(a.fecha))
+  return evs
+}
+
+export async function contarEvidenciasAlumno(alumno_id: number): Promise<number> {
+  return db.evidencias.where('alumno_id').equals(alumno_id).count()
+}
+
+export async function eliminarEvidencia(id: number): Promise<void> {
+  await db.evidencias.delete(id)
+}
+
+export async function actualizarEvidencia(id: number, data: Partial<Pick<Evidencia, 'descripcion' | 'criterio_id' | 'trimestre'>>): Promise<void> {
+  await db.evidencias.update(id, data)
+}
+
+// ─── PLANO DE CLASE ───────────────────────────────────────────────────────────
+
+export type PlanoDetalle = {
+  plano: Plano
+  asientos: Asiento[]
+}
+
+const PLANO_DEFAULT = { filas: 5, cols: 6 }
+
+export async function getPlano(grupo_id: number): Promise<PlanoDetalle> {
+  let plano = await db.planos.where('grupo_id').equals(grupo_id).first()
+  if (!plano) {
+    const id = await db.planos.add({ grupo_id, ...PLANO_DEFAULT }) as number
+    plano = { id, grupo_id, ...PLANO_DEFAULT }
+  }
+  const asientos = await db.asientos.where('grupo_id').equals(grupo_id).toArray()
+  return { plano, asientos }
+}
+
+export async function redimensionarPlano(grupo_id: number, filas: number, cols: number): Promise<void> {
+  const plano = await db.planos.where('grupo_id').equals(grupo_id).first()
+  if (plano?.id != null) await db.planos.update(plano.id, { filas, cols })
+  // Quitar asientos que queden fuera de la nueva cuadrícula
+  await db.asientos.where('grupo_id').equals(grupo_id)
+    .filter(a => a.fila >= filas || a.col >= cols).delete()
+}
+
+export async function asignarAsiento(grupo_id: number, alumno_id: number, fila: number, col: number): Promise<void> {
+  await db.transaction('rw', db.asientos, async () => {
+    // Un alumno solo puede ocupar un asiento, y un asiento un alumno
+    await db.asientos.where('[grupo_id+alumno_id]').equals([grupo_id, alumno_id]).delete()
+    await db.asientos.where('[grupo_id+fila+col]').equals([grupo_id, fila, col]).delete()
+    await db.asientos.add({ grupo_id, alumno_id, fila, col })
+  })
+}
+
+export async function quitarAsiento(grupo_id: number, alumno_id: number): Promise<void> {
+  await db.asientos.where('[grupo_id+alumno_id]').equals([grupo_id, alumno_id]).delete()
+}
+
 // ─── BACKUP / EXPORT / IMPORT ────────────────────────────────────────────────
+
+// Los blobs de evidencias se serializan a base64 para el fichero de backup
+function blobABase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve((reader.result as string).split(',')[1])
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(blob)
+  })
+}
+
+function base64ABlob(b64: string, mime: string): Blob {
+  const bin = atob(b64)
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new Blob([bytes], { type: mime })
+}
 
 export async function exportarDatos(): Promise<string> {
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
-         calificaciones, sesiones, asistencia, unidades, unidad_criterios, rubricas] = await Promise.all([
+         calificaciones, sesiones, asistencia, unidades, unidad_criterios, rubricas,
+         evidencias, planos, asientos] = await Promise.all([
     db.grupos.toArray(),
     db.alumnos.toArray(),
     db.grupo_alumnos.toArray(),
@@ -478,28 +610,47 @@ export async function exportarDatos(): Promise<string> {
     db.unidades.toArray(),
     db.unidad_criterios.toArray(),
     db.rubricas.toArray(),
+    db.evidencias.toArray(),
+    db.planos.toArray(),
+    db.asientos.toArray(),
   ])
+
+  // Serializar los blobs de evidencias a base64
+  const evidenciasSerial = await Promise.all(evidencias.map(async ev => {
+    const { blob, ...rest } = ev
+    return { ...rest, blob_b64: await blobABase64(blob) }
+  }))
+
   return JSON.stringify({
-    version: 2,
+    version: 3,
     exported_at: now(),
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios, rubricas,
+    evidencias: evidenciasSerial, planos, asientos,
   }, null, 2)
 }
 
 export async function importarDatos(json: string): Promise<void> {
   const data = JSON.parse(json)
-  if (![1, 2].includes(data.version)) throw new Error('Versión de backup no compatible')
+  if (![1, 2, 3].includes(data.version)) throw new Error('Versión de backup no compatible')
+
+  // Reconstruir blobs fuera de la transacción (FileReader no puede vivir dentro)
+  const evidencias: Evidencia[] = (data.evidencias || []).map((ev: any) => {
+    const { blob_b64, ...rest } = ev
+    return { ...rest, blob: base64ABlob(blob_b64, ev.mime || 'image/jpeg') }
+  })
 
   await db.transaction('rw',
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
-     db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios, db.rubricas],
+     db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
+     db.rubricas, db.evidencias, db.planos, db.asientos],
     async () => {
       await Promise.all([
         db.grupos.clear(), db.alumnos.clear(), db.grupo_alumnos.clear(),
         db.asignaturas.clear(), db.instrumentos.clear(), db.calificaciones.clear(),
         db.sesiones.clear(), db.asistencia.clear(), db.unidades.clear(),
         db.unidad_criterios.clear(), db.rubricas.clear(),
+        db.evidencias.clear(), db.planos.clear(), db.asientos.clear(),
       ])
       await db.grupos.bulkAdd(data.grupos || [])
       await db.alumnos.bulkAdd(data.alumnos || [])
@@ -512,6 +663,9 @@ export async function importarDatos(json: string): Promise<void> {
       await db.unidades.bulkAdd(data.unidades || [])
       await db.unidad_criterios.bulkAdd(data.unidad_criterios || [])
       await db.rubricas.bulkAdd(data.rubricas || [])
+      await db.evidencias.bulkAdd(evidencias)
+      await db.planos.bulkAdd(data.planos || [])
+      await db.asientos.bulkAdd(data.asientos || [])
     }
   )
 }

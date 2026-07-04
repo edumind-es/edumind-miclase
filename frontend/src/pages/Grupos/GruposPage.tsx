@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { getGrupoDetalle } from '@/db/queries'
+import { imprimirHojaQR } from '@/utils/qrSheet'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import ProgramacionPanel from '@/components/ProgramacionPanel'
+import PlanoClase from '@/components/PlanoClase'
 
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
@@ -220,6 +222,17 @@ function DetalleGrupo() {
             📱 QR acceso móvil
           </button>
           <button
+            className="btn-secondary" style={{ fontSize: 13 }}
+            title="Hoja imprimible con un QR por alumno para pegar en las mesas"
+            onClick={async () => {
+              if (!grupo.alumnos?.length) { alert('El grupo no tiene alumnos.'); return }
+              const conNombres = confirm('¿Incluir los nombres bajo cada QR?\n\nAceptar = con nombres · Cancelar = solo códigos (anónimo)')
+              try { await imprimirHojaQR(grupo, grupo.alumnos, conNombres) }
+              catch (e: any) { alert(e.message) }
+            }}>
+            🖨 QR de mesas
+          </button>
+          <button
             onClick={handleEliminar}
             style={{ fontSize: 13, padding: '6px 12px', background: 'none', border: '1px solid var(--rojo-500)', color: 'var(--rojo-500)', borderRadius: 8, cursor: 'pointer' }}
             title="Eliminar grupo"
@@ -259,6 +272,8 @@ function DetalleGrupo() {
           ))}
         </div>
       </div>
+
+      <PlanoClase grupoId={Number(id)} alumnos={grupo.alumnos || []} modoAnon={modoAnon} />
 
       <AsignaturasPanel grupoId={id!} etapa={grupo.etapa} curso={grupo.curso} comunidad={grupo.comunidad || 'Galicia'} />
 

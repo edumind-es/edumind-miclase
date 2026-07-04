@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { crearAlumno as dbCrearAlumno, getAlumnosByGrupo } from '@/db/queries'
+import EvidenciasGaleria from '@/components/EvidenciasGaleria'
+import type { Alumno as DBAlumno } from '@/db/localDb'
 
 // ─── Parser de importación masiva ───────────────────────────────────────────
 
@@ -59,6 +61,7 @@ export default function AlumnosPage() {
   const { alumnos, cargarAlumnos, crearAlumno, grupos, cargarGrupos } = useAppStore()
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
+  const [alumnoGaleria, setAlumnoGaleria] = useState<DBAlumno | null>(null)
 
   useEffect(() => { cargarGrupos() }, [cargarGrupos])
   useEffect(() => {
@@ -130,17 +133,28 @@ export default function AlumnosPage() {
           <div key={a.id} className="card" style={{ padding: '12px 14px' }}>
             <div style={{ fontWeight: 600, fontSize: 14 }}>{a.apellidos}</div>
             <div style={{ fontSize: 14, color: 'var(--gris-600)' }}>{a.nombre}</div>
-            <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
               {a.neae ? <span className="badge" style={{ background: 'var(--ambar-100)', color: 'var(--ambar-500)', fontSize: 11 }}>NEAE</span> : null}
               {(a as any).codigo_cifrado && (
                 <span className="badge" style={{ background: 'var(--azul-100)', color: 'var(--azul-700)', fontSize: 11, fontFamily: 'monospace' }}>
                   {(a as any).codigo_cifrado}
                 </span>
               )}
+              <button
+                onClick={() => setAlumnoGaleria(a as unknown as DBAlumno)}
+                title="Ver evidencias del alumno"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '0 2px', marginLeft: 'auto' }}
+                aria-label={`Evidencias de ${a.nombre} ${a.apellidos}`}>
+                📸
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {alumnoGaleria && (
+        <EvidenciasGaleria alumno={alumnoGaleria} onClose={() => setAlumnoGaleria(null)} />
+      )}
     </>
   )
 }

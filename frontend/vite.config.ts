@@ -16,7 +16,9 @@ export default defineConfig({
             // Las llamadas al API son same-origin (/api/... vía proxy o nginx)
             urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/api/'),
             handler: 'NetworkFirst',
-            options: { cacheName: 'api-cache', expiration: { maxAgeSeconds: 3600 } },
+            // El currículo es estático: 7 días de caché para poder evaluar
+            // sin conexión en el patio o el gimnasio
+            options: { cacheName: 'api-cache', expiration: { maxAgeSeconds: 604800 } },
           },
         ],
       },

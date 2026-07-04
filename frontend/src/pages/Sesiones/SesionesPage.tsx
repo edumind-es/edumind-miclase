@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion, getAsistencia, saveAsistencia } from '@/db/queries'
+import { getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion, actualizarSesion, getAsistencia, saveAsistencia } from '@/db/queries'
 
 type Alumno  = { id: number; nombre: string; apellidos: string }
 type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null }
@@ -34,6 +34,8 @@ export default function SesionesPage() {
   const [guardando, setGuardando] = useState(false)
   const [formNueva, setFormNueva] = useState(false)
   const [nuevaSesion, setNuevaSesion] = useState({ fecha: hoy(), tipo: 'clase', notas: '' })
+  const [diario, setDiario] = useState('')
+  const [diarioGuardado, setDiarioGuardado] = useState(false)
 
   useEffect(() => {
     getGrupos().then(data => {
@@ -61,6 +63,16 @@ export default function SesionesPage() {
     const mapa: Record<number, Estado> = {}
     for (const d of datos) mapa[d.alumno_id] = d.estado as Estado
     setAsistencia(mapa)
+    setDiario(sesiones.find(s => s.id === sesionId)?.notas || '')
+    setDiarioGuardado(false)
+  }
+
+  const guardarDiario = async () => {
+    if (!sesionActiva) return
+    await actualizarSesion(sesionActiva, { notas: diario.trim() || undefined })
+    setSesiones(prev => prev.map(s => s.id === sesionActiva ? { ...s, notas: diario.trim() || undefined } : s))
+    setDiarioGuardado(true)
+    setTimeout(() => setDiarioGuardado(false), 2000)
   }
 
   const toggleEstado = (alumnoId: number) => {
@@ -240,6 +252,19 @@ export default function SesionesPage() {
                 {Object.values(asistencia).filter(e => e === 'ausente').length > 0 &&
                   ` · ${Object.values(asistencia).filter(e => e === 'ausente').length} ausentes`}
               </div>
+            </div>
+
+            {/* Diario de la sesión */}
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--gris-100)' }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'var(--azul-700)', display: 'block', marginBottom: 6 }}>
+                📓 Diario de la sesión
+              </label>
+              <textarea value={diario} onChange={e => setDiario(e.target.value)}
+                placeholder="Qué se trabajó, incidencias, cosas a retomar la próxima sesión…"
+                rows={3} style={{ width: '100%', resize: 'vertical', fontSize: 13, marginBottom: 8 }} />
+              <button className="btn-secondary" style={{ fontSize: 13 }} onClick={guardarDiario}>
+                {diarioGuardado ? '✅ Guardado' : 'Guardar diario'}
+              </button>
             </div>
           </div>
         ) : (
