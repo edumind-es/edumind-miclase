@@ -10,9 +10,17 @@ import {
   crearEvidencia, comprimirImagen, contarEvidenciasAlumno,
 } from '@/db/queries'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
+import InstrumentosManager from './InstrumentosManager'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number }
+
+function aplicaEnTrimestre(ins: Instrumento, trimestre: number): boolean {
+  try {
+    const t = JSON.parse(ins.trimestres || '[1,2,3]')
+    return !Array.isArray(t) || t.length === 0 || t.includes(trimestre)
+  } catch { return true }
+}
 
 const CFG_KEY = 'miclase_evalrapida_cfg'
 
@@ -49,9 +57,12 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const [nEvidencias, setNEvidencias] = useState(0)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [guardando, setGuardando] = useState(false)
+  const [managerAbierto, setManagerAbierto] = useState(false)
+  const [refreshInstr, setRefreshInstr] = useState(0)
   const fotoRef = useRef<HTMLInputElement>(null)
 
   const asig = asignaturas.find(a => a.id === asignaturaId) || null
+  const instrumentosVisibles = instrumentos.filter(i => aplicaEnTrimestre(i, trimestre))
 
   // 1) Grupos del alumno → grupo activo (preferir el de la última configuración)
   useEffect(() => {
@@ -83,7 +94,8 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     getAsignaturaDetalle(asignaturaId).then(det => {
       const instrs = det?.instrumentos || []
       setInstrumentos(instrs)
-      const pref = instrs.find(i => i.id === cfg.instrumento_id) || instrs[0]
+      const visibles = instrs.filter(i => aplicaEnTrimestre(i, trimestre))
+      const pref = visibles.find(i => i.id === cfg.instrumento_id) || visibles[0]
       setInstrumentoId(pref?.id ?? null)
     })
 
@@ -91,7 +103,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
       setUnidades(us)
       setUnidadId(cfg.unidad_id && us.some(u => String(u.id) === String(cfg.unidad_id)) ? String(cfg.unidad_id) : '')
     })
-  }, [asignaturaId])
+  }, [asignaturaId, refreshInstr])
 
   // 4) Criterios del currículo (filtrados por unidad si hay una activa)
   useEffect(() => {
@@ -228,9 +240,15 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
               {asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)}
             </select>
             <select value={instrumentoId ?? ''} onChange={e => setInstrumentoId(Number(e.target.value) || null)}>
-              {instrumentos.length === 0 && <option value="">Sin instrumentos</option>}
-              {instrumentos.map(i => <option key={i.id} value={i.id}>{i.nombre}</option>)}
+              {instrumentosVisibles.length === 0 && <option value="">Sin instrumentos</option>}
+              {instrumentosVisibles.map(i => <option key={i.id} value={i.id}>{i.nombre}</option>)}
             </select>
+            <button onClick={() => setManagerAbierto(true)}
+              title="Gestionar instrumentos de esta asignatura"
+              aria-label="Gestionar instrumentos"
+              className="btn-secondary" style={{ fontSize: 13, padding: '6px 10px' }}>
+              ⚙
+            </button>
             {unidades.length > 0 && (
               <select value={unidadId} onChange={e => setUnidadId(e.target.value)}>
                 <option value="">Todos los criterios</option>
@@ -350,6 +368,15 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         )}
         <button className="btn-secondary" onClick={onCerrar} style={{ minHeight: 48 }}>Cerrar</button>
       </div>
+
+      {managerAbierto && asig && grupo && (
+        <InstrumentosManager
+          asignaturaId={asig.id!}
+          asignaturaNombre={asig.nombre_display}
+          nivel={`${grupo.curso}º ${grupo.etapa}`}
+          onClose={() => { setManagerAbierto(false); setRefreshInstr(k => k + 1) }}
+        />
+      )}
     </div>
   )
 }

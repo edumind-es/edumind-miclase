@@ -2,10 +2,19 @@ import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { getGrupos, getAsignaturas, getUnidades, getCalificadorBase, saveCalificaciones } from '@/db/queries'
 import { useAppStore } from '@/store/useAppStore'
+import InstrumentosManager from '@/components/InstrumentosManager'
+
+// Trimestres en los que aplica un instrumento (campo JSON '[1,2,3]')
+function aplicaEnTrimestre(ins: { trimestres?: string }, trimestre: number): boolean {
+  try {
+    const t = JSON.parse(ins.trimestres || '[1,2,3]')
+    return !Array.isArray(t) || t.length === 0 || t.includes(trimestre)
+  } catch { return true }
+}
 
 type Alumno = { id: number; nombre: string; apellidos: string; neae: number }
 type Criterio = { id: string; descripcion: string; objetivo_id: string; peso: number }
-type Instrumento = { id: number; nombre: string; tipo: string; peso: number }
+type Instrumento = { id: number; nombre: string; tipo: string; peso: number; trimestres?: string }
 type CalIndex = Record<string, number | null>
 
 function calColor(v: number | null | undefined) {
@@ -39,6 +48,8 @@ export default function EvaluacionPage() {
   const [cargando, setCargando] = useState(false)
   const [errorCurriculo, setErrorCurriculo] = useState(false)
   const [cambiosPendientes, setCambiosPendientes] = useState<CalIndex>({})
+  const [managerAbierto, setManagerAbierto] = useState(false)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   const nPendientes = Object.keys(cambiosPendientes).length
 
@@ -95,8 +106,10 @@ export default function EvaluacionPage() {
     getCalificadorBase(Number(asignaturaId), trimestre).then(async base => {
       if (!base) { setCargando(false); return }
       setCalBase(base)
-      if (base.instrumentos.length > 0) setInstrumentoId(base.instrumentos[0].id!)
-      else setInstrumentoId(null)
+      // Instrumento activo: mantener el actual si sigue aplicando en este trimestre
+      const visibles = base.instrumentos.filter(i => aplicaEnTrimestre(i, trimestre))
+      setInstrumentoId(prev =>
+        prev && visibles.some(i => i.id === prev) ? prev : (visibles[0]?.id ?? null))
 
       // Criterios vienen del servidor (currículo público — no son datos personales)
       const cursoNorm = base.grupo.curso.replace('º', '').replace('ª', '') + 'º'
@@ -126,7 +139,7 @@ export default function EvaluacionPage() {
 
       setCargando(false)
     }).catch(() => setCargando(false))
-  }, [asignaturaId, trimestre, unidadId])
+  }, [asignaturaId, trimestre, unidadId, refreshKey])
 
   const getCal = (alumnoId: number, criterioId: string) => {
     if (!instrumentoId) return null
@@ -214,8 +227,8 @@ export default function EvaluacionPage() {
       )}
 
       {instrumentos.length > 0 && (
-        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
-          {instrumentos.map(ins => (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+          {instrumentos.filter(ins => aplicaEnTrimestre(ins, trimestre)).map(ins => (
             <button key={ins.id}
               onClick={() => setInstrumentoId(ins.id)}
               style={{
@@ -229,14 +242,36 @@ export default function EvaluacionPage() {
               <span style={{ marginLeft: 6, fontWeight: 400, opacity: .8, fontSize: 11 }}>{ins.peso}%</span>
             </button>
           ))}
+          <button
+            onClick={() => setManagerAbierto(true)}
+            title="Gestionar instrumentos: añadir, editar, peso, trimestres, orden y rúbrica"
+            aria-label="Gestionar instrumentos"
+            style={{
+              padding: '6px 12px', borderRadius: 20, fontSize: 13, cursor: 'pointer', fontWeight: 600,
+              border: '2px dashed var(--gris-300)', background: 'white', color: 'var(--gris-600)',
+            }}>
+            ⚙ Instrumentos
+          </button>
         </div>
       )}
 
       {instrumentos.length === 0 && asignaturas.length > 0 && !cargando && (
-        <div className="card" style={{ padding: 24, color: 'var(--gris-600)' }}>
+        <div className="card" style={{ padding: 24, color: 'var(--gris-600)', marginBottom: 14 }}>
           Esta asignatura no tiene instrumentos de evaluación.{' '}
-          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Añadir instrumentos →</Link>
+          <button onClick={() => setManagerAbierto(true)}
+            style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontWeight: 600, cursor: 'pointer', fontSize: 14, padding: 0 }}>
+            Crear instrumentos →
+          </button>
         </div>
+      )}
+
+      {managerAbierto && calBase && (
+        <InstrumentosManager
+          asignaturaId={Number(asignaturaId)}
+          asignaturaNombre={calBase.asig.nombre_display}
+          nivel={`${calBase.grupo.curso}º ${calBase.grupo.etapa}`}
+          onClose={() => { setManagerAbierto(false); setRefreshKey(k => k + 1) }}
+        />
       )}
 
       {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
