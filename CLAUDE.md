@@ -27,8 +27,11 @@ edumind_miclase/
 - `backend/.env` — nunca tocar sin confirmación explícita
 - `backend/src/plugins/auth.js` / `routes/auth.js` — auth dual local + OIDC, y exportación AES-256
 
-## Estado
-Sin nginx configurado todavía (no detectado en sites-enabled) — de momento vive en desarrollo local, no en producción.
+## Estado — EN PRODUCCIÓN
+Desplegada en https://miclase.edumind.es (verificado 2026-07-04):
+- nginx: `/etc/nginx/sites-enabled/miclase.edumind.es.conf` — sirve `frontend/dist` (SPA + PWA) y proxy `/api` → 127.0.0.1:3270
+- systemd: `edumind-miclase-api.service` — backend Fastify con NODE_ENV=production (env vars en el unit, tienen prioridad sobre backend/.env)
+- Despliegue: ver `DESPLIEGUE.md` (merge → npm install → build → restart servicio)
 
 ## Lo que NO hacer
 - No hacer `npm install` sin avisar
