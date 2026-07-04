@@ -466,9 +466,25 @@ export async function generarPlantillaUnidades(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres'>>
 ): Promise<void> {
   await db.instrumentos.update(id, fields)
+}
+
+// Subir/bajar un instrumento en el orden de su asignatura
+export async function moverInstrumento(asignatura_id: number, instrumento_id: number, dir: -1 | 1): Promise<void> {
+  const instrs = await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray()
+  instrs.sort((a, b) => a.orden - b.orden || a.id! - b.id!)
+  const idx = instrs.findIndex(i => i.id === instrumento_id)
+  const destino = idx + dir
+  if (idx < 0 || destino < 0 || destino >= instrs.length) return
+  // Normalizar el orden a 0..n-1 e intercambiar las dos posiciones
+  await db.transaction('rw', db.instrumentos, async () => {
+    ;[instrs[idx], instrs[destino]] = [instrs[destino], instrs[idx]]
+    for (let i = 0; i < instrs.length; i++) {
+      if (instrs[i].orden !== i) await db.instrumentos.update(instrs[i].id!, { orden: i })
+    }
+  })
 }
 
 // ─── RÚBRICAS ─────────────────────────────────────────────────────────────────
