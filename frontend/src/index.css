@@ -197,3 +197,18 @@ input:focus, select:focus, textarea:focus {
   }
   .sidebar { flex-direction: row; overflow-x: auto; }
 }
+
+/* --- Identidad Sistema Lámina EDUmind (nivel 1) ---
+   Canon: edumind.es/design/lamina.html · tokens en /vendor/lamina-v1.css */
+.lm-plate-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.sidebar-logo {
+  font-family: var(--lm-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}

@@ -29,6 +29,10 @@ function Layout() {
 
   return (
     <div className="layout">
+      {/* Identidad Sistema Lámina (nivel 1): barra de mundos EDUmind */}
+      <div className="lm-plate-top lm-plate-top--compact lm-plate-fixed" aria-hidden="true">
+        <i /><i /><i /><i /><i />
+      </div>
       <aside className="sidebar">
         <div className="sidebar-logo">EDUmind <span>MiClase</span></div>
 
