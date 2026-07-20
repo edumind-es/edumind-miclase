@@ -97,8 +97,19 @@ function Layout() {
           )}
         </div>
 
-        <div style={{ padding: '8px 16px', fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
+        <div style={{ padding: '8px 16px', fontSize: 10, color: 'rgba(255,255,255,0.35)', lineHeight: 1.6 }}>
           EDUmind MiClase v0.1
+          <br />
+          © {new Date().getFullYear()} EDUmind® por Luis Vilela Acuña
+          <br />
+          Software libre:{' '}
+          <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>AGPL-3.0-or-later</a>
+          {' / '}
+          <a href="https://eupl.eu/1.2/es/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>EUPL-1.2</a>
+          <br />
+          <a href="https://github.com/edumind-es" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+            Código fuente: github.com/edumind-es
+          </a>
         </div>
       </aside>
 
