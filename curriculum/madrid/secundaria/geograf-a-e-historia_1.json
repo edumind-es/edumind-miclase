@@ -1,0 +1,458 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "geograf-a-e-historia",
+    "ciclo_origen": "1-eso",
+    "fuente": "iDoceo_12_geograf_a_e_historia_1-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre temas relevantes del presente y del pasado, usando críticamente fuentes históricas y geográficas, para adquirir conocimientos, elaborar y expresar contenidos en varios formatos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar y elaborar productos propios sobre problemas geográficos, históricos y sociales que resulten relevantes en la actualidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los principales desafíos a los que se han enfrentado distintas sociedades a lo largo del tiempo, identificando las causas y consecuencias de los cambios producidos y los problemas a los que se enfrentan en la actualidad, mediante el desarrollo de proyectos de investigación y el uso de fuentes fiables.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar y analizar los elementos del paisaje y su articulación en sistemas complejos naturales, rurales y urbanos, así como su evolución en el tiempo, interpretando las causas de las transformaciones y valorando el grado de equilibrio existente en los distintos ecosistemas, para promover su conservación, mejora y uso sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar de forma crítica planteamientos históricos y geográficos explicando la construcción de los sistemas democráticos y los principios constitucionales que rigen la vida en comunidad, así como asumiendo los deberes y derechos propios de nuestro marco de convivencia, para promover la participación ciudadana y la cohesión social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender los procesos geográficos, históricos y culturales que han conformado la realidad multicultural en la que vivimos, conociendo y difundiendo la historia y cultura de las minorías étnicas presentes en nuestro país y valorando sus aportaciones.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar los fundamentos que sostienen las diversas identidades propias y las ajenas, a través del conocimiento y puesta en valor del patrimonio material e inmaterial que compartimos para conservarlo y respetar los sentimientos de pertenencia, así como para favorecer procesos que contribuyan a la cohesión y solidaridad territorial en orden a los valores del europeísmo y de la Declaración Universal de los Derechos Humanos.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Tomar conciencia del papel de los ciclos demográficos, el ciclo vital, las formas de vida y las relaciones intergeneracionales y de dependencia en la sociedad actual y su evolución a lo largo del tiempo, analizándolas de forma crítica, para promover alternativas saludables, sostenibles, enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Conocer y valorar la importancia de la seguridad integral ciudadana en la cultura de convivencia nacional e internacional, reconociendo la contribución del Estado, sus instituciones y otras entidades sociales a la ciudadanía global, a la paz, a la cooperación internacional, para promover la consecución de un mundo más seguro, solidario y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar, expresar y presentar contenidos propios en forma de esquemas, líneas de tiempo y tablas informativas mediante el desarrollo de métodos de búsqueda, selección y tratamiento de información sobre la geografía física y política y sobre procesos y acontecimientos relevantes del presente y de la prehistoria y la Antigüedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Contrastar y argumentar sobre temas y acontecimientos de la prehistoria y la Edad Antigua, localizando y analizando de forma crítica fuentes primarias y secundarias como pruebas históricas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar, valorar y mostrar interés por los principales problemas medioambientales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Argumentar de forma crítica sobre problemas de actualidad medioambiental a través de conocimientos geográficos, contrastando y valorando fuentes diversas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Incorporar y utilizar adecuadamente términos, conceptos y acontecimientos relacionados con la Geografía, la Historia y otras disciplinas de las Ciencias Sociales, a través de intervenciones orales y redacciones, mostrando planteamientos originales y propuestas originales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Adquirir y construir conocimiento relevante de los principales retos a los que se enfrenta el mundo actual, a través de procesos inductivos, de la investigación y del trabajo por proyectos, retos o problemas, mediante la elaboración de trabajos que reflejen la comprensión de los fenómenos y problemas abordados y utilizando las tecnologías de la información de forma segura.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar los principales problemas, retos y desafíos a los que se ha enfrentado la humanidad a lo largo de la prehistoria y de la Historia Antigua, los cambios producidos, sus causas y consecuencias.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Representar adecuadamente información geográfica e histórica a través de diversas formas de representación gráfica, cartográfica y visual, tales como el climodiagrama, el mapa físico o el histórico.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar una secuencia cronológica con objeto de examinar la relación entre hechos y procesos en diferentes períodos y lugares significativos de la prehistoria y la Edad Antigua (simultaneidad y duración), utilizando términos y conceptos apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar procesos de cambio histórico de relevancia, tales como el Neolítico o la aparición de la escritura, a través del uso de diferentes fuentes de información, teniendo en cuenta las continuidades y permanencias en diferentes periodos y lugares.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Interpretar el entorno natural desde una perspectiva sistémica e integradora, a través del concepto de paisaje, identificando sus principales elementos y las interrelaciones existentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar el grado de sostenibilidad y de equilibrio de los diferentes espacios naturales, desde distintas escalas, y analizar su transformación y degradación a través del tiempo por la acción humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Argumentar la necesidad de acciones de defensa, protección, conservación y mejora del entorno natural a través de propuestas e iniciativas que reflejen compromisos y conductas en favor de la sostenibilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar, interpretar y analizar los mecanismos que han regulado la convivencia y la vida en común a lo largo de la prehistoria y la Historia Antigua, desde el origen de la sociedad a las distintas civilizaciones que se han ido sucediendo, señalando los principales modelos de organización social, política, económica y las creencias religiosas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Señalar y explicar aquellas experiencias históricas más destacables de la Historia Antigua en las que se logró establecer sistemas políticos que favorecieron el ejercicio de derechos y libertades de los individuos y de la colectividad, considerándolas como antecedentes de las posteriores conquistas democráticas y referentes históricos de las libertades actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Mostrar actitudes pacíficas y asumir las normas como marco necesario para la convivencia, demostrando la necesidad de defender la verdad y la libertad.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Situar el nacimiento y desarrollo de distintas civilizaciones antiguas y ubicarlas en el espacio y en el tiempo, integrando los elementos históricos, culturales, institucionales y religiosos que las han conformado. .",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Describir la organización y las diferencias sociales durante la Prehistoria y la Edad Antigua.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar la pluralidad social y cultural actual y de la Edad Antigua.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Identificar y situar las principales características del medio físico y los principales accidentes geográficos de África, América, Asia y Oceanía, apreciando la diversidad y riqueza geográfica de la Tierra y reconociendo que el medio natural es un factor clave en la configuración de las sociedades.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Relacionar las culturas, religiones y civilizaciones que se han desarrollado a lo largo de la historia Antigua con el legado de la cultura Occidental.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Señalar los fundamentos de la idea de Europa a través de las diferentes experiencias históricas del mundo clásico e identificar el legado histórico, institucional, artístico y cultural como patrimonio común de la ciudadanía europea.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Conocer, valorar, proteger y conservar el patrimonio artístico, histórico y cultural prehistórico y de la Antigüedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Tomar conciencia del ciclo vital y analizar cómo han cambiado sus características, necesidades y obligaciones en determinados momentos históricos, como la prehistoria y la Edad Antigua, así como las raíces de la distribución familiar .",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar e interpretar la conexión de España con los grandes procesos históricos (de la Edad Antigua), valorando lo que han supuesto para su evolución y señalando las aportaciones de sus habitantes a lo largo de la historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Interpretar, desde la perspectiva del desarrollo sostenible y la ciudadanía global los principales desafíos medioambientales del mundo actual, expresando la importancia de implicarse en la búsqueda de soluciones y en el modo de concretarlos desde su capacidad de acción tanto local como global, valorando la contribución del Estado, sus instituciones y las asociaciones civiles en programas y misiones dirigidos por organismos nacionales e internacionales para el logro de la paz, la seguridad integral, la convivencia social y la cooperación entre los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.3",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar y situar las principales características del medio físico y los principales accidentes geográficos de España y de Europa, apreciando la diversidad y riqueza geográfica del subcontinente.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Geografía física"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Retos del mundo actual"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Prehistoria y Edad Antigua"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Sociedades y territorios"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Compromiso cívico"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El planeta Tierra y la ubicación espacial: (cid:2) La Tierra en el Sistema Solar. (cid:2) La forma y los movimientos de la Tierra. Rotación y traslación. (cid:2) Composición geológica de la Tierra. Las capas de la Tierra. (cid:2) Continentes, océanos y mares. (cid:2) Representación del espacio, orientación y escalas. Utilización de recursos digitales e interpretación y elaboración de mapas, esquemas, imágenes y representaciones gráficas. Tecnologías de la Información Geográfica (TIG). (cid:2) Las coordenadas geográficas. Latitud y longitud. (cid:2) Los elementos del medio físico. España, Europa y el mundo: principales accidentes geográficos y áreas bioclimáticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "El relieve. (cid:2) Las formas de relieve de las tierras emergidas y sumergidas. El relieve costero. (cid:2) Los procesos de modificación de la superficie terrestre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "El clima: (cid:2) La atmósfera. (cid:2) Elementos y factores que condicionan el clima. (cid:2) La diversidad de climas en España, en Europa y en el mundo. (cid:2) Métodos de recogida de datos meteorológicos y elaboración e interpretación de gráficos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Las aguas: (cid:2) La hidrosfera. Tipos de aguas y su distribución.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Los medios naturales y la biodiversidad: (cid:2) Los paisajes naturales y las zonas bioclimáticas de la Tierra. (cid:2) La Europa atlántica, continental y mediterránea. (cid:2) España y su diversidad bioclimática. (cid:2) Dinámicas de los ecosistemas planetarios. Riqueza y valor del patrimonio natural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Emergencia climática: (cid:2) El impacto de las actividades humanas en el clima, en el pasado y en la actualidad. (cid:2) Riesgos naturales y catástrofes climáticas, su impacto en el presente, en el pasado y en el futuro. (cid:2) Vulnerabilidad, prevención y resiliencia de la población ante las catástrofes y riesgos naturales. (cid:2) Soluciones frente al cambio climático: el desarrollo sostenible. La protección de la naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Amenazas a la biodiversidad: (cid:2) Principales problemas de los ecosistemas planetarios. (cid:2) La influencia humana en la alteración de los ecosistemas en el pasado y en la actualidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Tecnologías de la información: (cid:2) Manejo y utilización de dispositivos, aplicaciones informáticas y plataformas digitales. (cid:2) Búsqueda, tratamiento de la información y elaboración de conocimiento. (cid:2) Uso seguro de las redes de comunicación. (cid:2) Lectura crítica de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Sociedad del conocimiento: (cid:2) Uso de las plataformas digitales. Las redes sociales. Seguridad y prevención ante los riesgos y peligro del uso de las tecnologías de la información y de la comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La prehistoria: (cid:2) Análisis interdisciplinar del origen del ser humano y nacimiento de la sociedad. El proceso de hominización. Grandes migraciones humanas y el nacimiento de las primeras culturas. (cid:2) Los grandes períodos de la prehistoria: Paleolítico y Neolítico. La Edad de los Metales. Formas de vida y organización social. (cid:2) Expresiones artísticas durante la prehistoria: pintura y escultura. El megalitismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Las civilizaciones fluviales: (cid:2) Condicionantes geográficos e interpretaciones históricas del surgimiento de las civilizaciones. Características y ejemplos significativos. (cid:2) Mesopotamia: sumerios, acadios, asirios, babilonios y persas. Sociedad, economía y cultura. Expresiones artísticas. (cid:2) Egipto: organización política y económica. Manifestaciones artísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La Antigua Grecia: (cid:2) El medio físico. Orígenes de la cultura griega. (cid:2) Sociedad, economía y cultura de la Antigua Grecia. El arte griego. (cid:2) Los inicios de la convivencia cívica y cultura democrática. Incorporación e implicación de la sociedad civil en procesos democráticos históricos: la Atenas del siglo V a.C.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La civilización romana: (cid:2) Orígenes de la civilización romana. (cid:2) Evolución política de Roma: monarquía, república e imperio. El final de la Antigüedad. (cid:2) La romanización y la expansión de la cultura romana por el Mediterráneo. (cid:2) Sociedad, economía y cultura de la Roma clásica. El arte romano. (cid:2) El judaísmo. Grecia y Roma: del paganismo al Cristianismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La Península Ibérica durante la Edad Antigua: (cid:2) Los pueblos prerromanos y las primeras colonizaciones. (cid:2) La conquista romana y la romanización de la Península Ibérica. (cid:2) Sociedad, cultura, economía y arte en la Hispania romana. (cid:2) Los visigodos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "El conocimiento geográfico: (cid:2) Introducción a los objetivos de la Geografía y al uso de sus procedimientos, términos y conceptos. (cid:2) Métodos básicos de investigación para la construcción del conocimiento de la Geografía. Metodologías del pensamiento geográfico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "El conocimiento histórico: (cid:2) Introducción a los objetivos de la Historia y al uso de sus procedimientos, términos y conceptos. (cid:2) Métodos de investigación para la construcción del conocimiento de la Historia. Metodologías del pensamiento histórico. (cid:2) Las fuentes históricas y arqueológicas como base para la construcción del conocimiento histórico. Objetos y artefactos como fuente para la historia y el legado inmaterial. (cid:2) El tiempo histórico. Construcción e interpretación de las líneas de tiempo a través de la linealidad, cronología, simultaneidad y duración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Política: (cid:2) La organización política del ser humano y las formas políticas en el mundo Antiguo: democracias, repúblicas, imperios y reinos. Evolución de la teoría del poder durante la Antigüedad. (cid:2) Violencia y conflictos armados. El crecimiento de los ejércitos y la evolución del armamento: hoplitas y legiones romanas. Los civiles durante las guerras de la Antigüedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Sociedad: (cid:2) Complejidad social y nacimiento de la autoridad: familia, clan, tribu, casta, linaje. Desigualdad social y disputa por el poder en la prehistoria y la Edad Antigua: formación de oligarquías, la imagen del poder y evolución de la aristocracia. La esclavitud. (cid:2) La mujer en la Antigüedad. (cid:2) Ciclos vitales, uso del tiempo libre y hábitos de consumo actuales. La vida cotidiana durante la prehistoria y la Antigüedad y sus diferencias y cambios respecto a las sociedades actuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Economía: (cid:2) Las grandes rutas comerciales en la Edad Antigua y las estrategias por el control de los recursos: talasocracias del mundo mediterráneo y grandes imperios. Conquista y colonización del territorio. (cid:2) La transformación humana del territorio y la distribución desigual de los recursos y del trabajo. Evolución de los sistemas económicos, de los ciclos demográficos, de los modos de vida y de los modelos de organización social. La lucha por la supervivencia y el estatus social en la prehistoria y la Antigüedad. (cid:2) La ciudad y el mundo rural a lo largo de la historia: polis, urbes, ciudades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Patrimonio: (cid:2) Las raíces clásicas de la cultura occidental. (cid:2) Significado y función de las expresiones artísticas y culturales en las distintas civilizaciones de la Antigüedad: diversidad y riqueza cultural. Respeto, conservación y defensa del patrimonio material e inmaterial: histórico, artístico y cultural. (cid:2) España en el tiempo y su conexión con los grandes procesos de la historia Antigua: pueblos mediterráneos colonizadores y romanización. (cid:2) Interpretación del territorio y del paisaje natural. La huella humana y la protección del patrimonio ambiental. (cid:2) Acciones para la conservación del patrimonio histórico, artístico y cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Religión: (cid:2) El papel de la religión en la organización social, la legitimación del poder y la formación de identidades: politeísmo, monoteísmo y el surgimiento de las grandes religiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Grandes mujeres de la Antigüedad clásica .",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "La importancia de la defensa del patrimonio histórico, artístico y cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "La cultura clásica como inspiración para la Unión Europea, la defensa de la verdad y la libertad.",
+      "criterios_ids": []
+    }
+  ]
+}

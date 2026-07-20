@@ -1,0 +1,524 @@
+{
+  "meta": {
+    "comunidad": "CLM",
+    "etapa": "secundaria",
+    "asignatura": "expresion-artistica",
+    "ciclo_origen": "toda-la-etapa",
+    "fuente": "iDoceo_expresion-artistica_toda-la-etapa.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. de 2022 24490"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. crítico y responsable de las tecnologías digitales en la sociedad, así como la interacción con estas. y la colaboración, la educación mediática, la creación (incluido el bienestar digital y las competencias con la ciudadanía digital, la privacidad, la propiedad y crítico. completar la enseñanza básica, el alumno o la Realiza búsquedas en internet atendiendo a de validez, calidad, actualidad y fiabilidad, los resultados de manera crítica y para recuperarlos, referenciarlos y respetando la propiedad intelectual. Gestiona y utiliza su entorno personal digital aprendizaje para construir conocimiento y contenidos digitales, mediante estrategias tratamiento de la información y el uso de herramientas digitales, seleccionando configurando la más adecuada en función de tarea y de sus necesidades de aprendizaje de 2022 24491 Se comunica, participa, colabora e interactúa contenidos, datos e información herramientas o plataformas virtuales, gestiona de manera responsable sus acciones, y visibilidad en la red, para ejercer una digital activa, cívica y reflexiva. Identifica riesgos y adopta medidas al usar las tecnologías digitales para los dispositivos, los datos personales, la y el medioambiente, y para tomar conciencia la importancia y necesidad de hacer un uso legal, seguro, saludable y sostenible de tecnologías. Desarrolla aplicaciones informáticas sencillas soluciones tecnológicas creativas y sostenibles resolver problemas concretos o responder a propuestos, mostrando interés y curiosidad la evolución de las tecnologías digitales y por desarrollo sostenible y uso ético. implica la capacidad de reflexionar sobre uno mismo personal constante; gestionar el tiempo y la información mantener la resiliencia; y gestionar el aprendizaje a lo a la incertidumbre y a la complejidad; adaptarse a identificar conductas contrarias a la convivencia físico, mental y emocional propio y de las demás y a quienes lo rodean a través de la corresponsabilidad; expresar empatía y abordar los conflictos en un contexto Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas. de 2022 24492"
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. alumnas puedan ejercer una ciudadanía responsable y en la comprensión de los conceptos y las estructuras el conocimiento de los acontecimientos mundiales y el ciudadanía mundial. Incluye la alfabetización cívica, democrática fundada en el respeto a los derechos éticos de nuestro tiempo y el desarrollo de un estilo Sostenible planteados en la Agenda 2030. Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial. de 2022 24493"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. vital dirigido a actuar sobre oportunidades e ideas, generar resultados de valor para otras personas. Aporta necesidades y oportunidades; entrenar el pensamiento utilizando la imaginación, la creatividad, el pensamiento de los procesos creativos y de innovación; y despertar la Asimismo, implica tomar decisiones basadas en la otras personas, con motivación, empatía y habilidades a la acción mediante la planificación y gestión completar la enseñanza básica, el alumno o la Analiza necesidades y oportunidades afronta retos con sentido crítico, haciendo de su sostenibilidad, valorando el que puedan suponer en el entorno, para ideas y soluciones innovadoras, éticas sostenibles, dirigidas a crear valor en el ámbito social, educativo y profesional. Evalúa las fortalezas y debilidades propias, uso de estrategias de autoconocimiento autoeficacia, y comprende los elementos de la economía y las finanzas, conocimientos económicos y financieros actividades y situaciones concretas, utilizando que favorezcan el trabajo colaborativo en equipo, para reunir y optimizar los recursos que lleven a la acción una experiencia que genere valor. de 2022 24494 Desarrolla el proceso de creación de ideas soluciones valiosas y toma decisiones, de razonada, utilizando estrategias ágiles planificación y gestión, y reflexiona sobre proceso realizado y el resultado obtenido, llevar a término el proceso de creación de innovadores y de valor, considerando experiencia como una oportunidad para comprender y respetar el modo en que las ideas, las y se comunican de forma creativa en distintas culturas y culturales. Implica también un compromiso con propias y del sentido del lugar que se ocupa o del papel comprensión de la propia identidad en evolución y del así como la toma de conciencia de que el arte y de mirar el mundo y de darle forma. completar la enseñanza básica, el alumno o la Conoce, aprecia críticamente y respeta patrimonio cultural y artístico, implicándose en conservación y valorando el enriquecimiento a la diversidad cultural y artística. Disfruta, reconoce y analiza con las especificidades e intencionalidades las manifestaciones artísticas y culturales destacadas del patrimonio, distinguiendo medios y soportes, así como los lenguajes y técnicos que las caracterizan. Expresa ideas, opiniones, sentimientos y por medio de producciones culturales artísticas, integrando su propio cuerpo y la autoestima, la creatividad y el del lugar que ocupa en la sociedad, con actitud empática, abierta y colaborativa. Conoce, selecciona y utiliza con diversos medios y soportes, así técnicas plásticas, visuales, audiovisuales, o corporales, para la creación de productos y culturales, tanto de forma individual colaborativa, identificando oportunidades desarrollo personal, social y laboral, así como emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Analizar manifestaciones artísticas, contextualizándolas, describiendo sus aspectos esenciales y valorando el proceso de creación y el resultado final, para educar la mirada, alimentar el imaginario, reforzar la confianza y ampliar las posibilidades de disfrute del patrimonio cultural y artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas gráfico-plásticas, empleando distintos medios, soportes, herramientas y lenguajes, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las más adecuadas a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes medios, técnicas y formatos audiovisuales, decodificando sus lenguajes, identificando las herramientas y distinguiendo sus fines, para incorporarlos al repertorio personal de recursos y desarrollar el criterio de selección de los más adecuados a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD2",
+        "CD3",
+        "CD5",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Crear producciones artísticas, individuales o grupales, realizadas con diferentes técnicas y herramientas, incluido el propio cuerpo, a partir de un motivo o intención previos, adaptando el diseño y el proceso a las necesidades e indicaciones de realización y teniendo en cuenta las características del público destinatario, para compartirlas y valorar las oportunidades de desarrollo personal, social, académico o profesional que pueden derivarse de esta actividad.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar manifestaciones artísticas de diferentes épocas y culturas, contextualizándolas, describiendo sus aspectos esenciales, valorando el proceso de creación y el resultado final, y evidenciando una actitud de apertura, interés y respeto en su recepción. AÑO XLI Núm. 134 14 de julio de 2022 24569",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar críticamente los hábitos, los gustos y los referentes artísticos de diferentes épocas y culturas, reflexionando sobre su evolución y sobre su relación con los del presente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Participar, con iniciativa, confianza y creatividad, en la exploración de diferentes técnicas gráfico-plásticas, empleando herramientas, medios, soportes y lenguajes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar producciones gráfico-plásticas de forma creativa, determinando las intenciones expresivas y seleccionando con corrección las herramientas, medios, soportes y lenguajes más adecuados de entre los que conforman el repertorio personal de recursos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Participar, con iniciativa, confianza y creatividad, en la exploración de diferentes medios, técnicas y formatos audiovisuales, decodificando sus lenguajes, identificando las herramientas y distinguiendo sus fines.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar producciones audiovisuales, individuales o colaborativas, asumiendo diferentes funciones; incorporando el uso de las tecnologías digitales con una intención expresiva; buscando un resultado final ajustado al proyecto preparado previamente; y seleccionando y empleando, con corrección y de forma creativa, las herramientas y medios disponibles más adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Crear un producto artístico individual o grupal, de forma colaborativa y abierta, diseñando las fases del proceso y seleccionando las técnicas y herramientas más adecuadas para conseguir un resultado adaptado a una intención y a un público determinados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Exponer el resultado final de la creación de un producto artístico, individual o grupal, poniendo en común y valorando críticamente el desarrollo de su elaboración, las dificultades encontradas, los progresos realizados y los logros alcanzados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar oportunidades de desarrollo personal, social, académico o profesional relacionadas con el ámbito artístico, comprendiendo su valor añadido y expresando la opinión personal de forma razonada y respetuosa.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Técnicas gráfico-plásticas"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Fotografía, lenguaje visual, audiovisual y multimedia"
+    },
+    {
+      "id": "B3",
+      "titulo": "A. El nacimiento de la filosofía: el paso del mito al logos"
+    },
+    {
+      "id": "B4",
+      "titulo": "B. El ser humano: antropología, psicología y sociología"
+    },
+    {
+      "id": "B5",
+      "titulo": "C. Ética y problemas éticos de nuestro tiempo"
+    },
+    {
+      "id": "B6",
+      "titulo": "D. Política y problemas políticos de nuestro tiempo"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Los efectos del gesto y del instrumento: herramientas, medios y soportes. Cualidades plásticas y efectos visuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de dibujo y pintura: técnicas secas y húmedas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas mixtas y alternativas de las vanguardias artísticas. Posibilidades expresivas y contexto histórico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de estampación. Procedimientos directos, aditivos, sustractivos y mixtos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Grafiti y pintura mural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas básicas de creación de volúmenes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "El arte del reciclaje. Consumo responsable. Productos ecológicos, sostenibles e innovadores en la práctica artística. Arte y naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Seguridad, toxicidad e impacto medioambiental de los diferentes materiales artísticos. Prevención y gestión responsable de los residuos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Ejemplos de aplicación de técnicas gráfico-plásticas en diferentes manifestaciones artísticas y en el ámbito del diseño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Elementos y principios básicos del lenguaje visual y de la percepción. Color y composición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Narrativa de la imagen fija: encuadre y planificación, puntos de vista y angulación. La imagen secuenciada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Fotografía analógica: cámara oscura. Fotografía sin cámara (fotogramas). Técnicas fotográficas experimentales: cianotipia o antotipia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Fotografía digital. El fotomontaje digital y tradicional. AÑO XLI Núm. 134 14 de julio de 2022 24570",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Seguridad, toxicidad e impacto medioambiental de los diferentes materiales artísticos. Prevención y gestión responsable de los residuos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Narrativa audiovisual: fotograma, secuencia, escena, toma, plano y montaje. El guion y el storyboard.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "El proceso de creación. Realización y seguimiento: guion o proyecto, presentación final y evaluación (autorreflexión, autoevaluación y evaluación colectiva).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Publicidad: recursos formales, lingüísticos y persuasivos. Estereotipos y sociedad de consumo. El sexismo y los cánones corporales y sexuales en los medios de comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Campos y ramas del diseño: gráfico, de producto, de moda, de interiores, escenografía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas básicas de animación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Recursos digitales para la creación de proyectos de videoarte. AÑO XLI Núm. 134 14 de julio de 2022 24571 Filosofía. La materia de Filosofía se entiende como el comienzo de una reflexión teórico-práctica sobre el saber filosófico, que tendrá continuidad en la etapa educativa de Bachillerato, mediante la materia del mismo nombre, impartida en el primer curso y a través de la Historia de la Filosofía del segundo curso. Además, es una materia que tiene un sentido propio y autónomo que se imparte a un alumnado que finaliza la etapa educativa obligatoria y dispone ya de la madurez necesaria para poder reflexionar sobre los problemas éticos y políticos de nuestro tiempo que directamente influyen y repercuten en su vida diaria. La finalidad educativa de la materia de Filosofía está en consonancia con la Recomendación del Consejo de 22 de mayo de 2018, relativa a las competencias clave para el aprendizaje permanente, que refiere la necesidad de introducir en la educación herramientas que permitan lograr que lo aprendido se pueda aplicar en tiempo real, y que genere nuevas ideas, nuevas teorías, nuevos productos y nuevos conocimientos. El currículo de esta materia se diseña tomando como referentes los descriptores operativos que concretan el desarrollo competencial esperado conforme establece el Perfil de salida del alumnado al término de la enseñanza básica. Se desarrolla a partir de aprendizajes significativos, funcionales y de interés para el alumnado y está organizado en torno a la adquisición de las cinco competencias específicas definidas para ella. Esta adquisición, junto con el aprendizaje de los saberes básicos, contribuye al desarrollo de las ocho competencias clave, que constituyen el eje vertebrador del currículo. Los criterios de evaluación establecidos van dirigidos a comprobar el grado de adquisición de las competencias específicas, esto es, el nivel de desempeño cognitivo, instrumental y actitudinal que pueda ser aplicado en situaciones o actividades del ámbito personal, social y académico con una futura proyección profesional. Los saberes básicos de esta materia que contribuyen a adquirir las competencias específicas se organizan en cuatro bloques: El primero: «El nacimiento de la filosofía: el paso del mito al logos», comienza con una introducción al saber filosófico: su origen, las disciplinas que lo componen y los problemas que aborda. Es muy importante que el alumnado sepa diferenciar entre el saber filosófico que es argumentado, crítico y razonado, de los pseudosaberes y ficciones, como son el mito, la magia, las pseudociencias o la religión. Además, es imprescindible que comprenda que la Filosofía no es un saber meramente teórico, sino fundamentalmente práctico, que afecta a la vida diaria de las personas. Dadas estas características de la Filosofía, se hace necesario que el uso y conocimiento del lenguaje sea riguroso, alejado de las falacias, manipulaciones, malinterpretaciones e imprecisiones que habitualmente son utilizadas con fines alejados de la verdad y del auténtico conocimiento, por lo que es esencial que el alumnado se familiarice con el uso filosófico del diálogo argumentativo. A partir de este bloque será frecuente la discusión racional y el debate en torno a los diferentes problemas que afectan diariamente a nuestras sociedades. El segundo bloque: «El ser humano: antropología, psicología y sociología», aborda el conocimiento del ser humano desde las perspectivas antropológica, psicológica y sociológica. Partiendo de los planteamientos de la filosofía griega clásica, se atiende a la dicotomía existente entre monismos y dualismos defendidos a lo largo de la historia, con la que íntimamente se relacionan otras dicotomías clásicas, como son, entre otras: naturaleza y cultura, individuo y sociedad, genética y ambiente, determinismo y libertad junto a la más reciente: bioconservadurismo y transhumanismo. En este bloque también será esencial el análisis del uso de las tecnologías en la vida diaria de las personas, más concretamente en la del alumnado, para así ser conscientes de su influencia en el modo de pensar y actuar, ya que cada vez son más frecuentes las dependencias y trastornos psicológicos vinculados con los usos y abusos de su utilización, así como sus efectos en los medios de comunicación y en los ámbitos social, económico, cultural, político, medioambiental, laboral y personal de nuestro tiempo. El tercer bloque: «Ética y problemas éticos de nuestro tiempo», se ocupa de la ética y de los problemas éticos de nuestro tiempo, partiendo del conocimiento de las distintas corrientes éticas que nos han ido conformando a lo largo de la historia, como son el intelectualismo moral, el convencionalismo moral, el eudemonismo, el estoicismo, el epicureísmo, el escepticismo, el cinismo, el cristianismo, el deontologismo y el utilitarismo, entre otras. Centrándonos en el siglo XX, se destaca la importancia del principio de responsabilidad de Hans Jonas a propósito del poder que suponen los conocimientos en genética, el cambio climático y la sofisticación armamentística. Respecto al siglo XXI, desde esta perspectiva ética, también son abordables temas referentes a la bioética y el big data, impulsados por el desarrollo tecnológico de los últimos años. La bioética y la ética ambiental suponen asuntos éticos de primer orden, que afectan al presente y al futuro inmediato, en lo referente tanto a la vida como a las condiciones en las que vivimos. Concluimos este bloque tratando las diferentes éticas profesionales que AÑO XLI Núm. 134 14 de julio de 2022 24572 marcan los referentes morales del momento, abordando la virtud de la tolerancia y la denuncia de sus amenazas, que ponen en riesgo la calidad de las democracias actuales, como son el machismo, la homofobia, el racismo, la xenofobia y la aporofobia, entre otras. Finalmente, el cuarto bloque: «Política y problemas políticos de nuestro tiempo», presenta contenidos de tipo político que afectan a nuestras vidas. Desde la diferencia entre animal político y contractualismo, se explica el origen social del ser humano y el carácter político de nuestras sociedades. Realiza, además, un recorrido histórico por las diferentes formas de gobierno, así como por las distintas concepciones sobre la justicia y el derecho, destacando la importancia de los derechos humanos y su necesaria actualización para poder llevarlos a cabo, así como su relación con los problemas políticos internacionales actuales, como son la globalización, las migraciones, el narcotráfico, el cambio climático, el armamentismo, las guerras y la trata de personas, entre otros. Un aspecto esencial es el tratamiento del feminismo y la brecha de género tan presente en nuestra cultura, concluyendo con el estudio y análisis del sistema democrático y de sus amenazas más frecuentes como son la demagogia, la corrupción, el autoritarismo, el totalitarismo, entre otras. Con estos cuatro bloques se persigue que el alumnado se familiarice con la realidad de su tiempo y adquiera así los instrumentos adecuados para poder abordarlos desde un punto de vista crítico, racional y responsable. Esta asignatura proporciona, por tanto, el bagaje necesario para que las alumnas y los alumnos se conviertan en miembros activos y comprometidos con la sociedad en la que les ha tocado vivir. Competencias específicas: 1. Buscar, analizar, producir y transmitir información relativa a cuestiones filosóficas, a partir del empleo contrastado y seguro de fuentes y de procedimientos elementales de investigación y comunicación, para desarrollar una actitud indagadora, autónoma y creativa en el ámbito de la reflexión filosófica. La investigación filosófica requiere del hábito de la lectura, del análisis y comentario de textos, así como de la crítica filosófica de las fuentes y de sus contenidos, sean escritos u orales, de carácter textual o audiovisual, y sean o no de género estrictamente filosófico. El objetivo es que el alumnado, a través de preguntas, exposiciones, disertaciones, dilemas y debates, aborde los problemas filosóficos y adquiera una compresión básica e informada que le permita dialogar y argumentar, con criterio propio y de acuerdo con su madurez personal. Esta competencia específica se conecta con los siguientes descriptores del Perfil de salida: CCL1, CCL2, CCL3, STEM1, CD1, CD3, CPSAA5, CC3, CE3. 2. Identificar problemas y formular preguntas acerca de la naturaleza humana, del sentido de la realidad y de la existencia, a partir del análisis e interpretación de textos y otras formas de expresión filosófica y cultural, así como la necesidad de afrontarlas, para desarrollar una vida reflexiva y consciente. La actividad filosófica parte del asombro ante el hecho mismo de la existencia y las diversas preguntas que de él se derivan. Esta actitud interrogante requiere de un lenguaje específico y de un acervo cultural que facilite al alumnado la adquisición, comprensión y análisis de sus inquietudes vitales y existenciales. El objetivo principal es que el alumnado tome plena consciencia de la relevancia y la proyección universal de estas cuestiones, así como del uso de elementos culturales que le permitan un juicio crítico, autónomo y reflexivo. Esta competencia específica se conecta con los siguientes descriptores del Perfil de salida: CCL2, CPSAA2, CC1, CC3, CCEC1. 3. Reconocer, usar y valorar las normas y pautas de la argumentación y del diálogo filosóficos, mediante la identificación, análisis y aplicación de las mismas, con rigor y en distintos soportes, tanto en la construcción y exposición de argumentos como en el ejercicio del diálogo con los demás, para evitar dogmatismos, falacias y sesgos cognitivos. Los procedimientos de argumentación son una condición para pensar y comunicarse con rigor, tanto en el ámbito filosófico como en el científico, y en la vida cotidiana. El objetivo es que el alumnado reconozca argumentos bien formados y sepa distinguirlos de las falacias, sesgos y prejuicios en diferentes entornos comunicativos. Además, es necesario que el alumnado adquiera el compromiso con la verdad y sea respetuoso con todas las ideas y posiciones racionalmente sostenibles. AÑO XLI Núm. 134 14 de julio de 2022 24573 Esta competencia específica se conecta con los siguientes descriptores del Perfil de salida: CCL1, CCL5, STEM1, CC3. 4. Practicar el ejercicio del diálogo filosófico de manera crítica, tolerante y empática, interiorizando las pautas éticas y formales que este requiere, mediante la participación en actividades grupales y a través del planteamiento dialógico de las cuestiones filosóficas, para promover el contraste e intercambio de ideas y el ejercicio de una ciudadanía activa y democrática. El diálogo filosófico supone tanto el rigor racional como la aceptación del pluralismo ideológico y la actitud respetuosa y empática hacia aquellas personas con las que disentimos, sin dejar de buscar por ello un posible consenso. La práctica del diálogo se rige por los principios de cooperación, honestidad y generosidad hermenéutica, la cual conlleva la aceptación de la propia ignorancia, la incertidumbre y la actitud crítica. Además, se caracteriza por ser abierto e inconcluso, lo que lo hace imprescindible para la indagación filosófica, junto con el ejercicio activo y democrático de la ciudadanía. Esta competencia específica se conecta con los siguientes descriptores del Perfil de salida: CCL1, CCL5, STEM1, CPSAA4, CC2, CC3, CCEC1, CCEC4. 5. Adquirir una perspectiva interdisciplinar y global, más allá de la cosmovisión occidental, en el planteamiento de problemas éticos y políticos de actualidad, analizando sus múltiples aspectos, desde la perspectiva fundamental de la filosofía, para poder tratar cuestiones complejas, de modo crítico, creativo y transformador, y desarrollar la autonomía de juicio, además de promover actitudes y acciones, cívica y éticamente, consecuentes. La filosofía contribuye al logro de un entendimiento integral, global e interdisciplinar de cuestiones éticas y políticas de actualidad, así como de aquellos acontecimientos de incidencia global que condicionan hoy nuestra vida. La naturaleza compleja y global de las cuestiones bioéticas, ecológicas, ecosociales, de los procesos económicos y políticos, de los fenómenos ligados al desarrollo tecnológico y la digitalización del entorno, entre otras, pueden entenderse a través de un análisis en el que se integren datos y explicaciones de naturaleza antropológica, ética y política. Se trataría de promover en el alumnado una comprensión compleja de cuestiones y problemas de naturaleza global, que le permitan afrontar con espíritu crítico y transformador los retos del siglo XXI. Esta competencia específica se conecta con los siguientes descriptores del Perfil de salida: CCL2, CCL3, CPSAA5, CC1, CC3, CC4, CCEC1. Criterios de evaluación. Competencia específica 1. 1.1. Demostrar un conocimiento práctico de los procedimientos elementales de la investigación filosófica, a través de la identificación de fuentes fiables, la búsqueda eficiente y segura de información, tanto digitalmente como a través de medios más tradicionales. 1.2. Desarrollar una actitud indagadora, autónoma y activa en el ámbito de la reflexión filosófica, mediante el diseño y elaboración de trabajos de investigación, disertaciones, dilemas morales, comentarios de texto u otros. Competencia específica 2. 2.1. Reconocer la radicalidad y trascendencia de los problemas filosóficos, mediante la formulación, reconocimiento y análisis de los mismos, a través del trabajo con textos y otros medios de expresión, tanto filosófica como literaria, histórica, científica, artística o de cualquier otro ámbito cultural. Competencia específica 3. 3.1. Construir argumentos, orales y escritos, acerca de problemas filosóficos de nuestro tiempo, mediante el uso de normas lógicas y argumentativas. 3.2. Reconocer y evitar dogmatismos, falacias y sesgos como contenidos de opiniones, ideas y creencias, comprendiendo la naturaleza de los mismos. AÑO XLI Núm. 134 14 de julio de 2022 24574 Competencia específica 4 4.1. Reconocer la importancia de la cooperación, el compromiso con la verdad, el respeto a la pluralidad, la diversidad y el rechazo de toda actitud discriminatoria o arbitraria, en la práctica argumentativa y el diálogo con los demás, analizando conflictos actuales que afectan a la realidad de nuestro tiempo y discriminando las falacias y errores argumentativos en las informaciones de los medios de comunicación. 4.2. Promover el contraste e intercambio de ideas y el ejercicio de una ciudadanía activa y democrática, participando en actividades grupales y del diálogo racional, respetuoso, abierto y constructivo, acerca de cuestiones y problemas filosóficos actuales. Competencia específica 5 5.1. Afrontar temas complejos de carácter fundamental y de actualidad ética y política, de modo interdisciplinar y transformador, utilizando conceptos e ideas desde una perspectiva filosófica crítica. 5.2. Desarrollar el propio juicio y la autonomía moral mediante el análisis filosófico de problemas éticos y políticos fundamentales y de actualidad, argumentando, exponiendo y sometiendo al diálogo con los demás las propias tesis al respecto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Qué es la filosofía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Disciplinas filosóficas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "El diálogo argumentativo y sus amenazas: falacias y negacionismos, entre otras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Monismos versus dualismos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Naturaleza y cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Individuo y sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Determinismo y libertad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Genética y ambiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Bioconservadurismo versus transhumanismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Qué es la ética.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Principales corrientes éticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "El principio de responsabilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "La bioética.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "La ética ambiental.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Éticas profesionales: ética médica, ética de los negocios, ética periodística, ética jurídica, entre otras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "La tolerancia y sus amenazas: machismo, homofobia, racismo, xenofobia, aporofobia, entre otras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Qué es la política.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Animal político versus contractualismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Las diferentes formas de gobierno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Justicia y derecho.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Los derechos humanos y su actualización.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Problemas políticos internacionales: globalización, migraciones, narcotráfico, prostitución, cambio climático, armamentismo, guerras, trata de personas, entre otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "El feminismo y la brecha de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "La democracia y sus amenazas: demagogia, corrupción, autoritarismo, totalitarismo, entre otras. AÑO XLI Núm. 134 14 de julio de 2022 24575",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,1464 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "ambito-linguistico-y-social",
+    "ciclo_origen": "1º",
+    "fuente": "iDoceo_ambito-linguistico-y-social_1º.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al tiempo que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir a y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50062 distintas lenguas, orales o signadas, de fory la comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre lenmantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e y respetar la diversidad lingüística y cultural de democrática. operativos."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual. y."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social. en ciencia, tecnología e ingeniería. en ciencia, tecnología e ingeniería (comentraña la comprensión del mundo utilizando matemáticos, la tecnología y los entorno de forma comprometida, responsable C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50063 y aplicar la perspectiva y el razonamienproblemas en diferentes contextos. y explicación del entorno natural y y metodologías, incluidas la observación preguntas y extraer conclusiones basadas en el mundo natural y el contexto social. comprende la aplicación de los conocimienpara transformar nuestra sociedad de acuerdo en un marco de seguridad, responsabilidad operativos."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones coy nocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y replanteando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, haciéndose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica sobre el alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostracioy nes, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esy quemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemáticoformal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50065 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medio ambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. que alumnas y alumnos puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y polítimundiales y el compromiso activo mundial. Incluye la alfabetización cívica, de una cultura democrática fundada en el crítica sobre los grandes problemas éticos de C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50067 de vida sostenible acorde con los objetivos de 2030. operativos."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y contraria a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. un enfoque vital dirigido a actuar soespecíficos necesarios para geAcerca estrategias que permiten adaptar la entrenar el pensamiento para analizar utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos para aprender, a arriesgar y a afronC.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50068 decisiones basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas expuestas a la acproyectos sostenible de valor social, cultural y operativos y."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan. y."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II las materias etapa de la educación secundaria obligatoria del Medio Natural, Social y Cultural el desarrollo de la curiosidad y la actitud crítiC.494-1998 https://www.xunta.gal/diario-oficial-galicia."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Identificar y comprender la naturaleza histórica de las relaciones sociales, de las actividades económicas, de las manifestaciones culturales y de los bienes patrimoniales materiales e inmateriales que compartimos, analizando sus orígenes y evolución e identificando las causas y consecuencias de los cambios producidos, los problemas actuales y sus valores presentes, para realizar propuestas que contribuyan a respetar los sentimientos de pertenencia, el bienestar futuro y el desarrollo de la sociedad.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Comprender los orígenes y la evolución de los procesos de integración europea y su relevancia en el presente y en el futuro de la sociedad española y de las comunidades locales, destacando la contribución del Estado, sus instituciones y las entidades sociales a la paz, a la cooperación internacional, a la cohesión social, a la solidaridad territorial, al desarrollo sostenible y a la ciudadanía global en base a los valores del europeísmo y de la Declaración Universal de los Derechos Humanos, para contribuir a crear un mundo más seguro, solidario, sostenible y justo en el que se reconozca la conformación de una realidad multicultural y se valore la contribución de los movimientos en defensa de la igualdad y de la inclusión evitando discriminaciones y violencias.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Valorar los principios básicos del sistema democrático y los principios constitucionales que rigen la vida en comunidad, analizando de forma crítica los planteamientos históricos y geográficos, las instituciones y las diferentes organizaciones políticas y económicas en que se manifiestan, para adecuar el comportamiento propio al cumplimiento de dichos principios.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Comunicar en lengua castellana y gallega de manera cooperativa y respetuosa, atendiendo a las convenciones propias de los diferentes géneros discursivos y a su adecuación a diferentes ámbitos y contextos, para dar respuesta a necesidades concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM4",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CC3",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Seleccionar y contrastar información procedente de diferentes fuentes de manera progresivamente autónoma, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, e integrarla y transformarla en conocimiento para comunicarla, adoptando un punto de vista crítico y personal a la par que respetuoso con la propiedad intelectual.",
+      "descriptores_ids": [
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA4",
+        "CC2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Leer, interpretar y valorar fragmentos literarios del patrimonio nacional y universal, utilizando un metalenguaje específico y movilizando la experiencia biográfica y los conocimientos literarios y culturales para establecer vínculos entre textos diversos a fin de conformar un mapa cultural, ampliar las posibilidades de disfrutar de la literatura y crear textos de intención literaria.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CC1",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ7",
+      "descripcion": "Movilizar el conocimiento sobre la estructura de la lengua y sus usos y reflexionar de manera progresivamente autónoma sobre las elecciones lingüísticas y discursivas, con la terminología adecuada, para desarrollar la conciencia lingüística, aumentar el repertorio comunicativo y mejorar las destrezas tanto de producción oral y escritura como de recepción crítica.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ8",
+      "descripcion": "Comprender e interpretar, en lengua extranjera, el sentido general y los detalles más relevantes de textos expresados de forma clara y en la lengua estándar, buscando fuentes fiables y haciendo uso de estrategias como la inferencia de significados, para responder a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ9",
+      "descripcion": "Producir, en lengua extranjera, textos originales, de extensión media, sencillos y con una organización clara, usando estrategias tales como la planificación, la compensación o la autorreparación, para expresar de forma creativa, adecuada y coherente mensajes relevantes y responder a propósitos comunicativos concretos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD3",
+        "CPSAA5",
+        "CC1"
+      ]
+    },
+    {
+      "id": "OBJ10",
+      "descripcion": "Interactuar en lengua extranjera con otras personas con creciente autonomía, usando estrategias de cooperación y empleando recursos analógicos y digitales, para responder a propósitos comunicativos concretos en intercambios respetuosos con las normas de cortesía.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ11",
+      "descripcion": "Mediar en situaciones cotidianas entre distintas lenguas, usando estrategias y conocimientos sencillos orientados a explicar conceptos o simplificar mensajes, para transmitir información de manera eficaz, clara y responsable.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ12",
+      "descripcion": "Ampliar y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando de forma crítica sobre su funcionamiento y tomando conciencia de las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA5",
+        "CD2"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Elaborar contenidos propios en distintos formatos, mediante aplicaciones y estrategias de recogida y representación de datos usando fuentes fiables del presente y de la historia contemporánea y generar productos originales y creativos como proyectos de investigación, incidiendo en el uso de mapas y otras representaciones gráficas, como la interpretación de imágenes, y utilizar secuencias cronológicas en las que identificar, comparar y relacionar hechos y procesos en diferentes períodos y lugares históricos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar los elementos del entorno físico y humano y comprender su funcionamiento y analizar sus relaciones naturales y humanas, presentes y pasadas, valorando el grado de conservación y de equilibrio dinámico.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Idear y adoptar, cuando sea posible, comportamientos y acciones que contribuyan a la conservación y mejora del entorno natural, rural y urbano, a través del respeto a todos los seres vivos y defendiendo el acceso universal, justo y equitativo a los recursos que nos ofrece el planeta.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Conocer los objetivos de desarrollo sostenible, realizando propuestas que contribuyan a su logro.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Reconocer los rasgos que van conformando la identidad propia y de los demás, la riqueza de las identidades múltiples en relación con distintas escalas espaciales y el reconocimiento de sus expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar los principales hechos históricos en los diferentes contextos y valorar los cambios que propiciaron en los aspectos ideológicos, sociales, políticos y económicos y justificar qué hechos del pasado tienen una incidencia en el presente.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Valorar, proteger y conservar el patrimonio artístico, histórico y cultural como fundamento de nuestra identidad colectiva, considerándolo un bien para el disfrute recreativo y cultural y un recurso para el desarrollo de los pueblos, y apreciando el legado histórico, institucional, artístico y cultural como patrimonio común.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Rechazar actitudes discriminatorias y reconocer la riqueza de la diversidad que conformó la sociedad globalizada y multicultural actual reconociendo la aportación de los movimientos en defensa de los derechos de las minorías y en favor de la inclusión y la igualdad real, especialmente de las mujeres y de otros colectivos discriminados y generando una conciencia solidaria mediante el trabajo en equipo, mediación y resolución pacífica de conflictos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.9",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Conocer, valorar y ejercitar responsabilidades, derechos y deberes y actuar en favor de su desarrollo y la defensa de los valores constitucionales y democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.10",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Contribuir a la consecución de un mundo más seguro, justo, solidario y sostenible, a través del análisis de los principales conflictos del presente y el reconocimiento de las instituciones del Estado, y de las asociaciones civiles que garantizan la seguridad integral y la convivencia social, así como de los compromisos internacionales de nuestro país en favor de la paz, la seguridad, la cooperación, la sostenibilidad, los valores democráticos y los objetivos de desarrollo sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Reconocer y valorar las lenguas oficiales de España y sus variedades dialectales, con atención especial al gallego y al castellano, a partir de la explicación de su origen y su desarrollo histórico y sociolingüístico, contrastando aspectos lingüísticos y discursivos de las distintas lenguas, así como rasgos de los dialectos del español y del gallego, diferenciándolos de los rasgos sociolectales y de registro, en manifestaciones orales, escritas y multimodales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Identificar y cuestionar prejuicios y estereotipos lingüísticos, adoptando una actitud de respeto y valoración de la riqueza cultural, lingüística y dialectal a partir del análisis de la diversidad lingüística en contextos comunicativos cotidianos de los ámbitos personal y profesional y de la exploración y reflexión sociolingüística sobre los fenómenos de contacto entre lenguas y de la indagación de los derechos lingüísticos individuales y colectivos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Identificar y evitar los usos discriminatorios de la lengua, los abusos a través de la palabra y los usos manipuladores del lenguaje a partir de la reflexión y el análisis de los elementos lingüísticos, textuales y discursivos utilizados, así como de los elementos no verbales de la comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar estrategias para la resolución dialogada de los conflictos y la búsqueda de consensos, tanto en el ámbito personal como educativo y social y profesional.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Aceptar y valorar la diversidad lingüística y cultural como fuente de enriquecimiento personal, mostrando interés por compartir elementos culturales y lingüísticos que fomenten la sostenibilidad y la democracia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Comprender el sentido global, la estructura, la información más relevante en función de las necesidades comunicativas y la intención del emisor en textos orales, escritos y multimodales de cierta complejidad de diferentes ámbitos, analizando la interacción entre los diferentes códigos, realizando las inferencias necesarias y atendiendo a distintos propósitos de lectura.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Valorar la forma y el contenido de textos orales, escritos y multimodales de cierta complejidad, evaluando la calidad, fiabilidad e idoneidad del canal utilizado, así como la eficacia de los procedimientos comunicativos y lingüísticos empleados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Realizar exposiciones y argumentaciones orales de cierta extensión y complejidad con diferente grado de planificación sobre temas de interés personal, social, educativo y profesional, ajustándose a las convenciones propias de los diversos géneros discursivos, con fluidez, coherencia, cohesión y el registro adecuado en diferentes soportes, utilizando de manera eficaz recursos verbales y no verbales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Participar de manera activa y adecuada en interacciones orales informales, en el trabajo y en situaciones orales formales de carácter dialogado, con actitudes de escucha activa y estrategias de cooperación conversacional y cortesía lingüística.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Planificar la redacción de textos escritos y multimodales de cierta extensión atendiendo a la situación comunicativa, destinatario, propósito y canal; redactar borradores y revisarlos con la ayuda del diálogo entre iguales e instrumentos de consulta, y presentar un texto final coherente, cohesionado y con el registro adecuado.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Incorporar procedimientos para enriquecer los textos atendiendo a aspectos discursivos, lingüísticos y de estilo, con precisión léxica y corrección ortográfica y gramatical.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.7",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Localizar, seleccionar y contrastar información de manera progresivamente autónoma procedente de diferentes fuentes, tanto analógicas como digitales, evitando los riesgos de manipulación y desinformación y calibrando su fiabilidad y pertinencia en función de los objetivos de lectura; organizar e integrar la información en esquemas propios, y reelaborarla y comunicarla de manera creativa adoptando un punto de vista crítico, respetando los principios de propiedad intelectual.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.8",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Elaborar trabajos de investigación de manera progresivamente autónoma en diferentes soportes sobre diversos temas de interés académico, personal o social a partir de la información seleccionada.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.9",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Revisar los textos propios de manera progresivamente autónoma y hacer propuestas de mejora argumentando los cambios a partir de la reflexión metalingüística con el metalenguaje específico, e identificar y solucionar algunos problemas de comprensión lectora utilizando los conocimientos explícitos sobre la lengua y su uso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.10",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Explicar y argumentar la interrelación entre el propósito comunicativo y las elecciones lingüísticas del emisor, así como sus efectos en el receptor, utilizando el conocimiento explícito de la lengua y el metalenguaje específico.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Comprender el sentido global, la estructura, la información más relevante en función de las necesidades comunicativas y la intención del emisor en textos orales, escritos y multimodales de cierta complejidad de diferentes ámbitos, analizando la interacción entre los diferentes códigos, realizando las inferencias necesarias y atendiendo a diferentes propósitos de lectura.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Valorar la forma y el contenido de textos orales, escritos y multimodales de cierta complejidad, evaluando la calidad, fiabilidad e idoneidad del canal utilizado, así como la eficacia de los procedimientos comunicativos y lingüísticos empleados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Incorporar procedimientos para enriquecer los textos atendiendo a aspectos discursivos, lingüísticos y de estilo, con precisión léxica y corrección ortográfica y gramatical.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Leer de manera autónoma textos seleccionados en función de los propios gustos, intereses y necesidades, y dejar constancia del progreso del propio itinerario lector y cultural explicando los criterios de selección de las lecturas, las formas de acceso a la cultura literaria y la experiencia de lectura.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Compartir la experiencia de lectura en soportes diversos relacionando el sentido de la obra con la propia experiencia biográfica, lectora y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Explicar y argumentar la interpretación de las obras leídas a partir del análisis de las relaciones internas de sus elementos constitutivos con el sentido de la obra y de las relaciones externas del texto con su contexto sociohistórico, atendiendo a la configuración y evolución de los géneros y subgéneros literarios.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.7",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Establecer de manera progresivamente autónoma vínculos argumentados entre los textos leídos y otros textos escritos, orales o multimodales y otras manifestaciones artísticas y culturales en función de temas, tópicos, estructuras, lenguaje y valores éticos y estéticos, mostrando la implicación y la respuesta personal del alumnado en la lectura.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.8",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Crear textos personales o colectivos con intención literaria y conciencia de estilo, en distintos soportes y con la ayuda de otros lenguajes artísticos y audiovisuales, a partir de la lectura de obras o fragmentos significativos en que se empleen las convenciones formales de los diversos géneros y estilos literarios.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Incorporar procedimientos para enriquecer los textos atendiendo a aspectos discursivos, lingüísticos y de estilo, con precisión léxica y corrección ortográfica y gramatical.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Revisar los textos propios de manera progresivamente autónoma y hacer propuestas de mejora argumentando los cambios a partir de la reflexión metalingüística con el metalenguaje específico, e identificar y solucionar algunos problemas de comprensión lectora utilizando los conocimientos explícitos sobre la lengua y su uso.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Explicar y argumentar la interrelación entre el propósito comunicativo y las elecciones lingüísticas del emisor, así como sus efectos en el receptor, utilizando el conocimiento explícito de la lengua y el metalenguaje específico.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Formular generalizaciones sobre algunos aspectos del funcionamiento de la lengua a partir de la manipulación, comparación y transformación de enunciados, así como del planteamiento de hipótesis y la búsqueda de contraejemplos, utilizando el metalenguaje específico y consultando de manera progresivamente autónoma diccionarios, manuales y gramáticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Extraer y analizar el sentido global y las ideas principales, y seleccionar de forma guiada información pertinente de textos orales, escritos y multimodales sobre temas cotidianos, de relevancia personal o de interés público próximos a la experiencia del alumnado, expresados de forma clara y en la lengua estándar a través de diversos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Interpretar y, de forma guiada, valorar el contenido y los rasgos discursivos de textos progresivamente más complejos propios de los ámbitos de las relaciones interpersonales, de los medios de comunicación social y del aprendizaje, así como de textos literarios adecuados al nivel de madurez del alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Seleccionar, organizar y aplicar las estrategias y conocimientos más adecuados en cada situación comunicativa para comprender el sentido general, la información esencial y los detalles más relevantes de los textos; inferir significados e interpretar elementos no verbales; y buscar y seleccionar información veraz.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Expresar oralmente textos sencillos, estructurados, comprensibles, coherentes y adecuados a la situación comunicativa sobre asuntos cotidianos, de relevancia personal o de interés público próximo a la experiencia del alumnado con el fin de describir, narrar e informar en diferentes soportes, utilizando recursos verbales y no verbales, así como estrategias de planificación, control, compensación y cooperación básicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.5",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Redactar y difundir textos de extensión media con aceptable claridad, coherencia, cohesión, corrección y adecuación a la situación comunicativa propuesta, a la tipología textual y a las herramientas analógicas y digitales utilizadas, siguiendo pautas establecidas, sobre asuntos cotidianos, de relevancia personal o de interés público próximos a la experiencia del alumnado, respetando la propiedad intelectual y evitando el plagio.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.6",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Seleccionar, organizar y aplicar conocimientos y estrategias para planificar, producir, revisar y cooperar en la elaboración de textos coherentes, cohesionados y adecuados a las intenciones comunicativas, a las características contextuales, a los aspectos socioculturales y a la tipología textual, usando los recursos físicos o digitales más adecuados en función de la tarea y de las necesidades del interlocutor o interlocutora potencial a quien va dirigido el texto.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.7",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Planificar, participar y colaborar de manera activa, a través de diversos soportes, en situaciones interactivas sobre temas cotidianos, de relevancia personal o de interés público próximos a la experiencia del alumnado, mostrando iniciativa, empatía y respeto por la cortesía lingüística y la etiqueta digital, así como por las diferentes necesidades, ideas, inquietudes, iniciativas y motivaciones de los interlocutores e interlocutoras.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.8",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Seleccionar, organizar y utilizar de forma guiada estrategias adecuadas para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, solicitar y formular aclaraciones y explicaciones, resumir, colaborar, debatir y resolver problemas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.9",
+      "objetivo_id": "OBJ11",
+      "descripcion": "Inferir y explicar textos, conceptos y comunicación breves y sencillas en situaciones en las que atender a la diversidad, mostrando respeto y empatía por los interlocutores e interlocutoras, así como por las lenguas empleadas, y participando en la solución de problemas de intercomprensión y de entendimiento en su entorno, apoyándose en diversos recursos y soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.10",
+      "objetivo_id": "OBJ11",
+      "descripcion": "Aplicar estrategias que ayuden a crear puentes, faciliten la comunicación y sirvan para explicar y simplificar textos y mensajes, y que sean adecuadas a las intenciones comunicativas, a las características contextuales y a la tipología textual, usando recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.11",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Comparar y, de forma guiada, argumentar las semejanzas y diferencias entre distintas lenguas reflexionando de manera progresivamente autónoma sobre su funcionamiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.12",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Utilizar de forma creativa estrategias y conocimientos de mejora de la capacidad de comunicar y de aprender la lengua extranjera con apoyo de otros participantes y de soportes analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.13",
+      "objetivo_id": "OBJ12",
+      "descripcion": "Registrar y analizar, de forma guiada, los progresos y dificultades de aprendizaje de la lengua extranjera, seleccionando, con ayuda, las estrategias más eficaces para superar esas dificultades y consolidar su progreso, haciéndolos explícitos y compartiéndolos, por medio de actividades de planificación del propio aprendizaje, autoevaluación y coevaluación, como las propuestas en el Portfolio europeo de las lenguas (PEL) o en un diario de aprendizaje.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Ciencias Sociales"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Las lenguas y sus hablantes"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Comunicación en lengua castellana y lengua gallega"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Educación literaria"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque 5. Reflexión sobre la lengua"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque 6. Comunicación en lengua extranjera"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Retos del mundo actual.",
+      "criterios_ids": [
+        "CE1.10"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "– Objetivos y estrategias de las ciencias sociales: procedimientos, términos y conceptos y métodos de investigación en el ámbito de la geografía y de la historia.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "– Búsqueda de información en entornos digitales y uso específico de léxico relativo a los ámbitos histórico, artístico y geográfico y elaboración de trabajos o proyectos en los que se haga uso de mapas, gráficas, imágenes…",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "– El comentario de documentos escritos y gráficos. Exposición de ideas y argumentos sobre diferentes temas que se abordan en el curso.",
+      "criterios_ids": [
+        "CE3.8",
+        "CE6.1",
+        "CE6.7"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "– La transformación humana del territorio. El espacio natural, rural y urbano y su evolución en España y Galicia.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "– Los sectores productivos en la Unión Europea, España y Galicia. La Unión Europea como ejemplo del funcionamiento de los mercados.",
+      "criterios_ids": [
+        "CE6.11"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "– Igualdad de género y formas de violencia contra las mujeres. Actitudes y comportamientos sexistas.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Sociedades y territorios.",
+      "criterios_ids": [
+        "CE6.9"
+      ]
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "– Los regímenes demográficos y el reto demográfico en España y Galicia. Migraciones, multiculturalidad y mestizaje que dan como resultado la diversidad social, ético-cultural y de género.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "– La distribución desigual de recursos y trabajo. El empleo en la sociedad actual.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "– Del éxodo rural a la concentración urbana y el problema de la despoblación rural. La importancia del espacio público.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "– Organización política y económica de las sociedades. Ordenamiento normativo autonómico, constitucional y supranacional. Ciudadanía europea y cosmopolita. España y Galicia en la UE.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "– La transformación política de los seres humanos: de la servidumbre a la ciudadanía. Transiciones, revoluciones y resistencias: permanencias y cambios en la época contemporánea. La conquista de los derechos individuales y colectivos en la época contemporánea. Origen, evolución y adaptación de los sistemas liberales en España y en el mundo a través de las fuentes.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "– Revoluciones industriales y nacimiento de una nueva sociedad.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "– La participación de la mujer en los procesos históricos del siglo XVIII.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "– Las características generales de las nuevas expresiones artísticas y culturales hasta la mitad del XIX. La personalidad independiente de Goya. El patrimonio como bien y como recurso.",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Compromiso cívico y social.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "– Implicación en la defensa y protección del medio ambiente. Acción y posición ante la emergencia climática.",
+      "criterios_ids": [
+        "CE1.9"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Exploración y rechazo de prejuicios y estereotipos lingüísticos. Los fenómenos del contacto entre lenguas: bilingüismo, diglosia, préstamos, interferencias.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Detección de usos discriminatorios del lenguaje verbal y no verbal. Valoración de la forma y del contenido del texto.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Análisis de la diversidad lingüística del entorno. Biografía lingüística.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo sociohistórico de las lenguas de España, con especial atención al gallego y al castellano.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo de la reflexión interlingüística.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Contexto vinculado a las estrategias de producción, comprensión y análisis de textos orales, escritos y multimodales de diferentes ámbitos: componentes del hecho comunicativo.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1",
+        "CE4.2",
+        "CE3.2",
+        "CE4.7"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "– Análisis de los componentes del hecho comunicativo: grado de formalidad de la situación y carácter público o privado; distancia social entre los interlocutores; propósitos comunicativos e interpretación de intenciones; canal de comunicación y elementos no verbales de la comunicación.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Géneros discursivos desde el punto de vista de la producción, comprensión y análisis de textos orales, escritos y multimodales.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.2",
+        "CE4.1",
+        "CE3.1",
+        "CE4.7",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "– Comprensión y creación de secuencias textuales básicas, con especial atención a las expositivas.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "– Empleo correcto de las propiedades textuales: coherencia, cohesión y adecuación.",
+      "criterios_ids": [
+        "CE6.5"
+      ]
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "– Géneros discursivos propios del ámbito personal: la conversación, con especial atención a los actos de habla que amenazan la imagen del interlocutor (la discrepancia, la queja, la orden, la reprobación).",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "– Géneros discursivos propios del ámbito educativo: la estructura y las principales características de los textos científicos, técnicos y humanísticos (explicación, exposición...).",
+      "criterios_ids": [
+        "CE6.2",
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "– Géneros discursivos propios del ámbito social. Redes sociales y medios de comunicación. Etiqueta digital y riesgos de desinformación, noticias falsas, manipulación y vulneración de la privacidad. El ciberanzuelo. Análisis de la imagen y de los elementos paratextuales de los textos icónico-verbales y multimodales.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Procesos de producción, comprensión y análisis de textos orales, escritos y multimodales.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.2",
+        "CE4.1",
+        "CE3.1",
+        "CE4.7",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "– Interacción oral y escritura de carácter informal y formal. Cooperación conversacional y cortesía lingüística. Escucha activa, asertividad y resolución dialogada de los conflictos. Comunicación emocional.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "– Comprensión oral: sentido global del texto y relación entre sus partes, selección y retención de la información relevante. La intención del emisor.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "– Producción oral formal. Planificación y búsqueda de información, textualización y revisión. Adecuación a la audiencia y al tiempo de exposición. Elementos no verbales. Rasgos discursivos y lingüísticos de la oralidad formal. La deliberación oral argumentada.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "– Comprensión lectora: sentido global del texto y relación entre sus partes. La intención del emisor. Detección de usos discriminatorios del lenguaje verbal e icónico. Valoración de la forma y del contenido del texto.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "– Producción escrita. Planificación, redacción, revisión y edición en diferentes soportes. Corrección gramatical y ortográfica. Propiedad léxica. Usos de la escritura para la organización del pensamiento: toma de notas, esquemas, mapas conceptuales, resúmenes, etc.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Alfabetización informacional.",
+      "criterios_ids": [
+        "CE6.9"
+      ]
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "– Busca y selección de la información con criterios de fiabilidad, calidad y pertinencia; análisis, valoración, reorganización y síntesis de la información en esquemas propios.",
+      "criterios_ids": [
+        "CE3.7",
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "– Fuentes de información: criterios de búsqueda y selección de información fiable, pertinente y de calidad.",
+      "criterios_ids": [
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B3.18",
+      "bloque_id": "B3",
+      "descripcion": "– Comunicación y difusión de la información de manera creativa y respetuosa con la propiedad intelectual.",
+      "criterios_ids": [
+        "CE3.7",
+        "CE3.8"
+      ]
+    },
+    {
+      "id": "B3.19",
+      "bloque_id": "B3",
+      "descripcion": "– Estrategias de búsqueda y selección de información.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B3.20",
+      "bloque_id": "B3",
+      "descripcion": "– Análisis de los riesgos y consecuencias de la manipulación y de la desinformación.",
+      "criterios_ids": [
+        "CE3.7"
+      ]
+    },
+    {
+      "id": "B3.21",
+      "bloque_id": "B3",
+      "descripcion": "– Estrategias de organización de la información: la escritura como mecanismo para organizar el pensamiento (notas, esquemas, mapas conceptuales, resúmenes…).",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "B3.22",
+      "bloque_id": "B3",
+      "descripcion": "– Acercamiento al empleo correcto del sistema de citación y uso de las referencias bibliográficas en las creaciones propias.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.23",
+      "bloque_id": "B3",
+      "descripcion": "– Utilización responsable de las tecnologías de la información y de la comunicación. Dispositivos, aplicaciones informáticas y plataformas digitales, tanto para la búsqueda de información, como para la realización de proyectos escolares.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B3.24",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento y uso discursivo de los elementos lingüísticos en textos orales, escritos y multimodales.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B3.25",
+      "bloque_id": "B3",
+      "descripcion": "– Identificación y empleo de recursos lingüísticos para mostrar la implicación del emisor en los textos: formas de deixis (personal, temporal y espacial) y procedimientos de modalización.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3",
+        "CE3.6",
+        "CE4.2",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B3.26",
+      "bloque_id": "B3",
+      "descripcion": "– Uso coherente de las formas verbales en los textos. Los tiempos de pretérito en la narración. Correlación temporal en el discurso relatado.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "B3.27",
+      "bloque_id": "B3",
+      "descripcion": "– Uso coherente de las formas verbales en los textos. Reconocimiento y utilización del infinitivo flexionado y del futuro de subjuntivo. Contextos de uso.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "B3.28",
+      "bloque_id": "B3",
+      "descripcion": "– Corrección lingüística y revisión ortográfica y gramatical de los textos. Uso de diccionarios, manuales de consulta y de correctores ortográficos en soporte analógico o digital.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.29",
+      "bloque_id": "B3",
+      "descripcion": "– Empleo correcto de los signos de puntuación como mecanismo organizador del texto escrito. Su relación con el significado.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Lectura autónoma.",
+      "criterios_ids": [
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "– Expresión, a través de modelos, de la experiencia lectora y de diferentes formas de apropiación y recreación de los textos leídos.",
+      "criterios_ids": [
+        "CE4.5",
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura expresiva, dramatización y recitado de los textos escritos en lengua castellana atendiendo a los procesos de comprensión, apropiación y oralización implicados.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura expresiva, dramatización y recitación de los textos escritos en lengua gallega atendiendo a los procesos de comprensión, apropiación y oralización implicados.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura expresiva, dramatización y recitación de los textos atendiendo a los procesos de comprensión, apropiación y oralización implicados.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3",
+        "CE3.6",
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Lectura guiada.",
+      "criterios_ids": [
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura guiada de fragmentos de obras relevantes del patrimonio literario español a partir de la Edad Media hasta el siglo XVIII.",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura guiada de fragmentos de obras relevantes del patrimonio literario gallego desde la Edad Media hasta el siglo XIX.",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "– Lectura guiada de fragmentos de obras relevantes del patrimonio literario universal de la Edad Media hasta el siglo XVIII.",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "– Estrategias de construcción compartida de la interpretación de las obras. Discusiones o conversaciones literarias, debates y disertaciones literarias.",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "– Estrategias de utilización de información sociohistórica, cultural y artística básica para construir la interpretación de las obras literarias, en concreto, el acercamiento al contexto, a la corriente literaria y al autor o autora, así como el establecimiento de parentescos literarios.",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "– Relación y comparación de los textos leídos en lengua gallega y lengua castellana con otros textos orales, escritos o multimodales, con otras manifestaciones artísticas y con las nuevas formas de ficción en función de temas, estructuras y lenguajes.",
+      "criterios_ids": [
+        "CE4.7"
+      ]
+    },
+    {
+      "id": "B4.13",
+      "bloque_id": "B4",
+      "descripcion": "– Estrategias para interpretar obras y fragmentos literarios, atendiendo a los valores culturales, éticos y estéticos presentes en los textos. Lectura con perspectiva de género. Visibilización del universo femenino. Lectura con perspectiva ambiental y ecológica, con especial incidencia en el cambio climático y en la protección y bienestar de los animales.",
+      "criterios_ids": [
+        "CE4.7",
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B4.14",
+      "bloque_id": "B4",
+      "descripcion": "– Creación de textos a partir de la apropiación de las convenciones del lenguaje literario y en referencia a modelos dados (imitación, transformación, continuación, etc.).",
+      "criterios_ids": [
+        "CE4.8"
+      ]
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias de construcción guiada de conclusiones propias sobre el sistema lingüístico. Observación, comparación y clasificación de unidades comunicativas (morfemas, palabras, oraciones). Manipulación de estructuras, planteamiento de hipótesis, contraejemplos, generalizaciones y contraste entre lenguas, con el uso del metalenguaje específico.",
+      "criterios_ids": [
+        "CE5.4"
+      ]
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Observación de las diferencias relevantes e intersecciones entre lengua oral y lengua escrita atendiendo a aspectos sintácticos, léxicos y pragmáticos.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Distinción entre la forma (categoría gramatical) y la función de las palabras (funciones sintácticas de la oración simple).",
+      "criterios_ids": [
+        "CE6.11"
+      ]
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Relación entre los esquemas semántico y sintáctico de las oraciones coordinadas. Observación y transformación de enunciados de acuerdo con estos esquemas y uso de la terminología sintáctica necesaria.",
+      "criterios_ids": [
+        "CE5.4"
+      ]
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Procedimientos de adquisición y formación de palabras. Reflexión sobre los cambios en su significado, las relaciones semánticas entre palabras.",
+      "criterios_ids": [
+        "CE5.2",
+        "CE3.9",
+        "CE6.11"
+      ]
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias de uso progresivamente autónomo de diccionarios y manuales de gramática para obtener información gramatical básica. Recursos tecnológicos para el aprendizaje de la lengua.",
+      "criterios_ids": [
+        "CE5.4"
+      ]
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias y técnicas para la adquisición y el desarrollo de la autoconfianza y de la iniciativa. El error como parte integrante del proceso de aprendizaje.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias de uso común para la planificación, ejecución, control y reparación de la comprensión, la producción y la coproducción de textos orales, escritos y multimodales.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.2",
+        "CE4.1",
+        "CE3.1",
+        "CE4.7",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Conocimientos, destrezas y actitudes que permiten llevar a cabo actividades de mediación en situaciones cotidianas.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Funciones comunicativas de uso común adecuadas al ámbito y al contexto comunicativo: saludar y despedirse, presentar y presentarse; describir personas, objetos, lugares, fenómenos y acontecimientos; situar eventos en el tiempo; situar objetos, personas y lugares en el espacio; pedir e intercambiar información sobre cuestiones cotidianas; dar y pedir instrucciones, consejos y órdenes; ofrecer, aceptar y rechazar ayuda, proposiciones o sugerencias; expresar parcialmente el gusto o el interés y las emociones; narrar acontecimientos pasados, describir situaciones presentes y enunciar sucesos futuros; expresar la opinión, la posibilidad, la capacidad, la obligación y la prohibición; expresar argumentaciones sencillas; realizar hipótesis y suposiciones; expresar la incertidumbre y la duda; replantear y resumir.",
+      "criterios_ids": [
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Modelos contextuales y géneros discursivos de uso común en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios: características y reconocimiento del contexto (participantes y situación), expectativas generadas por el contexto; organización y estructuración según el género, la función textual y la estructura.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE3.1",
+        "CE6.10",
+        "CE4.7",
+        "CE4.2",
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Unidades lingüísticas de uso común y significados asociados a dichas unidades, tales como la expresión de la entidad y sus propiedades, cantidad y calidad, el espacio y las relaciones espaciales, el tiempo y las relaciones temporales, la afirmación, el no, la interrogación y la exclamación, relaciones lógicas habituales.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Léxico de uso común y de interés para el alumnado, relativo a la identificación personal, relaciones interpersonales, lugares y entornos, ocio y tiempo libre, salud y actividad física, vida cotidiana, vivienda y hogar, clima y entorno natural, tecnologías de la información y de la comunicación, sistema escolar y formación.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Patrones sonoros, acentuales, rítmicos y de entonación de uso común, y significados e intenciones comunicativas generales asociadas a dichos patrones.",
+      "criterios_ids": [
+        "CE6.10"
+      ]
+    },
+    {
+      "id": "B6.9",
+      "bloque_id": "B6",
+      "descripcion": "Convenciones ortográficas de uso común y significados e intenciones comunicativas asociados a los formatos, patrones y elementos gráficos.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "B6.10",
+      "bloque_id": "B6",
+      "descripcion": "Convenciones y estrategias conversacionales de uso común, en formato síncrono o asíncrono, para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, pedir y dar aclaraciones y explicaciones, replantear, comparar y contrastar, resumir, colaborar, debatir, etc.",
+      "criterios_ids": [
+        "CE6.8"
+      ]
+    },
+    {
+      "id": "B6.11",
+      "bloque_id": "B6",
+      "descripcion": "Recursos para el aprendizaje y estrategias de uso común de búsqueda y selección de información: diccionarios, libros de consulta, bibliotecas, recursos digitales e informáticos, etc.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B6.12",
+      "bloque_id": "B6",
+      "descripcion": "Respeto de la propiedad intelectual y derechos de autor sobre las fuentes consultadas y contenidos utilizados.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B6.13",
+      "bloque_id": "B6",
+      "descripcion": "Herramientas analógicas y digitales de uso común para la comprensión, producción y coproducción oral, escrita y multimodal; y plataformas virtuales de interacción y colaboración educativa (aulas virtuales, videoconferencias, herramientas digitales colaborativas, etc.) para el aprendizaje, la comunicación y el desarrollo de proyectos con hablantes o estudiantes de la lengua extranjera.",
+      "criterios_ids": [
+        "CE6.12"
+      ]
+    },
+    {
+      "id": "B6.14",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias y técnicas para responder eficazmente y con niveles crecientes de fluidez, adecuación y corrección a una necesidad comunicativa concreta a pesar de las limitaciones derivadas del nivel de competencia en la lengua extranjera y en las demás lenguas del repertorio lingüístico propio.",
+      "criterios_ids": [
+        "CE6.13"
+      ]
+    },
+    {
+      "id": "B6.15",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias de uso común para identificar, organizar, retener, recuperar y utilizar creativamente unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B6.16",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias y herramientas de uso común para la autoevaluación, la coevaluación y la autorreparación, analógicas y digitales, individuales y cooperativas.",
+      "criterios_ids": [
+        "CE6.12"
+      ]
+    },
+    {
+      "id": "B6.17",
+      "bloque_id": "B6",
+      "descripcion": "Expresiones y léxico específico de uso común para intercambiar ideas sobre la comunicación, la lengua, el aprendizaje y las herramientas de comunicación y aprendizaje (metalenguaje).",
+      "criterios_ids": [
+        "CE5.4",
+        "CE5.3",
+        "CE3.10",
+        "CE5.2",
+        "CE3.9"
+      ]
+    },
+    {
+      "id": "B6.18",
+      "bloque_id": "B6",
+      "descripcion": "Comparación entre lenguas a partir de elementos de la lengua extranjera y otras lenguas: origen y parentescos.",
+      "criterios_ids": [
+        "CE2.3",
+        "CE5.4",
+        "CE6.11",
+        "CE6.12",
+        "CE5.3",
+        "CE3.10"
+      ]
+    }
+  ]
+}

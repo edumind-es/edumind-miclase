@@ -1,0 +1,1491 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "primaria",
+    "asignatura": "lingua-galega",
+    "ciclo_origen": "3º",
+    "fuente": "iDoceo_lingua-galega_3º.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrutar y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos l personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Reconocer la diversidad lingüística del mundo a partir de la identificación de las lenguas del alumnado y la realidad lingüística de Galicia y plurilingüe y multicultural de España para favorecer la reflexión interlingüística, para identificar y rechazar estereotipos y prejuicios lingüísticos, y para valorar esa diversidad como fuente de riqueza cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CC2",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Comprender e interpretar textos orales y multimodales identificando el sentido general y la información más relevante, y valorando con ayuda aspectos formales y de contenido básicos para construir conocimiento y responder la diferentes necesidades comunicativas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "CD3",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Producir textos orales y multimodales con coherencia, claridad y registro adecuados para expresar ideas, sentimientos y conceptos; construir conocimiento; establecer vínculos personales; y participar con autonomía y una actitud cooperativa y empática en interacciones orales variadas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CC2",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Comprender e interpretar textos escritos y multimodales, reconociendo el sentido global, las ideas principales y la información explícita e implícita, y realizando con ayuda reflexiones elementales sobre aspectos formales y de contenido, para adquirir y construir conocimiento y para responder a necesidades e intereses comunicativos diversos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Producir textos escritos y multimodales, con corrección gramatical y ortográfica básicas, seriando correctamente los contenidos y aplicando estrategias elementales de planificación, textualización, redacción, revisión y edición para construir conocimiento y para dar respuesta a demandas comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA5",
+        "CC2"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Buscar, seleccionar y contrastar información procedente de dos o más fuentes, de forma planificada y con el debido acompañamiento, evaluando su fiabilidad y reconociendo algunos riesgos de manipulación y desinformación, para transformarla en conocimiento y para comunicarla de manera creativa, adoptando un punto de vista personal y respetuoso con la propiedad intelectual.",
+      "descriptores_ids": [
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA5",
+        "CC2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ7",
+      "descripcion": "Leer de manera autónoma obras diversas seleccionadas atendiendo a sus gustos e intereses, compartiendo las experiencias de lectura, para iniciar la construcción de la identidad lectora, para fomentar el gusto por la lectura como fuente de placer y para disfrutar de su dimensión social.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CD3",
+        "CPSAA1",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ8",
+      "descripcion": "Leer, interpretar y analizar, de manera acompañada, obras o fragmentos literarios adecuados a su desarrollo, estableciendo relaciones entre ellos e identificando el género literario y sus convenciones fundamentales, para iniciarse en el reconocimiento de la literatura como manifestación artística y fuente de placer, conocimiento e inspiración para crear textos de intención literaria.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL4",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ9",
+      "descripcion": "Reflexionar de forma guiada sobre el lenguaje a partir de procesos de producción y comprensión de textos en contextos significativos, utilizando la terminología elemental adecuada para iniciarse en el desarrollo de la conciencia lingüística y para mejorar las destrezas de producción y comprensión oral y escrita.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ10",
+      "descripcion": "Poner las propias prácticas comunicativas al servicio de la convivencia democrática utilizando un lenguaje no discriminatorio y detectando y rechazando los abusos de poder a través de la palabra para favorecer un uso no solo eficaz sino también ético del lenguaje.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "CD3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Mostrar interés y respeto por las distintas lenguas y variedades dialectales de Galicia, incluida una primera aproximación a los lenguajes de signos, identificando los empleadas en su ámbito familiar.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer la existencia de prejuicios y estereotipos lingüísticos frecuentes, ofreciendo alternativas y valorando la pluralidad lingüística de su entorno y, particularmente, la dualidad lingüística general gallego-castellano como una fuente de riqueza cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer las distintas lenguas empleadas en su entorno a través de la interacción con las personas próximas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Rechazar los usos lingüísticos discriminatorios de la comunicación, teniendo en cuenta una valoración social equilibrada de las dos lenguas oficiales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Usar un lenguaje respetuoso con las diferencias personales, culturales y con la perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Comprender el sentido de textos orales y multimodales sencillos, reconociendo las ideas principales, los mensajes explícitos y los mensajes implícitos más sencillos, y progresando, de manera acompañada, en la valoración crítica del contenido.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Ampliar paulatinamente el vocabulario a partir de las experiencias y situaciones cotidianas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Identificar, de manera acompañada, el contenido de textos orales y multimodales diversos, valorando la información más relevante.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Elaborar textos orales y multimodales coherentes, con planificación acompañada, ajustando el discurso a la situación comunicativa y utilizando recursos no verbales básicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Participar en interacciones orales espontáneas o reguladas, incorporando estrategias elementales de escucha activa y respetando las normas básicas de la cortesía lingüística.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Expresarse con coherencia de forma oral para satisfacer necesidades de comunicación en diferentes situaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.7",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Rechazar los usos lingüísticos discriminatorios y la discriminación por el uso de la lengua gallega, e identificar los abusos de poder a través de la palabra desde una reflexión grupal acompañada sobre los aspectos básicos, verbales y no verbales, de la comunicación, teniendo en cuenta una perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.8",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Movilizar, con la planificación y el acompañamiento necesarios, estrategias básicas para la comunicación asertiva y el consenso, progresando en la gestión dialogada de conflictos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Leer de manera silenciosa y en voz alta textos escritos y multimodales sencillos en lengua gallega, identificando el sentido global y la información relevante e integrando, de manera acompañada, la información explícita.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Comprender distintos tipos de textos adaptados a su edad, aplicando los conocimientos básicos sobre la estructura de la lengua, la gramática, el vocabulario, así como las reglas de ortografía para favorecer una comunicación más eficaz.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar estrategias para la comprensión lectora de textos de diversa tipología, identificando palabras clave y anticipando hipótesis.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Analizar, de manera acompañada, el contenido y aspectos formales y no verbales elementales de textos escritos y multimodales, valorando su contenido, estructura y fiabilidad, como medio para ampliar el vocabulario y consolidar la ortografía correcta.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Adquirir la eficacia lectora mediante una planificación de mejora y el gusto por la lectura.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Producir textos escritos y multimodales sencillos y coherentes en distintos soportes, en lengua gallega, seleccionando el modelo discursivo que mejor responda a cada situación comunicativa e iniciándose, de manera acompañada, en la movilización de estrategias sencillas, de planificación, redacción y revisión, cuidando la presentación.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.7",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Elaborar textos escritos y multimodales sencillos y coherentes, individuales o colectivos, integrando recursos gráficos o paratextuales sencillos que faciliten la comprensión del sentido global del texto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.8",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Utilizar, de manera acompañada, las bibliotecas de aula y de centro, respetando sus normas básicas de organización y funcionamiento y participando en las actividades organizadas e interesarse por formar una pequeña biblioteca propia con textos de la literatura infantil gallega.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.9",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Conseguir las destrezas y competencias lingüísticas a través del uso de la lengua escrita.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.10",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Construir, a través del lenguaje y de forma progresiva, un pensamiento crítico para evitar discriminaciones y prejuicios.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.11",
+      "objetivo_id": "OBJ10",
+      "descripcion": "Rechazar los usos lingüísticos discriminatorios y la discriminación por el uso de la lengua gallega, e identificar los abusos de poder a través de la palabra a partir de la reflexión grupal acompañada sobre los aspectos básicos, verbales y no verbales, de la comunicación, teniendo en cuenta una perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Localizar, seleccionar y contrastar información de distintas fuentes, incluidas las digitales, citándolas y recreándolas mediante la adaptación creativa de modelos dados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Compartir los resultados de un proceso de investigación sencillo, individual o grupal, sobre algún tema de interés personal, realizado de manera acompañada, que implique la localización, selección y contraste de información de distintas fuentes, incluidas las digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Utilizar la biblioteca de aula y de centro para localizar libros adecuados a su gusto personal e intereses.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Adoptar hábitos de uso crítico, seguro, sostenible y saludable de las tecnologías de la información y de la comunicación para la búsqueda de la información.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Leer de manera autónoma o acompañada textos de diversas fuentes de información que empleen la lengua gallega acordes con sus intereses, avanzando en la construcción de su identidad lectora.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Compartir oralmente la experiencia de lectura, participando, de forma acompañada o autónoma, en comunidades lectoras de ámbito escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Leer de manera autónoma o acompañada textos de diversos autores y autoras de la literatura gallega, ajustados a sus gustos e intereses, avanzando en la construcción de su identidad lectora.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Compartir la experiencia de lectura, en soportes diversos, mediante la realización de actividades literarias y participando en la comunidad lectora escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Valorar los textos literarios y la literatura en general como fuente de ocio e información.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Identificar la biblioteca del aula o del centro como escenario de actividades literarias compartidas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "OBJ7",
+      "descripcion": "Reproducir, a partir de modelos dados, textos literarios sencillos, en prosa o en verso, con sentido estético y creatividad: cuentos y poemas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.6",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Escuchar y leer textos variados de la literatura infantil universal y gallega, que recojan diversidad de autores y autoras, reconociendo elementos básicos de los distintos géneros literarios e interpretándolos y relacionándolos con otras manifestaciones artísticas de manera acompañada.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.7",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Producir, de manera acompañada, textos sencillos individuales o colectivos con intención literaria, recreando de manera personal los modelos dados.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.8",
+      "objetivo_id": "OBJ8",
+      "descripcion": "Reconocer recursos básicos del lenguaje literario.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comparar aspectos básicos de las lenguas del ámbito escolar y social para conseguir una competencia comunicativa integrada.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Producir en gallego textos escritos y multimodales sencillos y coherentes, seleccionando el modelo discursivo que mejor responda a cada situación comunicativa, iniciándose en el uso de normas ortográficas sencillas y adecuadas a su nivel, progresando, de manera acompañada, en la movilización de estrategias sencillas, de planificación, redacción y revisión, cuidando la presentación.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Formular conclusiones elementales sobre el funcionamiento de la lengua gallega, prestando especial atención a la concordancia y a las relaciones de significado entre las palabras (sustantivos, adjetivos y verbos), a partir de la observación, comparación y manipulación de palabras y enunciados, en un proceso acompañado de producción o comprensión de textos en contextos significativos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Revisar los textos propios y ajenos, de manera acompañada, a partir de la observación, comparación y manipulación de palabras en un proceso de mejora en la producción y comprensión de textos y mediante el uso guiado de diccionarios físicos o digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.5",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Aplicar los conocimientos básicos sobre las categorías gramaticales y las reglas de ortografía, fijando diferencias con el castellano, para favorecer una comunicación más eficaz.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.6",
+      "objetivo_id": "OBJ9",
+      "descripcion": "Progresar en la adquisición de vocabulario gallego a través de los textos.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Las lenguas y sus hablantes"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Comunicación oral"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Comunicación escrita"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Alfabetización mediática e informacional"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque 5. Educación literaria"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque 6. Reflexión sobre la lengua y sus usos en el marco de propuestas de producción y comprensión de"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Biografía lingüística personal y de su centro educativo",
+      "criterios_ids": [
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Identificación de prejuicios y estereotipos lingüísticos",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "La diversidad etnocultural y lingüística como riqueza y herramienta para aproximarse a su entorno",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento en las expresiones verbales y no verbales de la igualdad entre hombres y mujeres",
+      "criterios_ids": [
+        "CE1.2",
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Uso de un lenguaje no discriminatorio y respetuoso con las diferencias, teniendo una perspectiva de género",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Valoración de la diversidad de la lengua en el entorno y en nuestra comunidad autónoma",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Valoración social equilibrada de las dos lenguas oficiales de Galicia, reconociendo el gallego como lengua propia",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "(Contexto) Incidencia de los componentes (situación, participantes, propósito comunicativo, canal) en el acto comunicativo.",
+      "criterios_ids": [
+        "CE2.2",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "(Géneros discursivos) Estrategias para la adquisición de destrezas básicas sobre géneros discursivos propios del ámbito personal, social y educativo (contenido y forma).",
+      "criterios_ids": [
+        "CE2.3",
+        "CE2.5",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "(Géneros discursivos) Estrategias para la coherencia y la cohesión en la producción y reproducción oral de textos en lengua gallega.",
+      "criterios_ids": [
+        "CE2.6",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "(Géneros discursivos) Intención comunicativa y claves de la tipología textual básica: narración, descripción, diálogo y exposición.",
+      "criterios_ids": [
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "(Géneros discursivos) Interés por la ampliación de vocabulario para una mejor comunicación oral.",
+      "criterios_ids": [
+        "CE2.2",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: comprensión oral) Audición, dramatización y reproducción de textos adecuados al nivel, que estimulen intereses y gustos.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6",
+        "CE2.7",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: comprensión oral) Comprensión global y específica e identificación de las ideas más relevantes de textos orales de diversa tipología y procedentes de diversas fuentes (grabaciones, medios de comunicación, escucha oral de cuentos infantiles).",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.3",
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: comprensión oral) Comprensión y expresión de mensajes verbales y no verbales, especialmente gestos y tono de voz que incidan en el significado del mensaje que se quiere transmitir.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: comprensión oral) Detección de usos discriminatorios del lenguaje verbal y no verbal y de discriminación por el uso del gallego como lengua de comunicación.",
+      "criterios_ids": [
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: comprensión oral) Estrategias para la utilización del lenguaje oral como instrumento de comunicación y aprendizaje (escuchar y preguntar) y para la identificación e interpretación del sentido global de textos orales y multimodales sencillos.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: interacción oral) Estrategias de expresión y escucha empática de necesidades, vivencias y emociones propias y ajenas para la resolución dialogada de los conflictos, teniendo en cuenta la perspectiva de género.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE2.6",
+        "CE2.7",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: interacción oral) Estrategias de interpretación de elementos básicos de la comunicación no verbal.",
+      "criterios_ids": [
+        "CE2.4",
+        "CE2.5",
+        "CE2.7",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: interacción oral) Interacción oral adecuada en situaciones de aula, movilizando estrategias básicas de cortesía lingüística y asertividad.",
+      "criterios_ids": [
+        "CE2.2",
+        "CE2.5",
+        "CE2.6",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: interacción oral) Participación activa en situaciones de comunicación, espontáneas y dirigidas, utilizando frases con una secuencia lineal sencilla y coherente, construyendo el discurso de acuerdo con las necesidades comunicativas de cada situación.",
+      "criterios_ids": [
+        "CE2.2",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: producción oral) Construcción, valoración y comunicación de conocimiento mediante la planificación y producción acompañada de textos orales y multimodales sencillos.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.3",
+        "CE2.4",
+        "CE2.8"
+      ]
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: producción oral) Creación de textos orales utilizando un lenguaje verbal no discriminatorio y respetuoso con las diferencias.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.3",
+        "CE2.4",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "(Procesos: producción oral) Producción de textos orales sencillos de diferente tipología. Pronunciación y entonación adecuadas, atendiendo a la particularidad fonética de la lengua gallega.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "(Contexto) Incidencia de los componentes (situación, participantes, propósito comunicativo, canal) en el acto comunicativo.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "(Géneros discursivos) Elementos básicos de contenido (tema, léxico) y forma (estructura, título, imágenes).",
+      "criterios_ids": [
+        "CE3.2",
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "(Géneros discursivos) Estrategias para la adquisición de destrezas básicas sobre géneros discursivos propios del ámbito personal, social y educativo (contenido y forma).",
+      "criterios_ids": [
+        "CE3.9"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "(Géneros discursivos) Estrategias para la coherencia y la cohesión en la producción y reproducción de textos escritos, en lengua gallega.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "(Géneros discursivos) Estrategias para la comprensión lectora de textos sencillos, de la literatura gallega, de uso cotidiano.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE3.3",
+        "CE3.5",
+        "CE3.6",
+        "CE3.8"
+      ]
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "(Géneros discursivos) Intención comunicativa y claves de la tipología textual básica: narración, descripción, diálogo.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Comprensión de textos diversos, adecuados a su edad, leídos en voz alta y en silencio, empleando la lectura como medio para ampliar el vocabulario y consolidar la ortografía correcta.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5"
+      ]
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Conocimiento de la organización y funcionamiento de las bibliotecas del aula, del centro y de las virtuales y participación en las actividades organizadas. Interés por mantener la biblioteca propia y personal, ampliando sus fondos con textos propios de la literatura gallega.",
+      "criterios_ids": [
+        "CE3.8"
+      ]
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Detección de usos discriminatorios del lenguaje verbal e icónico.",
+      "criterios_ids": [
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Elementos gráficos, textuales y paratextuales progresivamente complejos que favorecen la comprensión antes, durante y después de la experiencia lectora.",
+      "criterios_ids": [
+        "CE3.5",
+        "CE3.7",
+        "CE3.10"
+      ]
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Estrategias básicas de comprensión del sentido general e identificación de las ideas más relevantes de textos escritos en lengua gallega.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Estrategias básicas de uso de fuentes documentales diversas, tanto en papel como digitales, para mejorar la comprensión de los textos.",
+      "criterios_ids": [
+        "CE3.3",
+        "CE3.5"
+      ]
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Lectura individual o acompañada de distintos tipos de textos, con entonación y ritmo adecuados al desarrollo cognitivo.",
+      "criterios_ids": [
+        "CE3.5"
+      ]
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Uso de la biblioteca para la lectura de los libros propuestos, en la búsqueda de información y utilización de esta como fuente de información y ocio.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: comprensión lectora) Valoración y aprecio de la lectura, especialmente en lengua gallega, como medio para ampliar el vocabulario y consolidar la ortografía correcta.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE3.4",
+        "CE3.5",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Aplicación de las normas ortográficas básicas adecuadas a su desarrollo cognitivo y cohesión del texto: mantenimiento del tiempo verbal, puntuación.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Creación de textos utilizando la lengua gallega con intención informativa: carteles, anuncios, pequeños cómics.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.8",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.18",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Estrategias básicas de uso de fuentes documentales diversas, tanto en papel como digitales, para mejorar la expresión escrita en lengua gallega y la elaboración de textos.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.3",
+        "CE3.6",
+        "CE3.8",
+        "CE3.9"
+      ]
+    },
+    {
+      "id": "B3.19",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Modelos y estrategias elementales, individuales o grupales, de planificación, redacción, revisión de textos escritos sencillos, en diferentes soportes (incluidos los digitales), con distintos propósitos comunicativos.",
+      "criterios_ids": [
+        "CE3.4",
+        "CE3.6",
+        "CE3.7",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B3.20",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Producción de textos escritos y multimodales sencillos, coherentes y con presentación cuidada, utilizando en cada situación el modelo discursivo que corresponda.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.4",
+        "CE3.6",
+        "CE3.7"
+      ]
+    },
+    {
+      "id": "B3.21",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Uso de elementos gráficos y paratextuales básicos que faciliten la organización y comprensión del texto.",
+      "criterios_ids": [
+        "CE3.7"
+      ]
+    },
+    {
+      "id": "B3.22",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Uso de un lenguaje no discriminatorio y respetuoso con las diferencias.",
+      "criterios_ids": [
+        "CE3.10"
+      ]
+    },
+    {
+      "id": "B3.23",
+      "bloque_id": "B3",
+      "descripcion": "(Procesos: producción escrita) Valoración de la propia producción escrita, así como la producción escrita de las compañeras y compañeros.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6",
+        "CE3.7",
+        "CE3.8",
+        "CE3.9",
+        "CE3.10",
+        "CE3.11"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Colaboración en comunidades lectoras de ámbito escolar a través de experiencias lectoras compartidas",
+      "criterios_ids": [
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Comunicación creativa del conocimiento, con respeto por la propiedad intelectual de las obras de escritores y escritoras gallegos",
+      "criterios_ids": [
+        "CE4.4",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Construcción de la identidad lectora a través de la lectura de textos en gallego y adecuados a sus intereses, procedentes de diversas fuentes de información",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias básicas en la búsqueda guiada de la localización, selección y contraste de información recogida de distintas fuentes, citándolas y recreándolas mediante la adaptación creativa de modelos dados",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.4",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias y técnicas para comparar y clasificar la información",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.4",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Identificación y valoración crítica de los mensajes y de la información recogidas y transmitidas de distintas fuentes y de distintos tipos de texto",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.4",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Modelos explícitos para reelaborar la información",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.4",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Utilización de la biblioteca y de los recursos digitales del aula o del centro como fuente de información, aprendizaje y ocio",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Utilización de las tecnologías de la información y comunicación para la búsqueda de la información, adoptando hábitos de uso crítico, seguro, sostenible y saludable",
+      "criterios_ids": [
+        "CE4.3",
+        "CE4.4",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Análisis guiado de los recursos expresivos elementales y sus efectos en la recepción del texto",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Comprensión, memorización y recitado de poemas, valorando el ritmo y la entonación",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Construcción de la identidad lectora empleando textos de la literatura gallega. Estrategias para la expresión de gustos e intereses",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Creación de textos literarios sencillos, en prosa o en verso: cuentos, poemas, adivinanzas, canciones y teatro",
+      "criterios_ids": [
+        "CE5.3",
+        "CE5.5"
+      ]
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Elaboración de textos con intención literaria en gallego, a partir de modelos dados o recreando textos literarios",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.3",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7"
+      ]
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias básicas para la interpretación acompañada y compartida de obras, a través de conversaciones literarias, participando en la comunidad lectora escolar",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Funcionamiento de la biblioteca del aula o del centro como escenario de actividades literarias compartidas",
+      "criterios_ids": [
+        "CE5.2",
+        "CE5.4",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Identificación de manera acompañado de recursos literarios básicos",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.4",
+        "CE5.6",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Lectura acompañada y comentada de diversos textos literarios en lengua gallega, adecuados a sus intereses y organizados en itinerarios lectores",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.6",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Lectura expresiva, dramatización o interpretación de fragmentos, atendiendo a los procesos de comprensión y al nivel de desarrollo",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "Los elementos constitutivos esenciales de la obra literaria (tema, protagonista, personajes secundarios)",
+      "criterios_ids": [
+        "CE5.7"
+      ]
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Relación entre los textos leídos y otras manifestaciones artísticas y culturales",
+      "criterios_ids": [
+        "CE5.6"
+      ]
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "Valoración del texto literario gallego y de la literatura en general, como vehículo de comunicación y recurso de ocio personal",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3",
+        "CE5.4",
+        "CE5.5",
+        "CE5.7",
+        "CE5.8"
+      ]
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Aproximación a la lengua como sistema con distintos niveles: sonidos y letras, palabras, oraciones y textos. Observación y comparación de unidades comunicativas básicas",
+      "criterios_ids": [
+        "CE6.1",
+        "CE6.2",
+        "CE6.3",
+        "CE6.4",
+        "CE6.5",
+        "CE6.6"
+      ]
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Establecimiento de generalizaciones sobre aspectos lingüísticos elementales en la estructura del gallego, prestando especial atención a las relaciones (género y número) que se establecen entre sustantivos, adjetivos y verbos",
+      "criterios_ids": [
+        "CE6.1",
+        "CE6.2",
+        "CE6.3",
+        "CE6.6"
+      ]
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias para la elaboración guiada de conclusiones propias sobre el sistema lingüístico. Transformación de enunciados (sustitución, cambio de orden, manipulación)",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.3",
+        "CE6.4"
+      ]
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Estrategias y técnicas elementales de reconocimiento de la intención comunicativa y del uso guiado de diccionarios, en distintos soportes",
+      "criterios_ids": [
+        "CE6.1",
+        "CE6.2",
+        "CE6.4",
+        "CE6.5"
+      ]
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Identificación de las similitudes y diferencias entre las lenguas de su ámbito escolar y social para conseguir una competencia comunicativa integrada y progresar en su aprendizaje",
+      "criterios_ids": [
+        "CE6.1",
+        "CE6.2",
+        "CE6.5",
+        "CE6.6"
+      ]
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Los signos de puntuación elementales como mecanismos para organizar el texto escrito",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Mecanismos de coherencia y cohesión elementales, con especial atención a las repeticiones y sinónimos, al orden de oraciones y párrafos y a los diferentes conectores gramaticales y textuales explicativos",
+      "criterios_ids": [
+        "CE6.3",
+        "CE6.5"
+      ]
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Ortografía: utilización de las reglas básicas de ortografía y puntuación",
+      "criterios_ids": [
+        "CE6.5"
+      ]
+    },
+    {
+      "id": "B6.9",
+      "bloque_id": "B6",
+      "descripcion": "Procedimientos elementales de adquisición de vocabulario gallego. Semejanzas y diferencias de forma y significado entre palabras de la misma familia léxica o semántica",
+      "criterios_ids": [
+        "CE6.3",
+        "CE6.4",
+        "CE6.5",
+        "CE6.6"
+      ]
+    },
+    {
+      "id": "B6.10",
+      "bloque_id": "B6",
+      "descripcion": "Reconocimiento de las distintas clases de palabras (sustantivo, verbo, adjetivo, pronombres, artículos). Características y uso de cada clase de palabra",
+      "criterios_ids": [
+        "CE6.3",
+        "CE6.4"
+      ]
+    }
+  ]
+}

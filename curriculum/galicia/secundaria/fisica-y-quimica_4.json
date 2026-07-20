@@ -1,0 +1,632 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "fisica-y-quimica",
+    "ciclo_origen": "4º",
+    "fuente": "iDoceo_fisica-y-quimica_4º.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al tiempo que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones coy nocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y replanteando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, haciéndose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica sobre el alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostracioy nes, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esy quemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemáticoformal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. saludable, sostenible, crítico y responsable para el trabajo y para la participación en la y datos, la comunicación y la colaboración, la digitales (incluida la programación), la serelacionadas con la ciberseguridigital, la privacidad, la propiedad intelectual, computacional y crítico. operativos."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50065 operativos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de y vida saludable en los ámbitos físico y mental, recoo noce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. culturales. culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de matambién un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50069 en un mundo caracterizado por la diverque el arte y otras manifestaciones culturales y de darle forma. operativos."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan. y."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II las materias etapa de la educación secundaria obligatoria del Medio Natural, Social y Cultural el desarrollo de la curiosidad y la actitud crítiC.494-1998 https://www.xunta.gal/diario-oficial-galicia."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Comprender y relacionar los motivos por los que ocurren los principales fenómenos fisicoquímicos del entorno, explicándolos en términos de las leyes y teorías científicas adecuadas para resolver problemas con el fin de aplicarlas para mejorar la realidad próxima y la calidad de la vida humana.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Expresar las observaciones realizadas por el alumnado en forma de preguntas, formulando hipótesis para explicarlas y demostrando estas hipótesis a través de la experimentación científica, la indagación y la búsqueda de evidencias, para desarrollar los razonamientos propios del pensamiento científico y mejorar las destrezas en el uso de las metodologías científicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Manejar con soltura las reglas y las normas básicas de la física y de la química en el referente al lenguaje de la IUPAC, al lenguaje matemático, al empleo de unidades de medida correctas, al uso seguro del laboratorio y a la interpretación y producción de datos e información en diferentes formatos y fuentes, para reconocer el carácter universal y transversal del lenguaje científico y la necesidad de una comunicación fiable en investigación y ciencia entre diferentes países y culturas.",
+      "descriptores_ids": [
+        "STEM4",
+        "STEM5",
+        "CD3",
+        "CPSAA2",
+        "CC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Utilizar de forma crítica, eficiente y segura plataformas digitales y recursos variados, tanto para el trabajo individual como en equipo, para fomentar la creatividad, el desarrollo personal y el aprendizaje individual y social, mediante la consulta de información, la creación de materiales y la comunicación efectiva en los diferentes entornos de aprendizaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer y describir situaciones problemáticas reales de índole científica y emprender iniciativas colaborativas en las que la ciencia y, en particular, la física y la química pueden contribuir a su solución, analizando críticamente su impacto en la sociedad y en el medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Predecir, para las cuestiones expuestas, respuestas que se puedan comprobar con las herramientas y conocimientos adquiridos, tanto de forma experimental como deductiva, aplicando el razonamiento lógico-matemático en su proceso de validación.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Emplear fuentes variadas fiables y seguras para seleccionar, interpretar, organizar y comunicar información relativa a un proceso fisicoquímico concreto, relacionando entre sí lo que cada una de ellas contiene, extrayendo en cada caso lo relevante para la resolución de un problema y desechando todo lo que sea irrelevante.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Utilizar adecuadamente las reglas básicas de la física y de la química, incluido el uso correcto de varios sistemas de unidades, las herramientas matemáticas necesarias y las reglas de nomenclatura avanzadas, así como las herramientas matemáticas, facilitando una comunicación efectiva con toda la comunidad científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Aplicar con rigor las normas de uso de los espacios específicos de la ciencia, como los laboratorios de física y química, asegurando la salud propia y colectiva, la conservación sostenible del medio ambiente y el cuidado de las instalaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar de forma eficiente recursos variados, tradicionales y digitales, mejorando el aprendizaje autónomo y la interacción con otros miembros de la comunidad educativa, de forma rigurosa y respetuosa y analizando críticamente las aportaciones de cada participante.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Trabajar de forma versátil con medios variados, tradicionales y digitales, en la consulta de información y en la creación de contenidos, seleccionando y empleando con criterio las fuentes y las herramientas más fiables y adecuadas mejorando el aprendizaje propio y colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Establecer interacciones constructivas y coeducativas emprendiendo actividades de cooperación e iniciando el uso de las estrategias propias del trabajo colaborativo, como forma de construir un medio de trabajo eficiente en la ciencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.9",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Reconocer y valorar, a través del análisis histórico de los avances científicos logrados por mujeres y hombres, así como de situaciones y contextos actuales (líneas de investigación, instituciones científicas, etc.), que la ciencia es un proceso en permanente construcción y que esta tiene repercusiones e implicaciones importantes sobre la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comprender fenómenos fisicoquímicos cotidianos relacionados con la composición y con la estructura de sistemas materiales, explicarlos con rigor en términos de los principios, teorías y leyes científicas adecuadas expresándolos de manera argumentada y utilizando diversidad de soportes y medios de comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Resolver los problemas fisicoquímicos expuestos en relación con la composición y con la estructura de sistemas materiales mediante las leyes y las teorías científicas adecuadas, razonando los procedimientos utilizados para encontrar las soluciones y expresando los resultados con corrección y precisión.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Emplear las metodologías propias de la ciencia en la identificación y descripción de fenómenos relacionados con sistemas materiales a partir de situaciones tanto observadas en el mundo natural como expuestas a través de enunciados con información textual, gráfica o numérica.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Aplicar las leyes y teorías científicas más importantes para validar hipótesis de manera informada y coherente con el conocimiento científico existente, diseñando los procedimientos experimentales o deductivos necesarios para resolverlas y analizando los resultados críticamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Reconocer y valorar, a través del análisis histórico del desarrollo del modelo atómico y de la ordenación de los elementos en la tabla periódica, que la ciencia es un proceso en permanente construcción.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comprender fenómenos fisicoquímicos cotidianos en cuanto a las distintas formas y transferencias de energía, explicarlos con rigor en términos de los principios, teorías y leyes científicas adecuadas, expresándolos de manera argumentada y utilizando diversidad de soportes y medios de comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Resolver los problemas fisicoquímicos expuestos en relación con la energía y con sus procesos de intercambio mediante las leyes y teorías científicas adecuadas, razonando los procedimientos utilizados para encontrar las soluciones y expresando los resultados con corrección y precisión.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer y describir situaciones problemáticas reales relacionadas con la energía y emprender iniciativas colaborativas en las que la física y la química pueden contribuir a su solución, analizando críticamente su impacto en la sociedad y en el medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Emplear las metodologías propias de la ciencia en la identificación y descripción de fenómenos relacionados con la energía y con sus procesos de intercambio a partir de situaciones tanto observadas en el mundo natural como expuestas a través de enunciados con información textual, gráfica o numérica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Aplicar las leyes y teorías científicas más importantes relacionadas con la energía y sus procesos de intercambio para validar hipótesis de manera informada y coherente con el conocimiento científico existente, diseñando los procedimientos experimentales o deductivos necesarios para resolverlas y analizando los resultados críticamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Emprender, de forma autónoma y de acuerdo con la metodología adecuada, proyectos científicos en cuanto a la energía que involucren al alumnado en la mejora de la sociedad y que creen valor individual y colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.7",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Detectar las necesidades tecnológicas, ambientales, económicas y sociales más importantes que demanda la sociedad, entendiendo la capacidad de la ciencia para darle solución sostenible a través de la implicación de toda la ciudadanía.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comprender fenómenos fisicoquímicos cotidianos relacionados con el movimiento, con las fuerzas y con sus efectos, explicarlos con rigor en términos de los principios, teorías y leyes científicas adecuadas, expresándolos de manera argumentada y utilizando diversidad de soportes y medios de comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Resolver los problemas fisicoquímicos expuestos con relación al movimiento, a las fuerzas y a sus efectos mediante las leyes y teorías científicas adecuadas, razonando los procedimientos utilizados para encontrar las soluciones y expresando los resultados con corrección y precisión.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Emplear las metodologías propias de la ciencia en la identificación y descripción de fenómenos con relación al movimiento, a las fuerzas y a sus efectos a partir de situaciones tanto observadas en el mundo natural como expuestas a través de enunciados con información textual, gráfica o numérica.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Aplicar las leyes y teorías científicas más importantes relacionadas con el movimiento, con las fuerzas y con sus efectos para validar hipótesis de manera informada y coherente con el conocimiento científico existente, diseñando los procedimientos experimentales o deductivos necesarios para resolverlas y analizando los resultados críticamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Emprender, de forma autónoma y de acuerdo con la metodología adecuada, proyectos científicos relacionados con el movimiento, con las fuerzas y con sus efectos que involucren al alumnado en la mejora de la sociedad y que creen un valor individual y colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Comprender cambios físicos y químicos cotidianos, explicarlos con rigor en términos de los principios, teorías y leyes científicas adecuadas, expresándolos de manera argumentada y utilizando diversidad de soportes y medios de comunicación.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Resolver los problemas fisicoquímicos expuestos con relación a los cambios físicos y químicos mediante las leyes y las teorías científicas adecuadas, razonando los procedimientos utilizados para encontrar las soluciones y expresando los resultados con corrección y precisión.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer y describir situaciones problemáticas reales relacionadas fundamentalmente con los cambios químicos y emprender iniciativas colaborativas en las que la física y la química pueden contribuir a su solución, analizando críticamente su impacto en la sociedad y en el medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Emplear las metodologías propias de la ciencia en la identificación y descripción de cambios físicos y químicos a partir de situaciones tanto observadas en el mundo natural como expuestas a través de enunciados con información textual, gráfica o numérica.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Emprender, de forma autónoma y de acuerdo con la metodología adecuada, proyectos científicos referidos a cambios físicos y químicos que involucren al alumnado en la mejora de la sociedad y que creen un valor individual y colectivo.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Las destrezas científicas básicas"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. La materia"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. La energía"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. La interacción"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque 5. El cambio"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Trabajo experimental y proyectos de investigación: estrategias en la resolución de problemas y el tratamiento del error mediante la indagación, la deducción, la búsqueda de evidencias y el razonamiento lógicomatemático, haciendo inferencias válidas de las observaciones y obteniendo conclusiones que vayan más allá de las condiciones experimentales para aplicarlas a nuevos escenarios.",
+      "criterios_ids": [
+        "CE1.8"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Diversos entornos y recursos de aprendizaje científico, como los laboratorios o los entornos virtuales: materiales, sustancias y herramientas tecnológicas.",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Normas de uso de cada espacio, asegurando y protegiendo así la salud propia y comunitaria, la seguridad en las redes y el respeto hacia el medio ambiente.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "El lenguaje científico: manejo adecuado de distintos sistemas de unidades y sus símbolos. Herramientas matemáticas adecuadas en diferentes escenarios científicos y de aprendizaje.",
+      "criterios_ids": [
+        "CE1.4",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de interpretación y producción de información científica en diferentes formatos y a partir de diferentes medios: desarrollo del criterio propio basado en lo que el pensamiento científico aporta a la mejora de la sociedad para hacerla más justa, equitativa e igualitaria.",
+      "criterios_ids": [
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Valoración de la cultura científica y del papel de científicos y científicas en los principales hitos históricos y actuales de la física y de la química para el avance y la mejora de la sociedad.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.9",
+        "CE3.6",
+        "CE5.5",
+        "CE4.5",
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La cultura científica: el papel de los científicos y de las científicas en los principales hitos históricos y actuales de la física y de la química en el avance y en la mejora de la sociedad.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.9",
+        "CE3.6",
+        "CE5.5",
+        "CE4.5",
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Sistemas materiales: resolución de problemas y otras situaciones de aprendizaje diversas sobre disoluciones y gases, entre otros sistemas materiales significativos.",
+      "criterios_ids": [
+        "CE2.3",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Modelos atómicos: desarrollo histórico de los principales modelos atómicos clásicos y cuánticos y descripción de las partículas subatómicas, estableciendo su relación con los avances de la física y de la química",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Estructura electrónica de los átomos: configuración electrónica de un átomo y su relación con la posición de este en la tabla periódica y sus propiedades fisicoquímicas.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Compuestos químicos: su formación, propiedades físicas y químicas y valoración de su utilidad e importancia en otros campos como la ingeniería o el deporte.",
+      "criterios_ids": [
+        "CE5.5"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Cuantificación de la cantidad de materia: cálculo del número de moles de sistemas materiales de diferente naturaleza, manejando con soltura las diferentes formas de medida y expresión de esta en el entorno científico.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Nomenclatura inorgánica: denominación de sustancias simples, iones y compuestos químicos binarios y ternarios mediante las normas de la IUPAC.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Introducción a la nomenclatura orgánica: denominación de compuestos orgánicos monofuncionales a partir de las normas de la IUPAC como base para entender la gran variedad de compuestos del entorno basadas en el carbono.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La energía: planteamiento y comprobación de hipótesis sobre las distintas formas de energía y aplicaciones a partir de sus propiedades y del principio de conservación, como base para la experimentación y la resolución de problemas relacionados con la energía mecánica en situaciones cotidianas.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Transferencias de energía: el trabajo y el calor como formas de transferencia de energía entre sistemas relacionados con las fuerzas o la diferencia de temperatura. La luz y el sonido como ondas que transfieren energía.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La energía en nuestro mundo: estimación de la energía consumida en la vida cotidiana mediante la procura de información contrastada, la experimentación y el razonamiento científico, comprendiendo la importancia de la energía en la sociedad, su producción y su uso responsable.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Predicción y comprobación, utilizando la experimentación y el razonamiento lógico-matemático, utilizando ecuaciones y gráficas de la variación de las principales magnitudes que describen el movimiento de un cuerpo, relacionándolo con situaciones cotidianas y con la mejora de la calidad de vida.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "La fuerza como agente de cambios en los cuerpos: principio fundamental de la física que se aplica a otros campos como el diseño, el deporte o la ingeniería.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Carácter vectorial de las fuerzas: uso del álgebra vectorial básica para la realización gráfica y numérica de operaciones con fuerzas y su aplicación a la resolución de problemas relacionados con sistemas sometidos a conjuntos de fuerzas, valorando su importancia en situaciones cotidianas.",
+      "criterios_ids": [
+        "CE2.3",
+        "CE4.3",
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Principales fuerzas del entorno cotidiano, reconocimiento del peso, la normal, el roce, la tensión o lo empuje y su uso en la explicación de fenómenos físicos en distintos escenarios.",
+      "criterios_ids": [
+        "CE4.3"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Ley de la gravitación universal: atracción entre los cuerpos que componen el universo. Concepto de peso.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Fuerzas y presión en los fluidos: efectos de las fuerzas y de la presión sobre los líquidos y los gases, estudiando los principios fundamentales que las describen.",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Ecuaciones químicas: ajuste de reacciones químicas y realización de predicciones cualitativas y cuantitativas basadas en la estequiometría, relacionándolas con procesos fisicoquímicos de la industria, del medio ambiente y de la sociedad.",
+      "criterios_ids": [
+        "CE3.3",
+        "CE5.3",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Descripción cualitativa de reacciones químicas de interés del entorno cotidiano, incluidas las combustiones, las neutralizaciones y los procesos electroquímicos sencillos, valorando las implicaciones que tienen en la tecnología, en la sociedad o en el medio ambiente.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Factores que influyen en la velocidad de las reacciones químicas: comprensión de cómo ocurre la reordenación de los átomos aplicando modelos como la teoría de colisiones y realización de predicciones en los procesos químicos cotidianos más importantes.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    }
+  ]
+}

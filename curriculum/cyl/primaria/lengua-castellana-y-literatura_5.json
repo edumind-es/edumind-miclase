@@ -1,0 +1,569 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "lengua-castellana-y-literatura",
+    "ciclo_origen": "quinto-curso",
+    "fuente": "iDoceo_lengua-castellana-y-literatura_quinto-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "5º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Reconocer la diversidad lingüística del mundo a partir de la identificación de las lenguas del alumnado y de la realidad plurilingüe y multicultural de España, para favorecer la reflexión interlingüística, para identificar y rechazar estereotipos y prejuicios lingüísticos y para valorar dicha diversidad como fuente de riqueza cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CPSAA3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Comprender e interpretar textos orales y multimodales, identificando el sentido general y la información más relevante y valorando con ayuda, elementos de la comunicación no verbal, aspectos formales y de contenido básicos, para construir conocimiento y responder a diferentes necesidades comunicativas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD3",
+        "CPSAA3",
+        "CC3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Producir textos orales y multimodales, con coherencia, claridad y registro adecuados, para expresar ideas, sentimientos y conceptos; construir conocimiento; establecer vínculos personales; y participar con autonomía y una actitud cooperativa y empática en interacciones orales variadas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender e interpretar textos escritos y multimodales, reconociendo el sentido global, las ideas principales y la información explícita e implícita, y realizando con ayuda reflexiones elementales sobre aspectos formales y de contenido, para adquirir y construir conocimiento y para responder a necesidades e intereses comunicativos diversos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL4",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Producir textos escritos y multimodales, con corrección gramatical y ortográfica básicas, secuenciando correctamente los contenidos y aplicando estrategias CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC2",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Buscar, seleccionar y contrastar información procedente de dos o más fuentes, de forma planificada y con el debido acompañamiento, evaluando su fiabilidad y reconociendo algunos riesgos de manipulación y desinformación, para transformarla en conocimiento y para comunicarla de manera creativa, adoptando un punto de vista personal y respetuoso con la propiedad intelectual.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM1",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA4",
+        "CPSAA5",
+        "CC2",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Leer de manera autónoma obras diversas seleccionadas atendiendo a sus gustos e intereses, compartiendo las experiencias de lectura, para iniciar la construcción de la identidad lectora, para fomentar el gusto por la lectura como fuente de placer y para disfrutar de su dimensión social.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CD3",
+        "CPSAA1",
+        "CPSAA4",
+        "CC2",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Leer, interpretar y analizar, de manera acompañada, obras o fragmentos literarios adecuados a su desarrollo, estableciendo relaciones entre ellos e identificando el género literario y sus convenciones fundamentales, para iniciarse en el reconocimiento de la literatura como manifestación artística y fuente de placer, conocimiento e inspiración para crear textos de intención literaria.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL4",
+        "STEM3",
+        "CD1",
+        "CD2",
+        "CE1",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Reflexionar de forma guiada sobre el lenguaje a partir de procesos de producción y comprensión de textos en contextos significativos, utilizando la terminología elemental adecuada, para iniciarse en el desarrollo de la conciencia lingüística y para mejorar las destrezas de producción y comprensión oral y escrita.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "CD2",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE10",
+      "descripcion": "Poner las propias prácticas comunicativas al servicio de la convivencia democrática utilizando un lenguaje no discriminatorio y detectando y rechazando los abusos de poder a través de la palabra, para favorecer un uso no solo eficaz sino también ético del lenguaje.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "CD3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar interés y respeto a las distintas lenguas y variedades dialectales, incluidas las lenguas de signos, identificando las características fundamentales de las de su entorno geográfico, así como algunas expresiones de uso cotidiano de los dialectos y lenguas familiares del alumnado. (CCL1, CP2, CC1, CC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Detectar, con cierta autonomía y en contextos próximos, prejuicios y estereotipos lingüísticos frecuentes, aportando alternativas, reconociendo la diversidad lingüística del mundo como una fuente de riqueza cultural y rechazando el uso discriminatorio del lenguaje verbal o no verbal. (CCL1, CCL5, CP3, CPSAA3, CC1, CC2, CC3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprender el sentido de textos orales y multimodales sencillos, reconociendo las ideas principales y los mensajes explícitos e implícitos, progresando, de manera acompañada, en la valoración crítica del contenido, de los elementos no verbales elementales y de los elementos formales más sencillos. (CCL2, CCL5, CP2, STEM1, CD3, CPSAA3, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Emplear estrategias de interpretación de elementos de la comunicación no verbal, potenciando el desarrollo de capacidades, actitudes y destrezas visuales, auditivas y corporales. (CCL2, CP2, STEM1, CPSAA3, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Producir textos orales y multimodales coherentes, con planificación y fluidez en contextos formales sencillos, ajustando el discurso a la situación comunicativa y utilizando recursos verbales y no verbales básicos. (CCL1, CCL3, CCL5, CP2, STEM1, CD2, CE1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Participar en interacciones orales espontáneas o regladas, incorporando estrategias sencillas de escucha activa, de cortesía lingüística y de cooperación conversacional. (CCL1, CCL5, STEM1, CD3, CPSAA3, CC1, CC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar diferentes géneros discursivos, adaptando el lenguaje a la práctica discursiva y favoreciendo una comunicación eficaz y ética. (CCL1, CCL3, CCL5, CPSAA3, CE1) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48662",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Comprender el sentido global y la información relevante de textos escritos y multimodales, realizando inferencias y a partir de estrategias básicas de comprensión antes, durante y después de la lectura. (CCL2, CCL4, CCL5, CP2, STEM1, CD1, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar, de manera acompañada, el contenido y aspectos formales y no verbales elementales de textos escritos y multimodales, valorando su contenido, ideas principales y secundarias, estructura y forma y, evaluando su fiabilidad e idoneidad en función del propósito de lectura. (CCL2, CCL3, CCL5, STEM1, CD1, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los elementos gráficos, textuales y paratextuales de textos escritos y multimodales que favorezcan la comprensión lectora, señalando la estructura organizativa del texto y su progresión temática. (CCL2 CCL3, STEM1, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Producir textos escritos y multimodales de relativa complejidad, con coherencia y adecuación, en distintos soportes, progresando en el uso de las normas gramaticales y ortográficas básicas al servicio de la cohesión textual y movilizando estrategias sencillas, individuales o grupales, de planificación, textualización, revisión y edición. (CCL1, CCL3, CCL5, STEM1, CD2, CD3, CPSAA5, CC2, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Elaborar organizadores gráficos, esquemas, mapas conceptuales y resúmenes sencillos de manera creativa, individualmente y en grupo, usándolos como instrumentos que facilitan la comprensión y ayuden a organizar la información y el pensamiento. (CCL1, CCL3, STEM1, CD2, CD3, CPSAA3, CPSAA4, CPSAA5, CC2, CE3, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Localizar, seleccionar y contrastar información de distintas fuentes, incluidas las digitales, citándolas y recreándolas mediante la adaptación creativa de modelos dados, reconociendo la propiedad intelectual, respetando la privacidad y favoreciendo la responsabilidad en la transmisión de bulos. (CCL1, CCL2, CCL3, CD1, CD2, CD4, CPSAA4, CPSAA5, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Compartir los resultados y conclusiones de un proceso de investigación individual o grupal, sobre algún tema de interés personal o ecosocial, utilizando diferentes medios y soportes. (CCL1, CD2, CD3, CC2, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Adoptar hábitos de uso crítico, seguro, sostenible y saludable de las tecnologías digitales en relación con la búsqueda, el análisis, el contraste, la evaluación y la comunicación de la información. (CCL2, CCL3, CD1, CD4, CPSAA4, CC2) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48663",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Aplicar habilidades, destrezas y estrategias para localizar ejemplares bibliográficos de diversos tipos, conociendo la organización y el funcionamiento de las bibliotecas escolares. (CCL3, STEM1, CD1, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Leer de manera autónoma textos de diversos autores y autoras ajustados a sus gustos e intereses, progresando en la construcción de su identidad lectora y favoreciendo la reflexión sobre los grandes retos del siglo XXI. (CCL4, CD3, CC3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Compartir la experiencia y disfrute por la lectura, en medios y soportes diversos, participando en comunidades lectoras en el ámbito escolar o social, desarrollando la creatividad y el pensamiento crítico. (CCL1, CCL4, CD3, CPSAA1, CPSAA3, CC2, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Realizar lecturas expresivas, dramatizaciones o interpretaciones de textos de diferente tipología con entonación, ritmo y musicalidad, de manera individual o en grupo, utilizando las diferentes posibilidades expresivas de la voz y el cuerpo, fomentando el gusto por la lectura como fuente de placer y disfrutando de su dimensión social. (CCL1, CCL4, CPSAA1, CPSAA3, CCEC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Escuchar y leer de manera acompañada textos literarios variados y adecuados a su edad, que recojan diversidad de autores y autoras, relacionándolos en función de los temas y de aspectos elementales de cada género literario e interpretándolos y relacionándolos con otras manifestaciones artísticas o culturales de manera progresivamente autónoma. (CCL1, CCL2, CCL4, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Realizar lecturas de refranes, retahílas, adivinanzas, trabalenguas y textos de tradición oral, en diferentes soportes y formatos, con entonación y musicalidad, de forma individual y en grupo, apreciando el valor de los textos literarios como patrimonio artístico y fuente de enriquecimiento personal. (CCL2, CCL4, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.3",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconocer los recursos del lenguaje literario aplicándolos de forma guiada en la construcción de obras individuales o en grupo. (CCL1, CCL2, CCL4, CE1, CE3, CCEC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.4",
+      "objetivo_id": "CE8",
+      "descripcion": "Producir, de manera progresivamente autónoma, textos sencillos individuales o colectivos con intención literaria, reelaborando con creatividad los modelos dados, en distintos medios y soportes y complementándolos con otros lenguajes artísticos. (CCL1, CCL4, CD2, CE1, CE3, CCEC3, CCEC4) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48664",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Establecer generalizaciones elementales sobre aspectos básicos del funcionamiento de la lengua de manera acompañada prestando especial atención a la gramática, la ortografía reglada, el léxico y la relación entre la intención comunicativa y la modalidad oracional, a partir de la observación, comparación y transformación de palabras, enunciados y textos, en un proceso acompañado de producción o comprensión de textos en contextos significativos. (CCL1, CCL2, CP2, STEM2, CD2, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Revisar y mejorar los textos propios y ajenos y subsanar algunos problemas de comprensión lectora, de manera progresivamente autónoma, a partir de la reflexión metalingüística e interlingüística y usando la terminología básica adecuada, desarrollando progresivamente la autoconfianza y reflexión sobre el aprendizaje. (CCL1, CCL2, STEM1, CPSAA4, CPSAA5, CE1)",
+      "peso": 1
+    },
+    {
+      "id": "CE10.1",
+      "objetivo_id": "CE10",
+      "descripcion": "Rechazar los usos lingüísticos discriminatorios y analizar los abusos de poder a través de la palabra identificados mediante la reflexión grupal acompañada sobre distintos aspectos, verbales y no verbales, de la comunicación, teniendo en cuenta una perspectiva de género y utilizando un lenguaje respetuoso con las diferencias. (CCL1, CCL5, CP3, CD3, CC1, CC2, CC3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE10.2",
+      "objetivo_id": "CE10",
+      "descripcion": "Movilizar e interiorizar, con la planificación y el acompañamiento necesarios, estrategias básicas para la escucha activa, la comunicación asertiva y el consenso, progresando en la gestión dialogada de conflictos. (CCL1, CCL5, CP3, CD3, CPSAA3, CC1, CC2)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Las lenguas y sus hablantes"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Comunicación"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Educación literaria"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Reflexión sobre la lengua y sus usos en el marco de propuestas de producción y"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Biografía lingüística personal y mapa lingüístico del entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La diversidad etnocultural y lingüística como riqueza y herramienta de reflexión interlingüística. Aproximación y respeto a las lenguas de signos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de identificación de prejuicios y estereotipos lingüísticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Uso de un lenguaje no discriminatorio y respetuoso con las diferencias. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                           Pág. 48665",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Interacciones entre los componentes del hecho comunicativo (situación, participantes, propósito comunicativo, canal, registro).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Tipologías textuales: la narración, la descripción, el diálogo, la exposición y la argumentación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Propiedades textuales: estrategias básicas para la coherencia, cohesión y adecuación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Géneros discursivos propios del ámbito personal, social y educativo. Contenido (tema, fórmulas fijas, léxico, inferencias de información), y forma (estructura, formato, título, imágenes, tipografía; autor, ilustrador, editorial). Redes sociales y sus riesgos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Interacción oral: interacción oral y adecuada en contextos formales e informales, escucha activa, asertividad, resolución dialogada de conflictos y cortesía lingüística. La expresión y escucha empática de necesidades, vivencias y emociones propias y ajenas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Comprensión oral: identificación de las ideas más relevantes e interpretación del sentido global realizando las inferencias necesarias. Valoración crítica. Detección de usos discriminatorios del lenguaje verbal y no verbal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Producción oral: elementos de la prosodia y de la comunicación no verbal. Construcción, comunicación y valoración de conocimiento mediante la planificación y producción de textos orales y multimodales con progresiva autonomía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Comprensión lectora: estrategias de comprensión lectora antes, durante y después de la lectura. Identificación de las ideas más relevantes (ideas principales y secundarias) e interpretación del sentido global realizando las inferencias necesarias. Valoración crítica. Identificación de elementos gráficos, textuales y paratextuales al servicio de la comprensión. Lectura compartida y expresiva en medios y soportes diversos. Detección de usos discriminatorios del lenguaje verbal y no verbal. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                           Pág. 48666",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Producción escrita: ortografía reglada en la textualización y la autocorrección. Coherencia y cohesión textual. Estrategias básicas, individuales o grupales, de planificación, textualización, revisión y autocorrección. Uso de elementos gráficos y paratextuales al servicio de la comprensión. Escritura en soporte digital progresivamente autónoma. El error como parte integrante del proceso e instrumento de mejora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Alfabetización mediática e informacional: estrategias para la búsqueda de información en distintas fuentes documentales y con distintos soportes y formatos. Reconocimiento de autoría. Comparación, organización, valoración crítica y comunicación creativa de la información. Uso progresivamente autónomo de la biblioteca, así como de recursos digitales del aula. Interpretación reflexiva de la información obtenida. La propiedad intelectual, la privacidad y la responsabilidad en la transmisión de bulos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Lectura progresivamente autónoma de obras o fragmentos variados y diversos de la literatura, incluidos los de la comunidad de Castilla y León, adecuados a su edad y organizados en itinerarios lectores. Cuentos, leyendas, fábulas, poemas y teatro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Lectura de refranes, retahílas, adivinanzas, trabalenguas y textos de tradición oral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias para la interpretación progresivamente autónoma y compartida de las obras a través de conversaciones literarias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Relación, de manera acompañada, entre los elementos constitutivos de la obra literaria (tema, protagonistas, personajes secundarios, argumento, espacio) y la construcción del sentido de la obra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Análisis acompañado de la relación entre los elementos básicos del género literario y la construcción del sentido de la obra y de los recursos expresivos y sus efectos en la recepción del texto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Recursos del lenguaje literario. Comparaciones, metáforas, juegos de palabras y personificaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Relación entre los textos leídos y otras manifestaciones artísticas y culturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Progreso en la construcción de la identidad lectora. Estrategias para la expresión de gustos e intereses y para la valoración crítica elemental de las obras. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                            Pág. 48667",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Lectura expresiva, dramatización o interpretación de fragmentos atendiendo a los procesos de comprensión y al nivel de desarrollo. Entonación, ritmo y musicalidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Creación de textos de intención literaria de manera libre y a partir de la recreación y apropiación de los modelos dados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Uso progresivamente autónomo de la biblioteca de aula o de centro como escenario de actividades literarias compartidas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "comprensión de textos orales, escritos o multimodales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Establecimiento de generalizaciones sobre aspectos lingüísticos elementales a partir de la observación y comparación de palabras y enunciados. Categorías gramaticales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Aproximación a la lengua como sistema con distintos niveles: sonidos y letras, palabras, oraciones y textos. Tipos de oraciones. Análisis sintáctico y morfológico. Observación y comparación de unidades comunicativas básicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Procedimientos básicos de adquisición de vocabulario. Mecanismos léxicos básicos para la formación de palabras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Relación entre intención comunicativa y modalidad oracional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Mecanismos básicos de coherencia y cohesión, con especial atención a las sustituciones pronominales y a la correlación temporal establecida mediante los distintos tiempos verbales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Los signos de puntuación como mecanismos para organizar el texto y expresar intención comunicativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias de observación y formulación de generalizaciones sobre la acentuación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias básicas para el uso de diccionarios, en distintos soportes. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48668",
+      "criterios_ids": []
+    }
+  ]
+}

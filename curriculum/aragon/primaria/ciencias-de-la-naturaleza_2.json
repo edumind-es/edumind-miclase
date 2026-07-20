@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "ciencias-de-la-naturaleza",
+    "ciclo_origen": "1er-ciclo",
+    "fuente": "iDoceo_ciencias-de-la-naturaleza_1er-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para l generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir. l"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medioambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos l personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solici- l tando ayuda en caso necesario. l"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Utilizar dispositivos y recursos digitales de forma segura, responsable y eficiente, para buscar información, comunicarse, trabajar de manera individual, en equipo y en red y, para reelaborar y crear contenido digital de acuerdo a las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas, relacionadas con las Ciencias de la Naturaleza, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Resolver problemas a través de proyectos de diseño y de la aplicación del pensamiento computacional, para generar o reelaborar cooperativamente un producto creativo e innovador que responda a necesidades concretas.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "CD5",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Conocer y tomar conciencia del propio cuerpo, así como de las emociones y sentimientos propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio natural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio natural, conservarlo, mejorarlo y emprender acciones para su uso responsable.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Utilizar dispositivos y recursos digitales de forma segura y de acuerdo con las necesidades del contexto educativo de forma segura.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Formular preguntas y realizar predicciones mostrando curiosidad por objetos, hechos y fenómenos cercanos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Buscar información sencilla de diferentes fuentes seguras y fiables, más allá del ámbito virtual, de forma guiada, utilizándola en investigaciones relacionadas con el medio natural, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Utilizar diferentes técnicas sencillas de indagación, participando en experimentos pautados o guiados, empleando de forma segura instrumentos y registrando las observaciones de forma clara.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Proponer respuestas a preguntas planteadas, comparando la información y datos obtenidos con las predicciones realizadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Comunicar de forma oral o gráfica el resultado de las investigaciones escolares explicando los pasos seguidos con ayuda de un guion.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Realizar, de forma guiada, un producto final sencillo que dé solución a un problema de diseño, probando en equipo diferentes prototipos y utilizando de forma segura los materiales adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Presentar de forma oral o gráfica el producto final de los proyectos de diseño, explicando los pasos seguidos con la ayuda de un guion.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Mostrar interés por el pensamiento computacional, participando en la resolución guiada de problemas sencillos de programación.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Identificar las emociones propias y las de los demás, entendiendo las relaciones familiares y escolares a las que pertenecen y reconociendo las acciones que favorezcan el bienestar emocional y social.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Reconocer estilos de vida saludables, valorando la importancia de una alimentación variada, equilibrada y sostenible, la higiene, el ejercicio físico y el descanso y el uso adecuado de las tecnologías.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reconocer las características, organización y propiedades de los elementos del medio natural a través de indagación u otras prácticas científicas, utilizando las herramientas y procesos adecuados de forma pautada.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reconocer conexiones sencillas y directas entre diferentes elementos del medio natural por medio de la observación, la manipulación y la experimentación.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Mostrar actitudes de respeto para el disfrute del patrimonio natural, reconociéndolo como un bien común.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "A.1. Iniciación a la actividad científica",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1.1",
+      "bloque_id": null,
+      "descripcion": "Procedimientos adecuados a las necesidades de la investigación escolar (observación en el tiempo, identificación y clasificación, búsqueda de patrones...).",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.1.2",
+      "bloque_id": null,
+      "descripcion": "Instrumentos y dispositivos apropiados para realizar observaciones y mediciones de acuerdo a las necesidades de las diferentes investigaciones escolares.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "A.1.3",
+      "bloque_id": null,
+      "descripcion": "Vocabulario científico básico relacionado con las diferentes investigaciones.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.1.4",
+      "bloque_id": null,
+      "descripcion": "La curiosidad y la iniciativa en la realización de las diferentes investigaciones como actitudes presentes en la construcción del conocimiento científico.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.1.5",
+      "bloque_id": null,
+      "descripcion": "Las profesiones relacionadas con la ciencia y la tecnología desde una perspectiva de género.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.1.6",
+      "bloque_id": null,
+      "descripcion": "Estilos de vida sostenible e importancia del cuidado del planeta a través de acciones presentes en la vida cotidiana basadas en el conocimiento científico.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "A.2. La vida en nuestro planeta",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.2.1",
+      "bloque_id": null,
+      "descripcion": "Necesidades básicas de los seres vivos y la diferencia con los objetos inertes.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.2.2",
+      "bloque_id": null,
+      "descripcion": "Las adaptaciones de los seres vivos a su hábitat, concebido como el lugar en el que cubren sus necesidades.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.2.3",
+      "bloque_id": null,
+      "descripcion": "Clasificación e identificación de los seres vivos de acuerdo con sus características observables.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "A.2.4",
+      "bloque_id": null,
+      "descripcion": "Las relaciones entre los seres humanos, los animales y las plantas. Cuidado y respeto hacia los seres vivos y el entorno en el que viven.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.2.5",
+      "bloque_id": null,
+      "descripcion": "Hábitos saludables relacionados con el bienestar físico del ser humano: higiene, alimentación variada y equilibrada, ejercicio físico, contacto con la naturaleza, descanso y cuidado del cuerpo para prevenir posibles enfermedades.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.2.6",
+      "bloque_id": null,
+      "descripcion": "Hábitos saludables relacionados con el bienestar emocional y social: estrategias de identificación de las propias emociones y respeto por las de los demás. Sensibilidad y aceptación de la diversidad presente en el aula y en la sociedad. Educación afectivo- sexual.",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "A.3",
+      "bloque_id": null,
+      "descripcion": "A.3. Materia, fuerzas y energía",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.3.1",
+      "bloque_id": null,
+      "descripcion": "Propiedades observables de los materiales, su procedencia y su uso en objetos de la vida cotidiana de acuerdo a las necesidades de diseño para los que fueron fabricados.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "A.3.2",
+      "bloque_id": null,
+      "descripcion": "La luz y el sonido como entidades físicas.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.3",
+      "bloque_id": null,
+      "descripcion": "Otras formas de energía. Fuentes y uso en la vida cotidiana.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.4",
+      "bloque_id": null,
+      "descripcion": "Las mezclas y sus componentes. Identificación de mezclas homogéneas y heterogéneas. Separación de mezclas heterogéneas y algunas homogéneas mediante distintos métodos físicos sencillos.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.5",
+      "bloque_id": null,
+      "descripcion": "Estructuras resistentes, estables y útiles en el contexto escolar.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4",
+      "bloque_id": null,
+      "descripcion": "A.4. La Tierra y el espacio",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.4.1",
+      "bloque_id": null,
+      "descripcion": "La Tierra en el universo. Algunos componentes. Propiedades físicas observables de algunos minerales y rocas.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "A.4.2",
+      "bloque_id": null,
+      "descripcion": "Movimientos y dinámicas relacionados con la Tierra y el universo y sus consecuencias en la vida diaria y en el entorno. Secuencias temporales y cambios estacionales.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4.3",
+      "bloque_id": null,
+      "descripcion": "La vida en la Tierra. Fenómenos atmosféricos y su repercusión en los ciclos biológicos y en la vida diaria. Observación y registro de datos atmosféricos",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "B.1. Digitalización del entorno personal de aprendizaje",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1.1",
+      "bloque_id": null,
+      "descripcion": "Dispositivos y recursos del entorno digital de aprendizaje de acuerdo con las necesidades del contexto educativo.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.2",
+      "bloque_id": null,
+      "descripcion": "Recursos digitales para comunicarse con personas conocidas en entornos conocidos y seguros.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "B.2. Proyectos de diseño y pensamiento computacional",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.2.1",
+      "bloque_id": null,
+      "descripcion": "Fases de los proyectos de diseño: de modelos analógicos y prototipos, prueba y comunicación.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B.2.2",
+      "bloque_id": null,
+      "descripcion": "Materiales adecuados a la consecución del proyecto de diseño.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B.2.3",
+      "bloque_id": null,
+      "descripcion": "Iniciación a la programación a través de recursos analógicos o digitales adaptados al nivel lector del alumnado (actividades desenchufadas, plataformas digitales de iniciación a la programación, robótica educativa...).",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B.2.4",
+      "bloque_id": null,
+      "descripcion": "Estrategias básicas de trabajo en equipo.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,826 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "revisar-idoceo-lengua-propia-aragones",
+    "ciclo_origen": "2o-ciclo",
+    "fuente": "REVISAR_iDoceo_lengua-propia-aragones_2o-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrutar y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, por lo menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos l personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Comprender, identificar e interpretar el sentido general e información específica más relevante y predecible de textos breves y sencillos, expresados de forma clara, en la lengua estándar o en alguna de sus variedades dialectales, haciendo uso de diversas estrategias y recurriendo, cuando sea necesario, al uso de distintos tipos de apoyo, para desarrollar el repertorio lingüístico y para responder a necesidades comunicativas cotidianas. Se buscará el aprendizaje de la lengua desde una perspectiva proactiva en donde el alumnado pueda cubrir sus necesidades de comunicación desde la perspectiva de la metalingüística ( comprensión y utilización de habilidades comunicativas como expresiones, frases hechas, palabras, lenguaje irónico, poético, de doble sentido, etc), aspectos más o menos formales de la lengua aragonesa, de forma oral y escrita y en diversos soportes multimodales acomodándose a los distintos estilos y registros de la lengua según el contexto en el que se den, sabiendo interpretar el sentido general y discriminando las ideas principales de las secundarias y desarrollando herramientas que le permitan conocer el significado de aquello que desconoce a través del contexto . Se trabajará desde la forma más sencilla como es la palabra hasta las construcciones más complejas, consiguiendo un discurso fluido y coherente. Será necesaria la planificación y secuenciación del discurso. En las zonas de uso de alguna de las variantes lingüísticas, se iniciará el aprendizaje desde el léxico y formas propias de la misma, trabajando la identificación de la propia variedad para posteriormente identificar a través de semejanzas y diferencias otras variedades y la lengua estándar. En el primer ciclo se trabajará desde la palabra, formas básicas ,expresiones, textos breves y sencillos que se acerquen a sus necesidades comunicativas más próximas.En segundo ciclo se trabajará la ampliación del léxico, expresiones , textos de diferente índole con diferentes usos de la lengua según el contexto.En el tercer ciclo se buscará que el alumnado sea autónomo en la comprensión e interpretación de textos tanto escritos como orales de mayor complejidad léxica ( literarios o no literarios) y de diferentes campos semánticos , profundizando en las funciones de la lengua.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CD1",
+        "CPSAA4",
+        "CPSAA5",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Producir textos sencillos de manera comprensible y estructurada, mediante el empleo de estrategias como la planificación o la compensación, para expresar mensajes breves relacionados con necesidades inmediatas, responder a propósitos comunicativos cotidianos, expresar ideas, sentimientos y conceptos con corrección gramatical y ortografía básicas. El aprendizaje de la lengua aragonesa debe realizarse desde una perspectiva proactiva por lo que el alumnado será parte activa del aprendizaje también a nivel escrito. Para ello, deberán desarrollar sus competencias en torno a la creación de escritos en aragonés en dificultad progresiva, utilizando como punto de partida todos los vínculos previos que tengan de la lengua o de otras lenguas cercanas al aragonés y poniendo en uso los conocimientos adquiridos en el aula. El proceso pasará por una planificación del texto a producir para que la lectura del mismo sea clara y coherente. El fin será crear canales de comunicación escrita multimodales adaptados al lector o al contexto de forma creativa y en donde se resuelvan sus necesidades comunicativas cotidianas pero que también puedan comunicar necesidades o sentimientos más elevados, de estilo literario. Los aspectos formales y estructurales de la lengua como la gramática y ortografía propias del aragonés le permitirán dominar más la lengua aragonesa y crear un discurso correcto a efectos formales por lo que será esencial su estudio. El error será considerado parte del proceso de aprendizaje del alumnado. En el primer ciclo se trabajarán textos sencillos y breves, de temas cercanos al alumnado, con los que pueda dar solución a necesidades específicas y dar respuesta escrita a preguntas sencillas, con vocabulario básico, ortografía y gramática sencilla con una estructura básica, clara y directa. En el segundo ciclo, se ampliarán las dimensiones de los textos así como el vocabulario, utilizando una ortografía y gramática más complejas pero acorde al nivel madurativo del alumnado; planificación y estructuración de forma guiada. Se iniciarán en la creación de textos escritos sencillos de forma autónoma en donde expresar de forma clara y coherente sus necesidades o expectativas. En el tercer ciclo se ampliarán la dificultad de los temas a desarrollar, con un léxico más complejo y específico del tema a trabajar. Se tendrá más en cuenta la corrección ortográfica y la gramática. La planificación y estructura de los textos será autónoma. Se desarrollará con más profundidad la creación de textos propios y creativos en donde el alumno o la alumna puedan desarrollar sus capacidades expresivas a través de textos de diferentes estilos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Interactuar con otras personas usando expresiones cotidianas, recurriendo a estrategias de cooperación y empleando recursos analógicos y digitales, para responder a necesidades inmediatas de su interés, expresar ideas, sentimientos y conceptos en intercambios comunicativos respetuosos con las normas de cortesía, poniendo las propias prácticas comunicativas al servicio de la convivencia democrática utilizando un lenguaje no discriminatorio. En la utilización funcional de la lengua es necesario adquirir destrezas en la adquisición de información en producciones escritas u orales que le permitan informar, explicar, describir, narrar para uno o varios lectores u oyentes adaptándose al medio utilizado para la comunicación; obtener información desarrollando recursos para obtener información del receptor, haciendo preguntas adecuadas y bien estructuradas formalmente para que el oyente o lector pueda responder de forma ajustada a la demanda de información; regular la acción a través de la actividad verbal y no verbal implícita para el receptor de la información, regulando su acción en función de la misma, es decir, los cambios que nuestro discurso produce en la conducta del receptor; adquisición de fórmulas de cortesía y de convivencia pacífica con el uso de fórmulas culturales y sociales propias de la lengua aragonesa; desarrollo de estrategias verbales y no verbales ante diferentes situaciones comunicativas más complejas utilizando diferentes herramientas lingüísticas que le permitan adaptarse a la misma. Se utilizará el diccionario y traductores analógicos y digitales así como cualquier otra herramienta que ayude al alumnado a expresarse de forma correcta y lo más acertadamente a su intención comunicativa y sentimientos. En el primer ciclo las interacciones serán predominantemente orales, guiadas y asistidas. Será necesario apoyarse en recursos verbales y no verbales, principalmente visuales para transmitir y recibir mensajes mostrando respeto y empatía hacia sus interlocutores así como respeto por las producciones propias y de los compañeros. De este modo el alumnado aprenderá a participar en situaciones comunicativas básicas del aula del día a día. En el segundo ciclo, el alumnado será más autónomo y podrá participar en situaciones de mayor complejidad preparadas previamente, seleccionando estrategias y teniendo en cuenta el contexto y normas de cortesía elementales. En tercer ciclo, el alumnado será capaz de anticipar las necesidades derivadas de una situación comunicativa pudiendo seleccionar y aplicar estrategias para participar en ellas. Será capaz de ajustar su participación atendiendo a las necesidades, ideas y motivaciones de los interlocutores.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP1",
+        "CP3",
+        "CD2",
+        "CD4",
+        "CPSAA1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Leer, interpretar y analizar, de manera acompañada y autónoma obras diversas adecuadas a su desarrollo, gustos e intereses para iniciar la construcción de la identidad lectora, fomentar el gusto por la misma como fuente de placer, búsqueda y selección de información en diferentes soportes para contrastar y disfrutar de su dimensión social. La lectura comprensiva de diferentes obras en aragonés ayudarán al alumnado a reforzar y ampliar sus conocimientos sobre vocabulario, gramática funcional y funciones del lenguaje, además de construir un pensamiento crítico, desarrollando sus gustos y preferencias, aprendiendo a interpretar el contexto de la obra literaria y no literaria en aragonés. El fin mismo es la creación de lectores en lengua aragonesa que en el futuro sean consumidores de la misma para satisfacer sus necesidades informativas y de ocio. En el primer ciclo se iniciará en la lectura comprensiva de textos breves y sencillos de intereses cercanos al alumnado, próximos a su repertorio lingüístico y sus conocimientos previos haciendo conexiones con otras lenguas familiares u otras variedades lingüísticas, analizando semejanzas y diferencias, buscando informaciones de interés de forma guiada para su análisis e interpretación y desarrollando gusto por la lectura . En el segundo ciclo la competencia aumentará de forma progresiva y se ampliará la lectura a textos de mayor complejidad, analizando e interpretando diferentes estructuras; comparará y contrastará similitudes y diferencias con otras lenguas familiares, diferentes variedades lingüísticas y la forma estándar, así como sobre aspectos básicos de la misma; utilizará y diferenciará de forma guiada conocimientos y estrategias de mejora de su capacidad de comunicar y aprender la lengua aplicándola en las siguientes situaciones de aprendizaje; buscará información precisa sobre temas de interés propuestos en el aula o por interés propio o en la elaboración de investigaciones guiadas en el aula; desarrollará el pensamiento crítico y la crítica constructiva desde un lenguaje inclusivo positivo hacia la convivencia. En el tercer ciclo su competencia lectora y sus capacidad para analizar e interpretar es mucho mayor por lo que gana en autonomía, y por tanto, comparará , contrastará y señalará las similitudes y diferencias entre las lenguas familiares, diferentes variedades lingüísticas y la forma estándar reflexionando de forma autónoma sobre aspectos básicos; utilizará sus conocimientos para buscar una mejora en los ámbitos en los que deba mejorar a través de la coevaluación; será capaz de buscar información precisa en diferentes soportes para su análisis e interpretación , su utilización en trabajos o exposiciones escritas u orales; desarrollará una visión crítica de los textos leídos desde una perspectiva personal y cercana a sus gustos, teniendo en cuenta el contexto histórico social de la lectura.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL5",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Iniciarse en la lectura de textos literarios y no literarios en aragonés como manifestación artística y fuente de placer, conocimiento e inspiración para crear textos de intención literaria propios, discriminar las diferencias lingüísticas y formas propias del aragonés, frases hechas y refranes. Esta competencia busca el acercamiento del alumnado a la literatura en aragonés, enfrentándose a una lectura variada en estilos y multimodal, sin miedo, sin prejuicios ni estereotipos. Se propiciará la lectura de textos clave, ejemplificante o/ y de relevancia en aragonés estándar o en cualquiera de sus variedades lingüísticas. Los textos necesitarán del análisis del mismo desde su contexto socio cultural e histórico haciendo un reconocimiento al escritor o escritora e identificándolos y relacionándolos con otras manifestaciones culturales y artísticas. Desde la lectura se desarrollarán sus gustos y una actitud crítica y constructiva hacia los mismos. En primer ciclo se trabajarán textos sencillos de forma guiada, iniciados desde la escucha y acompañados de imágenes, relacionados con temas cercanos y de su interés, iniciándose en la señalización de rasgos de las variedades dialectales, reconociendo y analizando las frases hechas o refranes que se den en el texto, dando su opinión y expresando las emociones que le ha producido. En el segundo ciclo se trabajarán textos más amplios y de mayor complejidad, de temas cercanos al alumnado y de diferentes estilos, discriminando características de la variedad lingüística o diferentes al estándar, reconociendo y analizando las frases hechas usuales y refranes que se den en el texto. adoptarán una actitud crítica, dando su punto de opinión justificada y expresando las emociones que le ha producido. En el tercer ciclo, se iniciarán en la lectura de textos amplios, relacionados con sus gustos o de temas trabajados en el aula de diferentes estilos y de mayor complejidad formal, iniciándose en la búsqueda autónoma de textos de su gusto; discriminará rasgos de otras variedades lingüísticas reconociendo y analizando las frases hechas usuales y refranes que se den en el texto y desarrollará una actitud crítica hacia los textos dando su opinión justificada , expresando las emociones que le ha producido y que le ha inspirado para crear producciones propias.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CP3",
+        "CD2",
+        "CE3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Apreciar y respetar la diversidad lingüística, cultural y artística a partir de la lengua aragonesa identificando y valorando las diferencias y semejanzas entre las diferentes variedades lingüísticas del aragonés, otras lenguas y culturas, para aprender a gestionar situaciones interculturales, mediando en situaciones predecibles, usando estrategias y conocimientos con el fin de facilitar la comunicación. La lengua aragonesa conforma un espacio simbólico y social con dinámicas particulares. El dominio del léxico y de la gramática no es suficiente para conocerla y apreciarla de forma íntegra. Es necesario por ello conocer su cultura en diferentes dimensiones ( social, natural, artístico musical, histórica, geográfica, etc) que darán la llave al alumnado para comprenderla y valorarla como merece. Como patrimonio inmaterial debemos llevar nuestros esfuerzos hacia la contribución de su salvaguarda desde la escuela siendo imprescindible la identificación de estereotipos negativos y prejuicios lingüísticos para su eliminación asi como la discriminación de la lengua desde el deconocimiento de la misma. Dentro de la lengua aragonesa coexisten diferentes dialectos que ,de forma histórica, han sido el reflejo más cercano de la cultura aragonesa en esos lugares y que son el punto de partida para el alumnado de esas zonas sin el menoscabo del conocimiento y uso de la lengua estándar como nexo de unificación entre todas ellas y como punto de partida para la normativización. Asimismo, desde la lengua aragonesa se podrán realizar conexiones lingüísticas con otras lenguas a través de semejanzas y diferencias, sobre todo con aquellas lenguas de origen romance en dónde se dará un lugar a la lengua aragonesa en el mapa lingüístico europeo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL4",
+        "CP2",
+        "CP3",
+        "CPSAA1",
+        "CC4",
+        "CE1",
+        "CC1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Reconocer e interpretar el sentido global, así como palabras y frases previamente indicadas en textos orales, escritos y multimodales breves y sencillos sobre temas frecuentes y cotidianos de relevancia personal y próximos a su experiencia, así como de textos de ficción adecuados al nivel de desarrollo del alumnado, expresados de forma comprensible y clara,en lengua estándar o en su variedad lingüística a través de distintos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Seleccionar y aplicar de forma guiada estrategias adecuadas en situaciones comunicativas cotidianas y de relevancia para el alumnado para captar el sentido global y procesar informaciones explícitas en textos breves y sencillos sobre temas familiares.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Expresar oralmente frases cortas con información básica sobre asuntos cotidianos y de relevancia para el alumnado, utilizando de forma guiada recursos verbales y no verbales, prestando atención al ritmo, la acentuación y la entonación.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Redactar textos muy breves y sencillos, con adecuación a la situación comunicativa propuesta, a partir de modelos y a través de herramientas analógicas y digitales, usando estructuras y léxico elemental sobre asuntos cotidianos y de relevancia personal para el alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Seleccionar y aplicar de forma guiada estrategias para producir mensajes breves y sencillos adecuados a las intenciones comunicativas usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Participar en situaciones interactivas breves y sencillas sobre temas cotidianos, de relevancia personal y próximos a su experiencia, preparadas previamente, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado o el lenguaje no verbal, y mostrando empatía y respeto por la cortesía lingüística y la etiqueta digital.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Seleccionar y utilizar, de forma guiada y en situaciones cotidianas, estrategias elementales para saludar, despedirse y presentarse; expresar mensajes breves; y formular y contestar preguntas sencillas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Escuchar y leer textos orales y escritos infantiles, que recojan diversidad de autoras y autores, relacionándolos en función de temas y aspectos elementales de manera acompañada y relacionándolos con otras lenguas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Producir, de manera acompañada, textos sencillos individuales o colectivos en aragonés con intención literaria, recreando de manera personal los modelos dados, en distintos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Registrar y aplicar, de manera guiada, los progresos y dificultades elementales de aprendizaje de la lengua aragonesa, reconociendo los aspectos que ayudan a mejorar, y participando en actividades de autoevaluación y coevaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL).",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Leer de manera autónoma textos de distintas autoras y autores de acuerdo con sus gustos e intereses, seleccionados con creciente autonomía, avanzando en la construcción de su identidad lectora en aragonés.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Compartir la experiencia de lectura en soportes diversos, participando en comunidades lectoras en el ámbito escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Actuar con respeto en situaciones interculturales, identificando y comparando semejanzas y diferencias elementales entre lenguas y culturas, y mostrando rechazo frente a discriminaciones, prejuicios y estereotipos de cualquier tipo en contextos comunicativos cotidianos y habituales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Reconocer y apreciar la diversidad lingüística y cultural propia de Aragón como fuente de enriquecimiento personal, mostrando interés por comprender elementos culturales y lingüísticos elementales y habituales que fomenten la convivencia pacífica y el respeto por los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "OBJ6",
+      "descripcion": "Seleccionar y aplicar, de forma guiada, estrategias básicas para entender y apreciar los aspectos más relevantes de la diversidad lingüística y cultural de Aragón.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "A.1. Comunicación oral",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1.1",
+      "bloque_id": null,
+      "descripcion": "Autoconfianza y reflexión sobre el aprendizaje. El error como parte integrante del proceso.",
+      "criterios_ids": [
+        "CE4.3"
+      ]
+    },
+    {
+      "id": "A.1.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias básicas de uso común para la comprensión y la producción de textos orales, multimodales breves, sencillos y contextualizados.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.1.3",
+      "bloque_id": null,
+      "descripcion": "Estrategias de interpretación de elementos básicos de la comunicación no verbal.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "A.1.4",
+      "bloque_id": null,
+      "descripcion": "Estrategias de identificación e interpretación del sentido global del texto y de integración de la información explícita de textos orales y multimodales sencillos.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.1.5",
+      "bloque_id": null,
+      "descripcion": "Estrategias de escucha activa en la resolución dialogada de los conflictos, teniendo en cuenta la perspectiva de género.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "A.1.6",
+      "bloque_id": null,
+      "descripcion": "permiten iniciarse en actividades de mediación en situaciones cotidianas básicas",
+      "criterios_ids": [
+        "CE3.2",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.1.7",
+      "bloque_id": null,
+      "descripcion": "Convenciones y estrategias de cortesía lingüística básicas de uso común, en formato síncrono o asíncrono, para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, pedir y dar indicaciones, etc; y detección de posibles usos discriminatorios del lenguaje verbal y no verbal.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "A.1.8",
+      "bloque_id": null,
+      "descripcion": "Funciones comunicativas básicas de uso común adecuadas al ámbito y al contexto de forma oral: saludar, despedirse, presentar y presentarse; describir personas, objetos y lugares; pedir e intercambiar información sobre cuestiones cotidianas; describir rutinas; dar indicaciones e instrucciones; expresar el tiempo, la medida, cantidad y el espacio.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "A.1.9",
+      "bloque_id": null,
+      "descripcion": "Construcción, valoración y comunicación de Modelos contextuales y géneros discursivos básicos de uso común en la comprensión, producción y coproducción de textos orales, multimodales, breves y sencillos, literarios y no literarios tales como, instrucciones, normas, avisos o conversaciones reguladoras de la convivencia mediante la planificación y producción..",
+      "criterios_ids": [
+        "CE1.1",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.1.10",
+      "bloque_id": null,
+      "descripcion": "Intención comunicativa y claves de la tipología textual básica: narración, descripción, diálogo y exposición.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.1.11",
+      "bloque_id": null,
+      "descripcion": "Herramientas analógicas y digitales básicas de uso común para la comprensión, producción y coproducción oral, escrita y multimodal; y plataformas virtuales de interacción y colaboración educativa.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.1.12",
+      "bloque_id": null,
+      "descripcion": "Interés por expresarse oralmente con pronunciación y entonación adecuadas.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "A.2. Comunicación escrita",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.2.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias elementales para la comprensión de textos escritos, multimodales de extensión media y contextualizados.",
+      "criterios_ids": [
+        "CE4.1",
+        "CE1.1",
+        "CE3.2",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.2.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias elementales para comparar información de distintas fuentes, buscando la veracidad de las mismas.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "A.2.3",
+      "bloque_id": null,
+      "descripcion": "Estrategias elementales para la lectura guiada, compartida y comentada de obras o fragmentos variados y diversos de la literatura en aragonés adecuados a sus intereses.",
+      "criterios_ids": [
+        "CE3.2",
+        "CE2.3",
+        "CE6.3",
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "A.2.4",
+      "bloque_id": null,
+      "descripcion": "Estrategias para la expresión de gustos e intereses. Inicio de la construcción de la identidad lectora.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "A.2.5",
+      "bloque_id": null,
+      "descripcion": "Recursos para el aprendizaje y estrategias eficientes de búsqueda guiada de información en medios analógicos y digitales.",
+      "criterios_ids": [
+        "CE2.3",
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "A.2.6",
+      "bloque_id": null,
+      "descripcion": "Herramientas analógicas y digitales básicas tales como plataformas virtuales de interacción y colaboración educativa de uso común para la comprensión escrita y multimodal.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.2.7",
+      "bloque_id": null,
+      "descripcion": "Léxico eficaz y de interés para el alumnado relativo a los temas o hilos conductores seleccionados .",
+      "criterios_ids": [
+        "CE2.2",
+        "CE1.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.2.8",
+      "bloque_id": null,
+      "descripcion": "Los elementos constitutivos esenciales de la obra literaria (tema, personajes, trama, escenario) en la construcción acompañada del sentido de la obra.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.2.9",
+      "bloque_id": null,
+      "descripcion": "Lectura expresiva, dramatización o interpretación de fragmentos atendiendo a los procesos de comprensión y al nivel de desarrollo.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.2.10",
+      "bloque_id": null,
+      "descripcion": "Patrones sonoros, acentuales y de entonación básicos de uso común, y funciones comunicativas generales asociadas a dichos patrones.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "A.2.11",
+      "bloque_id": null,
+      "descripcion": "Funcionamiento elemental de la biblioteca de aula o de centro como escenario de actividades literarias compartidas. Comunidades lectoras.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "A.2.12",
+      "bloque_id": null,
+      "descripcion": "Modelos contextuales y géneros discursivos básicos de uso común en la comprensión, producción y coproducción de textos escritos y multimodales, breves y sencillos, literarios y no literarios tales como cuentos, recetas, cartas o biografías, teatros o libres. Cuidado en la presentación de las producciones escritas.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.2.13",
+      "bloque_id": null,
+      "descripcion": "Estrategias eficientes de escritura, individuales o grupales, de textos escritos y multimodales sencillos, en diferentes soportes, próximos a su experiencia personal y con diferentes propósitos y contextos comunicativos.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.2.14",
+      "bloque_id": null,
+      "descripcion": "Mecanismos de coherencia y cohesión elementales, con especial atención a las repeticiones y sinónimos, y al orden de oraciones y párrafos.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.2.15",
+      "bloque_id": null,
+      "descripcion": "Intención comunicativa y claves de la tipología textual básica: narración, descripción, diálogo.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.2.16",
+      "bloque_id": null,
+      "descripcion": "Funciones comunicativas básicas de uso común adecuadas al ámbito y al contexto de forma escrita: saludar, despedirse, presentar y presentarse; describir personas, objetos y lugares; pedir e intercambiar información sobre cuestiones cotidianas; describir rutinas; dar indicaciones e instrucciones; expresar el tiempo, la cantidad y el espacio.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "A.2.17",
+      "bloque_id": null,
+      "descripcion": "Léxico elemental y de interés para el alumnado relativo a relaciones interpersonales básicas, vivienda, lugares y entornos cercanos .",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.2.18",
+      "bloque_id": null,
+      "descripcion": "Herramientas analógicas y digitales básicas de uso común para la comprensión, producción y coproducción escrita y multimodal; y plataformas virtuales de interacción y colaboración educativa.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.2.19",
+      "bloque_id": null,
+      "descripcion": "Elementos gráficos y paratextuales sencillos que facilitan la organización y la comprensión del texto.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.2.20",
+      "bloque_id": null,
+      "descripcion": "Herramientas analógicas y digitales elementales para la comprensión y producción oral, escrita y multimodal.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.4",
+      "bloque_id": null,
+      "descripcion": "A.4. Conocimiento formal de la lengua",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.4.1",
+      "bloque_id": null,
+      "descripcion": "Unidades lingüísticas básicas de uso común y significados asociados a dichas estructuras tales como expresión de la entidad y sus propiedades, cantidad y número, espacio y las relaciones espaciales, afirmación, exclamación, negación, interrogación.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "A.4.2",
+      "bloque_id": null,
+      "descripcion": "Léxico elemental y de interés para el alumnado relativo a relaciones interpersonales próximas, vivienda, lugares y entornos cercanos.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.4.3",
+      "bloque_id": null,
+      "descripcion": "Patrones sonoros, acentuales y de entonación básicos de uso común, y funciones comunicativas generales asociadas a dichos patrones.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "A.4.4",
+      "bloque_id": null,
+      "descripcion": "Convenciones ortográficas básicas de uso común y significados asociados a los formatos y elementos gráficos.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "A.4.5",
+      "bloque_id": null,
+      "descripcion": "Estrategias elementales para el uso guiado de diccionarios, en distintos soportes.",
+      "criterios_ids": [
+        "CE4.2",
+        "CE3.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B",
+      "bloque_id": null,
+      "descripcion": "B. Multilingüismo",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "Estrategias y técnicas elementales de detección de las carencias comunicativas y las limitaciones derivadas del nivel de competencia en la lengua aragonesa en relación con el resto de lenguas familiares.",
+      "criterios_ids": [
+        "CE4.3",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las estrategias elementales para identificar y utilizar unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE3.2",
+        "CE6.3",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B.3",
+      "bloque_id": null,
+      "descripcion": "Identificación y análisis, con acompañamiento, de prejuicios y estereotipos lingüísticos.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B.4",
+      "bloque_id": null,
+      "descripcion": "Uso de un lenguaje no discriminatorio y respetuoso con las diferencias.",
+      "criterios_ids": [
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "B.5",
+      "bloque_id": null,
+      "descripcion": "La diversidad etno-cultural y lingüística como riqueza y herramienta de reflexión interlingüística.",
+      "criterios_ids": [
+        "CE6.3",
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "B.6",
+      "bloque_id": null,
+      "descripcion": "Iniciación a estrategias y herramientas básicas de uso común de autoevaluación y coevaluación, analógicas y digitales, individuales y cooperativas.",
+      "criterios_ids": [
+        "CE2.2",
+        "CE4.3",
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B.7",
+      "bloque_id": null,
+      "descripcion": "Léxico y expresiones elementales para comprender enunciados sobre la comunicación, la lengua y el aprendizaje (metalenguaje).",
+      "criterios_ids": [
+        "CE4.3",
+        "CE6.2"
+      ]
+    },
+    {
+      "id": "C",
+      "bloque_id": null,
+      "descripcion": "C. Etnolingüística",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.1",
+      "bloque_id": null,
+      "descripcion": "El Aragonés como medio de comunicación y relación con personas de otros lugares de la Comunidad Autónoma de Aragón o de España donde se den rasgos de la lengua aragonesa.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE4.3"
+      ]
+    },
+    {
+      "id": "C.2",
+      "bloque_id": null,
+      "descripcion": "Aspectos socioculturales y sociolingüísticos elementales y más significativos relativos a las costumbres y la vida cotidiana en Aragón en las zonas de uso histórico predominante de la misma, en el resto de Aragón y en zonas próximas con influencia aragonesa..",
+      "criterios_ids": [
+        "CE6.2",
+        "CE4.3",
+        "CE6.3",
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "C.3",
+      "bloque_id": null,
+      "descripcion": "Iniciación a las estrategias básicas de uso común para entender y apreciar la diversidad lingüística con otras lenguas cercanas y con las variedades dialectales, cultural y artística, atendiendo a valores ecosociales y democráticos.",
+      "criterios_ids": [
+        "CE6.3"
+      ]
+    },
+    {
+      "id": "C.4",
+      "bloque_id": null,
+      "descripcion": "Identificación, con acompañamiento, de prejuicios y estereotipos lingüísticos.",
+      "criterios_ids": [
+        "CE6.2",
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "C.5",
+      "bloque_id": null,
+      "descripcion": "Uso de un lenguaje no discriminatorio y respetuoso con las diferencias.",
+      "criterios_ids": [
+        "CE6.1"
+      ]
+    },
+    {
+      "id": "C.6",
+      "bloque_id": null,
+      "descripcion": "Relación de los textos leídos y otras manifestaciones artísticas y culturales.",
+      "criterios_ids": [
+        "CE6.2"
+      ]
+    }
+  ]
+}

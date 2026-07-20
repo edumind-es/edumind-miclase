@@ -1,0 +1,287 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "ciencias-de-la-computaci-n",
+    "ciclo_origen": "1-eso",
+    "fuente": "iDoceo_02_ciencias_de_la_computaci_n_1-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Entender y utilizar algoritmos que lleven a la resolución de problemas concretos, aplicando los principios del pensamiento computacional y el razonamiento lógico.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM1",
+        "STEM3",
+        "CD2",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Diseñar, escribir y depurar aplicaciones informáticas, en entornos de programación gráfica y textual, que den solución a problemas concretos, incluyendo el control de sistemas físicos y robóticos.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD5",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los elementos componentes, tanto hardware como software, de los distintos sistemas informáticos, valorando la importancia de su mantenimiento y actualización, así como la manera en la que la información es tratada y almacenada en ellos.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM3",
+        "CD2",
+        "CD4",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender cómo los equipos informáticos se comunican entre sí formando redes, desde las más pequeñas hasta internet, para compartir información, servicios y recursos, siendo conscientes de las amenazas que esto conlleva y de la importancia de la ciberseguridad.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM5",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprender qué es un algoritmo, hacer uso de ellos para la resolución de problemas simples y representarlos mediante diagramas de flujo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar el razonamiento lógico para explicar cómo funcionan algunos algoritmos básicos y también para detectar y corregir errores en ellos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Usar secuencias, selecciones y repeticiones en algoritmos que lleven a la resolución de problemas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Diseñar e implementar mediante un lenguaje de programación por bloques, programas que realicen tareas diversas como animaciones, historias, juegos de preguntas y respuestas o videojuegos simples, que incluyan interacción con el usuario.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Usar las secuencias, la selección y la repetición en programas, trabajando con objetos, variables, y diversas formas de entrada y salida.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Coordinar la ejecución de tareas diferentes en un programa mediante eventos y mensajes a objetos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar aplicaciones para dispositivos móviles haciendo uso de la programación por bloques y utilizando las posibilidades que ofrecen en cuanto a comunicaciones y al uso de los sensores que incorporan, valorando especialmente el diseño de la interfaz de usuario para lograr una experiencia accesible y segura.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Integrar gráficos, sonidos y otros elementos multimedia en los programas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Describir la función de los principales elementos componentes de un ordenador, valorando la importancia de una correcta elección de los mismos en función del uso que se les vaya a dar.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Comprender cómo se conectan los componentes de un ordenador y cómo se procesa y almacena la información.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Describir las funciones principales de los sistemas operativos, así como valorar la elección del mismo entre las diferentes opciones disponibles, prestando especial atención a factores como su facilidad de instalación, su mantenimiento y su uso seguro, protegiendo la privacidad de las personas y datos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Organizar la información de manera segura dentro de dispositivos de almacenamiento y en la nube, haciendo un uso adecuado de operaciones como mover, copiar o cortar archivos, así como guardándola en el formato más adecuado para cada tipo de documento.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer la existencia de diferentes tipos de software para la realización de tareas tales como el tratamiento de imágenes, ofimáticas, entretenimiento y comunicaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar software de edición de imágenes para crear y modificar gráficos vectoriales y de mapas de bits.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer los elementos y componentes de las redes informáticas, incluido los de Internet.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conectar equipos informáticos a todo tipo de redes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer y utilizar de forma segura los diferentes servicios que ofrecen las redes, así como las oportunidades que ofrecen para la comunicación y el trabajo colaborativo.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Pensamiento computacional"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Programación"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Computadores"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Redes"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Algoritmos: (cid:2) Definición y ejemplos sencillos. (cid:2) Análisis de problemas simples y diseño de algoritmos para su resolución. (cid:2) Representación de algoritmos mediante diagramas de flujo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Detección y corrección de errores en algoritmos haciendo uso del razonamiento lógico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Pensamiento computacional: (cid:2) Concepto y fundamentos. (cid:2) Técnicas de resolución de problemas: descomposición de problemas complejos en otros más pequeños, identificación de patrones repetitivos y secuenciación de operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Lenguajes de programación: definición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Tipos de lenguajes de programación. Características.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Fundamentos de la programación por bloques: (cid:2) Uso de variables (tipos y operaciones). (cid:2) Estructuras de control (secuencias de instrucciones, bucles, condicionales y eventos). (cid:2) Integración de gráficos y sonidos. (cid:2) Ejecución simultánea de varios objetos, clones y comunicación entre ellos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Programación por bloques de animaciones, presentaciones y videojuegos sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Programación por bloques de aplicaciones para dispositivos móviles: (cid:2) Programación orientada a eventos. (cid:2) Diseño de la interfaz de usuario. (cid:2) Uso de sensores de los dispositivos móviles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Hardware de sistemas informáticos: (cid:2) Componentes (procesador, memoria, unidades de almacenamiento, periféricos). (cid:2) Conexiones entre ellos y flujo de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Software de sistemas informáticos: sistemas operativos, software de utilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Organización de la información en el almacenamiento secundario. Operaciones básicas con archivos y carpetas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La imagen digital: (cid:2) Tipos de imágenes. (cid:2) El píxel. (cid:2) Propiedades de la imagen: resolución, dimensión, profundidad y modo de color. (cid:2) Formatos de imagen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Redes de computadores: elementos componentes, usos y topología.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Conexión segura de equipos informáticos a redes de área local y a internet.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Internet: estructura y funcionamiento. Servicios de internet, incluida la World Wide Web.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Prácticas de uso seguro y responsable de internet.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "educacion-plastica-y-visual",
+    "ciclo_origen": "tercer-curso",
+    "fuente": "iDoceo_educacion-plastica-y-visual_tercer-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Descubrir propuestas plásticas, visuales y audiovisuales de diferentes géneros, estilos, estéticas, épocas y culturas, a través de la recepción activa y el análisis de las mismas, para desarrollar la curiosidad, el placer y la apertura hacia el descubrimiento de lo nuevo y el respeto por la diversidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP3",
+        "STEM1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Investigar sobre manifestaciones plásticas, visuales y audiovisuales, y sus contextos, empleando diversos canales, medios y técnicas, para desarrollar interés y aprecio por las mismas, disfrutar de ellas, entender su valor y empezar a desarrollar una sensibilidad artística propia.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "STEM2",
+        "CD1",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Expresar y comunicar de manera creativa ideas, sentimientos y emociones a través de diferentes lenguajes, técnicas, instrumentos, medios y soportes, experimentando con las posibilidades del sonido, la imagen y los medios digitales y multimodales, desarrollando la autoconfianza y una visión crítica y empática de las posibilidades comunicativas y expresivas, para producir e interpretar obras propias y ajenas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CD2",
+        "CD4",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC2",
+        "CE1",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Participar activamente del diseño, la elaboración y la difusión de producciones plásticas, visuales y audiovisuales, individuales o colectivas, poniendo en valor el proceso a desarrollar, asumiendo diferentes funciones en la consecución de un resultado final, respetando su propia labor y la de sus compañeros, para desarrollar la creatividad, la noción de autoría, el sentido de pertenencia, el compromiso en experiencias colaborativas y el espíritu emprendedor.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CC2",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer propuestas plásticas, visuales y audiovisuales de diferentes géneros, estilos, estéticas, épocas y culturas, a través de la recepción activa en diferentes contextos y respeto por las mismas e incorporando la perspectiva de género. (CCL1, CP3, CPSAA1, CPSAA3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir los elementos básicos de manifestaciones plásticas, visuales y audiovisuales explorando sus principales características con actitud abierta e interés. (CCL1, CPSAA3, CC1, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar e iniciarse en la utilización del vocabulario específico de uso común del lenguaje plástico, visual y audiovisual, en diversos contextos de recepción, análisis y creación planteados en el aula. (CCL1, CC3, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar y aplicar estrategias para la búsqueda guiada de información sobre manifestaciones plásticas, visuales y audiovisuales, a través de canales y medios de acceso sencillos, tanto de forma individual como cooperativa, disfrutando tanto en las tareas de búsqueda como de las manifestaciones encontradas, mostrando interés y aprecio por las mismas. (CCL3, CP3, STEM2, CD1, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Distinguir elementos característicos básicos de distintas manifestaciones plásticas, visuales y audiovisuales, que forman parte del patrimonio cultural y artístico, indicando los canales, medios y técnicas utilizados, identificando sus diferencias y similitudes y dialogando sobre las sensaciones producidas, con actitud de interés, aprecio y respeto. (CP3, CD1, CPSAA1, CPSAA3, CC3, CCEC1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer y compartir las sensaciones y emociones producidas por diferentes manifestaciones plásticas, visuales y audiovisuales a través de la recepción activa y su CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48498 disfrute, mostrando respeto hacia las emociones compartidas por los otros compañeros. (CP3, CPSAA1, CPSAA3, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Producir obras propias básicas y sencillas creativas de carácter plástico, visual y audiovisual, de forma individual y en grupo, utilizando las posibilidades expresivas de la imagen, los medios digitales básicos y otros materiales y herramientas, mostrando confianza en las capacidades creativas propias y respeto hacia las diferentes posibilidades comunicativas y expresivas. (CCL5, CD2, CPSAA3, CPSAA5, CC2, CE1, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Expresar con creatividad y de forma guiada, ideas, sentimientos y emociones a través de la creación de manifestaciones plásticas, visuales y audiovisuales básicas y sencillas experimentando con los diferentes lenguajes artísticos e instrumentos, herramientas y materiales, prestando atención a la ejecución. (CCL1, CPSAA1, CPSAA5, CE1, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar de manera individual o grupal manifestaciones plásticas, visuales y audiovisuales sencillas utilizando las herramientas, los instrumentos u otros materiales y medios, desarrollando una actitud cooperativa y de atención. (CCL1, CCL5, CPSAA3, CC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar de manera guiada en el diseño de producciones plásticas, visuales y audiovisuales sencillas, trabajando con interés de forma cooperativa en la consecución de un resultado final, poniendo en valor el proceso a desarrollar y asumiendo diferentes funciones, desde la igualdad y el respeto a la diversidad. (CCL1, CCL5, CP3, STEM3, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar en el proceso cooperativo de elaboración de producciones plásticas, visuales y audiovisuales, de forma respetuosa, utilizando elementos básicos de los diferentes lenguajes y técnicas artísticas, disfrutando tanto del proceso de elaboración como del resultado final, respetando la propia labor y la de los compañeros. (CCL1, CCL5, STEM3, CPSAA3, CPSAA4, CC2, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Compartir los proyectos plásticos, visuales y audiovisuales o experiencias creativas, empleando alguna estrategia comunicativa básica, explicando el proceso y el resultado final obtenido, respetando y valorando las experiencias y opiniones propias y las de los demás. (CCL1, CCL5, CP3, CPSAA3, CPSAA4, CCEC3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48499",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Recepción, análisis y reflexión"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Experimentación, creación y comunicación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Propuestas musical plásticas, visuales y audiovisuales sencillas de diferentes géneros, estilos, corrientes estéticas, procedencias y épocas producidas por creadores locales, regionales y nacionales. Propuestas artísticas específicas de Castilla y León.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de recepción activa que favorezcan el disfrute y el respeto. Construcción del propio gusto y referente creativo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Normas elementales de comportamiento en la recepción de propuestas plásticas, visuales y audiovisuales, en diferentes espacios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Vocabulario específico sencillo y de uso común de las artes plásticas, visuales y audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Recursos digitales de uso común para las artes plásticas, visuales y audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas y sencillas de exploración de propuestas plásticas, visuales y audiovisuales, desde una perspectiva de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Cultura visual. La imagen en el mundo actual: técnicas y estrategias básicas de lectura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "El cine como forma de narración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Géneros y formatos básicos y sencillos de producciones audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Características elementales del lenguaje audiovisual multimodal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Fases del proceso creativo de propuestas plásticas, visuales y audiovisuales: planificación, experimentación y comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Profesiones vinculadas con las artes plásticas, visuales y audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Actitud activa e interés tanto por el proceso como por el producto final en producciones plásticas, visuales y audiovisuales. Iniciación a la valoración de ambos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Elementos configurativos básicos del lenguaje visual: punto, línea, plano, textura, color. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                               Viernes, 30 de septiembre de 2022                       Pág. 48500",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Materiales, instrumentos, soportes y técnicas básicas utilizados en la expresión plástica y visual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Medios, soportes y materiales de expresión plástica y visual. Técnicas bidimensionales y tridimensionales en dibujos y modelados sencillos con diferentes materiales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "La representación espacial. Percepción visual y táctil del volumen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Aproximación a las técnicas, materiales y recursos informáticos y tecnológicos básicos: su aplicación para la captura y manipulación de producciones plásticas, visuales y audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Registro y edición básica y sencilla de elementos audiovisuales: conceptos, tecnologías, técnicas y recursos elementales y de manejo sencillo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Producciones multimodales: aproximación al conocimiento de diversas herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Aproximación a las herramientas y las técnicas básicas de animación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Fotografía básica.",
+      "criterios_ids": []
+    }
+  ]
+}

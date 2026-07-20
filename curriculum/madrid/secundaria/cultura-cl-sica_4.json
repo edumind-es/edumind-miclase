@@ -1,0 +1,410 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "cultura-cl-sica",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_03_cultura_cl_sica_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar el marco geográfico en el que se desarrolló la historia de Grecia y Roma, los períodos más relevantes de estas y sus acontecimientos y figuras más destacados.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Conocer los elementos esenciales de la cultura clásica, percibir su pervivencia en el mundo actual y valorar su contribución a la formación de la cultura y civilización occidentales.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer la contribución del griego clásico a las lenguas de cultura y el origen latino del español y de las lenguas romances, propiciando el dominio de la lengua española culta, oral y escrita, así como facilitando el aprendizaje y perfeccionamiento de otras lenguas romances del repertorio lingüístico del alumnado.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP2",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Aproximarse a la literatura y a las obras de arte clásicas apreciando su valor intrínseco y su influencia a lo largo de la historia de la literatura y del arte.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CCL4",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Conocer las instituciones políticas y sociales de la Antigüedad griega y romana, valorarlas críticamente e identificar las semejanzas y diferencias con las actuales.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL5",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir los diferentes marcos geográficos en los que se desarrollan las civilizaciones griega y romana a lo largo de su historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Localizar en un mapa hitos geográficos y enclaves concretos relevantes para el conocimiento de las civilizaciones griega y romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar, describir y explicar el marco histórico en el que se desarrollan las civilizaciones griega y romana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer las principales características de los diferentes periodos de la historia de Grecia y Roma, elaborar y saber situar en un eje cronológico hechos históricos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Situar los principales asentamientos griegos en España.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Situar las provincias de Hispania romana y sus principales ciudades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "CE1",
+      "descripcion": "Explicar la romanización de Hispania, describiendo sus causas y fases y los acontecimientos más importantes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer y saber ubicar los principales monumentos clásicos del patrimonio conservados, sobre todo en España.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar las manifestaciones de la mitología clásica en la historia del arte europeo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la influencia del arte clásico en la historia del arte europeo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Obtener información de forma crítica sobre la pervivencia e influencia de la civilización clásica en el entorno cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer la existencia de diversos tipos de escritura, distinguirlos y comprender sus funciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el origen del alfabeto y distinguir distintos tipos de alfabetos usados en la actualidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer la presencia de elementos de los alfabetos griego y latino en los alfabetos actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el significado de raíces y afijos empleados usualmente en la formación de términos científicos y explicar el significado de helenismos a partir del análisis etimológico de sus componentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar los procesos de evolución de las lenguas romances, aplicando las reglas fonéticas de evolución, distinguiendo las palabras patrimoniales de los cultismos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el significado y emplear adecuadamente locuciones latinas de uso frecuente en español y otras lenguas de cultura.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.7",
+      "objetivo_id": "CE3",
+      "descripcion": "Comprender los distintos procedimientos que emplean las lenguas para marcar las funciones sintácticas y semánticas de los grupos nominales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.8",
+      "objetivo_id": "CE3",
+      "descripcion": "Reflexionar sobre el funcionamiento de las lenguas que forman el repertorio lingüístico del alumno, partiendo de la comparación con el latín.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Sintetizar las características de los géneros de la literatura clásica y reconocerlos en fragmentos de obras traducidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer los autores más destacados de cada género de la literatura clásica, situarlos cronológicamente, así como sus principales obras.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Comentar fragmentos traducidos de obras griegas y latinas, identificando las referencias mitológicas, históricas, sociales, políticas... que aparecen en ellos, así como su pervivencia en obras posteriores de la literatura, las artes plásticas o la cinematografía.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Constatar la aportación de la cultura griega y romana, a través del conocimiento de la literatura clásica, a la conformación de la identidad cultural europea.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "CE4",
+      "descripcion": "Enumerar las fases y explicar los procesos de transmisión de la literatura griega y romana hasta nuestros días.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer las características esenciales de la arquitectura griega y de la arquitectura e ingeniería romana y sus principales manifestaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.7",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar los periodos y principales características de la escultura griega y las principales manifestaciones de la escultura romana y sus características.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.8",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer los estilos, tipos y motivos de la cerámica griega.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.9",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer los principales temas y características de la pintura y el mosaico romano. Competencia 5.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Constatar la pervivencia de elementos de la configuración política de Atenas y Roma en las sociedades actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer las semejanzas y diferencias del sistema legal y judicial griego y romano con el actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar la contribución de la oratoria clásica en la acción política y judicial de la sociedad actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Comparar las relaciones intrafamiliares y el papel de la mujer en las sociedades antiguas con la situación en la sociedad occidental y en otras sociedades.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El marco geográfico e histórico"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. El griego, el latín y su pervivencia"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. La literatura y el arte"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. La pervivencia de la cultura clásica"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El marco geográfico e histórico de Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La colonización griega en España. La romanización de la Península Ibérica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Historia de la escritura. Los alfabetos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Elementos griegos en el vocabulario científico y técnico actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "El griego y el latín como lenguas flexivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Evolución del latín al español. Cultismos y palabras patrimoniales",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Locuciones latinas en el español y otras lenguas de cultura actuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La literatura griega: La poesía épica. La poesía lírica. El teatro griego: La tragedia y la comedia. La historiografía. La oratoria. La filosofía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "La literatura latina: La poesía épica. La comedia. La poesía lírica. La historiografía y la novela. La oratoria y la retórica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La transmisión de la literatura clásica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "El arte griego: Arquitectura. Escultura. Cerámica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "El arte romano: Arquitectura e ingeniería. Escultura. Pintura y mosaico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Pervivencia de las instituciones políticas y sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Pervivencia de la mitología clásica en las manifestaciones artísticas y culturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Pervivencia de la literatura y el arte de Grecia y Roma.",
+      "criterios_ids": []
+    }
+  ]
+}

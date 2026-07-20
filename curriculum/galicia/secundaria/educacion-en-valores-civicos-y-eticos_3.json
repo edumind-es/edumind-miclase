@@ -1,0 +1,1036 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "secundaria",
+    "asignatura": "educacion-en-valores-civicos-y-eticos",
+    "ciclo_origen": "3º",
+    "fuente": "iDoceo_educacion-en-valores-civicos-y-eticos_3º.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. C.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50062 distintas lenguas, orales o signadas, de fory la comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre lenmantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e y respetar la diversidad lingüística y cultural de democrática. operativos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. saludable, sostenible, crítico y responsable para el trabajo y para la participación en la y datos, la comunicación y la colaboración, la digitales (incluida la programación), la serelacionadas con la ciberseguridigital, la privacidad, la propiedad intelectual, computacional y crítico. operativos."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digiy tal activa, cívica y reflexiva."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de y vida saludable en los ámbitos físico y mental, recoo noce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y contraria a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. un enfoque vital dirigido a actuar soespecíficos necesarios para geAcerca estrategias que permiten adaptar la entrenar el pensamiento para analizar utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos para aprender, a arriesgar y a afronC.494-1998 https://www.xunta.gal/diario-oficial-galicia de 2022 Pág. 50068 decisiones basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas expuestas a la acproyectos sostenible de valor social, cultural y operativos y."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afrenta retos con sentido crítico, haciendo balance de su sosy tenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innoa vadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Inquirir e investigar cuanto se refiere a la identidad humana y a las cuestiones éticas relativas al propio proyecto vital, analizando críticamente información fiable y generando una actitud reflexiva al respecto, para promover el autoconocimiento y la elaboración de planteamientos y juicios morales de manera autónoma y razonada.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Actuar e interactuar de acuerdo con normas y valores cívicos y éticos, a partir del reconocimiento fundado de su importancia para regular la vida comunitaria y su aplicación efectiva y justificada en distintos contextos, para promover una convivencia pacífica, respetuosa, democrática y comprometida con el bien común.",
+      "descriptores_ids": [
+        "CCL5",
+        "CD3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Entender la naturaleza interconectada e inter y codependiente de las actividades humanas, mediante la identificación y el análisis de problemas ecosociales de relevancia, para promover hábitos y actitudes éticamente comprometidos con el logro de formas de vida sostenibles.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Mostrar una adecuada estima de sí mismo y del entorno, reconociendo y valorando las emociones y los sentimientos propios y ajenos, para lograr una actitud empática y cuidadosa con respeto a los demás y a la naturaleza.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Construir y expresar un concepto ajustado de sí mismo reconociendo las múltiples dimensiones de su naturaleza y personalidad, así como de la dimensión cívica y moral de esta, a partir de la investigación y del diálogo alrededor de diversas concepciones sobre la naturaleza humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Identificar, gestionar y comunicar ideas, emociones, afectos y deseos con comprensión y empatía hacia las demás personas, demostrando autoestima y compartiendo un concepto adecuado de lo que deben ser las relaciones con otras personas, incluyendo el ámbito afectivosexual.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Desarrollar y demostrar autonomía moral mediante la práctica de la deliberación racional, el uso de conceptos éticos y el diálogo respetuoso con los demás, alrededor de distintos valores y modos de vida, así como a problemas relacionados con el ejercicio de los derechos individuales, el uso responsable y seguro de las redes, las conductas adictivas y el acoso escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Desarrollar una actitud de gestión equilibrada de las emociones, de estima y cuidado de sí y de las demás personas, identificando, analizando y expresando de manera asertiva las propias emociones y sentimientos, y reconociendo y valorando los de los demás en distintos contextos y alrededor de actividades creativas y de reflexión individual o dialogada sobre cuestiones éticas y cívicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Promover y demostrar una convivencia pacífica, respetuosa, democrática y comprometida con el bien común, a partir de la investigación sobre la naturaleza social y política del ser humano y el uso y comprensión crítico de los conceptos de ley, poder, soberanía, justicia, Estado, democracia, memoria democrática, dignidad y derechos humanos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Fomentar el ejercicio de la ciudadanía activa y democrática a través del conocimiento del movimiento asociativo y la participación respetuosa, dialogante y constructiva en actividades de grupo que impliquen tomar decisiones colectivas, planificar acciones coordinadas y resolver problemas aplicando procedimientos y principios cívicos, éticos y democráticos explícitos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Contribuir a generar un compromiso activo con el bien común a través del análisis y la toma razonada y dialogante de posición alrededor de cuestiones éticas de actualidad como la lucha contra la desigualdad y la pobreza, el derecho al trabajo, la salud, la educación y la justicia, así como sobre los fines y límites éticos de la investigación científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Tomar consciencia de la lucha por una efectiva igualdad de género y del problema de la violencia y explotación sobre las mujeres, a través del análisis de las diversas generaciones y corrientes del feminismo y de las medidas de prevención de la desigualdad, la violencia y la discriminación por razón de género y orientación sexual, mostrando igualmente conocimiento de los derechos LGTBIQ+ y reconociendo la necesidad de respetarlos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Contribuir activamente al bienestar social adoptando una posición propia, explícita, informada y éticamente fundamentada sobre el valor y pertinencia de los derechos humanos, el respeto por la diversidad etnocultural, la consideración de los bienes públicos globales, la percepción del valor social de los impuestos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Contribuir a la consecución de un mundo más justo y pacífico a través del análisis y reconocimiento de la historia democrática de nuestro país y de las funciones del Estado de derecho y sus instituciones, los organismos internacionales, las asociaciones civiles y los cuerpos y fuerzas de seguridad del Estado, en su empeño por lograr la paz y la seguridad integral, atender a las víctimas de la violencia y promover la solidaridad y cooperación entre las personas y los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Describir las relaciones históricas de interconexión, interdependencia y ecodependencia entre nuestras vidas y el entorno a partir del análisis de las causas y consecuencias de los más graves problemas ecosociales que nos afectan.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Valorar distintos planteamientos científicos, políticos y éticos con los que afrontar la emergencia climática y la crisis ambiental a través de la exposición y el debate argumental alrededor de estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Promover estilos de vida éticamente comprometidos con el logro de un desarrollo sostenible, contribuyendo por sí mismo y en su entorno al tratamiento preventivo de los residuos, la gestión sostenible de los recursos, la movilidad segura, sostenible y saludable, el comercio justo, el consumo responsable, el cuidado del patrimonio natural, el respeto por la diversidad etnocultural, y el cuidado y protección de los animales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Desarrollar una actitud de gestión equilibrada de las emociones, de estima y cuidado de sí mismo y de los otros, identificando, analizando y expresando de manera asertiva las propias emociones y sentimientos, y reconociendo y valorando los de los demás en distintos contextos y alrededor de actividades creativas y de reflexión individual o dialogada sobre cuestiones éticas y cívicas.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Autoconocimiento y autonomía moral"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Sociedad, justicia y democracia"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Sostenibilidad y ética ambiental"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La ética dentro del conjunto de saberes filosóficos.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "– El objeto de la ética.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "– La aplicación de la ética: la orientación para la resolución de problemas complejos sobre cómo actuar.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "La naturaleza humana.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "– Libertad y moral como características específicamente humanas.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "– La identidad personal, el cruce de caminos entre la naturaleza, la crianza y el proyecto vital.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La educación de emociones y sentimientos.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "– La autoestima personal.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "– La igualdad y el respeto en las relaciones con otras personas.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "– La educación afectivo-sexual.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Análisis de las acciones.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "– Los motivos de la acción: deseos y razones.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "– La voluntad como razón práctica.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "– La autonomía de la voluntad.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "– La responsabilidad de las acciones.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "La ética y las éticas como guías de nuestras acciones.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "– El juicio moral: las normas, el valor y el valioso, las virtudes, los sentimientos morales.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "– Universalismo y pluralismo moral.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "– Éticas de la felicidad, éticas del deber, éticas de la virtud.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Ética y derecho.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "– Semejanzas y diferencias entre ética y derecho.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "– El conflicto legitimidad-legalidad.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "– La objeción de conciencia.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "– Los derechos individuales y los deberes ciudadanos.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "– El debate sobre la libertad de expresión.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B1.26",
+      "bloque_id": "B1",
+      "descripcion": "La ética en la sociedad actual.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B1.27",
+      "bloque_id": "B1",
+      "descripcion": "– El problema de la desinformación.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B1.28",
+      "bloque_id": "B1",
+      "descripcion": "– La protección de datos y el derecho a la intimidad.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B1.29",
+      "bloque_id": "B1",
+      "descripcion": "– El ciberacoso y otras formas de violencia en las redes sociales.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B1.30",
+      "bloque_id": "B1",
+      "descripcion": "– Las conductas adictivas.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La sociedad humana: naturaleza y origen.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "– Las estructuras sociales y los grupos de pertenencia.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "– Cooperación y altruismo frente a competencia y egoísmo.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La convivencia social.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "– Las virtudes del diálogo y las normas de argumentación.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "– La resolución pacífica de conflictos.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "– La empatía con los demás.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "La política.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "– Conceptos clave: ley, poder, soberanía, justicia y dignidad.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "– El Estado: formas de Estado y tipos de gobierno.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "– La democracia: principios, procedimientos e instituciones.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "– El Estado español como estado social y democrático de derecho.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "– Valores constitucionales.",
+      "criterios_ids": [
+        "CE1.3"
+      ]
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "– La memoria democrática.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Los derechos humanos.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "– Referente moral de la democracia y la justicia social.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "– Generaciones e historia de los derechos humanos.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "– Derechos de la infancia.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.19",
+      "bloque_id": "B2",
+      "descripcion": "– Los derechos económicos, sociales y culturales: el derecho al trabajo, a la salud, a la educación y a la justicia.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.20",
+      "bloque_id": "B2",
+      "descripcion": "La participación democrática: ser ciudadanos.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.21",
+      "bloque_id": "B2",
+      "descripcion": "– Otras formas de participación social: el asociacionismo y el voluntariado.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B2.22",
+      "bloque_id": "B2",
+      "descripcion": "La búsqueda de la justicia social.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.23",
+      "bloque_id": "B2",
+      "descripcion": "– La desigualdad económica y la lucha contra la pobreza.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.24",
+      "bloque_id": "B2",
+      "descripcion": "– Globalización económica y bienes públicos globales.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.25",
+      "bloque_id": "B2",
+      "descripcion": "– El comercio justo.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B2.26",
+      "bloque_id": "B2",
+      "descripcion": "– El valor social de los impuestos.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.27",
+      "bloque_id": "B2",
+      "descripcion": "La igualdad de género.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.28",
+      "bloque_id": "B2",
+      "descripcion": "– Las diversas ondas y corrientes del feminismo.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.29",
+      "bloque_id": "B2",
+      "descripcion": "– La prevención de la explotación y la violencia contra niñas y mujeres.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.30",
+      "bloque_id": "B2",
+      "descripcion": "– La corresponsabilidad en las tareas domésticas y de cuidados.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B2.31",
+      "bloque_id": "B2",
+      "descripcion": "La sociedad y la ciudadanía plural.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.32",
+      "bloque_id": "B2",
+      "descripcion": "– El interculturalismo.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B2.33",
+      "bloque_id": "B2",
+      "descripcion": "– La inclusión social y el respeto por la diversidad y las identidades étnico-culturales y de género.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "B2.34",
+      "bloque_id": "B2",
+      "descripcion": "– Los derechos LGTBIQ+.",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "B2.35",
+      "bloque_id": "B2",
+      "descripcion": "La convivencia pacífica y segura.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.36",
+      "bloque_id": "B2",
+      "descripcion": "– La guerra, el terrorismo y otras formas de violencia política.",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B2.37",
+      "bloque_id": "B2",
+      "descripcion": "– La atención a las víctimas de la violencia.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.38",
+      "bloque_id": "B2",
+      "descripcion": "– Acciones individuales y colectivas en favor de la paz.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B2.39",
+      "bloque_id": "B2",
+      "descripcion": "– La contribución del Estado y los organismos internacionales a la paz, a la seguridad integral y a la cooperación.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.40",
+      "bloque_id": "B2",
+      "descripcion": "– El derecho internacional y la ciudadanía global.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.41",
+      "bloque_id": "B2",
+      "descripcion": "– Las fuerzas armadas y la defensa al servicio de la paz.",
+      "criterios_ids": [
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.42",
+      "bloque_id": "B2",
+      "descripcion": "– El papel de las ONG y de las ONGD en la lucha por la paz.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.43",
+      "bloque_id": "B2",
+      "descripcion": "Los desafíos de la democracia actual.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B2.44",
+      "bloque_id": "B2",
+      "descripcion": "– Los códigos deontológicos.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B2.45",
+      "bloque_id": "B2",
+      "descripcion": "– Las éticas aplicadas.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B2.46",
+      "bloque_id": "B2",
+      "descripcion": "– Fines y límites éticos de la investigación científica. La bioética.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "B2.47",
+      "bloque_id": "B2",
+      "descripcion": "– El desafío de la inteligencia artificial.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B2.48",
+      "bloque_id": "B2",
+      "descripcion": "– Las propuestas transhumanistas.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Vida responsable con el entorno y protección del medio ambiente.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "– Recorrido crítico sobre las diferentes formas de relación del ser humano con la naturaleza a lo largo de la historia y la huella ecológica de las acciones humanas en el planeta.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "– Empatía y responsabilidad con el entorno: interdependencia, interconexión y ecodependencia.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "– La protección del medio ambiente y los derechos para con la naturaleza: derechos humanos de tercera generación.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Consumo responsable para una vida sostenible en el planeta.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "– Los límites del planeta y el agotamiento de los recursos.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "– Objetivos del desarrollo sostenible: agenda hacia 2030 para un planeta sostenible.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "– Economía sostenible y ecológica en la globalización, y nueva lógica del crecimiento: economía circular y economía azul.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "– Hábitos para una gestión adecuada de los recursos y tratamiento preventivo de los residuos. La movilidad segura, saludable y sostenible.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "– Consumo responsable y soberanía alimentaria.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Propuestas científicas y ético-políticas acerca de los problemas ecosociales.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "– Justicia ecológica.",
+      "criterios_ids": [
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "– Ética medioambiental: ecocentrismo, biocentrismo y extensionismo.",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "– Ecofeminismo y ética del cuidado.",
+      "criterios_ids": [
+        "CE1.4"
+      ]
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Protección y derechos de los animales.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "– Valores éticos y democráticos como fundamento para una conducta empática y respetuosa hacia los animales.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "– Los derechos humanos de la tercera generación y la conducta con los animales basada en derechos.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    }
+  ]
+}

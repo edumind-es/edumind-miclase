@@ -1,0 +1,481 @@
+{
+  "meta": {
+    "comunidad": "Valencia",
+    "etapa": "primaria",
+    "asignatura": "lengua-extranjera",
+    "ciclo_origen": "1-ciclo",
+    "fuente": "iDoceo_07_lengua_extranjera_1-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, acompañamiento, sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de fiabilidad y pertinencia en función lectura, y la integra y transforma en de los objetivos de lectura y conocimiento adoptando un punto de vista creativo, manipulación y desinformación, y crítico y personal a la par que respetuoso intelectual. creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, diversas adecuadas a su edad, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como aprecia el patrimonio literario como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia individual y colectiva; y experiencia personal y lectora para construir y compartir su interpretación biográfica y sus conocimientos de las obras y para crear textos de intención literaria a partir de modelos y compartir su interpretación de las sencillos. intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización así como los abusos de poder, no solo eficaz sino también ética de los diferentes comunicación. comunicación. 1.2 Competencia plurilingüe (CP) La competencia plurilingüe implica utilizar distintas lenguas, orales o signadas, de forma apropiada y eficaz para el aprendizaje y la comunicación. Esta competencia supone reconocer y respetar los perfiles lingüísticos individuales y aprovechar las experiencias propias para desarrollar estrategias que permitan mediar y hacer transferencias entre lenguas, incluidas las clásicas, y, en su caso, mantener y adquirir destrezas en la lengua o lenguas familiares y en las lenguas oficiales. Integra, asimismo, dimensiones históricas e interculturales orientadas a conocer, valorar y respetar la diversidad lingüística y cultural de la sociedad con el objetivo de fomentar la convivencia democrática. Descriptores operativos Al completar Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. factor de diálogo, para fomentar la cohesión social. 1.3 Competencia matemática y competencia en ciencia, tecnología e ingeniería (STEM) La competencia matemática y competencia en ciencia, tecnología e ingeniería (competencia STEM por sus siglas en inglés) entraña la comprensión del mundo utilizando los métodos científicos, el pensamiento y representación matemáticos, la tecnología y los métodos de la ingeniería para transformar el entorno de forma comprometida, responsable y sostenible. La competencia matemática permite desarrollar y aplicar la perspectiva y el razonamiento matemáticos con el fin de resolver diversos problemas en diferentes contextos. La competencia en ciencia conlleva la comprensión y explicación del entorno natural y social, utilizando un conjunto de conocimientos y metodologías, incluidas la observación y la experimentación, con el fin de plantear preguntas y extraer conclusiones basadas en pruebas para poder interpretar y transformar el mundo natural y el contexto social. La competencia en tecnología e ingeniería comprende la aplicación de los conocimientos y metodologías propios de las ciencias para transformar nuestra sociedad de acuerdo con las necesidades o deseos de las personas en un marco de seguridad, responsabilidad y sostenibilidad. Descriptores operativos Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas. cesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos científico para entender y explicar de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utimiento como motor de desarrollo, lizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada. tos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación participación de todo el grupo, rede todo el grupo y resolviendo pacífisolviendo pacíficamente los concamente los conflictos que puedan surgir. rando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, macesos, razonamientos, demostratemáticos y tecnológicos de forma clara y veraz, utilizando la terminolotíficos, matemáticos y tecnológicos gía científica apropiada, en diferentes de forma clara y precisa y en difeformatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la símbolos...), aprovechando de cultura digital para compartir y consforma crítica la cultura digital e intruir nuevos conocimientos. formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando social, y preservar el medio amprincipios de ética y seguridad y pracbiente y los seres vivos; y aplica ticando el consumo responsable. la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. 1.4 Competencia digital (CD) La competencia digital implica el uso seguro, saludable, sostenible, crítico y responsable de las tecnologías digitales para el aprendizaje, para el trabajo y para la participación en la sociedad, así como la interacción con estas. Incluye la alfabetización en información y datos, la comunicación y la colaboración, la educación mediática, la creación de contenidos digitales (incluida la programación), la seguridad (incluido el bienestar digital y las competencias relacionadas con la ciberseguridad), asuntos relacionados con la ciudadanía digital, la privacidad, la propiedad intelectual, la resolución de problemas y el pensamiento computacional y crítico. Descriptores operativos Al completar Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. dad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos personal digital de aprendizaje (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimienmación y el uso de diferentes hetos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reuticuada en función de la tarea y de liza. permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos presencia y visibilidad en la red, y supervisados de manera segura, con una actitud abierta y responsable activa, cívica y reflexiva. ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispoger los dispositivos, los datos sitivos, los datos personales, la salud personales, la salud y el mey el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías. tenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenimáticas sencillas y soluciones tecbles (reutilización de materiales tecnológicas creativas y sostenibles nológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario. ble y uso ético. 1.5 Competencia personal, social y de aprender a aprender (CPSAA) La competencia personal, social y de aprender a aprender implica la capacidad de reflexionar sobre uno mismo para autoconocerse, aceptarse y promover un crecimiento personal constante; gestionar el tiempo y la información eficazmente; colaborar con otros de forma constructiva; mantener la resiliencia; y gestionar el aprendizaje a lo largo de la vida. Incluye también la capacidad de hacer frente a la incertidumbre y a la complejidad; adaptarse a los cambios; aprender a gestionar los procesos metacognitivos; identificar conductas contrarias a la convivencia y desarrollar estrategias para abordarlas; contribuir al bienestar físico, mental y emocional propio y de las demás personas, desarrollando habilidades para cuidarse a sí mismo y a quienes lo rodean a través de la corresponsabilidad; ser capaz de llevar una vida orientada al futuro; así como expresar empatía y abordar los conflictos en un contexto integrador y de apoyo. Descriptores operativos Al completar la Educación Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para para la salud relacionados con facla salud, adopta estilos de vida salutores sociales, consolida estilos de dables para su bienestar físico y menvida saludable a nivel físico y mental, y detecta y busca apoyo ante sital, reconoce conductas contrarias tuaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las reslas incorpora a su aprendizaje, ponsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de obtareas y responsabilidades de majetivos compartidos. tegias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados. clusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendidio plazo y desarrolla procesos zaje autorregulado y participa en prometacognitivos de retroalimentacesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento. 1.6 Competencia ciudadana (CC) La competencia ciudadana contribuye a que alumnos y alumnas puedan ejercer una ciudadanía responsable y participar plenamente en la vida social y cívica, basándose en la comprensión de los conceptos y las estructuras sociales, económicas, jurídicas y políticas, así como en el conocimiento de los acontecimientos mundiales y el compromiso activo con la sostenibilidad y el logro de una ciudadanía mundial. Incluye la alfabetización cívica, la adopción consciente de los valores propios de una cultura democrática fundada en el respeto a los derechos humanos, la reflexión crítica acerca de los grandes problemas éticos de nuestro tiempo y el desarrollo de un estilo de vida sostenible acorde con los Objetivos de Desarrollo Sostenible planteados en la Agenda 2030. Descriptores operativos Al completar Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto. y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Eurofancia, participando en actividades pea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la tos, con actitud democrática, resigualdad de género, la cohesión social y los Objetivos de Desarrollo Sosmiso con la igualdad de género, la tenible. tenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia. quier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción ecodependencia e interconexión de estilos de vida sostenibles, para les, y adopta, de forma consciente contribuir a la conservación de la bioy motivada, un estilo de vida sostediversidad desde una perspectiva tanto local como global. 1.7 Competencia emprendedora (CE) La competencia emprendedora implica desarrollar un enfoque vital dirigido a actuar sobre oportunidades e ideas, utilizando los conocimientos específicos necesarios para generar resultados de valor para otras personas. Aporta estrategias que permiten adaptar la mirada para detectar necesidades y oportunidades; entrenar el pensamiento para analizar y evaluar el entorno, y crear y replantear ideas utilizando la imaginación, la creatividad, el pensamiento estratégico y la reflexión ética, crítica y constructiva dentro de los procesos creativos y de innovación; y despertar la disposición a aprender, a arriesgar y a afrontar la incertidumbre. Asimismo, implica tomar decisiones basadas en la información y el conocimiento y colaborar de manera ágil con otras personas, con motivación, empatía y habilidades de comunicación y de negociación, para llevar las ideas planteadas a la acción mediante la planificación y gestión de proyectos sostenibles de valor social, cultural y económico-financiero. Descriptores operativos Al completar Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas. tivo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de dades propias, haciendo uso de autoconocimiento y se inicia en el coestrategias de autoconocimiento y nocimiento de elementos económicos y financieros básicos, aplicándomentos fundamentales de la ecolos a situaciones y problemas de la vida cotidiana, para detectar aquellos nocimientos económicos y finanrecursos que puedan llevar las ideas originales y valiosas a la acción. que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso liosas y toma decisiones, de marealizado y el resultado obtenido, para llevar a cabo una iniciativa emgias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, prendedora, considerando la experiencia como una oportunidad para aprender. riencia como una oportunidad para aprender. 1.8 Competencia en conciencia y expresión culturales (CCEC) La competencia en conciencia y expresión culturales supone comprender y respetar el modo en que las ideas, las opiniones, los sentimientos y las emociones se expresan y se comunican de forma creativa en distintas culturas y por medio de una amplia gama de manifestaciones artísticas y culturales. Implica también un compromiso con la comprensión, el desarrollo y la expresión de las ideas propias y del sentido del lugar que se ocupa o del papel que se desempeña en la sociedad. Asimismo, requiere la comprensión de la propia identidad en evolución y del patrimonio cultural en un mundo caracterizado por la diversidad, así como la toma de conciencia de que el arte y otras manifestaciones culturales pueden suponer una manera de mirar el mundo y de darle forma. Descriptores operativos Al completar Primaria, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan. terizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e indio de producciones culturales y clusiva, empleando distintos lenguajes artísticos y culturales, integrando cuerpo y desarrollando la autoessu propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas. colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, liza con creatividad diversos mey diversas técnicas plásticas, visuaplásticas, visuales, audiovisuales, les, audiovisuales, sonoras o corposonoras o corporales, para la crearales, para elaborar propuestas artísción de productos artísticos y culticas y culturales. como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. ANEXO II PERFIL DE SALIDA El Perfil de salida del alumnado al término de la enseñanza básica es la herramienta en la que se concretan los principios y los fines del sistema educativo español referidos a dicho periodo. El Perfil identifica y define, en conexión con los retos del siglo XXI, las competencias clave que se espera que los alumnos y alumnas hayan desarrollado al completar esta fase de su itinerario formativo. El Perfil de salida es único y el mismo para todo el territorio nacional. Es la piedra angular de todo el currículo, la matriz que cohesiona y hacia donde convergen los objetivos de las distintas etapas que constituyen la enseñanza básica. Se concibe, por tanto, como el elemento que debe fundamentar las decisiones curriculares, así como las estrategias y las orientaciones metodológicas en la práctica lectiva. Debe ser, además, el fundamento del aprendizaje permanente y el referente de la evaluación interna y externa de los aprendizajes del alumnado, en particular en lo relativo a la toma de decisiones sobre promoción entre los distintos cursos, así como a la obtención del título de Graduado en Educación Secundaria Obligatoria. El Perfil de salida parte de una visión a la vez estructural y funcional de las competencias clave, cuya adquisición por parte del alumnado se considera indispensable para su desarrollo personal, para resolver situaciones y problemas de los distintos ámbitos de su vida, para crear nuevas oportunidades de mejora, así como para lograr la continuidad de su itinerario formativo y facilitar y desarrollar su inserción y participación activa en la sociedad y en el cuidado de las personas, del entorno natural y del planeta. Se garantiza así la consecución del doble objetivo de formación personal y de socialización previsto para la enseñanza básica en el artículo 4.4 de la LOE, con el fin de dotar a cada alumno o alumna de las herramientas imprescindibles para que desarrolle un proyecto de vida personal, social y profesional satisfactorio. Dicho proyecto se constituye como el elemento articulador de los diversos aprendizajes que le permitirán afrontar con éxito los desafíos y los retos a los que habrá de enfrentarse para llevarlo a cabo. El referente de partida para definir las competencias recogidas en el Perfil de salida ha sido la Recomendación del Consejo de la Unión Europea, de 22 de mayo de 2018, relativa a las competencias clave para el aprendizaje permanente. El anclaje del Perfil de salida a la Recomendación del Consejo refuerza el compromiso del sistema educativo español con el objetivo de adoptar unas referencias comunes que fortalezcan la cohesión entre los sistemas educativos de la Unión Europea y faciliten que sus ciudadanos y ciudadanas, si así lo consideran, puedan estudiar y trabajar a lo largo de su vida tanto en su propio país como en otros países de su entorno. En el Perfil, las competencias clave de la Recomendación europea se han vinculado con los principales retos y desafíos globales del siglo XXI a los que el alumnado va a verse confrontado y ante los que necesitará desplegar esas mismas competencias clave. Del mismo modo, se han incorporado también los retos recogidos en el documento Key Drivers of Curricula Change in the 21st Century de la Oficina Internacional de Educación de la UNESCO, así como los Objetivos de Desarrollo Sostenible de la Agenda 2030 adoptada por la Asamblea General de las Naciones Unidas en septiembre de 2015. La vinculación entre competencias clave y retos del siglo XXI es la que dará sentido a los aprendizajes, al acercar la escuela a situaciones, cuestiones y problemas reales de la vida cotidiana, lo que, a su vez, proporcionará el necesario punto de apoyo para favorecer situaciones de aprendizaje significativas y relevantes, tanto para el alumnado como para el personal docente. Se quiere garantizar que todo alumno o alumna que supere con éxito la enseñanza básica y, por tanto, alcance el Perfil de salida sepa activar los aprendizajes adquiridos para responder a los principales desafíos a los que deberá hacer frente a lo largo de su vida: – Desarrollar una actitud responsable a partir de la toma de conciencia de la degradación del medioambiente y del maltrato animal basada en el conocimiento de las causas que los provocan, agravan o mejoran, desde una visión sistémica, tanto local como global. – Identificar los diferentes aspectos relacionados con el consumo responsable, valorando sus repercusiones sobre el bien individual y el común, juzgando críticamente las necesidades y los excesos y ejerciendo un control social frente a la vulneración de sus derechos. – Desarrollar estilos de vida saludable a partir de la comprensión del funcionamiento del organismo y la reflexión crítica sobre los factores internos y externos que inciden en ella, asumiendo la responsabilidad personal y social en el cuidado propio y en el cuidado de las demás personas, así como en la promoción de la salud pública. – Desarrollar un espíritu crítico, empático y proactivo para detectar situaciones de inequidad y exclusión a partir de la comprensión de las causas complejas que las originan. – Entender los conflictos como elementos connaturales a la vida en sociedad que deben resolverse de manera pacífica. – Analizar de manera crítica y aprovechar las oportunidades de todo tipo que ofrece la sociedad actual, en particular las de la cultura en la era digital, evaluando sus beneficios y riesgos y haciendo un uso ético y responsable que contribuya a la mejora de la calidad de vida personal y colectiva. – Aceptar la incertidumbre como una oportunidad para articular respuestas más creativas, aprendiendo a manejar la ansiedad que puede llevar aparejada. – Cooperar y convivir en sociedades abiertas y cambiantes, valorando la diversidad personal y cultural como fuente de riqueza e interesándose por otras lenguas y culturas. – Sentirse parte de un proyecto colectivo, tanto en el ámbito local como en el global, desarrollando empatía y generosidad. – Desarrollar las habilidades que le permitan seguir aprendiendo a lo largo de la vida, desde la confianza en el conocimiento como motor del desarrollo y la valoración crítica de los riesgos y beneficios de este último. La respuesta a estos y otros desafíos –entre los que existe una absoluta interdependencia– necesita de los conocimientos, destrezas y actitudes que subyacen a las competencias clave y son abordados en las distintas áreas, ámbitos y materias que componen el currículo. Estos contenidos disciplinares son imprescindibles, porque sin ellos el alumnado no entendería lo que ocurre a su alrededor y, por tanto, no podría valorar críticamente la situación ni, mucho menos, responder adecuadamente. Lo esencial de la integración de los retos en el Perfil de salida radica en que añaden una exigencia de actuación, la cual conecta con el enfoque competencial del currículo: la meta no es la mera adquisición de contenidos, sino aprender a utilizarlos para solucionar necesidades presentes en la realidad. Estos desafíos implican adoptar una posición ética exigente, ya que suponen articular la búsqueda legítima del bienestar personal respetando el bien común. Requieren, además, trascender la mirada local para analizar y comprometerse también con los problemas globales. Todo ello exige, por una parte, una mente compleja, capaz de pensar en términos sistémicos, abiertos y con un alto nivel de incertidumbre, y, por otra, la capacidad de empatizar con aspectos relevantes, aunque no nos afecten de manera directa, lo que implica asumir los valores de justicia social, equidad y democracia, así como desarrollar un espíritu crítico y proactivo hacia las situaciones de injusticia, inequidad y exclusión."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Multilingüismo e interculturalidad. Reconocer y usar los repertorios lingüísticos de varias lenguas, reflexionar sobre su funcionamiento y tomar conciencia de los propios conocimientos, así como identificar la diversidad lingüística y cultural a partir de la lengua extranjera.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Comprensión oral. Interpretar la información de textos orales y multimodales, breves y sencillos, de manera guiada, sobre varios temas predecibles de ámbito personal, social y educativo, por medio de la escucha activa y la aplicación de estrategias para la comprensión oral.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Comprensión escrita. Interpretar la información expresada por medio de textos escritos y multimodales, breves y sencillos, de manera guiada, sobre diferentes temas predecibles de ámbito personal, social y educativo, mediante estrategias que permiten desarrollar la comprensión escrita.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Expresión oral. Producir de manera guiada textos orales y multimodales, comprensibles y estructurados, para expresar mensajes breves y sencillos del ámbito personal, social y educativo, aplicando estrategias de planificación y compensación.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Expresión escrita. Producir, de manera guiada, textos escritos y multimodales, comprensibles y estructurados, para expresar mensajes breves y sencillos del ámbito personal, social y educativo, aplicando estrategias de planificación, textualización y revisión.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Interacción oral y escrita. Interaccionar de manera oral, escrita y multimodal por medio de textos sencillos, breves y guiados, de manera síncrona y asíncrona, para responder a necesidades comunicativas relacionadas con el ámbito personal, social y educativo.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "STEM",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CE",
+        "CCEC"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Mediación oral y escrita. Mediar entre el grupo de interlocutores o interlocutoras utilizando estrategias de adaptación y simplificación del lenguaje para procesar y transmitir información básica y sencilla en situaciones comunicativas predecibles de ámbito personal, social y educativo.",
+      "descriptores_ids": [
+        "CCL",
+        "CP",
+        "STEM",
+        "CD",
+        "CPSAA",
+        "CC",
+        "CE",
+        "CCEC"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Comparar, con apoyo y de manera guiada, similitudes y diferencias básicas del repertorio lingüístico propio, mostrando interés por descubrir cómo se expresan y comunican las personas en distintas lenguas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar, con ayuda docente y del resto del alumnado, conocimientos y estrategias básicas del repertorio lingüístico propio para comunicarse en situaciones cotidianas, con apoyo de recursos visuales, gestuales, analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar y apreciar la diversidad lingüística y cultural relacionada con la lengua extranjera, mostrando interés por conocer sus elementos culturales y lingüísticos elementales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar interés y respeto por las diferencias lingüísticas y culturales de la lengua extranjera, identificando, de forma guiada, los prejuicios y los estereotipos más comunes, en situaciones cotidianas y habituales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Escuchar de manera activa, con apoyo, textos orales y multimodales, breves y sencillos, sobre temas previsibles del ámbito personal, social y educativo próximo al alumnado, así como textos literarios adecuados a su nivel.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar la idea global de textos orales y multimodales sencillos, con la ayuda docente, haciendo uso de los elementos lingüísticos y extralingüísticos del contexto (gestos, entonación, entorno sonoro, signos visuales, emotividad del mensaje).",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer e interpretar el vocabulario y las estructuras frecuentes básicas sobre temas del ámbito personal, social y educativo próximo, expresados de manera clara y sencilla.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Leer e interpretar, con ayuda docente, textos escritos y multimodales muy breves y sencillos, sobre temas familiares y de su entorno próximo, así como textos literarios adecuados a su nivel y presentados de manera clara y comprensible y con apoyo visual.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar, con ayuda constante del personal docente, la idea principal de textos escritos y multimodales muy sencillos, utilizando apoyos visuales, así como sonoros o imágenes, para comprender el significado global del texto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer, con apoyo docente, palabras y expresiones muy frecuentes y estructuras básicas en textos escritos y multimodales sobre temas cercanos a su vida cotidiana.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Localizar, con ayuda docente, información muy concreta en recursos digitales sencillos y en textos multimodales relacionados con su entorno personal, social y educativo próximo.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Reproducir y producir, con ayuda docente y a partir de modelos orales, palabras, expresiones y frases sencillas, con una pronunciación y entonación adecuadas, utilizando léxico y estructuras básicas relacionadas con su entorno personal, social y escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Utilizar, con ayuda docente y mediante la imitación de modelos, estrategias muy básicas de planificación y producción, apoyándose en gestos, imágenes u otros recursos visuales, para realizar intervenciones orales sencillas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Producir textos escritos y multimodales sencillos, a partir de modelos y con una finalidad específica, a través de herramientas analógicas y digitales, con la ayuda docente y usando léxico y estructuras elementales sobre asuntos cotidianos y de relevancia personal para el alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Revisar, con ayuda docente y a partir de modelos sencillos, los textos escritos propios, realizando correcciones guiadas sobre aspectos básicos como orden o palabras.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Participar, con apoyo docente y mediante la repetición de modelos, en pequeños intercambios orales sobre temas cercanos y cotidianos, utilizando gestos, expresiones sencillas y fórmulas básicas de cortesía propias del lenguaje oral.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Interaccionar, con apoyo docente y mediante modelos sencillos, mostrando respeto hacia los compañeros y compañeras, utilizando fórmulas básicas para saludar, despedirse y presentarse, y para expresar mensajes muy breves o responder a preguntas sencillas.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Comprender, con ayuda docente y mediante modelos sencillos, mensajes muy breves y claros en la L2, y comunicar oralmente o con gestos información básica, recurriendo al apoyo de los compañeros o compañeras si es necesario.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Identificar y utilizar, con ayuda docente y a partir de modelos sencillos, estrategias muy básicas que faciliten la comprensión y la expresión de mensajes orales en diferentes lenguas (de la L2 a la L1), apoyándose en gestos, dibujos u otros recursos visuales para ayudar a comunicarse.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Lengua y uso"
+    },
+    {
+      "id": "B2",
+      "titulo": "Estrategias comunicativas"
+    },
+    {
+      "id": "B3",
+      "titulo": "Cultura y sociedad"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Modelos contextuales elementales en la comprensión y producción de textos orales, escritos y multimodales, breves y sencillos, como por ejemplo felicitaciones, notas, listas o avisos. • Modelos contextuales y géneros discursivos básicos de uso común en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios, como por ejemplo folletos, instrucciones, normas, avisos o conversaciones reguladoras de la convivencia. • Modelos contextuales y géneros discursivos básicos en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios: características y reconocimiento del contexto, la organización y la estructuración según la estructura interna.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Léxico básico elemental y de interés para el alumnado, relativo a relaciones interpersonales básicas, vivienda, lugares y entornos próximos. • Léxico elemental y de interés para el alumnado, relativo a relaciones interpersonales próximas, vivienda, lugares y entornos próximos. • Léxico básico y de interés para el alumnado, relativo a identificación personal, relaciones interpersonales próximas, lugares y entornos próximos, ocio y tiempo libre y vida cotidiana. • Léxico y expresiones elementales para comprender enunciados sobre la comunicación, la lengua y el aprendizaje (metalenguaje). • Léxico y expresiones de uso común para comprender enunciados sobre la comunicación, la lengua, el aprendizaje y las herramientas de comunicación y aprendizaje (metalenguaje).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación a patrones sonoros y acentuales elementales. • Patrones sonoros, acentuales y de entonación básicos de uso común y funciones comunicativas generales asociadas a estos patrones. • Patrones sonoros, acentuales, rítmicos y de entonación básicos y funciones comunicativas generales asociadas a estos patrones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Iniciación a convenciones ortográficas elementales. • Convenciones ortográficas básicas de uso común y significados asociados a los formatos y elementos gráficos. • Convenciones ortográficas básicas y significados asociados a los formatos y elementos gráficos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Iniciación a las estrategias elementales para identificar y utilizar unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Autoconfianza en el uso de la lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Herramientas analógicas y digitales elementales para la comprensión y producción oral, escrita y multimodal.",
+      "criterios_ids": []
+    }
+  ]
+}

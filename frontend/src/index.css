@@ -1,0 +1,214 @@
+/* ============================================================
+   EDUmind MiClase — Sistema de diseño base
+   ============================================================ */
+
+:root {
+  --azul-900: #0f2d4a;
+  --azul-700: #1a4a7a;
+  --azul-500: #2e6db4;
+  --azul-300: #7ab3e0;
+  --azul-100: #e8f2fb;
+
+  --verde-500: #27a35a;
+  --verde-100: #e6f7ee;
+  --rojo-500:  #d94040;
+  --rojo-100:  #fdeaea;
+  --ambar-500: #e07b10;
+  --ambar-100: #fef3e2;
+  --gris-900:  #1a1a1a;
+  --gris-600:  #4a4a4a;
+  --gris-500:  #6e6e6e;
+  --gris-300:  #c4c4c4;
+  --gris-100:  #f5f5f5;
+  --blanco:    #ffffff;
+
+  /* Semáforo de calificaciones */
+  --cal-sobresaliente: #1e7e43;
+  --cal-notable:       #3a9bd5;
+  --cal-bien:          #8a6db5;
+  --cal-suficiente:    #e07b10;
+  --cal-insuficiente:  #d94040;
+  --cal-sin-dato:      #c4c4c4;
+
+  --radio-sm: 6px;
+  --radio-md: 10px;
+  --radio-lg: 16px;
+  --sombra:   0 2px 8px rgba(0,0,0,0.08);
+  --sombra-md: 0 4px 20px rgba(0,0,0,0.12);
+
+  --fuente: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: var(--fuente);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--gris-900);
+  background: var(--gris-100);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { min-height: 100vh; }
+
+a { color: var(--azul-500); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font-family: var(--fuente);
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radio-sm);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity .15s, background .15s;
+}
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--azul-700);
+  color: var(--blanco);
+}
+.btn-primary:hover { background: var(--azul-500); }
+
+.btn-secondary {
+  background: var(--gris-100);
+  color: var(--gris-600);
+  border: 1px solid var(--gris-300);
+}
+.btn-secondary:hover { background: var(--gris-300); }
+
+.btn-danger {
+  background: var(--rojo-500);
+  color: var(--blanco);
+}
+
+input, select, textarea {
+  font-family: var(--fuente);
+  font-size: 14px;
+  border: 1px solid var(--gris-300);
+  border-radius: var(--radio-sm);
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color .15s;
+  background: var(--blanco);
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--azul-500);
+  box-shadow: 0 0 0 3px var(--azul-100);
+}
+
+.card {
+  background: var(--blanco);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra);
+  padding: 20px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Modales */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--gris-600);
+  padding: 4px;
+  line-height: 1;
+}
+.modal-close:hover { color: var(--gris-900); }
+
+/* Color semáforo para celdas del calificador */
+.cal-10, .cal-9 { background: var(--cal-sobresaliente); color: white; }
+.cal-8, .cal-7 { background: var(--cal-notable);       color: white; }
+.cal-6         { background: var(--cal-bien);           color: white; }
+.cal-5         { background: var(--cal-suficiente);     color: white; }
+.cal-4, .cal-3, .cal-2, .cal-1, .cal-0 {
+                 background: var(--cal-insuficiente);   color: white; }
+.cal-vacio     { background: var(--gris-100);           color: var(--gris-300); }
+
+/* Layout global */
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: var(--azul-900);
+  color: var(--blanco);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-logo {
+  padding: 20px;
+  font-size: 16px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  letter-spacing: .5px;
+}
+.sidebar-logo span { color: var(--azul-300); }
+.sidebar nav { flex: 1; padding: 12px 0; }
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  font-weight: 500;
+  transition: background .15s, color .15s;
+}
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background: rgba(255,255,255,0.1);
+  color: var(--blanco);
+  text-decoration: none;
+}
+.main-content {
+  padding: 28px;
+  overflow-y: auto;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--azul-700);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .sidebar { flex-direction: row; overflow-x: auto; }
+}
+
+/* --- Identidad Sistema Lámina EDUmind (nivel 1) ---
+   Canon: edumind.es/design/lamina.html · tokens en /vendor/lamina-v1.css */
+.lm-plate-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.sidebar-logo {
+  font-family: var(--lm-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}

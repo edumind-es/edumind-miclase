@@ -1,0 +1,664 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "ciencias-de-la-naturaleza",
+    "ciclo_origen": "3er-ciclo",
+    "fuente": "iDoceo_ciencias-de-la-naturaleza_3er-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "5º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompaña- l miento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para l generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir. l"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medioambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos l personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solici- l tando ayuda en caso necesario. l"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Utilizar dispositivos y recursos digitales de forma segura, responsable y eficiente, para buscar información, comunicarse, trabajar de manera individual, en equipo y en red y, para reelaborar y crear contenido digital de acuerdo a las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas, relacionadas con las Ciencias de la Naturaleza, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Resolver problemas a través de proyectos de diseño y de la aplicación del pensamiento computacional, para generar o reelaborar cooperativamente un producto creativo e innovador que responda a necesidades concretas.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "CD5",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Conocer y tomar conciencia del propio cuerpo, así como de las emociones y sentimientos propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio natural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio natural, conservarlo, mejorarlo y emprender acciones para su uso responsable.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Utilizar dispositivos y recursos digitales de acuerdo con las necesidades del contexto educativo de forma segura y eficiente, buscando información, comunicándose y",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Formular preguntas y realizar predicciones razonadas sobre el medio natural, social o cultural mostrando y manteniendo la curiosidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Buscar, seleccionar y contrastar información, de diferentes fuentes seguras y fiables, más allá del ámbito virtual, usando los criterios de fiabilidad de fuentes, adquiriendo léxico científico básico, utilizándola en investigaciones escolares relacionadas con el medio natural, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Diseñar y realizar experimentos guiados, cuando la investigación lo requiera, utilizando diferentes estrategias de indagación y modelos, empleando de forma segura los instrumentos y dispositivos apropiados, realizando observaciones y mediciones precisas y registrándolas correctamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Proponer posibles respuestas a las preguntas planteadas, a través del análisis e interpretación de la información y los resultados obtenidos, valorando la coherencia de las posibles soluciones, comparándolas con las predicciones realizadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Comunicar los resultados y conclusiones de las investigaciones escolares adaptando el mensaje y el formato a la audiencia que va dirigido, utilizando lenguaje científico, utilizando representaciones gráficas y explicando los pasos seguido.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Plantear problemas de diseño que se resuelvan con la creación de un prototipo o solución digital, evaluando necesidades del entorno y estableciendo objetivos concretos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Diseñar posibles soluciones a los problemas planteados de acuerdo a técnicas sencillas de pensamiento de diseño y pensamiento computacional, mediante estrategias básicas de gestión de proyectos cooperativos, teniendo en cuenta los recursos necesarios y estableciendo criterios concretos para evaluar el proyecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Desarrollar un producto final que dé solución a un problema de diseño, probando en equipo, diferentes prototipos o soluciones digitales y utilizando de forma segura las herramientas, dispositivos, técnicas y materiales adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Comunicar el diseño de un producto final, adaptando el mensaje y el formato a la audiencia, explicando los pasos seguidos, justificando por qué ese prototipo o solución digital cumple con los requisitos del proyecto y proponiendo posibles retos para futuros proyectos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Adoptar actitudes que fomenten el bienestar emocional y social, identificando y gestionando las emociones propias y respetando las de los demás, fomentando relaciones afectivas saludables y reflexionando ante los usos de la tecnología y la gestión del tiempo libre.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Adoptar estilos de vida saludable, valorando la importancia de una alimentación variada, equilibrada y sostenible, el ejercicio físico, el contacto con la naturaleza, el descanso, la higiene y la prevención de enfermedades y el uso adecuado de nuevas tecnologías.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Conocer y valorar la dimensión humana de la sexualidad en toda su diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Valorar críticamente los hábitos sociales relacionados con la salud, el consumo, el cuidado, la empatía y el respeto hacia los",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Identificar y analizar las características, organización y propiedades de los elementos del medio a través de la indagación u otras prácticas científicas utilizando las herramientas y procesos adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Establecer conexiones sencillas entre diferentes elementos del medio natural mostrando comprensión de las relaciones que se establecen.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Valorar, proteger y mostrar actitudes de conservación y mejora del patrimonio natural a través de propuestas y acciones que reflejen compromisos y conductas en favor de la sostenibilidad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "A.1. Iniciación a la actividad científica",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1.1",
+      "bloque_id": null,
+      "descripcion": "Prácticas científicas (observación, formulación de preguntas y predicciones, planificación y realización de experimentos, recogida y análisis de información y datos, comunicación de resultados y conclusiones...).",
+      "criterios_ids": [
+        "CE2.4"
+      ]
+    },
+    {
+      "id": "A.1.2",
+      "bloque_id": null,
+      "descripcion": "Instrumentos y dispositivos apropiados para realizar observaciones y mediciones precisas de acuerdo con las necesidades de la investigación.",
+      "criterios_ids": [
+        "CE2.3"
+      ]
+    },
+    {
+      "id": "A.1.3",
+      "bloque_id": null,
+      "descripcion": "Vocabulario científico básico relacionado con las diferentes investigaciones.",
+      "criterios_ids": [
+        "CE2.5",
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.1.4",
+      "bloque_id": null,
+      "descripcion": "La curiosidad, la iniciativa, la constancia y el sentido de la responsabilidad como actitudes en la realización de las diferentes investigaciones.",
+      "criterios_ids": [
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.1.5",
+      "bloque_id": null,
+      "descripcion": "La ciencia, la tecnología y la ingeniería como actividades humanas. Las profesiones STEM en la actualidad desde una perspectiva de género.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5"
+      ]
+    },
+    {
+      "id": "A.1.6",
+      "bloque_id": null,
+      "descripcion": "La relación entre los avances en matemáticas, ciencia, ingeniería y tecnología para comprender la evolución de la sociedad en el ámbito científico-tecnológico.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "A.2. La vida en nuestro planeta",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.2.1",
+      "bloque_id": null,
+      "descripcion": "Aspectos básicos de las funciones vitales del ser humano desde una perspectiva integrada: obtención de energía, relación con el entorno y perpetuación de la especie.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.2.2",
+      "bloque_id": null,
+      "descripcion": "Los cambios físicos, emocionales y sociales que conllevan la pubertad y la adolescencia para aceptarlos de forma positiva tanto en uno mismo como en los demás. Educación afectivo-sexual.",
+      "criterios_ids": [
+        "CE4.4"
+      ]
+    },
+    {
+      "id": "A.2.3",
+      "bloque_id": null,
+      "descripcion": "Pautas para una alimentación saludable y sostenible: menús saludables y equilibrados. La importancia de la cesta de la compra y del etiquetado de los productos alimenticios para conocer sus nutrientes y su aporte energético.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.2.4",
+      "bloque_id": null,
+      "descripcion": "Pautas que fomenten una salud emocional y social adecuadas: higiene del sueño, prevención y consecuencias del consumo de drogas (legales e ilegales), gestión saludable del ocio y del tiempo libre, uso adecuado de dispositivos digitales, estrategias para el fomento de relaciones sociales saludables y fomento de los cuidados de las personas.",
+      "criterios_ids": [
+        "CE4.1"
+      ]
+    },
+    {
+      "id": "A.2.5",
+      "bloque_id": null,
+      "descripcion": "Pautas para la prevención de riesgos y accidentes. Conocimiento de actuaciones básicas de primeros auxilios.",
+      "criterios_ids": [
+        "CE4.2"
+      ]
+    },
+    {
+      "id": "A.3",
+      "bloque_id": null,
+      "descripcion": "A.3. Materia, fuerzas y energía",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.3.1",
+      "bloque_id": null,
+      "descripcion": "Masa y volumen. Su medida en objetos y materiales.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.2",
+      "bloque_id": null,
+      "descripcion": "Instrumentos y procedimientos para calcular medirla masa y la capacidad volumen de un diferentes objetos.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.3",
+      "bloque_id": null,
+      "descripcion": "Concepto de densidad y su relación con la flotabilidad de un objeto o material en un líquido o en un gas.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.4",
+      "bloque_id": null,
+      "descripcion": "La energía eléctrica: fuentes, transferencia, transformaciones entre formas de energía y usos en la vida cotidiana. Los circuitos eléctricos y las estructuras robotizadas como ejemplos de transferencia y transformación y algunos usos.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.5",
+      "bloque_id": null,
+      "descripcion": "Las fuentes de energías renovables y no renovables y su influencia en la contribución al desarrollo sostenible de la sociedad.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.3.6",
+      "bloque_id": null,
+      "descripcion": "Artefactos, objetos y seres vivos voladores. Principios básicos físicos del vuelo.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4",
+      "bloque_id": null,
+      "descripcion": "A.4. La Tierra y el espacio",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.4.1",
+      "bloque_id": null,
+      "descripcion": "El futuro de la Tierra y del universo. Los fenómenos físicos relacionados con la Tierra y el universo y su repercusión en la vida diaria y en el entorno.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4.2",
+      "bloque_id": null,
+      "descripcion": "Clasificación básica de rocas y minerales. Usos y explotación sostenible de los recursos geológicos",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4.3",
+      "bloque_id": null,
+      "descripcion": "Procesos geológicos básicos de formación y modelado del relieve.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "A.4.4",
+      "bloque_id": null,
+      "descripcion": "Fenómenos atmosféricos",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "A.4.5",
+      "bloque_id": null,
+      "descripcion": "La exploración espacial y la observación del cielo; la contaminación lumínica.",
+      "criterios_ids": [
+        "CE5.1",
+        "CE5.2",
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "B.1. Digitalización del entorno personal de aprendizaje",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1.1",
+      "bloque_id": null,
+      "descripcion": "Dispositivos y recursos digitales de acuerdo a las necesidades del contexto educativo.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.2",
+      "bloque_id": null,
+      "descripcion": "Estrategias de búsquedas de información seguras y eficientes en Internet (valoración, discriminación, selección, organización y propiedad intelectual).",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.3",
+      "bloque_id": null,
+      "descripcion": "Estrategias de recogida, almacenamiento y representación de datos para facilitar su comprensión y análisis.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.4",
+      "bloque_id": null,
+      "descripcion": "Reglas básicas de seguridad y privacidad para navegar por Internet y para proteger el entorno digital personal de aprendizaje.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.5",
+      "bloque_id": null,
+      "descripcion": "Recursos y plataformas digitales restringidas y seguras para comunicarse con otras personas. Etiqueta digital, reglas básicas de cortesía y respeto y estrategias para resolver problemas en la comunicación digital.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.1.6",
+      "bloque_id": null,
+      "descripcion": "Estrategias para fomentar el bienestar físico y mental. Reconocimiento de los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales (tiempo excesivo de uso, ciberacoso, dependencia tecnológica, acceso a contenidos inadecuados, etc.), y estrategias de actuación.",
+      "criterios_ids": [
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "B.2. Proyectos de diseño y pensamiento computacional",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.2.1",
+      "bloque_id": null,
+      "descripcion": "Fases de los proyectos de diseño: identificación de necesidades, diseño, creación de un prototipo, prueba, evaluación y comunicación.",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B.2.2",
+      "bloque_id": null,
+      "descripcion": "Fases del pensamiento computacional (descomposición de una tarea en partes más sencillas, reconocimiento de patrones y creación de algoritmos sencillos para la resolución del problema...).",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "B.2.3",
+      "bloque_id": null,
+      "descripcion": "Materiales, herramientas, objetos, dispositivos y recursos digitales (programación por bloques, sensores, motores, simuladores, impresoras 3D, ...) seguros y adecuados a la consecución del proyecto.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "B.2.4",
+      "bloque_id": null,
+      "descripcion": "Estrategias en situaciones de incertidumbre: adaptación y cambio de estrategia cuando sea necesario, valoración del error propio y el de los demás como oportunidad de aprendizaje.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,563 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "formaci-n-y-orientaci-n-personal-y-profesional",
+    "ciclo_origen": "4-eso",
+    "fuente": "iDoceo_11_formaci_n_y_orientaci_n_personal_y_profesional_4-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "4º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender los procesos físicos y psicológicos implicados en la cognición, la motivación y el aprendizaje, analizando sus implicaciones en la conducta.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Comprender las principales características del desarrollo evolutivo de la persona, analizando aquellos elementos de la madurez que condicionan los comportamientos e identificando las cualidades personales y de relación social, para potenciar las que favorecen la autonomía y permiten afrontar de forma eficaz los nuevos retos.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer y comprender al ser humano, sus sociedades y culturas, analizando su complejidad desde diferentes perspectivas, para fomentar el espíritu crítico sobre aspectos que dirigen el funcionamiento humano, social y cultural.",
+      "descriptores_ids": [
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer la dimensión social y antropológica del ser humano y desarrollar estrategias y habilidades sociales adecuadas a contextos cambiantes y a grupos diferentes.",
+      "descriptores_ids": [
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Explorar las oportunidades académicas y profesionales que ofrece el entorno, descubriendo y priorizando las necesidades e intereses personales y vocacionales y desarrollando el espíritu de iniciativa y de superación, así como las destrezas necesarias en la toma de decisiones, para llevar a cabo un proyecto personal, académico y profesional propio y realizar una primera aproximación al diseño de un plan de búsqueda de empleo.",
+      "descriptores_ids": [
+        "CD1",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE2",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Mejorar el desempeño personal, social y académico aplicando estrategias de aprendizaje que permitan mayor control sobre las acciones y sus consecuencias.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar y aplicar los procesos que intervienen en el aprendizaje, analizando sus implicaciones y desarrollando estrategias que favorezcan la adquisición de conocimientos, destrezas y actitudes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar la importancia del componente emocional, tomando conciencia de su repercusión en el aprendizaje y desarrollando estrategias que lo mejoren.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar la relación de la cognición, la motivación y el aprendizaje con la conducta, a partir de las bases teóricas fundamentales de los procesos físicos y psicológicos que intervienen en ellos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Afrontar nuevos retos, de forma eficaz y con progresiva autonomía, identificando las cualidades personales y sociales y analizando los elementos que condicionan los comportamientos y actuaciones en el proceso de desarrollo evolutivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer el desarrollo evolutivo de las personas, analizando y comprendiendo las principales características de la madurez que van conformando a la persona en distintos planos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar cualidades personales y de los demás, reflexionando sobre la importancia de potenciar aquellas que resultan necesarias para afrontar eficazmente los retos y que faciliten el proceso de transición de la adolescencia a la edad adulta.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar los aspectos básicos de la vida adulta desde un punto de vista psicológico, social y legal, entendiendo los derechos y deberes inherentes a ser adulto.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Reflexionar de manera crítica sobre la condición humana, la sociedad y la cultura a partir del conocimiento que proporcionan las ciencias humanas y sociales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar la diversidad personal, social y cultural desde distintas perspectivas a partir de los conocimientos que proporcionan las ciencias humanas y sociales, mostrando actitudes de respeto y empatía.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Mejorar la comprensión de uno mismo en relación a los demás, tomando como referencia el conocimiento de la dimensión social y antropológica del ser humano y analizando los factores que intervienen en la configuración psicológica de la persona, y desarrollar estrategias y habilidades sociales que faciliten la adaptación a nuevos grupos y contextos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los factores personales y socioculturales que intervienen en la configuración psicológica de la persona a partir del conocimiento comparado de la dimensión social y antropológica del ser humano.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar la diversidad, desde el respeto, la inclusión y la igualdad real efectiva entre hombres y mujeres, considerándola un elemento enriquecedor y de valor a nivel personal, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Mejorar la capacidad para trabajar en equipo, respetando diferentes puntos de vista.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "CE4",
+      "descripcion": "Mejorar la capacidad para comunicarnos con los demás comprendiendo y afrontando las ventajas e inconvenientes que las nuevas tecnologías nos ofrecen.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Realizar un proyecto personal, académico y profesional propio y aproximarse al proceso de búsqueda activa de empleo, priorizando las necesidades y descubriendo los intereses personales y vocacionales mediante la exploración de las oportunidades académicas y profesionales que ofrece el entorno presencial y virtual y desarrollando las destrezas necesarias en el proceso de toma de decisiones.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Explorar el entorno próximo identificando las oportunidades académicas y profesionales que ofrece, valorando aquellas que mejor se adaptan a las cualidades e intereses personales y potenciando el espíritu de iniciativa y superación.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El ser humano y el conocimiento de uno mismo"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Formación y orientación personal y profesional hacia la vida adulta"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Proyecto personal, académico-profesional y aproximación a la búsqueda activa de"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Visión y conocimiento del ser humano desde las perspectivas psicológica, antropológica y sociológica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Reflexión sobre las múltiples dimensiones de ser humano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Aproximación a la definición de ser humano como animal racional y a sus dimensiones natural, cultural y social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Neurociencia, conducta y cognición. Sistema nervioso central y sistema nervioso periférico. Descripción general.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Estudio del cerebro. Neuronas y estructura funcional del cerebro. Circuito de recompensa y su relación con las adicciones. Bienestar y hábitos saludables: sueño, gestión del estrés, componentes de afectividad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Fundamentos biológicos de la conducta. (cid:2) Patrones innatos de la conducta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Procesos cognitivos. (cid:2) Percepción, atención, memoria, procesamiento de la información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Otros enfoques psicológicos. Comprensión del ser humano desde otras teorías y corrientes psicológicas, condicionamiento clásico, instrumental, aprendizaje social, aprendizaje cognitivo, teorías psicoanalíticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo personal dentro del grupo. Influencia del grupo en el individuo. Presión del grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Normas, roles y estereotipos. Igualdad de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Experimentos relevantes de la psicología social. Milgram, Ash, Bandura y otros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "La adolescencia desde el punto de vista biológico, psicológico y social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "La adolescencia y su significado evolutivo. (cid:2) Fases de la adolescencia. Cambios físicos y psicológicos, sociales, emocionales y en el desarrollo moral. (cid:2) Desarrollo cognitivo y desarrollo de la personalidad durante la adolescencia. Reconocimiento y control de las emociones. (cid:2) La adolescencia como transición evolutiva. El camino hacia la autonomía personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo de la personalidad y desarrollo social durante la adolescencia: la familia y la influencia de los grupos de iguales. Los roles dentro de estos grupos y su evolución en la adolescencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Comprensión del ser humano desde las ciencias sociales y humanas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Formas de entender la cultura. Características y elementos. Concepto antropológico de cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "El ser humano como ser y como construcción cultural. Humanización y cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Cultura y personalidad. Instituciones culturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Etnocentrismo y diversidad cultural. Debate entre relativismo y universalismo cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "El ser humano como ser social. Concepto de sociedad. Tipos de sociedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de inclusión y cohesión social para mejorar la calidad de vida de las personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "El adolescente y sus relaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "Búsqueda de la autonomía y asunción progresiva de responsabilidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "Conductas y comportamientos sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "Diversidad y convivencia positiva dentro los grupos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.26",
+      "bloque_id": "B1",
+      "descripcion": "Procesos de transición a la vida adulta en perspectiva comparada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Enfoque psicológico. Procesos implicados en el aprendizaje: atención, motivación, memoria y procesamiento de la información. Metacognición. Inteligencia emocional e inteligencia ejecutiva. Estrategias de aprendizaje y estudio. Componente emocional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Enfoque antropológico. Lo heredado y lo aprendido: biología y cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Enfoque sociológico. Proceso de socialización. Agentes de socialización: familia, escuela, grupo de pares, medios de comunicación, redes sociales y otros. Aprendizaje formal e informal. 2. Construcción del sentido de competencia y logro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Autoconocimiento e identidad personal: Elementos: características y rasgos físicos y psicológicos. Rasgos de personalidad, actitudes, aptitudes, valores y hábitos. Importancia de los condicionantes personales, familiares y sociales en la construcción de la identidad personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Autonomía personal y autopercepción.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Estilo atribucional: atribución causal, locus de control.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Capacidad autocrítica: análisis de puntos fuertes y aspectos a mejorar. Dificultades personales y posibilidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Iniciativa personal. Pensamiento creativo. Confianza y seguridad en uno mismo. Optimismo inteligente. Perseverancia. Estrategias para enfrentarse al fracaso y a la frustración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La vida adulta. Definición desde la perspectiva antropológica, histórica, social, psicológica y legal. Responsabilidades, derechos y obligaciones legales, laborales y penales. Minoría y mayoría de edad civil y penal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades sociales. Inteligencias. Tolerancia y respeto. Empatía. Dinamismo, iniciativa y liderazgo. Capacidad de negociación. Trabajo en equipo: Estrategias de organización ágiles de trabajo en equipo, definición de roles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades comunicativas. Barreras en la comunicación y estrategias para superarlas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas digitales para la interacción con los demás. Ventajas e inconvenientes. Huella y reputación digital. Gestión de identidades digitales: personal y profesional. Uso y abuso de las herramientas digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades de relación con el entorno: conocimiento del entorno próximo y posibilidades de ocio y tiempo libre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades de organización y gestión. Organización del tiempo y planificación de tareas. Entorno personal de aprendizaje. Gestión de recursos y ejecución de tareas. 4. Orientación hacia la formación académica y profesional. Exploración del entorno profesional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Estructura del sistema educativo: opciones académicas al terminar la etapa de Educación Secundaria Obligatoria. (cid:2) Formación Profesional de grado medio y superior: estructura, modalidades y regímenes. Acceso, salidas y posibilidades. (cid:2) Bachillerato: estructura, modalidades y regímenes. Acceso, salidas y posibilidades. (cid:2) Enseñanzas artísticas, estudios de música y danza, enseñanzas deportivas, enseñanzas de idiomas. (cid:2) Formación complementaria. Formación reglada y no reglada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Programas y oportunidades de formación. Titulaciones, cualificaciones y programas de formación complementaria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Ayudas para la formación. Becas nacionales e internacionales. Oportunidades de educación y formación en otros países.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "Participación social activa. Colaboración y voluntariado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.19",
+      "bloque_id": "B2",
+      "descripcion": "Servicios de orientación académica y profesional. Las redes de orientación. (cid:2) La orientación escolar y profesional en los departamentos de orientación. (cid:2) Orientación dependiente de los servicios de empleo, INEM y otras entidades: Dirección General de Empleo, Servicio regional de Empleo. (cid:2) Otros servicios de orientación en el entorno próximo: proyectos, propuestas de intervención y programas de autoconocimiento, orientación y búsqueda activa de empleo de colectivos sociales, asociaciones, ONG...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.20",
+      "bloque_id": "B2",
+      "descripcion": "Formación permanente a lo largo de la vida y concepto de itinerario formativo. Actividades educativas en entornos académicos y en otros entornos: recursos culturales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.21",
+      "bloque_id": "B2",
+      "descripcion": "Exploración y descubrimiento del entorno de trabajo. Población y trabajo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.22",
+      "bloque_id": "B2",
+      "descripcion": "Relaciones laborales. Derecho laboral y contrato de trabajo: características, elementos, tipos. Derechos y deberes de los empresarios y trabajadores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.23",
+      "bloque_id": "B2",
+      "descripcion": "La ética del trabajo. Los códigos deontológicos. El ser humano como homo oeconomicus. Teorías críticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.24",
+      "bloque_id": "B2",
+      "descripcion": "Tendencias laborales y demandas del mercado. Los nuevos perfiles profesionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.25",
+      "bloque_id": "B2",
+      "descripcion": "Retos de la revolución digital en el entorno laboral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.26",
+      "bloque_id": "B2",
+      "descripcion": "Emprendimiento e intraemprendimiento. Autoempleo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "empleo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Conocimiento de las cualidades personales. Rasgos físicos, capacidades y competencias, intereses y preferencias, expectativas, estilo decisional, autoestima, habilidades sociales, valores, variables y condicionantes familiares y sociales. Rasgos de personalidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Identificación de las fortalezas y debilidades propias. La diversidad como elemento enriquecedor para la persona.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias de entrenamiento en hábitos saludables y prevención del riesgo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Exploración de las ayudas y recursos para superar carencias y afrontar retos personales y profesionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Reflexión sobre aspiraciones y metas: formativas, laborales y personales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Fases del plan: exploración, diagnóstico, relación de perfiles académicos y profesionales con la formación, toma de decisiones, formación, tránsito al empleo. 3. Aproximación a un plan de búsqueda activa de empleo con proyección hacia el futuro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias de búsqueda de empleo. Fuentes y recursos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Instrumentos de búsqueda de empleo. (cid:2) Marca y sello personal. (cid:2) Red de contactos. (cid:2) CV (tipos, características, contenidos videocurriculum, porfolio profesional). (cid:2) Entrevistas de trabajo. Características, preparación. (cid:2) Carta de autocandidatura o autopresentación. (cid:2) Recursos digitales y nuevas tecnologías en la búsqueda de empleo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Sistema de acceso al empleo público.",
+      "criterios_ids": []
+    }
+  ]
+}

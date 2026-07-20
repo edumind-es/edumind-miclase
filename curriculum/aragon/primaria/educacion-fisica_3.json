@@ -1,0 +1,605 @@
+{
+  "meta": {
+    "comunidad": "Aragon",
+    "etapa": "primaria",
+    "asignatura": "educacion-fisica",
+    "ciclo_origen": "2o-ciclo",
+    "fuente": "iDoceo_educacion-fisica_2o-ciclo.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medioambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "CE.EF1. Adaptar la motricidad (esquema corporal, las capacidades físicas, perceptivo-motrices y coordinativas, las habilidades y destrezas motrices, aplicando procesos de percepción, decisión y ejecución) en diferentes situaciones de aprendizaje, para dar una respuesta ajustada a las demandas de proyectos de aprendizaje relacionadas con actividades conectadas con el contexto social próximo. Se propone una progresión en la adquisición y perfeccionamiento de las conductas motrices del alumnado. Para ello cada criterio va a estar referido a un tipo de dominio de acción motriz: individuales, de oposición, de cooperación, de colaboración-oposición, en el medio natural, y con intenciones artístico expresivas. En el primer ciclo se buscará la adquisición, en el segundo ciclo la finalidad será el enriquecimiento y en el tercer ciclo será el perfeccionamiento de las acciones motrices asociadas a cada uno de los dominios de acción. Se perseguirá que el alumnado reciba a lo largo de la etapa un tratamiento adecuado del área de Educación Física a través de un trabajo sistemático (todos los ciclos), equilibrado (parecido número de sesiones) y contextualizado (ajustado a las posibilidades del centro y del entorno) de los diferentes tipos de experiencias motrices, ya que de lo contrario no estaremos aprovechando al máximo las posibilidades educativas que nos ofrece el área.",
+      "descriptores_ids": [
+        "STEM1",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Practicar y reconocer diferentes manifestaciones lúdicas, físico-deportivas y artístico-expresivas propias de la cultura motriz, valorando su influencia y sus aportaciones estéticas y creativas a la cultura tradicional y contemporánea, para integrarlas en las situaciones motrices y para realizar proyectos de aprendizaje conectados con el contexto social próximo. Se tratar de conocer y valorar la cultura física como un proceso de (re)construcción social. Debe evaluarse cómo, mediante la utilización de actividades físicas de tradición local tales como las danzas folclóricas y los juegos y deportes tradicionales, el alumnado practica, conoce y valora nuestra cultura popular, como parte del patrimonio aragonés, nacional e internacional. Se prestará atención a las más habituales en el contexto general del alumnado para dotar de significatividad a lo realizado en el ámbito escolar. También hay que prestar atención al fenómeno deportivo en la sociedad actual y los valores que transmite como situación social de referencia y no de reverencia (priorizando otros motivos que respondan a intereses de parte que necesitan una revisión por parte del ciudadano).",
+      "descriptores_ids": [
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Desarrollar procesos de autorregulación e interacción en la práctica motriz, con actitud empática e inclusiva, haciendo uso de habilidades personales y sociales y actitudes de cooperación, respeto, trabajo en equipo y deportividad, con independencia de las diferencias étnico- culturales, sociales, de género y de habilidad de los participantes, para contribuir a la convivencia y al compromiso ético en los diferentes espacios conectados con el contexto social próximo. La Educación Física participa de forma fundamental en la educación en valores. Aprender a gestionar las emociones en una situación de riesgo controlado, anticipar y valorar riesgos, etc., posibilita ir construyendo principios de seguridad individual y colectiva. Fomentar una comunicación sana y respetuosa en las situaciones de juego, la educación para la convivencia, fundamentalmente en lo que se refiere al trabajo sobre la construcción e integración de reglas de vida y funcionamiento colectivo (basados en la participación democrática, la autonomía personal, el respeto a la diversidad, el desarrollo del sentido crítico, la oposición frente a la intolerancia y la violencia, etc.), puede reforzarse desde la vivencia de situaciones motrices en las que el alumnado juegue con la norma y concilie el deseo de “ganar” y “poder más” con el respeto a las personas. No se trata de reprimir pulsiones del individuo activo, sino de facilitar estrategias y ayudar a orientarlas y canalizarlas para la mejora individual y colectiva.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Valorar diferentes medios naturales y urbanos como contextos de práctica motriz, interactuando en ellos y comprendiendo la importancia de su conservación desde un enfoque sostenible, adoptando medidas de responsabilidad individual durante la práctica de juegos y actividades físico-deportivas, para realizar una práctica eficiente y respetuosa con el entorno y participar en su cuidado y mejora. El área de Educación Física debe participar del desarrollo de conductas sostenibles y ecológicas. Las situaciones vinculadas con las acciones motrices propuestas en el Bloque A y en la CE.EF1 son óptimas para abordar e inculcar valores como el respeto, el cuidado, la responsabilidad individual y colectiva al realizar una salida, la sostenibilidad y la conservación de la naturaleza.",
+      "descriptores_ids": [
+        "STEM5",
+        "CC2",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Desarrollar un estilo de vida activo y saludable a través de un proceso de construcción social compartido, practicando regularmente actividades físico-deportivas y artístico-expresivas, que le capacite a tomar decisiones saludables (físicas, emocionales y sociales), para él o ella y para su entorno social que contribuyan a su bienestar. Esta competencia se construye a partir de dos ideas clave. La primera está relacionada con el concepto de salutogénesis y que transmite el concepto de que cada persona debe tomar sus decisiones con respecto a su salud. La segunda, en la salud basada en activos y que pone en valor la intersectorialidad, la salud positiva, el bienestar, la participación, la equidad y la orientación a los determinantes de la salud que el desarrollo de un estilo de vida. Es por ello que los criterios de evaluación se han configurado para que el alumnado vaya adquiriendo mayor autonomía a lo largo de la etapa. Los temas abordados son la higiene y la salud postural, el establecimiento de rutinas de activación- calentamiento y de vuelta a la calma, la actuación ante lesiones o situaciones de riesgo en la práctica, el Inicio de la autogestión de las cualidades físicas a través de proyectos con criterios saludables y la construcción de la identidad activa a través del respeto de la imagen corporal propia y de los demás y de la identificación de comportamientos saludables.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CPSAA2",
+        "CPSAA5",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Integrar diferentes acciones motrices individuales para realizar proyectos de acción tendentes a mejorar sus resultados (por ejemplo, atletismo, natación, etc.) y/o diseñar y realizar un encadenamiento motriz (por ejemplo, gimnasia deportiva, patines, etc.).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Encadenar acciones que le permitan resolver y analizar diferentes situaciones de juego en las que se movilicen diferentes acciones motrices de oposición (por ejemplo, luctatorias, de cancha dividida u otras).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Encadenar acciones para resolver situaciones de retos cooperativos asumiendo diferentes roles.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Encadenar acciones para resolver situaciones modificadas de colaboración- oposición asumiendo los diferentes roles.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Combinar acciones motrices con la ayuda docente, para decodificar información y adaptar su motricidad de forma segura para realizar recorridos con incertidumbre en el medio, aprovechando las posibilidades del centro escolar, y modulando",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Improvisar y crear producciones artístico-expresivas en grupo, utilizando los recursos expresivos del cuerpo (motricidad expresiva, simbolización y comunicación), prestando especial atención a las relaciones que se establecen en el alumnado respecto al espacio, al tiempo (unísono, cascada, alternancia...), contacto corporal y roles, y cuando corresponda, utilizando los recursos propios de cada actividad artístico-expresiva (pasos, figuras, hazañas, etc.).",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Participar activamente en juegos motores y otras manifestaciones artístico- expresivas con arraigo en la cultura propia, tradicional o actual, así como otros procedentes de diversas culturas, contextualizando su origen, su aparición y su transmisión a lo largo del tiempo y valorando su importancia, repercusión e influencia en las sociedades pasadas y presentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Asumir una visión abierta del deporte a partir del conocimiento de distintas ligas femeninas, masculinas o mixtas, acercándose al deporte organizado (escolar, amateur y profesional) e identificando y rechazando comportamientos contrarios a la convivencia independientemente del contexto en el que tengan lugar.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Mostrar una disposición positiva hacia la práctica física y hacia el esfuerzo, controlando la impulsividad y las emociones negativas que surjan en contextos de actividad motriz.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Respetar las normas consensuadas en clase, así como las reglas de juego y actuar desde los parámetros de la deportividad y el juego limpio, valorando la aportación de los participantes (deportistas, árbitros-juez, entrenadores u otros roles que formen parte de la dinámica establecida).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Desarrollar habilidades sociales de acogida, inclusión, ayuda y cooperación al participar en prácticas motrices variadas, resolviendo los conflictos individuales y colectivos de forma dialógica y justa, y mostrando un compromiso activo frente a los estereotipos, las actuaciones discriminatorias y de violencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Desarrollar una práctica motriz segura en contextos naturales y urbanos de carácter terrestre o acuático, adecuando las acciones al análisis de cada situación, aplicando medidas de conservación ambiental.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Aplicar medidas de educación postural, higiene corporal y preparación de la práctica motriz, asumiendo responsabilidades (e.g atuendo) y generando hábitos y rutinas en situaciones cotidianas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Tomar medidas de precaución y prevención de lesiones en relación con la conservación y al mantenimiento del material en el marco de distintas prácticas físico-deportivas, conociendo protocolos básicos de actuación ante accidentes que se puedan producir en este contexto.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Participar en proyectos que conlleven a la autogestión de sus capacidades físicas, siendo capaces de regular y dosificar la intensidad y la duración del esfuerzo acorde con sus posibilidades y dentro de unos criterios saludables.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Reconocer la propia imagen corporal y la de los demás, aceptando y respetando las diferencias individuales que puedan existir, superando y rechazando las conductas discriminatorias que se puedan producir en contextos de práctica motriz.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Analizar comportamientos saludables en función de diferentes momentos (del día, de la semana o del año) para establecer acciones (personales, colectivas o sociales) que le ayuden a adoptar un estilo de vida saludable.",
+      "peso": 1
+    }
+  ],
+  "bloques": [],
+  "saberes": [
+    {
+      "id": "A",
+      "bloque_id": null,
+      "descripcion": "A. Resolución de problemas",
+      "criterios_ids": []
+    },
+    {
+      "id": "A.1",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices individuales. Principios para actuar metódicamente: emitir hipótesis de acción, identificar constantes, anticipar las acciones que hay que realizar, seleccionar las formas de hacer más apropiadas, resolver problemas. Perfeccionamiento y combinación de acciones motrices elementales para construir otras de mayor complejidad en situaciones y medios variados.",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "A.2",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices de oposición. Información visual (juegos con raqueta: visión puntual, periférica, espacios libres...) y kinestésica (juegos de lucha: percepción del tono muscular, del equilibrio y desequilibrio, del centro de gravedad...). Principios y reglas de acción para superar al adversario (colocación en el terreno, utilización de la fuerza del oponente, alternancia...)",
+      "criterios_ids": [
+        "CE1.5",
+        "CE1.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.3",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices de cooperación: la colaboración, la sincronización, la disponibilidad. Encadenamiento y coordinación de acciones grupales. Sincronización de acciones. Utilización de estrategias básicas de juego (anticipación). Práctica de actividades cooperativas que supongan un esfuerzo conjunto. Verbalización de reglas de acuerdo con las posibilidades del alumnado y respetando los principios de seguridad. Toma de informaciones y referencias pertinentes para construir un desplazamiento razonado y reflexionado. Adopción de una motricidad adaptada y específica para ajustarse a un medio variado y, a veces, variable (natural o",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "A.4",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices de colaboración-oposición: roles que vinculan interacciones posibles, relaciones con espacios y tiempos o uso de objetos. Explicación a posteriori de la propia acción, la de sus compañeros, compañeras y oponentes. Aplicación del repertorio de acciones motrices como portador y no portador del móvil (pelota), en ataque y en defensa. Ajuste de las conductas para hacerlas más eficaces (anticipar, actuar rápido, cambiar de ritmo...). Elaboración y utilización de estrategias de acción colectiva de ataque y defensa, enunciando reglas de acción para buscar la eficacia.",
+      "criterios_ids": [
+        "CE1.4",
+        "CE3.2",
+        "CE1.2",
+        "CE1.1"
+      ]
+    },
+    {
+      "id": "A.5",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices en el medio natural: características y modalidades de utilización del material y el equipo para la realización de actividades en el medio natural, incluido el de seguridad. Preparación y realización de un proyecto de acción en el medio natural (excursión, acampada, cicloturismo, orientación) de acuerdo con las posibilidades del alumnado y respetando los principios de seguridad. Toma de informaciones y referencias pertinentes para construir un desplazamiento razonado y reflexionado. Adopción de una motricidad adaptada y específica para ajustarse a un medio variado y, a veces, variable (natural o reproducido) y para manejar instrumentos o materiales que produzcan problemas de equilibrio. Gestión para llevar a buen término una actividad con economía y eficacia.",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "A.6",
+      "bloque_id": null,
+      "descripcion": "Acciones motrices con intención artística o expresiva: el cuerpo como instrumento de expresión y comunicación. Algunas manifestaciones expresivas relacionadas con estas actividades: la expresión corporal, la dramatización, la(s) danza(s), la gimnasia rítmica. Espacio propio, próximo y común o coreográfico. Utilización de los recursos expresivos del cuerpo y el movimiento (energía, espacio y tiempo) para la creación, expresión y comunicación de imágenes, ideas, estados de ánimo, sentimientos, emociones, roles, actitudes, tramas… Ejecución con precisión de formas motrices (desplazamientos, pasos, gestos, figuras...) y evoluciones en el espacio (formaciones, coreografías...) ajustadas al ritmo o soporte sonoro. Participación en la construcción, estructuración y ejecución de una producción colectiva, previendo roles y tareas de cada uno.",
+      "criterios_ids": [
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B",
+      "bloque_id": null,
+      "descripcion": "B. Manifestaciones",
+      "criterios_ids": []
+    },
+    {
+      "id": "B.1",
+      "bloque_id": null,
+      "descripcion": "Aportaciones de la cultura motriz a la herencia cultural. Los juegos populares y tradicionales como manifestación de la propia cultura y su potencial intercultural.",
+      "criterios_ids": [
+        "CE2.1",
+        "CE5.4"
+      ]
+    },
+    {
+      "id": "B.2",
+      "bloque_id": null,
+      "descripcion": "Aportaciones de la cultura motriz a la herencia cultural. Las danzas como manifestación de la propia cultura y su potencial intercultural.",
+      "criterios_ids": [
+        "CE5.4",
+        "CE2.1"
+      ]
+    },
+    {
+      "id": "B.3",
+      "bloque_id": null,
+      "descripcion": "Conocimiento de nombres de juegos populares y tradicionales.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B.4",
+      "bloque_id": null,
+      "descripcion": "Deporte y perspectiva de género: ligas masculinas, femeninas y mixtas de distintos deportes. Referentes en el deporte de distintos géneros.",
+      "criterios_ids": [
+        "CE2.2"
+      ]
+    },
+    {
+      "id": "B.5",
+      "bloque_id": null,
+      "descripcion": "El juego y el deporte: reglamento.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "C",
+      "bloque_id": null,
+      "descripcion": "C. Autorregulación emocional e interacción",
+      "criterios_ids": []
+    },
+    {
+      "id": "C.1",
+      "bloque_id": null,
+      "descripcion": "Gestión emocional: reconocimiento de emociones propias, pensamientos y sentimientos a partir de experiencias motrices.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "C.2",
+      "bloque_id": null,
+      "descripcion": "Habilidades sociales: escucha activa y estrategias de negociación para la resolución de conflictos en contextos motrices.",
+      "criterios_ids": [
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "C.3",
+      "bloque_id": null,
+      "descripcion": "Concepto de deportividad.",
+      "criterios_ids": [
+        "CE3.2"
+      ]
+    },
+    {
+      "id": "C.4",
+      "bloque_id": null,
+      "descripcion": "Conductas contrarias a la convivencia, discriminatorias o sexistas, en situaciones motrices (discriminación por cuestiones de competencia motriz, raza, género u otras): estrategias de identificación y efectos negativos.",
+      "criterios_ids": [
+        "CE5.4",
+        "CE5.1",
+        "CE3.3",
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "C.5",
+      "bloque_id": null,
+      "descripcion": "Dominio de las emociones en un ámbito de las actividades en el medio natural con incertidumbre (impulsivo-reflexivo, etc.).",
+      "criterios_ids": [
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "D",
+      "bloque_id": null,
+      "descripcion": "D. Interacción eficiente y",
+      "criterios_ids": []
+    },
+    {
+      "id": "D.1",
+      "bloque_id": null,
+      "descripcion": "Normas de uso: educación vial para peatones, patinetes, bicicletas, etc. Movilidad sostenible.",
+      "criterios_ids": [
+        "CE5.1"
+      ]
+    },
+    {
+      "id": "D.2",
+      "bloque_id": null,
+      "descripcion": "Espacios naturales en el contexto urbano: uso, disfrute y mantenimiento.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "D.3",
+      "bloque_id": null,
+      "descripcion": "Estado del material para actividades en el medio natural: valoración previa y actuación ante desperfectos.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "D.4",
+      "bloque_id": null,
+      "descripcion": "Prevención y sensibilización sobre la generación de residuos.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "D.5",
+      "bloque_id": null,
+      "descripcion": "Realización de actividades físicas en el medio natural y urbano.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "D.6",
+      "bloque_id": null,
+      "descripcion": "Cuidado del entorno como servicio a la comunidad, durante la práctica de actividad física.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "E",
+      "bloque_id": null,
+      "descripcion": "E. Organización y gestión",
+      "criterios_ids": []
+    },
+    {
+      "id": "E.1",
+      "bloque_id": null,
+      "descripcion": "Cuidado y preparación del material según la actividad a desarrollar.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "E.2",
+      "bloque_id": null,
+      "descripcion": "Pautas de higiene personal relacionados con la actividad física.",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "E.3",
+      "bloque_id": null,
+      "descripcion": "Elección de la práctica física: usos y fines. Respeto a las elecciones de los demás.",
+      "criterios_ids": [
+        "CE5.4",
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "E.4",
+      "bloque_id": null,
+      "descripcion": "Prevención de accidentes en las prácticas motrices: mecanismos de prevención y control corporal para la prevención de lesiones.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "E.5",
+      "bloque_id": null,
+      "descripcion": "Protocolo de actuación antes accidentes. Técnicas PAS (proteger, ayudar, socorrer) u otras.",
+      "criterios_ids": [
+        "CE5.2"
+      ]
+    },
+    {
+      "id": "E.6",
+      "bloque_id": null,
+      "descripcion": "Planificación y autorregulación de proyectos motores: mecanismos básicos para ejecutar lo planificado.",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    },
+    {
+      "id": "F",
+      "bloque_id": null,
+      "descripcion": "F. Vida activa",
+      "criterios_ids": []
+    },
+    {
+      "id": "F.1",
+      "bloque_id": null,
+      "descripcion": "Salud física: efectos físicos y psicológicos beneficiosos de un estilo de vida activo. Características de alimentos naturales, procesados y ultraprocesados. Educación postural en acciones motrices habituales. Factores básicos que inciden en el cuidado del cuerpo.",
+      "criterios_ids": [
+        "CE5.5",
+        "CE5.1",
+        "CE4.1",
+        "CE3.3"
+      ]
+    },
+    {
+      "id": "F.2",
+      "bloque_id": null,
+      "descripcion": "Salud social: la actividad física como hábito y alternativa saludable frente a formas de ocio nocivas. Límites para evitar una competitividad desmedida. Aceptación de distintas tipologías",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "F.3",
+      "bloque_id": null,
+      "descripcion": "Salud mental: respeto y aceptación del propio cuerpo. Autoconocimiento e identificación de fortalezas y debilidades o posibilidades y limitaciones en todos los ámbitos (social, físico y mental).",
+      "criterios_ids": [
+        "CE5.3"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,518 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "educacion-fisica",
+    "ciclo_origen": "tercer-curso",
+    "fuente": "iDoceo_educacion-fisica_tercer-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Adoptar un estilo de vida activo y saludable, practicando regularmente actividades físicas, lúdicas y deportivas, adoptando comportamientos que potencien la salud física, mental y social, así como medidas de responsabilidad individual y colectiva antes, durante y después de la práctica motriz, para interiorizar e integrar hábitos sistemáticos de actividad física, cuidado del cuerpo y alimentación saludable que contribuyan al bienestar.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CPSAA2",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Adaptar los elementos propios del esquema corporal, las capacidades físicas, perceptivo-motrices y coordinativas, así como las habilidades y destrezas motrices, aplicando procesos de percepción, decisión y ejecución adecuados a la lógica interna y a los objetivos de diferentes situaciones, para dar respuesta a las demandas de proyectos motores y de prácticas motrices con distintas finalidades en contextos de la vida diaria.",
+      "descriptores_ids": [
+        "STEM1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Desarrollar procesos de autorregulación e interacción en el marco de la práctica motriz, con actitud empática e inclusiva, haciendo uso de habilidades sociales y actitudes de cooperación, respeto, trabajo en equipo y deportividad, con independencia de las diferencias étnico-culturales, sociales, de género y de habilidad de los participantes, para contribuir a la convivencia y al compromiso ético en los diferentes espacios en los que se participa.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CPSAA5",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Reconocer y practicar diferentes manifestaciones lúdicas, físico-deportivas y artístico- expresivas propias de la cultura motriz, valorando su influencia y sus aportaciones estéticas y creativas a la cultura tradicional y contemporánea, para integrarlas en las situaciones motrices que se utilizan regularmente en la vida cotidiana.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Valorar diferentes medios naturales y urbanos como contextos de práctica motriz, interactuando en ellos y comprendiendo la importancia de su conservación desde un enfoque sostenible, adoptando medidas de responsabilidad individual durante la práctica de juegos y actividades físico-deportivas, para realizar una práctica eficiente y respetuosa con el entorno y participar en su cuidado y mejora.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA2",
+        "CC2",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Buscar, analizar, seleccionar y tratar información relacionada con el área Educación Física, utilizando diferentes formatos y medios, especialmente los dispositivos y recursos digitales, de forma segura, responsable y eficiente, de manera individual y en grupo, para dar respuesta a las necesidades del contexto educativo y, si se precisa, para comunicarla de manera creativa.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM2",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA5"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer la actividad física como alternativa de ocio saludable, identificando desplazamientos activos y sostenibles y conociendo los efectos beneficiosos a nivel físico que posee adoptar un estilo de vida activo. (STEM2, STEM5, CPSAA2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar medidas de educación postural, alimentación saludable, higiene corporal y preparación de la práctica motriz, asumiendo responsabilidades y generando hábitos y rutinas en situaciones cotidianas. (STEM2, STEM5, CPSAA2, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar medidas de precaución y prevención de lesiones en relación con la conservación y el mantenimiento del material en el marco de distintas prácticas físico- deportivas, conociendo protocolos básicos de actuación ante accidentes que se puedan producir en este contexto. (STEM2, STEM5, CPSAA2, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Aceptar la propia imagen corporal y la de los demás, aceptando y respetando las diferencias individuales que puedan existir, superando y rechazando las conductas discriminatorias que se puedan producir en contextos de práctica motriz. (CPSAA2, CPSAA5, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Participar en proyectos motores de carácter individual, cooperativo o colaborativo, empleando estrategias de seguimiento que permitan observar los resultados obtenidos y mejorar el repertorio motriz. (STEM1, CPSAA3, CPSAA5, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprender y resolver situaciones lúdicas, juegos y actividades deportivas, ajustándose a las demandas derivadas de los objetivos motores, de las características del grupo y de la lógica interna de situaciones individuales, de cooperación, de oposición y de colaboración-oposición, en contextos simulados de actuación. (STEM1, CPSAA4, CE1)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Emplear y comprender los componentes cualitativos y cuantitativos de la motricidad de manera eficiente en distintos contextos y situaciones motrices, adquiriendo un progresivo control y dominio corporal sobre ellos. (STEM1, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer los aspectos que dan lugar a una disposición positiva hacia la práctica física y hacia el esfuerzo, controlando las emociones negativas que surjan en contextos de actividad motriz. (CPSAA1, CPSAA2, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Respetar las normas consensuadas, así como las reglas de juego, y actuar desde los parámetros de la deportividad y el juego limpio, observando la aportación de los participantes. (CPSAA1, CPSAA3, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer habilidades sociales de acogida, inclusión, ayuda y cooperación al participar en prácticas motrices variadas, resolviendo los conflictos individuales y colectivos de forma dialógica y justa, y mostrando un compromiso activo frente a los estereotipos, las actuaciones discriminatorias y cualquier tipo de violencia. (CCL1, CCL5, CPSAA5, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar activamente en juegos motores y otras manifestaciones artístico- expresivas con arraigo en la cultura propia, tradicional o actual castellano leonesa, así como otros procedentes de diversas culturas y distintas épocas, contextualizando su origen, su aparición y su transmisión a lo largo del tiempo. (CP3, CCEC1, CCEC2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Asumir una visión abierta del deporte a partir del conocimiento de distintas ligas femeninas, masculinas o mixtas, acercándose al deporte federado e identificando y rechazando comportamientos contrarios a la convivencia. (CPSAA1, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Reproducir distintas combinaciones de movimientos o coreografías individuales y grupales que incorporen prácticas comunicativas trasmitiendo sentimientos, emociones o ideas de forma estética y creativa. (CPSAA1, CPSAA3, CE3, CCEC3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Respetar la propia realidad corporal y la de los demás mostrando una actitud crítica. (CPSAA1, CPSAA3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Desarrollar una práctica motriz segura en contextos naturales y urbanos de carácter terrestre o acuático, aplicando medidas de conservación ambiental. (STEM5, CPSAA2, CC4, CE1) 5.2. Manifestar respeto hacia el entorno y el medio natural en los juegos y actividades al aire libre, identificando acciones concretas a su preservación. (STEM5, CC2, CC4, CE3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48589",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Comprender y resolver situaciones motrices con diversidad de estímulos y condicionantes espacio-temporales, seleccionando y combinando las habilidades motrices básicas y adaptándolas a las condiciones establecidas de forma eficaz. (CC2, CE1, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Buscar y seleccionar información relacionada con la motricidad, a partir de distintas fuentes fiables y seguras, utilizándola en investigaciones propias del área. (CCL2, CCL3, CPSAA5) 6.2. Utilizar dispositivos digitales como recurso de apoyo al área, adoptando hábitos de uso seguro, responsable y crítico. (STEM2, CD1, CD2, CD3, CD4)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Intercambiar información, compartiendo los resultados de investigaciones sencillas o proyectos vinculados a la actividad físico-deportiva, respetando y valorando las intervenciones de los demás. (CCL1, CCL2, CPSAA5)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Vida activa y saludable"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Organización y gestión de la actividad física"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Resolución de problemas en situaciones motrices"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Autorregulación emocional e interacción social en situaciones motrices"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Manifestaciones de la cultura motriz"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Interacción eficiente y sostenible con el entorno"
+    },
+    {
+      "id": "B7",
+      "titulo": "G. Información, digitalización y comunicación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Salud física: Reconocimiento de los efectos físicos y psicológicos beneficiosos de un estilo de vida activo. Identificación de los efectos perjudiciales relacionados con un estilo de vida con ausencia de práctica de actividad física.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Hábitos de alimentación y su repercusión sobre la salud y el ejercicio físico. Fundamentos de una dieta equilibrada. Características de alimentos naturales, procesados y ultraprocesados. Educación postural en acciones motrices habituales, adopción de hábitos posturales correctos. Factores básicos que inciden en el cuidado del cuerpo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Salud mental: respeto y aceptación del propio cuerpo. Autoconocimiento e identificación de fortalezas y debilidades o posibilidades y limitaciones en todos los ámbitos (social, físico y mental). Relación de la actividad física con la salud y el bienestar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Salud social: la actividad física como hábito y alternativa saludable frente a formas de ocio nocivas. Límites para evitar una competitividad desmedida. Aceptación de distintas tipologías corporales, para practicar, en igualdad, diversidad de actividades físico-deportivas. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                         Pág. 48590",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Elección de la práctica física: usos y finalidades catárticos, lúdicorecreativos y cooperativos. Respeto de las elecciones de los demás.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Cuidado y preparación del material según la actividad a desarrollar. Uso correcto de materiales y espacios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Pautas de higiene personal relacionadas con la actividad física.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Planificación y autorregulación de proyectos motores: mecanismos básicos para ejecutar lo planificado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Prevención de accidentes en las prácticas motrices: mecanismos de prevención, medidas de seguridad y control corporal para la prevención de lesiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Calentamiento antes de la realización de actividad física, dosificación del esfuerzo y la recuperación como aspectos importantes en la prevención de lesiones en la actividad física.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Interés por mejorar la competencia motriz y valoración del esfuerzo personal en la actividad física. Confianza en sus propias posibilidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Utilización de los medios de información y comunicación para la obtención de información y para la preparación, elaboración, presentación de las composiciones, representaciones y trabajos, con unos contenidos estructurados y una presentación cuidada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Toma de decisiones: Distribución racional del esfuerzo en situaciones motrices individuales. Ubicación en el espacio en situaciones cooperativas. Ubicación en el espacio y reubicación tras cada acción en situaciones motrices de persecución y de interacción con un móvil. Anticipación a las decisiones ofensivas del adversario en situaciones de oposición de contacto. Pase a compañeros desmarcados o en situación ventajosa en situaciones motrices de colaboración- oposición de persecución y de interacción con un móvil. Percepción y estructuración espacio-temporal del movimiento: coordinación de trayectorias: intercepción y golpeo-intercepción; coordinación de las secuencias motrices propias con las de otro, con un objetivo común. Iniciativa y autonomía en la toma de decisiones: resolución de situaciones motrices con varias alternativas de respuesta que impliquen la coordinación espacio-temporal. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48591",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Capacidades perceptivo-motrices en contexto de práctica: integración del esquema corporal, control tónico-postural e independencia segmentaria en situaciones motrices. Intervención de las partes del cuerpo en el movimiento. Definición de la lateralidad: reconocimiento de la izquierda y la derecha en los demás y en los objetos. Coordinación dinámica general y segmentaria. Control del cuerpo en relación con la actitud postural, con la tensión y la relajación. Control de las fases, los tipos y los ritmos respiratorios. Control del cuerpo en situaciones de equilibrio y desequilibrio variando la base de sustentación, los puntos de apoyo y la posición del centro de gravedad. Interiorización de las posibilidades y limitaciones motrices de las partes del cuerpo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Capacidades condicionales: Las capacidades físicas básicas orientadas a la ejecución motriz. Mantenimiento de la flexibilidad y ejercitación globalizada de la fuerza, la velocidad y la resistencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Habilidades y destrezas motrices básicas genéricas: locomotrices, no locomotrices y manipulativas. Combinación de nuevas habilidades motrices. Las habilidades básicas en medios y situaciones estables y conocidas. Aplicación de habilidades motrices básicas y específicas en la resolución de situaciones de juego de creciente complejidad motriz",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Creatividad motriz: variación y adecuación de la acción motriz ante estímulos internos y externos. Control y dominio del movimiento. Resolución de problemas motrices que impliquen selección y aplicación de respuestas basadas en la aplicación de las habilidades básicas, complejas y de sus combinaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Acciones motrices (individuales, de oposición, de cooperación y de cooperación- oposición): Práctica de habilidades motrices específicas: gimnásticas, atléticas y/o predeportivas. Participación en juegos tradicionales, alternativos y/o en la naturaleza. Valores fundamentales del juego: el esfuerzo personal, la relación con los demás y la aceptación del resultado. Roles de trabajo que le corresponde a cada uno como jugador dentro de un equipo. Estrategias básicas de juego relacionadas con la cooperación, la oposición y la cooperación/oposición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Gestión emocional: reconocimiento de emociones propias, pensamientos y sentimientos a partir de experiencias motrices. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                                Viernes, 30 de septiembre de 2022                        Pág. 48592",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Valoración y aceptación de la propia realidad corporal y la de los demás, de la diferencia de niveles de competencia motriz entre las diferentes personas y adopción de una actitud crítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Habilidades sociales: escucha activa y estrategias de negociación para la resolución de conflictos en contextos motrices.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Concepto de deportividad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Conductas contrarias a la convivencia, discriminatorias o sexistas, en situaciones motrices (discriminación por cuestiones de competencia motriz, etnia, género u otras): efectos negativos y estrategias de identificación, abordaje y evitación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Aceptación y respeto hacia las normas, reglas, estrategias, resultados y personas que participan en el juego.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Aportaciones de la cultura motriz a la herencia cultural. Los juegos y las danzas como manifestación de la interculturalidad: adaptación del movimiento corporal a estructuras rítmicas y musicales. Iniciación en Juegos o deportes tradicionales de Castilla y León (Lucha leonesa, frontón, comba, rana, tanguilla…) y juegos emergentes (Numanball, Datchball, Goubak, Quiddith, Kinball)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Usos comunicativos de la corporalidad: comunicación de sensaciones, sentimientos, emociones e ideas simples: espontaneidad y creatividad en el movimiento expresivo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Composiciones estéticas: iconografía, acrosport, habilidades circenses, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Práctica de actividades rítmico-musicales con carácter expresivo: juegos bailados, danzas lúdicas, danza creativa, danzas urbanas, danza improvisación, bailes y danzas del mundo y tradicionales de Castilla y León, coreografías grupales, etc. (movimientos en pareja o grupales en bailes y coreografías sencillos)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Prácticas teatrales: juego dramático, mimo, clown, teatro de sombras, match de improvisación, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Fases del proceso creativo: solicitud a partir de un inductor, diversidad/variedad, enriquecimiento, elección individual o colectiva, producción y presentación ante los demás.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Roles de trabajo: actor, coreógrafo, espectador, etc. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                             Pág. 48593",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Proyectos de curso o centro: mostrar a otros cursos o compañeros/as las producciones,     festivales   de   navidad,     festivales   de   final   de   curso, conmemoraciones, exhibiciones, proyectos interdisciplinares, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Deporte y perspectiva de género: ligas masculinas, femeninas y mixtas de distintos deportes. Referentes en el deporte de distintos géneros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Origen y práctica de juegos populares, tradicionales y autóctonos de Castilla y León.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Normas de uso: educación vial para bicicletas. Movilidad segura, saludable y sostenible. Actividades de adaptación al entorno urbano como peatones y como ocupantes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Espacios naturales en el contexto urbano: uso, disfrute seguro y mantenimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Estado del material para actividades en el medio natural y urbano: valoración previa y actuación ante desperfectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Prevención y sensibilización sobre la generación de residuos y su correcta gestión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Realización de actividades físicas seguras en el medio natural y urbano: senderismo, rutas en BTT, acampadas, actividades de orientación, grandes juegos en la naturaleza, esquí nórdico, marcha, trepa, etc…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Cuidado del entorno próximo y de los animales y plantas que en él conviven como servicio a la comunidad, durante la práctica segura de actividades físicas en el medio natural y urbano. Sensibilización y respeto al medio ambiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Proyectos de curso o centro: Con la bici al cole. Parques activos. Grupos de medio natural con familias. Preparación y realización de un proyecto de acción en el medio natural (excursiones, acampadas, cicloturismo, orientación, esquí nórdico, vías verdes, etc.) de acuerdo con las posibilidades del alumnado, del centro y respetando los principios de seguridad activa y pasiva. Realización de actividades que combinan prácticas físicas (por ejemplo: la orientación y BTT, el esquí etc.) y que conllevan la preparación previa de esa tarea (cuadernos de campo, etc.), con una relación explicita con otras áreas para enriquecer el proyecto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "Vocabulario específico del área. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                             Viernes, 30 de septiembre de 2022                         Pág. 48594",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "Instrumentos y dispositivos digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.3",
+      "bloque_id": "B7",
+      "descripcion": "Integración responsable de las TIC en el proceso de búsqueda, análisis y selección de información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.4",
+      "bloque_id": "B7",
+      "descripcion": "Interacción oral adecuada en contextos informales, escucha activa, asertividad y empatía con las intervenciones de los demás.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.5",
+      "bloque_id": "B7",
+      "descripcion": "Producción escrita con orden y estructura adecuada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.6",
+      "bloque_id": "B7",
+      "descripcion": "Expresión, escucha y valoración de necesidades, vivencias y emociones.",
+      "criterios_ids": []
+    }
+  ]
+}

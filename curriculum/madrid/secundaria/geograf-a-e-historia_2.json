@@ -1,0 +1,488 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "secundaria",
+    "asignatura": "geograf-a-e-historia",
+    "ciclo_origen": "2-eso",
+    "fuente": "iDoceo_12_geograf_a_e_historia_2-eso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "2º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre temas relevantes del presente y del pasado, usando críticamente fuentes históricas y geográficas, para adquirir conocimientos, elaborar y expresar contenidos en varios formatos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar y elaborar productos propios sobre problemas geográficos, históricos y sociales que resulten relevantes en la actualidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer los principales desafíos a los que se han enfrentado distintas sociedades a lo largo del tiempo, identificando las causas y consecuencias de los cambios producidos y los problemas a los que se enfrentan en la actualidad, mediante el desarrollo de proyectos de investigación y el uso de fuentes fiables.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar y analizar los elementos del paisaje y su articulación en sistemas complejos naturales, rurales y urbanos, así como su evolución en el tiempo, interpretando las causas de las transformaciones y valorando el grado de equilibrio existente en los distintos ecosistemas, para promover su conservación, mejora y uso sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar de forma crítica planteamientos históricos y geográficos explicando la construcción de los sistemas democráticos y los principios constitucionales que rigen la vida en comunidad, así como asumiendo los deberes y derechos propios de nuestro marco de convivencia, para promover la participación ciudadana y la cohesión social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender los procesos geográficos, históricos y culturales que han conformado la realidad multicultural en la que vivimos, conociendo y difundiendo la historia y cultura de las minorías étnicas presentes en nuestro país y valorando sus aportaciones.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar los fundamentos que sostienen las diversas identidades propias y las ajenas, a través del conocimiento y puesta en valor del patrimonio material e inmaterial que compartimos para conservarlo y respetar los sentimientos de pertenencia, así como para favorecer procesos que contribuyan a la cohesión y solidaridad territorial en orden a los valores del europeísmo y de la Declaración Universal de los Derechos Humanos.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Tomar conciencia del papel de los ciclos demográficos, el ciclo vital, las formas de vida y las relaciones intergeneracionales y de dependencia en la sociedad actual y su evolución a lo largo del tiempo, analizándolas de forma crítica, para promover alternativas saludables, sostenibles, enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Conocer y valorar la importancia de la seguridad integral ciudadana en la cultura de convivencia nacional e internacional, reconociendo la contribución del Estado, sus instituciones y otras entidades sociales a la ciudadanía global, a la paz, a la cooperación internacional, para promover la consecución de un mundo más seguro, solidario y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar, expresar y presentar contenidos propios en forma de resúmenes, líneas de tiempo, cuadros conceptuales y otros formatos mediante el desarrollo de métodos de búsqueda, selección y tratamiento de información relativas a procesos y acontecimientos relevantes del presente y de la Edad Media y Moderna.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Contrastar y argumentar sobre temas y acontecimientos de la Edad Media y la Edad Moderna, localizando y analizando de forma crítica fuentes primarias y secundarias como pruebas históricas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar, valorar y mostrar interés por los principales problemas demográficos y urbanísticos que afectan a la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Argumentar de forma crítica sobre problemas de convivencia actuales a través de conocimientos geográficos e históricos, contrastando y valorando fuentes diversas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Incorporar y utilizar adecuadamente términos, conceptos y acontecimientos relacionados con la Geografía, la Historia y otras disciplinas de las Ciencias Sociales, a través de textos escritos y otras fuentes históricas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar juicios razonados, respetando las opiniones de los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Adquirir conocimiento relevante de la historia, a través de procesos inductivos, la investigación y el trabajo por proyectos, retos o problemas, mediante la elaboración de trabajos que reflejen la comprensión de los fenómenos y problemas abordados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar los principales problemas, retos y desafíos a los que se ha enfrentado la humanidad a lo largo de la Edad Media y Edad Moderna, los cambios producidos, sus causas y consecuencias.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Representar adecuadamente información geográfica e histórica a través de diversas formas visuales y cartográficas, tales como los diferentes tipos de gráfico, incluyendo la pirámide de población, o los diversos mapas temáticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilizar una secuencia cronológica con objeto de examinar la relación entre hechos y procesos en diferentes períodos y lugares significativos de la Edad Media y Moderna (simultaneidad y duración), utilizando fechas y siglos, términos y conceptos apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar procesos de cambio histórico de relevancia, tales como la expansión del islam o los grandes descubrimientos geográficos en los albores de la Edad Moderna, a través del uso de diferentes fuentes de información, teniendo en cuenta las continuidades y permanencias en diferentes periodos y lugares.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Interpretar el entorno humanizado desde una perspectiva sistémica e integradora, a través del concepto de paisaje, identificando sus principales elementos y las interrelaciones existentes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar el grado de sostenibilidad y de equilibrio de los diferentes espacios y desde distintas escalas, y analizar su transformación y degradación a través del tiempo por la acción humana en la explotación de los recursos, profundizando en su relación con la evolución de la población, identificando las estrategias desarrolladas para su control y dominio y conociendo los conflictos que ha provocado.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Argumentar la necesidad de acciones de defensa, protección, conservación y mejora del entorno rural y urbano.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar, interpretar y analizar los mecanismos que han regulado la convivencia y la vida en común a lo largo de la Edad Media y Edad Moderna.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Señalar y explicar aquellas experiencias históricas más destacables de la Edad Media y Moderna en las que se lograron establecer sistemas políticos que favorecieron el ejercicio de derechos y libertades de los individuos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Mostrar actitudes pacíficas y respetuosas y asumir las normas como marco necesario para la convivencia, demostrando capacidad crítica e identificando y respondiendo de manera asertiva ante las situaciones de injusticia y desigualdad.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Situar el nacimiento y desarrollo de distintas civilizaciones medievales y modernas y ubicarlas en el espacio y en el tiempo, integrando los elementos históricos, culturales, institucionales y religiosos que las han conformado, identificando sus aportaciones más relevantes a la cultura universal.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer la organización y las diferencias sociales durante la Edad Media y Moderna.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar la riqueza y la variedad de la Edad Media y Moderna europea y española. El mestizaje en América. .",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Grandes mujeres de la Edad Media y Moderna.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Relacionar las distintas aportaciones a la cultura de la Edad Media y Moderna y su legado para Occidente.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Identificar el origen histórico de los reinos hispánicos y su vertebración.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Señalar los fundamentos de la idea de Europa a través de las diferentes experiencias medievales y modernas e identificar el legado histórico, institucional, artístico y cultural como patrimonio común de la ciudadanía europea.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.4",
+      "objetivo_id": "CE7",
+      "descripcion": "Conocer, valorar, proteger y conservar el patrimonio artístico, histórico y cultural medieval y moderno.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Conocer e interpretar los comportamientos demográficos de la población, los cambios que ha experimentado y sus ciclos, identificando y analizando los principales problemas y retos a los que nos enfrentamos en el mundo y en España.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Tomar conciencia del ciclo vital y analizar cómo han cambiado sus características, necesidades y obligaciones en determinados momentos históricos, como la Edad Media y la Edad Moderna.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.3",
+      "objetivo_id": "CE8",
+      "descripcion": "Relacionar los cambios en los estilos de vida propios de la Edad Media y de la Edad Moderna y contrastarlos con los que son saludables y sostenibles en el entorno, a través de comportamientos respetuosos con la salud propia, con la de los demás y con otros seres vivos, tomando conciencia de la importancia de promover el propio desarrollo personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar e interpretar la conexión de España con los grandes procesos históricos de la Edad Media y Moderna, valorando lo que han supuesto para su evolución y señalando las aportaciones de sus habitantes a lo largo de la historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Interpretar desde la perspectiva del desarrollo sostenible y la ciudadanía global los principales desafíos demográficos, económicos y relativos a la convivencia del mundo actual, expresando la importancia de implicarse en la búsqueda de soluciones y en el modo de concretarlos desde su capacidad de acción tanto local como global, valorando la contribución del Estado, sus instituciones y las asociaciones civiles en programas y misiones dirigidos por organismos nacionales e internacionales para el logro de la paz, la seguridad integral, la convivencia social y la cooperación entre los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.3",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar y situar en el mapa político los Estados y capitales de Europa.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.4",
+      "objetivo_id": "CE9",
+      "descripcion": "Identificar y situar en el mapa político de España las comunidades autónomas, capitales y provincias, conociendo las diferentes formas de organización territorial administrativa.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Geografía humana: demografía y urbanismo"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Retos del mundo actual"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. La Edad Media y la Edad Moderna"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Sociedades y territorios"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Compromiso cívico"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La población: (cid:2) Evolución de la población y distribución geográfica. (cid:2) Los movimientos naturales y espaciales de la población. (cid:2) Desafíos demográficos en el mundo actual: causalidad y comparación en el estudio de la diversidad social y cultural y de las estructuras demográficas a distintas escalas (europea y planetaria). Las pirámides de población. (cid:2) La población local, autonómica y española. Evolución, distribución y estructura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Los hábitats humanos y su diversidad: (cid:2) El paisaje como síntesis geográfica. (cid:2) Los grandes problemas del mundo rural: sostenibilidad económica y despoblación. (cid:2) Aglomeraciones urbanas. Elementos del espacio urbano. Análisis del plano urbano. (cid:2) La jerarquía urbana. Las grandes ciudades del mundo. (cid:2) Las ciudades españolas. (cid:2) El desarrollo urbano sostenible: la ciudad, espacio de convivencia. Modos y estilos de vida en el contexto de la globalización.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Competencia y conflicto por los recursos y el territorio: (cid:2) Mercados regionales y políticas comerciales. (cid:2) Tensiones internacionales, choques y alianzas entre civilizaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Concentración y distribución de la riqueza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Igualdad: (cid:2) Dignidad humana y derechos universales. (cid:2) Situaciones discriminatorias. . (cid:2) Convención sobre los Derechos del Niño.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Los Objetivos de Desarrollo Sostenible: (cid:2) El papel de la seguridad y de la cooperación internacional para alcanzar los Objetivos de Desarrollo Sostenible. (cid:2) La contribución del Estado y sus instituciones a la paz, a la seguridad integral ciudadana y a la convivencia social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Las primeras civilizaciones medievales: (cid:2) Los reinos germánicos. El Imperio carolingio. (cid:2) El Imperio romano de Oriente. Bizancio. Arte y cultura. (cid:2) Mahoma y el surgimiento del islam. La civilización islámica medieval. La expansión musulmana. Sociedad, arte, cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "La Europa feudal: (cid:2) Orígenes y características del feudalismo. (cid:2) La sociedad estamental. El papel de la Iglesia. (cid:2) Arte y cultura. El Románico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La Baja Edad Media: (cid:2) Transformaciones políticas, económicas, culturales y sociales. El nacimiento de la burguesía. (cid:2) El resurgir de las ciudades y el comercio. Los gremios. (cid:2) La crisis de la Baja Edad Media. (cid:2) Arte y cultura. El Gótico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La Edad Media en la Península Ibérica: (cid:2) Al-Ándalus: evolución política. (cid:2) Sociedad, economía, cultura y arte de Al-Ándalus. (cid:2) Los primeros reinos cristianos y su expansión. Las repoblaciones. La importancia del Camino de Santiago. (cid:2) La Baja Edad Media. Organización política de la Corona de Castilla y de la Corona de Aragón. Conflictos sociales. (cid:2) El arte medieval en la Península Ibérica. Arte andalusí, asturiano, mozárabe, románico, gótico y mudéjar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Los inicios de la Edad Moderna (siglos XV-XVI): (cid:2) El Estado moderno y la monarquía. El reinado de los Reyes Católicos. (cid:2) Los descubrimientos geográficos. El descubrimiento de América. La expansión de los europeos. Culturas precolombinas. (cid:2) Exploración, conquista y colonización de América. (cid:2) La cultura humanística. El arte renacentista. (cid:2) La crisis religiosa del siglo XVI. La Reforma protestante. La Contrarreforma católica. (cid:2) El reinado de Carlos V y de Felipe II.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "El siglo XVII: (cid:2) La crisis del siglo XVII. (cid:2) Las monarquías absolutas y los regímenes parlamentarios. (cid:2) La Guerra de los Treinta Años y el fin de la hegemonía de la monarquía hispánica. (cid:2) Los últimos Habsburgo. El problema sucesorio a la muerte de Carlos II. (cid:2) Arte, cultura y ciencia. El Barroco.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Política: (cid:2) La organización política del ser humano y las formulaciones estatales en el mundo Medieval y Moderno. Evolución de la teoría del poder desde la caída del Imperio romano hasta la monarquía hispánica. (cid:2) Violencia y conflictos armados. El crecimiento de los ejércitos y la evolución del armamento desde los ejércitos bizantinos a los tercios. (cid:2) El mapa político de España y de Europa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Sociedad: (cid:2) La lucha por la supervivencia y el estatus social durante la Edad Media y la Edad Moderna. (cid:2) Complejidad social: los estamentos. Desigualdad social y disputa por el poder en la Edad Media y Moderna: formación de oligarquías, la imagen del poder y evolución de la aristocracia. (cid:2) El pueblo judío: origen y características. La presencia de los judíos en la península ibérica, su religión, su importancia social y su legado hasta los Reyes Católicos. La expulsión de los judíos y sus consecuencias. La influencia de la civilización judía en la cultura europea. El legado judío en la península ibérica: su influencia en la literatura, la economía, la ciencia y las distintas manifestaciones artísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Economía: (cid:2) Viajes, descubrimientos y sistemas de intercambio en la formación de una economía mundial. La disputa por la hegemonía y la geopolítica en el nacimiento y evolución de la Modernidad. La piratería. (cid:2) La ciudad y el mundo rural a lo largo de la Edad Media y la Edad Moderna: aldeas, villas y ciudades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Patrimonio: (cid:2) El significado de los archivos, bibliotecas y museos y del legado histórico y cultural como patrimonio colectivo. (cid:2) Significado y función de las expresiones artísticas y culturales en la Edad Media y Moderna: diversidad y riqueza cultural. (cid:2) La influencia de la civilización islámica en la cultura europea. . (cid:2) España en el tiempo y su conexión con los grandes procesos de la Edad Media y Moderna: el islam, la feudalización y los descubrimientos geográficos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Religión: (cid:2) Herejías, persecuciones y guerras de religión en la Edad Media y Moderna. (cid:2) La importancia de las creencias religiosas en la Edad Media y Moderna. El Cristianismo en los Reinos hispánicos medievales y en la Monarquía hispánica moderna. La presencia del Islam en España.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Ciencia y tecnología: (cid:2) Ciencia, medicina y avances tecnológicos durante la Edad Media y la Edad Moderna. La lucha contra las epidemias y pandemias: la «Peste Negra». Racionalismo y empirismo en la explicación de la realidad frente a las supersticiones: la revolución científica del siglo XVII.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "La tolerancia y la intolerancia religiosa en la Edad Media y la Edad Moderna. Las instituciones de beneficencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "La violencia y las persecuciones en la Edad Media y la Edad Moderna.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "La defensa de la verdad. Los prejuicios sobre la Edad Media y la leyenda negra en la Edad Moderna .",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "El estudio de la estructura económica de la población española como impulsora para actuar de forma solidaria y emprender acciones de apoyo a colectivos en situaciones de pobreza, vulnerabilidad y exclusión social. Participación en proyectos comunitarios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Identificación y gestión de las emociones y su repercusión en comportamientos individuales y colectivos. La Historia como herramienta para potenciar la empatía.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "La importancia de la seguridad vial y la movilidad, segura, saludable y sostenible en la ciudad del siglo XXI. El espacio público.",
+      "criterios_ids": []
+    }
+  ]
+}

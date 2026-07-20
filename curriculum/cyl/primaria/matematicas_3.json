@@ -1,0 +1,699 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "matematicas",
+    "ciclo_origen": "tercer-curso",
+    "fuente": "iDoceo_matematicas_tercer-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar situaciones de la vida cotidiana, proporcionando una representación matemática de las mismas mediante conceptos, herramientas y estrategias, para analizar la información más relevante.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Resolver situaciones problematizadas, aplicando diferentes técnicas, estrategias y formas de razonamiento, para explorar distintas maneras de proceder, obtener CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM1",
+        "STEM2",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Explorar, formular y comprobar conjeturas sencillas o plantear problemas de tipo matemático en situaciones basadas en la vida cotidiana, de forma guiada, reconociendo el valor del razonamiento y la argumentación, para contrastar su validez, adquirir e integrar nuevo conocimiento.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD3",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilizar el pensamiento computacional, organizando datos, descomponiendo en partes, reconociendo patrones, generalizando e interpretando, modificando y creando algoritmos de forma guiada, para modelizar y automatizar diferentes situaciones de la vida cotidiana.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD5",
+        "CC2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconocer y utilizar conexiones entre las diferentes ideas matemáticas, así como identificar las matemáticas implicadas en otras áreas o en diversas situaciones de la CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD3",
+        "CD5",
+        "CPSAA4",
+        "CC2",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comunicar y representar, de forma individual y colectiva, conceptos, procedimientos y resultados matemáticos, utilizando el lenguaje oral, escrito, gráfico, multimodal y la terminología apropiados, para dar significado y permanencia a las ideas matemáticas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD3",
+        "CD5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Desarrollar destrezas personales que ayuden a identificar y gestionar emociones al enfrentarse a retos matemáticos, fomentando la confianza en las propias posibilidades, aceptando el error como parte del proceso de aprendizaje y adaptándose a las situaciones de incertidumbre, para mejorar la perseverancia y disfrutar en el aprendizaje de las matemáticas.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM5",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Desarrollar destrezas sociales, reconociendo y respetando las emociones, las experiencias de los demás y el valor de la diversidad y participando activamente en CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC2",
+        "CC3",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Interpretar, de manera acompañada, problemas de la vida cotidiana, comprendiendo las preguntas planteadas a través de diferentes estrategias o herramientas. (CCL2, STEM1, STEM2, STEM4, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Producir, de manera acompañada, representaciones matemáticas a través de recursos manipulativos, esquemas o diagramas sencillos que ayuden en la resolución de una situación problematizada. (CCL1, STEM1, STEM2, STEM4, CPSAA5, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Obtener posibles soluciones a problemas aplicando estrategias básicas de resolución. (STEM1, CPSAA4, CE1, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Describir la corrección matemática de las soluciones de un problema y su coherencia en el contexto planteado contrastando los resultados y los procedimientos realizados. (CCL2, STEM1, STEM2, CPSAA4, CPSAA5, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar estrategias básicas de cálculo mental aplicándolas a la resolución de problemas. (STEM1, CPSAA5, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar conjeturas matemáticas sencillas investigando patrones, propiedades y relaciones de forma pautada. (STEM1, STEM2, STEM4, CD1, CD5, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Dar ejemplos de problemas sobre situaciones cotidianas que se resuelven matemáticamente. (CCL1, STEM1, STEM2, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Automatizar situaciones sencillas de la vida cotidiana que se realicen paso a paso o sigan una rutina, utilizando de forma pautada principios básicos del pensamiento computacional. (STEM1, STEM2, STEM3, STEM4, CD3, CD5, CC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Emplear herramientas tecnológicas adecuadas en el proceso de resolución de problemas. (STEM1, STEM2, CD1, CD3, CD5, CC2, CE3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48758",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Interpretar conexiones entre los diferentes elementos matemáticos, aplicando conocimientos y experiencias propios. (STEM1, STEM3, CD3, CPSAA4, CC2, CC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer las matemáticas presentes en la vida cotidiana y en otras áreas, estableciendo e interpretando conexiones entre ellas. (STEM1, STEM3, CD3, CD5, CPSAA4, CC2, CC4, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer lenguaje matemático sencillo presente en la vida cotidiana en diferentes formatos, adquiriendo vocabulario específico básico e identificando la idea principal del mensaje. (CCL3, STEM4, CD1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Explicar ideas y procesos matemáticos sencillos, los pasos seguidos en la resolución de un problema o los resultados matemáticos, utilizando un lenguaje matemático sencillo en diferentes formatos. (CCL1, CCL3, STEM1, STEM2, STEM4, CD5, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Identificar las emociones básicas propias al abordar retos matemáticos, pidiendo ayuda solo cuando sea necesario desarrollando la autoconfianza. (CCL1, CPSAA1, CPSAA4, CPSAA5, CE2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Mostrar actitudes positivas ante retos matemáticos, valorando el error como una oportunidad de aprendizaje. (STEM5, CPSAA1, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Participar respetuosamente en el trabajo en equipo, respetando la diversidad del grupo y estableciendo relaciones saludables basadas en el respeto, la tolerancia, la igualdad y la resolución pacífica de conflictos. (CCL5, CP3, STEM3, CPSAA3, CC2, CC3, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Aceptar la tarea y rol asignado en el trabajo en equipo, asumiendo y respetando las responsabilidades individuales asignadas y contribuyendo a la consecución de los objetivos del grupo. (STEM3, CPSAA1, CC2, CE3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48759",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Sentido numérico"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Sentido de la medida"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Sentido espacial"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Sentido algebraico"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Sentido estocástico"
+    },
+    {
+      "id": "B6",
+      "titulo": "F. Sentido socioafectivo"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "1. Conteo",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias variadas de conteo y recuento sistemático en situaciones de la vida cotidiana en cantidades hasta el 9999.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Números ordinales hasta el trigésimo en situaciones de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias y técnicas de interpretación y manipulación del orden de magnitud de los números (unidades, decenas, centenas y unidades y decenas de millar). Valor de la posición de las cifras de un número.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Comparación de números y ordenación de números naturales de hasta 4 cifras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Estimaciones y aproximaciones razonadas de cantidades en contextos de resolución de problemas. Redondeo de números naturales a la decena y centena.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Lectura y representación (incluida la recta numérica y con materiales manipulativos), composición, descomposición y recomposición de números naturales hasta 9999).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Fracciones propias con denominador hasta 8 en contextos de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "3. Sentido de las operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de cálculo mental con números naturales de más de dos cifras aplicadas a la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de reconocimiento de qué operaciones simples (suma, resta, multiplicación, división como reparto y partición) son útiles para resolver situaciones contextualizadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Construcción de las tablas de multiplicar apoyándose en número de veces, suma repetida o disposición en cuadrículas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Suma, resta (hasta cuatro cifras), multiplicación (por una cifra) y división (enteras por números de una cifra) de números naturales resueltas con flexibilidad y sentido en situaciones contextualizadas: estrategias y herramientas de resolución y propiedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Jerarquía de las operaciones CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                             Pág. 48760",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Propiedad conmutativa y asociativa de la suma e inicio a la propiedad asociativa de la suma y del producto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Sistema de numeración de base diez (hasta el 9999): aplicación de las relaciones que genera en las operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Números naturales en contextos de la vida cotidiana: comparación y ordenación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Series ascendentes y descendentes con distintas cadencias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Fracciones en contextos de la vida cotidiana: comparación y ordenación de fracciones con el mismo denominador.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Relaciones entre la suma y la resta, y la multiplicación y la división: identificación de sus términos. Aplicación en contextos cotidianos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Cálculo y estimación de cantidades y cambios (euros y céntimos de euro) en problemas de la vida cotidiana: ingresos, gastos y ahorro. Decisiones de compra responsable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Atributos mensurables de los objetos (longitud, masa, capacidad).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Unidades convencionales (km, m, cm, kg, g; l) y no convencionales en situaciones de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Medida del tiempo (año, mes, semana, día, hora y minutos) y determinación de la duración de periodos de tiempo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para realizar mediciones con instrumentos y unidades no convencionales (repetición de una unidad, uso de cuadrículas y materiales manipulativos) y convencionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Procesos de medición mediante instrumentos convencionales (regla, cinta métrica, balanzas, reloj analógico y digital).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                                Viernes, 30 de septiembre de 2022                        Pág. 48761",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de comparación y ordenación de medidas de la misma magnitud (km, m, cm; kg, g; l): aplicación de equivalencias entre unidades en problemas de la vida cotidiana que impliquen convertir en unidades más pequeñas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Estimación de medidas de longitud, masa y capacidad por comparación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Procesos de identificación de ángulos (rectos, agudos y obtusos), comparación, clasificación, ordenación y equivalencia entre sus medidas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Evaluación de resultados de mediciones y estimaciones o cálculos de medidas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Figuras   geométricas      de   dos   dimensiones    (líneas   rectas   y   curvas, perpendiculares y paralelas. Polígonos regulares. Perímetros, lados, ángulos y vértices) en objetos de la vida cotidiana: identificación. Reconocimiento de lenguaje matemático. y clasificación atendiendo a sus elementos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Figuras geométricas de tres dimensiones (prismas, pirámides y cuerpos redondos, elementos básicos) en objetos de la vida cotidiana: identificación y clasificación atendiendo a sus elementos y a las relaciones entre ellos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias y técnicas de construcción de figuras geométricas de dos dimensiones     por    composición    y   descomposición,   mediante    materiales manipulables, instrumentos de dibujo (regla, escuadra y compás) y aplicaciones informáticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Vocabulario: descripción verbal de los elementos y las propiedades de figuras geométricas sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La circunferencia y el círculo. Elementos básicos: centro, radio, diámetro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Propiedades de figuras geométricas de dos y tres dimensiones: exploración mediante materiales manipulables (cuadrículas, geoplanos, policubos, etc.) y el manejo de herramientas digitales (programas de geometría dinámica, realidad aumentada, robótica educativa, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Descripción de la posición relativa de objetos en el espacio o de sus representaciones, utilizando vocabulario geométrico adecuado (paralelo, perpendicular, oblicuo, derecha, izquierda, etc.). CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                                 Viernes, 30 de septiembre de 2022                       Pág. 48762",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Descripción verbal e interpretación de movimientos, en relación a uno mismo o a otros puntos de referencia, utilizando vocabulario geométrico adecuado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Interpretación de itinerarios en planos, callejeros y mapas utilizando soportes físicos y virtuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Identificación de figuras transformadas mediante traslaciones, giros y simetrías en situaciones de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Generación de figuras transformadas a partir de simetrías y traslaciones de un patrón inicial y predicción del resultado. 4. Visualización, razonamiento y modelización geométrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias para el cálculo de perímetros de figuras planas y utilización en la resolución de problemas de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Modelos geométricos en la resolución de problemas relacionados con los otros sentidos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Reconocimiento de relaciones geométricas en campos ajenos a la clase de matemáticas, como el arte, las ciencias y la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Identificación, descripción verbal, representación y predicción razonada de términos a partir de las regularidades en una colección de números, figuras o imágenes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Proceso pautado de modelización usando representaciones matemáticas (gráficas, tablas...) para facilitar la comprensión y la resolución de problemas de la vida cotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias para la interpretación de enunciados en la resolución de problemas de dos operaciones para relacionarlos con los datos, la pregunta y las operaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias para la interpretación del uso de los números y el cálculo numérico para resolver problemas en situaciones reales, explicando oralmente y por escrito los procesos de resolución y los resultados obtenidos. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                               Viernes, 30 de septiembre de 2022                         Pág. 48763",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Resolución de problemas de dos operaciones combinadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Formulación de problemas creativos y propuesta de pequeñas investigaciones en contextos matemáticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Relaciones de igualdad y desigualdad, y uso de los signos = y ≠ entre expresiones que incluyan operaciones y sus propiedades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "La igualdad como expresión de una relación de equivalencia entre dos elementos y obtención de datos sencillos desconocidos (representados por medio de un símbolo) en cualquiera de los dos elementos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Representación de la relación «mayor que» y «menor que», y uso de los signos < y >.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias para la interpretación y modificación de algoritmos sencillos (reglas de   juegos,      instrucciones   secuenciales,   bucles,   patrones   repetitivos, programación por bloques, robótica educativa...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias para seleccionar de forma guiada el uso de herramientas tecnológicas y dispositivos (calculadora) para la realización de cálculos, automatismos, resolución y comprensión problemas o conjeturas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Utilización de herramientas digitales para la creación de contenidos digitales con creatividad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Gráficos estadísticos de la vida cotidiana (pictogramas, gráficas de barras, histogramas...): lectura e interpretación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias sencillas para la recogida, clasificación y organización de datos cualitativos o cuantitativos discretos en muestras pequeñas mediante calculadora y aplicaciones informáticas sencillas. Frecuencia absoluta: interpretación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Gráficos estadísticos sencillos (diagrama de barras y pictogramas) para representar datos, seleccionando el más conveniente, mediante recursos tradicionales y aplicaciones informáticas sencillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "La moda: interpretación como el dato más frecuente. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                               Viernes, 30 de septiembre de 2022                        Pág. 48764",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Comparación gráfica de dos conjuntos de datos para establecer relaciones y extraer conclusiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "La probabilidad como medida subjetiva de la incertidumbre. Reconocimiento de la incertidumbre en situaciones de la vida cotidiana y mediante la realización de experimentos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Identificación de suceso seguro, suceso posible y suceso imposible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Carácter aleatorio de algunas experiencias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Formulación de conjeturas a partir de los datos recogidos y analizados, dándoles sentido en el contexto de estudio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Gestión emocional: estrategias de identificación y expresión de las propias emociones ante las matemáticas. Curiosidad, tolerancia ante la frustración e iniciativa en el aprendizaje de las matemáticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Fomento de la autonomía y estrategias para la toma de decisiones en situaciones de resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Valoración del error como oportunidad de aprendizaje. 2. Trabajo en equipo, inclusión, respeto y diversidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Identificación y rechazo de actitudes discriminatorias ante las diferencias individuales presentes en el aula. Actitudes inclusivas y aceptación de la diversidad del grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Participación activa en el trabajo en equipo: interacción positiva, escucha activa y respeto por el trabajo de los demás.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Valoración de la contribución de las matemáticas a los distintos ámbitos del conocimiento humano desde una perspectiva de género. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                         Pág. 48765",
+      "criterios_ids": []
+    }
+  ]
+}

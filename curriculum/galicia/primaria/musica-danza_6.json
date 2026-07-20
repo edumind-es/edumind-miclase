@@ -1,0 +1,860 @@
+{
+  "meta": {
+    "comunidad": "Galicia",
+    "etapa": "primaria",
+    "asignatura": "musica-danza",
+    "ciclo_origen": "6º",
+    "fuente": "iDoceo_musica-danza_6º.xlsx",
+    "generado": "2026-06-29",
+    "curso": "6º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y la transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal al i tiempo que respetuoso con la propiedad intelectual. i"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, haciéndose preguntas y realizando experimentos sencillos de forma guiada. l"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para l generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir. l"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos. l"
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulada y participa en l procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad y el l logro de la igualdad de género, la cohesión social y los objetivos de desarrollo sostenible. l"
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el l entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones ar- l tísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "OBJ1",
+      "descripcion": "Descubrir propuestas artísticas musicales y dancísticas de diferentes géneros, estilos, épocas y culturas, a través de la recepción activa, para desarrollar la curiosidad, la sensibilidad, el pensamiento crítico y el respeto por la diversidad.",
+      "descriptores_ids": [
+        "CP3",
+        "STEM1",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CE2",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ2",
+      "descripcion": "Reconocer los elementos básicos específicos del lenguaje musical, a través de la percepción y del análisis de diferentes fragmentos y obras, para llegar a la comprensión de las diferentes manifestaciones culturales y artísticas.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CC3",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ3",
+      "descripcion": "Investigar acerca de diferentes manifestaciones culturales y artísticas musicales y dancísticas y sus contextos, empleando diversos canales, medios y técnicas, para disfrutar de las mismas, entender su valor, así como desarrollar el pensamiento y una sensibilidad artística propia.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP3",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CC3",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "OBJ4",
+      "descripcion": "Expresar y comunicar de manera creativa ideas, sentimientos y emociones, experimentando con las posibilidades del sonido, del cuerpo y de los medios digitales, para producir obras propias.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA5",
+        "CC2",
+        "CE1",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Participar del diseño, elaboración y difusión de producciones culturales y artísticas musicales y dancísticas, tanto individuales como colaborativas, poniendo en valor el proceso y asumiendo diferentes roles en la consecución de un resultado final, para desarrollar la creatividad, la noción de autoría y el sentido de pertenencia.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CC2",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Distinguir propuestas artísticas musicales de diferentes géneros, estilos, épocas y culturas, a través de la recepción activa y mostrando curiosidad por las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Describir manifestaciones culturales y artísticas musicales, explorando sus características con interés, estableciendo relaciones entre ellas, valorando la diversidad que las genera, así como las principales profesiones vinculadas a la creación e interpretación musical, y empleando el vocabulario específico de las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "OBJ2",
+      "descripcion": "Identificar visual y auditivamente, clasificar, describir y representar elementos de la música y del lenguaje musical.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Seleccionar y aplicar estrategias para la búsqueda de información sobre manifestaciones culturales y artísticas musicales a través de diversos canales y medios de acceso, de forma individual y colaborativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Comparar el significado y los elementos característicos de distintas manifestaciones culturales y artísticas musicales que forman parte del patrimonio de diversos entornos, analizando los canales, medios y técnicas vinculados a ellas, así como sus diferencias y similitudes, y desarrollando criterios de valoración propios.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Valorar las sensaciones y emociones producidas por diferentes manifestaciones culturales y artísticas musicales, a partir del análisis y de la comprensión de dichas manifestaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Manifestar respeto en la recepción de propuestas artísticas musicales, interiorizando las normas elementales de comportamiento y mostrando una actitud positiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Producir obras propias básicas utilizando las posibilidades expresivas del cuerpo, el sonido, la imagen y los medios digitales básicos y mostrando confianza en las capacidades propias.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Expresar con creatividad ideas, sentimientos y emociones a través de diversas manifestaciones artísticas musicales, utilizando los diferentes lenguajes e instrumentos a su alcance, mostrando confianza en las propias capacidades y perfeccionando la ejecución.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Utilizar elementos del lenguaje musical para interpretar propuestas musicales vocales e instrumentales sencillas a través de la vivencia de los mismos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Planificar y diseñar producciones culturales y artísticas musicales colectivas, trabajando de forma cooperativa en la consecución de un resultado final que cumpla con unos objetivos acordados y asumiendo diferentes roles, desde la igualdad y el respeto a la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Participar en el proceso cooperativo de producciones culturales y artísticas musicales, de forma creativa, utilizando elementos básicos del lenguaje musical y diferentes técnicas artísticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Compartir los proyectos creativos musicales empleando diferentes estrategias comunicativas a través de diversos medios y explicando el proceso y el resultado final obtenido.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.7",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Manifestar respeto en la realización de actividades, interiorizando las normas elementales de comportamiento y mostrando una actitud positiva y empática hacia la expresión de ideas, sentimientos y emociones de los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Distinguir propuestas artísticas escénicas y performativas de diferentes géneros, estilos, épocas y culturas, a través de la recepción activa y mostrando curiosidad por las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Describir manifestaciones culturales y artísticas escénicas y performativas explorando sus características con interés, estableciendo relaciones entre ellas, valorando la diversidad que las genera, así como las principales profesiones vinculadas a la creación e interpretación escénica y performativa, y empleando el vocabulario específico de las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Seleccionar y aplicar estrategias para la búsqueda de información sobre manifestaciones culturales y artísticas escénicas y performativas a través de diversos canales y medios de acceso, de forma individual y colaborativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Comparar el significado y los elementos característicos de distintas manifestaciones culturales y artísticas escénicas y performativas que forman parte del patrimonio de diversos entornos, analizando los canales, medios y técnicas vinculados a ellas, así como sus diferencias y similitudes, y desarrollando criterios de valoración propios.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "OBJ3",
+      "descripcion": "Valorar las sensaciones y emociones producidas por diferentes manifestaciones culturales y artísticas escénicas y performativas, a partir del análisis y de la comprensión de las dichas manifestaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "OBJ1",
+      "descripcion": "Manifestar respeto en la recepción de propuestas artísticas escénicas y performativas, interiorizando las normas de respeto y mostrando una actitud positiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Producir obras propias básicas utilizando las posibilidades expresivas del cuerpo, el sonido, la imagen y los medios digitales básicos, y mostrando confianza en las capacidades propias.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "OBJ4",
+      "descripcion": "Expresar con creatividad ideas, sentimientos y emociones a través de diversas manifestaciones artísticas escénicas y performativas, utilizando los diferentes lenguajes e instrumentos a su alcance, mostrando confianza en las propias capacidades y perfeccionando la ejecución.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Planificar y diseñar producciones culturales y artísticas escénicas y performativas colectivas, trabajando de forma cooperativa en la consecución de un resultado final que cumpla con unos objetivos acordados y asumiendo diferentes roles desde la igualdad y el respeto a la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Participar en el proceso cooperativo de producciones culturales y artísticas escénicas y performativas, de forma creativa, utilizando elementos básicos de la expresión corporal y diferentes técnicas artísticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.5",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Compartir los proyectos creativos escénicos y performativos, empleando diferentes estrategias comunicativas a través de diversos medios y explicando el proceso y el resultado final obtenido.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.6",
+      "objetivo_id": "OBJ5",
+      "descripcion": "Manifestar respeto en la creación e interpretación de propuestas artísticas escénicas y performativas, interiorizando las normas elementales de comportamiento y mostrando una actitud positiva y empática hacia la expresión de ideas, sentimientos y emociones de los demás.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque 1. Educación musical: percepción y análisis"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque 2. Educación musical: creación e interpretación"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque 3. Educación en artes escénicas y performativas: percepción y análisis"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque 4. Educación en artes escénicas y performativas: creación e interpretación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El pulso, el acento y el compás: identificación y diferenciación entre compás binario, ternario y cuaternario. Introducción a la diferenciación auditiva entre subdivisión binaria y ternaria",
+      "criterios_ids": [
+        "CE1.3",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "El sonido y sus cualidades: identificación visual y auditiva, clasificación y representación de diversidad de sonidos y estructura rítmicas y melódicas a través de grafías convencionales y no convencionales",
+      "criterios_ids": [
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "El tiempo, el carácter y la dinámica: identificación y descripción",
+      "criterios_ids": [
+        "CE1.2",
+        "CE1.3",
+        "CE1.5"
+      ]
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de análisis de propuestas musicales desde una perspectiva de género",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.4",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de recepción activa",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.4",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "La armonía. Concepto de acorde, consonancia y disonancia. Diferenciación auditiva entre acorde mayor y menor",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La melodía y la forma musical. Identificación de formas sencillas: monotemáticas, binarias, ternarias, canción popular, rondó simple y canon",
+      "criterios_ids": [
+        "CE1.3",
+        "CE1.4",
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "La textura. Aproximación a la discriminación auditiva de monodia, melodía acompañada y textura fugada",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "La voz y los instrumentos musicales. Familias y agrupaciones. Clasificación y comprensión de los mecanismos de producción sonora en cada uno. Identificación visual y auditiva. Instrumentos tradicionales en la música gallega. Instrumentos digitales. Instrumentos no convencionales y exóticos. Instrumentos caseros",
+      "criterios_ids": [
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Normas elementales de comportamiento y actitud positiva en la recepción de propuestas musicales. El silencio como elemento y condición indispensable para mantener la atención durante la audición",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.3",
+        "CE1.5",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Principales géneros musicales",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.6"
+      ]
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Profesiones vinculadas a la creación e interpretación musical. Conocimiento y valoración",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.4",
+        "CE1.5",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Propuestas musicales de diferentes corrientes estéticas, procedencias y épocas producidas por creadoras y creadores locales, regionales, nacionales e internacionales",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Recursos digitales de uso común para música",
+      "criterios_ids": [
+        "CE1.1",
+        "CE1.2",
+        "CE1.3",
+        "CE1.4",
+        "CE1.5",
+        "CE1.6",
+        "CE1.7"
+      ]
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Vocabulario específico de música",
+      "criterios_ids": [
+        "CE1.2"
+      ]
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Aplicaciones informáticas de grabación, edición de audio y edición de partituras: utilización guiada en la audición, conocimiento, interpretación, grabación, reproducción, improvisación y creación de obras diversas",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Construcción de objetos sonoros e instrumentos y exploración de sus posibilidades sonoras para su uso expresivo",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Evaluación, interés y valoración, tanto del proceso como del producto final, en producciones musicales",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Fases del proceso creativo: planificación, interpretación, experimentación y evaluación",
+      "criterios_ids": [
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6"
+      ]
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Lenguajes musicales: aplicación de sus conceptos fundamentales en la interpretación y en la improvisación guiada de propuestas musicales vocales e instrumentales. El silencio como elemento fundamental de la música: utilización adecuada en la interpretación musical",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Normas elementales de comportamiento y actitud positiva en la creación e interpretación de propuestas musicales. El silencio como elemento y condición indispensable durante la creación y la práctica musical",
+      "criterios_ids": [
+        "CE2.3",
+        "CE2.4",
+        "CE2.5",
+        "CE2.6",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Práctica instrumental, vocal y corporal: experimentación, exploración creativa, interpretación, improvisación y composición con pautas guiadas a partir de sus posibilidades sonoras y expresivas. Respiración consciente e higiene y corrección postural",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.2",
+        "CE2.3",
+        "CE2.5",
+        "CE2.6",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Uso responsable de bancos de imágenes y sonidos: respeto a las licencias de uso y distribución de contenidos generados por otros. Plagio y derechos de autor",
+      "criterios_ids": [
+        "CE2.1",
+        "CE2.4",
+        "CE2.7"
+      ]
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Elementos fundamentales de la representación escénica. Roles, materiales y espacios. Teatralidad. Estructura dramática básica",
+      "criterios_ids": [
+        "CE3.4"
+      ]
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias básicas de análisis de propuestas escénicas y performativas desde una perspectiva de género",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias de recepción activa",
+      "criterios_ids": [
+        "CE3.1"
+      ]
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Géneros escénicos: aproximación a estos. Valoración de la importancia de la interpretación dramática en el proceso artístico y del patrimonio vinculado a las artes escénicas y performativas",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Manifestaciones vinculadas a la expresión corporal y a las artes escénicas y performativas de diferentes corrientes estéticas, procedencias y épocas producidas por creadoras y creadores locales, regionales, nacionales e internacionales",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Normas de comportamiento y actitud positiva en la recepción de propuestas vinculadas con la expresión corporal y dramática en diferentes espacios culturales y artísticos. El silencio como elemento y condición indispensable para mantener la atención durante la recepción",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.4",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Profesiones vinculadas a las artes escénicas performativas. Conocimiento y valoración",
+      "criterios_ids": [
+        "CE3.1",
+        "CE3.2",
+        "CE3.3",
+        "CE3.4",
+        "CE3.5",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Recursos digitales de uso común para las artes escénicas y performativas",
+      "criterios_ids": [
+        "CE3.3",
+        "CE3.5"
+      ]
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Vocabulario específico de las artes escénicas y performativas",
+      "criterios_ids": [
+        "CE3.2",
+        "CE3.3",
+        "CE3.5",
+        "CE3.6"
+      ]
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Capacidades expresivas y creativas básicas de la expresión corporal y dramática. Disfrutar como forma de interacción social, recurso expresivo y emotivo y deleite estético",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.4",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "El cuerpo y sus posibilidades motrices, dramáticas y creativas: interés en la experimentación y exploración a través de ejecuciones individuales y grupales vinculadas con el movimiento, la danza, la dramatización y la representación teatral como medio de expresión y diversión",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.4",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Evaluación, interés y valoración, tanto del proceso como del producto final, en producciones escénicas y performativas",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.4",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Fases del proceso creativo: planificación, interpretación, experimentación y evaluación",
+      "criterios_ids": [
+        "CE4.2",
+        "CE4.3",
+        "CE4.4",
+        "CE4.5"
+      ]
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Normas elementales de comportamiento y actitud positiva en la creación e interpretación de propuestas vinculadas con la expresión corporal y dramática. 10.4",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.4",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas básicas dramáticas y dancísticas. Respiración consciente e higiene y corrección postural. Nociones elementales de biomecánica. Lenguajes expresivos. Introducción a los métodos interpretativos. Experimentación con actos performativos. Improvisación guiada y creativa. Interés, práctica y confianza en uno mismo",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.2",
+        "CE4.3",
+        "CE4.4",
+        "CE4.5",
+        "CE4.6"
+      ]
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Uso responsable de bancos de imágenes y sonidos: respeto a las licencias de uso y distribución de contenidos generados por otros. Plagio y derechos de autor",
+      "criterios_ids": [
+        "CE4.1",
+        "CE4.3",
+        "CE4.6"
+      ]
+    }
+  ]
+}

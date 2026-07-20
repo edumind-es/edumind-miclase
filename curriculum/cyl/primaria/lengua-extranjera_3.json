@@ -1,0 +1,428 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "lengua-extranjera",
+    "ciclo_origen": "tercer-curso",
+    "fuente": "iDoceo_lengua-extranjera_tercer-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender el sentido general e información específica y predecible de textos breves y sencillos, expresados de forma clara y en la lengua estándar, haciendo uso de diversas estrategias y recurriendo, cuando sea necesario, al uso de distintos tipos de apoyo, para desarrollar el repertorio lingüístico y para responder a necesidades comunicativas cotidianas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL4",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA5",
+        "CE1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Expresar textos sencillos de manera comprensible y estructurada, mediante el empleo de estrategias como la planificación o la compensación, para expresar mensajes breves relacionados con necesidades inmediatas y responder a propósitos comunicativos cotidianos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interactuar con otras personas usando expresiones cotidianas, recurriendo a estrategias de cooperación y empleando recursos analógicos y digitales, para responder a necesidades inmediatas de su interés en intercambios comunicativos respetuosos con las normas de cortesía.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD3",
+        "CPSAA3",
+        "CC3",
+        "CE1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Mediar en situaciones predecibles, usando estrategias y conocimientos, acogiendo la diversidad cognitiva, social y cultural para procesar y transmitir información básica y sencilla, con el fin de facilitar la comunicación.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconocer y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando sobre su funcionamiento e identificando las estrategias y conocimientos propios, respetando siempre la diversidad cognitiva, social y cultural, para mejorar la respuesta a necesidades comunicativas concretas en situaciones conocidas.",
+      "descriptores_ids": [
+        "CCL3",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CC3",
+        "CE3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Tomar conciencia, apreciar, valorar y respetar la diversidad lingüística, cultural y artística a partir de la lengua extranjera, identificando y valorando las diferencias y semejanzas entre lenguas y culturas, para aprender a gestionar situaciones interculturales.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer e interpretar el sentido global y la información esencial, así como palabras y frases previamente indicadas, en textos orales, escritos y multimodales, breves y sencillos sobre temas frecuentes y cotidianos de relevancia personal, necesidades, intereses y próximos a su experiencia a través de distintos soportes. (CCL2, CCL4, STEM1, CE1, CCEC2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar y aplicar, de forma guiada, estrategias elementales adecuadas en situaciones comunicativas cotidianas y de relevancia para el alumnado, captando el sentido global y procesando informaciones explícitas en textos orales, escritos y multimodales breves y sencillos sobre temas familiares. (CCL2, CCL3, CP1, STEM1, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar oralmente frases cortas con información básica sobre asuntos cotidianos y de relevancia para el alumnado, utilizando, de forma guiada, recursos verbales y no verbales, prestando atención al ritmo, la acentuación y la entonación. (CCL1, CP1, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Redactar, de forma guiada, textos muy breves y sencillos, con adecuación a la situación comunicativa propuesta, a partir de modelos y a través de herramientas analógicas y digitales, usando estructuras y léxico elemental sobre asuntos cotidianos y de relevancia personal para el alumnado. (CCL1, CP1, CD2, CE1, CE3, CCEC4)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar y aplicar, de forma guiada, estrategias para expresar mensajes breves y sencillos adecuados a las intenciones comunicativas, usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento. (CCL3, CP1, CP2, STEM1, CD2, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Participar, de forma guiada, en situaciones interactivas breves y sencillas sobre temas cotidianos, de relevancia personal y próximos a su experiencia, preparadas previamente, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado o el lenguaje no verbal, y mostrando empatía y respeto por CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48700 la cortesía lingüística y la etiqueta digital. (CCL1, CCL5, CP2, CD3, CPSAA3, CC3, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar y utilizar, de forma guiada, estrategias elementales para saludar, despedirse y presentarse; expresar mensajes breves; y contestar preguntas sencillas, respondiendo a las necesidades comunicativas que surjan en situaciones y contextos próximos a su entorno. (CCL1, CCL5, CP1, STEM1, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Interpretar y explicar textos, información de conceptos y comunicaciones breves y sencillas, de forma guiada, en situaciones en las que atender a la diversidad, mostrando empatía e interés por los interlocutores y por los problemas de entendimiento en su entorno más próximo, apoyándose en diversos recursos y soportes. (CCL2, CP2, CP3, STEM1, CPSAA3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer, de forma guiada, estrategias muy elementales que faciliten la comprensión y expresión de información y la comunicación, usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento. (CCL5, CP1, STEM1, CPSAA1, CPSAA3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Comparar y contrastar las similitudes y diferencias entre distintas lenguas reflexionando, de forma guiada, sobre aspectos elementales de su funcionamiento, respetando la diversidad cognitiva, social y cultural. (CP2, CP3, CPSAA4, CC3, CCEC1) 5.2. Utilizar, de forma guiada, conocimientos y estrategias de mejora de su capacidad de comunicar y de aprender la lengua extranjera, apoyándose en el grupo y en soportes analógicos y digitales. (CCL3, STEM1, CD2, CPSAA4, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Registrar y aplicar, de manera guiada, los progresos y dificultades elementales en el proceso de aprendizaje de la lengua extranjera, participando en actividades de autoevaluación y coevaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL), normalizando el error y valorándolo como una fuente de aprendizaje. (PEL). (STEM1, CPSAA1, CPSAA4, CPSAA5)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Actuar con respeto en situaciones interculturales, identificando y reconociendo semejanzas y diferencias elementales entre lenguas y culturas, y mostrando rechazo frente a discriminaciones, prejuicios y estereotipos de cualquier tipo en contextos comunicativos cotidianos y habituales. (CCL5, CP3, CPSAA1, CPSAA3, CC2, CC3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48701",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer y apreciar la diversidad lingüística, cultural y artística propia de países donde se habla la lengua extranjera como fuente de enriquecimiento personal, mostrando interés por comprender elementos culturales y lingüísticos elementales y habituales que fomenten la convivencia pacífica y el respeto por los demás. (CCL5, CP2, CP3, CPSAA3, CC3, CCEC1)",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Distinguir, de forma guiada, estrategias básicas para entender y apreciar los aspectos más relevantes de la diversidad lingüística, cultural y artística, aceptando y respetando su valor y mostrando una actitud de apertura. (CCL5, CP3, CPSAA3, CC2, CC3, CCEC1)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Comunicación"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Plurilingüismo"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Interculturalidad"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Autoconfianza y reflexión sobre el aprendizaje. El error como parte integrante del proceso.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas y elementales de uso común para la comprensión y la expresión de textos orales, escritos y multimodales breves, sencillos y contextualizados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Conocimientos básicos, destrezas y actitudes elementales que permiten iniciarse en actividades de mediación en situaciones cotidianas básicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Funciones comunicativas básicas de uso común adecuadas al ámbito y al contexto:    saludar, despedirse, presentar y presentarse.    describir personas, objetos, lugares, plantas y animales.    describir rutinas diarias.    pedir e intercambiar información sobre cuestiones cotidianas.    pedir ayuda y permiso.    dar indicaciones e instrucciones.    expresar el tiempo, la cantidad, el espacio, la posesión, la existencia, el gusto, la preferencia, la opinión y la capacidad.    utilización de lenguaje en el aula.    narrar hechos presentes. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                             Viernes, 30 de septiembre de 2022                           Pág. 48702",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Modelos contextuales y géneros discursivos básicos de uso común en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios tales como folletos, instrucciones, normas, avisos o conversaciones reguladoras de la convivencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Unidades lingüísticas básicas de uso común y significados asociados a dichas estructuras, tales como expresión de la entidad y sus propiedades, existencia, modalidad, gustos y preferencias, cantidad y número, espacio y las relaciones espaciales, tiempo, afirmación, exclamación, negación, interrogación, relaciones lógicas elementales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Léxico elemental y de interés para el alumnado relativo a relaciones interpersonales próximas, vivienda, lugares y entornos cercanos (p. e. números, formas geométricas, familia, alimentación, partes del cuerpo, animales, meses, estaciones, tiempo atmosférico, prendas de vestir, adjetivos descriptivos, deporte, sentimientos).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Patrones sonoros, acentuales y de entonación básicos y sencillos de uso común, y funciones comunicativas generales asociadas a dichos patrones: rimas, retahílas, trabalenguas, canciones, adivinanzas, recursos de la tradición oral y escrita.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Convenciones ortográficas básicas y sencillas de uso común y significados asociados a los formatos y elementos gráficos simples.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Convenciones y estrategias conversacionales básicas y conocidas de uso común, en formato síncrono o asíncrono, para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, pedir y dar indicaciones, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Recursos básicos para el aprendizaje y estrategias elementales de búsqueda guiada de información en medios analógicos y digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Herramientas analógicas y digitales básicas y sencillas de uso común para la comprensión, expresión y coproducción oral, escrita y multimodal; y plataformas virtuales de interacción, cooperación y colaboración educativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de formulación de hipótesis sobre el significado a partir de la comprensión de elementos significativos lingüísticos y paralingüísticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias y técnicas básicas de compensación de las carencias comunicativas para responder a una necesidad elemental a pesar de las limitaciones derivadas CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                                Viernes, 30 de septiembre de 2022                        Pág. 48703 del nivel de competencia en la lengua extranjera y en las demás lenguas del repertorio lingüístico propio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias básicas y sencillas de uso común para identificar, retener, recuperar y utilizar unidades lingüísticas (léxico, morfosintaxis, patrones sonoros, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Iniciación en estrategias y herramientas básicas y sencillas de uso común de autoevaluación    y     coevaluación,   analógicas y   digitales,   individuales   y cooperativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Léxico y expresiones elementales y simples para comprender enunciados sobre la comunicación, la lengua y el aprendizaje (metalenguaje).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas que faciliten el desarrollo de un aprendizaje autónomo de las lenguas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La lengua extranjera como medio de comunicación y relación con personas de otros países, y como medio para conocer culturas y modos de vida diferentes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Interés en la participación en intercambios comunicativos sencillos y planificados, a través de diferentes medios, con estudiantes de la lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Aspectos socioculturales y sociolingüísticos más significativos relativos a las costumbres, la vida cotidiana y las relaciones interpersonales básicas en países donde se habla la lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias básicas de uso común para entender, respetar y apreciar la diversidad lingüística, cultural y artística, a partir de valores ecosociales y democráticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias básicas de uso común de detección de usos discriminatorios del lenguaje verbal y no verbal. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                                                                                                                       Viernes, 30 de septiembre de 2022                                                                                                                                      Pág. 48704 Estructuras sintáctico-discursivas alemán                                                       Francés                                                       inglés                                                     italiano                                                 portugués",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de relaciones lógicas: conjunción                –   Expresión de relaciones lógicas: conjunción              – Expresión de relaciones lógicas: conjunción               –   Expresión de relaciones lógicas: conjunción – Expresión de relaciones lógicas: conjunción (e), (und); disyunción (oder); oposición (aber).                   (et), disyunción (ou), oposición (mais).                     (and), disyunción ( or), oposición (but).                   (e), disyunción (o), oposición (ma).                      disyunción (ou), oposición (mas).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Afirmación:          frases      afirmativas;     Ja+     –   Afirmación: frases afirmativas; Oui + nom.               – Afirmación: frases afirmativas; Yes + tag.                –   Afirmación: frases afirmativas; Sì,…                    – Afirmación: frases afirmativas; Sim+ frase. affirmative Zeichen                                       –   Exclamación: frases exclamativas; J’aime la              – Exclamación: frases exclamativas; e.g. I love             –   Exclamación: frases exclamativas; p.e. Adoro – Exclamación: frases exclamativas: Adoro a",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Exclamación: frases exclamativas; Ich liebe                    salade! Aide-moi! Pardon!, Attention!                        salad!; Help! Sorry! Be careful! Excuse me!                 l’insalata!;    Aiuto!,    Scusa/mi     dispiace!,        salada! Que bom! Desculpe! Ajuda! Cuidado! Salat!,   Hilfel!,     Tut    mir   leid!,   Achtung!,    –   Negación: frases negativas avec             ne…pas,      – Negación:      frases negativas with not, No +                Attento/a!, Scusa!                                      – Negación: frases negativas: Não. Não + verbo. Entschuldigung!                                               Non + ne (verbe) pas+nom                                     negative tag.                                           –   Negación: frases negativas con no, non…                 – Interrogación:      Pronombres       interrogativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Negación:             frases negativas con        nicht;   –   Interrogación: questions avec verbe être,                – Interrogación: Wh- questions; auxiliary verbs in          –   Interrogación:       preguntas    con chi,     dove,      Partícula enfática “é que”. Nein….                                                        avoir et faire (qu’est-ce que, qui, comment,                 questions (to be and to do).                                quando, come, che/cosa/che cosa, quale, – Expresión de la modalidad: capacidad y permiso",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Interrogación: W-Fragen und Ja/ Nein Fragen                    quel).                                                   – Expresión de la modalidad: capacidad (can);                   perché, quanto.                                           (poder); frases imperativas básicas (faça y",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Expresión       de      la    modalidad:      capacidad    –   Expresión de la modalidad: capacidad (peut);                 permiso    (can,     may);     frases   imperativas;    –   Expresión      de    la   modalidad:    capacidad         verbos regulares); necesidad (preciso de); (mögen); permiso (können, dürfen); frases                     permiso         (peux);      frases     imperativas;         necesidad (must, need); adverbios de modo:                  (sapere/potere);      permiso    (potere);     frases     adverbios de modo: rápido, devagar, bem, imperativas;            necesidad            (müssen);        necesidad (devoir); adverbios de modo: expl.                 e.g.slowly, well, quickly, badly.                           imperativas; necesidad (dovere, necessitare);             mal. adverbios de modo:            z.B. langsam,       gut,        lentement, bien, mal.                                    –   Expresión de la existencia: (there is/are); la              adverbios de modo: p.e. lentamente, bene, – Expresión de la existencia: verbo haver; la schnell, schwer.                                          –   Expresión de la existencia: (il y a, c’est, ce               entidad (nouns, articles, demostratives and                 velocemente, male.                                        entidad (nombres, artículos, demostrativos y",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de la existencia: (es gibt); la                      sont);     la      entidad      (noms,       articles,       pronouns); cualidad very+adj; posesión (my,             –   Expresión de la existencia: (c’è/ci sono); la             pronombres; cualidad: adjetivos grado positivo, entidad (Nomen, Artikel, Demostrativ und                      démonstratifs et pronoms); y la cualidad (très               your, his/her).                                             entidad (nombres, artículos, demostrativos y              muito   +adj;     posesión:     posesivos.    Verbos Pronomen); cualidad sehr + Adj; posesión                      +adj); posesión (mon, ton, son, notre).                  – Expresión de la cantidad: singular/plural;                    pronombres); cualidad molto+adj; posesión                 chamar-se, ser y ter. (mein, dein, sein/ihr).                                   –   Expresión de la cantidad:             singular/plural;       números cardinales de hasta dos dígitos;                    (mio/a, tuo/a, suo/a).                                  – Expresión    de     la   cantidad:   singular/plural;",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de la cantidad: singular/plural;                     números cardinales de hasta dos dígitos;                     números ordinales de un dígito; cantidad                –   Expresión de la cantidad: singular/plural;                números cardinales de hasta dos dígitos; números cardinales de hasta dos dígitos;                      números ordinales de un dígito; cantidad                     (many, some); grado (very).                                 números cardinales de hasta dos dígitos;                  números ordinales de un dígito;              cantidad números ordinales de un dígito; cantidad                      (beaucoup, un peut, quelques, une bouteille,             – Expresión       del    espacio:     preposiciones    y        números ordinales de un dígito; cantidad                  (muito, pouco, algo, bastante); grado (muito). (viele, etwas); grado (sehr).                                 un verre); grado (très).                                     adverbios de lugar, posición: here, there, on, in,          (molti, qualche, alcuni/e); grado (molto).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Expresión       del espacio: preposiciones y               –   Expresión del espacio: preposiciones y                       under, next to.                                         –   Expresión      del   espacio:    preposiciones     y – Expresión       del     espacio:     preposiciones     y adverbios de lugar, posición: hier, da, an, in,               adverbios de lugar, posición: dans, sur, sous,           – Expresiones de tiempo y de frecuencia: las                    adverbios de lugar, posición: qui/quà, lì/là,             adverbios de lugar, posición: aquí, aí, ali, em unter, neben.                                                 à côté, ici, là.                                             horas (en punto); now, tomorrow; sometimes,                 sopra, in/dentro, sotto, vicino a.                        cima de, debaixo de, ao lado de, perto de, longe",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.15",
+      "bloque_id": "B3",
+      "descripcion": "Expresiones de tiempo y de frecuencia: las                 –   Expresiones de tiempo y de frecuencia: las                   on Sundays.                                             –   Expresiones de tiempo y de frecuencia: las                de. Verbos morar, estar y ficar. horas (en punto); jetzt, morgen; manchmal,                    horas     (en punto);     maintenant,        demain;     – Expresión         de    gustos      y     preferencias:       horas (en punto); adesso, domani; a volte, il – Expresiones de tiempo y de frecuencia: las montags.                                                      parfois, le lundi.                                           verb + noun (like, love, hate).                             lunedì.                                                   horas (en punto); agora, amanhã; às vezes, ao",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.16",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de gustos y preferencias: gern +                 –   Expresión de gustos y preferencias: aimer,               – Expresión de hechos: presente simple.                     –   Expresión de gustos y preferencias: verbos mi             domingo, habitualmente. Verb; (mögen, lieben, hassen).                                détester +nom.                                                                                                           piace/piacciono, amo, odio + nombre sing. o – Expresión de gustos y preferencias: Gosto",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.17",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de hechos: presente.                             –   Expresión de hechos: presente simple.                                                                                    pl.                                                       de…, não gosto, detesto, adoro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.18",
+      "bloque_id": "B3",
+      "descripcion": "Expresión de         hechos:     el presente      de – Expresión de hechos: Presente de Indicativo, indicativo.                                               verbos regulares. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                             Viernes, 30 de septiembre de 2022                         Pág. 48705",
+      "criterios_ids": []
+    }
+  ]
+}

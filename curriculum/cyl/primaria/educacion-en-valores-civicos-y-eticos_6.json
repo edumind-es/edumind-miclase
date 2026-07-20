@@ -1,0 +1,382 @@
+{
+  "meta": {
+    "comunidad": "CyL",
+    "etapa": "primaria",
+    "asignatura": "educacion-en-valores-civicos-y-eticos",
+    "ciclo_origen": "sexto-curso",
+    "fuente": "iDoceo_educacion-en-valores-civicos-y-eticos_sexto-curso.xlsx",
+    "generado": "2026-06-29",
+    "curso": "6º"
+  },
+  "competencias": [],
+  "descriptores": [],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Deliberar y argumentar sobre problemas de carácter ético referidos a sí mismo y su entorno, buscando y analizando información fiable y generando una actitud reflexiva al respecto, para promover el autoconocimiento y la autonomía moral y desarrollar la autoestima.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "CD1",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Actuar e interactuar de acuerdo con normas y valores cívicos y éticos, reconociendo su importancia para la vida individual y colectiva y aplicándolos de manera efectiva y argumentada en distintos contextos, para promover una convivencia democrática, justa, inclusiva, respetuosa y pacífica.",
+      "descriptores_ids": [
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CD1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Comprender las relaciones sistémicas entre el individuo, la sociedad y la naturaleza, a través del conocimiento y la reflexión sobre los problemas ecosociales, para comprometerse activamente con valores y prácticas consecuentes con el respeto, cuidado y protección de las personas y el planeta.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM1",
+        "STEM5",
+        "CPSAA2",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Desarrollar la autoestima y la empatía con el entorno, identificando, gestionando, expresando y comunicando emociones y sentimientos propios, y reconociendo y valorando los de los otros, para adoptar una actitud fundada en el cuidado y aprecio de sí mismo, de los demás y del resto de la naturaleza.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE2",
+        "CE3",
+        "CCEC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Construir un adecuado concepto de sí mismo o sí misma en relación con los demás y la naturaleza, organizando y generando, de forma segura y crítica, información analógica y digital acerca de los rasgos relativos a la identidad, diferencia y dignidad de las personas, analizando las fortalezas y debilidades propias y promoviendo una posición moral autónoma. (CCL3, CD1, CPSAA1, CPSAA4, CPSAA5, CC3, CC1, CE2)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar, expresar, aceptar y gestionar emociones, afectos y deseos, mostrando confianza en las propias capacidades y valorando el esfuerzo personal al servicio de la CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48806 consecución motivada de fines personales y colectivos. (CCL1, CCL5, CPSAA1, CPSAA3, CPSAA4, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Generar una posición moral autónoma mediante el ejercicio de la deliberación racional, el uso de conceptos éticos y el dialogo respetuoso con otros, examinando y contrastando de manera respetuosa distintos valores y modos de vida, así como a problemas relacionados con el uso responsable, seguro y crítico de las redes y medios de comunicación, las conductas adictivas, la prevención del abuso y el acoso y ciberacoso escolar, y el respeto a la intimidad personal. (CCL3, CCL5, CD4, CPSAA2, CPSAA3, CC1, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Desarrollar la autoestima y autonomía personal a partir del autoconocimiento, contribuyendo al crecimiento personal y al establecimiento de relaciones sociales positivas. (CPSAA1, CPSAA4, CPSAA5, CC1, CC2, CE2)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Promover y demostrar un modo de convivencia democrática, justa, inclusiva, respetuosa y pacífica, a partir de la investigación en diferentes fuentes de información y comprensión de la naturaleza social y política del ser humano y mediante el uso crítico de los conceptos de ley, ética, civismo, democracia, justicia, dignidad, derechos humanos y paz y el análisis de la problemática del entorno, desarrollando una actitud de apertura. (CCL3, CCL5, CP2, CP3, CD1, CPSAA3, CPSAA4, CC1, CC2, CC3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Interactuar con otros adoptando, de forma motivada y autónoma, conductas cívicas y éticas orientadas por valores comunes, a partir del conocimiento de los derechos humanos y de los principios constitucionales fundamentales, en relación con contextos y problemas concretos, así como por una consideración crítica y dialogada acerca de cómo debemos relacionarnos con los demás. (CCL5, CC1, CC2, CC3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Reflexionar y asumir un compromiso activo y crítico con valores relativos a la solidaridad y el respeto a las minorías y las identidades etnoculturales y de género, analizando desde un punto de vista ético cuestiones relacionadas con la desigualdad y la pobreza, el hecho multicultural, la diversidad humana y los fenómenos migratorios. (CPSAA3, CPSAA4, CC1, CC2, CC3, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a generar una convivencia respetuosa, no sexista y comprometida con el logro de la igualdad y la corresponsabilidad efectivas, y con la erradicación de la violencia de género, a partir del conocimiento y análisis crítico de la situación secular de desigualdad entre mujeres y hombres. (CCL5, CPSAA3, CPSAA4, CC1, CC2, CC3, CCEC1) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48807",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprender y valorar los principios de justicia, solidaridad, seguridad y paz, a la vez que el respeto a las libertades básicas, a partir del análisis y la ponderación de las políticas y acciones de ayuda y cooperación internacional, de defensa para la paz y de seguridad integral ciudadana, ejercidas por el Estado y sus instituciones, los organismos internacionales, las ONG y ONGD y la propia ciudadanía. (CP3, CPSAA4, CC1, CC2, CC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar y analizar, de forma crítica y dialogada, la manera en la que nos relacionamos con los demás promoviendo una convivencia pacífica y respeto por los demás. (CCL5, CPSAA3, CPSAA4, CC1, CC2, CCEC1, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Evaluar, seleccionar y aplicar diferentes alternativas con que frenar el cambio climático y lograr los Objetivos de Desarrollo Sostenible, identificando causas y problemas ecosociales, y justificando argumentalmente y de modo crítico y constructivo el deber ético de proteger y cuidar la naturaleza. (CCL1, CCL2, CCL5, STEM1, CC2, CC3, CC4, CE1)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Respetar, cuidar y proteger a las personas, los animales y el planeta, desarrollando activamente valores, prácticas y actitudes afectivas de manera comprometida y reconociendo el papel de las personas, colectivos, y entidades implicadas con la protección del entorno. (CCL5, STEM5, CPSAA2, CC2, CC3, CC4, CE1)",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Promover y comprometerse con el consumo responsable y con el uso sostenible del suelo, el aire, el agua, la energía, la movilidad segura, saludable y sostenible y la prevención y gestión de residuos, a través de la implicación en actividades escolares y/o de su entorno que los fomenten. (STEM5, CPSAA2, CC2, CC3, CC4, CE1, CE3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Gestionar equilibradamente pensamientos, sentimientos y emociones a través de un proceso guiado de aprendizaje para la adecuada toma de conciencia, identificación, análisis, etiquetado y regulación emocional en diferentes situaciones o contextos. (CPSAA1, CPSAA2, CPSAA3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Expresar y comunicar pensamientos, sentimientos, emociones y afectos de manera asertiva en distintos contextos y en relación con actividades creativas y de reflexión individual o dialogada sobre cuestiones éticas y cívicas. (CCL1, CCL5, STEM5, CPSAA1, CC2, CC3, CE3, CCEC3) CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190 Viernes, 30 de septiembre de 2022 Pág. 48808",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Desarrollar una actitud de estima y cuidado de sí mismo o sí misma, apoyándose en el autoconocimiento forjado sobre la base de sus propias experiencias y a través de la introspección que contribuya a su bienestar emocional. (CPSAA1, CPSAA2, CE2, CCEC3)",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer y valorar las emociones y afectos de otras personas desarrollando una actitud de estima y cuidado de los demás y del entorno mostrando respeto y empatía. (CCL5, STEM5, CPSAA2, CPSAA3, CC2, CC3, CC4)",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Autoconocimiento y autonomía moral"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Sociedad, justicia y democracia"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Desarrollo sostenible y ética ambiental"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El pensamiento crítico y ético.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La naturaleza humana y la identidad personal. Igualdad y diferencia entre las personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Conciencia de las propias emociones y de las de los demás. Captación del clima emocional de un contexto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "La gestión de las emociones y los sentimientos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Comunicación receptiva-expresiva y verbal-no verbal. Escucha activa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Habilidades sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Autoconocimiento y autoestima.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Automotivación: confianza, esfuerzo y constancia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Toma de decisiones. Búsqueda de recursos y ayuda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Solución de conflictos. Estrategias de autocontrol, control de la impulsividad, autogeneración de emociones positivas y estrategias de afrontamiento. Tolerancia a la frustración y regulación de la ira y prevención de la violencia. Negociación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "La educación afectivo-sexual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Deseos y razones. La voluntad y el juicio moral. Autonomía y responsabilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "La ética como guía de nuestras acciones. El debate en torno a lo valioso y a los valores. Las normas, las virtudes y los sentimientos morales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "El propio proyecto personal: la diversidad de valores, fines y modelos de vida. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48809",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "La influencia y el uso crítico y responsable de los medios y las redes de comunicación. La prevención del abuso y el ciberacoso. El respeto a la intimidad. Los límites a la libertad de expresión. Las conductas adictivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Las virtudes del diálogo y las normas de la argumentación. La toma democrática de decisiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Fundamentos de la vida en sociedad. La empatía con lo demás. Los afectos. La familia. La amistad y el amor.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Las reglas de convivencia. Moralidad, legalidad y conducta cívica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Principios y valores constitucionales y democráticos. El problema de la justicia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Los derechos humanos y de la infancia y su relevancia ética. La dignidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La desigualdad económica. La pobreza y la explotación laboral e infantil: análisis de sus causas y búsqueda de soluciones locales y globales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "La igualdad y la corresponsabilidad entre mujeres y hombres. La prevención de los abusos y la violencia de género. La conducta no sexista.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "El respeto por las minorías y las identidades etnoculturales. Interculturalidad y migraciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La cultura de paz y no violencia. La contribución del Estado y sus instituciones a la paz, la seguridad y la cooperación internacional. La seguridad integral del ciudadano. Valoración de la defensa como un compromiso cívico y solidario al servicio de la paz. La protección civil y la colaboración ciudadana frente a los desastres. El papel de las ONG y ONGD. La resolución pacífica de los conflictos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La empatía, el cuidado y el aprecio hacia los seres vivos y el medio natural. El maltrato animal y su prevención.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "La   acción    humana     en     la   naturaleza.   Ecosistemas    y    sociedades: interdependencia, ecodependencia e interrelación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Los límites del planeta y el cambio climático.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "El deber ético y la obligación legal de proteger y cuidar el planeta. CV: BOCYL-D-30092022-2 Boletín Oficial de Castilla y León Núm. 190                              Viernes, 30 de septiembre de 2022                          Pág. 48810",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Hábitos y actividades para el logro de los Objetivos de Desarrollo Sostenible. El consumo responsable. El uso sostenible del suelo, del agua y de la energía. La movilidad segura, saludable y sostenible. La prevención y la gestión de residuos.",
+      "criterios_ids": []
+    }
+  ]
+}

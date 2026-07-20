@@ -1,0 +1,779 @@
+{
+  "meta": {
+    "comunidad": "MADRID",
+    "etapa": "primaria",
+    "asignatura": "segunda-lengua-extranjera",
+    "ciclo_origen": "toda-la-etapa",
+    "fuente": "iDoceo_09_segunda_lengua_extranjera_toda-la-etapa.xlsx",
+    "generado": "2026-06-29",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o claridad y adecuación a diferentes contextos cotidianos de su entorno interacciones de comunicación, tanto para intercambiar información personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados y educativo, con acompañamiento puntual, para participar en contextos"
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, adoptando un punto de vista creativo, crítico y personal."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su desarrollo madurativo, intereses; reconoce el patrimonio literario como fuente de disfrute construir y compartir su interpretación de las obras y para crear textos"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia, derechos de todas las personas, para favorecer un uso eficaz y no b) Competencia plurilingüe (CP) Descriptores"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua propia, comunicativas sencillas y predecibles, de manera adecuada tanto cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce las diferentes lenguas realizar transferencias sencillas entre distintas lenguas para comunicarse lenguaje."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la variedad de las lenguas presentes en de diálogo, para mejorar la convivencia. BOCM BOLETÍN OFICIAL Pág.30 LUNES18DEJULIODE2022 c) Competencia matemática y competencia en ciencia, tecnología Descriptores"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y conocidas, y selecciona y emplea algunas estrategias para resolver"
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar de herramientas e instrumentos adecuados, planteándose preguntas"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando ante la incertidumbre, para generar un producto creativo con un"
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes tecnológicos de forma clara y veraz, utilizando la terminología científica gráficos, símbolos…) y aprovechando de forma crítica y responsable conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para vivos. d) Competencia digital (CD) Descriptores"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias (palabras clave, selección de información relevante, organización obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos informático...) mediante el uso de diferentes herramientas digitales la propiedad intelectual y los derechos de autor de los contenidos"
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades y/o proyectos escolares mediante construir nuevo conocimiento, comunicarse, trabajar en grupo, y y supervisados de manera segura y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, proteger los dispositivos, los datos personales, la salud y el medioambiente, las mismas."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas programación informática por bloques, robótica educativa…) para creativa, solicitando ayuda en caso necesario. e) Competencia personal, social y de aprender a aprender (CPSAA) Descriptores"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos en situaciones de tensión o conflicto, adaptándose a los cambios"
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos busca apoyo ante situaciones negativas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las responsabilidades individuales asignadas y emplea estrategias"
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje y evaluación conjunta, reconociendo sus limitaciones y sabiendo BOCM BOLETÍN OFICIAL B.O.C.M.Núm.169 LUNES18DEJULIODE2022 f) Competencia ciudadana (CC) Descriptores"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes convivencia, y las aplica de manera constructiva, dialogante e inclusiva"
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades de su entorno cercano, en la toma de y respetuosa con los principios y valores de la Unión Europea y la el valor a la diversidad y de la igualdad entre hombres y mujeres, acordados por la ONU."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas de la actualidad, y creencias, cuidar el entorno, de rechazar prejuicios, y de oponerse"
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones entre las acciones humanas y el para conservar la biodiversidad. g) Competencia emprendedora (CE) Descriptores"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades inherentes a los retos que debe afrontar tomando conciencia de las consecuencias y efectos que las ideas valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias elementos económicos y financieros básicos, aplicándolos a situaciones"
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas planifica tareas, colabora con otros y en equipo, cabo iniciativas de emprendimiento, y considera la experiencia como h) Competencia en conciencia y expresión culturales (CCEC) Descriptores"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del culturales y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce especificidades e intencionalidades de las patrimonio, y se interesa por ellas, identificando los medios y soportes, caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones culturales, integrando su propio cuerpo, interactuando con el entorno"
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y sonoras o corporales, para elaborar propuestas artísticas y culturales."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Adquirir estrategias que faciliten la comprensión del sentido general e información concreta y previsible de pequeños textos sencillos, expresados de forma clara y en lengua estándar como medio para comunicar necesidades habituales y desarrollar el repertorio del lenguaje personal.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Desarrollar la producción oral, escrita y multimodal de textos breves, sencillos, comprensibles y estructurados sobre temas cotidianos y de relevancia personal para el alumnado, utilizando estrategias como la planificación o la compensación a través del lenguaje verbal y no verbal.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Participar en intercambios comunicativos para expresar o responder a necesidades inmediatas en situaciones de interés para el alumnado, mediante el uso de expresiones habituales, estrategias de colaboración mutua y recursos analógicos y digitales, mostrando respeto por las normas de cortesía establecidas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Actuar como intermediario en contextos predecibles y cotidianos, para procesar y transmitir información básica y sencilla, utilizando estrategias y conocimientos que faciliten la comunicación.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reflexionar sobre el funcionamiento de las distintas lenguas, reconociendo, utilizando y enriqueciendo los repertorios del lenguaje personal, usando los conocimientos previos y desarrollando las estrategias necesarias que faciliten la comunicación en situaciones cotidianas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Identificar las diferencias y semejanzas entre las diferentes lenguas, valorando y respetando su diversidad como medio para gestionar situaciones interculturales.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprender e interpretar el sentido global, así como palabras de uso frecuente y frases previamente indicadas en textos orales, escritos y multimodales breves y sencillos sobre temas habituales, de relevancia personal y próximos a su experiencia, adecuados al nivel de desarrollo del alumnado, expresados de manera comprensible, clara y en lengua estándar a través de distintos soportes, incluidos los audiovisuales e informáticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Aplicar de forma guiada estrategias adecuadas para captar el sentido global y procesar informaciones explícitas en textos breves y sencillos sobre temas familiares, en situaciones comunicativas cotidianas y de relevancia para el alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Atender al ritmo, la acentuación y la entonación durante la expresión oral de frases cortas con información básica sobre asuntos cotidianos y de relevancia para el alumnado, utilizando de forma guiada recursos verbales y no verbales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Producir textos muy breves y sencillos, adecuados a la situación comunicativa propuesta, a partir de modelos y a través de herramientas analógicas y digitales, usando estructuras y léxico elemental sobre asuntos cotidianos y de relevancia personal para el alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar de forma guiada estrategias que faciliten la producción de mensajes breves y sencillos adecuados a las intenciones comunicativas usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Participar en situaciones interactivas breves y sencillas sobre temas cotidianos, de relevancia personal y próxima a su experiencia, preparadas previamente, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado o el lenguaje no verbal, y mostrando respeto por la cortesía del lenguaje y la etiqueta digital.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar y utilizar, de forma guiada y en situaciones cotidianas, estrategias elementales para saludar, despedirse y presentarse; expresar mensajes breves; y formular y contestar preguntas sencillas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Mostrar empatía e interés por los interlocutores y por los problemas de entendimiento en su entorno más próximo, apoyándose en diversos recursos y soportes para interpretar y explicar textos, conceptos y comunicaciones breves y sencillas, de forma guiada, en situaciones en las que atender a la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Adquirir estrategias elementales que ayuden a crear puentes y faciliten la comprensión y producción de información y la comunicación, usando, con ayuda, recursos y apoyos físicos o digitales en función de las necesidades de cada momento. - -",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Desarrollar destrezas personales que ayuden a enfrentarse al aprendizaje de otra lengua, fomentando la confianza en las propias posibilidades, aceptando el error como parte del proceso de aprendizaje y adaptándose ante situaciones de incertidumbre, para disfrutar en el aprendizaje de una segunda lengua.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar las similitudes y diferencias entre distintas lenguas reflexionando, de forma guiada, sobre aspectos básicos de su funcionamiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar y diferenciar, de forma guiada, los conocimientos y estrategias de mejora de su capacidad de comunicar y de aprender una segunda extranjera, con apoyo de otros participantes y de soportes analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Registrar y aplicar, de manera guiada, los avances y dificultades elementales del aprendizaje de la lengua extranjera, reconociendo los aspectos que ayudan a mejorar, participando en actividades de autoevaluación y evaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL).",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Mostrar respeto en diversas situaciones, identificando y comparando semejanzas y diferencias elementales entre lenguas y culturas en diferentes contextos comunicativos cotidianos y habituales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer y apreciar la diversidad de países donde se habla la segunda lengua extranjera como fuente de enriquecimiento personal, mostrando interés por comprender elementos culturales y del lenguaje elemental y habitual que fomenten el respeto por los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer y aplicar estrategias básicas para entender y apreciar los aspectos más relevantes de la diversidad del lenguaje, de la cultura y del arte.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Saberes"
+    },
+    {
+      "id": "B2",
+      "titulo": "A. Comunicación"
+    },
+    {
+      "id": "B3",
+      "titulo": "B. Plurilingüismo"
+    },
+    {
+      "id": "B4",
+      "titulo": "C. Diferentes culturas"
+    },
+    {
+      "id": "B5",
+      "titulo": "D. Contenidos"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El error como parte integrante del proceso y como instrumento de mejora. Confianza y reflexión sobre el aprendizaje, las propias posibilidades y la prioridad de la intención comunicativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias básicas de uso común (contexto visual, conocimiento previo del tema, identificación de información básica, deducción del significado de palabras y frases nuevas por el contexto…) para la comprensión y la producción de textos orales, escritos y multimodales breves, sencillos y contextualizados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Conocimientos, destrezas y actitudes elementales que permiten iniciarse en actividades de comunicación en situaciones cotidianas básicas, en las que se utilicen gradualmente estrategias que ayuden a resolver conflictos, mejorar la comunicación o servir de enlace entre varios interlocutores en la misma o en diferentes lenguas, crear relaciones y llegar a acuerdos, fomentando actitudes de colaboración mutua.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Funciones comunicativas básicas de uso común adecuadas al ámbito y al contexto: saludar, despedirse, presentar y presentarse; describir personas, objetos y lugares; pedir e intercambiar información sobre cuestiones cotidianas; describir rutinas; dar indicaciones e instrucciones; expresar el tiempo, la cantidad y el espacio.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "7 Modelos contextuales y géneros discursivos básicos de uso común en la comprensión, producción y coproducción de textos orales, escritos y multimodales, breves y sencillos, literarios y no literarios, tales como cuentos, leyendas, artículos,",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "noticias, cartas, emails, folletos, instrucciones, normas, avisos o conversaciones M reguladoras de la convivencia. asociados a dichas cantidad y exclamación, negación, el alumnado relativo a próximas (familiares, aplicando los adecuada del texto. uso común, y funciones Aspectos fonológicos: de uso frecuente en adivinanzas… de palabras finales. asociados a los o no verbales (cara a cara, teléfono, social, para iniciar, palabra, pedir y dar búsqueda guiada de elegir los términos los datos, valorar y para la comprensión, virtuales de (petición de utilización de a una necesidad de competencia en la recuperar y utilizar sonoros, etc.) uso de mapas semánticos, común de evaluación, de clase, porfolios, enunciados sobre la La enseñanza de contextuales, tales anáforas, de los prefijos, sufijos, relación con personas de diferentes. Comprensión acentos. a través de",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "de la segunda que supone la relación",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "lengua extranjera. M",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Aspectos de la lengua, de la cultura y de la sociedad elementales, relativos a las costumbres, la vida cotidiana y las relaciones interpersonales básicas en países donde se habla esta segunda lengua extranjera.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias básicas de uso común para entender y apreciar la diversidad del lenguaje, de la cultura y del arte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Expresión de relaciones lógicas: conjunción (et); disyunción (ou); oposición (mais); causa (parce que); finalidad (pour + Inf.); comparación (aussi/plus/moins que).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Relaciones temporales (quand, d ´abord, ensuite, après).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Exclamación (ortografía, curva entonativa).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Negación (ne...pas, ne...jamais).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Interrogación: ortografía; curva entonativa; mots interrogatifs (qu ´est-ce que, qui, quand, comment, pourquoi, combien de, où, comment, est-ce que); réponse: oui, non.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Expresión del tiempo: presente; pasado (passé composé, passé récent: venir de + Inf.); futuro: futur proche (aller + Inf.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Expresión del aspecto: puntual (phrases simples); durativo (être en train de + Inf.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Expresión de la modalidad: factualidad (phrases déclaratives); capacidad (pouvoir, ne pas pouvoir); posibilidad/propabilidad ((ne pas) pouvoir, peut-être); necesidad (avoir besoin de qqch., avoir besoin de + Inf.); obligación / prohibición (on doit/on ne peut pas + Inf.); permiso (est-ce quon peut? Je peux?); intención/deseo (futur proche, verbe vouloir).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.13",
+      "bloque_id": "B4",
+      "descripcion": "Expresión de la existencia (presentativos (cest, ce sont), il y a); la entidad (articles (un, une, des; le, la, l, les), noms, pronoms sujets, pronoms toniques, adjectifs démonstratifs; la cualidad ((très +) Adj.); la posesión (cest à / ce sont à + pron. tóniques)).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la cantidad: (singulier/pluriel; numéros cardinaux jusqu´à 100; articles partitifs (du, de la, de l´, des); empleo de «de» en oraciones negativas (ex: je n´ai pas de pain); Adv. de cantidad y medidas: tout(-e), tous, beaucoup, (un) peu de, la moitié de, une bouteille/un verre/une pièce/une assiette de; le degré: très, beaucoup, trop, assez.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del espacio (prépositions et adverbes de lieu, position, distance, mouvement, direction, provenance, destination).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo: puntual (jours de la semaine, en + mois de lannée, au mois de, en / au + saisons, la date); indicaciones de tiempo (maintenant, après, aujourd ´hui, demain, tôt, tard); duración (pendant + expression de temps); anterioridad (avant); posterioridad (après); secuenciación (d´abord, ensuite); simultaneidad (quand); frecuencia (le(s) + jour de la semaine).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del modo: adverbes de manière ((très) bien, mal; avec + nom).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de relaciones lógicas: conjunción (und); disyunción (oder); oposición (aber); causa (weil); finalidad (um- Infinitiv, z. b. Ich habe es gemacht um ihr zu helfen); comparación (so Adj. wie; kleiner (als); der größte)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Relaciones temporales (wenn; bevor; nachdem).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Afirmación (affirmativen Sätzen; Ja (+affirmative Zeichen)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Exclamación (Welch + Nomen, z. b. Welch unerwartete Überraschung!; Wie + Adj., z. b. Wie gut!; Ausrufe Sätzen, e.g. Das ist teuer! ).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "1 Negación (negative Sätze mit nicht, nie, nicht (Adjektiv), niemand, nichts; Nein (+",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "negative Zeichen)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "Interrogación (Fragesätze und einfache Fragewörter) 2",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo: pasado (Perfekt, Präteritum); presente (Präsens); futuro",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "(werden).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.14",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del aspecto: puntual (Perfekt); durativo (Präsens und Präteritum); habitual (+ Adv, z. b. immer, jeden Tag); incoativo (beginnen zu –en); terminativo (aufhören zu –en).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.15",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la modalidad: factualidad (Aussagesätzen); capacidad (mögen); posibilidad (können); necesidad (sollen; müssen); obligación (müssen; Imperativ); permiso (können; dürfen); intención (werden -en; wollen).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.16",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la existencia (es gibt); la entidad (Nomen und Pronomen, Artikelwörter, Demonstrativartikeln); la cualidad ((sehr+) Adj).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.17",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la cantidad (Singular/ Plural; Kardinalzahlen bis auf vier Ziffern; Ordinalzahlen bis auf hundertster. Quantität: alle, viele, manche, einige, mancherlei, ein bißchen, mehr, ein halber, eine Flasche/ Tasse /ein Glas/Stück von. Grad: sehr, zu viel, genüg).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.18",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del espacio (Lokale Präpositionen und Adverbien Bereich, Gegenseite, Lage, Nähe, Punkt).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.19",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo (Stundenzählung (z. b. viertel vor acht); Stundenteilung und Jahrezeiten (z. b. Viertelstunde, Sommer), und Ausdruck von Zeit (z. b. nun, jetz, morgen); Dauer (z. b. während drei Jahren); Vorzeitigkeit (vor); Nachzeitigkeit (nach); Aufeinanderfolge (Vorher, Davor); Gleichzeitigkeit (zur selben Zeit); Häufigkeit (z. b. manchmal, am Sonntags).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.20",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del modo (Modaladverbien, z. b. langsam, gut).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.21",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de relaciones lógicas: conjunción (e); disyunción (o); oposición (ma); causa (perché); finalidad (per/a + Inf.); condición (se); comparación (più (di); come; il più grande).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.22",
+      "bloque_id": "B5",
+      "descripcion": "Relaciones temporales (quando, prima, dopo).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.23",
+      "bloque_id": "B5",
+      "descripcion": "Interrogación (totali; parziali introdotte da come, dove, quando, perché, quanto, chi, che, cosa, che cosa, quale).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.24",
+      "bloque_id": "B5",
+      "descripcion": "Afirmación (proforma sì, frasi dichiarative affermative).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.25",
+      "bloque_id": "B5",
+      "descripcion": "Negación (proforma no, frasi dichiarative negative con non, mai, niente, nessuno/a).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.26",
+      "bloque_id": "B5",
+      "descripcion": "Exclamación ((che) + agg., p.es. Che bello!; V, p.es. Guarda!).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.27",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo: presente (presente); pasado (imperfetto e perfetto composto); futuro (presente e futuro).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.28",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del aspecto: puntual (v. puntuali, p.es. partire); durativo (presente e imperfetto; stare + gerundio; continuare a + Inf.); habitual (presente e imperfetto (+ avv. p.es. sempre); incoativo (cominciare a/iniziare a +Inf.); terminativo (finire di+Inf.; perfetto composto).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.29",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la modalidad: factualidad (frasi dichiarative affermative e negative); capacidad ((non) potere; (non) sapere); posibilidad (presente potere; forse (+ presente e futuro)); necesidad (presente dovere; avere bisogno di + N / Inf.); obligación (presente dovere; imperativo); intención (presente e condizionale semplice di verbi volitivi + N / Inf.; futuro; pensare di +Inf.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.30",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la existencia (cè; ecco); la entidad (nomi, pronomi, articoli e dimostrativi); la cualidad (molto + agg.; –issimo/a).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.31",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la cantidad (numero: singolare/plurale; numerali cardinali fino a quattro cifre e ordinali fino a due cifre. Quantità: tutto, molto, poco, troppo, tanto, un po(di), nessuno/a, alcuni/e, niente, qualcosa, qualche, più, meno, solo, una tazza/un bicchiere/ una bottiglia/un pezzo di... Grado: poco, molto, troppo).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.32",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del espacio (preposizioni, avv. ed espressioni che indicano luogo, posizione, distanza, movimento, direzione, origine e disposizione.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.33",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo (lora (p. es. le tre e mezza); divisione (p. es il lunedi, a febbraio)",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.34",
+      "bloque_id": "B5",
+      "descripcion": "e collocazione nel tempo (p. es. ora, ieri, domani); durata (p. es. per due giorni); anteriorità (prima); posteriorità (dopo); contemporaneità (quando, durante); sequenza (prima… poi ... dopo); intermittenza (qualche volta); frequenza (p.es. di solito, mai).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.35",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del modo (avverbi di modo, p.es. lentamente, bene). M",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.36",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de relaciones lógicas: conjunción (e); disyunción (ou); oposición (mas); causa (porque); finalidad (para + Inf.); comparación (mais/ menos (do) que; maior; grau do Adj. e do Adv.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.37",
+      "bloque_id": "B5",
+      "descripcion": "Relaciones temporales (quando; antes/ depois de + Inf.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.38",
+      "bloque_id": "B5",
+      "descripcion": "Afirmación (sentenças declarativas afirmativas; Sim + frase (p. e. Sim, tenho três.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.39",
+      "bloque_id": "B5",
+      "descripcion": "Interrogación (quem; (o) que; qual; onde; de quem; quanto; como; porquê).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.40",
+      "bloque_id": "B5",
+      "descripcion": "Negación (frases declarativas negativas; Não (+ Verbo conjugado do enunciado anterior); nenhum; ninguém; nada).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.41",
+      "bloque_id": "B5",
+      "descripcion": "Exclamación: frases exclamativas (Que gelado tão bom! Tantos carros!).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.42",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo: pasado (pretérito imperfeito e perfeito); presente (presente); futuro (ir + Inf.; futuro do presente).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.43",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del aspecto: puntual (verbos não durativos, p. e. nascer; perfeito); durativo (estar + gerúndio); habitual (presente do indicativo (+ Adv., p. e. sempre; geralmente); incoativo (començar a + Inf.); terminativo (deixar de + Inf.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.44",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la modalidad: factualidad (sentenças declarativas); capacidad (posso; pode; é capaz de); posibilidad (podia); necesidad (precisar (de); necessitar); obligación (ter de/que; dever + Inf.); permiso (posso; pode); intención (quero; tenho de; gostava).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.45",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la existencia (ter/ haver); la entidad (substantivos; pronomes; artigos; demonstrativos); la cualidad ((muito +) Adj.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.46",
+      "bloque_id": "B5",
+      "descripcion": "Expresión de la cantidad (Singular/plural; Numerais até quatro dígitos, ordinais até dois dígitos. Quantidade: muito(s); pouco(s); tudo. Grado: muito; tão).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.47",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del espacio (expressões, preposições e locuções prepositivas de lugar e de movimento).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.48",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del tiempo (expressões, preposições e locuções de tempo (horas (p. e. dez menos um quarto), divisões (p. e. meia hora; verão) e indicações (p. e. agora; amanhâ) de tempo; duração (p. e. durante dois dias); anterioridade (antes); posterioridade (depois); seqüência (primeiro em seguida); simultaneidade (ao mesmo tempo); freqüência (p. e. às vezes; aos domingos).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.49",
+      "bloque_id": "B5",
+      "descripcion": "Expresión del modo (expressões, preposições e locuções prepositivas de modo; bem; mal; assim).",
+      "criterios_ids": []
+    }
+  ]
+}
