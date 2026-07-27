@@ -107,8 +107,8 @@ function Layout() {
           {' / '}
           <a href="https://eupl.eu/1.2/es/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>EUPL-1.2</a>
           <br />
-          <a href="https://github.com/edumind-es" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
-            Código fuente: github.com/edumind-es
+          <a href="https://github.com/edumind-es/edumind-miclase" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+            Código fuente en GitHub
           </a>
         </div>
       </aside>
