@@ -1,0 +1,171 @@
+/**
+ * Motor de cálculo de calificaciones.
+ *
+ * Hasta ahora los boletines hacían media aritmética simple: el peso de cada
+ * instrumento y el reparto por trimestres de la asignatura se configuraban
+ * pero no se usaban. Aquí vive la única definición de «qué nota saca».
+ *
+ * Jerarquía:
+ *   nota de criterio (trimestre) = Σ(nota · peso_instrumento) / Σ(peso_instrumento)
+ *   nota de área (trimestre)     = Σ(nota_criterio · peso_criterio) / Σ(peso_criterio)
+ *   nota de área (final)         = Σ(nota_trimestre · peso_trimestre) / Σ(peso_trimestre)
+ *
+ * Solo cuentan los trimestres con datos: si un área aún no tiene nada en el
+ * 3er trimestre, la nota final es la de lo que sí hay, no un 0 encubierto.
+ */
+import type { Calificacion, Instrumento } from './localDb'
+
+export type NotaCriterio = {
+  criterio_id: string
+  trimestres: Record<number, number | null>
+  final: number | null
+  /** Detalle de qué instrumentos han intervenido, para el informe */
+  aportaciones: { instrumento_id: number; nombre: string; valor: number; peso: number; trimestre: number }[]
+}
+
+export type NotaArea = {
+  asignatura_id: number
+  trimestres: Record<number, number | null>
+  final: number | null
+  criterios: NotaCriterio[]
+}
+
+const TRIMESTRES = [1, 2, 3]
+
+function redondear(n: number): number {
+  return Math.round(n * 100) / 100
+}
+
+/** Media ponderada; devuelve null si no hay ningún dato con peso > 0. */
+function ponderada(items: { valor: number; peso: number }[]): number | null {
+  let suma = 0, pesos = 0
+  for (const it of items) {
+    const p = it.peso > 0 ? it.peso : 0
+    if (p === 0) continue
+    suma += it.valor * p
+    pesos += p
+  }
+  return pesos > 0 ? redondear(suma / pesos) : null
+}
+
+export function parsearPesosTrimestres(json: string | undefined): Record<number, number> {
+  try {
+    const o = JSON.parse(json || '{"1":33,"2":33,"3":34}')
+    return { 1: Number(o['1']) || 0, 2: Number(o['2']) || 0, 3: Number(o['3']) || 0 }
+  } catch {
+    return { 1: 33, 2: 33, 3: 34 }
+  }
+}
+
+/**
+ * Calcula las notas de un alumno en un área.
+ *
+ * @param calificaciones notas del alumno en esa área (todos los trimestres)
+ * @param instrumentos   instrumentos del área (aportan el peso)
+ * @param pesosCriterio  peso de cada criterio en la programación (por defecto 1)
+ */
+export function calcularNotaArea(
+  asignatura_id: number,
+  calificaciones: Calificacion[],
+  instrumentos: Instrumento[],
+  pesosTrimestresJson: string | undefined,
+  pesosCriterio: Map<string, number> = new Map()
+): NotaArea {
+  const instrById = new Map(instrumentos.map(i => [i.id!, i]))
+  const conValor = calificaciones.filter(c => c.valor != null)
+
+  // criterio → trimestre → aportaciones
+  const porCriterio = new Map<string, Map<number, { valor: number; peso: number }[]>>()
+  const aportacionesPorCriterio = new Map<string, NotaCriterio['aportaciones']>()
+
+  for (const c of conValor) {
+    const ins = instrById.get(c.instrumento_id)
+    // Una nota cuyo instrumento ya no existe conserva valor histórico con peso 1
+    const peso = ins ? (ins.peso > 0 ? ins.peso : 0) : 1
+    if (peso === 0) continue
+
+    if (!porCriterio.has(c.criterio_id)) porCriterio.set(c.criterio_id, new Map())
+    const porTrim = porCriterio.get(c.criterio_id)!
+    if (!porTrim.has(c.trimestre)) porTrim.set(c.trimestre, [])
+    porTrim.get(c.trimestre)!.push({ valor: c.valor!, peso })
+
+    const aps = aportacionesPorCriterio.get(c.criterio_id) || []
+    aps.push({
+      instrumento_id: c.instrumento_id,
+      nombre: ins?.nombre ?? '(instrumento retirado)',
+      valor: c.valor!,
+      peso,
+      trimestre: c.trimestre,
+    })
+    aportacionesPorCriterio.set(c.criterio_id, aps)
+  }
+
+  const pesosTrim = parsearPesosTrimestres(pesosTrimestresJson)
+
+  const criterios: NotaCriterio[] = [...porCriterio.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0], 'es', { numeric: true }))
+    .map(([criterio_id, porTrim]) => {
+      const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
+      for (const t of TRIMESTRES) {
+        trimestres[t] = ponderada(porTrim.get(t) || [])
+      }
+      const final = ponderada(
+        TRIMESTRES
+          .filter(t => trimestres[t] != null)
+          .map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] }))
+      )
+      return {
+        criterio_id,
+        trimestres,
+        final,
+        aportaciones: aportacionesPorCriterio.get(criterio_id) || [],
+      }
+    })
+
+  // Nota de área por trimestre: media de criterios ponderada por su peso
+  const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
+  for (const t of TRIMESTRES) {
+    trimestres[t] = ponderada(
+      criterios
+        .filter(c => c.trimestres[t] != null)
+        .map(c => ({ valor: c.trimestres[t]!, peso: pesosCriterio.get(c.criterio_id) ?? 1 }))
+    )
+  }
+
+  const final = ponderada(
+    TRIMESTRES
+      .filter(t => trimestres[t] != null)
+      .map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] }))
+  )
+
+  return { asignatura_id, trimestres, final, criterios }
+}
+
+// ─── Escalas LOMLOE ──────────────────────────────────────────────────────────
+
+export type Calificativo = { sigla: string; etiqueta: string; color: string }
+
+/** Escala cualitativa de Primaria/ESO a partir de la nota numérica. */
+export function calificativo(nota: number | null | undefined): Calificativo {
+  if (nota == null) return { sigla: '—', etiqueta: 'Sin datos', color: 'var(--gris-500)' }
+  if (nota >= 9) return { sigla: 'SB', etiqueta: 'Sobresaliente', color: 'var(--cal-sobresaliente)' }
+  if (nota >= 7) return { sigla: 'NT', etiqueta: 'Notable',       color: 'var(--cal-notable)' }
+  if (nota >= 6) return { sigla: 'BI', etiqueta: 'Bien',          color: 'var(--cal-bien)' }
+  if (nota >= 5) return { sigla: 'SU', etiqueta: 'Suficiente',    color: 'var(--cal-suficiente)' }
+  return { sigla: 'IN', etiqueta: 'Insuficiente', color: 'var(--cal-insuficiente)' }
+}
+
+/** Nota redondeada a la escala de acta (entero 1-10). */
+export function notaActa(nota: number | null | undefined): number | null {
+  if (nota == null) return null
+  return Math.max(1, Math.min(10, Math.round(nota)))
+}
+
+/**
+ * Convierte el nivel de una rúbrica (escala 1..max) a la escala 0-10 usada
+ * en toda la app, para que «Excelente (4/4)» se guarde como 10 y no como 4.
+ */
+export function nivelANota(valor: number, maxNivel: number): number {
+  if (!maxNivel || maxNivel <= 0) return valor
+  return Math.round((valor / maxNivel) * 100) / 10
+}

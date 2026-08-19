@@ -56,17 +56,28 @@ async function exportarCodigos(grupoId: string | null) {
 // ─── Componente principal ────────────────────────────────────────────────────
 
 export default function AlumnosPage() {
-  const [searchParams] = useSearchParams()
-  const grupoId = searchParams.get('grupo_id')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const grupoParam = searchParams.get('grupo_id')
   const { alumnos, cargarAlumnos, crearAlumno, grupos, cargarGrupos } = useAppStore()
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
   const [alumnoGaleria, setAlumnoGaleria] = useState<DBAlumno | null>(null)
 
+  // El alumnado SIEMPRE pertenece a una clase concreta. Antes, entrando sin
+  // `grupo_id`, los alumnos nuevos caían en el grupo 1: aquí se elige de forma
+  // explícita y no se puede dar de alta a nadie sin clase.
+  const grupoId = grupoParam || (grupos.length === 1 ? String(grupos[0].id) : '')
+
   useEffect(() => { cargarGrupos() }, [cargarGrupos])
   useEffect(() => {
     if (grupoId) cargarAlumnos(Number(grupoId))
   }, [grupoId, cargarAlumnos])
+
+  const elegirGrupo = (id: string) => {
+    setSearchParams(id ? { grupo_id: id } : {}, { replace: true })
+  }
+
+  const grupoActual = grupos.find(g => String(g.id) === grupoId)
 
   const filtrados = alumnos.filter(a =>
     `${a.nombre} ${a.apellidos}`.toLowerCase().includes(busqueda.toLowerCase())
@@ -78,21 +89,44 @@ export default function AlumnosPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Alumnado</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <h1 className="page-title" style={{ marginBottom: 0 }}>Alumnado</h1>
+          <select value={grupoId} onChange={e => elegirGrupo(e.target.value)} style={{ minWidth: 190 }}>
+            <option value="">— Elige una clase —</option>
+            {grupos.map(g => (
+              <option key={g.id} value={g.id}>{g.nombre} · {g.curso}º · {g.num_alumnos || 0} alumnos</option>
+            ))}
+          </select>
+        </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn-secondary" onClick={() => setModal('bulk')}>📋 Importar lista</button>
-          <button className="btn-primary" onClick={() => setModal('individual')}>+ Añadir alumno</button>
+          <button className="btn-secondary" onClick={() => setModal('bulk')} disabled={!grupoId}>📋 Importar lista</button>
+          <button className="btn-primary" onClick={() => setModal('individual')} disabled={!grupoId}>+ Añadir alumno</button>
         </div>
       </div>
 
+      {grupos.length === 0 && (
+        <div className="card" style={{ padding: 32, textAlign: 'center', color: 'var(--gris-600)' }}>
+          Primero crea una clase: el alumnado siempre pertenece a una.{' '}
+          <Link to="/grupos/nuevo" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Crear clase →</Link>
+        </div>
+      )}
+
+      {grupos.length > 0 && !grupoId && (
+        <div className="card" style={{ padding: 32, textAlign: 'center', color: 'var(--gris-600)' }}>
+          Elige arriba de qué clase quieres ver o añadir alumnado.
+        </div>
+      )}
+
       {grupoId && (
         <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 13, color: 'var(--gris-600)' }}>Grupo filtrado ·</span>
+          <span style={{ fontSize: 13, color: 'var(--gris-600)' }}>
+            Clase <strong>{grupoActual?.nombre}</strong> ·
+          </span>
           <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(grupoId)}>
             🔐 Descargar claves anonimización
           </button>
-          <Link to="/alumnos" style={{ fontSize: 13, color: 'var(--azul-500)' }}>Ver todos</Link>
+          <Link to={`/grupos/${grupoId}`} style={{ fontSize: 13, color: 'var(--azul-500)' }}>Ir a la ficha de la clase →</Link>
         </div>
       )}
 
@@ -100,7 +134,8 @@ export default function AlumnosPage() {
         <FormNuevoAlumno
           grupoIdInicial={grupoId ? Number(grupoId) : undefined}
           onGuardar={async (datos: Record<string, any>) => {
-            await crearAlumno({ ...datos, grupo_id: grupoId ? Number(grupoId) : 1 })
+            if (!grupoId) return
+            await crearAlumno({ ...datos, grupo_id: Number(grupoId) })
             recargar()
             setModal(null)
           }}
@@ -116,15 +151,19 @@ export default function AlumnosPage() {
         />
       )}
 
-      <div style={{ marginBottom: 16 }}>
-        <input value={busqueda} onChange={e => setBusqueda(e.target.value)}
-          placeholder="Buscar por nombre o apellidos…"
-          style={{ width: '100%', maxWidth: 380 }} />
-      </div>
+      {grupoId && (
+        <div style={{ marginBottom: 16 }}>
+          <input value={busqueda} onChange={e => setBusqueda(e.target.value)}
+            placeholder="Buscar por nombre o apellidos…"
+            style={{ width: '100%', maxWidth: 380 }} />
+        </div>
+      )}
 
-      {filtrados.length === 0 && (
+      {grupoId && filtrados.length === 0 && (
         <div className="card" style={{ textAlign: 'center', padding: 40, color: 'var(--gris-600)' }}>
-          {busqueda ? 'Sin resultados.' : 'No hay alumnos. Añade uno o importa una lista.'}
+          {busqueda
+            ? 'Sin resultados.'
+            : 'Esta clase todavía no tiene alumnado. Añade uno o pega la lista completa con «Importar lista».'}
         </div>
       )}
 
@@ -220,7 +259,7 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
 
   const confirmar = async () => {
     const validos = editados.filter(a => a.nombre.trim())
-    if (validos.length === 0) return
+    if (validos.length === 0 || !grupoId) return
     setGuardando(true)
     try {
       let insertados = 0
@@ -228,10 +267,10 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
         await dbCrearAlumno({
           nombre: al.nombre, apellidos: al.apellidos,
           neae: 0, etiquetas: '[]',
-        }, grupoId ? Number(grupoId) : 1)
+        }, Number(grupoId))
         insertados++
       }
-      setResultado({ insertados, errores: [] })
+      setResultado({ total: insertados })
       onCompletado()
     } finally {
       setGuardando(false)

@@ -1,26 +1,25 @@
-import { useEffect, useState } from 'react'
+/**
+ * Calificador — matriz alumno × criterio.
+ *
+ * Organización: pestañas por área, subpestañas por unidad de la programación.
+ * Cada celda muestra la nota y el instrumento con el que la programación dice
+ * que se evalúa ese criterio; al pulsarla se abre el panel de evaluación.
+ * Un criterio sin instrumento asignado sale rayado y explica cómo arreglarlo.
+ */
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { getGrupos, getAsignaturas, getUnidades, getCalificadorBase, saveCalificaciones } from '@/db/queries'
+import {
+  getGrupos, getAsignaturas, getUnidades, getMatrizEvaluacion,
+  type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
+} from '@/db/queries'
+import { calificativo } from '@/db/calculo'
 import { useAppStore } from '@/store/useAppStore'
+import { getInstrConfig } from '@/ia/instrumentosConfig'
 import InstrumentosManager from '@/components/InstrumentosManager'
+import CeldaEvaluacion from '@/components/CeldaEvaluacion'
+import type { Alumno } from '@/db/localDb'
 
-// Trimestres en los que aplica un instrumento (campo JSON '[1,2,3]')
-function aplicaEnTrimestre(ins: { trimestres?: string }, trimestre: number): boolean {
-  try {
-    const t = JSON.parse(ins.trimestres || '[1,2,3]')
-    return !Array.isArray(t) || t.length === 0 || t.includes(trimestre)
-  } catch { return true }
-}
-
-type Alumno = { id: number; nombre: string; apellidos: string; neae: number }
-type Criterio = { id: string; descripcion: string; objetivo_id: string; peso: number }
-type Instrumento = { id: number; nombre: string; tipo: string; peso: number; trimestres?: string }
-type CalIndex = Record<string, number | null>
-
-function calColor(v: number | null | undefined) {
-  if (v == null) return 'cal-vacio'
-  return `cal-${Math.round(v)}`
-}
+type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number }
 
 // Trimestre del curso escolar según la fecha: sep-dic → 1º, ene-mar → 2º, abr-ago → 3º
 function trimestreActual(): number {
@@ -28,330 +27,424 @@ function trimestreActual(): number {
   return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
 }
 
+function claseNota(v: number | null | undefined) {
+  if (v == null) return ''
+  return `cal-${Math.round(v)}`
+}
+
 export default function EvaluacionPage() {
   const [params] = useSearchParams()
-  const grupoId = params.get('grupo_id')
-  const asignaturaIdParam = params.get('asignatura_id')
-  const unidadIdParam = params.get('unidad_id')
   const headers = useAppStore(s => s._headers)
 
   const [trimestre, setTrimestre] = useState(trimestreActual)
   const [grupos, setGrupos] = useState<any[]>([])
   const [grupoSelId, setGrupoSelId] = useState<string>('')
   const [asignaturas, setAsignaturas] = useState<any[]>([])
-  const [asignaturaId, setAsignaturaId] = useState<string>('')
-  const [unidades, setUnidades] = useState<any[]>([])
-  const [unidadId, setUnidadId] = useState<string>(unidadIdParam || '')
-  const [instrumentoId, setInstrumentoId] = useState<number | null>(null)
-  const [calBase, setCalBase] = useState<any>(null)
+  const [asignaturaId, setAsignaturaId] = useState<number | null>(null)
+  const [unidades, setUnidades] = useState<UnidadConCriterios[]>([])
+  const [unidadId, setUnidadId] = useState<number | null>(null)
+  const [matriz, setMatriz] = useState<MatrizEvaluacion | null>(null)
   const [criterios, setCriterios] = useState<Criterio[]>([])
   const [cargando, setCargando] = useState(false)
   const [errorCurriculo, setErrorCurriculo] = useState(false)
-  const [cambiosPendientes, setCambiosPendientes] = useState<CalIndex>({})
   const [managerAbierto, setManagerAbierto] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
+  const [refresco, setRefresco] = useState(0)
+  const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio } | null>(null)
 
-  const nPendientes = Object.keys(cambiosPendientes).length
+  // Parámetros de entrada (llegan desde la programación o el detalle de clase)
+  const grupoParam = params.get('grupo_id')
+  const asigParam = params.get('asignatura_id')
+  const unidadParam = params.get('unidad_id')
 
-  // Al cambiar de grupo o asignatura los cambios pendientes dejan de ser válidos:
-  // pedir confirmación antes de descartarlos
-  const confirmarDescarte = () =>
-    nPendientes === 0 ||
-    confirm(`Tienes ${nPendientes} calificación(es) sin guardar. ¿Descartarlas?`)
-
-  // Aviso del navegador si se cierra o recarga con cambios sin guardar
-  useEffect(() => {
-    if (nPendientes === 0) return
-    const avisar = (e: BeforeUnloadEvent) => { e.preventDefault(); e.returnValue = '' }
-    window.addEventListener('beforeunload', avisar)
-    return () => window.removeEventListener('beforeunload', avisar)
-  }, [nPendientes])
+  // ── Carga en cascada ──────────────────────────────────────────────────
 
   useEffect(() => {
     getGrupos().then(data => {
       setGrupos(data)
-      const gid = grupoId || (data[0]?.id ? String(data[0].id) : '')
-      setGrupoSelId(gid)
+      setGrupoSelId(grupoParam || (data[0]?.id ? String(data[0].id) : ''))
     })
   }, [])
 
-  useEffect(() => {
-    if (grupoId) setGrupoSelId(grupoId)
-  }, [grupoId])
+  useEffect(() => { if (grupoParam) setGrupoSelId(grupoParam) }, [grupoParam])
 
   useEffect(() => {
-    if (!grupoSelId) return
+    if (!grupoSelId) { setAsignaturas([]); return }
     getAsignaturas(Number(grupoSelId)).then(d => {
       setAsignaturas(d)
-      const preferred = asignaturaIdParam ? asignaturaIdParam : (d[0]?.id ? String(d[0].id) : '')
-      setAsignaturaId(preferred)
+      const pedida = asigParam ? Number(asigParam) : null
+      setAsignaturaId(prev =>
+        (pedida && d.some(a => a.id === pedida)) ? pedida
+        : (prev && d.some(a => a.id === prev)) ? prev
+        : (d[0]?.id ?? null))
     })
-  }, [grupoSelId])
+  }, [grupoSelId, asigParam])
 
-  // Los cambios pendientes solo son válidos dentro de la misma asignatura
-  useEffect(() => { setCambiosPendientes({}) }, [asignaturaId])
-
+  // Al cambiar de área, la unidad activa deja de tener sentido:
+  // conservarla dejaba la matriz vacía sin explicar por qué.
   useEffect(() => {
-    if (!asignaturaId) { setUnidades([]); return }
-    getUnidades(Number(asignaturaId)).then(d => {
-      setUnidades(Array.isArray(d) ? d : [])
-      if (unidadIdParam && !unidadId) setUnidadId(unidadIdParam)
+    if (!asignaturaId) { setUnidades([]); setUnidadId(null); return }
+    getUnidades(asignaturaId).then(us => {
+      setUnidades(us)
+      const pedida = unidadParam ? Number(unidadParam) : null
+      setUnidadId(pedida && us.some(u => u.id === pedida) ? pedida : null)
     })
-  }, [asignaturaId])
+  }, [asignaturaId, unidadParam])
 
+  // Criterios del currículo (servidor) — cacheados por área/curso
   useEffect(() => {
-    if (!asignaturaId) return
+    const asig = asignaturas.find(a => a.id === asignaturaId)
+    const grupo = grupos.find(g => String(g.id) === grupoSelId)
+    if (!asig || !grupo) { setCriterios([]); return }
+
+    const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
+    const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
+
+    fetch(url, { headers: headers() })
+      .then(r => { if (!r.ok) throw new Error(); return r.json() })
+      .then((all: Criterio[]) => { setCriterios(Array.isArray(all) ? all : []); setErrorCurriculo(false) })
+      .catch(() => { setCriterios([]); setErrorCurriculo(true) })
+  }, [asignaturaId, asignaturas, grupoSelId, grupos])
+
+  // Matriz local
+  useEffect(() => {
+    if (!asignaturaId) { setMatriz(null); return }
     setCargando(true)
+    getMatrizEvaluacion(asignaturaId, unidadId, trimestre)
+      .then(m => { setMatriz(m); setCargando(false) })
+      .catch(() => setCargando(false))
+  }, [asignaturaId, unidadId, trimestre, refresco])
 
-    getCalificadorBase(Number(asignaturaId), trimestre).then(async base => {
-      if (!base) { setCargando(false); return }
-      setCalBase(base)
-      // Instrumento activo: mantener el actual si sigue aplicando en este trimestre
-      const visibles = base.instrumentos.filter(i => aplicaEnTrimestre(i, trimestre))
-      setInstrumentoId(prev =>
-        prev && visibles.some(i => i.id === prev) ? prev : (visibles[0]?.id ?? null))
+  // ── Derivados ─────────────────────────────────────────────────────────
 
-      // Criterios vienen del servidor (currículo público — no son datos personales)
-      const cursoNorm = base.grupo.curso.replace('º', '').replace('ª', '') + 'º'
-      const critsUrl = `/api/curriculum/criterios?asignatura=${encodeURIComponent(base.asig.nombre)}&curso=${cursoNorm}&etapa=${base.grupo.etapa}&comunidad=${encodeURIComponent(base.asig.comunidad)}`
-      const allCrits: Criterio[] | null = await fetch(critsUrl, { headers: headers() })
-        .then(r => { if (!r.ok) throw new Error(); return r.json() })
-        .catch(() => null)
+  const columnas = useMemo(() => {
+    if (!matriz) return []
+    if (matriz.criteriosDeUnidad) {
+      return criterios.filter(c => matriz.criteriosDeUnidad!.has(c.id))
+    }
+    return criterios
+  }, [criterios, matriz])
 
-      if (allCrits === null) {
-        // Distinguir "sin criterios" de "no se pudo cargar el currículo"
-        setErrorCurriculo(true)
-        setCriterios([])
-        setCargando(false)
-        return
-      }
-      setErrorCurriculo(false)
+  const alumnos: Alumno[] = matriz?.alumnos ?? []
+  const asigActual = asignaturas.find(a => a.id === asignaturaId)
+  const unidadActual = unidades.find(u => u.id === unidadId)
 
-      if (unidadId) {
-        // Filtrar criterios de esta unidad
-        const ucs = await getUnidades(Number(asignaturaId))
-        const u = ucs.find(u => String(u.id) === unidadId)
-        const ucSet = new Set(u?.criterios.map(c => c.criterio_id) || [])
-        setCriterios(allCrits.filter(c => ucSet.has(c.id)))
-      } else {
-        setCriterios(allCrits)
-      }
+  const sinInstrumento = useMemo(() => {
+    if (!matriz) return 0
+    return columnas.filter(c => !(matriz.porCriterio.get(c.id)?.length)).length
+  }, [columnas, matriz])
 
-      setCargando(false)
-    }).catch(() => setCargando(false))
-  }, [asignaturaId, trimestre, unidadId, refreshKey])
-
-  const getCal = (alumnoId: number, criterioId: string) => {
-    if (!instrumentoId) return null
-    const key = `${alumnoId}:${criterioId}:${instrumentoId}:${trimestre}`
-    if (key in cambiosPendientes) return cambiosPendientes[key]
-    return calBase?.calificaciones?.[key]?.valor ?? null
+  const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
+    if (!matriz || !instrs.length) return null
+    // Con varios instrumentos, la celda muestra la media ponderada de los que tengan nota
+    let suma = 0, pesos = 0
+    for (const ins of instrs) {
+      const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${ins.instrumento_id}:${trimestre}`]
+      if (c?.valor == null) continue
+      const p = ins.peso > 0 ? ins.peso : 1
+      suma += c.valor * p
+      pesos += p
+    }
+    return pesos > 0 ? Math.round((suma / pesos) * 10) / 10 : null
   }
 
-  const setCal = (alumnoId: number, criterioId: string, val: string) => {
-    if (!instrumentoId) return
-    const key = `${alumnoId}:${criterioId}:${instrumentoId}:${trimestre}`
-    const v = val === '' ? null : Math.min(10, Math.max(0, parseFloat(val)))
-    setCambiosPendientes(p => ({ ...p, [key]: isNaN(v as number) ? null : v }))
-  }
-
-  const guardar = async () => {
-    if (!calBase || Object.keys(cambiosPendientes).length === 0) return
-    const items = Object.entries(cambiosPendientes).map(([key, valor]) => {
-      const [alumno_id, criterio_id, instrumento_id, trim] = key.split(':')
-      return {
-        alumno_id: Number(alumno_id), criterio_id,
-        instrumento_id: Number(instrumento_id), trimestre: Number(trim),
-        valor: valor as number | null,
-        asignatura: calBase.asig.nombre, curso: calBase.grupo.curso,
-        etapa: calBase.grupo.etapa, comunidad: calBase.asig.comunidad || 'Galicia',
-      }
-    })
-    await saveCalificaciones(items)
-    setCambiosPendientes({})
-    // Recargar solo las calificaciones
-    const base = await getCalificadorBase(Number(asignaturaId), trimestre)
-    if (base) setCalBase(base)
-  }
-
-  const instrumentos: Instrumento[] = calBase?.instrumentos || []
+  // ── Estados vacíos ────────────────────────────────────────────────────
 
   if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
-        <p style={{ color: 'var(--gris-600)', marginBottom: 16 }}>Crea un grupo primero para poder evaluar.</p>
-        <Link to="/grupos/nuevo" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Crear grupo →</Link>
+        <div style={{ fontSize: 34, marginBottom: 10 }}>👥</div>
+        <p style={{ color: 'var(--gris-600)', marginBottom: 16 }}>
+          Todavía no tienes ninguna clase. Créala y podrás evaluar.
+        </p>
+        <Link to="/grupos/nuevo" className="btn-primary" style={{ padding: '10px 20px', borderRadius: 8, background: 'var(--azul-700)', color: 'white', fontWeight: 600 }}>
+          Crear mi primera clase →
+        </Link>
       </div>
     )
   }
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
+      {/* Cabecera */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <select value={grupoSelId} onChange={e => { if (confirmarDescarte()) setGrupoSelId(e.target.value) }} style={{ minWidth: 120 }}>
+          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)} style={{ minWidth: 120 }}>
             {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
           </select>
-          <select value={asignaturaId} onChange={e => { if (confirmarDescarte()) setAsignaturaId(e.target.value) }} disabled={asignaturas.length === 0} style={{ minWidth: 160 }}>
-            {asignaturas.length === 0
-              ? <option value="">Sin asignaturas</option>
-              : asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)
-            }
-          </select>
-          {/* Los pendientes sobreviven al cambio de unidad/instrumento: la clave incluye instrumento y trimestre */}
-          {unidades.length > 0 && (
-            <select value={unidadId} onChange={e => setUnidadId(e.target.value)} style={{ minWidth: 140 }}>
-              <option value="">Todos los criterios</option>
-              {unidades.map((u: any) => (
-                <option key={u.id} value={u.id}>{u.nombre}{u.trimestre ? ` (T${u.trimestre})` : ''}</option>
-              ))}
-            </select>
-          )}
           <select value={trimestre} onChange={e => setTrimestre(Number(e.target.value))}>
             <option value={1}>1er trimestre</option>
             <option value={2}>2º trimestre</option>
             <option value={3}>3er trimestre</option>
           </select>
-          <button className="btn-primary" onClick={guardar} disabled={nPendientes === 0}>
-            {nPendientes > 0 ? `Guardar (${nPendientes})` : 'Guardado'}
-          </button>
-        </div>
-      </div>
-
-      {asignaturas.length === 0 && (
-        <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
-          No hay asignaturas configuradas para este grupo.{' '}
-          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Ir al grupo →</Link>
-        </div>
-      )}
-
-      {instrumentos.length > 0 && (
-        <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap', alignItems: 'center' }}>
-          {instrumentos.filter(ins => aplicaEnTrimestre(ins, trimestre)).map(ins => (
-            <button key={ins.id}
-              onClick={() => setInstrumentoId(ins.id)}
-              style={{
-                padding: '6px 14px', borderRadius: 20, fontSize: 13, cursor: 'pointer', fontWeight: 600,
-                border: '2px solid',
-                borderColor: instrumentoId === ins.id ? 'var(--azul-700)' : 'var(--gris-300)',
-                background: instrumentoId === ins.id ? 'var(--azul-700)' : 'white',
-                color: instrumentoId === ins.id ? 'white' : 'var(--gris-600)',
-              }}>
-              {ins.nombre}
-              <span style={{ marginLeft: 6, fontWeight: 400, opacity: .8, fontSize: 11 }}>{ins.peso}%</span>
+          {asignaturaId && (
+            <button className="btn-secondary" style={{ fontSize: 13 }}
+              onClick={() => setManagerAbierto(true)}
+              title="Gestionar instrumentos: nombre, tipo, peso, trimestres y rúbrica">
+              ⚙ Instrumentos
             </button>
-          ))}
-          <button
-            onClick={() => setManagerAbierto(true)}
-            title="Gestionar instrumentos: añadir, editar, peso, trimestres, orden y rúbrica"
-            aria-label="Gestionar instrumentos"
-            style={{
-              padding: '6px 12px', borderRadius: 20, fontSize: 13, cursor: 'pointer', fontWeight: 600,
-              border: '2px dashed var(--gris-300)', background: 'white', color: 'var(--gris-600)',
-            }}>
-            ⚙ Instrumentos
-          </button>
+          )}
         </div>
-      )}
-
-      {instrumentos.length === 0 && asignaturas.length > 0 && !cargando && (
-        <div className="card" style={{ padding: 24, color: 'var(--gris-600)', marginBottom: 14 }}>
-          Esta asignatura no tiene instrumentos de evaluación.{' '}
-          <button onClick={() => setManagerAbierto(true)}
-            style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontWeight: 600, cursor: 'pointer', fontSize: 14, padding: 0 }}>
-            Crear instrumentos →
-          </button>
-        </div>
-      )}
-
-      {managerAbierto && calBase && (
-        <InstrumentosManager
-          asignaturaId={Number(asignaturaId)}
-          asignaturaNombre={calBase.asig.nombre_display}
-          nivel={`${calBase.grupo.curso}º ${calBase.grupo.etapa}`}
-          onClose={() => { setManagerAbierto(false); setRefreshKey(k => k + 1) }}
-        />
-      )}
-
-      {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
-
-      {errorCurriculo && !cargando && (
-        <div className="card" style={{ padding: 24, background: 'var(--ambar-100)', color: 'var(--ambar-500)' }}>
-          ⚠️ No se pudo cargar el currículo del servidor. Comprueba que el backend está
-          arrancado y vuelve a intentarlo — tus calificaciones no se han perdido.
-        </div>
-      )}
-
-      {calBase && !cargando && instrumentoId && (
-        <CalificadorGrid alumnos={calBase.alumnos} criterios={criterios} getCal={getCal} setCal={setCal} />
-      )}
-    </>
-  )
-}
-
-function CalificadorGrid({ alumnos, criterios, getCal, setCal }: {
-  alumnos: Alumno[]; criterios: Criterio[]
-  getCal: (a: number, c: string) => number | null
-  setCal: (a: number, c: string, v: string) => void
-}) {
-  if (!alumnos?.length || !criterios?.length) {
-    return (
-      <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
-        Configura instrumentos y añade alumnos para usar el calificador.
       </div>
-    )
-  }
 
-  return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ borderCollapse: 'collapse', fontSize: 13, minWidth: 700 }}>
-        <thead>
-          <tr>
-            <th style={{
-              background: 'var(--azul-900)', color: 'white', padding: '10px 14px',
-              textAlign: 'left', position: 'sticky', left: 0, zIndex: 2, minWidth: 160,
-            }}>Alumno</th>
-            {criterios.map(cr => (
-              <th key={cr.id} title={cr.descripcion} style={{
-                background: 'var(--azul-700)', color: 'white', padding: '8px 10px',
-                textAlign: 'center', minWidth: 80, maxWidth: 110, fontWeight: 600,
-              }}>
-                <div style={{ fontSize: 12, fontWeight: 700 }}>{cr.id}</div>
-                <div style={{ fontSize: 10, opacity: .75, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 90 }}>
-                  {cr.descripcion?.substring(0, 28)}…
-                </div>
-              </th>
+      {/* Sin áreas configuradas */}
+      {asignaturas.length === 0 ? (
+        <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+          <div style={{ fontSize: 30, marginBottom: 8 }}>📚</div>
+          <strong style={{ display: 'block', marginBottom: 6, color: 'var(--gris-900)' }}>
+            Esta clase aún no tiene áreas
+          </strong>
+          Elige las áreas que impartes y aparecerán aquí como pestañas, cada una con sus criterios LOMLOE.{' '}
+          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+            Elegir áreas →
+          </Link>
+        </div>
+      ) : (
+        <>
+          {/* Pestañas de área */}
+          <div className="tabs-area" role="tablist" aria-label="Áreas">
+            {asignaturas.map(a => (
+              <button key={a.id} role="tab" aria-selected={a.id === asignaturaId}
+                className={`tab-area${a.id === asignaturaId ? ' activa' : ''}`}
+                onClick={() => setAsignaturaId(a.id)}>
+                {a.nombre_display}
+              </button>
             ))}
-          </tr>
-        </thead>
-        <tbody>
-          {alumnos.map((al, i) => (
-            <tr key={al.id} style={{ background: i % 2 === 0 ? 'white' : 'var(--gris-100)' }}>
-              <td style={{
-                padding: '8px 14px', fontWeight: 500, position: 'sticky', left: 0,
-                background: 'inherit', borderRight: '2px solid var(--gris-300)',
-              }}>
-                {al.apellidos}, {al.nombre}
-                {al.neae ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
-              </td>
-              {criterios.map(cr => {
-                const val = getCal(al.id, cr.id)
+          </div>
+
+          {/* Subpestañas de unidad */}
+          {unidades.length > 0 ? (
+            <div className="tabs-unidad" role="tablist" aria-label="Unidades de la programación">
+              <button role="tab" aria-selected={unidadId === null}
+                className={`tab-unidad${unidadId === null ? ' activa' : ''}`}
+                onClick={() => setUnidadId(null)}>
+                Todo el curso
+                <span className="trim">{criterios.length} criterios</span>
+              </button>
+              {unidades.map(u => (
+                <button key={u.id} role="tab" aria-selected={u.id === unidadId}
+                  className={`tab-unidad${u.id === unidadId ? ' activa' : ''}`}
+                  onClick={() => setUnidadId(u.id!)}
+                  title={u.descripcion || u.nombre}>
+                  {u.nombre}
+                  <span className="trim">{u.trimestre ? `T${u.trimestre}` : ''} · {u.criterios.length}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
+              <strong>Esta área no tiene programación todavía.</strong>{' '}
+              Sin unidades puedes calificar sobre todos los criterios, pero no sabrás con qué instrumento evaluar cada uno.{' '}
+              <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+                Montar la programación →
+              </Link>
+            </div>
+          )}
+
+          {/* Avisos */}
+          {errorCurriculo && (
+            <div className="card" style={{ padding: 18, background: 'var(--ambar-100)', color: 'var(--ambar-500)', marginBottom: 12, boxShadow: 'none' }}>
+              ⚠️ No se ha podido cargar el currículo del servidor. Comprueba la conexión —
+              tus calificaciones están a salvo en este dispositivo.
+            </div>
+          )}
+
+          {sinInstrumento > 0 && (
+            <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+              <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
+              Asígnales uno en la programación y podrás evaluarlos.{' '}
+              <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
+                Ir a la programación →
+              </Link>
+            </div>
+          )}
+
+          {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
+
+          {/* Matriz */}
+          {!cargando && matriz && (
+            alumnos.length === 0 ? (
+              <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+                Esta clase todavía no tiene alumnado.{' '}
+                <Link to={`/alumnos?grupo_id=${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+                  Añadir alumnado →
+                </Link>
+              </div>
+            ) : columnas.length === 0 ? (
+              <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+                {unidadId
+                  ? 'Esta unidad no tiene criterios vinculados. Añádeselos desde la programación.'
+                  : 'No hay criterios disponibles para esta área en el currículo de tu comunidad.'}
+              </div>
+            ) : (
+              <div className="matriz-wrap">
+                <table className="matriz">
+                  <thead>
+                    <tr>
+                      <th className="col-alumno" scope="col">
+                        Alumno
+                        <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
+                          {alumnos.length} · {columnas.length} criterios
+                        </div>
+                      </th>
+                      {columnas.map(cr => {
+                        const instrs = matriz.porCriterio.get(cr.id) ?? []
+                        return (
+                          <th key={cr.id} scope="col" title={cr.descripcion}>
+                            <div className="criterio-th-id">{cr.id}</div>
+                            <div className="criterio-th-desc">{cr.descripcion}</div>
+                            <div className="criterio-th-instr">
+                              {instrs.length === 0
+                                ? <span className="aviso" title="Sin instrumento asignado en la programación">⚠</span>
+                                : instrs.map(i => (
+                                    <i key={i.instrumento_id}
+                                      style={{ background: getInstrConfig(i.tipo).color }}
+                                      title={`${i.nombre} · ${getInstrConfig(i.tipo).label} · ${i.peso}%`} />
+                                  ))}
+                            </div>
+                          </th>
+                        )
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {alumnos.map((al, idx) => (
+                      <tr key={al.id}>
+                        <td className="col-alumno">
+                          {al.apellidos}, {al.nombre}
+                          {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                        </td>
+                        {columnas.map(cr => {
+                          const instrs = matriz.porCriterio.get(cr.id) ?? []
+                          const valor = notaCelda(al.id!, cr.id, instrs)
+                          const nEvid = matriz.evidencias.get(`${al.id}:${cr.id}`) ?? 0
+                          const sinInstr = instrs.length === 0
+
+                          return (
+                            <td key={cr.id} className="celda">
+                              <button
+                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
+                                onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
+                                title={sinInstr
+                                  ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
+                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${instrs.map(i => i.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
+                              >
+                                {sinInstr ? (
+                                  <span>sin instr.</span>
+                                ) : (
+                                  <>
+                                    <span>{valor == null ? '·' : valor}</span>
+                                    <span className="celda-instr">
+                                      {instrs.map(i => (
+                                        <i key={i.instrumento_id}
+                                          style={{ background: getInstrConfig(i.tipo).color }} />
+                                      ))}
+                                      {nEvid > 0 && <b title={`${nEvid} evidencia(s) adjunta(s)`}>{nEvid}</b>}
+                                    </span>
+                                  </>
+                                )}
+                              </button>
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )
+          )}
+
+          {/* Leyenda */}
+          {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
+              <span>Pulsa una casilla para evaluar.</span>
+              {[10, 8, 6, 5, 3].map(v => {
+                const c = calificativo(v)
                 return (
-                  <td key={cr.id} style={{ textAlign: 'center', padding: 2 }}>
-                    <input type="number" min={0} max={10} step={0.1}
-                      value={val === null ? '' : val}
-                      onChange={e => setCal(al.id, cr.id, e.target.value)}
-                      className={calColor(val)}
-                      style={{ width: 56, textAlign: 'center', border: 'none', borderRadius: 4, padding: '5px 4px', fontSize: 13, fontWeight: 600 }}
-                    />
-                  </td>
+                  <span key={v} style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <span style={{ width: 13, height: 13, borderRadius: 3, background: c.color, display: 'inline-block' }} />
+                    {c.etiqueta}
+                  </span>
                 )
               })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <span style={{ display: 'inline-flex', gap: 2 }}>
+                  <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
+                </span>
+                cada punto es un instrumento
+              </span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <b style={{ fontSize: 11 }}>2</b> evidencias adjuntas
+              </span>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Panel de evaluación de una celda */}
+      {celda && matriz && (() => {
+        const al = alumnos[celda.alumnoIdx]
+        if (!al) return null
+        const instrs = matriz.porCriterio.get(celda.criterio.id) ?? []
+
+        if (instrs.length === 0) {
+          return (
+            <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setCelda(null) }}>
+              <div className="card" style={{ width: 'min(460px, 94vw)', padding: 24 }}>
+                <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--ambar-500)', marginBottom: 10 }}>
+                  ⚠️ {celda.criterio.id} no tiene instrumento
+                </h2>
+                <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 8 }}>
+                  {celda.criterio.descripcion}
+                </p>
+                <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 18 }}>
+                  Tu programación no dice todavía con qué se evalúa este criterio. Asígnale un instrumento
+                  (prueba, rúbrica, observación…) y la casilla quedará lista para calificar.
+                </p>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <Link to={`/grupos/${grupoSelId}`} className="btn-primary"
+                    style={{ padding: '9px 16px', borderRadius: 8, background: 'var(--azul-700)', color: 'white', fontWeight: 600, fontSize: 13.5 }}>
+                    Ir a la programación →
+                  </Link>
+                  <button className="btn-secondary" onClick={() => setCelda(null)}>Cerrar</button>
+                </div>
+              </div>
+            </div>
+          )
+        }
+
+        return (
+          <CeldaEvaluacion
+            alumno={al}
+            criterio={celda.criterio}
+            instrumentos={instrs}
+            grupo={matriz.grupo}
+            asig={matriz.asig}
+            trimestre={trimestre}
+            unidadId={unidadId}
+            unidadNombre={unidadActual?.nombre}
+            posicion={`${celda.alumnoIdx + 1}/${alumnos.length}`}
+            onGuardado={() => setRefresco(r => r + 1)}
+            onCerrar={() => setCelda(null)}
+            onAnterior={celda.alumnoIdx > 0
+              ? () => setCelda(c => c && { ...c, alumnoIdx: c.alumnoIdx - 1 })
+              : undefined}
+            onSiguiente={celda.alumnoIdx < alumnos.length - 1
+              ? () => setCelda(c => c && { ...c, alumnoIdx: c.alumnoIdx + 1 })
+              : undefined}
+          />
+        )
+      })()}
+
+      {managerAbierto && asigActual && (
+        <InstrumentosManager
+          asignaturaId={asigActual.id}
+          asignaturaNombre={asigActual.nombre_display}
+          nivel={`${grupos.find(g => String(g.id) === grupoSelId)?.curso}º ${grupos.find(g => String(g.id) === grupoSelId)?.etapa}`}
+          onClose={() => { setManagerAbierto(false); setRefresco(r => r + 1) }}
+        />
+      )}
+    </>
   )
 }

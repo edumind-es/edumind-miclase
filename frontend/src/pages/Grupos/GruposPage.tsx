@@ -5,7 +5,6 @@ import { getGrupoDetalle } from '@/db/queries'
 import { imprimirHojaQR } from '@/utils/qrSheet'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
-import ProgramacionPanel from '@/components/ProgramacionPanel'
 import PlanoClase from '@/components/PlanoClase'
 
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
@@ -39,16 +38,16 @@ function ListaGrupos() {
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Mis grupos</h1>
+        <h1 className="page-title" style={{ marginBottom: 0 }}>Mis clases</h1>
         <Link to="nuevo" className="btn-primary" style={{ display: 'inline-block', padding: '9px 18px', borderRadius: 8, background: 'var(--azul-700)', color: 'white', fontWeight: 600 }}>
-          + Nuevo grupo
+          + Nueva clase
         </Link>
       </div>
 
       {cargando && <p>Cargando…</p>}
       {grupos.length === 0 && !cargando && (
         <div className="card" style={{ textAlign: 'center', padding: 48 }}>
-          <p style={{ color: 'var(--gris-600)' }}>No tienes grupos todavía.</p>
+          <p style={{ color: 'var(--gris-600)' }}>No tienes clases todavía.</p>
         </div>
       )}
 
@@ -95,7 +94,7 @@ function NuevoGrupo() {
     <>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
         <Link to="/grupos" style={{ color: 'var(--gris-600)', fontSize: 20 }}>←</Link>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Nuevo grupo</h1>
+        <h1 className="page-title" style={{ marginBottom: 0 }}>Nueva clase</h1>
       </div>
 
       <div className="card" style={{ maxWidth: 480 }}>
@@ -277,6 +276,35 @@ function DetalleGrupo() {
 
       <AsignaturasPanel grupoId={id!} etapa={grupo.etapa} curso={grupo.curso} comunidad={grupo.comunidad || 'Galicia'} />
 
+      {/* Evaluar en vivo con el QR de mesa: el atajo que casi nadie descubre solo */}
+      <div className="card" style={{ marginBottom: 20, background: 'var(--azul-100)', boxShadow: 'none' }}>
+        <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--azul-700)', marginBottom: 8 }}>
+          📱 Evaluar en el aula con el QR de mesa
+        </h2>
+        <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.65, marginBottom: 12 }}>
+          Imprime la hoja de QR y pega uno en cada mesa. Con el móvil o la tablet, entra en
+          <strong> Evaluar QR</strong>, apunta la cámara al código y se abre directamente el panel de ese alumno:
+          eliges el criterio, pulsas la nota y, si quieres, haces una foto de la producción como evidencia.
+          Los códigos son anónimos — no llevan el nombre, así que la hoja puede estar a la vista.
+        </p>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button
+            className="btn-primary" style={{ fontSize: 13 }}
+            onClick={async () => {
+              if (!grupo.alumnos?.length) { alert('Añade alumnado antes de imprimir los QR.'); return }
+              const conNombres = confirm('¿Incluir los nombres bajo cada QR?\n\nAceptar = con nombres · Cancelar = solo códigos (anónimo, recomendado)')
+              try { await imprimirHojaQR(grupo, grupo.alumnos, conNombres) }
+              catch (e: any) { alert(e.message) }
+            }}>
+            🖨 Imprimir QR de mesas
+          </button>
+          <Link to="/escanear"
+            style={{ padding: '8px 16px', background: 'white', color: 'var(--azul-700)', border: '1px solid var(--azul-300)', borderRadius: 6, fontWeight: 600, fontSize: 13 }}>
+            📷 Abrir el escáner
+          </Link>
+        </div>
+      </div>
+
       <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
         <Link to={`/evaluacion?grupo_id=${id}`}
           style={{ padding: '10px 20px', background: 'var(--azul-700)', color: 'white', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
@@ -289,6 +317,10 @@ function DetalleGrupo() {
         <Link to={`/seguimiento?grupo_id=${id}`}
           style={{ padding: '10px 20px', background: 'var(--gris-100)', color: 'var(--gris-600)', border: '1px solid var(--gris-300)', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
           📈 Seguimiento
+        </Link>
+        <Link to={`/informes`}
+          style={{ padding: '10px 20px', background: 'var(--gris-100)', color: 'var(--gris-600)', border: '1px solid var(--gris-300)', borderRadius: 8, fontWeight: 600, fontSize: 14 }}>
+          📄 Informes
         </Link>
       </div>
     </>

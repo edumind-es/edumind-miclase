@@ -87,3 +87,41 @@ CREATE TABLE IF NOT EXISTS docentes (
 -- ------------------------------------------------------------
 
 CREATE INDEX IF NOT EXISTS idx_c_criterios_asig ON c_criterios(asignatura, curso, etapa, comunidad);
+
+-- ------------------------------------------------------------
+-- SINCRONIZACIÓN MULTI-DISPOSITIVO (extremo a extremo)
+--
+-- El servidor NO puede leer nada de lo que guarda aquí: `payload` es
+-- AES-256-GCM cifrado en el navegador con una clave derivada de la
+-- contraseña de sincronización del docente, que nunca se envía.
+--
+-- Lo único legible por el servidor es el enrutado: de quién es la fila,
+-- de qué tabla, qué id local y cuándo se modificó. Hace falta en claro
+-- para poder servir sincronizaciones incrementales y resolver el
+-- last-write-wins sin descifrar.
+-- ------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS sync_registros (
+  docente_id  INTEGER NOT NULL,
+  tabla       TEXT    NOT NULL,
+  registro_id TEXT    NOT NULL,
+  seq         INTEGER NOT NULL,   -- cursor monótono por docente
+  updated_at  TEXT    NOT NULL,   -- ISO-8601, para el last-write-wins
+  device_id   TEXT    NOT NULL,
+  iv          TEXT    NOT NULL,   -- base64
+  payload     TEXT    NOT NULL,   -- base64 (AES-256-GCM)
+  PRIMARY KEY (docente_id, tabla, registro_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_sync_cursor ON sync_registros(docente_id, seq);
+
+-- Contador monótono y sal de derivación de clave, por docente.
+-- La sal no es secreta: se comparte entre dispositivos para que todos
+-- deriven la misma clave a partir de la misma contraseña.
+CREATE TABLE IF NOT EXISTS sync_estado (
+  docente_id  INTEGER PRIMARY KEY,
+  seq         INTEGER NOT NULL DEFAULT 0,
+  salt        TEXT,
+  verificador TEXT,               -- cifrado de una cadena conocida: valida la contraseña
+  actualizado TEXT
+);

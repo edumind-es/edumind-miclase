@@ -141,28 +141,55 @@ input:focus, select:focus, textarea:focus {
                  background: var(--cal-insuficiente);   color: white; }
 .cal-vacio     { background: var(--gris-100);           color: var(--gris-300); }
 
-/* Layout global */
+/* Layout global — el sidebar se pliega a rail de iconos */
 .layout {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: var(--ancho-sidebar, 220px) 1fr;
   min-height: 100vh;
+  transition: grid-template-columns .18s ease;
 }
+.layout.plegado { --ancho-sidebar: 62px; }
+
 .sidebar {
   background: var(--azul-900);
   color: var(--blanco);
   padding: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 18px 14px 18px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .sidebar-logo {
-  padding: 20px;
   font-size: 16px;
   font-weight: 700;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
   letter-spacing: .5px;
+  white-space: nowrap;
 }
 .sidebar-logo span { color: var(--azul-300); }
-.sidebar nav { flex: 1; padding: 12px 0; }
+.layout.plegado .sidebar-logo { display: none; }
+.layout.plegado .sidebar-cabecera { padding: 18px 0; justify-content: center; }
+
+.sidebar-toggle {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.75);
+  border-radius: var(--radio-sm);
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.sidebar-toggle:hover { background: rgba(255,255,255,0.16); color: #fff; }
+
+.sidebar nav { flex: 1; padding: 12px 0; overflow-y: auto; }
 .sidebar nav a {
   display: flex;
   align-items: center;
@@ -171,7 +198,14 @@ input:focus, select:focus, textarea:focus {
   color: rgba(255,255,255,0.75);
   font-size: 14px;
   font-weight: 500;
+  white-space: nowrap;
   transition: background .15s, color .15s;
+}
+.sidebar nav a .nav-icono {
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+  font-size: 15px;
 }
 .sidebar nav a:hover,
 .sidebar nav a.active {
@@ -179,9 +213,41 @@ input:focus, select:focus, textarea:focus {
   color: var(--blanco);
   text-decoration: none;
 }
+.sidebar nav a.active { box-shadow: inset 3px 0 0 var(--azul-300); }
+.layout.plegado .sidebar nav a { justify-content: center; padding: 12px 0; }
+.layout.plegado .nav-texto,
+.layout.plegado .sidebar-pie,
+.layout.plegado .sidebar-panel-texto { display: none; }
+.layout.plegado .sidebar-panel { padding: 10px 8px; }
+.layout.plegado .sidebar-panel button { padding: 8px 0; text-align: center; font-size: 15px; }
+
+.sidebar-panel { border-top: 1px solid rgba(255,255,255,0.1); padding: 14px 16px; }
+.sidebar-btn {
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  border-radius: var(--radio-sm);
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  text-align: left;
+}
+.sidebar-btn:hover { background: rgba(255,255,255,0.18); }
+.sidebar-btn--tenue { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
+.sidebar-pie {
+  padding: 8px 16px 14px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.6;
+}
+.sidebar-pie a { color: inherit; text-decoration: underline; }
+
 .main-content {
   padding: 28px;
   overflow-y: auto;
+  min-width: 0;
 }
 .page-title {
   font-size: 22px;
@@ -190,25 +256,171 @@ input:focus, select:focus, textarea:focus {
   margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-  .layout {
+@media (max-width: 860px) {
+  .layout, .layout.plegado {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
   }
-  .sidebar { flex-direction: row; overflow-x: auto; }
+  .sidebar { flex-direction: column; }
+  .sidebar nav { display: flex; flex-direction: row; overflow-x: auto; padding: 6px 0; }
+  .sidebar nav a { flex-direction: column; gap: 2px; padding: 8px 12px; font-size: 11px; }
+  .sidebar nav a.active { box-shadow: inset 0 -3px 0 var(--azul-300); }
+  .sidebar-panel, .sidebar-pie { display: none; }
+  .main-content { padding: 16px; }
 }
+
+/* ── Pestañas de área y subpestañas de unidad (Evaluación) ────────────── */
+.tabs-area {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--gris-300);
+  margin-bottom: 0;
+  scrollbar-width: thin;
+}
+.tab-area {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border: none;
+  border-radius: var(--radio-sm) var(--radio-sm) 0 0;
+  background: transparent;
+  color: var(--gris-600);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+.tab-area:hover { background: var(--azul-100); color: var(--azul-700); }
+.tab-area.activa {
+  background: var(--blanco);
+  color: var(--azul-900);
+  border-bottom-color: var(--azul-700);
+}
+.tabs-unidad {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 0 12px;
+  flex-wrap: wrap;
+}
+.tab-unidad {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1.5px solid var(--gris-300);
+  background: var(--blanco);
+  color: var(--gris-600);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-unidad:hover { border-color: var(--azul-300); color: var(--azul-700); }
+.tab-unidad.activa { background: var(--azul-700); border-color: var(--azul-700); color: var(--blanco); }
+.tab-unidad .trim { opacity: .7; font-weight: 500; margin-left: 4px; }
+
+/* ── Matriz del calificador ───────────────────────────────────────────── */
+.matriz-wrap { overflow: auto; max-height: calc(100vh - 250px); border: 1px solid var(--gris-300); border-radius: var(--radio-md); background: var(--blanco); }
+.matriz { border-collapse: separate; border-spacing: 0; font-size: 13px; }
+.matriz th, .matriz td { border-bottom: 1px solid var(--gris-300); }
+.matriz thead th {
+  position: sticky; top: 0; z-index: 3;
+  background: var(--azul-700); color: var(--blanco);
+  padding: 7px 8px; text-align: center; font-weight: 600;
+  min-width: 96px; max-width: 120px; vertical-align: top;
+}
+.matriz thead th.col-alumno {
+  left: 0; z-index: 5; background: var(--azul-900);
+  text-align: left; min-width: 190px; max-width: 190px;
+}
+.matriz tbody td.col-alumno {
+  position: sticky; left: 0; z-index: 2;
+  background: inherit;
+  border-right: 2px solid var(--gris-300);
+  padding: 6px 12px; font-weight: 500; text-align: left;
+}
+.matriz tbody tr { background: var(--blanco); }
+.matriz tbody tr:nth-child(even) { background: var(--gris-100); }
+.matriz tbody tr:hover { background: var(--azul-100); }
+.matriz td.celda { padding: 3px; text-align: center; }
+
+.celda-btn {
+  width: 100%;
+  min-height: 40px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radio-sm);
+  background: var(--gris-100);
+  color: var(--gris-500);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 3px 2px;
+  line-height: 1.1;
+}
+.celda-btn:hover { border-color: var(--azul-500); }
+.celda-btn:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 1px; }
+
+/* El semáforo de la nota debe ganar al fondo neutro de la casilla.
+   Ambas son clases simples, así que sin este refuerzo de especificidad
+   la casilla se quedaba gris aunque tuviera nota. */
+.celda-btn.cal-10, .celda-btn.cal-9 { background: var(--cal-sobresaliente); color: #fff; }
+.celda-btn.cal-8,  .celda-btn.cal-7 { background: var(--cal-notable);       color: #fff; }
+.celda-btn.cal-6                    { background: var(--cal-bien);          color: #fff; }
+.celda-btn.cal-5                    { background: var(--cal-suficiente);    color: #fff; }
+.celda-btn.cal-4, .celda-btn.cal-3, .celda-btn.cal-2,
+.celda-btn.cal-1, .celda-btn.cal-0  { background: var(--cal-insuficiente);  color: #fff; }
+
+/* Identidad del instrumento: puntos de color, no emoji.
+   En la matriz los emoji se ven diminutos y no todos los sistemas los
+   tienen; un punto del color del instrumento se lee de un vistazo. */
+.celda-instr { display: flex; align-items: center; gap: 3px; line-height: 1; }
+.celda-instr i {
+  width: 6px; height: 6px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.55);
+}
+.celda-instr b {
+  font-size: 9px; font-weight: 700; opacity: .9;
+  padding-left: 2px;
+}
+.celda-btn.sin-instrumento {
+  background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 5px, #ffedd5 5px, #ffedd5 10px);
+  color: var(--ambar-500);
+  border-color: #fed7aa;
+  border-style: dashed;
+  font-size: 12px;
+}
+
+.criterio-th-id { font-size: 12px; font-weight: 700; letter-spacing: .02em; }
+.criterio-th-desc {
+  font-size: 9.5px; opacity: .8; font-weight: 400;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; line-height: 1.25; margin-top: 2px;
+}
+.criterio-th-instr {
+  display: flex; justify-content: center; align-items: center; gap: 4px;
+  margin-top: 5px; min-height: 9px;
+}
+.criterio-th-instr i {
+  width: 7px; height: 7px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.7);
+}
+.criterio-th-instr .aviso { font-size: 10px; line-height: 1; }
 
 /* --- Identidad Sistema Lámina EDUmind (nivel 1) ---
    Canon: edumind.es/design/lamina.html · tokens en /vendor/lamina-v1.css */
 .lm-plate-fixed {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 100;
 }
-.sidebar-logo {
-  font-family: var(--lm-display);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
+.sidebar-logo { font-family: var(--lm-display); font-weight: 800; letter-spacing: -0.02em; }
+.page-title   { font-family: var(--lm-display); letter-spacing: -0.015em; }

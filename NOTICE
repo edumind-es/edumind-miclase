@@ -9,3 +9,14 @@ https://github.com/edumind-es/edumind-miclase
 
 EDUmind(R), logos and brand assets are reserved trademarks/distinctive
 signs. See TRADEMARKS.md.
+
+Third-party fonts bundled in frontend/public/fonts/ (used by the printed
+"lamina" reports and the app shell), both under the SIL Open Font License 1.1:
+
+  - Outfit          (c) 2020 Smartsheet Inc. / The Outfit Project Authors
+                    https://github.com/Outfitio/Outfit-Fonts
+  - IBM Plex Mono   (c) 2017 IBM Corp.
+                    https://github.com/IBM/plex
+
+The OFL requires the license notice to travel with the font files; it does
+not affect the license of this application.

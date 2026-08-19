@@ -11,6 +11,7 @@ import Database from 'better-sqlite3'
 import curriculumRoutes from './routes/curriculum.js'
 import authRoutes from './routes/auth.js'
 import authPlugin from './plugins/auth.js'
+import syncRoutes from './routes/sync.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ROOT = resolve(__dirname, '../..')
@@ -38,7 +39,11 @@ if (!db.prepare('SELECT id FROM docentes LIMIT 1').get()) {
   db.prepare("INSERT INTO docentes (nombre, email) VALUES ('Docente Principal', NULL)").run()
 }
 
-const app = Fastify({ logger: { level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' } })
+const app = Fastify({
+  logger: { level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' },
+  // Los lotes de sincronización llevan evidencias cifradas en base64
+  bodyLimit: 64 * 1024 * 1024,
+})
 
 await app.register(cors, {
   origin: process.env.NODE_ENV === 'production'
@@ -56,6 +61,7 @@ await app.register(authPlugin)
 // Rutas
 await app.register(authRoutes, { prefix: '/api/auth' })
 await app.register(curriculumRoutes, { prefix: '/api/curriculum' })
+await app.register(syncRoutes, { prefix: '/api/sync' })
 
 app.get('/api/health', async () => ({ status: 'ok', version: '0.1.0' }))
 

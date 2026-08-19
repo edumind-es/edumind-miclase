@@ -58,7 +58,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': { target: 'http://127.0.0.1:3270', changeOrigin: true },
+      // VITE_API_TARGET permite apuntar a un backend de pruebas sin tocar
+      // el de producción (ver pruebas/README.md)
+      '/api': { target: process.env.VITE_API_TARGET || 'http://127.0.0.1:3270', changeOrigin: true },
     },
   },
 })
