@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { generarPKCE } from './crypto'
+import { api } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 
 interface AuthConfig {
@@ -35,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Cargar config de Authentik desde el backend
-    fetch('/api/auth/config')
+    fetch(api('/api/auth/config'))
       .then(r => r.json())
       .then((cfg: AuthConfig) => {
         setAuthConfig(cfg)
@@ -46,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (savedToken && savedNombre) {
           // Verificar que el token sigue siendo válido
-          fetch('/api/auth/me', {
+          fetch(api('/api/auth/me'), {
             headers: { Authorization: `Bearer ${savedToken}` }
           }).then(r => {
             if (r.ok) {
@@ -103,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null)
     setNombre(null)
     setModo('local')
-    fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+    fetch(api('/api/auth/logout'), { method: 'POST' }).catch(() => {})
   }
 
   const headers = (): Record<string, string> =>

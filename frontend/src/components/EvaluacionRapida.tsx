@@ -7,19 +7,21 @@
  * criterio se ofrece el instrumento que la programación le ha asignado,
  * no una lista suelta de instrumentos del área.
  */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   getGruposDeAlumno, getAsignaturas, getInstrumentos, getUnidades,
   getRubrica, getCalificacionUnica, saveCalificaciones,
-  crearEvidencia, comprimirImagen, contarEvidenciasAlumno,
+  crearEvidencia, contarEvidenciasAlumno,
   getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura,
   type UnidadConCriterios,
 } from '@/db/queries'
 import { nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { api } from '@/api'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
 import InstrumentosManager from './InstrumentosManager'
+import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -62,7 +64,6 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const [guardando, setGuardando] = useState(false)
   const [managerAbierto, setManagerAbierto] = useState(false)
   const [refrescoInstr, setRefrescoInstr] = useState(0)
-  const fotoRef = useRef<HTMLInputElement>(null)
 
   const asig = asignaturas.find(a => a.id === asignaturaId) || null
   const instrById = useMemo(() => new Map(instrumentos.map(i => [i.id!, i])), [instrumentos])
@@ -123,7 +124,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     if (!asig || !grupo) { setCriterios([]); return }
     const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
     const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
-    fetch(url)
+    fetch(api(url))
       .then(r => { if (!r.ok) throw new Error(); return r.json() })
       .then((all: Criterio[]) => {
         const lista = Array.isArray(all) ? all : []
@@ -195,24 +196,21 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     } finally { setGuardando(false) }
   }
 
-  const capturarFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
+  const guardarEvidencia = async (ev: EvidenciaCapturada) => {
     setGuardando(true)
     try {
-      const blob = await comprimirImagen(file)
       await crearEvidencia({
         alumno_id: alumno.id!, asignatura_id: asignaturaId, criterio_id: criterioId || null,
-        instrumento_id: instrumentoId, unidad_id: unidadId,
-        trimestre, tipo: 'foto', mime: 'image/jpeg', blob,
+        instrumento_id: instrumentoId, unidad_id: unidadId, trimestre,
+        tipo: ev.tipo, mime: ev.mime, blob: ev.blob, duracion_ms: ev.duracion_ms ?? null,
         descripcion: observacion.trim() || undefined,
       })
       setNEvidencias(n => n + 1)
-      setMsg({ tipo: 'ok', texto: 'Evidencia guardada 📸' })
+      const nombre = ev.tipo === 'foto' ? 'Foto' : ev.tipo === 'audio' ? 'Audio' : 'Vídeo'
+      setMsg({ tipo: 'ok', texto: `${nombre} guardado como evidencia` })
       setTimeout(() => setMsg(null), 2200)
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la foto' })
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
     } finally { setGuardando(false) }
   }
 
@@ -405,16 +403,11 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           )}
 
           {/* Observación + evidencia */}
-          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch', marginBottom: 12, flexWrap: 'wrap' }}>
+          <div style={{ marginBottom: 12 }}>
             <input value={observacion} onChange={e => setObservacion(e.target.value)}
-              placeholder="Observación (se adjunta a la próxima nota o foto)…"
-              style={{ flex: '1 1 200px', minHeight: 44 }} />
-            <button className="btn-secondary" onClick={() => fotoRef.current?.click()} disabled={guardando}
-              style={{ minHeight: 44, fontSize: 14, whiteSpace: 'nowrap' }}>
-              📸 Evidencia
-            </button>
-            <input ref={fotoRef} type="file" accept="image/*" capture="environment"
-              style={{ display: 'none' }} onChange={capturarFoto} />
+              placeholder="Observación (se adjunta a la próxima nota o evidencia)…"
+              style={{ width: '100%', minHeight: 44, marginBottom: 8 }} />
+            <CapturaEvidencia onCapturada={guardarEvidencia} deshabilitado={guardando} />
           </div>
 
           {msg && (

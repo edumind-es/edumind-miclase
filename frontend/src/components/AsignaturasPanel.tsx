@@ -7,6 +7,7 @@ import {
 } from '@/db/queries'
 import { useAppStore } from '@/store/useAppStore'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
+import { api } from '@/api'
 
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
@@ -96,7 +97,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   const cargar = async () => {
     const [asigs, currList] = await Promise.all([
       getAsignaturas(Number(grupoId)),
-      fetch(`/api/curriculum/asignaturas?etapa=${etapa}&comunidad=${encodeURIComponent(comunidad)}`,
+      fetch(api(`/api/curriculum/asignaturas?etapa=${etapa}&comunidad=${encodeURIComponent(comunidad)}`),
         { headers: headers() }).then(r => r.json()).catch(() => []),
     ])
     const conInstr = await Promise.all(

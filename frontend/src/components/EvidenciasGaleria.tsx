@@ -1,11 +1,16 @@
 /**
- * Galería de evidencias de un alumno: fotos de producciones capturadas
- * desde el panel de evaluación rápida. Los blobs viven en IndexedDB;
- * aquí se convierten en object URLs solo mientras la galería está abierta.
+ * Galería de evidencias de un alumno: fotos, audios y vídeos capturados
+ * desde los paneles de evaluación. Los blobs viven en IndexedDB; aquí se
+ * convierten en object URLs solo mientras la galería está abierta.
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getEvidenciasAlumno, eliminarEvidencia } from '@/db/queries'
-import type { Alumno, Evidencia } from '@/db/localDb'
+import { duracionLegible } from './MiniaturaEvidencia'
+import type { Alumno, Evidencia, TipoEvidencia } from '@/db/localDb'
+
+const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
+const ETIQUETA: Record<string, string> = { foto: 'Fotos', audio: 'Audios', video: 'Vídeos' }
+const EXTENSION: Record<string, string> = { foto: 'jpg', audio: 'webm', video: 'mp4' }
 
 interface Props {
   alumno: Alumno
@@ -18,6 +23,15 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
   const [evidencias, setEvidencias] = useState<EvConUrl[]>([])
   const [ampliada, setAmpliada] = useState<EvConUrl | null>(null)
   const [cargando, setCargando] = useState(true)
+  const [filtro, setFiltro] = useState<TipoEvidencia | 'todas'>('todas')
+
+  const porTipo = useMemo(() => {
+    const r: Record<string, number> = { foto: 0, audio: 0, video: 0 }
+    for (const ev of evidencias) r[ev.tipo] = (r[ev.tipo] ?? 0) + 1
+    return r
+  }, [evidencias])
+
+  const visibles = filtro === 'todas' ? evidencias : evidencias.filter(e => e.tipo === filtro)
 
   useEffect(() => {
     let urls: string[] = []
@@ -49,7 +63,8 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
   const descargar = (ev: EvConUrl) => {
     const a = document.createElement('a')
     a.href = ev.url
-    a.download = `evidencia-${alumno.apellidos}-${ev.fecha.slice(0, 10)}.jpg`
+    const ext = ev.mime?.split('/')[1]?.split(';')[0] || EXTENSION[ev.tipo] || 'bin'
+    a.download = `evidencia-${alumno.apellidos}-${ev.fecha.slice(0, 10)}.${ext}`
     a.click()
   }
 
@@ -60,7 +75,7 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
-              📸 Evidencias — {alumno.apellidos}, {alumno.nombre}
+              🗂 Evidencias — {alumno.apellidos}, {alumno.nombre}
             </h2>
             <div style={{ fontSize: 12, color: 'var(--gris-600)' }}>
               {evidencias.length} evidencia{evidencias.length !== 1 ? 's' : ''} · guardadas solo en este dispositivo
@@ -74,19 +89,47 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
         {!cargando && evidencias.length === 0 && (
           <div style={{ textAlign: 'center', padding: 40, color: 'var(--gris-600)' }}>
             <div style={{ fontSize: 36, marginBottom: 10 }}>🗂</div>
-            Sin evidencias todavía. Se capturan desde el panel de evaluación rápida (📷 Evaluar QR).
+            Sin evidencias todavía. Se capturan al evaluar: en el calificador, pulsando una casilla,
+            o desde <strong>Evaluar QR</strong> con la tablet. Puedes guardar foto, audio o vídeo.
+          </div>
+        )}
+
+        {!cargando && evidencias.length > 0 && !ampliada && (
+          <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+            <button className={`tab-unidad${filtro === 'todas' ? ' activa' : ''}`} onClick={() => setFiltro('todas')}>
+              Todas <span className="trim">{evidencias.length}</span>
+            </button>
+            {(['foto', 'audio', 'video'] as TipoEvidencia[]).filter(t => porTipo[t] > 0).map(t => (
+              <button key={t} className={`tab-unidad${filtro === t ? ' activa' : ''}`} onClick={() => setFiltro(t)}>
+                {ICONO[t]} {ETIQUETA[t]} <span className="trim">{porTipo[t]}</span>
+              </button>
+            ))}
           </div>
         )}
 
         {/* Vista ampliada */}
         {ampliada ? (
           <div>
-            <img src={ampliada.url} alt="Evidencia"
-              style={{ width: '100%', borderRadius: 10, marginBottom: 10 }} />
+            {ampliada.tipo === 'foto' && (
+              <img src={ampliada.url} alt="Evidencia"
+                style={{ width: '100%', borderRadius: 10, marginBottom: 10 }} />
+            )}
+            {ampliada.tipo === 'audio' && (
+              <div style={{ background: 'var(--gris-100)', borderRadius: 10, padding: 20, marginBottom: 10, textAlign: 'center' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>🎙</div>
+                <audio src={ampliada.url} controls style={{ width: '100%' }} />
+              </div>
+            )}
+            {ampliada.tipo === 'video' && (
+              <video src={ampliada.url} controls playsInline
+                style={{ width: '100%', borderRadius: 10, marginBottom: 10, maxHeight: '55vh', background: '#000' }} />
+            )}
             <div style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 12 }}>
               {new Date(ampliada.fecha).toLocaleString('es-ES')}
               {ampliada.criterio_id && ` · Criterio ${ampliada.criterio_id}`}
               {ampliada.trimestre && ` · T${ampliada.trimestre}`}
+              {duracionLegible(ampliada.duracion_ms) && ` · ${duracionLegible(ampliada.duracion_ms)}`}
+              {` · ${(ampliada.blob.size / 1024 / 1024).toFixed(1)} MB`}
               {ampliada.descripcion && <div style={{ marginTop: 4, fontStyle: 'italic' }}>{ampliada.descripcion}</div>}
             </div>
             <div style={{ display: 'flex', gap: 10 }}>
@@ -97,12 +140,26 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 10 }}>
-            {evidencias.map(ev => (
+            {visibles.map(ev => (
               <button key={ev.id} onClick={() => setAmpliada(ev)}
                 style={{ border: '1px solid var(--gris-300)', borderRadius: 10, padding: 0, cursor: 'pointer', overflow: 'hidden', background: 'white', textAlign: 'left' }}>
-                <img src={ev.url} alt="Evidencia" loading="lazy"
-                  style={{ width: '100%', height: 110, objectFit: 'cover', display: 'block' }} />
+                {ev.tipo === 'foto' ? (
+                  <img src={ev.url} alt="Evidencia" loading="lazy"
+                    style={{ width: '100%', height: 110, objectFit: 'cover', display: 'block' }} />
+                ) : ev.tipo === 'video' ? (
+                  <video src={ev.url} preload="metadata" muted
+                    style={{ width: '100%', height: 110, objectFit: 'cover', display: 'block', background: '#000' }} />
+                ) : (
+                  <div style={{ width: '100%', height: 110, display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center', background: 'var(--azul-100)' }}>
+                    <span style={{ fontSize: 30 }}>🎙</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--azul-700)', marginTop: 4 }}>
+                      {duracionLegible(ev.duracion_ms) || 'audio'}
+                    </span>
+                  </div>
+                )}
                 <div style={{ padding: '6px 8px', fontSize: 11, color: 'var(--gris-600)' }}>
+                  <span style={{ marginRight: 4 }}>{ICONO[ev.tipo]}</span>
                   {new Date(ev.fecha).toLocaleDateString('es-ES')}
                   {ev.criterio_id && <span style={{ fontWeight: 700, color: 'var(--azul-700)' }}> · {ev.criterio_id}</span>}
                 </div>

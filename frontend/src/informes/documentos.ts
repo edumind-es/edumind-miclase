@@ -7,7 +7,7 @@
 import {
   documento, hoja, cabecera, pie, seccion, esc, nota, tinta, barraNota,
 } from './lamina'
-import { calificativo, parsearPesosTrimestres } from '@/db/calculo'
+import { calificativo, parsearPesosTrimestres, perfilCompetencial } from '@/db/calculo'
 import {
   notasDeAlumno, observacionesDeAlumno,
   type DatosGrupo, type EvidenciaInforme,
@@ -15,6 +15,12 @@ import {
 import type { Alumno } from '@/db/localDb'
 
 const TRIM = [1, 2, 3]
+
+function duracion(ms?: number | null): string {
+  if (!ms || !Number.isFinite(ms)) return '—'
+  const seg = Math.round(ms / 1000)
+  return `${Math.floor(seg / 60)}:${String(seg % 60).padStart(2, '0')}`
+}
 
 function etiquetaTrimestre(t: number) {
   return t === 1 ? '1er trimestre' : t === 2 ? '2º trimestre' : '3er trimestre'
@@ -100,6 +106,29 @@ export function informeIndividual(
       <table><thead><tr>${cab}</tr></thead><tbody>${filas}</tbody></table>`
   }).join('')
 
+  // ── Perfil competencial: cómo va en cada competencia específica
+  const bloquePerfil = conDatos.map(({ area, nota: n }) => {
+    const perfil = perfilCompetencial(n.criterios, area.pesosCriterio)
+      .filter(c => trimestre == null ? c.final != null : c.trimestres[trimestre] != null)
+    if (!perfil.length) return ''
+
+    const filas = perfil.map(c => {
+      const v = trimestre ? c.trimestres[trimestre] : c.final
+      return `<tr>
+        <td>${esc(c.etiqueta)}
+          <span style="font-family:var(--lm-mono);font-size:6.5pt;color:var(--lm-ink-3)"> ${esc(c.criterios.join(' '))}</span>
+        </td>
+        ${celdaNota(v, true)}
+        <td style="width:38mm">${barraNota(v)}</td>
+      </tr>`
+    }).join('')
+
+    return `<p class="sub">${esc(area.asig.nombre_display)}</p>
+      <table><thead><tr>
+        <th>Competencia específica</th><th class="n">Nota</th><th></th>
+      </tr></thead><tbody>${filas}</tbody></table>`
+  }).filter(Boolean).join('')
+
   // ── 03 · Observaciones
   const bloqueObs = observaciones.length
     ? observaciones.map(o => `<div class="observacion">
@@ -109,13 +138,37 @@ export function informeIndividual(
     : `<p class="vacio">Sin observaciones registradas.</p>`
 
   // ── 04 · Evidencias
-  const bloqueEvid = evidencias.length
-    ? `<div class="evidencias">${evidencias.map(ev => `<figure>
+  const fotos = evidencias.filter(e => e.tipo === 'foto' && e.src)
+  const medios = evidencias.filter(e => e.tipo !== 'foto')
+
+  const rejillaFotos = fotos.length
+    ? `<div class="evidencias">${fotos.map(ev => `<figure>
         <img src="${ev.src}" alt="Evidencia de aprendizaje">
         <figcaption>${esc(new Date(ev.fecha).toLocaleDateString('es-ES'))}${
           ev.criterio ? ` · ${esc(ev.criterio)}` : ''}${
           ev.descripcion ? `<br>${esc(ev.descripcion)}` : ''}</figcaption>
       </figure>`).join('')}</div>`
+    : ''
+
+  // El audio y el vídeo no se imprimen, pero deben constar
+  const listaMedios = medios.length
+    ? `<p class="sub">Grabaciones — consultables en la app</p>
+       <table><thead><tr>
+         <th style="width:22mm">Tipo</th><th style="width:22mm">Criterio</th>
+         <th>Descripción</th><th class="n">Duración</th><th class="n">Fecha</th>
+       </tr></thead><tbody>
+       ${medios.map(ev => `<tr>
+         <td>${ev.tipo === 'audio' ? 'Audio' : 'Vídeo'}</td>
+         <td class="criterio-id">${esc(ev.criterio || '—')}</td>
+         <td class="desc">${esc(ev.descripcion || 'Sin descripción')}</td>
+         <td class="n">${duracion(ev.duracion_ms)}</td>
+         <td class="n">${esc(new Date(ev.fecha).toLocaleDateString('es-ES'))}</td>
+       </tr>`).join('')}
+       </tbody></table>`
+    : ''
+
+  const bloqueEvid = (rejillaFotos || listaMedios)
+    ? rejillaFotos + listaMedios
     : `<p class="vacio">Sin evidencias adjuntas.</p>`
 
   // ── Asistencia
@@ -143,10 +196,16 @@ export function informeIndividual(
     ])}
     ${bloqueAsistencia}
 
-    ${seccion('01', 'Resultados por área', bloqueAreas)}
-    ${incluirCriterios && bloqueCriterios ? seccion('02', 'Detalle por criterio de evaluación', bloqueCriterios) : ''}
-    ${seccion(incluirCriterios && bloqueCriterios ? '03' : '02', 'Observaciones del docente', bloqueObs)}
-    ${seccion(incluirCriterios && bloqueCriterios ? '04' : '03', `Evidencias de aprendizaje${evidencias.length ? ` (${evidencias.length})` : ''}`, bloqueEvid)}
+    ${(() => {
+      // Las secciones se numeran según las que realmente aparezcan
+      const partes: [string, string][] = [['Resultados por área', bloqueAreas]]
+      if (bloquePerfil) partes.push(['Perfil por competencia específica', bloquePerfil])
+      if (incluirCriterios && bloqueCriterios) partes.push(['Detalle por criterio de evaluación', bloqueCriterios])
+      partes.push(['Observaciones del docente', bloqueObs])
+      partes.push([`Evidencias de aprendizaje${evidencias.length ? ` (${evidencias.length})` : ''}`, bloqueEvid])
+      return partes.map(([titulo, cuerpo], i) =>
+        seccion(String(i + 1).padStart(2, '0'), titulo, cuerpo)).join('\n    ')
+    })()}
 
     <div class="firma">
       <div>El maestro / la maestra</div>

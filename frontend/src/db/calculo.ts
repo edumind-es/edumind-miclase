@@ -141,6 +141,70 @@ export function calcularNotaArea(
   return { asignatura_id, trimestres, final, criterios }
 }
 
+// ─── Competencias específicas ────────────────────────────────────────────────
+
+export type NotaCompetencia = {
+  /** Número de la competencia específica: el 2 de «CE2.3» */
+  numero: string
+  etiqueta: string
+  trimestres: Record<number, number | null>
+  final: number | null
+  criterios: string[]
+}
+
+/**
+ * Extrae la competencia específica de un código de criterio.
+ *
+ * El currículo LOMLOE numera los criterios colgando de su competencia
+ * específica: CE2.3 es el tercer criterio de la competencia específica 2. Esa
+ * convención se respeta en todas las comunidades, así que se puede derivar el
+ * perfil competencial sin pedir nada más al servidor.
+ */
+export function competenciaDeCriterio(criterioId: string): string | null {
+  const m = /^\s*(?:CE|CA)?\s*(\d+)\s*[.\-]/i.exec(criterioId)
+  return m ? m[1] : null
+}
+
+/**
+ * Agrupa las notas de criterio en el perfil por competencia específica.
+ * Cada competencia pondera sus criterios por igual, salvo que la programación
+ * les haya dado pesos distintos.
+ */
+export function perfilCompetencial(
+  criterios: NotaCriterio[],
+  pesosCriterio: Map<string, number> = new Map()
+): NotaCompetencia[] {
+  const grupos = new Map<string, NotaCriterio[]>()
+  for (const c of criterios) {
+    const comp = competenciaDeCriterio(c.criterio_id)
+    if (!comp) continue
+    const lista = grupos.get(comp) ?? []
+    lista.push(c)
+    grupos.set(comp, lista)
+  }
+
+  return [...grupos.entries()]
+    .sort((a, b) => Number(a[0]) - Number(b[0]))
+    .map(([numero, lista]) => {
+      const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
+      for (const t of TRIMESTRES) {
+        trimestres[t] = ponderada(
+          lista.filter(c => c.trimestres[t] != null)
+               .map(c => ({ valor: c.trimestres[t]!, peso: pesosCriterio.get(c.criterio_id) ?? 1 })))
+      }
+      const final = ponderada(
+        lista.filter(c => c.final != null)
+             .map(c => ({ valor: c.final!, peso: pesosCriterio.get(c.criterio_id) ?? 1 })))
+      return {
+        numero,
+        etiqueta: `Competencia específica ${numero}`,
+        trimestres,
+        final,
+        criterios: lista.map(c => c.criterio_id),
+      }
+    })
+}
+
 // ─── Escalas LOMLOE ──────────────────────────────────────────────────────────
 
 export type Calificativo = { sigla: string; etiqueta: string; color: string }

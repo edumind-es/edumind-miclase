@@ -18,10 +18,15 @@ edumind_miclase/
 │   ├── src/routes/auth.js
 │   └── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v4) · queries.ts (única fuente de verdad)
-│   │                   calculo.ts (motor de notas ponderadas) · sync.ts (E2E) · ids.ts (rangos por dispositivo)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
+│   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
+│   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
-│   └── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
+│   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
+│   ├── capacitor.config.ts
+│   ├── ios/          ← proyecto Xcode (permisos en App/App/Info.plist)
+│   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
 ├── curriculum/       ← currículum por CCAA
 ├── scripts/
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos
@@ -39,9 +44,19 @@ edumind_miclase/
   trimestre → nota final. Un trimestre sin datos no cuenta como cero.
 - **Cambiar la programación no borra calificaciones.** Retirar un instrumento de
   un criterio conserva las notas ya puestas.
+- **Toda llamada al API pasa por `api()` de `src/api.ts`.** Una ruta relativa
+  fija funciona en la web pero en el contenedor nativo apunta al propio
+  contenedor, no al servidor.
+- **La fusión de sincronización mantiene su base.** `sync_base` guarda la
+  última versión común de cada registro; sin ella el merge cae al
+  last-write-wins y se pierden cambios simultáneos en campos distintos.
+- **Las evidencias de más de 5 MB no sincronizan** (tope del sobre cifrado).
+  Se guardan igual, pero hay que avisar al docente, no fallar en silencio.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
+- Empaquetar nativo: `npm run nativo:sync` (y `nativo:ios` / `nativo:android`
+  para abrir Xcode o Android Studio — requieren macOS o Android Studio)
 - Backend solo: `npm run dev:backend` (puerto 3270)
 - Frontend solo: `npm run dev:frontend` (puerto 5173)
 - Seed DB: `npm run seed`
@@ -58,8 +73,9 @@ sueltos y se lanzan a mano (ver `DESPLIEGUE.md`):
 - Motor de cálculo: bundle con esbuild y `node`.
 - Backend de sync: arrancar en un puerto aparte con una copia de la BD y
   firmar un JWT de prueba con `jose`.
-- Interfaz y migración v3→v4: Playwright (el binario vive en
-  `/var/www/pasos_v2/node_modules`).
+- Fusión a tres bandas: bundle con esbuild y `node`.
+- Interfaz, migración v3→v5 y sincronización real entre dos dispositivos:
+  Playwright (el binario vive en `/var/www/pasos_v2/node_modules`).
 
 ## Estado — EN PRODUCCIÓN
 Desplegada en https://miclase.edumind.es (verificado 2026-07-04):

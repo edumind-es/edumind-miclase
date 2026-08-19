@@ -50,7 +50,7 @@ await p.waitForFunction(() => document.getElementById('estado')?.textContent?.st
 const estado = await p.locator('#estado').innerText()
 ok(estado === 'LISTO v3', 'base de datos v3 sembrada con un curso real de Educación Física', estado)
 
-console.log('\n2. Abrir la app nueva (dispara la migración a v4)')
+console.log('\n2. Abrir la app nueva (dispara la migración a v5)')
 await p.goto(BASE, { waitUntil: 'networkidle' })
 await p.waitForTimeout(2500)
 ok(errores.length === 0, 'la migración no lanza ningún error', errores.slice(0,3).join(' | '))
@@ -78,9 +78,10 @@ const tras = await p.evaluate(async () => {
   return r
 })
 
-ok(tras.version === 40, 'la base pasa a la versión 4 (Dexie numera internamente ×10)', `idb v${tras.version}`)
+ok(tras.version === 50, 'la base pasa a la versión 5 (Dexie numera internamente ×10)', `idb v${tras.version}`)
 ok(tras.tablas.includes('criterio_instrumentos'), 'aparece la tabla criterio_instrumentos')
 ok(tras.tablas.includes('meta'), 'aparece la tabla meta')
+ok(tras.tablas.includes('sync_base'), 'aparece la tabla de fusión a tres bandas')
 
 console.log('\n3. Nada se ha perdido')
 ok(tras.grupos.length === 1 && tras.grupos[0].nombre === '5ºB', 'la clase sigue ahí')

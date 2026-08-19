@@ -8,6 +8,7 @@ import {
 } from '@/db/queries'
 import { useAppStore } from '@/store/useAppStore'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { api } from '@/api'
 
 const TIPOS_UNIDAD = [
   { value: 'unidad',    label: 'Unidad Didáctica', short: 'UD'   },
@@ -65,7 +66,7 @@ export default function ProgramacionPanel({
 
   const cargar = async () => {
     const crits = await fetch(
-      `/api/curriculum/criterios?asignatura=${encodeURIComponent(asignaturaNombre)}&curso=${grupoCurso}&etapa=${grupoEtapa}&comunidad=${encodeURIComponent(grupoComunidad)}`,
+      api(`/api/curriculum/criterios?asignatura=${encodeURIComponent(asignaturaNombre)}&curso=${grupoCurso}&etapa=${grupoEtapa}&comunidad=${encodeURIComponent(grupoComunidad)}`),
       { headers: headers() }
     ).then(r => r.json()).catch(() => [])
 

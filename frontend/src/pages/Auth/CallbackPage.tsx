@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGuardarSesion } from '@/auth/AuthProvider'
+import { api } from '@/api'
 
 export default function CallbackPage() {
   const navigate = useNavigate()
@@ -30,7 +31,7 @@ export default function CallbackPage() {
 
     sessionStorage.removeItem('pkce_verifier')
 
-    fetch('/api/auth/callback', {
+    fetch(api('/api/auth/callback'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, code_verifier: verifier }),

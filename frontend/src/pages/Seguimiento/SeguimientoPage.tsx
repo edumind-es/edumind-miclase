@@ -11,7 +11,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
 import { getGrupos, getAsignaturas, getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
-import { calcularNotaArea, calificativo } from '@/db/calculo'
+import { calcularNotaArea, calificativo, perfilCompetencial, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
 
 type FilaAlumno = {
@@ -28,9 +28,10 @@ export default function SeguimientoPage() {
   const [asignaturas, setAsignaturas] = useState<Asignatura[]>([])
   const [asignaturaId, setAsignaturaId] = useState('')
   const [datosCriterios, setDatosCriterios] = useState<any[]>([])
+  const [datosCompetencias, setDatosCompetencias] = useState<any[]>([])
   const [filas, setFilas] = useState<FilaAlumno[]>([])
   const [cargando, setCargando] = useState(false)
-  const [vista, setVista] = useState<'criterios' | 'alumnado'>('criterios')
+  const [vista, setVista] = useState<'criterios' | 'competencias' | 'alumnado'>('criterios')
 
   useEffect(() => {
     getGrupos().then(gs => {
@@ -77,12 +78,24 @@ export default function SeguimientoPage() {
         }
       }
 
+      // Perfil competencial del grupo: media de las notas de cada alumno
+      const acumulado = new Map<string, { etiqueta: string; suma: Record<number, number[]>; final: number[] }>()
+
       setFilas(alumnos.map(al => {
         const propias: Calificacion[] = calificaciones.filter(
           c => c.alumno_id === al.id && instrIds.has(c.instrumento_id))
         const n = calcularNotaArea(
           Number(asignaturaId), propias, instrumentos as Instrumento[],
           asig?.pesos_trimestres, pesosCriterio)
+
+        for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
+          const e = acumulado.get(comp.numero) ??
+            { etiqueta: `CE${comp.numero}`, suma: { 1: [], 2: [], 3: [] }, final: [] }
+          for (const t of [1, 2, 3]) if (comp.trimestres[t] != null) e.suma[t].push(comp.trimestres[t]!)
+          if (comp.final != null) e.final.push(comp.final)
+          acumulado.set(comp.numero, e)
+        }
+
         return {
           alumno: al,
           trimestres: n.trimestres,
@@ -90,6 +103,16 @@ export default function SeguimientoPage() {
           evaluados: n.criterios.length,
         }
       }))
+
+      const media = (xs: number[]) => xs.length ? Math.round((xs.reduce((a, b) => a + b, 0) / xs.length) * 10) / 10 : null
+      setDatosCompetencias(
+        [...acumulado.entries()]
+          .sort((a, b) => Number(a[0]) - Number(b[0]))
+          .map(([, e]) => ({
+            competencia: e.etiqueta,
+            '1T': media(e.suma[1]), '2T': media(e.suma[2]), '3T': media(e.suma[3]),
+            Final: media(e.final),
+          })))
 
       setCargando(false)
     }).catch(() => setCargando(false))
@@ -148,11 +171,13 @@ export default function SeguimientoPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
-            {(['criterios', 'alumnado'] as const).map(v => (
+            {(['criterios', 'competencias', 'alumnado'] as const).map(v => (
               <button key={v} onClick={() => setVista(v)}
                 className={`tab-unidad${vista === v ? ' activa' : ''}`}
                 style={{ fontSize: 13 }}>
-                {v === 'criterios' ? '📊 Por criterio' : '👥 Por alumno'}
+                {v === 'criterios' ? '📊 Por criterio'
+                  : v === 'competencias' ? '🎯 Por competencia'
+                  : '👥 Por alumno'}
               </button>
             ))}
           </div>
@@ -187,6 +212,32 @@ export default function SeguimientoPage() {
                   <Bar dataKey="1T" name="1er trim." fill="#2e6db4" radius={[3, 3, 0, 0]} />
                   <Bar dataKey="2T" name="2º trim."  fill="#27a35a" radius={[3, 3, 0, 0]} />
                   <Bar dataKey="3T" name="3er trim." fill="#e07b10" radius={[3, 3, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          {!cargando && datosCompetencias.length > 0 && vista === 'competencias' && (
+            <div className="card">
+              <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>
+                Perfil por competencia específica
+              </h2>
+              <p style={{ fontSize: 12.5, color: 'var(--gris-600)', marginBottom: 18 }}>
+                Media del grupo en cada competencia específica del área, agrupando sus criterios.
+                Es la lectura que pide la evaluación competencial LOMLOE.
+              </p>
+              <ResponsiveContainer width="100%" height={330}>
+                <BarChart data={datosCompetencias} margin={{ top: 5, right: 20, left: 0, bottom: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--gris-300)" />
+                  <XAxis dataKey="competencia" tick={{ fontSize: 12 }} />
+                  <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
+                  <Tooltip />
+                  <Legend />
+                  <ReferenceLine y={5} stroke="var(--rojo-500)" strokeDasharray="4 4" />
+                  <Bar dataKey="1T" name="1er trim." fill="#2e6db4" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="2T" name="2º trim."  fill="#27a35a" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="3T" name="3er trim." fill="#e07b10" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="Final" name="Final"  fill="#0f2d4a" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

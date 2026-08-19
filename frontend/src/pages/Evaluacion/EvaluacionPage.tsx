@@ -15,6 +15,7 @@ import {
 import { calificativo } from '@/db/calculo'
 import { useAppStore } from '@/store/useAppStore'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import type { Alumno } from '@/db/localDb'
@@ -99,7 +100,7 @@ export default function EvaluacionPage() {
     const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
     const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
 
-    fetch(url, { headers: headers() })
+    fetch(api(url), { headers: headers() })
       .then(r => { if (!r.ok) throw new Error(); return r.json() })
       .then((all: Criterio[]) => { setCriterios(Array.isArray(all) ? all : []); setErrorCurriculo(false) })
       .catch(() => { setCriterios([]); setErrorCurriculo(true) })

@@ -44,21 +44,50 @@ diez segundos (QR de mesa → panel táctil → nota + foto).
   - **Programación no destructiva**: regenerar la estructura conserva lo hecho;
     retirar un instrumento de un criterio no borra las notas ya puestas.
 
+- **Fase 5 — Roadmap cerrado (agosto 2026)**:
+  - **Empaquetado nativo (Capacitor 7)**: proyectos iOS y Android en
+    `frontend/ios` y `frontend/android`, con los permisos de cámara y
+    micrófono declarados. Resuelve la purga de IndexedDB de Safari: dentro del
+    contenedor el almacenamiento es de la app y el sistema no lo limpia por
+    inactividad. La app se empaqueta entera, así que arranca sin cobertura.
+  - **Evidencias de audio y vídeo**: grabación de audio con cronómetro sin
+    salir de la app, vídeo con la cámara del sistema, reproducción en la
+    galería y en el panel de celda, filtros por tipo y control de tamaño
+    (aviso al pasar de 5 MB, que es lo que cabe en un sobre de sincronización).
+    En los informes las fotos se incrustan y las grabaciones se listan con su
+    duración, porque en papel no se pueden reproducir.
+  - **Fusión a tres bandas**: la sincronización ya no resuelve los conflictos
+    a lo bruto. Guarda la última versión común de cada registro y combina
+    campo a campo: si en el portátil se corrige el apellido y en la tablet se
+    marca NEAE, se conservan los dos cambios. Solo cuando ambos tocan el mismo
+    campo decide el más reciente.
+  - **Perfil por competencia específica**: los criterios se agrupan por su
+    competencia (CE2.3 → competencia 2) en el informe individual y en una
+    vista nueva de Seguimiento. Es la lectura que pide la evaluación
+    competencial.
+  - **Rúbricas compartibles**: exportación e importación fiel en
+    `.edurubrica.json`, con su escala intacta. Es un fichero: no pasa por
+    ningún servidor.
+  - **Offline de verdad**: el service worker deja de cachear las respuestas de
+    sesión y de sincronización (guardarlas daba sesiones fantasma), el
+    currículo se cachea 120 días, cualquier ruta de la app abre sin red, y hay
+    aviso de trabajo sin conexión y panel de salud del almacenamiento.
+  - `jspdf` y `html2canvas` retirados: ya no se usaban.
+
 ## Pendiente
 
-1. **iPad de verdad (Capacitor)**: Safari puede purgar IndexedDB tras ~7 días
-   sin uso. Para competir con iDoceo en su terreno hay que empaquetar la app:
-   `npm i @capacitor/core @capacitor/cli && npx cap init` + plataforma iOS
-   (necesita macOS/Xcode). La app web actual funciona sin cambios dentro del
-   contenedor. Mientras tanto: Android/Chrome no tienen ese problema, el
-   almacenamiento persistente ya se solicita y la sincronización protege
-   frente a una purga.
-2. **Evidencias de audio y vídeo**: el modelo de datos ya lo contempla
-   (`evidencias.tipo`); falta la captura y los límites de tamaño. Ojo: el
-   sobre de sincronización tiene un tope de 8 MB por registro.
-3. **Resolución de conflictos más fina**: hoy es last-write-wins por registro.
-   Para edición simultánea intensiva convendría bajar a nivel de campo.
-4. **Informe de evolución por competencia específica**: agrupar criterios por
-   competencia y dibujar el perfil competencial del alumno.
-5. **Rúbricas compartibles**: exportar/importar rúbricas entre docentes como
-   fichero, sin pasar por el servidor.
+Nada del roadmap anterior queda abierto. Lo siguiente son mejoras, no deudas:
+
+1. **Publicar en las tiendas**: los proyectos nativos están listos, pero
+   compilar iOS exige macOS con Xcode y una cuenta de desarrollador de Apple
+   (99 $/año); Android necesita firmar el bundle. Hasta entonces, la PWA
+   instalable cubre el caso de uso en Android y en escritorio.
+2. **Sincronización en segundo plano**: hoy se sincroniza al abrir la pantalla
+   y cada cinco minutos si se activa. Con `Background Sync` en Android y
+   `BGTaskScheduler` en iOS podría hacerse sin abrir la app.
+3. **Compartir programaciones completas**, no solo rúbricas: exportar una
+   unidad con sus criterios e instrumentos para que otro docente la adopte.
+4. **Modo tutoría**: vista de un alumno con todas sus áreas a la vez, pensada
+   para la reunión con la familia.
+5. **Importar alumnado desde XADE / Séneca / Rayuela** con el formato de
+   exportación de cada consejería.

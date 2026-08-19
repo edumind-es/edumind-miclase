@@ -52,12 +52,13 @@ Notas:
    `sync_estado` para el buzón de sincronización cifrada. Se crean solas al
    reiniciar el backend (`CREATE TABLE IF NOT EXISTS`), pero **el reinicio del
    paso 5 es obligatorio**, no opcional. Ninguna tabla existente se toca.
-2. **La base del navegador migra de la v3 a la v4** en cuanto cada docente
-   abra la app: añade `criterio_instrumentos`, la tabla `meta` y sella
-   `updated_at`/`deleted_at` en todo lo que ya había. Migración probada sin
-   pérdida de datos (clases, alumnado, notas, observaciones, programación,
-   evidencias con foto, asistencia y rúbricas). Aun así, conviene avisar de
-   que descarguen una copia de seguridad antes de actualizar.
+2. **La base del navegador migra de la v3 a la v5** en cuanto cada docente
+   abra la app: añade `criterio_instrumentos`, `meta`, `sync_base` (la base de
+   la fusión a tres bandas) y sella `updated_at`/`deleted_at` en todo lo que ya
+   había. Migración probada sin pérdida de datos (clases, alumnado, notas,
+   observaciones, programación, evidencias con foto, asistencia y rúbricas).
+   Aun así, conviene avisar de que descarguen una copia de seguridad antes de
+   actualizar.
 3. **La sincronización exige sesión EDUmind.** En modo local (docente_id = 1)
    los endpoints `/api/sync/*` responden 403 con código `SIN_SSO`, para que
    todas las instalaciones locales no compartan el mismo buzón.
@@ -70,9 +71,13 @@ Notas:
    `frontend/src/db/sync.ts` (`LIMITE_ENVIO`), hay que subir nginx también.
 5. **Tipografías nuevas** en `frontend/public/fonts/` (Outfit e IBM Plex Mono,
    OFL-1.1) para los informes en Sistema Lámina. Van al build automáticamente.
-6. `jspdf` y `html2canvas` han dejado de usarse (los informes ahora se componen
-   en HTML e imprime el navegador). Siguen en `package.json`; se pueden quitar
-   en una limpieza posterior de dependencias.
+6. `jspdf` y `html2canvas` **retirados** del proyecto: los informes se componen
+   en HTML y los imprime el navegador.
+7. **El service worker cambia de política**: deja de cachear `/api/auth/` y
+   `/api/sync` (una respuesta de sesión guardada daba sesiones fantasma) y
+   cachea el currículo 120 días. Los navegadores se actualizan solos al
+   recargar, pero si alguien ve comportamientos raros de sesión el primer día,
+   basta con recargar dos veces.
 
 ## Pruebas antes de desplegar
 
@@ -100,7 +105,47 @@ node pruebas/sync.test.mjs
 npm run dev:frontend &
 node pruebas/e2e.test.mjs
 node pruebas/migracion.test.mjs
+
+# 5. Sincronización real entre dos dispositivos (vite contra el backend de prueba)
+pkill -f "bin/vite"
+VITE_API_TARGET=http://127.0.0.1:3999 npm run dev:frontend &
+node pruebas/sync-dos-dispositivos.test.mjs
 ```
+
+## Empaquetado nativo (iPad y Android)
+
+La app web sigue siendo el producto principal. El contenedor nativo existe por
+una razón concreta: **Safari purga IndexedDB tras unos días sin visitar el
+sitio**, y ahí se va el trimestre. Dentro de la app instalada el almacenamiento
+pertenece a la aplicación y el sistema no lo limpia por inactividad.
+
+Los proyectos ya están generados y versionados, con los permisos declarados:
+
+- `frontend/ios/App/App/Info.plist` — cámara, micrófono y fototeca, con los
+  textos que lee el docente en el diálogo de iOS. **Sin estas claves iOS cierra
+  la app** en cuanto se pide la cámara.
+- `frontend/android/app/src/main/AndroidManifest.xml` — `CAMERA` y
+  `RECORD_AUDIO`, declarados como características opcionales para no excluir
+  dispositivos sin cámara en la tienda.
+
+```bash
+# Copia el build web dentro de los dos proyectos nativos
+npm run nativo:sync
+
+# Abre el proyecto (requiere el IDE correspondiente)
+npm run nativo:ios       # necesita macOS con Xcode
+npm run nativo:android   # necesita Android Studio
+```
+
+Para publicar hace falta lo que no se puede hacer desde este servidor: un Mac
+con Xcode y cuenta de desarrollador de Apple (99 $/año) para iOS, y firmar el
+bundle para Google Play. Hasta entonces, en Android y escritorio la PWA
+instalable cubre el caso de uso, y el aviso de «proteger mis datos» de la
+pantalla de Sincronizar pide al navegador almacenamiento persistente.
+
+Ojo con la versión de Node: **Capacitor 7 es la última que funciona con Node 20**,
+que es lo que hay en este servidor. Capacitor 8 exige Node ≥ 22; si algún día se
+actualiza Node, se puede subir.
 
 ## Pendientes conocidos (archivos de sistema — cambiarlos a mano)
 

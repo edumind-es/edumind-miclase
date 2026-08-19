@@ -12,6 +12,7 @@ import {
 } from '@/db/queries'
 import { calcularNotaArea, type NotaArea } from '@/db/calculo'
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
+import { api } from '@/api'
 
 export type AreaInforme = {
   asig: Asignatura
@@ -40,7 +41,7 @@ async function criteriosDeArea(
               `&curso=${cursoNorm}&etapa=${grupo.etapa}` +
               `&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
   try {
-    const lista = await fetch(url, { headers: headers() }).then(r => r.ok ? r.json() : [])
+    const lista = await fetch(api(url), { headers: headers() }).then(r => r.ok ? r.json() : [])
     const m = new Map<string, string>()
     if (Array.isArray(lista)) for (const c of lista) m.set(c.id, c.descripcion)
     return m
@@ -122,21 +123,48 @@ function blobADataURL(blob: Blob): Promise<string> {
   })
 }
 
-export type EvidenciaInforme = { src: string; criterio: string | null; fecha: string; descripcion?: string }
+export type EvidenciaInforme = {
+  tipo: 'foto' | 'audio' | 'video'
+  /** Data-URL, solo para fotos: audio y vídeo no se pueden imprimir */
+  src?: string
+  criterio: string | null
+  fecha: string
+  descripcion?: string
+  duracion_ms?: number | null
+  bytes: number
+}
 
-/** Evidencias del alumno ya convertidas a data-URL para incrustarlas. */
-export async function evidenciasDeAlumno(alumnoId: number, maximo = 9): Promise<EvidenciaInforme[]> {
+/**
+ * Evidencias del alumno preparadas para el informe.
+ *
+ * Las fotos se incrustan como data-URL. El audio y el vídeo no caben en papel,
+ * pero tampoco pueden desaparecer del informe: se listan con su tipo, fecha,
+ * criterio y duración, para que el documento deje constancia de que existen y
+ * de dónde consultarlos.
+ */
+export async function evidenciasDeAlumno(alumnoId: number, maximoFotos = 9): Promise<EvidenciaInforme[]> {
   const evs = await getEvidenciasAlumno(alumnoId)
   const salida: EvidenciaInforme[] = []
-  for (const ev of evs.slice(0, maximo)) {
-    try {
-      salida.push({
-        src: await blobADataURL(ev.blob),
-        criterio: ev.criterio_id ?? null,
-        fecha: ev.fecha,
-        descripcion: ev.descripcion,
-      })
-    } catch { /* una evidencia ilegible no debe tumbar el informe */ }
+  let fotas = 0
+
+  for (const ev of evs) {
+    const base = {
+      tipo: ev.tipo,
+      criterio: ev.criterio_id ?? null,
+      fecha: ev.fecha,
+      descripcion: ev.descripcion,
+      duracion_ms: ev.duracion_ms ?? null,
+      bytes: ev.blob.size,
+    }
+    if (ev.tipo === 'foto') {
+      if (fotas >= maximoFotos) continue
+      try {
+        salida.push({ ...base, src: await blobADataURL(ev.blob) })
+        fotas++
+      } catch { /* una imagen ilegible no debe tumbar el informe */ }
+    } else {
+      salida.push(base)
+    }
   }
   return salida
 }

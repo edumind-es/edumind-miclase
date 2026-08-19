@@ -4,9 +4,12 @@
   "author": "Luis Vilela Acuña <contacto@edumind.es>",
   "private": true,
   "scripts": {
-    "dev:backend":  "cd backend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "seed":         "cd backend && npm run seed",
-    "build":        "cd frontend && npm run build"
+    "seed": "cd backend && npm run seed",
+    "build": "cd frontend && npm run build",
+    "nativo:sync": "npm run build && cd frontend && npx cap sync",
+    "nativo:ios": "npm run nativo:sync && cd frontend && npx cap open ios",
+    "nativo:android": "npm run nativo:sync && cd frontend && npx cap open android"
   }
 }

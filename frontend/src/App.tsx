@@ -12,6 +12,7 @@ import EscanearPage from '@/pages/Escanear/EscanearPage'
 import SincronizarPage from '@/pages/Sincronizar/SincronizarPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
 import ExportImport from '@/components/ExportImport'
+import EstadoConexion from '@/components/EstadoConexion'
 
 const NAV = [
   { to: '/',            label: 'Inicio',      icon: '⊞' },
@@ -155,6 +156,7 @@ function Layout() {
       </main>
 
       {exportOpen && <ExportImport onClose={() => setExportOpen(false)} />}
+      <EstadoConexion />
     </div>
   )
 }

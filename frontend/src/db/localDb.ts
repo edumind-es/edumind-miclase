@@ -146,7 +146,12 @@ export interface Rubrica extends Sincronizable {
   created_at?: string
 }
 
-// Evidencia de aprendizaje (foto de una producción, etc.) — el blob vive en IndexedDB
+/**
+ * Evidencia de aprendizaje: la producción del alumno capturada en el momento.
+ * El blob vive en IndexedDB; nunca sale del dispositivo salvo cifrado.
+ */
+export type TipoEvidencia = 'foto' | 'audio' | 'video'
+
 export interface Evidencia extends Sincronizable {
   id?: number
   alumno_id: number
@@ -155,9 +160,11 @@ export interface Evidencia extends Sincronizable {
   instrumento_id?: number | null
   unidad_id?: number | null
   trimestre?: number | null
-  tipo: string           // 'foto' (futuro: 'audio', 'video')
+  tipo: TipoEvidencia
   mime: string
   blob: Blob
+  /** Duración en milisegundos — solo audio y vídeo */
+  duracion_ms?: number | null
   descripcion?: string
   fecha: string
 }
@@ -185,6 +192,20 @@ export interface Meta {
   valor: any
 }
 
+/**
+ * Copia de la última versión que este dispositivo y el servidor tenían en
+ * común, por registro. Es la «base» de la fusión a tres bandas: sin ella solo
+ * se puede saber cuál de las dos versiones es más nueva, no QUÉ cambió cada
+ * uno. Con ella, si un dispositivo tocó el nombre y el otro el color, se
+ * conservan los dos cambios en vez de perder uno.
+ *
+ * Los blobs se excluyen: son inmutables una vez creados y ocuparían el doble.
+ */
+export interface SyncBase {
+  clave: string     // `${tabla}:${id}`
+  datos: any
+}
+
 class MiClaseDB extends Dexie {
   grupos!: Table<Grupo>
   alumnos!: Table<Alumno>
@@ -202,6 +223,7 @@ class MiClaseDB extends Dexie {
   planos!: Table<Plano>
   asientos!: Table<Asiento>
   meta!: Table<Meta>
+  sync_base!: Table<SyncBase>
 
   constructor() {
     super('miclase_db')
@@ -259,6 +281,13 @@ class MiClaseDB extends Dexie {
           if (r.deleted_at === undefined) r.deleted_at = null
         })
       }
+    })
+
+    // v5 — base de la fusión a tres bandas. Tabla nueva y vacía: los
+    // registros van entrando a medida que se sincronizan. Mientras un
+    // registro no tenga base, el merge cae al last-write-wins de siempre.
+    this.version(5).stores({
+      sync_base: 'clave',
     })
   }
 }

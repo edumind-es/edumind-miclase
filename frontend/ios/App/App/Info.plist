@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+        <string>EDUmind MiClase</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<!-- Permisos de captura de evidencias. Sin estas descripciones iOS cierra
+	     la app en cuanto se pide la cámara o el micrófono. El texto es el que
+	     lee el docente en el diálogo del sistema. -->
+	<key>NSCameraUsageDescription</key>
+	<string>Para fotografiar o grabar en vídeo las producciones del alumnado como evidencia de evaluación. Las imágenes se guardan solo en este dispositivo.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Para grabar exposiciones orales y lecturas del alumnado como evidencia de evaluación. Las grabaciones se guardan solo en este dispositivo.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Para guardar en tu carrete las evidencias que decidas exportar.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para adjuntar como evidencia una imagen que ya tengas en el dispositivo.</string>
+	<!-- El almacenamiento local es el cuaderno del docente: no debe ir a iCloud
+	     sin que lo decida, porque contiene datos del alumnado. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+</dict>
+</plist>

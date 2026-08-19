@@ -14,7 +14,8 @@
  * cada dispositivo genera ids en su propio rango.
  */
 import { db, TABLAS_SINC, type TablaSinc } from './localDb'
-import { idDispositivo } from './ids'
+import { idDispositivo, sello } from './ids'
+import { api } from '@/api'
 
 const K_CLAVE     = 'sync_clave'
 const K_PULL_SEQ  = 'sync_pull_seq'
@@ -41,6 +42,9 @@ export type ResultadoSync = {
   aplicados: number
   descartados: number
   conflictos: number
+  /** Registros que ambos dispositivos habían tocado y se han combinado */
+  fusionados: number
+  detalleFusion: string[]
   errores: string[]
 }
 
@@ -143,7 +147,7 @@ async function descifrar(clave: CryptoKey, iv: string, payload: string): Promise
 type Cabeceras = () => Record<string, string>
 
 async function pedir(ruta: string, headers: Cabeceras, init: RequestInit = {}) {
-  const res = await fetch(`/api/sync${ruta}`, {
+  const res = await fetch(api(`/api/sync${ruta}`), {
     ...init,
     headers: { 'Content-Type': 'application/json', ...headers(), ...(init.headers || {}) },
   })
@@ -200,6 +204,91 @@ export async function desbloquear(password: string, headers: Cabeceras): Promise
   await guardarMeta(K_CLAVE, clave)
 }
 
+// ─── Base de la fusión a tres bandas ─────────────────────────────────────
+
+/** Los blobs no participan en la fusión: son inmutables y pesan. */
+function sinBlob(reg: any): any {
+  if (!reg || typeof reg !== 'object') return reg
+  const { blob, ...resto } = reg
+  return resto
+}
+
+function claveBase(tabla: TablaSinc, id: number | string): string {
+  return `${tabla}:${id}`
+}
+
+async function guardarBase(tabla: TablaSinc, reg: any): Promise<void> {
+  await db.sync_base.put({ clave: claveBase(tabla, reg.id), datos: sinBlob(reg) })
+}
+
+async function leerBase(tabla: TablaSinc, id: number | string): Promise<any | null> {
+  const b = await db.sync_base.get(claveBase(tabla, id))
+  return b?.datos ?? null
+}
+
+/** Campos que nunca se fusionan campo a campo: los gestiona el propio sync. */
+const CAMPOS_DE_CONTROL = new Set(['id', 'updated_at', 'blob'])
+
+function iguales(a: any, b: any): boolean {
+  if (a === b) return true
+  if (a == null && b == null) return true
+  // Los campos JSON (trimestres, etiquetas, niveles…) se comparan como texto
+  if (typeof a === 'object' || typeof b === 'object') {
+    try { return JSON.stringify(a) === JSON.stringify(b) } catch { return false }
+  }
+  return false
+}
+
+export type ResultadoFusion = { registro: any; huboFusion: boolean; campos: string[] }
+
+/**
+ * Fusión a tres bandas: base (lo último que ambos compartían), local y remoto.
+ *
+ * Para cada campo:
+ *   · solo lo cambió el remoto  → se coge el remoto
+ *   · solo lo cambió el local   → se conserva el local
+ *   · lo cambiaron los dos      → gana el más reciente (last-write-wins)
+ *
+ * Así, si en el portátil se corrige el apellido de un alumno y en la tablet se
+ * le marca NEAE, no se pierde ninguno de los dos cambios.
+ */
+export function fusionarTresBandas(base: any, local: any, remoto: any): ResultadoFusion {
+  const remotoEsMasNuevo = (remoto.updated_at ?? '') > (local.updated_at ?? '')
+  const salida: any = { ...local }
+  const campos: string[] = []
+
+  const claves = new Set([...Object.keys(base), ...Object.keys(local), ...Object.keys(remoto)])
+  for (const campo of claves) {
+    if (CAMPOS_DE_CONTROL.has(campo)) continue
+
+    const cambioLocal = !iguales(local[campo], base[campo])
+    const cambioRemoto = !iguales(remoto[campo], base[campo])
+
+    if (cambioRemoto && !cambioLocal) {
+      salida[campo] = remoto[campo]
+      campos.push(campo)
+    } else if (cambioLocal && cambioRemoto && remotoEsMasNuevo) {
+      salida[campo] = remoto[campo]
+      campos.push(campo)
+    }
+    // resto de casos: se queda el valor local
+  }
+
+  // El blob solo puede venir del remoto si aquí no lo teníamos
+  if (remoto.blob && !local.blob) salida.blob = remoto.blob
+
+  // ¿El resultado difiere de lo que hay en el servidor? Entonces hay que
+  // devolvérselo, y para eso necesita un sello más reciente.
+  const difiereDelRemoto = [...claves].some(
+    c => !CAMPOS_DE_CONTROL.has(c) && !iguales(salida[c], remoto[c]))
+
+  salida.updated_at = difiereDelRemoto
+    ? sello()
+    : (remotoEsMasNuevo ? remoto.updated_at : local.updated_at)
+
+  return { registro: salida, huboFusion: difiereDelRemoto, campos }
+}
+
 // ─── Serialización de registros ──────────────────────────────────────────
 
 async function aSobre(tabla: TablaSinc, reg: any): Promise<string> {
@@ -236,6 +325,8 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
     let registros: any[] = []
     let bytes = 0
 
+    let originales: any[] = []
+
     const enviar = async () => {
       if (!registros.length) return
       const r = await pedir('/push', headers, {
@@ -244,7 +335,10 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
       })
       res.enviados += r.escritos ?? 0
       res.conflictos += r.descartados ?? 0
+      // Lo que el servidor ya tiene es, a partir de ahora, terreno común
+      for (const reg of originales) await guardarBase(tabla, reg)
       registros = []
+      originales = []
       bytes = 0
     }
 
@@ -263,6 +357,7 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
         if (bytes + payload.length > LIMITE_ENVIO || registros.length >= LOTE) await enviar()
 
         registros.push({ tabla, registro_id: String(reg.id), updated_at: reg.updated_at, iv, payload })
+        originales.push(reg)
         bytes += payload.length
         if (reg.updated_at > maxSello) maxSello = reg.updated_at
       } catch (e: any) {
@@ -293,7 +388,7 @@ async function traer(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync) {
       try {
         const json = await descifrar(clave, fila.iv, fila.payload)
         const remoto = deSobre(fila.tabla as TablaSinc, json)
-        const aplicado = await fusionar(fila.tabla as TablaSinc, remoto)
+        const aplicado = await fusionar(fila.tabla as TablaSinc, remoto, res)
         aplicado ? res.aplicados++ : res.descartados++
       } catch (e: any) {
         res.errores.push(`${fila.tabla}#${fila.registro_id}: ${e.message || 'no se pudo descifrar'}`)
@@ -307,15 +402,57 @@ async function traer(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync) {
 }
 
 /**
- * Last-write-wins por registro. Devuelve true si el remoto ha ganado.
- * Se compara `updated_at` como cadena ISO: el orden lexicográfico y el
- * cronológico coinciden, así que no hace falta parsear fechas.
+ * Integra un registro remoto en la base local.
+ *
+ * Con base común disponible, se fusiona campo a campo (ver
+ * `fusionarTresBandas`). Sin ella —primer encuentro con ese registro— no hay
+ * forma de saber qué cambió cada uno, así que se cae al last-write-wins.
+ *
+ * `updated_at` se compara como cadena ISO: su orden lexicográfico coincide con
+ * el cronológico, así que no hace falta parsear fechas.
  */
-async function fusionar(tabla: TablaSinc, remoto: any): Promise<boolean> {
+async function fusionar(
+  tabla: TablaSinc, remoto: any, res: ResultadoSync
+): Promise<boolean> {
   const t = db.table(tabla)
-  const local = await t.get(remoto.id)
-  if (local && (local.updated_at ?? '') >= (remoto.updated_at ?? '')) return false
-  await t.put(remoto)
+  const local: any = await t.get(remoto.id)
+
+  // No lo teníamos: se acepta tal cual
+  if (!local) {
+    await t.put(remoto)
+    await guardarBase(tabla, remoto)
+    return true
+  }
+
+  const base = await leerBase(tabla, remoto.id)
+
+  if (!base) {
+    // Sin terreno común: solo cabe quedarse con el más reciente
+    if ((local.updated_at ?? '') >= (remoto.updated_at ?? '')) return false
+    await t.put(remoto)
+    await guardarBase(tabla, remoto)
+    return true
+  }
+
+  const { registro, huboFusion, campos } = fusionarTresBandas(base, local, remoto)
+
+  // Nada que cambiar aquí
+  if (iguales(sinBlob(registro), sinBlob(local))) {
+    await guardarBase(tabla, remoto)
+    return false
+  }
+
+  await t.put(registro)
+  // La base pasa a ser lo que el servidor tiene; si hemos fusionado, nuestro
+  // resultado se le devolverá en el siguiente envío
+  await guardarBase(tabla, huboFusion ? remoto : registro)
+
+  if (huboFusion) {
+    res.fusionados++
+    res.detalleFusion.push(
+      `${tabla}#${remoto.id}: se combinaron cambios de los dos dispositivos` +
+      (campos.length ? ` (${campos.join(', ')})` : ''))
+  }
   return true
 }
 
@@ -326,7 +463,8 @@ export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
   const res: ResultadoSync = {
-    enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0, errores: [],
+    enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0,
+    fusionados: 0, detalleFusion: [], errores: [],
   }
 
   // Primero enviar y después recibir: así lo local nunca se pierde por una
@@ -360,4 +498,13 @@ export async function pendientesDeEnvio(): Promise<number> {
 /** Olvida los cursores para forzar un envío completo desde cero. */
 export async function reenviarTodo(): Promise<void> {
   await guardarMeta(K_PUSH_DESDE, '')
+}
+
+/**
+ * Olvida el terreno común. El siguiente ciclo volverá al last-write-wins en
+ * los registros afectados, así que solo tiene sentido si la base se ha
+ * corrompido o tras cambiar la contraseña y vaciar el buzón.
+ */
+export async function olvidarBaseDeFusion(): Promise<void> {
+  await db.sync_base.clear()
 }

@@ -8,3 +8,16 @@ backend/data/
 .DS_Store
 *.log
 *.tsbuildinfo
+
+# Artefactos de compilación nativa (Capacitor).
+# El proyecto Xcode y el de Gradle SÍ se versionan: llevan la configuración
+# de permisos e iconos. Lo que se ignora es lo que se regenera al compilar.
+frontend/ios/App/Pods/
+frontend/ios/App/App/public/
+frontend/ios/App/build/
+frontend/android/app/src/main/assets/public/
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/app/build/
+frontend/android/local.properties
+frontend/android/.idea/

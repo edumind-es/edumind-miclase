@@ -15,6 +15,8 @@ import {
   type EstadoSync, type ResultadoSync,
 } from '@/db/sync'
 import { idDispositivo } from '@/db/ids'
+import { esNativo, plataforma, servidor, fijarServidor } from '@/api'
+import AlmacenamientoLocal from '@/components/AlmacenamientoLocal'
 
 const K_AUTO = 'miclase_sync_auto'
 
@@ -168,6 +170,32 @@ export default function SincronizarPage() {
         </p>
       </div>
 
+      <AlmacenamientoLocal />
+
+      {/* En la app instalada la dirección del servidor es configurable:
+          un centro puede apuntar a su propia instalación sin recompilar. */}
+      {esNativo() && (
+        <div className="card" style={{ marginBottom: 18 }}>
+          <h2 style={{ fontSize: 14.5, fontWeight: 700, marginBottom: 6 }}>
+            🌐 Servidor EDUmind
+          </h2>
+          <p style={{ fontSize: 12.5, color: 'var(--gris-600)', marginBottom: 10, lineHeight: 1.6 }}>
+            De aquí se descarga el currículo y aquí está tu buzón cifrado.
+            Cámbialo solo si tu centro tiene su propia instalación.
+            Plataforma: <strong>{plataforma()}</strong>.
+          </p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <input defaultValue={servidor()} placeholder="https://miclase.edumind.es"
+              aria-label="Dirección del servidor EDUmind"
+              onBlur={e => fijarServidor(e.target.value)}
+              style={{ flex: '1 1 260px' }} />
+            <button className="btn-secondary" onClick={() => location.reload()}>
+              Aplicar y recargar
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Requisito: sesión SSO */}
       {!conectado ? (
         <div className="card" style={{ padding: 28, textAlign: 'center' }}>
@@ -270,6 +298,16 @@ export default function SincronizarPage() {
                   <strong>Último ciclo:</strong> {ultimo.enviados} enviados · {ultimo.recibidos} recibidos ·{' '}
                   {ultimo.aplicados} aplicados · {ultimo.descartados} ya estaban al día
                   {ultimo.conflictos > 0 && ` · ${ultimo.conflictos} versiones más antiguas descartadas`}
+                  {ultimo.fusionados > 0 && (
+                    <details style={{ marginTop: 8 }}>
+                      <summary style={{ cursor: 'pointer', color: 'var(--azul-700)', fontWeight: 600 }}>
+                        {ultimo.fusionados} registro(s) editados a la vez en dos dispositivos — se combinaron
+                      </summary>
+                      <ul style={{ margin: '6px 0 0 18px', fontSize: 12, lineHeight: 1.6 }}>
+                        {ultimo.detalleFusion.slice(0, 12).map((d, i) => <li key={i}>{d}</li>)}
+                      </ul>
+                    </details>
+                  )}
                   {ultimo.errores.length > 0 && (
                     <details style={{ marginTop: 8 }}>
                       <summary style={{ cursor: 'pointer', color: 'var(--rojo-500)', fontWeight: 600 }}>

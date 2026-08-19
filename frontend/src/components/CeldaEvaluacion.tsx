@@ -6,12 +6,14 @@
  * (o instrumentos) que la programación le ha asignado, su rúbrica si la tiene,
  * y solo entonces la nota. Además deja adjuntar la evidencia en el momento.
  */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
-  crearEvidencia, comprimirImagen, getEvidenciasAlumno, eliminarEvidencia,
+  crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
   type CeldaInstrumento,
 } from '@/db/queries'
+import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
+import MiniaturaEvidencia from './MiniaturaEvidencia'
 import { nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
@@ -46,7 +48,6 @@ export default function CeldaEvaluacion({
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [guardando, setGuardando] = useState(false)
-  const fotoRef = useRef<HTMLInputElement>(null)
 
   const instrumentoSel = instrumentos.find(i => i.instrumento_id === instrumentoId) ?? null
   const cfg = instrumentoSel ? getInstrConfig(instrumentoSel.tipo) : null
@@ -122,25 +123,22 @@ export default function CeldaEvaluacion({
     } finally { setGuardando(false) }
   }
 
-  const capturarFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
+  const guardarEvidencia = async (ev: EvidenciaCapturada) => {
     setGuardando(true)
     try {
-      const blob = await comprimirImagen(file)
       await crearEvidencia({
         alumno_id: alumno.id!, asignatura_id: asig.id, criterio_id: criterio.id,
-        instrumento_id: instrumentoId, unidad_id: unidadId,
-        trimestre, tipo: 'foto', mime: 'image/jpeg', blob,
+        instrumento_id: instrumentoId, unidad_id: unidadId, trimestre,
+        tipo: ev.tipo, mime: ev.mime, blob: ev.blob, duracion_ms: ev.duracion_ms ?? null,
         descripcion: observacion.trim() || undefined,
       })
       recargarEvidencias()
-      setMsg({ tipo: 'ok', texto: 'Evidencia guardada 📸' })
-      setTimeout(() => setMsg(null), 2000)
+      const nombre = ev.tipo === 'foto' ? 'Foto' : ev.tipo === 'audio' ? 'Audio' : 'Vídeo'
+      setMsg({ tipo: 'ok', texto: `${nombre} guardado como evidencia` })
+      setTimeout(() => setMsg(null), 2200)
       onGuardado()
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la foto' })
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
     } finally { setGuardando(false) }
   }
 
@@ -298,32 +296,18 @@ export default function CeldaEvaluacion({
           </div>
 
           {/* Observación + evidencia */}
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
+          <div style={{ marginBottom: 12 }}>
             <input value={observacion} onChange={e => setObservacion(e.target.value)}
               placeholder="Observación para este criterio…"
               onBlur={() => { if (valorActual != null) guardarNota(valorActual) }}
-              style={{ flex: '1 1 220px', minHeight: 42 }} />
-            <button className="btn-secondary" onClick={() => fotoRef.current?.click()} disabled={guardando}
-              style={{ minHeight: 42, fontSize: 13.5, whiteSpace: 'nowrap' }}>
-              📸 Evidencia
-            </button>
-            <input ref={fotoRef} type="file" accept="image/*" capture="environment"
-              style={{ display: 'none' }} onChange={capturarFoto} />
+              style={{ width: '100%', minHeight: 42, marginBottom: 8 }} />
+            <CapturaEvidencia onCapturada={guardarEvidencia} compacto deshabilitado={guardando} />
           </div>
 
           {evidencias.length > 0 && (
-            <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', marginBottom: 12 }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
               {evidencias.map(ev => (
-                <div key={ev.id} style={{ position: 'relative' }}>
-                  <img src={URL.createObjectURL(ev.blob)} alt={ev.descripcion || 'Evidencia'}
-                    style={{ width: 72, height: 56, objectFit: 'cover', borderRadius: 7, border: '1px solid var(--gris-300)' }} />
-                  <button onClick={() => borrarEvidencia(ev.id!)} title="Eliminar evidencia"
-                    style={{
-                      position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%',
-                      background: 'var(--rojo-500)', color: 'white', border: '2px solid white',
-                      fontSize: 11, lineHeight: 1, cursor: 'pointer', padding: 0,
-                    }}>×</button>
-                </div>
+                <MiniaturaEvidencia key={ev.id} evidencia={ev} onBorrar={() => borrarEvidencia(ev.id!)} />
               ))}
             </div>
           )}

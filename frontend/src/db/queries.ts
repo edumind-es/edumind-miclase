@@ -827,6 +827,32 @@ export async function eliminarRubrica(instrumento_id: number): Promise<void> {
 // ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
 
 /**
+ * Tamaño máximo que cabe en un sobre de sincronización.
+ *
+ * El servidor rechaza payloads de más de 8 MB y base64 infla un tercio, así
+ * que el blob en bruto tiene que quedar por debajo de ~5,5 MB. Una evidencia
+ * más grande se puede guardar igual —es del docente y es local— pero no
+ * viajará a los demás dispositivos, y eso hay que decírselo.
+ */
+export const LIMITE_EVIDENCIA_SINC = 5 * 1024 * 1024
+
+/** Tope duro: por encima de esto la cuota de IndexedDB sufre de verdad. */
+export const LIMITE_EVIDENCIA = 25 * 1024 * 1024
+
+export type AvisoEvidencia = { nivel: 'ok' | 'aviso' | 'error'; texto: string }
+
+export function revisarTamano(blob: Blob): AvisoEvidencia {
+  const mb = (blob.size / 1024 / 1024).toFixed(1)
+  if (blob.size > LIMITE_EVIDENCIA) {
+    return { nivel: 'error', texto: `Son ${mb} MB y el máximo son 25 MB. Graba un fragmento más corto.` }
+  }
+  if (blob.size > LIMITE_EVIDENCIA_SINC) {
+    return { nivel: 'aviso', texto: `Son ${mb} MB: se guarda en este dispositivo, pero no se sincronizará con los demás (máximo 5 MB).` }
+  }
+  return { nivel: 'ok', texto: `${mb} MB` }
+}
+
+/**
  * Comprime una imagen a JPEG (máx. 1600px de lado) antes de guardarla,
  * para que las fotos de la cámara no llenen la cuota de IndexedDB.
  */
@@ -861,6 +887,14 @@ export async function getEvidenciasAlumno(alumno_id: number): Promise<Evidencia[
 
 export async function contarEvidenciasAlumno(alumno_id: number): Promise<number> {
   return (await getEvidenciasAlumno(alumno_id)).length
+}
+
+/** Recuento por tipo, para las etiquetas de la galería. */
+export async function contarEvidenciasPorTipo(alumno_id: number): Promise<Record<string, number>> {
+  const evs = await getEvidenciasAlumno(alumno_id)
+  const r: Record<string, number> = { foto: 0, audio: 0, video: 0 }
+  for (const ev of evs) r[ev.tipo] = (r[ev.tipo] ?? 0) + 1
+  return r
 }
 
 /** Nº de evidencias por criterio de un alumno — lo pinta la matriz del calificador. */

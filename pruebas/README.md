@@ -7,6 +7,7 @@ despliegue**.
 | Fichero | Qué comprueba | Necesita |
 |---|---|---|
 | `calculo.test.ts` | Motor de notas: ponderación por instrumento, por criterio y por trimestre; escala LOMLOE; conversión de rúbricas | nada |
+| `fusion.test.ts` | Fusión a tres bandas: qué se conserva cuando dos dispositivos tocan el mismo registro | nada |
 | `sync.test.mjs` | Buzón de sincronización: configuración, empuje, descarga, last-write-wins, aislamiento entre docentes | backend en `:3999` con una **copia** de la BD |
 | `e2e.test.mjs` | Flujo completo en navegador: clase → alumnado → áreas → programación → instrumento por criterio → matriz → informe lámina → backup | `npm run dev:frontend` |
 | `migracion.test.mjs` | Que una base v3 de un curso real migre a v4 sin perder nada | `npm run dev:frontend` |
@@ -26,9 +27,11 @@ export SCRATCH=/tmp/miclase-pruebas && mkdir -p $SCRATCH
 # Tipos
 npx --prefix frontend tsc -b frontend
 
-# Motor de cálculo
-npx --prefix frontend esbuild pruebas/calculo.test.ts --bundle --platform=node \
-  --format=esm --outfile=$SCRATCH/calculo.mjs && node $SCRATCH/calculo.mjs
+# Funciones puras: motor de cálculo y fusión
+for t in calculo fusion; do
+  npx --prefix frontend esbuild pruebas/$t.test.ts --bundle --platform=node \
+    --format=esm --outfile=$SCRATCH/$t.mjs && node $SCRATCH/$t.mjs
+done
 
 # Sincronización (NUNCA contra la BD de producción)
 cp backend/data/miclase.db $SCRATCH/test.db

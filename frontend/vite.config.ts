@@ -11,21 +11,41 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 7_000_000,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // Cualquier ruta de la SPA debe abrir sin red: el docente entra en
+        // /evaluacion desde el acceso directo del móvil, no por la portada
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/api\//],
+        cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
-            // Las llamadas al API son same-origin (/api/... vía proxy o nginx)
-            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/api/'),
-            handler: 'NetworkFirst',
-            // El currículo es estático: 7 días de caché para poder evaluar
-            // sin conexión en el patio o el gimnasio
-            options: { cacheName: 'api-cache', expiration: { maxAgeSeconds: 604800 } },
+            // El currículo es público y prácticamente inmutable durante el
+            // curso: se cachea a lo grande para poder evaluar sin cobertura
+            // en el gimnasio, el patio o una salida.
+            urlPattern: ({ url, sameOrigin }) =>
+              sameOrigin && url.pathname.startsWith('/api/curriculum/'),
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'curriculo',
+              expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 120 },
+              cacheableResponse: { statuses: [200] },
+            },
+          },
+          {
+            // Sesión y sincronización NO se cachean nunca: una respuesta de
+            // auth guardada daría una sesión fantasma, y una de sync haría
+            // creer que ya se descargó lo que no se ha descargado.
+            urlPattern: ({ url, sameOrigin }) =>
+              sameOrigin && (url.pathname.startsWith('/api/auth/') || url.pathname.startsWith('/api/sync')),
+            handler: 'NetworkOnly',
           },
         ],
       },
       manifest: {
         name: 'EDUmind MiClase',
         short_name: 'MiClase',
-        description: 'Gestión de aula, evaluación y seguimiento docente',
+        description: 'Cuaderno del profesorado: evaluación competencial LOMLOE, asistencia y programación. Funciona sin conexión.',
+        lang: 'es',
+        categories: ['education', 'productivity'],
         theme_color: '#1a4a7a',
         background_color: '#ffffff',
         display: 'standalone',

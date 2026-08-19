@@ -24,6 +24,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [tieneDatos, setTieneDatos] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
+  const importRubricaRef = useRef<HTMLInputElement>(null)
 
   // IA
   const ai = useLocalAI()
@@ -124,6 +125,62 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     a.download = `rubrica-${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.md`
     a.click()
     setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+  }
+
+  /**
+   * Intercambio fiel entre docentes.
+   *
+   * El Markdown es cómodo de leer y de pasar por una IA, pero pierde el valor
+   * numérico de cada nivel: al reimportarlo hay que adivinarlo. Este formato
+   * guarda la rúbrica tal cual, con su escala, para que compartirla entre
+   * compañeros no degrade nada. Es un fichero: no pasa por ningún servidor.
+   */
+  const exportarRubrica = () => {
+    const paquete = {
+      formato: 'edumind-rubrica',
+      version: 1,
+      exportado: new Date().toISOString(),
+      titulo: rubrica.titulo,
+      area: asignaturaNombre,
+      nivel,
+      contexto: iaContexto || undefined,
+      niveles: rubrica.niveles,
+      indicadores: rubrica.indicadores,
+    }
+    const blob = new Blob([JSON.stringify(paquete, null, 2)], { type: 'application/json' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.edurubrica.json`
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+    setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
+  }
+
+  const importarRubrica = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const p = JSON.parse(await file.text())
+      if (p.formato !== 'edumind-rubrica') throw new Error('El fichero no es una rúbrica de EDUmind.')
+      if (!Array.isArray(p.niveles) || !p.niveles.length) throw new Error('La rúbrica no trae niveles.')
+      if (!Array.isArray(p.indicadores) || !p.indicadores.length) throw new Error('La rúbrica no trae indicadores.')
+
+      setRubrica(r => ({
+        ...r,
+        titulo: p.titulo || r.titulo,
+        niveles: p.niveles,
+        indicadores: p.indicadores,
+      }))
+      if (p.contexto) setIaContexto(p.contexto)
+      const de = p.area && p.area !== asignaturaNombre ? ` (venía de ${p.area})` : ''
+      setMsg({
+        tipo: 'ok',
+        texto: `Rúbrica «${p.titulo}» importada con ${p.indicadores.length} indicadores y ${p.niveles.length} niveles${de}. Revísala y pulsa Guardar.`,
+      })
+    } catch (err: any) {
+      setMsg({ tipo: 'error', texto: err.message || 'No se pudo leer el fichero de rúbrica.' })
+    }
   }
 
   const importarMD = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,6 +353,18 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                   + Añadir indicador
                 </button>
                 <div style={{ flex: 1 }} />
+                <button className="btn-secondary" style={{ fontSize: 12 }}
+                  onClick={() => importRubricaRef.current?.click()}
+                  title="Cargar una rúbrica compartida por otro docente (.edurubrica.json)">
+                  📥 Importar rúbrica
+                </button>
+                <input ref={importRubricaRef} type="file" accept=".json,.edurubrica.json"
+                  style={{ display: 'none' }} onChange={importarRubrica} />
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarRubrica}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Guardar la rúbrica en un fichero para compartirla con otro docente">
+                  📤 Compartir rúbrica
+                </button>
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => importRef.current?.click()} title="Importar desde archivo .md">
                   ⬆ Importar .md
                 </button>
