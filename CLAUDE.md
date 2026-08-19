@@ -28,7 +28,8 @@ edumind_miclase/
 │   ├── ios/          ← proyecto Xcode (permisos en App/App/Info.plist)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
 ├── curriculum/       ← currículum por CCAA
-├── scripts/
+├── scripts/          ← parse_curriculum.py · generar_iconos.py (todos los iconos)
+├── PRIVACIDAD.md     ← qué datos se tratan y qué ve el servidor
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos
 
 ## Invariantes que no se deben romper
@@ -52,6 +53,11 @@ edumind_miclase/
   last-write-wins y se pierden cambios simultáneos en campos distintos.
 - **Las evidencias de más de 5 MB no sincronizan** (tope del sobre cifrado).
   Se guardan igual, pero hay que avisar al docente, no fallar en silencio.
+- **El escaneo de QR necesita los dos motores.** `BarcodeDetector` no existe en
+  WKWebView ni en Safari: sin el decodificador de reserva de `utils/lectorQR.ts`
+  la función estrella desaparece justo en el iPad.
+- **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
+  produce los de web, iOS y Android desde una única definición.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`

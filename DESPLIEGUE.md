@@ -128,24 +128,80 @@ Los proyectos ya están generados y versionados, con los permisos declarados:
   `RECORD_AUDIO`, declarados como características opcionales para no excluir
   dispositivos sin cámara en la tienda.
 
+Los iconos y la pantalla de arranque se generan desde una sola definición:
+
 ```bash
-# Copia el build web dentro de los dos proyectos nativos
-npm run nativo:sync
-
-# Abre el proyecto (requiere el IDE correspondiente)
-npm run nativo:ios       # necesita macOS con Xcode
-npm run nativo:android   # necesita Android Studio
+python3 scripts/generar_iconos.py   # web, iOS y Android de una vez
+npm run nativo:sync                 # build + copia a los proyectos nativos
 ```
-
-Para publicar hace falta lo que no se puede hacer desde este servidor: un Mac
-con Xcode y cuenta de desarrollador de Apple (99 $/año) para iOS, y firmar el
-bundle para Google Play. Hasta entonces, en Android y escritorio la PWA
-instalable cubre el caso de uso, y el aviso de «proteger mis datos» de la
-pantalla de Sincronizar pide al navegador almacenamiento persistente.
 
 Ojo con la versión de Node: **Capacitor 7 es la última que funciona con Node 20**,
 que es lo que hay en este servidor. Capacitor 8 exige Node ≥ 22; si algún día se
 actualiza Node, se puede subir.
+
+### Compilar en el Mac, paso a paso
+
+En este servidor no hay Xcode ni CocoaPods, así que el proyecto se prepara aquí
+y se compila allí. Lo que sigue está pensado para hacerse de una sentada.
+
+**1. Llevarse el código.** No hay remoto git, pero se puede clonar por SSH
+directamente desde el servidor, y así se conserva el historial:
+
+```bash
+# En el Mac
+git clone ssh://nuevoadmin@edumind-mini:2122/var/www/edumind_miclase
+cd edumind_miclase
+```
+
+**2. Preparar.** Hace falta Node (18 o superior) y CocoaPods
+(`brew install cocoapods`):
+
+```bash
+cd frontend && npm install && cd ..
+npm run nativo:sync          # compila la web y la mete en el proyecto iOS
+cd frontend && npx cap open ios
+```
+
+`npx cap sync` ejecuta `pod install` automáticamente cuando encuentra
+CocoaPods; en este servidor se salta ese paso y avisa.
+
+**3. En Xcode, tres cosas y solo tres:**
+
+1. Selecciona el target **App** → pestaña **Signing & Capabilities** →
+   en **Team** elige tu equipo de desarrollador. Con la firma automática, Xcode
+   registra el identificador `es.edumind.miclase` por ti.
+2. Arrastra `App/PrivacyInfo.xcprivacy` al target **App** en el navegador de
+   proyecto (desmarca *Copy items if needed*: el fichero ya está en su sitio).
+   Comprueba que aparece en **Build Phases → Copy Bundle Resources**. Sin esto
+   App Store Connect se queja del manifiesto de privacidad al subir.
+3. Elige un iPad conectado o un simulador y pulsa **Run**.
+
+**4. Publicar.** `Product → Archive` → *Distribute App*. Para TestFlight basta
+con eso; para la App Store hay que rellenar la ficha de privacidad en App Store
+Connect. Las respuestas, según lo que hace la app: **no se recogen datos**, no
+hay rastreo y no hay identificadores. Si el validador señala un «required reason
+API», el que corresponde es `NSPrivacyAccessedAPICategoryUserDefaults` con
+motivo `CA92.1`, que ya está declarado en el manifiesto.
+
+### Qué revisar en el iPad antes de dar por buena la compilación
+
+| Comprobación | Por qué importa |
+|---|---|
+| Escanear un QR de mesa con la cámara | WKWebView no trae `BarcodeDetector`: se usa el decodificador de reserva en JavaScript (`utils/lectorQR.ts`). Si esto falla, la función estrella no existe en iPad. |
+| Hacer una foto y grabar un audio como evidencia | Verifica que los permisos del `Info.plist` están y que el texto que sale es el correcto |
+| Cerrar la app, esperar y volver a abrirla con las notas puestas | Es la razón de ser del empaquetado: el almacenamiento debe sobrevivir |
+| Abrir la app en modo avión | Debe arrancar y dejar calificar sin red |
+| Girar el iPad y abrir el teclado en el calificador | Las áreas seguras y `contentInset` del teclado |
+| Entrar en Sincronizar | Debe aparecer el campo de servidor, que solo se muestra en la app nativa |
+
+### Android
+
+```bash
+npm run nativo:android    # abre Android Studio
+```
+
+Para Google Play hay que firmar el paquete: *Build → Generate Signed Bundle*.
+El icono adaptativo ya está generado (primer plano y color de fondo).
 
 ## Pendientes conocidos (archivos de sistema — cambiarlos a mano)
 

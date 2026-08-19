@@ -8,9 +8,11 @@ despliegue**.
 |---|---|---|
 | `calculo.test.ts` | Motor de notas: ponderación por instrumento, por criterio y por trimestre; escala LOMLOE; conversión de rúbricas | nada |
 | `fusion.test.ts` | Fusión a tres bandas: qué se conserva cuando dos dispositivos tocan el mismo registro | nada |
+| `lectorqr.test.mjs` | El decodificador de QR de reserva (el que usa el iPad) contra los QR que genera la app | nada |
 | `sync.test.mjs` | Buzón de sincronización: configuración, empuje, descarga, last-write-wins, aislamiento entre docentes | backend en `:3999` con una **copia** de la BD |
 | `e2e.test.mjs` | Flujo completo en navegador: clase → alumnado → áreas → programación → instrumento por criterio → matriz → informe lámina → backup | `npm run dev:frontend` |
-| `migracion.test.mjs` | Que una base v3 de un curso real migre a v4 sin perder nada | `npm run dev:frontend` |
+| `migracion.test.mjs` | Que una base v3 de un curso real migre a v5 sin perder nada | `npm run dev:frontend` |
+| `escaner-sin-detector.test.mjs` | Que el QR se pueda escanear en un navegador sin `BarcodeDetector`, o sea, en iPad | `npm run dev:frontend` |
 | `sync-dos-dispositivos.test.mjs` | Cifrado, descifrado y fusión **en el navegador**: dos dispositivos que se sincronizan, el servidor sin poder leer nada, y el last-write-wins | backend de prueba + vite con `VITE_API_TARGET` |
 
 `migracion.test.mjs` se crea y se borra solo la página de siembra que necesita
@@ -32,6 +34,7 @@ for t in calculo fusion; do
   npx --prefix frontend esbuild pruebas/$t.test.ts --bundle --platform=node \
     --format=esm --outfile=$SCRATCH/$t.mjs && node $SCRATCH/$t.mjs
 done
+node pruebas/lectorqr.test.mjs
 
 # Sincronización (NUNCA contra la BD de producción)
 cp backend/data/miclase.db $SCRATCH/test.db
@@ -44,6 +47,7 @@ node pruebas/sync.test.mjs
 npm run dev:frontend & sleep 3
 node pruebas/e2e.test.mjs
 node pruebas/migracion.test.mjs
+node pruebas/escaner-sin-detector.test.mjs
 
 # Sincronización entre dos dispositivos: vite debe apuntar al backend de prueba
 pkill -f "bin/vite"

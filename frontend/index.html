@@ -3,9 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1a4a7a" />
-    <meta name="description" content="EDUmind MiClase — Gestión de aula y evaluación docente" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <!-- `viewport-fit=cover` + `env(safe-area-inset-*)` en el CSS: sin esto la
+         barra lateral queda bajo la muesca en iPhone y bajo el indicador de
+         inicio en iPad. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f2d4a" />
+    <meta name="description" content="EDUmind MiClase — cuaderno del profesorado: evaluación competencial LOMLOE, asistencia y programación. Funciona sin conexión." />
+    <!-- Añadir a pantalla de inicio en iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MiClase" />
+    <!-- El calificador es una tabla: que iOS no convierta los códigos de
+         criterio en enlaces de teléfono. -->
+    <meta name="format-detection" content="telephone=no" />
     <!-- Sistema Lámina EDUmind (vendorizado; canon en edumind.es/design/lamina.html) -->
     <link rel="stylesheet" href="/vendor/lamina-v1.css" />
     <title>EDUmind MiClase</title>

@@ -146,7 +146,12 @@ input:focus, select:focus, textarea:focus {
   display: grid;
   grid-template-columns: var(--ancho-sidebar, 220px) 1fr;
   min-height: 100vh;
+  min-height: 100dvh;   /* en móvil, descontando la barra del navegador */
   transition: grid-template-columns .18s ease;
+  /* En iPhone y iPad con muesca o indicador de inicio, el contenido debe
+     respetar las zonas del sistema o queda tapado. */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 .layout.plegado { --ancho-sidebar: 62px; }
 
@@ -164,6 +169,7 @@ input:focus, select:focus, textarea:focus {
   justify-content: space-between;
   gap: 8px;
   padding: 18px 14px 18px 20px;
+  padding-top: calc(18px + env(safe-area-inset-top));
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .sidebar-logo {
@@ -246,6 +252,7 @@ input:focus, select:focus, textarea:focus {
 
 .main-content {
   padding: 28px;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
   overflow-y: auto;
   min-width: 0;
 }

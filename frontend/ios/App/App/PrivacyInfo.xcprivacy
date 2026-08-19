@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Manifiesto de privacidad de EDUmind MiClase.
+
+	  La declaración es corta porque la app no recoge nada: todos los datos del
+	  aula viven en el almacenamiento del dispositivo y no se envían a ningún
+	  servidor en claro. La sincronización opcional sube sobres cifrados de
+	  extremo a extremo cuyo contenido el servidor no puede leer, así que no
+	  constituye recogida de datos en el sentido de esta declaración.
+
+	  Los frameworks de Capacitor traen su propio manifiesto; este cubre el
+	  target de la aplicación.
+
+	  IMPORTANTE: para que Apple lo tenga en cuenta, este fichero debe estar
+	  añadido al target «App» en Xcode (Build Phases → Copy Bundle Resources).
+	  Ver DESPLIEGUE.md, sección de empaquetado iOS.
+	-->
+
+	<!-- No se rastrea a nadie ni se comparten datos con corredores de datos -->
+	<key>NSPrivacyTracking</key>
+	<false/>
+
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+
+	<!-- No se recoge ningún dato del usuario ni del alumnado -->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<!--
+	  APIs de «motivo requerido» que usa el target de la app.
+	  CA92.1: acceder a las preferencias del usuario para guardar únicamente
+	  ajustes de la propia app, sin salir de ella.
+	-->
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>CA92.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

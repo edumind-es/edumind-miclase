@@ -53,8 +53,12 @@ export default defineConfig({
         scope: '/',
         start_url: '/',
         icons: [
-          { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+          { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          // El enmascarable va aparte: el sistema recorta los bordes, así que
+          // su marca es más pequeña. Declarar el mismo fichero como «any
+          // maskable» hacía que Android lo recortara y se comiera el icono.
+          { src: '/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
     }),

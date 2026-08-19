@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EDUmind MiClase">
+  <rect width="512" height="512" rx="112" fill="#0f2d4a"/>
+  <g>
+    <rect x="71.7" y="148.7" width="60.5" height="60.5" rx="13.3" fill="#e8613f"/>
+    <rect x="71.7" y="225.8" width="60.5" height="60.5" rx="13.3" fill="#e8613f"/>
+    <rect x="71.7" y="302.8" width="60.5" height="60.5" rx="13.3" fill="#e8613f"/>
+    <rect x="148.7" y="148.7" width="60.5" height="60.5" rx="13.3" fill="#e8a92e"/>
+    <rect x="148.7" y="225.8" width="60.5" height="60.5" rx="13.3" fill="#e8a92e"/>
+    <rect x="148.7" y="302.8" width="60.5" height="60.5" rx="13.3" fill="#e8a92e"/>
+    <rect x="225.8" y="148.7" width="60.5" height="60.5" rx="13.3" fill="#6ea94a"/>
+    <rect x="225.8" y="225.8" width="60.5" height="60.5" rx="13.3" fill="#6ea94a"/>
+    <rect x="225.8" y="302.8" width="60.5" height="60.5" rx="13.3" fill="#6ea94a"/>
+    <rect x="302.8" y="148.7" width="60.5" height="60.5" rx="13.3" fill="#3f7d99"/>
+    <rect x="302.8" y="225.8" width="60.5" height="60.5" rx="13.3" fill="#3f7d99"/>
+    <rect x="302.8" y="302.8" width="60.5" height="60.5" rx="13.3" fill="#3f7d99"/>
+    <rect x="379.9" y="148.7" width="60.5" height="60.5" rx="13.3" fill="#2c5c66"/>
+    <rect x="379.9" y="225.8" width="60.5" height="60.5" rx="13.3" fill="#2c5c66"/>
+    <rect x="383.2" y="306.1" width="53.8" height="53.8" rx="13.3" fill="none" stroke="#e9e6dd" stroke-width="6.7"/>
+  </g>
+</svg>

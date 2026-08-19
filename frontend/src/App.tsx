@@ -134,8 +134,11 @@ function Layout() {
           {' / '}
           <a href="https://eupl.eu/1.2/es/" target="_blank" rel="noopener noreferrer">EUPL-1.2</a>
           <br />
+          <a href="https://github.com/edumind-es/edumind-miclase/blob/main/PRIVACIDAD.md"
+             target="_blank" rel="noopener noreferrer">Privacidad y datos</a>
+          {' · '}
           <a href="https://github.com/edumind-es/edumind-miclase" target="_blank" rel="noopener noreferrer">
-            Código fuente en GitHub
+            Código fuente
           </a>
         </div>
       </aside>

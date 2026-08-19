@@ -1,8 +1,9 @@
 /**
  * Escáner de QR de mesa: apunta la cámara de la tablet al código del alumno
- * y se abre su panel de evaluación rápida. Sin dependencias: usa la API
- * nativa BarcodeDetector (Chrome/Edge/Android); en navegadores sin soporte
- * se puede introducir el código a mano.
+ * y se abre su panel de evaluación rápida. Usa el detector nativo del
+ * navegador cuando existe (Chrome/Android) y un decodificador en JavaScript
+ * cuando no (Safari y el WKWebView del iPad), de modo que escanear funciona
+ * en todos los dispositivos. Queda además la entrada manual del código.
  *
  * Entradas alternativas por URL (sin cámara):
  *   /escanear?c=M7KP2      ← QR escaneado con la cámara nativa del dispositivo
@@ -14,9 +15,10 @@ import { getAlumnoPorCodigo } from '@/db/queries'
 import { db } from '@/db/localDb'
 import type { Alumno } from '@/db/localDb'
 import { extraerCodigo } from '@/utils/qrSheet'
+import { crearLector, sePuedeEscanear, type Lector } from '@/utils/lectorQR'
 import EvaluacionRapida from '@/components/EvaluacionRapida'
 
-const tieneDetector = typeof window !== 'undefined' && 'BarcodeDetector' in window
+const tieneDetector = sePuedeEscanear()
 
 export default function EscanearPage() {
   const [params, setParams] = useSearchParams()
@@ -27,10 +29,13 @@ export default function EscanearPage() {
   const [noEncontrado, setNoEncontrado] = useState('')
   const [historial, setHistorial] = useState<Alumno[]>([])
 
+  const [motor, setMotor] = useState<'nativo' | 'javascript' | null>(null)
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const timerRef = useRef<number | null>(null)
   const ocupadoRef = useRef(false)
+  const lectorRef = useRef<Lector | null>(null)
 
   // Entrada directa por URL (QR con cámara nativa, o toque en el plano)
   useEffect(() => {
@@ -79,20 +84,28 @@ export default function EscanearPage() {
       requestAnimationFrame(async () => {
         if (!videoRef.current) return
         videoRef.current.srcObject = stream
+        // `playsInline` es obligatorio en iOS: sin él el vídeo se abre a
+        // pantalla completa y no se puede escanear
+        videoRef.current.setAttribute('playsinline', 'true')
         await videoRef.current.play()
-        const Detector = (window as any).BarcodeDetector
-        const detector = new Detector({ formats: ['qr_code'] })
+
+        const lector = await crearLector()
+        lectorRef.current = lector
+        setMotor(lector.motor)
+
+        // El decodificador en JavaScript necesita algo más de holgura entre
+        // fotogramas que el nativo para no saturar un iPad antiguo
+        const cadencia = lector.motor === 'nativo' ? 250 : 350
+
         timerRef.current = window.setInterval(async () => {
           if (ocupadoRef.current || !videoRef.current || videoRef.current.readyState < 2) return
           ocupadoRef.current = true
           try {
-            const codes = await detector.detect(videoRef.current)
-            if (codes.length > 0 && codes[0].rawValue) {
-              await abrirPorCodigo(codes[0].rawValue)
-            }
-          } catch { /* frame no legible, seguir intentando */ }
+            const valor = await lector.leer(videoRef.current)
+            if (valor) await abrirPorCodigo(valor)
+          } catch { /* fotograma no legible, seguir intentando */ }
           ocupadoRef.current = false
-        }, 250)
+        }, cadencia)
       })
     } catch (e: any) {
       setErrorCamara(e?.name === 'NotAllowedError'
@@ -104,9 +117,12 @@ export default function EscanearPage() {
 
   const pararCamara = () => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
+    lectorRef.current?.liberar()
+    lectorRef.current = null
     streamRef.current?.getTracks().forEach(t => t.stop())
     streamRef.current = null
     setCamaraActiva(false)
+    setMotor(null)
   }
 
   const buscarManual = (e: React.FormEvent) => {
@@ -135,7 +151,8 @@ export default function EscanearPage() {
       <h1 className="page-title">Evaluar con QR</h1>
       <p style={{ color: 'var(--gris-600)', fontSize: 14, marginBottom: 20, maxWidth: 620 }}>
         Apunta la cámara al código QR de la mesa del alumno para abrir su panel de
-        evaluación al instante. Los QR se imprimen desde la ficha de cada grupo.
+        evaluación al instante. Los QR se imprimen desde la ficha de cada clase y
+        llevan solo un código anónimo, nunca el nombre.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, maxWidth: 900 }}>
@@ -148,6 +165,11 @@ export default function EscanearPage() {
                   style={{ width: '100%', maxHeight: 380, borderRadius: 10, background: '#000', objectFit: 'cover' }} />
                 <div style={{ fontSize: 13, color: 'var(--gris-600)', margin: '10px 0' }}>
                   Buscando código QR…
+                  {motor === 'javascript' && (
+                    <span style={{ display: 'block', fontSize: 11.5, color: 'var(--gris-500)', marginTop: 3 }}>
+                      Acerca un poco más el código: este dispositivo lee más despacio
+                    </span>
+                  )}
                 </div>
                 <button className="btn-secondary" onClick={pararCamara}>Detener cámara</button>
               </>
@@ -165,10 +187,9 @@ export default function EscanearPage() {
             )
           ) : (
             <div style={{ fontSize: 13, color: 'var(--gris-600)', padding: 12, lineHeight: 1.6 }}>
-              Este navegador no soporta el escaneo de QR con cámara
-              (necesita Chrome o Edge). Puedes usar la cámara nativa del
-              dispositivo (el QR abre la app directamente) o escribir el
-              código de la etiqueta aquí al lado.
+              Este dispositivo no da acceso a la cámara desde el navegador.
+              Puedes escanear el QR con la cámara del sistema —abre la app
+              directamente— o escribir el código de la etiqueta aquí al lado.
             </div>
           )}
         </div>
