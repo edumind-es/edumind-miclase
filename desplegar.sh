@@ -33,7 +33,9 @@ gris()  { printf '\033[90m%s\033[0m\n' "$*"; }
 # un directorio a medias.
 publicar() {
   local destino="$1"
-  ln -sfn "$destino" "$RAIZ/frontend/.dist-nueva"
+  # Relativo, no absoluto: el enlace vive dentro de frontend/ y asi no lleva
+  # dentro la ruta de esta maquina.
+  ln -sfn "releases/$(basename "$destino")" "$RAIZ/frontend/.dist-nueva"
   mv -Tf "$RAIZ/frontend/.dist-nueva" "$VIVA"
 }
 

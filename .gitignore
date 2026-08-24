@@ -1,5 +1,9 @@
 node_modules
 dist/
+# Sin barra tambien: desde que desplegar.sh publica por enlace simbolico,
+# frontend/dist es un enlace, y «dist/» solo casa con directorios. Se colo
+# commiteado con la ruta absoluta de este servidor.
+frontend/dist
 *.db
 *.db-wal
 *.db-shm
