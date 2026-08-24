@@ -119,8 +119,11 @@ async function principal() {
     const base = `http://127.0.0.1:${puertoWeb}`
     // Vite directamente, no por `npm run`: los argumentos que pasan por npm
     // los interpreta npm como configuración suya y el puerto se ignoraba.
+    // Y `--host 127.0.0.1` explícito: por defecto escucha en «localhost», que
+    // en algunas máquinas —los runners de GitHub, sin ir más lejos— resuelve
+    // primero a IPv6, y entonces nadie contesta en 127.0.0.1.
     const web = arrancar('servidor de desarrollo', 'npx',
-      ['vite', '--port', String(puertoWeb), '--strictPort'],
+      ['vite', '--host', '127.0.0.1', '--port', String(puertoWeb), '--strictPort'],
       { cwd: 'frontend', env: { VITE_API_TARGET: api } })
     // Margen amplio: en una máquina limpia, la primera vez que arranca vite
     // tiene que preparar las dependencias y tarda bastante más que aquí.
