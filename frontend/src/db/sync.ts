@@ -20,6 +20,8 @@ import {
   transporteServidor,
   type Cabeceras, type EstadoSync, type RespuestaPush, type Transporte,
 } from './transporte'
+import { transporteDirecto } from './transporteDirecto'
+import type { Enlace } from './enlaceDirecto'
 
 export type { EstadoSync } from './transporte'
 
@@ -34,11 +36,24 @@ function transporte(headers: Cabeceras): Transporte {
   return transporteServidor(headers)
 }
 
-const K_CLAVE      = 'sync_clave'
-const K_PULL_SEQ   = 'sync_pull_seq'
-const K_PUSH_DESDE = 'sync_push_desde'
-const K_ULTIMA     = 'sync_ultima'
-const K_CUARENTENA = 'sync_cuarentena'
+const K_CLAVE       = 'sync_clave'
+const K_PULL_SEQ    = 'sync_pull_seq'
+const K_PUSH_DESDE  = 'sync_push_desde'
+const K_ULTIMA      = 'sync_ultima'
+const K_CUARENTENA  = 'sync_cuarentena'
+const K_SALT        = 'sync_salt'
+const K_VERIFICADOR = 'sync_verificador'
+
+/**
+ * Cada transporte lleva sus propios cursores: lo que ya se ha subido al buzón
+ * no es lo que ya se le ha pasado a la tablet por enlace directo. Compartirlos
+ * haría que un envío por un camino diese por enviado lo del otro.
+ *
+ * El buzón se queda con los nombres de siempre para no obligar a migrar nada.
+ */
+function cursor(base: string, canal: Transporte): string {
+  return canal.id === 'servidor' ? base : `${base}:${canal.id}`
+}
 
 const ITERACIONES = 210_000          // OWASP 2023 para PBKDF2-SHA256
 const VERIFICADOR = 'EDUmind MiClase · verificador de contraseña v1'
@@ -181,16 +196,45 @@ export async function iniciarSincronizacion(
   const clave = await derivar(password, salt)
   const { iv, payload } = await cifrar(clave, VERIFICADOR)
 
-  await transporte(headers).configurar(b64(salt), `${iv}.${payload}`, reiniciar)
+  const verificador = `${iv}.${payload}`
+  await transporte(headers).configurar(b64(salt), verificador, reiniciar)
 
   await guardarMeta(K_CLAVE, clave)
+  await guardarConfig(b64(salt), verificador)
   await guardarMeta(K_PULL_SEQ, 0)
   await guardarMeta(K_PUSH_DESDE, '')
 }
 
+/**
+ * La sal y el verificador se guardan también aquí, no solo en el buzón.
+ *
+ * Hacían falta para que un dispositivo nuevo pudiera comprobar la contraseña,
+ * y hasta ahora solo vivían en el servidor: sin él no había forma de
+ * desbloquear. Guardándolos en cada aparato, dos que se emparejan
+ * directamente se los pueden pedir entre ellos y el servidor deja de ser
+ * imprescindible. No son secretos: la sal es pública por diseño y el
+ * verificador es un texto conocido cifrado con la clave.
+ */
+async function guardarConfig(salt: string | null, verificador: string | null) {
+  await guardarMeta(K_SALT, salt)
+  await guardarMeta(K_VERIFICADOR, verificador)
+}
+
+/** Lo que este dispositivo le puede contar a otro al emparejarse. */
+export async function configLocal(): Promise<{ salt: string | null; verificador: string | null }> {
+  return {
+    salt: await leerMeta<string | null>(K_SALT, null),
+    verificador: await leerMeta<string | null>(K_VERIFICADOR, null),
+  }
+}
+
 /** Dispositivo nuevo: descarga la sal, deriva y comprueba el verificador. */
 export async function desbloquear(password: string, headers: Cabeceras): Promise<void> {
-  const estado = await consultarEstado(headers)
+  await desbloquearCon(password, await consultarEstado(headers))
+}
+
+/** El mismo desbloqueo, con la configuración venga de donde venga. */
+async function desbloquearCon(password: string, estado: EstadoSync): Promise<void> {
   if (!estado.iniciado || !estado.salt || !estado.verificador) {
     throw new Error('Esta cuenta todavía no tiene sincronización configurada')
   }
@@ -203,6 +247,7 @@ export async function desbloquear(password: string, headers: Cabeceras): Promise
     throw new Error('Contraseña de sincronización incorrecta')
   }
   await guardarMeta(K_CLAVE, clave)
+  await guardarConfig(estado.salt, estado.verificador)
 }
 
 // ─── Base de la fusión a tres bandas ─────────────────────────────────────
@@ -336,8 +381,10 @@ function deSobre(tabla: TablaSinc, json: string): any {
 // ─── Empuje ──────────────────────────────────────────────────────────────
 
 async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
-  const desde: string = await leerMeta(K_PUSH_DESDE, '')
-  const cuarentena: Cuarentena = await leerMeta(K_CUARENTENA, {})
+  const kDesde = cursor(K_PUSH_DESDE, canal)
+  const kAislados = cursor(K_CUARENTENA, canal)
+  const desde: string = await leerMeta(kDesde, '')
+  const cuarentena: Cuarentena = await leerMeta(kAislados, {})
   const device_id = idDispositivo()
 
   let maxSello = desde
@@ -440,21 +487,22 @@ async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) 
 
   if (maxSello) {
     const frenado = sinEnviar.length ? sinEnviar.reduce((a, b) => (a < b ? a : b)) : null
-    const cursor = frenado && frenado < maxSello ? frenado : maxSello
-    await guardarMeta(K_PUSH_DESDE, cursor)
+    const hasta = frenado && frenado < maxSello ? frenado : maxSello
+    await guardarMeta(kDesde, hasta)
   }
-  await guardarMeta(K_CUARENTENA, cuarentena)
+  await guardarMeta(kAislados, cuarentena)
 }
 
 // ─── Descarga y fusión ───────────────────────────────────────────────────
 
 async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
   const device_id = idDispositivo()
-  let cursor: number = await leerMeta(K_PULL_SEQ, 0)
+  const kSeq = cursor(K_PULL_SEQ, canal)
+  let desde: number = await leerMeta(kSeq, 0)
   let hayMas = true
 
   while (hayMas) {
-    const r = await canal.traer(cursor, LOTE, device_id)
+    const r = await canal.traer(desde, LOTE, device_id)
 
     res.recibidos += r.registros.length
 
@@ -469,9 +517,9 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
       }
     }
 
-    cursor = r.seq
+    desde = r.seq
     hayMas = r.hay_mas
-    await guardarMeta(K_PULL_SEQ, cursor)
+    await guardarMeta(kSeq, desde)
   }
 }
 
@@ -538,7 +586,7 @@ async function fusionar(
 
 // ─── Ciclo completo ──────────────────────────────────────────────────────
 
-export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
+async function ejecutar(canal: Transporte): Promise<ResultadoSync> {
   const clave = await claveGuardada()
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
@@ -547,8 +595,6 @@ export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
     fusionados: 0, detalleFusion: [], errores: [],
   }
 
-  const canal = transporte(headers)
-
   // Primero enviar y después recibir: así lo local nunca se pierde por una
   // fusión que llegue antes de haber publicado los propios cambios.
   await empujar(clave, canal, res)
@@ -556,6 +602,52 @@ export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
 
   await guardarMeta(K_ULTIMA, new Date().toISOString())
   return res
+}
+
+/** Sincronización contra el buzón del servidor. */
+export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
+  return ejecutar(transporte(headers))
+}
+
+/**
+ * Un transporte por enlace, y no uno por llamada.
+ *
+ * El enlace admite un solo receptor de mensajes, y sobre todo: el otro aparato
+ * puede preguntar en cuanto se abre el canal, mucho antes de que aquí se pulse
+ * nada. Si el transporte se creara al sincronizar, esas preguntas caerían en
+ * el vacío y quien esperase se quedaría colgado hasta agotar el tiempo.
+ */
+const sesiones = new WeakMap<Enlace, Transporte>()
+
+/**
+ * Ponerse a la escucha del otro dispositivo. Hay que llamarla en los dos lados
+ * en cuanto el canal se abre, antes de pedirle nada.
+ */
+export function atenderEnlace(enlace: Enlace): Transporte {
+  let canal = sesiones.get(enlace)
+  if (!canal) {
+    canal = transporteDirecto(enlace, configLocal)
+    sesiones.set(enlace, canal)
+  }
+  return canal
+}
+
+/**
+ * Sincronización directa con el otro dispositivo, sin servidor.
+ *
+ * Los dos aparatos corren esto a la vez: cada uno manda lo suyo y recoge lo
+ * del otro por el mismo canal. Nada queda depositado en ninguna parte.
+ */
+export async function sincronizarPorEnlace(enlace: Enlace): Promise<ResultadoSync> {
+  return ejecutar(atenderEnlace(enlace))
+}
+
+/**
+ * Desbloqueo de un dispositivo nuevo sin pasar por el servidor: la sal y el
+ * verificador se los pide al aparato con el que se acaba de emparejar.
+ */
+export async function desbloquearPorEnlace(password: string, enlace: Enlace): Promise<void> {
+  await desbloquearCon(password, await atenderEnlace(enlace).estado())
 }
 
 export async function ultimaSincronizacion(): Promise<string | null> {
