@@ -1,64 +1,48 @@
 # Pruebas de EDUmind MiClase
 
-No hay framework de tests instalado: son scripts sueltos que se lanzan a mano y
-salen con código 0 si todo va bien. Están pensados para pasarlos **antes de cada
-despliegue**.
-
-| Fichero | Qué comprueba | Necesita |
-|---|---|---|
-| `calculo.test.ts` | Motor de notas: ponderación por instrumento, por criterio y por trimestre; escala LOMLOE; conversión de rúbricas | nada |
-| `fusion.test.ts` | Fusión a tres bandas: qué se conserva cuando dos dispositivos tocan el mismo registro | nada |
-| `lectorqr.test.mjs` | El decodificador de QR de reserva (el que usa el iPad) contra los QR que genera la app | nada |
-| `sync.test.mjs` | Buzón de sincronización: configuración, empuje, descarga, last-write-wins, aislamiento entre docentes | backend en `:3999` con una **copia** de la BD |
-| `e2e.test.mjs` | Flujo completo en navegador: clase → alumnado → áreas → programación → instrumento por criterio → matriz → informe lámina → backup | `npm run dev:frontend` |
-| `migracion.test.mjs` | Que una base v3 de un curso real migre a v5 sin perder nada | `npm run dev:frontend` |
-| `escaner-sin-detector.test.mjs` | Que el QR se pueda escanear en un navegador sin `BarcodeDetector`, o sea, en iPad | `npm run dev:frontend` |
-| `sync-dos-dispositivos.test.mjs` | Cifrado, descifrado y fusión **en el navegador**: dos dispositivos que se sincronizan, el servidor sin poder leer nada, y el last-write-wins | backend de prueba + vite con `VITE_API_TARGET` |
-
-`migracion.test.mjs` se crea y se borra solo la página de siembra que necesita
-(`frontend/public/__sembrar-v3.html` y una copia de Dexie). No hay que hacer
-nada a mano; si alguna vez se interrumpe a lo bruto, comprueba que no quedan
-ficheros `__*` en `frontend/public/` antes de compilar.
-
-## Cómo lanzarlos
-
 ```bash
-cd /var/www/edumind_miclase
-export SCRATCH=/tmp/miclase-pruebas && mkdir -p $SCRATCH
-
-# Tipos
-npx --prefix frontend tsc -b frontend
-
-# Funciones puras: motor de cálculo y fusión
-for t in calculo fusion; do
-  npx --prefix frontend esbuild pruebas/$t.test.ts --bundle --platform=node \
-    --format=esm --outfile=$SCRATCH/$t.mjs && node $SCRATCH/$t.mjs
-done
-node pruebas/lectorqr.test.mjs
-
-# Sincronización (NUNCA contra la BD de producción)
-cp backend/data/miclase.db $SCRATCH/test.db
-PORT=3999 DB_PATH=$SCRATCH/test.db NODE_ENV=development \
-  JWT_SECRET=clave_de_pruebas_de_al_menos_32_caracteres \
-  node backend/src/index.js & sleep 2
-node pruebas/sync.test.mjs
-
-# Navegador (Playwright vive en /var/www/pasos_v2)
-npm run dev:frontend & sleep 3
-node pruebas/e2e.test.mjs
-node pruebas/migracion.test.mjs
-node pruebas/escaner-sin-detector.test.mjs
-
-# Sincronización entre dos dispositivos: vite debe apuntar al backend de prueba
-pkill -f "bin/vite"
-VITE_API_TARGET=http://127.0.0.1:3999 npm run dev:frontend & sleep 3
-sqlite3 $SCRATCH/test.db "INSERT OR IGNORE INTO docentes (id, nombre, email) \
-  VALUES (2, 'Docente de prueba', 'authentik-sub-de-prueba')"
-node pruebas/sync-dos-dispositivos.test.mjs
+npm test              # todo (~3 min)
+npm run test:rapido   # sin navegador (~4 s)
+npm run test:prod     # contra https://miclase.edumind.es
 ```
 
-El backend de prueba debe arrancarse para esa última con
-`JWT_SECRET=clave_de_pruebas_de_al_menos_32_caracteres`, que es la que el
-script usa para firmar la sesión.
+`ejecutar.mjs` es quien orquesta: levanta el backend y el servidor de
+desarrollo en **puertos libres**, espera a que respondan de verdad, lanza las
+suites y lo mata todo al terminar.
 
-Las capturas de pantalla quedan en `$SCRATCH/tiros/`.
+## Reglas
+
+- **Nunca contra la base de datos de producción.** El orquestador la copia a un
+  directorio temporal y aborta si alguien apunta a la real.
+- **Ningún puerto ni ruta cableados en las pruebas.** Los recibe por variables
+  de entorno (`BASE`, `API`, `SYNC_API`, `BUNDLE`). Con puertos fijos, un
+  proceso superviviente de la tanda anterior hacía que una prueba pasara contra
+  código viejo. Pasó de verdad.
+- **Playwright es dependencia del proyecto**, no se coge prestado de otro repo.
+- Si algo falla, el temporal **no se borra**: dentro están las capturas.
+
+## Qué cubre cada suite
+
+| Suite | Qué comprueba | Necesita |
+|---|---|---|
+| `tipos` | `tsc` sobre todo el frontend | — |
+| `calculo.test.ts` | notas ponderadas, trimestres, escala LOMLOE | — |
+| `fusion.test.ts` | fusión a tres bandas, campo a campo | — |
+| `lectorqr.test.mjs` | decodificación de QR | — |
+| `enlace-directo.test.mjs` | emparejamiento WebRTC y troceado de 3 MB | navegador |
+| `sync.test.mjs` | buzón del servidor: cuotas, fechas, rechazos | backend |
+| `e2e.test.mjs` | recorrido por la interfaz | backend + web |
+| `migracion.test.mjs` | subida de esquema Dexie v3→v5 | backend + web |
+| `escaner-sin-detector.test.mjs` | el escáner sin `BarcodeDetector`, como en iPad | backend + web |
+| `sync-dos-dispositivos.test.mjs` | sincronización por buzón entre dos aparatos | backend + web |
+| `sync-directo.test.mjs` | sincronización **sin servidor**, con `/api/` cortado | backend + web |
+| `emparejar-ui.test.mjs` | el emparejamiento desde la pantalla | backend + web |
+| `emparejar-produccion.test.mjs` | el paquete compilado, con la CSP real | producción |
+
+## Añadir una suite
+
+1. Un `.test.mjs` en esta carpeta. Salir con código distinto de cero si falla.
+2. Coger el navegador de `./lib/entorno.mjs`, nunca importarlo por ruta.
+3. Leer las URLs de `process.env`, con un valor por defecto razonable.
+4. Registrarla en `ejecutar.mjs`, en el bloque que le corresponda según lo que
+   necesite montado.

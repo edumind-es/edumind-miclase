@@ -93,14 +93,11 @@ edumind_miclase/
 - `backend/src/plugins/auth.js` / `routes/auth.js` — auth dual local + OIDC, y exportación AES-256
 
 ## Pruebas
-No hay framework de tests instalado; las pruebas se escriben como scripts
-sueltos y se lanzan a mano (ver `DESPLIEGUE.md`):
-- Motor de cálculo: bundle con esbuild y `node`.
-- Backend de sync: arrancar en un puerto aparte con una copia de la BD y
-  firmar un JWT de prueba con `jose`.
-- Fusión a tres bandas: bundle con esbuild y `node`.
-- Interfaz, migración v3→v5 y sincronización real entre dos dispositivos:
-  Playwright (el binario vive en `/var/www/pasos_v2/node_modules`).
+`npm test` monta backend y servidor de desarrollo en puertos libres, corre las
+doce suites y lo apaga todo. Se niega a arrancar contra la BD de producción.
+`npm run test:rapido` para el bucle corto (4 s), `npm run test:prod` contra la
+web ya desplegada. Se lanzan solas en `git commit` (rápidas) y `git push`
+(completas) vía `.githooks/`.
 
 ## Estado — EN PRODUCCIÓN
 Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
@@ -113,14 +110,18 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - systemd: `edumind-miclase-api.service` — backend Fastify con NODE_ENV=production.
   Los secretos (`JWT_SECRET`, `AUTHENTIK_CLIENT_SECRET`) **no están en el unit**:
   viven en `/etc/edumind-miclase-api.env` con permisos 600.
-- Despliegue: ver `DESPLIEGUE.md` (merge → npm install → build → restart servicio)
-- **El árbol de trabajo ES producción**: nginx sirve `frontend/dist` y systemd
-  ejecuta `backend/src` desde este mismo directorio. Un `git checkout` de otra
-  rama cambia lo que está en producción; el backend, además, recoge los cambios
-  en el siguiente `systemctl restart`.
+- Despliegue: `./desplegar.sh` (pruebas → compila en `frontend/releases/…` →
+  cambia el enlace simbólico de golpe → comprueba → vuelve atrás si falla).
+  `./desplegar.sh --volver` deshace. Nunca automático.
+- **El árbol de trabajo ES producción**: systemd ejecuta `backend/src` desde
+  este mismo directorio, así que un `git checkout` de otra rama cambia el
+  backend en el siguiente `systemctl restart`. El frontend ya no: `frontend/dist`
+  es un enlace simbólico a la versión publicada en `frontend/releases/`, y solo
+  cambia cuando lo cambia `desplegar.sh`.
 
 ## Lo que NO hacer
 - No hacer `npm install` sin avisar
+- No compilar a mano sobre `frontend/dist`: usar `./desplegar.sh`
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle

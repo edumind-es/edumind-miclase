@@ -79,45 +79,64 @@ Notas:
    recargar, pero si alguien ve comportamientos raros de sesión el primer día,
    basta con recargar dos veces.
 
-## Pruebas antes de desplegar
+## Pruebas
 
-No hay framework de tests: son scripts sueltos. Nunca contra la BD de producción.
+Un solo comando. Monta el backend y el servidor de desarrollo en puertos
+libres, corre las doce suites y lo apaga todo al terminar. La base de datos se
+copia a un temporal: **el orquestador se niega a arrancar contra la de
+producción**.
 
 ```bash
 cd /var/www/edumind_miclase
-SCRATCH=/tmp/miclase-pruebas && mkdir -p $SCRATCH
-
-# 1. Tipos
-npx --prefix frontend tsc -b frontend
-
-# 2. Motor de cálculo de notas (funciones puras)
-npx --prefix frontend esbuild pruebas/calculo.test.ts --bundle --platform=node \
-  --format=esm --outfile=$SCRATCH/calculo.mjs && node $SCRATCH/calculo.mjs
-
-# 3. Backend de sincronización, en un puerto aparte y con una COPIA de la BD
-cp backend/data/miclase.db $SCRATCH/test.db
-PORT=3999 DB_PATH=$SCRATCH/test.db NODE_ENV=development \
-  JWT_SECRET=clave_de_pruebas_de_al_menos_32_caracteres \
-  node backend/src/index.js &
-node pruebas/sync.test.mjs
-
-# 4. Interfaz y migración v3→v4 (Playwright vive en /var/www/pasos_v2)
-npm run dev:frontend &
-node pruebas/e2e.test.mjs
-node pruebas/migracion.test.mjs
-
-# 5. Sincronización real entre dos dispositivos (vite contra el backend de prueba)
-pkill -f "bin/vite"
-VITE_API_TARGET=http://127.0.0.1:3999 npm run dev:frontend &
-node pruebas/sync-dos-dispositivos.test.mjs
-
-# 6. Enlace directo entre dispositivos (sin servidor)
-npx --prefix frontend esbuild frontend/src/db/enlaceDirecto.ts --bundle \
-  --format=iife --global-name=Enlace --outfile=$SCRATCH/enlace.js
-BUNDLE=$SCRATCH/enlace.js node pruebas/enlace-directo.test.mjs
-node pruebas/sync-directo.test.mjs
-node pruebas/emparejar-ui.test.mjs
+npm test              # todo, unos 3 minutos
+npm run test:rapido   # tipos, cálculo, fusión y lector de QR: 4 segundos
+npm run test:prod     # contra https://miclase.edumind.es, ya desplegado
 ```
+
+Si algo falla, el resumen dice qué suite y deja las capturas de pantalla en el
+directorio temporal, que en ese caso no se borra.
+
+Las pruebas se lanzan solas en dos momentos (`.githooks/`, activados con
+`git config core.hooksPath .githooks`):
+
+| Momento | Qué corre | Cuánto tarda |
+|---|---|---|
+| `git commit` | `npm run test:rapido` | ~4 s |
+| `git push` | `npm test` | ~3 min |
+| `./desplegar.sh` | `npm test` | ~3 min |
+
+Para saltárselo puntualmente: `--no-verify` en git, `--sin-pruebas` al desplegar.
+
+`.github/workflows/ci.yml` corre exactamente lo mismo, y está listo para
+cuando el repositorio suba a GitHub. **No despliega**: el despliegue es
+siempre una decisión manual.
+
+## Desplegar
+
+```bash
+./desplegar.sh              # pruebas, compilar y publicar
+./desplegar.sh --volver     # deshacer: versión anterior, al instante
+./desplegar.sh --sin-pruebas
+```
+
+Qué hace, y por qué así:
+
+1. **Se planta si hay cambios sin guardar en git.** Producción tiene que salir
+   de un commit identificable.
+2. **Pasa las pruebas.**
+3. **Compila en `frontend/releases/<fecha>-<commit>`**, nunca encima de lo que
+   se está sirviendo. Antes, `npm run build` vaciaba `frontend/dist` —que es
+   literalmente la raíz de nginx—, así que durante la compilación la app estaba
+   a medias y una compilación fallida la dejaba rota.
+4. **Reinicia el backend solo si `backend/` ha cambiado**, según git.
+5. **Cambia la versión viva de golpe**, moviendo un enlace simbólico. No hay
+   ningún instante en que nginx vea un directorio incompleto.
+6. **Comprueba que la web sirve el paquete nuevo** y, si no, **vuelve atrás
+   sola**.
+7. Conserva las cinco últimas versiones.
+
+`frontend/dist` es un enlace simbólico a la versión publicada. nginx lo
+resuelve en cada petición, así que el cambio no necesita recargar nginx.
 
 ## Empaquetado nativo (iPad y Android)
 
