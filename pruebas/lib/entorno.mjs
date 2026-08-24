@@ -116,5 +116,7 @@ export async function esperarA(url, { intentos = 60, cada = 500, proceso = null 
     }
     await new Promise((r) => setTimeout(r, cada))
   }
-  throw new Error(`${url} no responde después de ${(intentos * cada) / 1000} s`)
+  // Sin la salida del proceso, un plantón aquí no dice nada de por qué.
+  const cola = proceso ? `\n${proceso.nombre} dijo:\n${proceso.salida.slice(-15).join('')}` : ''
+  throw new Error(`${url} no responde después de ${(intentos * cada) / 1000} s${cola}`)
 }

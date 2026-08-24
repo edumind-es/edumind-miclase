@@ -122,7 +122,9 @@ async function principal() {
     const web = arrancar('servidor de desarrollo', 'npx',
       ['vite', '--port', String(puertoWeb), '--strictPort'],
       { cwd: 'frontend', env: { VITE_API_TARGET: api } })
-    await esperarA(base, { proceso: web })
+    // Margen amplio: en una máquina limpia, la primera vez que arranca vite
+    // tiene que preparar las dependencias y tarda bastante más que aquí.
+    await esperarA(base, { proceso: web, intentos: 240 })
     console.log(gris(`  api ${api} · web ${base}`))
 
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
