@@ -109,6 +109,27 @@ Lo siguiente son mejoras, no deudas:
    Es la pieza que más acercaría la app a iDoceo en comodidad de uso, y es
    trabajo de diseño además de código: no está empezada.
 
+0.b **Soberanía del dato: quitarle al servidor el papel de depositario**
+   (decidido con Luis, agosto 2026). Hoy el servidor ya no guarda datos de
+   alumnado en claro, pero sigue albergando el buzón cifrado, y eso es
+   tratamiento de datos personales seudonimizados. En un centro público el
+   responsable del tratamiento es la Consellería, no el docente, así que lo
+   defendible es que el dato no salga del dispositivo. Por orden de interés:
+   - **Buzón «trae tu propio almacén»**: que el docente elija dónde vive el
+     buzón cifrado —su Nextcloud, un WebDAV, una carpeta— en vez de en el
+     servidor de EDUmind. Si otros centros adoptan la app, EDUmind deja de ser
+     encargado del tratamiento de nadie (art. 28 RGPD).
+   - **Sincronización directa entre dispositivos** (WebRTC con código de
+     emparejamiento o QR): elimina el buzón por completo.
+   - **Purga y retención del buzón**: borrar los sobres en cuanto los han
+     recogido todos los dispositivos del docente (minimización, art. 5).
+   - **Empotrar el currículo en la app** (Galicia son 4,2 MB): el servidor
+     dejaría de hacer falta para evaluar.
+   Pendiente inmediato: eliminar del servidor las tablas de aula huérfanas
+   anteriores a local-first (`alumnos`, `grupos`, `calificaciones`…). No las
+   usa ninguna ruta y no están en `schema.sql`, pero `alumnos` conserva dos
+   filas de prueba, una con `neae = 1`, que es dato de salud del artículo 9.
+
 1. **Publicar en las tiendas**: los proyectos nativos están listos, pero
    compilar iOS exige macOS con Xcode y una cuenta de desarrollador de Apple
    (99 $/año); Android necesita firmar el bundle. Hasta entonces, la PWA
