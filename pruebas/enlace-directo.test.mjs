@@ -28,8 +28,10 @@ const codigoEnlace = readFileSync(BUNDLE, 'utf8')
 
 async function pestana(nombre) {
   const p = await navegador.newPage()
-  await p.goto('http://localhost/')       // contexto seguro; no hace falta que responda
-    .catch(() => p.goto('about:blank'))
+  // `about:blank` es contexto seguro (origen opaco), que es lo que WebRTC
+  // exige. Antes se intentaba http://localhost primero, y eso solo funcionaba
+  // en una maquina donde algo escuchase en el puerto 80.
+  await p.goto('about:blank')
   await p.addScriptTag({ content: codigoEnlace })
   p.on('console', (m) => { if (m.type() === 'error') console.log(`    [${nombre}] ${m.text()}`) })
   return p

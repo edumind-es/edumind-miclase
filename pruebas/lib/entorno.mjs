@@ -10,9 +10,8 @@
  */
 import { spawn } from 'node:child_process'
 import { createServer } from 'node:net'
-import { existsSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 export const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
@@ -38,6 +37,19 @@ export async function navegadorChromium() {
   }
   throw new Error(
     'No se encuentra Playwright. Ejecuta `npm install` en la raíz del proyecto.')
+}
+
+/**
+ * Un módulo instalado en el `node_modules` de un subproyecto.
+ *
+ * Las pruebas los importaban por ruta absoluta (`/var/www/edumind_miclase/...`),
+ * que solo funciona en este servidor. Lo destapó la integración continua en su
+ * segunda ejecución.
+ *
+ *   const { SignJWT } = await moduloDe('backend', 'jose/dist/webapi/index.js')
+ */
+export function moduloDe(subproyecto, ruta) {
+  return import(pathToFileURL(resolve(RAIZ, subproyecto, 'node_modules', ruta)).href)
 }
 
 // ─── Puertos ─────────────────────────────────────────────────────────────

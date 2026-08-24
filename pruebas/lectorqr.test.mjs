@@ -9,8 +9,9 @@
  * Se trabaja con el búfer de píxeles directamente: así la prueba corre en
  * Node, sin navegador ni decodificación de PNG de por medio.
  */
-import QRCode from '/var/www/edumind_miclase/frontend/node_modules/qrcode/lib/index.js'
-import jsQR from '/var/www/edumind_miclase/frontend/node_modules/jsqr/dist/jsQR.js'
+import { moduloDe } from './lib/entorno.mjs'
+const QRCode = (await moduloDe('frontend', 'qrcode/lib/index.js')).default
+const jsQR = (await moduloDe('frontend', 'jsqr/dist/jsQR.js')).default
 
 let fallos = 0
 const ok = (c, m, extra = '') => {

@@ -1,4 +1,5 @@
-import { SignJWT } from '/var/www/edumind_miclase/backend/node_modules/jose/dist/webapi/index.js'
+import { moduloDe } from './lib/entorno.mjs'
+const { SignJWT } = await moduloDe('backend', 'jose/dist/webapi/index.js')
 
 const BASE = process.env.SYNC_API || 'http://127.0.0.1:3999/api/sync'
 // El mismo secreto con el que se arranca el backend de prueba
