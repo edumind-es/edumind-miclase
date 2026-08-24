@@ -11,6 +11,11 @@ export default defineConfig({
       workbox: {
         maximumFileSizeToCacheInBytes: 7_000_000,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // El motor de IA local pesa 6 MB y solo se puede usar en Chrome o Edge
+        // de escritorio. Precachearlo obligaba a TODA instalación de la PWA
+        // —el iPad incluido, donde no hay WebGPU— a descargarlo para nada.
+        // Se sigue sirviendo desde el mismo origen cuando se pide.
+        globIgnores: ['**/web-llm-*.js'],
         // Cualquier ruta de la SPA debe abrir sin red: el docente entra en
         // /evaluacion desde el acceso directo del móvil, no por la portada
         navigateFallback: 'index.html',
