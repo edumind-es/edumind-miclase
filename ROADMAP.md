@@ -119,8 +119,13 @@ Lo siguiente son mejoras, no deudas:
      buzón cifrado —su Nextcloud, un WebDAV, una carpeta— en vez de en el
      servidor de EDUmind. Si otros centros adoptan la app, EDUmind deja de ser
      encargado del tratamiento de nadie (art. 28 RGPD).
-   - **Sincronización directa entre dispositivos** (WebRTC con código de
-     emparejamiento o QR): elimina el buzón por completo.
+   - ✅ **Sincronización directa entre dispositivos** — HECHO (agosto 2026).
+     Los dos aparatos se emparejan escaneando un QR que lleva dentro el saludo
+     de WebRTC, y los sobres cifrados viajan de uno a otro sin servidor de por
+     medio. No hace falta sesión ni haber usado nunca el buzón: la contraseña
+     de sincronización se puede estrenar sin conexión. Alcance deliberado: la
+     misma red, sin STUN ni TURN, porque un relevo volvería a poner a un
+     tercero en el circuito.
    - **Purga y retención del buzón**: borrar los sobres en cuanto los han
      recogido todos los dispositivos del docente (minimización, art. 5).
    - **Empotrar el currículo en la app** (Galicia son 4,2 MB): el servidor

@@ -206,6 +206,23 @@ export async function iniciarSincronizacion(
 }
 
 /**
+ * Estrenar la sincronización sin buzón y sin sesión.
+ *
+ * Hasta ahora la contraseña solo se podía crear publicándola en el servidor,
+ * así que quien quisiera sincronizar dos aparatos entre ellos tenía que pasar
+ * por el servidor al menos una vez. Con esto no hace falta nunca: la sal se
+ * genera aquí y el otro dispositivo se la pide al emparejarse.
+ */
+export async function estrenarSincronizacionLocal(password: string): Promise<void> {
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  const clave = await derivar(password, salt)
+  const { iv, payload } = await cifrar(clave, VERIFICADOR)
+
+  await guardarMeta(K_CLAVE, clave)
+  await guardarConfig(b64(salt), `${iv}.${payload}`)
+}
+
+/**
  * La sal y el verificador se guardan también aquí, no solo en el buzón.
  *
  * Hacían falta para que un dispositivo nuevo pudiera comprobar la contraseña,

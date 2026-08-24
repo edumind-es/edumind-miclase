@@ -18,6 +18,7 @@ import {
 import { idDispositivo } from '@/db/ids'
 import { esNativo, plataforma, servidor, fijarServidor } from '@/api'
 import AlmacenamientoLocal from '@/components/AlmacenamientoLocal'
+import EmparejarDirecto from '@/components/EmparejarDirecto'
 
 const K_AUTO = 'miclase_sync_auto'
 
@@ -200,6 +201,11 @@ export default function SincronizarPage() {
           </div>
         </div>
       )}
+
+      {/* Enlace directo: no necesita sesion ni servidor, asi que va fuera del
+          bloque que exige SSO. Es la unica forma de sincronizar sin dejar
+          nada depositado en ningun sitio. */}
+      <EmparejarDirecto onCambio={refrescar} />
 
       {/* Requisito: sesión SSO */}
       {!conectado ? (

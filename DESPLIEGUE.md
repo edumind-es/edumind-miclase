@@ -110,6 +110,13 @@ node pruebas/migracion.test.mjs
 pkill -f "bin/vite"
 VITE_API_TARGET=http://127.0.0.1:3999 npm run dev:frontend &
 node pruebas/sync-dos-dispositivos.test.mjs
+
+# 6. Enlace directo entre dispositivos (sin servidor)
+npx --prefix frontend esbuild frontend/src/db/enlaceDirecto.ts --bundle \
+  --format=iife --global-name=Enlace --outfile=$SCRATCH/enlace.js
+BUNDLE=$SCRATCH/enlace.js node pruebas/enlace-directo.test.mjs
+node pruebas/sync-directo.test.mjs
+node pruebas/emparejar-ui.test.mjs
 ```
 
 ## Empaquetado nativo (iPad y Android)
