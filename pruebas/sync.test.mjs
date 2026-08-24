@@ -112,5 +112,51 @@ ok(r.status === 200 && r.body.borrados === 3, 'se borran los 3 sobres', JSON.str
 r = await api(t2, '/config')
 ok(r.body.iniciado === false && r.body.registros === 0, 'el buzón queda limpio')
 
+console.log('\n9. El servidor dice QUÉ rechaza y por qué')
+// Antes solo devolvía un contador, así que el cliente no podía distinguir
+// «ya tengo algo más nuevo» de «esto no cabe y no va a caber nunca». Avanzaba
+// el cursor igualmente y el registro no se reintentaba jamás.
+await api(t2, '/config', { method: 'POST', body: JSON.stringify({ salt: 'U0FMVA==', verificador: 'aXY=.Y2lmcmFkbw==' }) })
+
+const enorme = 'A'.repeat(9 * 1024 * 1024)   // 9 MB, por encima del tope de 8
+r = await api(t2, '/push', { method: 'POST', body: JSON.stringify({
+  device_id: 'disp-A',
+  registros: [
+    { tabla: 'evidencias', registro_id: '2000001', updated_at: '2026-08-24T10:00:00.000Z', iv: 'eA==', payload: enorme },
+    { tabla: 'alumnos',    registro_id: '2000002', updated_at: '2026-08-24T10:00:00.000Z', iv: 'eA==', payload: 'b2s=' },
+  ],
+})})
+ok(r.body.escritos === 1 && r.body.descartados === 1, 'la evidencia de 9 MB se rechaza y la otra pasa')
+ok(r.body.rechazados?.[0]?.motivo === 'demasiado_grande',
+   'y dice que es por tamaño', JSON.stringify(r.body.rechazados))
+ok(r.body.rechazados?.[0]?.registro_id === '2000001',
+   'identificando el registro exacto, no un contador')
+ok(r.body.aceptados?.some(a => a.registro_id === '2000002'),
+   'y lista lo que sí escribió, que es lo único que el cliente puede dar por común')
+
+console.log('\n10. `updated_at` con forma de fecha')
+// La comparación de last-write-wins es de texto: sin validar, un "zzz" gana a
+// cualquier fecha real y pisa el registro bueno.
+r = await api(t2, '/push', { method: 'POST', body: JSON.stringify({
+  device_id: 'disp-B',
+  registros: [{ tabla: 'alumnos', registro_id: '2000002', updated_at: 'zzz', iv: 'eA==', payload: 'cGlzYWRv' }],
+})})
+ok(r.body.escritos === 0 && r.body.rechazados?.[0]?.motivo === 'fecha_invalida',
+   'un updated_at que no es ISO-8601 se rechaza', JSON.stringify(r.body.rechazados))
+
+r = await api(t2, '/pull?desde=0')
+const sobrevive = r.body.registros.find(x => x.registro_id === '2000002')
+ok(sobrevive?.payload === 'b2s=', 'y el registro bueno sigue intacto')
+
+console.log('\n11. Una versión anterior no es un error')
+r = await api(t2, '/push', { method: 'POST', body: JSON.stringify({
+  device_id: 'disp-B',
+  registros: [{ tabla: 'alumnos', registro_id: '2000002', updated_at: '2026-01-01T00:00:00.000Z', iv: 'eA==', payload: 'dmllam8=' }],
+})})
+ok(r.body.rechazados?.[0]?.motivo === 'version_anterior',
+   'se distingue de un fallo real: el pull traerá la buena')
+
+await api(t2, '', { method: 'DELETE' })
+
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
 process.exit(fallos === 0 ? 0 : 1)

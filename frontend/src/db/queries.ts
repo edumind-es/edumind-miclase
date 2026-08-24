@@ -1,5 +1,7 @@
 import { db } from './localDb'
 import { nuevoId, sello } from './ids'
+import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
+import { reiniciarEstadoDeSincronizacion } from './sync'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -826,28 +828,26 @@ export async function eliminarRubrica(instrumento_id: number): Promise<void> {
 
 // ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
 
-/**
- * Tamaño máximo que cabe en un sobre de sincronización.
- *
- * El servidor rechaza payloads de más de 8 MB y base64 infla un tercio, así
- * que el blob en bruto tiene que quedar por debajo de ~5,5 MB. Una evidencia
- * más grande se puede guardar igual —es del docente y es local— pero no
- * viajará a los demás dispositivos, y eso hay que decírselo.
- */
-export const LIMITE_EVIDENCIA_SINC = 5 * 1024 * 1024
-
-/** Tope duro: por encima de esto la cuota de IndexedDB sufre de verdad. */
-export const LIMITE_EVIDENCIA = 25 * 1024 * 1024
+// Los topes viven en db/limites.ts, derivados del que manda de verdad: el
+// que aplica el servidor por registro. Se reexportan porque las pantallas ya
+// los importaban desde aquí.
+export { LIMITE_EVIDENCIA_SINC, LIMITE_EVIDENCIA }
 
 export type AvisoEvidencia = { nivel: 'ok' | 'aviso' | 'error'; texto: string }
 
 export function revisarTamano(blob: Blob): AvisoEvidencia {
-  const mb = (blob.size / 1024 / 1024).toFixed(1)
+  const mb = enMB(blob.size)
   if (blob.size > LIMITE_EVIDENCIA) {
-    return { nivel: 'error', texto: `Son ${mb} MB y el máximo son 25 MB. Graba un fragmento más corto.` }
+    return {
+      nivel: 'error',
+      texto: `Son ${mb} MB y el máximo son ${enMB(LIMITE_EVIDENCIA)} MB. Graba un fragmento más corto.`,
+    }
   }
   if (blob.size > LIMITE_EVIDENCIA_SINC) {
-    return { nivel: 'aviso', texto: `Son ${mb} MB: se guarda en este dispositivo, pero no se sincronizará con los demás (máximo 5 MB).` }
+    return {
+      nivel: 'aviso',
+      texto: `Son ${mb} MB: se guarda en este dispositivo, pero no se sincronizará con los demás (máximo ${enMB(LIMITE_EVIDENCIA_SINC)} MB).`,
+    }
   }
   return { nivel: 'ok', texto: `${mb} MB` }
 }
@@ -1188,7 +1188,9 @@ export async function importarDatos(json: string): Promise<void> {
   await db.transaction('rw',
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
-     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos],
+     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos,
+     // La restauración también toca el estado de sincronización: ver abajo.
+     db.sync_base, db.meta],
     async () => {
       await Promise.all([
         db.grupos.clear(), db.alumnos.clear(), db.grupo_alumnos.clear(),
@@ -1212,6 +1214,13 @@ export async function importarDatos(json: string): Promise<void> {
       await db.evidencias.bulkAdd(sellar(evidencias))
       await db.planos.bulkAdd(sellar(data.planos || []))
       await db.asientos.bulkAdd(sellar(data.asientos || []))
+
+      // Los ids siguen existiendo pero su contenido es otro. Si no se
+      // reinicia, la base de fusión apunta a versiones que ya no tienen nada
+      // que ver y el merge a tres bandas calcula diferencias falsas; y el
+      // cursor de envío se queda en el sello anterior, con lo que lo
+      // restaurado —más antiguo— no se sube nunca.
+      await reiniciarEstadoDeSincronizacion()
     }
   )
 }

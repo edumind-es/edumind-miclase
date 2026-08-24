@@ -12,6 +12,7 @@ import { useAuth } from '@/auth/AuthProvider'
 import {
   consultarEstado, iniciarSincronizacion, desbloquear, sincronizar,
   claveGuardada, olvidarClave, ultimaSincronizacion, pendientesDeEnvio, reenviarTodo,
+  registrosAislados,
   type EstadoSync, type ResultadoSync,
 } from '@/db/sync'
 import { idDispositivo } from '@/db/ids'
@@ -33,6 +34,9 @@ export default function SincronizarPage() {
   const [ultimo, setUltimo] = useState<ResultadoSync | null>(null)
   const [ultimaFecha, setUltimaFecha] = useState<string | null>(null)
   const [pendientes, setPendientes] = useState(0)
+  // Registros que no se sincronizan y no se van a sincronizar solos: casi
+  // siempre una evidencia que no cabe en un sobre. Antes desaparecían sin más.
+  const [aislados, setAislados] = useState<Array<{ clave: string; motivo: string }>>([])
   const [auto, setAuto] = useState(() => localStorage.getItem(K_AUTO) === '1')
 
   const conectado = modo === 'authentik'
@@ -41,6 +45,7 @@ export default function SincronizarPage() {
     setDesbloqueado(!!(await claveGuardada()))
     setUltimaFecha(await ultimaSincronizacion())
     setPendientes(await pendientesDeEnvio())
+    setAislados(await registrosAislados())
     if (!conectado) { setEstado(null); return }
     try {
       setEstado(await consultarEstado(headers))
@@ -238,6 +243,29 @@ export default function SincronizarPage() {
               valor={ultimaFecha ? new Date(ultimaFecha).toLocaleString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Nunca'}
               color="var(--gris-600)" />
           </div>
+
+          {aislados.length > 0 && (
+            <div style={{
+              marginBottom: 16, padding: '12px 16px', borderRadius: 8, fontSize: 13.5,
+              background: 'var(--ambar-100)', border: '1px solid var(--ambar-500)',
+            }}>
+              <strong>
+                {aislados.length === 1
+                  ? '1 registro se queda en este dispositivo'
+                  : `${aislados.length} registros se quedan en este dispositivo`}
+              </strong>
+              <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+                {aislados.slice(0, 12).map(a => (
+                  <li key={a.clave}><code>{a.clave}</code> — {a.motivo}</li>
+                ))}
+              </ul>
+              <p style={{ margin: '8px 0 0', color: 'var(--gris-600)' }}>
+                Se guardan aquí y salen en los informes, pero no viajan a los demás
+                dispositivos. Si sustituyes la evidencia por una más ligera, se
+                reintenta sola.
+              </p>
+            </div>
+          )}
 
           {msg && (
             <div style={{
