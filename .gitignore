@@ -21,3 +21,6 @@ frontend/android/build/
 frontend/android/app/build/
 frontend/android/local.properties
 frontend/android/.idea/
+
+# Versiones publicadas: se generan al desplegar (ver desplegar.sh)
+frontend/releases/

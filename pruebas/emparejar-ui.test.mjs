@@ -11,9 +11,11 @@
  *
  * Requiere vite en :5173 (el backend solo hace falta para que arranque la app).
  */
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
 
-const BASE = 'http://127.0.0.1:5173'
+const chromium = await navegadorChromium()
+
+const BASE = process.env.BASE || 'http://127.0.0.1:5173'
 const CONTRASENA = 'melocoton-bicicleta-42'
 
 let fallos = 0

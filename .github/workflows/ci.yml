@@ -1,0 +1,58 @@
+# Integración continua de EDUmind MiClase.
+#
+# Corre la misma tanda que `npm test` en local: no hay dos verdades sobre si
+# el proyecto está bien. Lo que aquí se comprueba es exactamente lo que el
+# gancho de pre-push comprueba en el servidor.
+#
+# Este fichero está listo para el día en que el repositorio se suba a GitHub.
+# Mientras tanto, quien manda es el gancho local (.githooks/pre-push).
+#
+# NO despliega. El despliegue es siempre una decisión manual: ./desplegar.sh
+name: Pruebas
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Tres package.json distintos: raíz (pruebas), frontend y backend.
+      # No hay workspaces, así que se instalan uno a uno.
+      - name: Instalar dependencias
+        run: |
+          npm ci || npm install
+          npm --prefix frontend ci || npm --prefix frontend install
+          npm --prefix backend ci || npm --prefix backend install
+
+      # Solo Chromium: es el único navegador que usan las pruebas.
+      - name: Instalar el navegador
+        run: npx playwright install --with-deps chromium
+
+      # La base de datos con el currículo no se versiona (pesa y se genera).
+      # Sin ella el backend de pruebas no arranca.
+      - name: Preparar la base de datos de pruebas
+        run: npm run seed
+
+      - name: Pruebas
+        run: npm test
+
+      # Si algo falla, las capturas de pantalla explican mucho más que el log.
+      - name: Guardar capturas si ha fallado
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas
+          path: /tmp/miclase-pruebas-*/tiros/
+          if-no-files-found: ignore

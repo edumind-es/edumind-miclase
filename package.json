@@ -6,10 +6,16 @@
   "scripts": {
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
+    "test": "node pruebas/ejecutar.mjs",
+    "test:rapido": "node pruebas/ejecutar.mjs --rapido",
+    "test:prod": "node pruebas/ejecutar.mjs --produccion",
     "seed": "cd backend && npm run seed",
     "build": "cd frontend && npm run build",
     "nativo:sync": "npm run build && cd frontend && npx cap sync",
     "nativo:ios": "npm run nativo:sync && cd frontend && npx cap open ios",
     "nativo:android": "npm run nativo:sync && cd frontend && npx cap open android"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
   }
 }

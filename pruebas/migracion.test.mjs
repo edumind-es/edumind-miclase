@@ -8,7 +8,9 @@
  * La página de siembra y la copia de Dexie se crean aquí y se borran al salir:
  * si se quedaran en frontend/public/ acabarían en el build y en el servidor.
  */
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 import { mkdirSync, copyFileSync, writeFileSync, rmSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
@@ -31,7 +33,7 @@ process.on('SIGINT', () => { limpiar(); process.exit(130) })
 copyFileSync(resolve(RAIZ, 'frontend/node_modules/dexie/dist/dexie.mjs'), DEXIE_TMP)
 writeFileSync(SIEMBRA, PAGINA_SIEMBRA())
 
-const BASE = 'http://127.0.0.1:5173'
+const BASE = process.env.BASE || 'http://127.0.0.1:5173'
 let fallos = 0
 const ok = (c, m, extra = '') => { console.log(`${c ? '  ✓' : '  ✗ FALLO'} ${m}${extra ? ' — ' + extra : ''}`); if (!c) fallos++ }
 

@@ -9,13 +9,17 @@
  *
  * Requiere `npm run dev:frontend`.
  */
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
 
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
 mkdirSync(process.env.SCRATCH + '/tiros', { recursive: true })
 let fallos = 0
 const ok = (c, m, e = '') => { console.log(`${c ? '  ✓' : '  ✗ FALLO'} ${m}${e ? ' — ' + e : ''}`); if (!c) fallos++ }
+
+const BASE = process.env.BASE || `${BASE}`
 
 const nav = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] })
 const ctx = await nav.newContext({ permissions: ['camera'], viewport: { width: 1100, height: 800 } })
@@ -25,7 +29,7 @@ const p = await ctx.newPage()
 const errores = []
 p.on('pageerror', e => errores.push(e.message))
 
-await p.goto('http://127.0.0.1:5173/escanear', { waitUntil: 'networkidle' })
+await p.goto(`${BASE}/escanear`, { waitUntil: 'networkidle' })
 await p.waitForTimeout(1500)
 
 ok(await p.evaluate(() => !('BarcodeDetector' in window)), 'el navegador simula no tener detector nativo')

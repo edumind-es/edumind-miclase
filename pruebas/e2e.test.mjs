@@ -1,11 +1,13 @@
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
 
 // Carpeta de trabajo para capturas y descargas
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
 mkdirSync(process.env.SCRATCH + '/tiros', { recursive: true })
 
-const BASE = 'http://127.0.0.1:5173'
+const BASE = process.env.BASE || 'http://127.0.0.1:5173'
 const TIROS = process.env.SCRATCH + '/tiros'
 let fallos = 0
 const ok = (cond, msg, extra = '') => {

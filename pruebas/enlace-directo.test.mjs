@@ -11,7 +11,9 @@
  *   node pruebas/enlace-directo.test.mjs
  */
 import { readFileSync } from 'node:fs'
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 
 const BUNDLE = process.env.BUNDLE || '/tmp/enlace.js'
 

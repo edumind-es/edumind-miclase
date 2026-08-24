@@ -11,7 +11,9 @@
  *
  *   node pruebas/emparejar-produccion.test.mjs
  */
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 
 const BASE = process.env.BASE || 'https://miclase.edumind.es'
 

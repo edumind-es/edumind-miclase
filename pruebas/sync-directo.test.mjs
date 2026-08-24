@@ -14,11 +14,13 @@
  *   backend de PRUEBA en :3999 con JWT_SECRET=clave_de_pruebas_de_al_menos_32_caracteres
  *   vite en :5173 con VITE_API_TARGET=http://127.0.0.1:3999
  */
-import { chromium } from '/var/www/pasos_v2/node_modules/playwright/index.mjs'
+import { navegadorChromium } from './lib/entorno.mjs'
+
+const chromium = await navegadorChromium()
 import { SignJWT } from '/var/www/edumind_miclase/backend/node_modules/jose/dist/webapi/index.js'
 
-const BASE = 'http://127.0.0.1:5173'
-const API = 'http://127.0.0.1:3999'
+const BASE = process.env.BASE || 'http://127.0.0.1:5173'
+const API = process.env.API || 'http://127.0.0.1:3999'
 const SECRETO = 'clave_de_pruebas_de_al_menos_32_caracteres'
 const CONTRASENA = 'melocoton-bicicleta-42'
 

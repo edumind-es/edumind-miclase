@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Puerta rápida antes de cada commit: tipos y las pruebas que no necesitan
+# navegador. Unos cuatro segundos. Lo lento (navegador, backend) va en
+# pre-push y en el despliegue.
+#
+# Para saltárselo puntualmente: git commit --no-verify
+set -e
+cd "$(git rev-parse --show-toplevel)"
+npm run test:rapido
