@@ -78,6 +78,9 @@ CREATE TABLE IF NOT EXISTS docentes (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre      TEXT NOT NULL,
   email       TEXT UNIQUE,
+  -- Sin uso: no hay auth por contraseña en ninguna parte del proyecto. La
+  -- única identidad es el SSO de Authentik. Se conserva la columna porque
+  -- quitarla exigiría migrar la tabla y no estorba.
   password_hash TEXT,
   created_at  TEXT DEFAULT (datetime('now'))
 );

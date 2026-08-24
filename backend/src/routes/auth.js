@@ -122,6 +122,15 @@ export default async function authRoutes(app) {
     return { token, nombre, expires_in: SESSION_TTL }
   })
 
+  /**
+   * Cierre de sesión.
+   *
+   * El JWT es sin estado y no hay lista de revocación, así que el servidor no
+   * puede invalidarlo: quien cierre sesión deja de enviarlo (el cliente lo
+   * borra de sessionStorage), pero el token sigue siendo válido hasta que
+   * caduca. Con SESSION_TTL de 7 días eso es lo que hay. Este endpoint existe
+   * para que el cliente tenga a quién avisar el día que se añada revocación.
+   */
   app.post('/logout', async () => ({ ok: true }))
 
   app.get('/me', async (req, reply) => {

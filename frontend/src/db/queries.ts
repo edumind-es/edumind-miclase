@@ -26,14 +26,6 @@ export type UnidadConCriterios = Unidad & {
   }[]
 }
 
-export type CalificadorBase = {
-  alumnos: Alumno[]
-  instrumentos: Instrumento[]
-  calificaciones: Record<string, Calificacion>
-  asig: Asignatura
-  grupo: Grupo
-}
-
 export type CalItem = {
   alumno_id: number
   instrumento_id: number
@@ -472,36 +464,6 @@ export async function asignarInstrumentoAUnidad(
 
 // ─── CALIFICACIONES ───────────────────────────────────────────────────────────
 
-/**
- * Devuelve alumnos, instrumentos y calificaciones indexadas para el calificador.
- * Los criterios los obtiene el componente del servidor (currículo público).
- */
-export async function getCalificadorBase(
-  asignatura_id: number,
-  trimestre: number
-): Promise<CalificadorBase | null> {
-  const asig = await getAsignatura(asignatura_id)
-  if (!asig) return null
-  const grupo = await getGrupo(asig.grupo_id)
-  if (!grupo) return null
-
-  const alumnos = await getAlumnosByGrupo(asig.grupo_id)
-  const instrumentos = await getInstrumentos(asignatura_id)
-
-  const instrIds = instrumentos.map(i => i.id!)
-  const cals = instrIds.length
-    ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-        .filter(c => c.trimestre === trimestre).toArray())
-    : []
-
-  const calificaciones: Record<string, Calificacion> = {}
-  for (const c of cals) {
-    calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
-  }
-
-  return { alumnos, instrumentos, calificaciones, asig, grupo }
-}
-
 // Nota actual de un alumno en un criterio/instrumento/trimestre concretos
 export async function getCalificacionUnica(
   alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number
@@ -545,28 +507,45 @@ export async function getCalificacionesAlumnoAsignatura(
     .filter(c => c.alumno_id === alumno_id).toArray())
 }
 
-// Media por criterio y trimestre de una asignatura (para las gráficas de seguimiento)
+/**
+ * Media por criterio y trimestre de una asignatura (gráficas de Seguimiento).
+ *
+ * Pondera por el peso del instrumento, igual que `calculo.ts`. Antes hacía
+ * media aritmética pura, así que la misma asignatura daba un número en la
+ * pantalla de Seguimiento y otro distinto en el informe: un examen al 70 % y
+ * una observación al 30 % salían aquí al 50/50.
+ */
 export async function getResumenPorCriterio(asignatura_id: number): Promise<
   { criterio_id: string; trimestre: number; media: number }[]
 > {
-  const instrIds = (await getInstrumentos(asignatura_id)).map(i => i.id!)
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const instrIds = instrumentos.map(i => i.id!)
   if (!instrIds.length) return []
+  const pesoDe = new Map(instrumentos.map(i => [i.id!, i.peso]))
 
   const cals = vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
     .filter(c => c.valor != null).toArray())
 
-  const acc = new Map<string, { suma: number; n: number }>()
+  const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
+    // Mismo criterio que el motor: peso 0 descarta la nota; una nota cuyo
+    // instrumento ya no existe conserva valor histórico con peso 1.
+    const declarado = pesoDe.get(c.instrumento_id)
+    const peso = declarado === undefined ? 1 : (declarado > 0 ? declarado : 0)
+    if (peso === 0) continue
+
     const key = `${c.criterio_id}::${c.trimestre}`
-    const e = acc.get(key) || { suma: 0, n: 0 }
-    e.suma += c.valor!
-    e.n++
+    const e = acc.get(key) || { suma: 0, pesos: 0 }
+    e.suma += c.valor! * peso
+    e.pesos += peso
     acc.set(key, e)
   }
-  return [...acc.entries()].map(([key, { suma, n }]) => {
-    const [criterio_id, trimestre] = key.split('::')
-    return { criterio_id, trimestre: Number(trimestre), media: suma / n }
-  })
+  return [...acc.entries()]
+    .filter(([, { pesos }]) => pesos > 0)
+    .map(([key, { suma, pesos }]) => {
+      const [criterio_id, trimestre] = key.split('::')
+      return { criterio_id, trimestre: Number(trimestre), media: suma / pesos }
+    })
 }
 
 // Para informes: todas las calificaciones de un grupo (todas asignaturas, todos trimestres)
@@ -916,14 +895,6 @@ export async function getEvidenciasAlumno(alumno_id: number): Promise<Evidencia[
 
 export async function contarEvidenciasAlumno(alumno_id: number): Promise<number> {
   return (await getEvidenciasAlumno(alumno_id)).length
-}
-
-/** Recuento por tipo, para las etiquetas de la galería. */
-export async function contarEvidenciasPorTipo(alumno_id: number): Promise<Record<string, number>> {
-  const evs = await getEvidenciasAlumno(alumno_id)
-  const r: Record<string, number> = { foto: 0, audio: 0, video: 0 }
-  for (const ev of evs) r[ev.tipo] = (r[ev.tipo] ?? 0) + 1
-  return r
 }
 
 /** Nº de evidencias por criterio de un alumno — lo pinta la matriz del calificador. */

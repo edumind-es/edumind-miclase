@@ -60,13 +60,13 @@ export default function SincronizarPage() {
 
   useEffect(() => { localStorage.setItem(K_AUTO, auto ? '1' : '0') }, [auto])
 
-  // Sincronización automática: al abrir la página y cada 5 minutos
+  // Al abrir esta pantalla se sincroniza una vez, para que lo que se ve sea
+  // de ahora. El reloj de cada cinco minutos ya no vive aquí: está en
+  // components/SyncAutomatica.tsx, montado en toda la app, porque antes
+  // dejaba de correr en cuanto el docente navegaba a otra pantalla.
   useEffect(() => {
     if (!auto || !conectado || !desbloqueado) return
-    const tic = () => { hacerSync(true) }
-    tic()
-    const id = window.setInterval(tic, 5 * 60_000)
-    return () => window.clearInterval(id)
+    hacerSync(true)
   }, [auto, conectado, desbloqueado])
 
   // ── Acciones ───────────────────────────────────────────────────────────

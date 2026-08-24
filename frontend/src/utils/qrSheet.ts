@@ -5,12 +5,13 @@
  */
 import QRCode from 'qrcode'
 import type { Alumno, Grupo } from '@/db/localDb'
+import { urlPublica } from '@/api'
 
 // El QR codifica una URL: la cámara nativa del móvil/tablet abre la app
 // directamente en el panel de evaluación de ese alumno; el escáner interno
 // de la app extrae el parámetro `c`.
-export function urlDeCodigo(codigo: string): string {
-  return `${window.location.origin}/escanear?c=${encodeURIComponent(codigo)}`
+function urlDeCodigo(codigo: string): string {
+  return urlPublica(`/escanear?c=${encodeURIComponent(codigo)}`)
 }
 
 // Extrae el código desde cualquier formato aceptado: URL con ?c=, o código pelado

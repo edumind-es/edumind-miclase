@@ -53,7 +53,8 @@ diez segundos (QR de mesa → panel táctil → nota + foto).
   - **Evidencias de audio y vídeo**: grabación de audio con cronómetro sin
     salir de la app, vídeo con la cámara del sistema, reproducción en la
     galería y en el panel de celda, filtros por tipo y control de tamaño
-    (aviso al pasar de 5 MB, que es lo que cabe en un sobre de sincronización).
+    (aviso al pasar de 5,5 MB, que es lo que de verdad cabe en un sobre de
+    sincronización una vez base64 lo infla un tercio).
     En los informes las fotos se incrustan y las grabaciones se listan con su
     duración, porque en papel no se pueden reproducir.
   - **Fusión a tres bandas**: la sincronización ya no resuelve los conflictos
@@ -74,17 +75,48 @@ diez segundos (QR de mesa → panel táctil → nota + foto).
     aviso de trabajo sin conexión y panel de salud del almacenamiento.
   - `jspdf` y `html2canvas` retirados: ya no se usaban.
 
+## Auditoría de agosto de 2026
+
+Una revisión a fondo (modelo de datos, backend, producción y pantallas)
+encontró que varias cosas dadas por cerradas aquí estaban a medias. Corregido
+en la rama `fix/auditoria-20260824`; lo que sigue queda anotado para no volver
+a darlo por hecho:
+
+- La **sincronización periódica** solo corría mientras la pantalla de
+  sincronización estaba abierta. Ahora el temporizador vive en toda la app
+  (`components/SyncAutomatica.tsx`), pero sigue necesitando la app en
+  ejecución: `Background Sync` real continúa pendiente.
+- **`Instrumento.trimestres`** se configuraba y no lo leía nadie: un examen
+  marcado «solo 1er trimestre» puntuaba en los tres. Ahora el calificador
+  filtra por él.
+- La sincronización podía **perder evidencias en silencio**: el cursor de
+  envío avanzaba al encolar, no al confirmar.
+- **No se podía editar ni borrar** un alumno ni una sesión, aunque las
+  funciones existían.
+- El **boletín trimestral** imprimía las faltas de todo el curso.
+- Los **niveles de rúbrica** no llegaban nunca a 0 ni podían dar un 0.
+
 ## Pendiente
 
-Nada del roadmap anterior queda abierto. Lo siguiente son mejoras, no deudas:
+Lo siguiente son mejoras, no deudas:
+
+0. **Instrumentos con forma propia** (pedido por Luis, agosto 2026): hoy todos
+   los instrumentos se califican igual —nota 0-10 o niveles de rúbrica— sea
+   una prueba escrita, un portfolio o un test. La idea es que cada tipo ofrezca
+   lo suyo: el portfolio, lo que el docente elija (rúbrica, lista de control…);
+   la prueba escrita, nota directa o desglose por preguntas con su puntuación;
+   un test de V/F, respuesta esperada y respuesta dada, con la nota calculada.
+   Es la pieza que más acercaría la app a iDoceo en comodidad de uso, y es
+   trabajo de diseño además de código: no está empezada.
 
 1. **Publicar en las tiendas**: los proyectos nativos están listos, pero
    compilar iOS exige macOS con Xcode y una cuenta de desarrollador de Apple
    (99 $/año); Android necesita firmar el bundle. Hasta entonces, la PWA
    instalable cubre el caso de uso en Android y en escritorio.
-2. **Sincronización en segundo plano**: hoy se sincroniza al abrir la pantalla
-   y cada cinco minutos si se activa. Con `Background Sync` en Android y
-   `BGTaskScheduler` en iOS podría hacerse sin abrir la app.
+2. **Sincronización en segundo plano**: hoy el temporizador corre en toda la
+   app (cada cinco minutos, y al volver del segundo plano), pero solo con la
+   app abierta. Con `Background Sync` en Android y `BGTaskScheduler` en iOS
+   podría hacerse sin abrirla.
 3. **Compartir programaciones completas**, no solo rúbricas: exportar una
    unidad con sus criterios e instrumentos para que otro docente la adopte.
 4. **Modo tutoría**: vista de un alumno con todas sus áreas a la vez, pensada

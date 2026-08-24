@@ -203,18 +203,28 @@ npm run nativo:android    # abre Android Studio
 Para Google Play hay que firmar el paquete: *Build → Generate Signed Bundle*.
 El icono adaptativo ya está generado (primer plano y color de fondo).
 
-## Pendientes conocidos (archivos de sistema — cambiarlos a mano)
+## Configuración de sistema (auditoría 2026-08-24)
 
-1. **Typo en el unit systemd**: la variable `JWT_SECRET` tiene el valor con el
-   prefijo `JWT_SECRET=` duplicado. Funciona (es solo una cadena más larga),
-   pero conviene corregirlo. Mejor aún: mover los secretos del unit a
-   `EnvironmentFile=/var/www/edumind_miclase/backend/.env` con permisos 600,
-   para que no sean legibles en `systemctl cat`.
-   Tras editar: `sudo systemctl daemon-reload && sudo systemctl restart edumind-miclase-api`.
-   (Cambiar el secreto invalida las sesiones activas de 7 días — impacto mínimo.)
-2. **CSP y la IA local**: la cabecera `Content-Security-Policy` de nginx tiene
-   `connect-src 'self'`, que bloquea la descarga del modelo WebLLM
-   (Phi-3.5 se baja de huggingface.co / CDN). Si se quiere IA local en
-   producción, añadir esos hosts a `connect-src` (y probablemente
-   `'wasm-unsafe-eval'` a `script-src`). Mientras tanto, el botón
-   "Copiar prompt" para IA externa funciona igualmente.
+Los dos pendientes que había aquí están resueltos. Todos los cambios se
+aplicaron con scripts en `/var/www/.edumind_ops/`, que hacen copia con fecha y
+revierten solos si `nginx -t` falla:
+
+| Script | Qué hace |
+|---|---|
+| `fix_miclase_headers_20260824.py` | Cabeceras de seguridad a un `.inc` incluido en **cada** `location`, y `Permissions-Policy` de `camera=()` a `camera=(self)` |
+| `fix_miclase_secretos_20260824.py` | Secretos del unit a `/etc/edumind-miclase-api.env` (600), `JWT_SECRET` rotado, `HOST` eliminada |
+| `fix_miclase_api_nostore_20260824.py` | `Cache-Control: no-store` en `/api/` |
+| `fix_miclase_ratelimit_20260824.py` | Zonas `limit_req` y `miclase-proxy.inc` |
+| `fix_miclase_429_20260824.py` | `limit_req_status 429` |
+| `fix_miclase_csp_webllm_20260824.py` | CSP: `'wasm-unsafe-eval'` y los orígenes del modelo de IA local |
+
+Dos cosas que conviene no perder de vista:
+
+1. **Las cabeceras de seguridad se incluyen en cada `location`, no solo en el
+   `server`.** nginx descarta *todas* las heredadas en cuanto un bloque hijo
+   declara su propio `add_header`. Si añades un `location` nuevo con un
+   `add_header`, incluye también `miclase-security-headers.inc` o ese recurso
+   se servirá sin CSP.
+2. **`AUTHENTIK_CLIENT_SECRET` sigue sin rotar.** Estuvo en un fichero 0644
+   legible por cualquier usuario del servidor. Rotarlo exige cambiarlo también
+   en Authentik, así que queda pendiente de hacerlo a mano.

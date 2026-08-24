@@ -70,11 +70,6 @@ export function nuevoId(): number {
   return base * FACTOR + seq
 }
 
-/** ¿Este id procede del esquema antiguo (anterior al reparto por rangos)? */
-export function esIdHeredado(id: number): boolean {
-  return id < FACTOR
-}
-
 /**
  * Pone el contador por encima de los ids que ya existen en este dispositivo.
  *

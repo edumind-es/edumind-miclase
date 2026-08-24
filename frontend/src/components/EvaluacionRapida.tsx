@@ -361,13 +361,15 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
             </div>
           )}
 
-          {/* Niveles de rúbrica (escala 1..max → 0-10) */}
+          {/* Niveles de rúbrica repartidos de 0 a 10 de extremo a extremo */}
           {niveles.length > 0 && criterioId && (() => {
-            const maxNivel = Math.max(...niveles.map(n => n.valor))
+            const valores = niveles.map(n => n.valor)
+            const maxNivel = Math.max(...valores)
+            const minNivel = Math.min(...valores)
             return (
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
                 {niveles.map(n => {
-                  const nota = nivelANota(n.valor, maxNivel)
+                  const nota = nivelANota(n.valor, maxNivel, minNivel)
                   const activo = valorActual === nota
                   return (
                     <button key={n.nombre} onClick={() => guardarNota(nota)} disabled={guardando}

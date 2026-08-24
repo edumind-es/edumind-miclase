@@ -254,6 +254,9 @@ export function boletinGrupo(datos: DatosGrupo, trimestre: number | null): strin
       <td style="width:34mm">${barraNota(trimestre ? n.trimestres[trimestre] : n.final)}</td>
     </tr>`).join('')
 
+    // Media aritmética de las áreas, no ponderada: el modelo no tiene peso
+    // por área y así es como se calcula la nota media de un expediente.
+    // Dentro de cada área sí manda la ponderación de calculo.ts.
     const valores = notas
       .map(n => trimestre ? n.nota.trimestres[trimestre] : n.nota.final)
       .filter((v): v is number => v != null)
@@ -274,7 +277,7 @@ export function boletinGrupo(datos: DatosGrupo, trimestre: number | null): strin
       ${metas([
         ['Clase', datos.grupo.nombre],
         ['Áreas', String(notas.length)],
-        ['Media', media != null ? nota(media) : '—'],
+        ['Media de las áreas', media != null ? nota(media) : '—'],
         // Justificadas y retrasos se contaban y no se enseñaban nunca: una
         // familia no puede leer «3 faltas» sin saber cuántas están
         // justificadas.

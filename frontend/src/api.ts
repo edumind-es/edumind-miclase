@@ -37,6 +37,22 @@ export function fijarServidor(url: string): void {
   else localStorage.removeItem(K_SERVIDOR)
 }
 
+/**
+ * URL pública de una ruta de la app, para poner en un QR o compartirla.
+ *
+ * No sirve `window.location.origin`: dentro del contenedor nativo eso es
+ * `https://localhost` y el QR llevaría al teléfono a ninguna parte. Y no vale
+ * dejarla fija a miclase.edumind.es, que es lo que había: un centro con su
+ * propia instalación repartía a su alumnado códigos que apuntaban al servidor
+ * de otro.
+ */
+export function urlPublica(ruta: string): string {
+  const base = esNativo()
+    ? (localStorage.getItem(K_SERVIDOR) || SERVIDOR_POR_DEFECTO).replace(/\/+$/, '')
+    : window.location.origin
+  return `${base}${ruta.startsWith('/') ? '' : '/'}${ruta}`
+}
+
 /** Construye la URL de una ruta del API. Úsese en TODA llamada a `/api/…`. */
 export function api(ruta: string): string {
   return servidor() + ruta

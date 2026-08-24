@@ -257,9 +257,13 @@ export default function CeldaEvaluacion({
               </div>
               <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
                 {(() => {
-                  const maxNivel = Math.max(...niveles.map(n => n.valor))
+                  // Los niveles se reparten de 0 a 10 de extremo a extremo,
+                  // así que hace falta también el más bajo, no solo el máximo.
+                  const valores = niveles.map(n => n.valor)
+                  const maxNivel = Math.max(...valores)
+                  const minNivel = Math.min(...valores)
                   return niveles.map(n => {
-                    const nota = nivelANota(n.valor, maxNivel)
+                    const nota = nivelANota(n.valor, maxNivel, minNivel)
                     const activo = valorActual === nota
                     return (
                       <button key={n.nombre} onClick={() => guardarNota(nota)} disabled={guardando}

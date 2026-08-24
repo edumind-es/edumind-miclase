@@ -28,7 +28,9 @@ export interface Alumno extends Sincronizable {
   id?: number
   nombre: string
   apellidos: string
+  /** Reservado: no hay interfaz que lo escriba todavía (falta foto de alumno). */
   foto_path?: string
+  /** Reservado: no se pide en el alta. */
   fecha_nacimiento?: string
   neae: number
   etiquetas: string   // JSON array string
@@ -107,6 +109,11 @@ export interface Unidad extends Sincronizable {
   descripcion?: string
   orden: number
   trimestre?: number | null
+  /**
+   * Reservados: la programación es por trimestre, no por fechas. Sin
+   * interfaz que los escriba, y son la pieza que faltaría para tener
+   * temporalización o agenda.
+   */
   fecha_inicio?: string
   fecha_fin?: string
   activa: number

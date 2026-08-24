@@ -13,6 +13,8 @@ import SincronizarPage from '@/pages/Sincronizar/SincronizarPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
 import ExportImport from '@/components/ExportImport'
 import EstadoConexion from '@/components/EstadoConexion'
+import SyncAutomatica from '@/components/SyncAutomatica'
+import NoEncontrada from '@/pages/NoEncontrada'
 
 const NAV = [
   { to: '/',            label: 'Inicio',      icon: '⊞' },
@@ -155,11 +157,14 @@ function Layout() {
           <Route path="/informes"      element={<InformesPage />} />
           <Route path="/sincronizar"   element={<SincronizarPage />} />
           <Route path="/auth/callback" element={<CallbackPage />} />
+          {/* Sin esto, una URL desconocida pintaba el marco con el contenido vacío */}
+          <Route path="*"              element={<NoEncontrada />} />
         </Routes>
       </main>
 
       {exportOpen && <ExportImport onClose={() => setExportOpen(false)} />}
       <EstadoConexion />
+      <SyncAutomatica />
     </div>
   )
 }
