@@ -262,3 +262,19 @@ Código fuente: <https://github.com/edumind-es/edumind-miclase>
 
 Si detectas un fallo de seguridad, escríbenos antes de publicarlo para que
 podamos corregirlo.
+
+## Sincronizar sin servidor
+
+Desde agosto de 2026 dos dispositivos del mismo docente pueden sincronizarse
+**directamente entre ellos**, sin que nada quede depositado en ningún sitio.
+Se emparejan escaneando un código QR que contiene el saludo de la conexión, y
+a partir de ahí los sobres cifrados viajan de un aparato al otro.
+
+En ese modo el servidor de EDUmind **no interviene en nada**: ni guarda, ni
+reparte, ni sirve para presentar los dispositivos. Ni siquiera hace falta
+iniciar sesión, ni haber usado nunca el buzón: la contraseña de
+sincronización se puede crear sin conexión.
+
+Requisito: los dos aparatos tienen que estar en la misma red. No se usa
+ningún servidor de relevo, precisamente para no volver a poner a un tercero
+por medio.

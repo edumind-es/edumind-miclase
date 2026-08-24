@@ -21,6 +21,8 @@ edumind_miclase/
 │   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
+│   │                   transporte.ts (interfaz) · transporteDirecto.ts + enlaceDirecto.ts
+│   │                   (sincronización entre dispositivos por WebRTC, sin servidor)
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
@@ -48,6 +50,17 @@ edumind_miclase/
 - **Toda llamada al API pasa por `api()` de `src/api.ts`.** Una ruta relativa
   fija funciona en la web pero en el contenedor nativo apunta al propio
   contenedor, no al servidor.
+- **`sync.ts` no sabe dónde viven los sobres.** Todo el diálogo con el exterior
+  pasa por la interfaz `Transporte` (`db/transporte.ts`). Hay dos: el buzón del
+  servidor y el enlace directo entre dispositivos. Meter una llamada `fetch`
+  dentro de `sync.ts` rompería el enlace directo, que no tiene servidor al que
+  llamar.
+- **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
+  ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
+  se envió por el otro. El buzón conserva los nombres de clave de siempre.
+- **La sal y el verificador viven también en el dispositivo**, no solo en el
+  buzón. Si solo estuvieran en el servidor, un aparato nuevo no podría
+  desbloquear sin él y el enlace directo no serviría de nada.
 - **La fusión de sincronización mantiene su base.** `sync_base` guarda la
   última versión común de cada registro; sin ella el merge cae al
   last-write-wins y se pierden cambios simultáneos en campos distintos.

@@ -13,6 +13,12 @@
  * para un QR de mesa no aporta nada.
  */
 
+/**
+ * Lado al que se reduce el fotograma antes de analizarlo. 640 basta y sobra
+ * para un QR de mesa. El de emparejar dos dispositivos es mucho mas denso
+ * (unos 660 caracteres, version 17), y a 640 se queda justo de resolucion:
+ * por eso se puede subir desde fuera.
+ */
 const LADO_MAXIMO = 640
 
 export type Lector = {
@@ -45,7 +51,7 @@ async function lectorNativo(): Promise<Lector> {
   }
 }
 
-async function lectorJavaScript(): Promise<Lector> {
+async function lectorJavaScript(ladoMaximo: number): Promise<Lector> {
   // Carga diferida: quien tenga detector nativo no descarga esto nunca
   const { default: jsQR } = await import('jsqr')
 
@@ -57,7 +63,7 @@ async function lectorJavaScript(): Promise<Lector> {
     async leer(video) {
       if (!ctx || !video.videoWidth) return null
 
-      const escala = Math.min(1, LADO_MAXIMO / Math.max(video.videoWidth, video.videoHeight))
+      const escala = Math.min(1, ladoMaximo / Math.max(video.videoWidth, video.videoHeight))
       const w = Math.round(video.videoWidth * escala)
       const h = Math.round(video.videoHeight * escala)
       if (lienzo.width !== w || lienzo.height !== h) {
@@ -79,9 +85,11 @@ async function lectorJavaScript(): Promise<Lector> {
   }
 }
 
-export async function crearLector(): Promise<Lector> {
+export async function crearLector(
+  { ladoMaximo = LADO_MAXIMO }: { ladoMaximo?: number } = {}
+): Promise<Lector> {
   if (hayDetectorNativo()) {
     try { return await lectorNativo() } catch { /* cae al de reserva */ }
   }
-  return lectorJavaScript()
+  return lectorJavaScript(ladoMaximo)
 }
