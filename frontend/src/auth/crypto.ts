@@ -78,6 +78,15 @@ export function descargarBlob(contenido: string, nombreArchivo: string, tipo = '
 }
 
 // Generar code_verifier y code_challenge para PKCE
+/**
+ * Valor aleatorio en base64url, para `state` y `nonce` del flujo OIDC.
+ * 32 bytes de entropía criptográfica, igual que el verificador PKCE.
+ */
+export function valorOpaco(): string {
+  return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+}
+
 export async function generarPKCE() {
   const verifier = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))))
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')

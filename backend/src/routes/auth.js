@@ -54,7 +54,7 @@ export default async function authRoutes(app) {
     if (!CLIENT_ID || !CLIENT_SECRET) {
       return reply.status(503).send({ error: 'Authentik no configurado en este servidor' })
     }
-    const { code, code_verifier } = req.body
+    const { code, code_verifier, nonce } = req.body || {}
     if (!code || !code_verifier) {
       return reply.status(400).send({ error: 'code y code_verifier son obligatorios' })
     }
@@ -91,15 +91,31 @@ export default async function authRoutes(app) {
       return reply.status(401).send({ error: 'Token Authentik inválido' })
     }
 
+    // El `nonce` ata este id_token a la petición de login que lo pidió.
+    // Basta con que lo lleve uno de los dos lados para exigir que coincidan:
+    // así una pestaña vieja que aún no lo enviaba sigue pudiendo entrar, pero
+    // nadie puede saltarse la comprobación simplemente omitiéndolo cuando
+    // Authentik sí lo ha emitido.
+    if ((nonce || claims.nonce) && claims.nonce !== nonce) {
+      return reply.status(401).send({
+        error: 'La respuesta de Authentik no corresponde a esta petición de acceso',
+      })
+    }
+
     const sub    = claims.sub
     const nombre = claims.preferred_username || claims.email || sub
-    const email  = claims.email || null
 
-    // Buscar/crear docente. Usamos el campo email para guardar el Authentik sub
-    let docente = db.prepare('SELECT id FROM docentes WHERE email = ?').get(sub)
+    // Buscar/crear docente. La columna `email` guarda el `sub` de Authentik,
+    // que es el identificador estable; el correo real no se almacena porque
+    // el servidor no lo necesita para nada.
+    let docente = db.prepare('SELECT id, nombre FROM docentes WHERE email = ?').get(sub)
     if (!docente) {
       const r = db.prepare('INSERT INTO docentes (nombre, email) VALUES (?, ?)').run(nombre, sub)
       docente = { id: r.lastInsertRowid }
+    } else if (docente.nombre !== nombre) {
+      // El nombre solo se escribía al crear: quien se lo cambiara en
+      // Authentik seguía viendo el viejo para siempre.
+      db.prepare('UPDATE docentes SET nombre = ? WHERE id = ?').run(nombre, docente.id)
     }
 
     const token = await emitirSessionJWT(docente.id, sub, nombre)

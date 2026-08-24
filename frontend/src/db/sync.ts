@@ -46,6 +46,8 @@ const MOTIVOS: Record<string, string> = {
   campos_incompletos:'el registro llegó incompleto al servidor',
   tabla_desconocida: 'el servidor no reconoce esa tabla',
   fecha_invalida:    'su fecha de modificación no es válida',
+  cuota_registros:   'el buzón del servidor ha llegado a su número máximo de registros',
+  cuota_espacio:     'el buzón del servidor no tiene espacio libre',
 }
 
 export type ResultadoSync = {
@@ -251,7 +253,18 @@ function iguales(a: any, b: any): boolean {
   return false
 }
 
-export type ResultadoFusion = { registro: any; huboFusion: boolean; campos: string[] }
+export type ResultadoFusion = {
+  registro: any
+  huboFusion: boolean
+  campos: string[]
+  /**
+   * El resultado queda borrado y el otro dispositivo había editado campos.
+   * La política es que el borrado manda —resucitar registros por una edición
+   * concurrente sorprende más—, pero callarse que se ha descartado un cambio
+   * es lo que hacía que un apellido corregido desapareciera sin explicación.
+   */
+  borradoConEdicion: boolean
+}
 
 /**
  * Fusión a tres bandas: base (lo último que ambos compartían), local y remoto.
@@ -298,7 +311,20 @@ export function fusionarTresBandas(base: any, local: any, remoto: any): Resultad
     ? sello()
     : (remotoEsMasNuevo ? remoto.updated_at : local.updated_at)
 
-  return { registro: salida, huboFusion: difiereDelRemoto, campos }
+  // El borrado gana, pero si el otro lado había tocado campos de contenido
+  // hay que decirlo: esos cambios ya no se van a ver en ninguna parte.
+  const quedaBorrado = !!salida.deleted_at
+  const camposDeContenido = campos.filter(c => c !== 'deleted_at')
+  const editoElOtroLado = [...claves].some(c =>
+    c !== 'deleted_at' && !CAMPOS_DE_CONTROL.has(c) &&
+    (!iguales(local[c], base[c]) || !iguales(remoto[c], base[c])))
+
+  return {
+    registro: salida,
+    huboFusion: difiereDelRemoto,
+    campos: camposDeContenido.length ? camposDeContenido : campos,
+    borradoConEdicion: quedaBorrado && editoElOtroLado,
+  }
 }
 
 // ─── Serialización de registros ──────────────────────────────────────────
@@ -502,7 +528,13 @@ async function fusionar(
     return true
   }
 
-  const { registro, huboFusion, campos } = fusionarTresBandas(base, local, remoto)
+  const { registro, huboFusion, campos, borradoConEdicion } = fusionarTresBandas(base, local, remoto)
+
+  if (borradoConEdicion) {
+    res.detalleFusion.push(
+      `${tabla}#${remoto.id}: se borró en un dispositivo mientras se editaba en otro. ` +
+      'Prevalece el borrado; los cambios de contenido no se aplican.')
+  }
 
   // Nada que cambiar aquí
   if (iguales(sinBlob(registro), sinBlob(local))) {

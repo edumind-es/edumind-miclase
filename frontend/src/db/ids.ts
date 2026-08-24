@@ -75,6 +75,32 @@ export function esIdHeredado(id: number): boolean {
   return id < FACTOR
 }
 
+/**
+ * Pone el contador por encima de los ids que ya existen en este dispositivo.
+ *
+ * `base` y `contador` viven en localStorage porque `nuevoId()` tiene que ser
+ * síncrono, pero localStorage y IndexedDB se pueden borrar por separado: si
+ * el navegador limpia el primero y no el segundo (limpieza de datos del
+ * sitio, un perfil restaurado, modo privado), el contador vuelve a 1 y los
+ * ids que entregue chocarán con los que ya hay guardados.
+ *
+ * Se llama al arrancar la app, antes de crear nada.
+ *
+ * @param maxIdsPorBase id más alto que existe en la base local para cada
+ *   base de dispositivo conocida.
+ */
+export function asegurarContador(maxIdLocal: number): void {
+  const base = baseDispositivo()
+  // Solo importan los ids de NUESTRO rango: los de otros dispositivos no
+  // pueden colisionar con los que emitamos nosotros.
+  if (Math.floor(maxIdLocal / FACTOR) !== base) return
+
+  const seqUsado = maxIdLocal % FACTOR
+  if (seqUsado >= leerEntero(K_SEQ)) {
+    localStorage.setItem(K_SEQ, String(seqUsado))
+  }
+}
+
 /** Marca temporal de modificación — base del merge last-write-wins. */
 export function sello(): string {
   return new Date().toISOString()

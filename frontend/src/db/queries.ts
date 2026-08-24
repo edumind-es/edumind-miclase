@@ -1,4 +1,4 @@
-import { db } from './localDb'
+import { db, TABLAS_SINC } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
@@ -1113,6 +1113,22 @@ export async function getMatrizEvaluacion(
   }
 }
 
+/**
+ * Id más alto que existe en este dispositivo, en cualquier tabla de aula.
+ *
+ * Lo usa `asegurarContador` al arrancar: `nuevoId()` guarda su contador en
+ * localStorage, que se puede borrar sin que se borre IndexedDB, y entonces
+ * volvería a repartir ids ya usados.
+ */
+export async function maxIdLocal(): Promise<number> {
+  let max = 0
+  for (const tabla of TABLAS_SINC) {
+    const ultimo = await db.table(tabla).orderBy('id').last()
+    if (ultimo?.id != null && ultimo.id > max) max = ultimo.id
+  }
+  return max
+}
+
 // ─── ESTADO DE CONFIGURACIÓN (asistente de primeros pasos) ────────────────────
 
 export type PasoEstado = {
@@ -1206,7 +1222,9 @@ export async function exportarDatos(): Promise<string> {
   }))
 
   return JSON.stringify({
-    version: 4,
+    // La versión del backup sigue a la del esquema Dexie, que va por la v5.
+    // Estaba clavada en 4 desde antes de que existiera sync_base.
+    version: 5,
     exported_at: now(),
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
@@ -1217,7 +1235,7 @@ export async function exportarDatos(): Promise<string> {
 
 export async function importarDatos(json: string): Promise<void> {
   const data = JSON.parse(json)
-  if (![1, 2, 3, 4].includes(data.version)) throw new Error('Versión de backup no compatible')
+  if (![1, 2, 3, 4, 5].includes(data.version)) throw new Error('Versión de backup no compatible')
 
   // Reconstruir blobs fuera de la transacción (FileReader no puede vivir dentro)
   const evidencias: Evidencia[] = (data.evidencias || []).map((ev: any) => {
