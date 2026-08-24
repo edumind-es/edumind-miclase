@@ -4,8 +4,8 @@
  * Ejecutar una sola vez después de crear la DB o cuando se actualicen los JSON.
  * Uso: node src/db/seed.js
  */
-import { readFileSync, readdirSync, statSync } from 'fs'
-import { join, resolve } from 'path'
+import { mkdirSync, readFileSync, readdirSync, statSync } from 'fs'
+import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import Database from 'better-sqlite3'
 import { createRequire } from 'module'
@@ -14,6 +14,11 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ROOT = resolve(__dirname, '../../..')
 const DB_PATH = process.env.DB_PATH || join(ROOT, 'backend/data/miclase.db')
 const CURRICULUM_PATH = process.env.CURRICULUM_PATH || join(ROOT, 'curriculum')
+
+// backend/data/ no se versiona, asi que en un clon limpio no existe y
+// better-sqlite3 falla con «the directory does not exist». Lo destapo la
+// primera ejecucion de la integracion continua.
+mkdirSync(dirname(DB_PATH), { recursive: true })
 
 const db = new Database(DB_PATH)
 
