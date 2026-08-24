@@ -9,13 +9,13 @@
  *   5. Frontend usa ese JWT en Authorization: Bearer <token> para el resto de API
  */
 import { SignJWT, createRemoteJWKSet, jwtVerify } from 'jose'
+import { JWT_SECRET } from '../config.js'
 
 const AUTHENTIK_URL    = process.env.AUTHENTIK_URL            || 'https://auth.edumind.es'
 const AUTHENTIK_SLUG   = process.env.AUTHENTIK_SLUG           || 'miclase'
 const CLIENT_ID        = process.env.AUTHENTIK_CLIENT_ID      || ''
 const CLIENT_SECRET    = process.env.AUTHENTIK_CLIENT_SECRET  || ''
 const REDIRECT_URI     = process.env.AUTHENTIK_REDIRECT_URI   || 'https://miclase.edumind.es/auth/callback'
-const JWT_SECRET       = process.env.JWT_SECRET               || 'cambiar_en_produccion_min32chars!!'
 const SESSION_TTL      = 60 * 60 * 24 * 7  // 7 días en segundos
 
 const issuerBase = () => `${AUTHENTIK_URL}/application/o/${AUTHENTIK_SLUG}`
