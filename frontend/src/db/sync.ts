@@ -16,7 +16,23 @@
 import { db, TABLAS_SINC, type TablaSinc } from './localDb'
 import { idDispositivo, sello } from './ids'
 import { LIMITE_ENVIO, LIMITE_SOBRE, LOTE, enMB } from './limites'
-import { api } from '@/api'
+import {
+  transporteServidor,
+  type Cabeceras, type EstadoSync, type RespuestaPush, type Transporte,
+} from './transporte'
+
+export type { EstadoSync } from './transporte'
+
+/**
+ * De dónde salen y a dónde van los sobres.
+ *
+ * Por ahora siempre el buzón de EDUmind, que es lo que había. Cuando existan
+ * los otros transportes —una carpeta del docente, o el otro dispositivo
+ * directamente— este es el único sitio donde hay que elegir.
+ */
+function transporte(headers: Cabeceras): Transporte {
+  return transporteServidor(headers)
+}
 
 const K_CLAVE      = 'sync_clave'
 const K_PULL_SEQ   = 'sync_pull_seq'
@@ -60,15 +76,6 @@ export type ResultadoSync = {
   fusionados: number
   detalleFusion: string[]
   errores: string[]
-}
-
-export type EstadoSync = {
-  iniciado: boolean
-  salt: string | null
-  verificador: string | null
-  seq: number
-  registros: number
-  actualizado: string | null
 }
 
 // ─── Utilidades binarias ─────────────────────────────────────────────────
@@ -156,27 +163,10 @@ async function descifrar(clave: CryptoKey, iv: string, payload: string): Promise
   return new TextDecoder().decode(claro)
 }
 
-// ─── API del servidor ────────────────────────────────────────────────────
-
-type Cabeceras = () => Record<string, string>
-
-async function pedir(ruta: string, headers: Cabeceras, init: RequestInit = {}) {
-  const res = await fetch(api(`/api/sync${ruta}`), {
-    ...init,
-    headers: { 'Content-Type': 'application/json', ...headers(), ...(init.headers || {}) },
-  })
-  const cuerpo = await res.json().catch(() => ({}))
-  if (!res.ok) {
-    const err: any = new Error(cuerpo.error || `Error ${res.status}`)
-    err.codigo = cuerpo.codigo
-    err.status = res.status
-    throw err
-  }
-  return cuerpo
-}
+// ─── Diálogo con el transporte ───────────────────────────────────────────
 
 export async function consultarEstado(headers: Cabeceras): Promise<EstadoSync> {
-  return pedir('/config', headers)
+  return transporte(headers).estado()
 }
 
 /**
@@ -191,10 +181,7 @@ export async function iniciarSincronizacion(
   const clave = await derivar(password, salt)
   const { iv, payload } = await cifrar(clave, VERIFICADOR)
 
-  await pedir('/config', headers, {
-    method: 'POST',
-    body: JSON.stringify({ salt: b64(salt), verificador: `${iv}.${payload}`, reiniciar }),
-  })
+  await transporte(headers).configurar(b64(salt), `${iv}.${payload}`, reiniciar)
 
   await guardarMeta(K_CLAVE, clave)
   await guardarMeta(K_PULL_SEQ, 0)
@@ -348,7 +335,7 @@ function deSobre(tabla: TablaSinc, json: string): any {
 
 // ─── Empuje ──────────────────────────────────────────────────────────────
 
-async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync) {
+async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
   const desde: string = await leerMeta(K_PUSH_DESDE, '')
   const cuarentena: Cuarentena = await leerMeta(K_CUARENTENA, {})
   const device_id = idDispositivo()
@@ -378,12 +365,9 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
     const enviar = async () => {
       if (!registros.length) return
       const tanda = originales
-      let r: any
+      let r: RespuestaPush
       try {
-        r = await pedir('/push', headers, {
-          method: 'POST',
-          body: JSON.stringify({ device_id, registros }),
-        })
+        r = await canal.empujar(device_id, registros)
       } catch (e: any) {
         // La tanda no llegó. Se vacía para no arrastrarla —antes seguía
         // acumulando encima de un lote ya fallido, que volvía a fallar— y se
@@ -394,17 +378,15 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
         return
       }
 
-      res.enviados += r.escritos ?? 0
-      res.conflictos += r.descartados ?? 0
+      res.enviados += r.escritos
+      res.conflictos += r.descartados
 
-      // Terreno común es solo lo que el servidor confirma haber escrito.
-      // Sellar la base de un registro que el servidor descartó la deja
-      // mintiendo, y la siguiente fusión concluye «esto solo lo cambió el
-      // remoto» sobre campos que el remoto nunca recibió.
-      const listaAceptados: any[] = Array.isArray(r.aceptados) ? r.aceptados : []
-      const listaRechazados: any[] = Array.isArray(r.rechazados) ? r.rechazados : []
-      const aceptados = new Set(listaAceptados.map((a: any) => String(a.registro_id)))
-      const motivos = new Map(listaRechazados.map((x: any) => [String(x.registro_id), x.motivo]))
+      // Terreno común es solo lo que el transporte confirma haber guardado.
+      // Sellar la base de un registro que se descartó la deja mintiendo, y la
+      // siguiente fusión concluye «esto solo lo cambió el remoto» sobre campos
+      // que el remoto nunca recibió.
+      const aceptados = new Set(r.aceptados.map(a => String(a.registro_id)))
+      const motivos = new Map(r.rechazados.map(x => [String(x.registro_id), x.motivo]))
 
       for (const reg of tanda) {
         const id = String(reg.id)
@@ -466,15 +448,13 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
 
 // ─── Descarga y fusión ───────────────────────────────────────────────────
 
-async function traer(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync) {
+async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
   const device_id = idDispositivo()
   let cursor: number = await leerMeta(K_PULL_SEQ, 0)
   let hayMas = true
 
   while (hayMas) {
-    const r = await pedir(
-      `/pull?desde=${cursor}&limite=${LOTE}&excluir_device=${encodeURIComponent(device_id)}`,
-      headers)
+    const r = await canal.traer(cursor, LOTE, device_id)
 
     res.recibidos += r.registros.length
 
@@ -567,10 +547,12 @@ export async function sincronizar(headers: Cabeceras): Promise<ResultadoSync> {
     fusionados: 0, detalleFusion: [], errores: [],
   }
 
+  const canal = transporte(headers)
+
   // Primero enviar y después recibir: así lo local nunca se pierde por una
   // fusión que llegue antes de haber publicado los propios cambios.
-  await empujar(clave, headers, res)
-  await traer(clave, headers, res)
+  await empujar(clave, canal, res)
+  await traer(clave, canal, res)
 
   await guardarMeta(K_ULTIMA, new Date().toISOString())
   return res
