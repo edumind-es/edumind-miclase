@@ -48,6 +48,50 @@ function ponderada(items: { valor: number; peso: number }[]): number | null {
   return pesos > 0 ? redondear(suma / pesos) : null
 }
 
+/**
+ * Trimestre del curso escolar al que pertenece una fecha.
+ *
+ * sep-dic → 1º · ene-mar → 2º · abr-ago → 3º
+ *
+ * La regla estaba copiada en tres pantallas y no la usaba nadie más; el
+ * resumen de asistencia la necesita para no meter en un boletín trimestral
+ * las faltas del curso entero.
+ */
+export function trimestreDeMes(mes: number): number {
+  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
+}
+
+/** @param fecha ISO (`2026-11-04` o `2026-11-04T…`) */
+export function trimestreDeFecha(fecha: string): number {
+  return trimestreDeMes(Number(fecha.slice(5, 7)))
+}
+
+export function trimestreActual(): number {
+  return trimestreDeMes(new Date().getMonth() + 1)
+}
+
+/**
+ * Trimestres en los que se usa un instrumento (`Instrumento.trimestres`).
+ *
+ * Un JSON vacío o roto se interpreta como «los tres»: es lo que el docente
+ * espera de un instrumento recién creado, y nunca hace desaparecer una
+ * columna del calificador por un dato mal guardado.
+ */
+export function parsearTrimestresInstrumento(json: string | undefined): number[] {
+  try {
+    const a = JSON.parse(json || '[1,2,3]')
+    const nums = Array.isArray(a) ? a.map(Number).filter(n => TRIMESTRES.includes(n)) : []
+    return nums.length ? nums : [...TRIMESTRES]
+  } catch {
+    return [...TRIMESTRES]
+  }
+}
+
+/** ¿Este instrumento se usa en este trimestre? */
+export function aplicaEnTrimestre(trimestresJson: string | undefined, trimestre: number): boolean {
+  return parsearTrimestresInstrumento(trimestresJson).includes(trimestre)
+}
+
 export function parsearPesosTrimestres(json: string | undefined): Record<number, number> {
   try {
     const o = JSON.parse(json || '{"1":33,"2":33,"3":34}')

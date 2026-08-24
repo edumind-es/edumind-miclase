@@ -29,6 +29,8 @@ export type DatosGrupo = {
   areas: AreaInforme[]
   calificaciones: Calificacion[]
   asistencia: Map<number, Record<string, number>>
+  /** Periodo del que se ha recontado la asistencia (null = curso completo) */
+  trimestreAsistencia: number | null
 }
 
 type Cabeceras = () => Record<string, string>
@@ -50,7 +52,15 @@ async function criteriosDeArea(
   }
 }
 
-export async function reunirDatosGrupo(grupoId: number, headers: Cabeceras): Promise<DatosGrupo> {
+/**
+ * @param trimestre periodo del informe. La asistencia se recuenta solo de ese
+ *   trimestre; a null, del curso completo.
+ */
+export async function reunirDatosGrupo(
+  grupoId: number,
+  headers: Cabeceras,
+  trimestre: number | null = null
+): Promise<DatosGrupo> {
   const grupo = await getGrupo(grupoId)
   if (!grupo) throw new Error('La clase ya no existe.')
 
@@ -58,7 +68,7 @@ export async function reunirDatosGrupo(grupoId: number, headers: Cabeceras): Pro
     getAlumnosByGrupo(grupoId),
     getAsignaturas(grupoId),
     getCalificacionesPorGrupo(grupoId),
-    getResumenAsistencia(grupoId),
+    getResumenAsistencia(grupoId, trimestre),
   ])
 
   const areas: AreaInforme[] = []
@@ -77,7 +87,7 @@ export async function reunirDatosGrupo(grupoId: number, headers: Cabeceras): Pro
     areas.push({ asig, instrumentos, descripciones, pesosCriterio })
   }
 
-  return { grupo, alumnos, areas, calificaciones, asistencia }
+  return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre }
 }
 
 /** Notas de un alumno en todas sus áreas. */

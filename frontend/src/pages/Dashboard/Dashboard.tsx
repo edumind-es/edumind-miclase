@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { getEstadoConfiguracion, type PasoEstado } from '@/db/queries'
-
-// Curso escolar: sep-dic → 1º, ene-mar → 2º, abr-ago → 3º
-function trimestreActual(): number {
-  const mes = new Date().getMonth() + 1
-  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
-}
+import { trimestreActual } from '@/db/calculo'
 
 type Paso = {
   n: number

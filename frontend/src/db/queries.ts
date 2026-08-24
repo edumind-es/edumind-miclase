@@ -1,6 +1,7 @@
 import { db } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
+import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
 import { reiniciarEstadoDeSincronizacion } from './sync'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -621,14 +622,32 @@ export async function getAsistencia(sesion_id: number): Promise<AsistenciaRec[]>
   return vivos(await db.asistencia.where('sesion_id').equals(sesion_id).toArray())
 }
 
+/**
+ * Guarda el pase de lista.
+ *
+ * `estado: null` significa «sin registrar», que no es lo mismo que presente:
+ * antes, al guardar, todo alumno que el docente no hubiera tocado se
+ * persistía como `presente` aunque en pantalla figurase con `?`. Un parte de
+ * faltas no puede inventarse asistencias.
+ */
 export async function saveAsistencia(
   sesion_id: number,
-  registros: { alumno_id: number; estado: string }[]
+  registros: { alumno_id: number; estado: string | null }[]
 ): Promise<void> {
   await db.transaction('rw', db.asistencia, async () => {
     for (const r of registros) {
       const existing = await db.asistencia
         .where('[sesion_id+alumno_id]').equals([sesion_id, r.alumno_id]).first()
+
+      if (r.estado == null) {
+        // Sin registrar: si había algo anotado, se retira con borrado lógico
+        // para que la retirada también viaje en la sincronización.
+        if (existing?.id != null && !existing.deleted_at) {
+          await db.asistencia.update(existing.id, tocado({ deleted_at: sello() }))
+        }
+        continue
+      }
+
       if (existing?.id != null) {
         await db.asistencia.update(existing.id, tocado({ estado: r.estado, deleted_at: null }))
       } else {
@@ -638,11 +657,21 @@ export async function saveAsistencia(
   })
 }
 
-/** Resumen de faltas por alumno de un grupo — alimenta informes y ficha. */
-export async function getResumenAsistencia(grupo_id: number): Promise<
-  Map<number, Record<string, number>>
-> {
-  const sesiones = await getSesiones(grupo_id)
+/**
+ * Resumen de faltas por alumno de un grupo — alimenta informes y ficha.
+ *
+ * @param trimestre si se indica, solo cuenta las sesiones de ese trimestre.
+ *   Sin esto el boletín del 1er trimestre imprimía las faltas de todo el
+ *   curso junto a notas que sí eran trimestrales.
+ */
+export async function getResumenAsistencia(
+  grupo_id: number,
+  trimestre: number | null = null
+): Promise<Map<number, Record<string, number>>> {
+  const todas = await getSesiones(grupo_id)
+  const sesiones = trimestre
+    ? todas.filter(s => s.fecha && trimestreDeFecha(s.fecha) === trimestre)
+    : todas
   const ids = sesiones.map(s => s.id!)
   const resumen = new Map<number, Record<string, number>>()
   if (!ids.length) return resumen
@@ -987,6 +1016,13 @@ export type MatrizEvaluacion = {
   instrumentos: Instrumento[]
   /** criterio_id → instrumentos que lo evalúan según la programación */
   porCriterio: Map<string, CeldaInstrumento[]>
+  /**
+   * Criterios que sí tienen instrumento asignado, pero ninguno de ellos se
+   * usa en el trimestre que se está viendo. Se distinguen de los que no
+   * tienen instrumento ninguno: el docente no tiene que arreglar la
+   * programación, solo está en el trimestre equivocado.
+   */
+  criteriosFueraDeTrimestre: Set<string>
   /** `alumno:criterio:instrumento:trimestre` → calificación */
   calificaciones: Record<string, Calificacion>
   /** `alumno:criterio` → nº de evidencias */
@@ -1029,11 +1065,18 @@ export async function getMatrizEvaluacion(
     : await getMapaCriterioInstrumentoAsignatura(asignatura_id)
 
   const porCriterio = new Map<string, CeldaInstrumento[]>()
+  const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
     const celdas: CeldaInstrumento[] = []
+    let habiaAlguno = false
     for (const item of lista) {
       const ins = instrById.get(item.instrumento_id)
       if (!ins) continue   // instrumento borrado: se ignora, la nota histórica se conserva
+      habiaAlguno = true
+      // El trimestre configurado en el instrumento por fin sirve para algo:
+      // hasta ahora se podía marcar «solo 1er trimestre» y el instrumento
+      // seguía apareciendo —y puntuando— en los tres.
+      if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
       celdas.push({
         instrumento_id: ins.id!,
         nombre: ins.nombre,
@@ -1043,6 +1086,7 @@ export async function getMatrizEvaluacion(
       })
     }
     if (celdas.length) porCriterio.set(criterio, celdas)
+    else if (habiaAlguno) criteriosFueraDeTrimestre.add(criterio)
   }
 
   const instrIds = instrumentos.map(i => i.id!)
@@ -1063,7 +1107,10 @@ export async function getMatrizEvaluacion(
     criteriosDeUnidad = new Set(ucs.map(uc => uc.criterio_id))
   }
 
-  return { grupo, asig, alumnos, instrumentos, porCriterio, calificaciones, evidencias, criteriosDeUnidad }
+  return {
+    grupo, asig, alumnos, instrumentos, porCriterio,
+    criteriosFueraDeTrimestre, calificaciones, evidencias, criteriosDeUnidad,
+  }
 }
 
 // ─── ESTADO DE CONFIGURACIÓN (asistente de primeros pasos) ────────────────────

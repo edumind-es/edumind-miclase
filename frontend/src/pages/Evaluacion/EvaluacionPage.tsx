@@ -19,14 +19,9 @@ import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import type { Alumno } from '@/db/localDb'
+import { trimestreActual } from '@/db/calculo'
 
 type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number }
-
-// Trimestre del curso escolar según la fecha: sep-dic → 1º, ene-mar → 2º, abr-ago → 3º
-function trimestreActual(): number {
-  const mes = new Date().getMonth() + 1
-  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
-}
 
 function claseNota(v: number | null | undefined) {
   if (v == null) return ''
@@ -129,9 +124,19 @@ export default function EvaluacionPage() {
   const asigActual = asignaturas.find(a => a.id === asignaturaId)
   const unidadActual = unidades.find(u => u.id === unidadId)
 
+  // Dos motivos distintos para que una casilla salga rayada, y el docente
+  // arregla cada uno en un sitio: uno en la programación, el otro cambiando
+  // de pestaña de trimestre.
   const sinInstrumento = useMemo(() => {
     if (!matriz) return 0
-    return columnas.filter(c => !(matriz.porCriterio.get(c.id)?.length)).length
+    return columnas.filter(c =>
+      !(matriz.porCriterio.get(c.id)?.length) && !matriz.criteriosFueraDeTrimestre.has(c.id)
+    ).length
+  }, [columnas, matriz])
+
+  const fueraDeTrimestre = useMemo(() => {
+    if (!matriz) return 0
+    return columnas.filter(c => matriz.criteriosFueraDeTrimestre.has(c.id)).length
   }, [columnas, matriz])
 
   const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
@@ -257,6 +262,14 @@ export default function EvaluacionPage() {
               <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
                 Ir a la programación →
               </Link>
+            </div>
+          )}
+
+          {fueraDeTrimestre > 0 && (
+            <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)' }}>
+              <strong>{fueraDeTrimestre} criterio{fueraDeTrimestre !== 1 ? 's' : ''} no se evalúa{fueraDeTrimestre !== 1 ? 'n' : ''} en el {trimestre}º trimestre</strong> —
+              su instrumento está configurado para otros. No hay nada que arreglar:
+              cambia de trimestre o edita el instrumento en <strong>⚙ Instrumentos</strong>.
             </div>
           )}
 
@@ -390,18 +403,22 @@ export default function EvaluacionPage() {
         const instrs = matriz.porCriterio.get(celda.criterio.id) ?? []
 
         if (instrs.length === 0) {
+          const soloOtroTrimestre = matriz.criteriosFueraDeTrimestre.has(celda.criterio.id)
           return (
             <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setCelda(null) }}>
               <div className="card" style={{ width: 'min(460px, 94vw)', padding: 24 }}>
-                <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--ambar-500)', marginBottom: 10 }}>
-                  ⚠️ {celda.criterio.id} no tiene instrumento
+                <h2 style={{ fontSize: 16, fontWeight: 700, color: soloOtroTrimestre ? 'var(--azul-700)' : 'var(--ambar-500)', marginBottom: 10 }}>
+                  {soloOtroTrimestre
+                    ? `${celda.criterio.id} no se evalúa en el ${trimestre}º trimestre`
+                    : `⚠️ ${celda.criterio.id} no tiene instrumento`}
                 </h2>
                 <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 8 }}>
                   {celda.criterio.descripcion}
                 </p>
                 <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 18 }}>
-                  Tu programación no dice todavía con qué se evalúa este criterio. Asígnale un instrumento
-                  (prueba, rúbrica, observación…) y la casilla quedará lista para calificar.
+                  {soloOtroTrimestre
+                    ? 'Sí tiene instrumento asignado, pero está configurado para otros trimestres. Cambia de trimestre para calificarlo, o edita en qué trimestres se usa desde ⚙ Instrumentos.'
+                    : 'Tu programación no dice todavía con qué se evalúa este criterio. Asígnale un instrumento (prueba, rúbrica, observación…) y la casilla quedará lista para calificar.'}
                 </p>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <Link to={`/grupos/${grupoSelId}`} className="btn-primary"

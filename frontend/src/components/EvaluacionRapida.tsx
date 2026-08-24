@@ -22,16 +22,12 @@ import { api } from '@/api'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
 import InstrumentosManager from './InstrumentosManager'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
+import { trimestreActual, aplicaEnTrimestre } from '@/db/calculo'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 
 const CFG_KEY = 'miclase_evalrapida_cfg'
-
-function trimestreActual(): number {
-  const mes = new Date().getMonth() + 1
-  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
-}
 
 function leerCfg(): Record<string, any> {
   try { return JSON.parse(localStorage.getItem(CFG_KEY) || '{}') } catch { return {} }
@@ -68,14 +64,19 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const asig = asignaturas.find(a => a.id === asignaturaId) || null
   const instrById = useMemo(() => new Map(instrumentos.map(i => [i.id!, i])), [instrumentos])
 
-  // Instrumentos que la programación asigna al criterio elegido.
+  // Instrumentos que la programación asigna al criterio elegido, filtrados por
+  // el trimestre en curso igual que en el calificador: si los dos sitios no
+  // aplican la misma regla, la misma casilla ofrece instrumentos distintos
+  // según por dónde se entre.
   // Sin programación, se ofrecen todos los del área para no bloquear.
   const instrumentosDelCriterio = useMemo(() => {
     const asignados = (mapaInstr.get(criterioId) || [])
       .map(x => instrById.get(x.instrumento_id))
       .filter((i): i is Instrumento => !!i)
-    return { lista: asignados.length ? asignados : instrumentos, segunProgramacion: asignados.length > 0 }
-  }, [mapaInstr, criterioId, instrById, instrumentos])
+      .filter(i => aplicaEnTrimestre(i.trimestres, trimestre))
+    const sueltos = instrumentos.filter(i => aplicaEnTrimestre(i.trimestres, trimestre))
+    return { lista: asignados.length ? asignados : sueltos, segunProgramacion: asignados.length > 0 }
+  }, [mapaInstr, criterioId, instrById, instrumentos, trimestre])
 
   const instrumentoSel = instrumentosDelCriterio.lista.find(i => i.id === instrumentoId) || null
 

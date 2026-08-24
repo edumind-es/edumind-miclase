@@ -1,4 +1,7 @@
-import { calcularNotaArea, calificativo, nivelANota, parsearPesosTrimestres } from '../frontend/src/db/calculo'
+import {
+  calcularNotaArea, calificativo, nivelANota, parsearPesosTrimestres,
+  parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
+} from '../frontend/src/db/calculo'
 
 let fallos = 0
 const ok = (cond: boolean, msg: string, extra = '') => {
@@ -104,6 +107,29 @@ console.log('\n10. Pesos de trimestre mal formados')
 {
   ok(parsearPesosTrimestres(undefined)[1] === 33, 'sin JSON usa el reparto por defecto')
   ok(parsearPesosTrimestres('{{roto')[3] === 34, 'un JSON roto no rompe el cálculo')
+}
+
+console.log('\n11. Trimestres en los que se usa un instrumento')
+{
+  // Se configuraba en la pantalla de instrumentos y no lo leía nadie: un
+  // examen marcado «solo 1er trimestre» seguía apareciendo en los tres.
+  ok(aplicaEnTrimestre('[1]', 1) === true,  'un instrumento de 1er trimestre aplica en el 1º')
+  ok(aplicaEnTrimestre('[1]', 2) === false, 'y no aplica en el 2º')
+  ok(aplicaEnTrimestre('[2,3]', 3) === true, 'admite varios trimestres')
+
+  ok(parsearTrimestresInstrumento(undefined).length === 3, 'sin dato se entiende que son los tres')
+  ok(parsearTrimestresInstrumento('{{roto').length === 3, 'un JSON roto no hace desaparecer la columna')
+  ok(parsearTrimestresInstrumento('[]').length === 3, 'una lista vacía tampoco')
+  ok(parsearTrimestresInstrumento('[1,7,2]').join(',') === '1,2', 'los trimestres inventados se descartan')
+}
+
+console.log('\n12. Trimestre del curso escolar según la fecha')
+{
+  ok(trimestreDeMes(9) === 1 && trimestreDeMes(12) === 1, 'de septiembre a diciembre, 1º')
+  ok(trimestreDeMes(1) === 2 && trimestreDeMes(3) === 2,  'de enero a marzo, 2º')
+  ok(trimestreDeMes(4) === 3 && trimestreDeMes(6) === 3,  'de abril en adelante, 3º')
+  ok(trimestreDeFecha('2026-11-04') === 1, 'una fecha de noviembre cae en el 1er trimestre')
+  ok(trimestreDeFecha('2027-02-10T09:30:00.000Z') === 2, 'y una de febrero en el 2º')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
