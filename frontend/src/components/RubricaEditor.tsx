@@ -34,6 +34,14 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const [iaError, setIaError] = useState('')
   const [promptCopiado, setPromptCopiado] = useState(false)
 
+  // Cerrar con Esc, como el resto de los modales de la app. Este era el único
+  // que no lo hacía, y es el más grande de todos.
+  useEffect(() => {
+    const alPulsar = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
+    window.addEventListener('keydown', alPulsar)
+    return () => window.removeEventListener('keydown', alPulsar)
+  }, [onCerrar])
+
   useEffect(() => {
     getRubrica(instrumentoId).then(r => {
       if (r) {
@@ -234,11 +242,16 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   // ──────────────────────────────────────────────────────────────────────
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
-      display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-      padding: '20px 16px', overflowY: 'auto',
-    }}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Rúbrica de ${instrumentoNombre}`}
+      onClick={e => { if (e.target === e.currentTarget) onCerrar() }}
+      style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
+        display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+        padding: '20px 16px', overflowY: 'auto',
+      }}>
       <div style={{
         background: 'white', borderRadius: 12, width: '100%', maxWidth: 900,
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)', overflow: 'hidden',
@@ -437,6 +450,20 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 )}
               </div>
 
+              {/* El motivo real del fallo. `useLocalAI` lo exponía en `error`
+                  y nadie lo leía: el botón se limitaba a poner «Error —
+                  reintentar» y el docente no sabía si era su navegador, la
+                  red o el servidor. */}
+              {ai.status === 'error' && ai.error && (
+                <div style={{ padding: '10px 14px', background: 'var(--rojo-100)', borderRadius: 8, fontSize: 12, color: '#991b1b', border: '1px solid var(--rojo-500)' }}>
+                  <strong>No se pudo cargar el modelo.</strong> {ai.error}
+                  <div style={{ marginTop: 4, color: 'var(--gris-600)' }}>
+                    Puedes seguir copiando el prompt y pegándolo en una IA externa: el
+                    resultado se pega abajo igual.
+                  </div>
+                </div>
+              )}
+
               {!hasWebGPU() && (
                 <div style={{ padding: '10px 14px', background: '#fef3c7', borderRadius: 8, fontSize: 12, color: '#92400e' }}>
                   ⚠️ Tu navegador no soporta IA local (requiere Chrome o Edge con WebGPU). Copia el prompt y pégalo en cualquier IA externa.
@@ -446,7 +473,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
               {/* Información sobre el modelo */}
               {hasWebGPU() && !ai.isReady && ai.status === 'idle' && (
                 <div style={{ padding: '10px 14px', background: '#f0fdf4', borderRadius: 8, fontSize: 12, color: '#166534', border: '1px solid #bbf7d0' }}>
-                  ℹ️ <strong>Phi-3.5-mini</strong> de Microsoft — modelo de IA que se descarga una vez (~2GB) y queda guardado en tu navegador. Genera rúbricas sin conexión ni servidor. Solo disponible en Chrome/Edge escritorio.
+                  ℹ️ <strong>Phi-3.5-mini</strong> de Microsoft — se descarga una vez (~2 GB) desde
+                  Hugging Face y queda guardado en tu navegador. A partir de ahí genera rúbricas sin
+                  conexión y sin pasar por ningún servidor: ni el texto que escribes ni la rúbrica
+                  salen de este equipo. Solo en Chrome o Edge de escritorio; en el iPad no hay WebGPU.
                 </div>
               )}
 

@@ -111,6 +111,10 @@ sin ella.
   dispositivo.
 - De ella se deriva una clave con **PBKDF2-SHA256, 210.000 iteraciones**
   (recomendación OWASP), y una sal aleatoria de 128 bits.
+- Ojo: esas 210.000 iteraciones son las del **buzón de sincronización**. Las
+  copias de seguridad que se exportan a un fichero `.miclase` usan el mismo
+  algoritmo con **100.000 iteraciones**. Son dos cifrados distintos y no
+  comparten contraseña.
 - Cada registro se cifra por separado con **AES-256-GCM**, con vector de
   inicialización propio.
 - La clave se guarda como objeto criptográfico **no extraíble**: ni siquiera el

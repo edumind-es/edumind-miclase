@@ -1,5 +1,8 @@
-import { db } from './localDb'
+import { db, TABLAS_SINC } from './localDb'
 import { nuevoId, sello } from './ids'
+import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
+import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
+import { reiniciarEstadoDeSincronizacion } from './sync'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -21,14 +24,6 @@ export type UnidadConCriterios = Unidad & {
     descripcion: string | null
     instrumentos: { instrumento_id: number; peso: number }[]
   }[]
-}
-
-export type CalificadorBase = {
-  alumnos: Alumno[]
-  instrumentos: Instrumento[]
-  calificaciones: Record<string, Calificacion>
-  asig: Asignatura
-  grupo: Grupo
 }
 
 export type CalItem = {
@@ -469,36 +464,6 @@ export async function asignarInstrumentoAUnidad(
 
 // ─── CALIFICACIONES ───────────────────────────────────────────────────────────
 
-/**
- * Devuelve alumnos, instrumentos y calificaciones indexadas para el calificador.
- * Los criterios los obtiene el componente del servidor (currículo público).
- */
-export async function getCalificadorBase(
-  asignatura_id: number,
-  trimestre: number
-): Promise<CalificadorBase | null> {
-  const asig = await getAsignatura(asignatura_id)
-  if (!asig) return null
-  const grupo = await getGrupo(asig.grupo_id)
-  if (!grupo) return null
-
-  const alumnos = await getAlumnosByGrupo(asig.grupo_id)
-  const instrumentos = await getInstrumentos(asignatura_id)
-
-  const instrIds = instrumentos.map(i => i.id!)
-  const cals = instrIds.length
-    ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-        .filter(c => c.trimestre === trimestre).toArray())
-    : []
-
-  const calificaciones: Record<string, Calificacion> = {}
-  for (const c of cals) {
-    calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
-  }
-
-  return { alumnos, instrumentos, calificaciones, asig, grupo }
-}
-
 // Nota actual de un alumno en un criterio/instrumento/trimestre concretos
 export async function getCalificacionUnica(
   alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number
@@ -542,28 +507,45 @@ export async function getCalificacionesAlumnoAsignatura(
     .filter(c => c.alumno_id === alumno_id).toArray())
 }
 
-// Media por criterio y trimestre de una asignatura (para las gráficas de seguimiento)
+/**
+ * Media por criterio y trimestre de una asignatura (gráficas de Seguimiento).
+ *
+ * Pondera por el peso del instrumento, igual que `calculo.ts`. Antes hacía
+ * media aritmética pura, así que la misma asignatura daba un número en la
+ * pantalla de Seguimiento y otro distinto en el informe: un examen al 70 % y
+ * una observación al 30 % salían aquí al 50/50.
+ */
 export async function getResumenPorCriterio(asignatura_id: number): Promise<
   { criterio_id: string; trimestre: number; media: number }[]
 > {
-  const instrIds = (await getInstrumentos(asignatura_id)).map(i => i.id!)
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const instrIds = instrumentos.map(i => i.id!)
   if (!instrIds.length) return []
+  const pesoDe = new Map(instrumentos.map(i => [i.id!, i.peso]))
 
   const cals = vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
     .filter(c => c.valor != null).toArray())
 
-  const acc = new Map<string, { suma: number; n: number }>()
+  const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
+    // Mismo criterio que el motor: peso 0 descarta la nota; una nota cuyo
+    // instrumento ya no existe conserva valor histórico con peso 1.
+    const declarado = pesoDe.get(c.instrumento_id)
+    const peso = declarado === undefined ? 1 : (declarado > 0 ? declarado : 0)
+    if (peso === 0) continue
+
     const key = `${c.criterio_id}::${c.trimestre}`
-    const e = acc.get(key) || { suma: 0, n: 0 }
-    e.suma += c.valor!
-    e.n++
+    const e = acc.get(key) || { suma: 0, pesos: 0 }
+    e.suma += c.valor! * peso
+    e.pesos += peso
     acc.set(key, e)
   }
-  return [...acc.entries()].map(([key, { suma, n }]) => {
-    const [criterio_id, trimestre] = key.split('::')
-    return { criterio_id, trimestre: Number(trimestre), media: suma / n }
-  })
+  return [...acc.entries()]
+    .filter(([, { pesos }]) => pesos > 0)
+    .map(([key, { suma, pesos }]) => {
+      const [criterio_id, trimestre] = key.split('::')
+      return { criterio_id, trimestre: Number(trimestre), media: suma / pesos }
+    })
 }
 
 // Para informes: todas las calificaciones de un grupo (todas asignaturas, todos trimestres)
@@ -619,14 +601,32 @@ export async function getAsistencia(sesion_id: number): Promise<AsistenciaRec[]>
   return vivos(await db.asistencia.where('sesion_id').equals(sesion_id).toArray())
 }
 
+/**
+ * Guarda el pase de lista.
+ *
+ * `estado: null` significa «sin registrar», que no es lo mismo que presente:
+ * antes, al guardar, todo alumno que el docente no hubiera tocado se
+ * persistía como `presente` aunque en pantalla figurase con `?`. Un parte de
+ * faltas no puede inventarse asistencias.
+ */
 export async function saveAsistencia(
   sesion_id: number,
-  registros: { alumno_id: number; estado: string }[]
+  registros: { alumno_id: number; estado: string | null }[]
 ): Promise<void> {
   await db.transaction('rw', db.asistencia, async () => {
     for (const r of registros) {
       const existing = await db.asistencia
         .where('[sesion_id+alumno_id]').equals([sesion_id, r.alumno_id]).first()
+
+      if (r.estado == null) {
+        // Sin registrar: si había algo anotado, se retira con borrado lógico
+        // para que la retirada también viaje en la sincronización.
+        if (existing?.id != null && !existing.deleted_at) {
+          await db.asistencia.update(existing.id, tocado({ deleted_at: sello() }))
+        }
+        continue
+      }
+
       if (existing?.id != null) {
         await db.asistencia.update(existing.id, tocado({ estado: r.estado, deleted_at: null }))
       } else {
@@ -636,11 +636,21 @@ export async function saveAsistencia(
   })
 }
 
-/** Resumen de faltas por alumno de un grupo — alimenta informes y ficha. */
-export async function getResumenAsistencia(grupo_id: number): Promise<
-  Map<number, Record<string, number>>
-> {
-  const sesiones = await getSesiones(grupo_id)
+/**
+ * Resumen de faltas por alumno de un grupo — alimenta informes y ficha.
+ *
+ * @param trimestre si se indica, solo cuenta las sesiones de ese trimestre.
+ *   Sin esto el boletín del 1er trimestre imprimía las faltas de todo el
+ *   curso junto a notas que sí eran trimestrales.
+ */
+export async function getResumenAsistencia(
+  grupo_id: number,
+  trimestre: number | null = null
+): Promise<Map<number, Record<string, number>>> {
+  const todas = await getSesiones(grupo_id)
+  const sesiones = trimestre
+    ? todas.filter(s => s.fecha && trimestreDeFecha(s.fecha) === trimestre)
+    : todas
   const ids = sesiones.map(s => s.id!)
   const resumen = new Map<number, Record<string, number>>()
   if (!ids.length) return resumen
@@ -826,28 +836,26 @@ export async function eliminarRubrica(instrumento_id: number): Promise<void> {
 
 // ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
 
-/**
- * Tamaño máximo que cabe en un sobre de sincronización.
- *
- * El servidor rechaza payloads de más de 8 MB y base64 infla un tercio, así
- * que el blob en bruto tiene que quedar por debajo de ~5,5 MB. Una evidencia
- * más grande se puede guardar igual —es del docente y es local— pero no
- * viajará a los demás dispositivos, y eso hay que decírselo.
- */
-export const LIMITE_EVIDENCIA_SINC = 5 * 1024 * 1024
-
-/** Tope duro: por encima de esto la cuota de IndexedDB sufre de verdad. */
-export const LIMITE_EVIDENCIA = 25 * 1024 * 1024
+// Los topes viven en db/limites.ts, derivados del que manda de verdad: el
+// que aplica el servidor por registro. Se reexportan porque las pantallas ya
+// los importaban desde aquí.
+export { LIMITE_EVIDENCIA_SINC, LIMITE_EVIDENCIA }
 
 export type AvisoEvidencia = { nivel: 'ok' | 'aviso' | 'error'; texto: string }
 
 export function revisarTamano(blob: Blob): AvisoEvidencia {
-  const mb = (blob.size / 1024 / 1024).toFixed(1)
+  const mb = enMB(blob.size)
   if (blob.size > LIMITE_EVIDENCIA) {
-    return { nivel: 'error', texto: `Son ${mb} MB y el máximo son 25 MB. Graba un fragmento más corto.` }
+    return {
+      nivel: 'error',
+      texto: `Son ${mb} MB y el máximo son ${enMB(LIMITE_EVIDENCIA)} MB. Graba un fragmento más corto.`,
+    }
   }
   if (blob.size > LIMITE_EVIDENCIA_SINC) {
-    return { nivel: 'aviso', texto: `Son ${mb} MB: se guarda en este dispositivo, pero no se sincronizará con los demás (máximo 5 MB).` }
+    return {
+      nivel: 'aviso',
+      texto: `Son ${mb} MB: se guarda en este dispositivo, pero no se sincronizará con los demás (máximo ${enMB(LIMITE_EVIDENCIA_SINC)} MB).`,
+    }
   }
   return { nivel: 'ok', texto: `${mb} MB` }
 }
@@ -887,14 +895,6 @@ export async function getEvidenciasAlumno(alumno_id: number): Promise<Evidencia[
 
 export async function contarEvidenciasAlumno(alumno_id: number): Promise<number> {
   return (await getEvidenciasAlumno(alumno_id)).length
-}
-
-/** Recuento por tipo, para las etiquetas de la galería. */
-export async function contarEvidenciasPorTipo(alumno_id: number): Promise<Record<string, number>> {
-  const evs = await getEvidenciasAlumno(alumno_id)
-  const r: Record<string, number> = { foto: 0, audio: 0, video: 0 }
-  for (const ev of evs) r[ev.tipo] = (r[ev.tipo] ?? 0) + 1
-  return r
 }
 
 /** Nº de evidencias por criterio de un alumno — lo pinta la matriz del calificador. */
@@ -987,6 +987,13 @@ export type MatrizEvaluacion = {
   instrumentos: Instrumento[]
   /** criterio_id → instrumentos que lo evalúan según la programación */
   porCriterio: Map<string, CeldaInstrumento[]>
+  /**
+   * Criterios que sí tienen instrumento asignado, pero ninguno de ellos se
+   * usa en el trimestre que se está viendo. Se distinguen de los que no
+   * tienen instrumento ninguno: el docente no tiene que arreglar la
+   * programación, solo está en el trimestre equivocado.
+   */
+  criteriosFueraDeTrimestre: Set<string>
   /** `alumno:criterio:instrumento:trimestre` → calificación */
   calificaciones: Record<string, Calificacion>
   /** `alumno:criterio` → nº de evidencias */
@@ -1029,11 +1036,18 @@ export async function getMatrizEvaluacion(
     : await getMapaCriterioInstrumentoAsignatura(asignatura_id)
 
   const porCriterio = new Map<string, CeldaInstrumento[]>()
+  const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
     const celdas: CeldaInstrumento[] = []
+    let habiaAlguno = false
     for (const item of lista) {
       const ins = instrById.get(item.instrumento_id)
       if (!ins) continue   // instrumento borrado: se ignora, la nota histórica se conserva
+      habiaAlguno = true
+      // El trimestre configurado en el instrumento por fin sirve para algo:
+      // hasta ahora se podía marcar «solo 1er trimestre» y el instrumento
+      // seguía apareciendo —y puntuando— en los tres.
+      if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
       celdas.push({
         instrumento_id: ins.id!,
         nombre: ins.nombre,
@@ -1043,6 +1057,7 @@ export async function getMatrizEvaluacion(
       })
     }
     if (celdas.length) porCriterio.set(criterio, celdas)
+    else if (habiaAlguno) criteriosFueraDeTrimestre.add(criterio)
   }
 
   const instrIds = instrumentos.map(i => i.id!)
@@ -1063,7 +1078,26 @@ export async function getMatrizEvaluacion(
     criteriosDeUnidad = new Set(ucs.map(uc => uc.criterio_id))
   }
 
-  return { grupo, asig, alumnos, instrumentos, porCriterio, calificaciones, evidencias, criteriosDeUnidad }
+  return {
+    grupo, asig, alumnos, instrumentos, porCriterio,
+    criteriosFueraDeTrimestre, calificaciones, evidencias, criteriosDeUnidad,
+  }
+}
+
+/**
+ * Id más alto que existe en este dispositivo, en cualquier tabla de aula.
+ *
+ * Lo usa `asegurarContador` al arrancar: `nuevoId()` guarda su contador en
+ * localStorage, que se puede borrar sin que se borre IndexedDB, y entonces
+ * volvería a repartir ids ya usados.
+ */
+export async function maxIdLocal(): Promise<number> {
+  let max = 0
+  for (const tabla of TABLAS_SINC) {
+    const ultimo = await db.table(tabla).orderBy('id').last()
+    if (ultimo?.id != null && ultimo.id > max) max = ultimo.id
+  }
+  return max
 }
 
 // ─── ESTADO DE CONFIGURACIÓN (asistente de primeros pasos) ────────────────────
@@ -1159,7 +1193,9 @@ export async function exportarDatos(): Promise<string> {
   }))
 
   return JSON.stringify({
-    version: 4,
+    // La versión del backup sigue a la del esquema Dexie, que va por la v5.
+    // Estaba clavada en 4 desde antes de que existiera sync_base.
+    version: 5,
     exported_at: now(),
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
@@ -1170,7 +1206,7 @@ export async function exportarDatos(): Promise<string> {
 
 export async function importarDatos(json: string): Promise<void> {
   const data = JSON.parse(json)
-  if (![1, 2, 3, 4].includes(data.version)) throw new Error('Versión de backup no compatible')
+  if (![1, 2, 3, 4, 5].includes(data.version)) throw new Error('Versión de backup no compatible')
 
   // Reconstruir blobs fuera de la transacción (FileReader no puede vivir dentro)
   const evidencias: Evidencia[] = (data.evidencias || []).map((ev: any) => {
@@ -1188,7 +1224,9 @@ export async function importarDatos(json: string): Promise<void> {
   await db.transaction('rw',
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
-     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos],
+     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos,
+     // La restauración también toca el estado de sincronización: ver abajo.
+     db.sync_base, db.meta],
     async () => {
       await Promise.all([
         db.grupos.clear(), db.alumnos.clear(), db.grupo_alumnos.clear(),
@@ -1212,6 +1250,13 @@ export async function importarDatos(json: string): Promise<void> {
       await db.evidencias.bulkAdd(sellar(evidencias))
       await db.planos.bulkAdd(sellar(data.planos || []))
       await db.asientos.bulkAdd(sellar(data.asientos || []))
+
+      // Los ids siguen existiendo pero su contenido es otro. Si no se
+      // reinicia, la base de fusión apunta a versiones que ya no tienen nada
+      // que ver y el merge a tres bandas calcula diferencias falsas; y el
+      // cursor de envío se queda en el sello anterior, con lo que lo
+      // restaurado —más antiguo— no se sube nunca.
+      await reiniciarEstadoDeSincronizacion()
     }
   )
 }

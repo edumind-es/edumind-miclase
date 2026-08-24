@@ -15,26 +15,40 @@
  */
 import { db, TABLAS_SINC, type TablaSinc } from './localDb'
 import { idDispositivo, sello } from './ids'
+import { LIMITE_ENVIO, LIMITE_SOBRE, LOTE, enMB } from './limites'
 import { api } from '@/api'
 
-const K_CLAVE     = 'sync_clave'
-const K_PULL_SEQ  = 'sync_pull_seq'
+const K_CLAVE      = 'sync_clave'
+const K_PULL_SEQ   = 'sync_pull_seq'
 const K_PUSH_DESDE = 'sync_push_desde'
-const K_ULTIMA    = 'sync_ultima'
+const K_ULTIMA     = 'sync_ultima'
+const K_CUARENTENA = 'sync_cuarentena'
 
 const ITERACIONES = 210_000          // OWASP 2023 para PBKDF2-SHA256
 const VERIFICADOR = 'EDUmind MiClase · verificador de contraseña v1'
-const LOTE = 200
 
 /**
- * Tamaño máximo de un envío, en bytes de payload cifrado.
+ * Registros que no se pueden enviar y no se van a poder enviar nunca tal como
+ * están: una evidencia que no cabe en un sobre, casi siempre.
  *
- * nginx corta las peticiones a miclase.edumind.es en 20 MB
- * (`client_max_body_size 20m`). Una tanda de evidencias con foto se pasa de
- * ahí enseguida, así que el lote se cierra por tamaño además de por número:
- * más vale mandar cinco peticiones que comerse un 413 y perder la tanda.
+ * Sin esto, el cursor de envío avanzaba igualmente y el registro no se
+ * reintentaba jamás: se perdía para los demás dispositivos y el docente solo
+ * veía «conflictos: 1». Y capar el cursor para reintentarlo habría hecho que
+ * cada sincronización volviera a cifrar y reenviar todo lo posterior.
+ *
+ * Se anota con el `updated_at` que tenía al fallar: si el docente lo edita o
+ * sustituye la evidencia, el sello cambia y se vuelve a intentar solo.
  */
-const LIMITE_ENVIO = 12 * 1024 * 1024
+type Cuarentena = Record<string, { updated_at: string; motivo: string }>
+
+const MOTIVOS: Record<string, string> = {
+  demasiado_grande:  'no cabe en un sobre de sincronización',
+  campos_incompletos:'el registro llegó incompleto al servidor',
+  tabla_desconocida: 'el servidor no reconoce esa tabla',
+  fecha_invalida:    'su fecha de modificación no es válida',
+  cuota_registros:   'el buzón del servidor ha llegado a su número máximo de registros',
+  cuota_espacio:     'el buzón del servidor no tiene espacio libre',
+}
 
 export type ResultadoSync = {
   enviados: number
@@ -239,7 +253,18 @@ function iguales(a: any, b: any): boolean {
   return false
 }
 
-export type ResultadoFusion = { registro: any; huboFusion: boolean; campos: string[] }
+export type ResultadoFusion = {
+  registro: any
+  huboFusion: boolean
+  campos: string[]
+  /**
+   * El resultado queda borrado y el otro dispositivo había editado campos.
+   * La política es que el borrado manda —resucitar registros por una edición
+   * concurrente sorprende más—, pero callarse que se ha descartado un cambio
+   * es lo que hacía que un apellido corregido desapareciera sin explicación.
+   */
+  borradoConEdicion: boolean
+}
 
 /**
  * Fusión a tres bandas: base (lo último que ambos compartían), local y remoto.
@@ -286,7 +311,20 @@ export function fusionarTresBandas(base: any, local: any, remoto: any): Resultad
     ? sello()
     : (remotoEsMasNuevo ? remoto.updated_at : local.updated_at)
 
-  return { registro: salida, huboFusion: difiereDelRemoto, campos }
+  // El borrado gana, pero si el otro lado había tocado campos de contenido
+  // hay que decirlo: esos cambios ya no se van a ver en ninguna parte.
+  const quedaBorrado = !!salida.deleted_at
+  const camposDeContenido = campos.filter(c => c !== 'deleted_at')
+  const editoElOtroLado = [...claves].some(c =>
+    c !== 'deleted_at' && !CAMPOS_DE_CONTROL.has(c) &&
+    (!iguales(local[c], base[c]) || !iguales(remoto[c], base[c])))
+
+  return {
+    registro: salida,
+    huboFusion: difiereDelRemoto,
+    campos: camposDeContenido.length ? camposDeContenido : campos,
+    borradoConEdicion: quedaBorrado && editoElOtroLado,
+  }
 }
 
 // ─── Serialización de registros ──────────────────────────────────────────
@@ -312,8 +350,19 @@ function deSobre(tabla: TablaSinc, json: string): any {
 
 async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync) {
   const desde: string = await leerMeta(K_PUSH_DESDE, '')
+  const cuarentena: Cuarentena = await leerMeta(K_CUARENTENA, {})
   const device_id = idDispositivo()
+
   let maxSello = desde
+  // Sellos de los registros que no llegaron a salir. El cursor no puede pasar
+  // del más antiguo de ellos: si lo hiciera, no volverían a leerse nunca.
+  const sinEnviar: string[] = []
+  const noEnviado = (u: string) => { sinEnviar.push(u) }
+
+  const aislar = (tabla: TablaSinc, reg: any, motivo: string) => {
+    cuarentena[`${tabla}:${reg.id}`] = { updated_at: reg.updated_at, motivo }
+    res.errores.push(`${tabla}#${reg.id}: ${MOTIVOS[motivo] ?? motivo}`)
+  }
 
   for (const tabla of TABLAS_SINC) {
     const t = db.table(tabla)
@@ -323,35 +372,73 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
       : await t.toArray()
 
     let registros: any[] = []
-    let bytes = 0
-
     let originales: any[] = []
+    let bytes = 0
 
     const enviar = async () => {
       if (!registros.length) return
-      const r = await pedir('/push', headers, {
-        method: 'POST',
-        body: JSON.stringify({ device_id, registros }),
-      })
+      const tanda = originales
+      let r: any
+      try {
+        r = await pedir('/push', headers, {
+          method: 'POST',
+          body: JSON.stringify({ device_id, registros }),
+        })
+      } catch (e: any) {
+        // La tanda no llegó. Se vacía para no arrastrarla —antes seguía
+        // acumulando encima de un lote ya fallido, que volvía a fallar— y se
+        // frena el cursor para que estos registros se reintenten.
+        for (const reg of tanda) noEnviado(reg.updated_at)
+        res.errores.push(`${tabla}: no se pudo enviar una tanda de ${tanda.length} registros (${e.message})`)
+        registros = []; originales = []; bytes = 0
+        return
+      }
+
       res.enviados += r.escritos ?? 0
       res.conflictos += r.descartados ?? 0
-      // Lo que el servidor ya tiene es, a partir de ahora, terreno común
-      for (const reg of originales) await guardarBase(tabla, reg)
-      registros = []
-      originales = []
-      bytes = 0
+
+      // Terreno común es solo lo que el servidor confirma haber escrito.
+      // Sellar la base de un registro que el servidor descartó la deja
+      // mintiendo, y la siguiente fusión concluye «esto solo lo cambió el
+      // remoto» sobre campos que el remoto nunca recibió.
+      const listaAceptados: any[] = Array.isArray(r.aceptados) ? r.aceptados : []
+      const listaRechazados: any[] = Array.isArray(r.rechazados) ? r.rechazados : []
+      const aceptados = new Set(listaAceptados.map((a: any) => String(a.registro_id)))
+      const motivos = new Map(listaRechazados.map((x: any) => [String(x.registro_id), x.motivo]))
+
+      for (const reg of tanda) {
+        const id = String(reg.id)
+        if (aceptados.has(id)) {
+          await guardarBase(tabla, reg)
+          continue
+        }
+        const motivo = motivos.get(id)
+        // `version_anterior` no es un fallo: el servidor ya tiene algo más
+        // nuevo y el pull lo traerá. Lo demás no se arregla reintentando.
+        if (motivo && motivo !== 'version_anterior') aislar(tabla, reg, motivo)
+      }
+
+      registros = []; originales = []; bytes = 0
     }
 
     for (const reg of pendientes) {
       if (reg.id == null || !reg.updated_at) continue
+
+      const aislado = cuarentena[`${tabla}:${reg.id}`]
+      if (aislado && aislado.updated_at === reg.updated_at) {
+        res.errores.push(`${tabla}#${reg.id}: ${MOTIVOS[aislado.motivo] ?? aislado.motivo} (sin cambios desde el último intento)`)
+        continue
+      }
+
       try {
         const sobre = await aSobre(tabla, reg)
         const { iv, payload } = await cifrar(clave, sobre)
 
-        // Un solo registro que no cabe nunca: avisar y seguir con los demás,
-        // en vez de bloquear la sincronización entera en cada intento
-        if (payload.length > LIMITE_ENVIO) {
-          res.errores.push(`${tabla}#${reg.id}: demasiado grande para sincronizar (${Math.round(payload.length / 1024 / 1024)} MB)`)
+        // Se corta con el tope del servidor, no con el de la tanda: enviar
+        // algo que el servidor va a rechazar solo sirve para perderlo.
+        if (payload.length > LIMITE_SOBRE) {
+          aislar(tabla, reg, 'demasiado_grande')
+          res.errores.push(`${tabla}#${reg.id}: ocupa ${enMB(payload.length)} MB cifrado y el máximo es ${enMB(LIMITE_SOBRE)} MB`)
           continue
         }
         if (bytes + payload.length > LIMITE_ENVIO || registros.length >= LOTE) await enviar()
@@ -361,13 +448,20 @@ async function empujar(clave: CryptoKey, headers: Cabeceras, res: ResultadoSync)
         bytes += payload.length
         if (reg.updated_at > maxSello) maxSello = reg.updated_at
       } catch (e: any) {
+        // No se pudo ni cifrar: puede ser transitorio, así que se reintenta.
+        noEnviado(reg.updated_at)
         res.errores.push(`${tabla}#${reg.id}: ${e.message}`)
       }
     }
     await enviar()
   }
 
-  if (maxSello) await guardarMeta(K_PUSH_DESDE, maxSello)
+  if (maxSello) {
+    const frenado = sinEnviar.length ? sinEnviar.reduce((a, b) => (a < b ? a : b)) : null
+    const cursor = frenado && frenado < maxSello ? frenado : maxSello
+    await guardarMeta(K_PUSH_DESDE, cursor)
+  }
+  await guardarMeta(K_CUARENTENA, cuarentena)
 }
 
 // ─── Descarga y fusión ───────────────────────────────────────────────────
@@ -434,7 +528,13 @@ async function fusionar(
     return true
   }
 
-  const { registro, huboFusion, campos } = fusionarTresBandas(base, local, remoto)
+  const { registro, huboFusion, campos, borradoConEdicion } = fusionarTresBandas(base, local, remoto)
+
+  if (borradoConEdicion) {
+    res.detalleFusion.push(
+      `${tabla}#${remoto.id}: se borró en un dispositivo mientras se editaba en otro. ` +
+      'Prevalece el borrado; los cambios de contenido no se aplican.')
+  }
 
   // Nada que cambiar aquí
   if (iguales(sinBlob(registro), sinBlob(local))) {
@@ -490,7 +590,9 @@ export async function pendientesDeEnvio(): Promise<number> {
   }
   let n = 0
   for (const tabla of TABLAS_SINC) {
-    n += await db.table(tabla).where('updated_at').above(desde).count()
+    // `aboveOrEqual`, igual que en empujar(): con `above` el contador decía
+    // cero mientras aún quedaban registros justo en el límite por enviar.
+    n += await db.table(tabla).where('updated_at').aboveOrEqual(desde).count()
   }
   return n
 }
@@ -498,6 +600,22 @@ export async function pendientesDeEnvio(): Promise<number> {
 /** Olvida los cursores para forzar un envío completo desde cero. */
 export async function reenviarTodo(): Promise<void> {
   await guardarMeta(K_PUSH_DESDE, '')
+  // También los registros aislados: si el docente pide reenviar todo, quiere
+  // que se reintenten hasta los que fallaron.
+  await guardarMeta(K_CUARENTENA, {})
+}
+
+/**
+ * Registros que no se están sincronizando y por qué.
+ * La pantalla de sincronización los enseña para que el docente sepa que esa
+ * evidencia se queda en este dispositivo.
+ */
+export async function registrosAislados(): Promise<Array<{ clave: string; motivo: string }>> {
+  const c: Cuarentena = await leerMeta(K_CUARENTENA, {})
+  return Object.entries(c).map(([clave, v]) => ({
+    clave,
+    motivo: MOTIVOS[v.motivo] ?? v.motivo,
+  }))
 }
 
 /**
@@ -507,4 +625,24 @@ export async function reenviarTodo(): Promise<void> {
  */
 export async function olvidarBaseDeFusion(): Promise<void> {
   await db.sync_base.clear()
+}
+
+/**
+ * Deja la sincronización como recién estrenada, conservando la contraseña.
+ *
+ * Es lo que hay que hacer tras restaurar una copia de seguridad: los ids
+ * siguen existiendo pero su contenido es otro, así que la base de fusión
+ * apunta a versiones que ya no tienen nada que ver y el merge a tres bandas
+ * calcula diferencias falsas. Además el cursor de envío se quedaba en el
+ * sello anterior, con lo que lo restaurado —más antiguo— no se subía nunca.
+ *
+ * No borra `sync_clave`: la contraseña de sincronización sigue siendo la
+ * misma y no tiene sentido pedirla otra vez.
+ */
+export async function reiniciarEstadoDeSincronizacion(): Promise<void> {
+  await db.sync_base.clear()
+  await guardarMeta(K_PUSH_DESDE, '')
+  await guardarMeta(K_PULL_SEQ, 0)
+  await guardarMeta(K_CUARENTENA, {})
+  await guardarMeta(K_ULTIMA, null)
 }

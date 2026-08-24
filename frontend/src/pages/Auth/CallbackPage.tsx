@@ -29,12 +29,26 @@ export default function CallbackPage() {
       return
     }
 
+    // El `state` tiene que ser el que generamos nosotros al empezar: si no
+    // coincide, este callback no viene de un login que iniciara este
+    // navegador y no se canjea nada.
+    const state = params.get('state')
+    const stateEsperado = sessionStorage.getItem('oidc_state')
+    if (!stateEsperado || state !== stateEsperado) {
+      setError('La respuesta de Authentik no corresponde a este inicio de sesión. Vuelve a intentarlo desde la aplicación.')
+      return
+    }
+
+    const nonce = sessionStorage.getItem('oidc_nonce')
+
     sessionStorage.removeItem('pkce_verifier')
+    sessionStorage.removeItem('oidc_state')
+    sessionStorage.removeItem('oidc_nonce')
 
     fetch(api('/api/auth/callback'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, code_verifier: verifier }),
+      body: JSON.stringify({ code, code_verifier: verifier, nonce }),
     })
       .then(r => r.json())
       .then(data => {

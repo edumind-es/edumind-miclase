@@ -3,6 +3,7 @@ import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import { getGrupoDetalle } from '@/db/queries'
 import { imprimirHojaQR } from '@/utils/qrSheet'
+import { urlPublica } from '@/api'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import PlanoClase from '@/components/PlanoClase'
@@ -185,7 +186,7 @@ function DetalleGrupo() {
   if (cargando) return <p>Cargando grupo…</p>
   if (!grupo) return <p>Grupo no encontrado.</p>
 
-  const qrUrl = `https://miclase.edumind.es/evaluacion?grupo_id=${id}`
+  const qrUrl = urlPublica(`/evaluacion?grupo_id=${id}`)
 
   return (
     <>

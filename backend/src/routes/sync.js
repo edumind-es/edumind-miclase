@@ -14,7 +14,30 @@
  */
 
 const LIMITE_LOTE = 500                    // registros por petición
-const LIMITE_PAYLOAD = 8 * 1024 * 1024     // 8 MB por registro (evidencias con foto)
+
+// 8 MB por registro (evidencias con foto). El cliente deriva de aquí el aviso
+// que le da al docente al capturar: ver frontend/src/db/limites.ts, que tiene
+// que mantener el mismo valor en LIMITE_SOBRE.
+const LIMITE_PAYLOAD = 8 * 1024 * 1024
+
+/**
+ * `updated_at` decide quién gana un conflicto, y se compara como texto. Sobre
+ * cadenas ISO-8601 eso ordena bien, pero sin validar nada un `updated_at` de
+ * "zzz" gana a cualquier fecha real y pisa el registro bueno. Se exige forma
+ * ISO antes de dejar que un valor entre en esa comparación.
+ */
+/**
+ * Cuota por docente.
+ *
+ * No habia ninguna: `registro_id` es texto libre elegido por el cliente, asi
+ * que un docente autenticado podia crear filas sin limite hasta llenar el
+ * disco del servidor. Los topes son holgados para un uso real de aula
+ * —evidencias de foto, audio y video de varios cursos— y solo cortan el abuso.
+ */
+const CUOTA_REGISTROS = 200_000
+const CUOTA_BYTES = 2 * 1024 * 1024 * 1024   // 2 GB de sobres cifrados
+
+const FECHA_ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/
 
 const TABLAS = new Set([
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
@@ -40,6 +63,14 @@ export default async function syncRoutes(app) {
       return null
     }
     return docenteId
+  }
+
+  /** Cuántos sobres y cuántos bytes ocupa ya este docente. */
+  function uso(docenteId) {
+    return db.prepare(`
+      SELECT COUNT(*) AS registros, COALESCE(SUM(LENGTH(payload)), 0) AS bytes
+      FROM sync_registros WHERE docente_id = ?
+    `).get(docenteId)
   }
 
   function estado(docenteId) {
@@ -125,8 +156,10 @@ export default async function syncRoutes(app) {
       return reply.status(409).send({ error: 'Configura primero la contraseña de sincronización', codigo: 'SIN_CONFIG' })
     }
 
-    const leerActual = db.prepare(
-      'SELECT updated_at FROM sync_registros WHERE docente_id = ? AND tabla = ? AND registro_id = ?')
+    const leerActual = db.prepare(`
+      SELECT updated_at, LENGTH(payload) AS bytes
+      FROM sync_registros WHERE docente_id = ? AND tabla = ? AND registro_id = ?
+    `)
     const escribir = db.prepare(`
       INSERT INTO sync_registros (docente_id, tabla, registro_id, seq, updated_at, device_id, iv, payload)
       VALUES (@docente_id, @tabla, @registro_id, @seq, @updated_at, @device_id, @iv, @payload)
@@ -135,18 +168,47 @@ export default async function syncRoutes(app) {
         device_id = excluded.device_id, iv = excluded.iv, payload = excluded.payload
     `)
 
+    // Cuota: se mide una vez por petición y se va descontando dentro del
+    // bucle, en vez de una consulta agregada por cada registro.
+    const u = uso(docenteId)
+    let filasUsadas = u.registros
+    let bytesUsados = u.bytes
+
     let seq = e.seq
     let escritos = 0, descartados = 0
 
+    // El cliente necesita saber QUE registro se ha rechazado y por que. Con un
+    // contador a secas no podia distinguir «el servidor ya tiene una version
+    // mas nueva» (normal, se resuelve en el pull) de «esta evidencia no cabe y
+    // no va a caber nunca» (hay que avisar al docente). Sin ese detalle el
+    // cliente avanzaba su cursor y el registro no se reintentaba jamas.
+    const aceptados = []
+    const rechazados = []
+    const rechazar = (r, motivo) => {
+      descartados++
+      rechazados.push({ tabla: r.tabla, registro_id: String(r.registro_id ?? ''), motivo })
+    }
+
     const tx = db.transaction(() => {
       for (const r of registros) {
-        if (!TABLAS.has(r.tabla)) { descartados++; continue }
-        if (!r.registro_id || !r.updated_at || !r.iv || !r.payload) { descartados++; continue }
-        if (r.payload.length > LIMITE_PAYLOAD) { descartados++; continue }
+        if (!TABLAS.has(r.tabla)) { rechazar(r, 'tabla_desconocida'); continue }
+        if (!r.registro_id || !r.updated_at || !r.iv || !r.payload) { rechazar(r, 'campos_incompletos'); continue }
+        if (r.payload.length > LIMITE_PAYLOAD) { rechazar(r, 'demasiado_grande'); continue }
+        if (!FECHA_ISO.test(r.updated_at)) { rechazar(r, 'fecha_invalida'); continue }
 
-        // Last-write-wins: no pisar una versión más reciente
+        // Last-write-wins: no pisar una versión más reciente.
+        // La comparación es de texto, pero sobre cadenas ISO-8601 validadas
+        // arriba, que ordenan igual que las fechas que representan.
         const actual = leerActual.get(docenteId, r.tabla, String(r.registro_id))
-        if (actual && actual.updated_at >= r.updated_at) { descartados++; continue }
+        if (actual && actual.updated_at >= r.updated_at) { rechazar(r, 'version_anterior'); continue }
+
+        if (!actual && filasUsadas >= CUOTA_REGISTROS) { rechazar(r, 'cuota_registros'); continue }
+        if (bytesUsados - (actual?.bytes ?? 0) + r.payload.length > CUOTA_BYTES) {
+          rechazar(r, 'cuota_espacio'); continue
+        }
+
+        if (!actual) filasUsadas++
+        bytesUsados += r.payload.length - (actual?.bytes ?? 0)
 
         seq++
         escribir.run({
@@ -160,13 +222,20 @@ export default async function syncRoutes(app) {
           payload: r.payload,
         })
         escritos++
+        aceptados.push({ tabla: r.tabla, registro_id: String(r.registro_id) })
       }
       db.prepare("UPDATE sync_estado SET seq = ?, actualizado = datetime('now') WHERE docente_id = ?")
         .run(seq, docenteId)
     })
     tx()
 
-    return { ok: true, escritos, descartados, seq }
+    return {
+      ok: true, escritos, descartados, seq, aceptados, rechazados,
+      cuota: {
+        registros: filasUsadas, bytes: bytesUsados,
+        max_registros: CUOTA_REGISTROS, max_bytes: CUOTA_BYTES,
+      },
+    }
   })
 
   // ── Descarga ───────────────────────────────────────────────────────────

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { generarPKCE } from './crypto'
+import { generarPKCE, valorOpaco } from './crypto'
 import { api } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -75,6 +75,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { verifier, challenge } = await generarPKCE()
     sessionStorage.setItem('pkce_verifier', verifier)
 
+    // PKCE cubre el robo del código, pero no que alguien nos empuje un
+    // callback ajeno (`state`) ni que reutilice un id_token viejo (`nonce`).
+    const state = valorOpaco()
+    const nonce = valorOpaco()
+    sessionStorage.setItem('oidc_state', state)
+    sessionStorage.setItem('oidc_nonce', nonce)
+
     const params = new URLSearchParams({
       response_type:         'code',
       client_id:             authConfig.client_id,
@@ -82,6 +89,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       scope:                 authConfig.scopes,
       code_challenge:        challenge,
       code_challenge_method: 'S256',
+      state,
+      nonce,
     })
     window.location.href = `${authConfig.authorize_url}?${params}`
   }

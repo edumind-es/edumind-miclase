@@ -51,8 +51,14 @@ edumind_miclase/
 - **La fusión de sincronización mantiene su base.** `sync_base` guarda la
   última versión común de cada registro; sin ella el merge cae al
   last-write-wins y se pierden cambios simultáneos en campos distintos.
-- **Las evidencias de más de 5 MB no sincronizan** (tope del sobre cifrado).
-  Se guardan igual, pero hay que avisar al docente, no fallar en silencio.
+- **Los topes de tamaño salen todos de `db/limites.ts`.** El que manda es
+  `LIMITE_SOBRE` (8 MB), que es lo que rechaza el servidor por registro; el
+  aviso al capturar (~5,5 MB) se deriva de ahí contando lo que infla base64.
+  No inventar cifras nuevas en otro fichero: eso ya pasó y dejó seis topes
+  incoherentes.
+- **Una evidencia que no puede viajar se dice, no se pierde.** El cursor de
+  envío solo avanza con lo que el servidor confirma, y lo que no cabe queda en
+  cuarentena y se lista en la pantalla de sincronización.
 - **El escaneo de QR necesita los dos motores.** `BarcodeDetector` no existe en
   WKWebView ni en Safari: sin el decodificador de reserva de `utils/lectorQR.ts`
   la función estrella desaparece justo en el iPad.
@@ -84,10 +90,21 @@ sueltos y se lanzan a mano (ver `DESPLIEGUE.md`):
   Playwright (el binario vive en `/var/www/pasos_v2/node_modules`).
 
 ## Estado — EN PRODUCCIÓN
-Desplegada en https://miclase.edumind.es (verificado 2026-07-04):
+Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - nginx: `/etc/nginx/sites-enabled/miclase.edumind.es.conf` — sirve `frontend/dist` (SPA + PWA) y proxy `/api` → 127.0.0.1:3270
-- systemd: `edumind-miclase-api.service` — backend Fastify con NODE_ENV=production (env vars en el unit, tienen prioridad sobre backend/.env)
+  - `miclase-security-headers.inc` — cabeceras de seguridad. **Se incluye dentro de
+    cada `location`**: nginx descarta las heredadas del `server` en cuanto un bloque
+    hijo declara su propio `add_header`, y así la SPA se servía sin CSP.
+  - `miclase-proxy.inc` — ajustes del proxy, compartidos por los cuatro `location` de `/api/`
+  - `/etc/nginx/conf.d/miclase-rate-limit.conf` — zonas `limit_req` (auth 10r/m, sync 120r/m, resto 60r/m; 429)
+- systemd: `edumind-miclase-api.service` — backend Fastify con NODE_ENV=production.
+  Los secretos (`JWT_SECRET`, `AUTHENTIK_CLIENT_SECRET`) **no están en el unit**:
+  viven en `/etc/edumind-miclase-api.env` con permisos 600.
 - Despliegue: ver `DESPLIEGUE.md` (merge → npm install → build → restart servicio)
+- **El árbol de trabajo ES producción**: nginx sirve `frontend/dist` y systemd
+  ejecuta `backend/src` desde este mismo directorio. Un `git checkout` de otra
+  rama cambia lo que está en producción; el backend, además, recoge los cambios
+  en el siguiente `systemctl restart`.
 
 ## Lo que NO hacer
 - No hacer `npm install` sin avisar

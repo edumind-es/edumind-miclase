@@ -5,8 +5,7 @@
  */
 import fp from 'fastify-plugin'
 import { jwtVerify } from 'jose'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'cambiar_en_produccion_min32chars!!'
+import { JWT_SECRET } from '../config.js'
 
 export async function verifySessionToken(token) {
   const key = new TextEncoder().encode(JWT_SECRET)

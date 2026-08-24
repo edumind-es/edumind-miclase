@@ -52,14 +52,16 @@ export default function InformesPage() {
   useEffect(() => {
     if (!grupoId) { setDatos(null); return }
     setMsg(null)
-    reunirDatosGrupo(Number(grupoId), headers)
+    // El trimestre entra en la recogida de datos, no solo en el filtrado de
+    // notas: la asistencia hay que recontarla del periodo del informe.
+    reunirDatosGrupo(Number(grupoId), headers, trim)
       .then(d => {
         setDatos(d)
-        setAlumnoSelId(d.alumnos[0]?.id ? String(d.alumnos[0].id) : '')
-        setAreaSelId(d.areas[0]?.asig.id ? String(d.areas[0].asig.id) : '')
+        setAlumnoSelId(prev => prev || (d.alumnos[0]?.id ? String(d.alumnos[0].id) : ''))
+        setAreaSelId(prev => prev || (d.areas[0]?.asig.id ? String(d.areas[0].asig.id) : ''))
       })
       .catch(e => setMsg({ tipo: 'error', texto: e.message }))
-  }, [grupoId])
+  }, [grupoId, trim])
 
   const opciones = { trimestre: trim, incluirCriterios: conCriterios }
 

@@ -96,6 +96,15 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px var(--azul-100);
 }
 
+/* Indicador de foco uniforme. El anillo por defecto del navegador se ve poco
+   sobre los botones de color de la app, y varía de un navegador a otro. Solo
+   :focus-visible, para que no salga al hacer clic con el ratón. */
+:where(a, button, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--azul-500);
+  outline-offset: 2px;
+  border-radius: var(--radio-sm);
+}
+
 .card {
   background: var(--blanco);
   border-radius: var(--radio-md);

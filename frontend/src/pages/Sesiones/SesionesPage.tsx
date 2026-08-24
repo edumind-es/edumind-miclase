@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion, actualizarSesion, getAsistencia, saveAsistencia } from '@/db/queries'
+import {
+  getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion,
+  actualizarSesion, eliminarSesion, getAsistencia, saveAsistencia,
+} from '@/db/queries'
 
 type Alumno  = { id: number; nombre: string; apellidos: string }
 type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null }
@@ -88,9 +91,34 @@ export default function SesionesPage() {
   const guardarAsistencia = async () => {
     if (!sesionActiva) return
     setGuardando(true)
-    const registros = alumnos.map(a => ({ alumno_id: a.id, estado: asistencia[a.id] || 'presente' }))
+    // Quien no se ha marcado se guarda como «sin registrar», no como presente:
+    // un parte de faltas no puede inventarse asistencias que nadie comprobó.
+    const registros = alumnos.map(a => ({ alumno_id: a.id, estado: asistencia[a.id] ?? null }))
     await saveAsistencia(sesionActiva, registros)
     setGuardando(false)
+  }
+
+  /** Devuelve a «sin registrar» al alumno que se marcó por error. */
+  const limpiarEstado = (alumnoId: number) => {
+    setAsistencia(prev => {
+      const { [alumnoId]: _, ...resto } = prev
+      return resto
+    })
+  }
+
+  /**
+   * Borra una sesión mal creada. `eliminarSesion` existía en db/queries.ts
+   * desde el principio, pero ninguna pantalla la llamaba: una sesión con la
+   * fecha equivocada se quedaba ahí para siempre, contando en los informes.
+   */
+  const borrarSesion = async (s: Sesion) => {
+    const ok = window.confirm(
+      `¿Borrar la sesión del ${s.fecha}?\n\n` +
+      'Se borra también su pase de lista y su diario. Las calificaciones no se tocan.')
+    if (!ok) return
+    await eliminarSesion(s.id)
+    if (sesionActiva === s.id) { setSesionActiva(null); setAsistencia({}); setDiario('') }
+    setSesiones(prev => prev.filter(x => x.id !== s.id))
   }
 
   const handleCrearSesion = async () => {
@@ -181,18 +209,35 @@ export default function SesionesPage() {
           )}
           <div style={{ maxHeight: 500, overflowY: 'auto' }}>
             {sesiones.map(s => (
-              <div key={s.id} onClick={() => cargarAsistencia(s.id)}
+              <div key={s.id}
+                role="button"
+                tabIndex={0}
+                aria-current={sesionActiva === s.id}
+                onClick={() => cargarAsistencia(s.id)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cargarAsistencia(s.id) }
+                }}
                 style={{
                   padding: '10px 14px', cursor: 'pointer', borderBottom: '1px solid var(--gris-100)',
                   background: sesionActiva === s.id ? 'var(--azul-100)' : 'transparent',
+                  display: 'flex', alignItems: 'center', gap: 8,
                 }}>
-                <div style={{ fontWeight: sesionActiva === s.id ? 700 : 500, fontSize: 14 }}>
-                  {new Date(s.fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: sesionActiva === s.id ? 700 : 500, fontSize: 14 }}>
+                    {new Date(s.fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' })}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--gris-600)', display: 'flex', gap: 8, marginTop: 2 }}>
+                    <span style={{ textTransform: 'capitalize' }}>{s.tipo}</span>
+                    {s.notas && <span style={{ fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 130 }}>· {s.notas}</span>}
+                  </div>
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--gris-600)', display: 'flex', gap: 8, marginTop: 2 }}>
-                  <span style={{ textTransform: 'capitalize' }}>{s.tipo}</span>
-                  {s.notas && <span style={{ fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 130 }}>· {s.notas}</span>}
-                </div>
+                <button
+                  onClick={e => { e.stopPropagation(); borrarSesion(s) }}
+                  title="Borrar esta sesión"
+                  aria-label={`Borrar la sesión del ${s.fecha}`}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--gris-600)', padding: 4 }}>
+                  🗑
+                </button>
               </div>
             ))}
           </div>
@@ -214,14 +259,25 @@ export default function SesionesPage() {
               </div>
             </div>
             <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 12 }}>
-              Toca el nombre para cambiar: P=Presente · A=Ausente · J=Justificada · R=Retraso
+              Toca el nombre para cambiar: P=Presente · A=Ausente · J=Justificada · R=Retraso.
+              Los que quedan con <strong>?</strong> se guardan como <strong>sin registrar</strong>,
+              no como presentes. Pulsación larga para volver a dejarlo sin registrar.
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 8, marginBottom: 16 }}>
               {alumnos.map(a => {
                 const estado = asistencia[a.id] || null
                 const info = ESTADOS.find(e => e.value === estado)
                 return (
-                  <div key={a.id} onClick={() => toggleEstado(a.id)}
+                  <div key={a.id}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${a.apellidos}, ${a.nombre}: ${estado ?? 'sin registrar'}`}
+                    onClick={() => toggleEstado(a.id)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleEstado(a.id) }
+                      if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); limpiarEstado(a.id) }
+                    }}
+                    onContextMenu={e => { e.preventDefault(); limpiarEstado(a.id) }}
                     style={{
                       padding: '10px 12px', borderRadius: 8, cursor: 'pointer',
                       border: `2px solid ${info ? info.color + '50' : 'var(--gris-200)'}`,
@@ -248,9 +304,26 @@ export default function SesionesPage() {
                 {guardando ? 'Guardando…' : '✓ Guardar asistencia'}
               </button>
               <div style={{ fontSize: 12, color: 'var(--gris-600)' }}>
-                {alumnos.filter(a => (asistencia[a.id] || 'presente') === 'presente').length}/{alumnos.length} presentes
-                {Object.values(asistencia).filter(e => e === 'ausente').length > 0 &&
-                  ` · ${Object.values(asistencia).filter(e => e === 'ausente').length} ausentes`}
+                {(() => {
+                  const cuenta = (v: Estado) => alumnos.filter(a => asistencia[a.id] === v).length
+                  const sinRegistrar = alumnos.filter(a => !asistencia[a.id]).length
+                  const partes = [
+                    `${cuenta('presente')}/${alumnos.length} presentes`,
+                    cuenta('ausente')     ? `${cuenta('ausente')} ausentes`         : '',
+                    cuenta('justificada') ? `${cuenta('justificada')} justificadas` : '',
+                    cuenta('retraso')     ? `${cuenta('retraso')} con retraso`      : '',
+                  ].filter(Boolean)
+                  return (
+                    <>
+                      {partes.join(' · ')}
+                      {sinRegistrar > 0 && (
+                        <span style={{ color: 'var(--ambar-500)', fontWeight: 600 }}>
+                          {' · '}{sinRegistrar} sin registrar
+                        </span>
+                      )}
+                    </>
+                  )
+                })()}
               </div>
             </div>
 

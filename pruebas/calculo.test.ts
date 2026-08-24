@@ -1,4 +1,7 @@
-import { calcularNotaArea, calificativo, nivelANota, parsearPesosTrimestres } from '../frontend/src/db/calculo'
+import {
+  calcularNotaArea, calificativo, nivelANota, parsearPesosTrimestres,
+  parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
+} from '../frontend/src/db/calculo'
 
 let fallos = 0
 const ok = (cond: boolean, msg: string, extra = '') => {
@@ -94,16 +97,67 @@ console.log('\n8. Escala cualitativa LOMLOE')
 
 console.log('\n9. Conversión de niveles de rúbrica a escala 0-10')
 {
-  ok(nivelANota(4, 4) === 10, 'nivel 4 de 4 → 10 (no 4)')
-  ok(nivelANota(1, 4) === 2.5, 'nivel 1 de 4 → 2.5')
-  ok(nivelANota(3, 5) === 6,   'nivel 3 de 5 → 6')
-  ok(nivelANota(2, 0) === 2,   'sin máximo no divide por cero')
+  // Los niveles se reparten de extremo a extremo, como en iDoceo: el más bajo
+  // es 0 y el más alto 10, sin que el docente configure nada. Antes se
+  // dividía por el máximo y el nivel inferior de una rúbrica de cuatro daba
+  // 2,5: era imposible poner un 0 con una rúbrica.
+  ok(nivelANota(4, 4) === 10,  'nivel 4 de 4 → 10')
+  ok(nivelANota(1, 4) === 0,   'nivel 1 de 4 → 0, no 2.5')
+  ok(nivelANota(2, 4) === 3.3, 'nivel 2 de 4 → 3.3')
+  ok(nivelANota(3, 4) === 6.7, 'nivel 3 de 4 → 6.7')
+  ok(nivelANota(3, 5) === 5,   'nivel 3 de 5 → 5, el punto medio')
+  ok(nivelANota(2, 0) === 2,   'una rúbrica de un solo nivel no divide por cero')
+  ok(nivelANota(0, 3, 0) === 0 && nivelANota(3, 3, 0) === 10,
+     'admite rúbricas que empiezan en 0')
 }
 
 console.log('\n10. Pesos de trimestre mal formados')
 {
   ok(parsearPesosTrimestres(undefined)[1] === 33, 'sin JSON usa el reparto por defecto')
   ok(parsearPesosTrimestres('{{roto')[3] === 34, 'un JSON roto no rompe el cálculo')
+}
+
+console.log('\n11. Trimestres en los que se usa un instrumento')
+{
+  // Se configuraba en la pantalla de instrumentos y no lo leía nadie: un
+  // examen marcado «solo 1er trimestre» seguía apareciendo en los tres.
+  ok(aplicaEnTrimestre('[1]', 1) === true,  'un instrumento de 1er trimestre aplica en el 1º')
+  ok(aplicaEnTrimestre('[1]', 2) === false, 'y no aplica en el 2º')
+  ok(aplicaEnTrimestre('[2,3]', 3) === true, 'admite varios trimestres')
+
+  ok(parsearTrimestresInstrumento(undefined).length === 3, 'sin dato se entiende que son los tres')
+  ok(parsearTrimestresInstrumento('{{roto').length === 3, 'un JSON roto no hace desaparecer la columna')
+  ok(parsearTrimestresInstrumento('[]').length === 3, 'una lista vacía tampoco')
+  ok(parsearTrimestresInstrumento('[1,7,2]').join(',') === '1,2', 'los trimestres inventados se descartan')
+}
+
+console.log('\n12. Trimestre del curso escolar según la fecha')
+{
+  ok(trimestreDeMes(9) === 1 && trimestreDeMes(12) === 1, 'de septiembre a diciembre, 1º')
+  ok(trimestreDeMes(1) === 2 && trimestreDeMes(3) === 2,  'de enero a marzo, 2º')
+  ok(trimestreDeMes(4) === 3 && trimestreDeMes(6) === 3,  'de abril en adelante, 3º')
+  ok(trimestreDeFecha('2026-11-04') === 1, 'una fecha de noviembre cae en el 1er trimestre')
+  ok(trimestreDeFecha('2027-02-10T09:30:00.000Z') === 2, 'y una de febrero en el 2º')
+}
+
+console.log('\n13. El redondeo no se acumula escalón a escalón')
+{
+  // Tres criterios cuyas notas de criterio no son exactas en dos decimales.
+  // Antes se redondeaba en cada escalón (instrumento → criterio → área), así
+  // que el área partía de valores ya recortados y la desviación crecía con el
+  // número de criterios.
+  const instrs = [instr(10, 'Examen', 1), instr(20, 'Observación', 2)]
+  const cals = [
+    cal(1, 10, 'CE1.1', 1, 10), cal(1, 20, 'CE1.1', 1, 9),
+    cal(1, 10, 'CE1.2', 1, 8),  cal(1, 20, 'CE1.2', 1, 7),
+    cal(1, 10, 'CE1.3', 1, 6),  cal(1, 20, 'CE1.3', 1, 5),
+  ]
+  const r = calcularNotaArea(1, cals, instrs, '{"1":100,"2":0,"3":0}')
+
+  // Cada criterio: (10·1 + 9·2)/3 = 9.333…, (8+14)/3 = 7.333…, (6+10)/3 = 5.333…
+  // Área = media de los tres = 7.333…  → 7.33
+  ok(r.trimestres[1] === 7.33, 'la nota de área sale del valor sin recortar', String(r.trimestres[1]))
+  ok(r.criterios[0].trimestres[1] === 9.33, 'y cada criterio se enseña ya redondeado', String(r.criterios[0].trimestres[1]))
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

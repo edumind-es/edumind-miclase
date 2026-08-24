@@ -32,11 +32,26 @@ export type NotaArea = {
 
 const TRIMESTRES = [1, 2, 3]
 
+/**
+ * Redondeo de presentación: dos decimales.
+ *
+ * Se aplica UNA vez, al construir el resultado. Antes se redondeaba en cada
+ * escalón —instrumento → criterio → área → final— y cada uno partía de
+ * valores ya recortados, así que la desviación se iba acumulando con el
+ * número de criterios.
+ */
 function redondear(n: number): number {
   return Math.round(n * 100) / 100
 }
 
-/** Media ponderada; devuelve null si no hay ningún dato con peso > 0. */
+function redondearOpcional(n: number | null): number | null {
+  return n == null ? null : redondear(n)
+}
+
+/**
+ * Media ponderada sin redondear; devuelve null si no hay ningún dato con
+ * peso > 0. El redondeo es cosa de quien presenta el número.
+ */
 function ponderada(items: { valor: number; peso: number }[]): number | null {
   let suma = 0, pesos = 0
   for (const it of items) {
@@ -45,7 +60,51 @@ function ponderada(items: { valor: number; peso: number }[]): number | null {
     suma += it.valor * p
     pesos += p
   }
-  return pesos > 0 ? redondear(suma / pesos) : null
+  return pesos > 0 ? suma / pesos : null
+}
+
+/**
+ * Trimestre del curso escolar al que pertenece una fecha.
+ *
+ * sep-dic → 1º · ene-mar → 2º · abr-ago → 3º
+ *
+ * La regla estaba copiada en tres pantallas y no la usaba nadie más; el
+ * resumen de asistencia la necesita para no meter en un boletín trimestral
+ * las faltas del curso entero.
+ */
+export function trimestreDeMes(mes: number): number {
+  return mes >= 9 ? 1 : mes <= 3 ? 2 : 3
+}
+
+/** @param fecha ISO (`2026-11-04` o `2026-11-04T…`) */
+export function trimestreDeFecha(fecha: string): number {
+  return trimestreDeMes(Number(fecha.slice(5, 7)))
+}
+
+export function trimestreActual(): number {
+  return trimestreDeMes(new Date().getMonth() + 1)
+}
+
+/**
+ * Trimestres en los que se usa un instrumento (`Instrumento.trimestres`).
+ *
+ * Un JSON vacío o roto se interpreta como «los tres»: es lo que el docente
+ * espera de un instrumento recién creado, y nunca hace desaparecer una
+ * columna del calificador por un dato mal guardado.
+ */
+export function parsearTrimestresInstrumento(json: string | undefined): number[] {
+  try {
+    const a = JSON.parse(json || '[1,2,3]')
+    const nums = Array.isArray(a) ? a.map(Number).filter(n => TRIMESTRES.includes(n)) : []
+    return nums.length ? nums : [...TRIMESTRES]
+  } catch {
+    return [...TRIMESTRES]
+  }
+}
+
+/** ¿Este instrumento se usa en este trimestre? */
+export function aplicaEnTrimestre(trimestresJson: string | undefined, trimestre: number): boolean {
+  return parsearTrimestresInstrumento(trimestresJson).includes(trimestre)
 }
 
 export function parsearPesosTrimestres(json: string | undefined): Record<number, number> {
@@ -122,7 +181,8 @@ export function calcularNotaArea(
       }
     })
 
-  // Nota de área por trimestre: media de criterios ponderada por su peso
+  // Nota de área por trimestre: media de criterios ponderada por su peso.
+  // Se calcula sobre los valores SIN redondear de los criterios.
   const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
   for (const t of TRIMESTRES) {
     trimestres[t] = ponderada(
@@ -138,7 +198,20 @@ export function calcularNotaArea(
       .map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] }))
   )
 
-  return { asignatura_id, trimestres, final, criterios }
+  // Redondeo, ya solo para enseñarlo
+  for (const c of criterios) {
+    for (const t of TRIMESTRES) c.trimestres[t] = redondearOpcional(c.trimestres[t])
+    c.final = redondearOpcional(c.final)
+  }
+  const trimestresRedondeados: Record<number, number | null> = { 1: null, 2: null, 3: null }
+  for (const t of TRIMESTRES) trimestresRedondeados[t] = redondearOpcional(trimestres[t])
+
+  return {
+    asignatura_id,
+    trimestres: trimestresRedondeados,
+    final: redondearOpcional(final),
+    criterios,
+  }
 }
 
 // ─── Competencias específicas ────────────────────────────────────────────────
@@ -195,11 +268,12 @@ export function perfilCompetencial(
       const final = ponderada(
         lista.filter(c => c.final != null)
              .map(c => ({ valor: c.final!, peso: pesosCriterio.get(c.criterio_id) ?? 1 })))
+      for (const tt of TRIMESTRES) trimestres[tt] = redondearOpcional(trimestres[tt])
       return {
         numero,
         etiqueta: `Competencia específica ${numero}`,
         trimestres,
-        final,
+        final: redondearOpcional(final),
         criterios: lista.map(c => c.criterio_id),
       }
     })
@@ -219,17 +293,24 @@ export function calificativo(nota: number | null | undefined): Calificativo {
   return { sigla: 'IN', etiqueta: 'Insuficiente', color: 'var(--cal-insuficiente)' }
 }
 
-/** Nota redondeada a la escala de acta (entero 1-10). */
-export function notaActa(nota: number | null | undefined): number | null {
-  if (nota == null) return null
-  return Math.max(1, Math.min(10, Math.round(nota)))
-}
-
 /**
- * Convierte el nivel de una rúbrica (escala 1..max) a la escala 0-10 usada
- * en toda la app, para que «Excelente (4/4)» se guarde como 10 y no como 4.
+ * Convierte el nivel de una rúbrica a la escala 0-10 usada en toda la app,
+ * repartiendo los niveles de extremo a extremo: el más bajo es 0 y el más
+ * alto 10, sin que el docente tenga que configurar nada.
+ *
+ * Con cuatro niveles: 0 · 3,3 · 6,7 · 10.
+ *
+ * Antes se dividía por el máximo (`valor / max * 10`), así que el nivel más
+ * bajo de una rúbrica de cuatro daba 2,5: un alumno en el escalón inferior de
+ * todos los criterios sacaba un 2,5 y era imposible poner un 0.
+ *
+ * La conversión ocurre al pulsar el nivel y lo que se guarda es la nota, así
+ * que este cambio no altera ninguna calificación ya puesta.
  */
-export function nivelANota(valor: number, maxNivel: number): number {
-  if (!maxNivel || maxNivel <= 0) return valor
-  return Math.round((valor / maxNivel) * 100) / 10
+export function nivelANota(valor: number, maxNivel: number, minNivel = 1): number {
+  const recorrido = maxNivel - minNivel
+  // Rúbrica de un solo nivel: no hay escala que repartir
+  if (!Number.isFinite(recorrido) || recorrido <= 0) return valor
+  const nota = ((valor - minNivel) / recorrido) * 10
+  return Math.round(Math.max(0, Math.min(10, nota)) * 10) / 10
 }

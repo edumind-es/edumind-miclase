@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
-import { crearAlumno as dbCrearAlumno, getAlumnosByGrupo } from '@/db/queries'
+import {
+  crearAlumno as dbCrearAlumno, getAlumnosByGrupo,
+  actualizarAlumno, eliminarAlumno,
+} from '@/db/queries'
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
 import type { Alumno as DBAlumno } from '@/db/localDb'
 
@@ -62,6 +65,9 @@ export default function AlumnosPage() {
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
   const [alumnoGaleria, setAlumnoGaleria] = useState<DBAlumno | null>(null)
+  // Hasta ahora una errata en un nombre era permanente: las funciones de
+  // edición y borrado existían en db/queries.ts sin que nada las llamara.
+  const [alumnoEditar, setAlumnoEditar] = useState<DBAlumno | null>(null)
 
   // El alumnado SIEMPRE pertenece a una clase concreta. Antes, entrando sin
   // `grupo_id`, los alumnos nuevos caían en el grupo 1: aquí se elige de forma
@@ -180,9 +186,16 @@ export default function AlumnosPage() {
                 </span>
               )}
               <button
+                onClick={() => setAlumnoEditar(a as unknown as DBAlumno)}
+                title="Editar los datos del alumno"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '0 2px', marginLeft: 'auto' }}
+                aria-label={`Editar ${a.nombre} ${a.apellidos}`}>
+                ✏️
+              </button>
+              <button
                 onClick={() => setAlumnoGaleria(a as unknown as DBAlumno)}
                 title="Ver evidencias del alumno"
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '0 2px', marginLeft: 'auto' }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '0 2px' }}
                 aria-label={`Evidencias de ${a.nombre} ${a.apellidos}`}>
                 📸
               </button>
@@ -193,6 +206,15 @@ export default function AlumnosPage() {
 
       {alumnoGaleria && (
         <EvidenciasGaleria alumno={alumnoGaleria} onClose={() => setAlumnoGaleria(null)} />
+      )}
+
+      {alumnoEditar && grupoId && (
+        <EditarAlumno
+          alumno={alumnoEditar}
+          grupoId={Number(grupoId)}
+          onCerrar={() => setAlumnoEditar(null)}
+          onGuardado={() => { setAlumnoEditar(null); recargar() }}
+        />
       )}
     </>
   )
@@ -387,6 +409,97 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+// ─── Editar un alumno ya creado ─────────────────────────────────────────────
+
+function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
+  alumno: DBAlumno
+  grupoId: number
+  onCerrar: () => void
+  onGuardado: () => void
+}) {
+  const [form, setForm] = useState({
+    nombre: alumno.nombre,
+    apellidos: alumno.apellidos,
+    neae: !!alumno.neae,
+    observaciones: alumno.observaciones || '',
+  })
+  const [guardando, setGuardando] = useState(false)
+
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
+    window.addEventListener('keydown', esc)
+    return () => window.removeEventListener('keydown', esc)
+  }, [onCerrar])
+
+  const guardar = async () => {
+    if (!form.nombre.trim() || !form.apellidos.trim()) return
+    setGuardando(true)
+    await actualizarAlumno(alumno.id!, {
+      nombre: form.nombre.trim(),
+      apellidos: form.apellidos.trim(),
+      neae: form.neae ? 1 : 0,
+      observaciones: form.observaciones.trim() || undefined,
+    })
+    onGuardado()
+  }
+
+  const quitar = async () => {
+    // No borra al alumno: lo da de baja en esta clase. Sus notas y evidencias
+    // siguen ahí, que es lo que hace falta si vuelve o si fue un error.
+    const ok = window.confirm(
+      `¿Quitar a ${form.nombre} ${form.apellidos} de esta clase?\n\n` +
+      'Sus calificaciones y evidencias se conservan; deja de aparecer en las ' +
+      'listas de esta clase. Puedes volver a añadirlo.')
+    if (!ok) return
+    setGuardando(true)
+    await eliminarAlumno(alumno.id!, grupoId)
+    onGuardado()
+  }
+
+  return (
+    <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Editar alumno"
+      onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
+      <div className="card" style={{ width: 'min(430px, 94vw)', padding: 24 }}>
+        <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>Editar alumno</h2>
+
+        <label htmlFor="ed-apellidos" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Apellidos</label>
+        <input id="ed-apellidos" value={form.apellidos} autoFocus
+          onChange={e => setForm({ ...form, apellidos: e.target.value })}
+          style={{ width: '100%', marginBottom: 12 }} />
+
+        <label htmlFor="ed-nombre" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Nombre</label>
+        <input id="ed-nombre" value={form.nombre}
+          onChange={e => setForm({ ...form, nombre: e.target.value })}
+          style={{ width: '100%', marginBottom: 12 }} />
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, marginBottom: 12 }}>
+          <input type="checkbox" checked={form.neae}
+            onChange={e => setForm({ ...form, neae: e.target.checked })} />
+          Necesidades específicas de apoyo educativo (NEAE)
+        </label>
+
+        <label htmlFor="ed-obs" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
+        <textarea id="ed-obs" value={form.observaciones} rows={3}
+          onChange={e => setForm({ ...form, observaciones: e.target.value })}
+          style={{ width: '100%', marginBottom: 18 }} />
+
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <button className="btn-primary" onClick={guardar}
+            disabled={guardando || !form.nombre.trim() || !form.apellidos.trim()}>
+            {guardando ? 'Guardando…' : 'Guardar'}
+          </button>
+          <button className="btn-secondary" onClick={onCerrar} disabled={guardando}>Cancelar</button>
+          <button onClick={quitar} disabled={guardando}
+            style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
+                     color: 'var(--rojo-500, #b91c1c)', fontSize: 13, fontWeight: 600 }}>
+            Quitar de la clase
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

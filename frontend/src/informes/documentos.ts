@@ -172,6 +172,7 @@ export function informeIndividual(
     : `<p class="vacio">Sin evidencias adjuntas.</p>`
 
   // ── Asistencia
+  // El recuento es del mismo periodo que las notas: ver `trimestreAsistencia`.
   const totalSesiones = Object.values(asist).reduce((s, n) => s + n, 0)
   const bloqueAsistencia = totalSesiones
     ? metas([
@@ -180,7 +181,9 @@ export function informeIndividual(
         ['Faltas', String(asist.ausente || 0)],
         ['Justificadas', String(asist.justificada || 0)],
         ['Retrasos', String(asist.retraso || 0)],
-      ])
+      ]) + `<p class="sub">Recuento del ${datos.trimestreAsistencia
+              ? etiquetaTrimestre(datos.trimestreAsistencia)
+              : 'curso completo'}. Los alumnos sin registrar en una sesión no cuentan en ninguna casilla.</p>`
     : ''
 
   const contenido = `
@@ -251,6 +254,9 @@ export function boletinGrupo(datos: DatosGrupo, trimestre: number | null): strin
       <td style="width:34mm">${barraNota(trimestre ? n.trimestres[trimestre] : n.final)}</td>
     </tr>`).join('')
 
+    // Media aritmética de las áreas, no ponderada: el modelo no tiene peso
+    // por área y así es como se calcula la nota media de un expediente.
+    // Dentro de cada área sí manda la ponderación de calculo.ts.
     const valores = notas
       .map(n => trimestre ? n.nota.trimestres[trimestre] : n.nota.final)
       .filter((v): v is number => v != null)
@@ -271,8 +277,17 @@ export function boletinGrupo(datos: DatosGrupo, trimestre: number | null): strin
       ${metas([
         ['Clase', datos.grupo.nombre],
         ['Áreas', String(notas.length)],
-        ['Media', media != null ? nota(media) : '—'],
-        ...(totalSesiones ? [['Faltas', String(asist.ausente || 0)] as [string, string]] : []),
+        ['Media de las áreas', media != null ? nota(media) : '—'],
+        // Justificadas y retrasos se contaban y no se enseñaban nunca: una
+        // familia no puede leer «3 faltas» sin saber cuántas están
+        // justificadas.
+        ...(totalSesiones
+          ? ([
+              ['Faltas', String(asist.ausente || 0)],
+              ['Justificadas', String(asist.justificada || 0)],
+              ['Retrasos', String(asist.retraso || 0)],
+            ] as [string, string][])
+          : []),
       ])}
 
       ${seccion('01', 'Calificaciones', notas.length
