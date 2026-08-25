@@ -6,4 +6,11 @@
 # Para saltárselo puntualmente: git commit --no-verify
 set -e
 cd "$(git rev-parse --show-toplevel)"
+
+# El gancho global de ~/.config/git/hooks bloquea .env, claves privadas y
+# certificados. core.hooksPath lo sustituye, asi que hay que llamarlo a mano
+# o se pierde esa red de seguridad.
+GLOBAL="$(git config --global --get core.hooksPath || true)"
+[ -n "$GLOBAL" ] && [ -x "$GLOBAL/pre-commit" ] && "$GLOBAL/pre-commit"
+
 npm run test:rapido
