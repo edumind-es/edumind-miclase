@@ -4,8 +4,8 @@
 # el proyecto está bien. Lo que aquí se comprueba es exactamente lo que el
 # gancho de pre-push comprueba en el servidor.
 #
-# Este fichero está listo para el día en que el repositorio se suba a GitHub.
-# Mientras tanto, quien manda es el gancho local (.githooks/pre-push).
+# El gancho local (.githooks/pre-push) corre lo mismo antes de subir, así que
+# un fallo aquí debería ser raro: significa que algo dependía de este servidor.
 #
 # NO despliega. El despliegue es siempre una decisión manual: ./desplegar.sh
 name: Pruebas

@@ -170,13 +170,13 @@ actualiza Node, se puede subir.
 En este servidor no hay Xcode ni CocoaPods, así que el proyecto se prepara aquí
 y se compila allí. Lo que sigue está pensado para hacerse de una sentada.
 
-**1. Llevarse el código.** No hay remoto git, pero se puede clonar por SSH
-directamente desde el servidor, y así se conserva el historial:
+**1. Llevarse el código.** Se clona desde el remoto de GitHub, que conserva el
+historial completo:
 
 ```bash
 # En el Mac
-git clone ssh://nuevoadmin@edumind-mini:2122/var/www/edumind_miclase
-cd edumind_miclase
+git clone https://github.com/edumind-es/edumind-miclase.git
+cd edumind-miclase
 ```
 
 **2. Preparar.** Hace falta Node (18 o superior) y CocoaPods
