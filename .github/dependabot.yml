@@ -1,0 +1,58 @@
+# Actualizaciones automáticas de dependencias.
+#
+# Hay TRES package.json y no hay workspaces: raíz (Playwright, para las
+# pruebas), frontend (React + Vite) y backend (Fastify). Cada uno necesita su
+# entrada; una sola en "/" solo miraría el de la raíz.
+#
+# No hay entrada de pip a propósito: los scripts de scripts/*.py usan Pillow y
+# openpyxl, pero el proyecto no declara un requirements.txt, así que Dependabot
+# no tendría manifiesto que actualizar. Una entrada de pip apuntando a /backend
+# es lo que hacía fallar este flujo cada semana: el backend es Node.
+#
+# Las menores y los parches van agrupados en un solo PR por ecosistema, para no
+# ahogar la lista de PRs. Las mayores vienen sueltas, que son las que rompen.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      dependencias-menores:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      dependencias-menores:
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      dependencias-menores:
+        update-types: ["minor", "patch"]
+
+  # Las acciones del flujo de CI también caducan (checkout@v4, setup-node@v4).
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      prefix: "chore(ci)"
+    groups:
+      acciones:
+        update-types: ["minor", "patch"]
