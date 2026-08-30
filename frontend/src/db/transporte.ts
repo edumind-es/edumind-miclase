@@ -88,9 +88,14 @@ export type Cabeceras = () => Record<string, string>
 // ─── Buzón de EDUmind ────────────────────────────────────────────────────
 
 async function pedir(ruta: string, headers: Cabeceras, init: RequestInit = {}) {
+  // El `content-type` describe el cuerpo: sin cuerpo no debe ir. Fastify 5
+  // responde 400 a un `application/json` vacío, y el DELETE de vaciado no
+  // lleva cuerpo. Antes se mandaba siempre y funcionaba de milagro.
+  const tipo: Record<string, string> =
+    init.body === undefined ? {} : { 'Content-Type': 'application/json' }
   const res = await fetch(api(`/api/sync${ruta}`), {
     ...init,
-    headers: { 'Content-Type': 'application/json', ...headers(), ...(init.headers || {}) },
+    headers: { ...tipo, ...headers(), ...(init.headers || {}) },
   })
   const cuerpo = await res.json().catch(() => ({}))
   if (!res.ok) {
