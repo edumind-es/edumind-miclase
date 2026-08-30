@@ -40,6 +40,23 @@ const app = Fastify({
   bodyLimit: 64 * 1024 * 1024,
 })
 
+// Fastify 5 rechaza con 400 un cuerpo vacío si viene `content-type:
+// application/json`. Fastify 4 lo toleraba, y los clientes de MiClase ya
+// instalados en tabletas y móviles mandan esa cabecera también en el DELETE
+// de /api/sync, que no lleva cuerpo. Sin esto, actualizar el servidor dejaría
+// a esos dispositivos sin poder vaciar su buzón hasta que se actualizaran.
+// El cliente ya no manda la cabecera de más (ver db/transporte.ts), pero el
+// servidor no puede dar por hecho que todos se hayan actualizado.
+app.addContentTypeParser('application/json', { parseAs: 'string' }, (req, cuerpo, hecho) => {
+  if (cuerpo === '') return hecho(null, undefined)
+  try {
+    hecho(null, JSON.parse(cuerpo))
+  } catch (err) {
+    err.statusCode = 400
+    hecho(err, undefined)
+  }
+})
+
 // `origin: true` refleja cualquier Origin que pida, y con credentials:true
 // eso deja que cualquier web abierta en el navegador del docente llame a
 // este API con su sesión. En desarrollo se listan los orígenes reales:
