@@ -1,58 +1,70 @@
-# Actualizaciones automáticas de dependencias.
+# Dependabot: un PR al mes por ecosistema, con todo agrupado.
 #
-# Hay TRES package.json y no hay workspaces: raíz (Playwright, para las
-# pruebas), frontend (React + Vite) y backend (Fastify). Cada uno necesita su
-# entrada; una sola en "/" solo miraría el de la raíz.
+# Las actualizaciones de SEGURIDAD no dependen de esta programación: llegan por
+# su propio canal en cuanto se publica el aviso. Bajar la cadencia aquí no
+# retrasa ningún parche.
 #
-# No hay entrada de pip a propósito: los scripts de scripts/*.py usan Pillow y
-# openpyxl, pero el proyecto no declara un requirements.txt, así que Dependabot
-# no tendría manifiesto que actualizar. Una entrada de pip apuntando a /backend
-# es lo que hacía fallar este flujo cada semana: el backend es Node.
-#
-# Las menores y los parches van agrupados en un solo PR por ecosistema, para no
-# ahogar la lista de PRs. Las mayores vienen sueltas, que son las que rompen.
+# Antes esto abría hasta 5 PR por ecosistema cada semana y las versiones
+# mayores iban sueltas: 49 PR abiertos a la vez en la organización, y un correo
+# por cada uno.
 version: 2
 updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     commit-message:
       prefix: "chore(deps)"
     groups:
-      dependencias-menores:
+      menores-y-parches:
         update-types: ["minor", "patch"]
+      mayores:
+        # Agrupadas también, pero aparte: son las que rompen y se revisan
+        # con calma. Si una necesita atención propia, se saca de aquí.
+        update-types: ["major"]
 
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     commit-message:
       prefix: "chore(deps)"
     groups:
-      dependencias-menores:
+      menores-y-parches:
         update-types: ["minor", "patch"]
+      mayores:
+        # Agrupadas también, pero aparte: son las que rompen y se revisan
+        # con calma. Si una necesita atención propia, se saca de aquí.
+        update-types: ["major"]
 
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+      interval: "monthly"
+    open-pull-requests-limit: 2
     commit-message:
       prefix: "chore(deps)"
     groups:
-      dependencias-menores:
+      menores-y-parches:
         update-types: ["minor", "patch"]
+      mayores:
+        # Agrupadas también, pero aparte: son las que rompen y se revisan
+        # con calma. Si una necesita atención propia, se saca de aquí.
+        update-types: ["major"]
 
-  # Las acciones del flujo de CI también caducan (checkout@v4, setup-node@v4).
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    open-pull-requests-limit: 2
     commit-message:
       prefix: "chore(ci)"
     groups:
-      acciones:
+      menores-y-parches:
         update-types: ["minor", "patch"]
+      mayores:
+        # Agrupadas también, pero aparte: son las que rompen y se revisan
+        # con calma. Si una necesita atención propia, se saca de aquí.
+        update-types: ["major"]
