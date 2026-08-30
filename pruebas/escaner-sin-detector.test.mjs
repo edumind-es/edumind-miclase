@@ -19,7 +19,7 @@ mkdirSync(process.env.SCRATCH + '/tiros', { recursive: true })
 let fallos = 0
 const ok = (c, m, e = '') => { console.log(`${c ? '  ✓' : '  ✗ FALLO'} ${m}${e ? ' — ' + e : ''}`); if (!c) fallos++ }
 
-const BASE = process.env.BASE || `${BASE}`
+const BASE = process.env.BASE || 'http://127.0.0.1:5173'
 
 const nav = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] })
 const ctx = await nav.newContext({ permissions: ['camera'], viewport: { width: 1100, height: 800 } })
@@ -29,24 +29,39 @@ const p = await ctx.newPage()
 const errores = []
 p.on('pageerror', e => errores.push(e.message))
 
+// Esperas por condición, no por reloj. Arrancar la cámara falsa y descargar
+// el fragmento de jsQR tarda lo que tarda la máquina: en el runner del CI, más
+// que en este servidor. Con esperas fijas la prueba fallaba de vez en cuando y
+// bloqueaba PRs correctos.
+const ESPERA = 15000
+const visible = async (loc) => {
+  try { await loc.waitFor({ state: 'visible', timeout: ESPERA }); return true }
+  catch { return false }
+}
+
 await p.goto(`${BASE}/escanear`, { waitUntil: 'networkidle' })
-await p.waitForTimeout(1500)
 
 ok(await p.evaluate(() => !('BarcodeDetector' in window)), 'el navegador simula no tener detector nativo')
-ok(await p.getByRole('button', { name: /Activar cámara/ }).isVisible(),
+
+const boton = p.getByRole('button', { name: /Activar cámara/ })
+ok(await visible(boton),
    'aun así se ofrece escanear con la cámara (antes decía «no soportado»)')
 
-await p.getByRole('button', { name: /Activar cámara/ }).click()
-await p.waitForTimeout(3000)
-ok(await p.locator('video').isVisible(), 'la cámara arranca')
-ok(await p.getByText(/Buscando código QR/).isVisible(), 'y entra en modo búsqueda')
-ok(await p.getByText(/lee más despacio/).isVisible(),
+await boton.click()
+ok(await visible(p.locator('video')), 'la cámara arranca')
+ok(await visible(p.getByText(/Buscando código QR/)), 'y entra en modo búsqueda')
+ok(await visible(p.getByText(/lee más despacio/)),
    'avisa de que este dispositivo usa el decodificador de reserva')
 await p.screenshot({ path: process.env.SCRATCH + '/tiros/40-escaner-ios.png' })
 
 // El fragmento de jsQR debe haberse cargado solo ahora, no antes
-const cargado = await p.evaluate(() =>
-  performance.getEntriesByType('resource').some(r => /jsQR/i.test(r.name)))
+let cargado = false
+try {
+  await p.waitForFunction(
+    () => performance.getEntriesByType('resource').some(r => /jsQR/i.test(r.name)),
+    null, { timeout: ESPERA })
+  cargado = true
+} catch { /* se queda en false y lo canta el ok() */ }
 ok(cargado, 'el decodificador se descarga solo cuando hace falta (carga diferida)')
 
 console.log(`\n${fallos === 0 && errores.length === 0 ? '✅ ESCÁNER OK SIN DETECTOR NATIVO' : `❌ ${fallos} fallo(s)`}`)
