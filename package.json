@@ -16,6 +16,6 @@
     "nativo:android": "npm run nativo:sync && cd frontend && npx cap open android"
   },
   "devDependencies": {
-    "playwright": "^1.58.2"
+    "playwright": "^1.62.1"
   }
 }
