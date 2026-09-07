@@ -501,3 +501,111 @@ input:focus, select:focus, textarea:focus {
   .barra-clase-ajustes span { display: none; }
 }
 
+/* ── Inicio ───────────────────────────────────────────────────────────── */
+.home-cabecera {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+.home-clase {
+  border-left: 4px solid var(--azul-500);
+  padding: 4px 0 4px 14px;
+}
+.home-clase-nombre {
+  font-family: var(--lm-display, inherit);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--azul-900);
+  line-height: 1.2;
+}
+.home-clase-datos { font-size: 13px; color: var(--gris-600); margin-top: 2px; }
+
+.home-titulo {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gris-500);
+  margin: 26px 0 12px;
+}
+
+.home-acciones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+.accion-grande {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: var(--blanco);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra);
+  color: inherit;
+  transition: box-shadow .15s, transform .15s;
+}
+a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px); text-decoration: none; }
+.accion-grande.inactiva { opacity: .55; box-shadow: none; border: 1px dashed var(--gris-300); }
+.accion-icono {
+  width: 46px; height: 46px;
+  border-radius: var(--radio-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 21px;
+  flex-shrink: 0;
+}
+.accion-titulo { display: block; font-size: 16px; font-weight: 700; color: var(--gris-900); }
+.accion-pie { display: block; font-size: 12.5px; color: var(--gris-600); margin-top: 2px; }
+
+.home-clases {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+}
+.home-tarjeta-clase {
+  display: block;
+  background: var(--blanco);
+  border-left: 4px solid var(--azul-500);
+  border-radius: var(--radio-md);
+  box-shadow: var(--sombra);
+  padding: 16px 18px;
+  color: inherit;
+}
+.home-tarjeta-clase:hover { box-shadow: var(--sombra-md); text-decoration: none; }
+.home-tarjeta-nombre { font-weight: 700; font-size: 17px; color: var(--gris-900); }
+.home-tarjeta-datos { font-size: 12.5px; color: var(--gris-600); margin: 3px 0 8px; }
+.home-tarjeta-alumnos { font-size: 12.5px; font-weight: 600; color: var(--azul-500); }
+.home-tarjeta-nueva {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1.5px dashed var(--gris-300);
+  border-radius: var(--radio-md);
+  padding: 16px;
+  color: var(--gris-600);
+  font-size: 13.5px;
+  font-weight: 600;
+  min-height: 92px;
+}
+.home-tarjeta-nueva:hover { border-color: var(--azul-500); color: var(--azul-700); text-decoration: none; }
+
+/* ── Invitación a instalar ────────────────────────────────────────────── */
+.instalar-app { margin: 22px 0 0; border-left: 4px solid var(--azul-500); }
+.instalar-app-cuerpo { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+.instalar-app-icono { font-size: 24px; line-height: 1.2; }
+.instalar-app-titulo { font-weight: 700; font-size: 15px; color: var(--azul-900); margin-bottom: 4px; }
+.instalar-app-texto { font-size: 13px; color: var(--gris-600); line-height: 1.6; max-width: 62ch; }
+.instalar-app-botones { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.instalar-app-pasos {
+  margin: 14px 0 0 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--gris-100);
+  font-size: 13px;
+  color: var(--gris-600);
+  line-height: 1.9;
+}
