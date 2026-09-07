@@ -9,11 +9,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
-  getGrupos, getAsignaturas, getUnidades, getMatrizEvaluacion,
+  getUnidades, getMatrizEvaluacion,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
 import { useAppStore } from '@/store/useAppStore'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
@@ -32,11 +34,14 @@ export default function EvaluacionPage() {
   const [params] = useSearchParams()
   const headers = useAppStore(s => s._headers)
 
-  const [trimestre, setTrimestre] = useState(trimestreActual)
-  const [grupos, setGrupos] = useState<any[]>([])
-  const [grupoSelId, setGrupoSelId] = useState<string>('')
-  const [asignaturas, setAsignaturas] = useState<any[]>([])
-  const [asignaturaId, setAsignaturaId] = useState<number | null>(null)
+  // La clase, el área y el trimestre son del contexto: la barra de arriba y
+  // las pestañas de área de esta pantalla mueven lo mismo.
+  useParametrosClase()
+  const {
+    grupos, grupo, grupoId, asignaturas, asignatura: asigActual, asignaturaId,
+    trimestre, elegirAsignatura, cargando: cargandoClase,
+  } = useClaseActiva()
+
   const [unidades, setUnidades] = useState<UnidadConCriterios[]>([])
   const [unidadId, setUnidadId] = useState<number | null>(null)
   const [matriz, setMatriz] = useState<MatrizEvaluacion | null>(null)
@@ -47,33 +52,11 @@ export default function EvaluacionPage() {
   const [refresco, setRefresco] = useState(0)
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio } | null>(null)
 
-  // Parámetros de entrada (llegan desde la programación o el detalle de clase)
-  const grupoParam = params.get('grupo_id')
-  const asigParam = params.get('asignatura_id')
+  // La unidad sigue siendo de esta pantalla: es una subdivisión del
+  // calificador, no del contexto de trabajo.
   const unidadParam = params.get('unidad_id')
 
   // ── Carga en cascada ──────────────────────────────────────────────────
-
-  useEffect(() => {
-    getGrupos().then(data => {
-      setGrupos(data)
-      setGrupoSelId(grupoParam || (data[0]?.id ? String(data[0].id) : ''))
-    })
-  }, [])
-
-  useEffect(() => { if (grupoParam) setGrupoSelId(grupoParam) }, [grupoParam])
-
-  useEffect(() => {
-    if (!grupoSelId) { setAsignaturas([]); return }
-    getAsignaturas(Number(grupoSelId)).then(d => {
-      setAsignaturas(d)
-      const pedida = asigParam ? Number(asigParam) : null
-      setAsignaturaId(prev =>
-        (pedida && d.some(a => a.id === pedida)) ? pedida
-        : (prev && d.some(a => a.id === prev)) ? prev
-        : (d[0]?.id ?? null))
-    })
-  }, [grupoSelId, asigParam])
 
   // Al cambiar de área, la unidad activa deja de tener sentido:
   // conservarla dejaba la matriz vacía sin explicar por qué.
@@ -89,7 +72,6 @@ export default function EvaluacionPage() {
   // Criterios del currículo (servidor) — cacheados por área/curso
   useEffect(() => {
     const asig = asignaturas.find(a => a.id === asignaturaId)
-    const grupo = grupos.find(g => String(g.id) === grupoSelId)
     if (!asig || !grupo) { setCriterios([]); return }
 
     const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
@@ -99,7 +81,7 @@ export default function EvaluacionPage() {
       .then(r => { if (!r.ok) throw new Error(); return r.json() })
       .then((all: Criterio[]) => { setCriterios(Array.isArray(all) ? all : []); setErrorCurriculo(false) })
       .catch(() => { setCriterios([]); setErrorCurriculo(true) })
-  }, [asignaturaId, asignaturas, grupoSelId, grupos])
+  }, [asignaturaId, asignaturas, grupo])
 
   // Matriz local
   useEffect(() => {
@@ -121,7 +103,6 @@ export default function EvaluacionPage() {
   }, [criterios, matriz])
 
   const alumnos: Alumno[] = matriz?.alumnos ?? []
-  const asigActual = asignaturas.find(a => a.id === asignaturaId)
   const unidadActual = unidades.find(u => u.id === unidadId)
 
   // Dos motivos distintos para que una casilla salga rayada, y el docente
@@ -155,6 +136,8 @@ export default function EvaluacionPage() {
 
   // ── Estados vacíos ────────────────────────────────────────────────────
 
+  if (cargandoClase) return <p style={{ color: 'var(--gris-600)' }}>Cargando…</p>
+
   if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
@@ -175,14 +158,6 @@ export default function EvaluacionPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)} style={{ minWidth: 120 }}>
-            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
-          </select>
-          <select value={trimestre} onChange={e => setTrimestre(Number(e.target.value))}>
-            <option value={1}>1er trimestre</option>
-            <option value={2}>2º trimestre</option>
-            <option value={3}>3er trimestre</option>
-          </select>
           {asignaturaId && (
             <button className="btn-secondary" style={{ fontSize: 13 }}
               onClick={() => setManagerAbierto(true)}
@@ -201,7 +176,7 @@ export default function EvaluacionPage() {
             Esta clase aún no tiene áreas
           </strong>
           Elige las áreas que impartes y aparecerán aquí como pestañas, cada una con sus criterios LOMLOE.{' '}
-          <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+          <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
             Elegir áreas →
           </Link>
         </div>
@@ -212,7 +187,7 @@ export default function EvaluacionPage() {
             {asignaturas.map(a => (
               <button key={a.id} role="tab" aria-selected={a.id === asignaturaId}
                 className={`tab-area${a.id === asignaturaId ? ' activa' : ''}`}
-                onClick={() => setAsignaturaId(a.id)}>
+                onClick={() => elegirAsignatura(a.id!)}>
                 {a.nombre_display}
               </button>
             ))}
@@ -241,7 +216,7 @@ export default function EvaluacionPage() {
             <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
               <strong>Esta área no tiene programación todavía.</strong>{' '}
               Sin unidades puedes calificar sobre todos los criterios, pero no sabrás con qué instrumento evaluar cada uno.{' '}
-              <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+              <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
                 Montar la programación →
               </Link>
             </div>
@@ -259,7 +234,7 @@ export default function EvaluacionPage() {
             <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
               Asígnales uno en la programación y podrás evaluarlos.{' '}
-              <Link to={`/grupos/${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
+              <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
                 Ir a la programación →
               </Link>
             </div>
@@ -280,7 +255,7 @@ export default function EvaluacionPage() {
             alumnos.length === 0 ? (
               <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
                 Esta clase todavía no tiene alumnado.{' '}
-                <Link to={`/alumnos?grupo_id=${grupoSelId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+                <Link to="/alumnos" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
                   Añadir alumnado →
                 </Link>
               </div>
@@ -421,7 +396,7 @@ export default function EvaluacionPage() {
                     : 'Tu programación no dice todavía con qué se evalúa este criterio. Asígnale un instrumento (prueba, rúbrica, observación…) y la casilla quedará lista para calificar.'}
                 </p>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  <Link to={`/grupos/${grupoSelId}`} className="btn-primary"
+                  <Link to={`/grupos/${grupoId}`} className="btn-primary"
                     style={{ padding: '9px 16px', borderRadius: 8, background: 'var(--azul-700)', color: 'white', fontWeight: 600, fontSize: 13.5 }}>
                     Ir a la programación →
                   </Link>
@@ -457,9 +432,9 @@ export default function EvaluacionPage() {
 
       {managerAbierto && asigActual && (
         <InstrumentosManager
-          asignaturaId={asigActual.id}
+          asignaturaId={asigActual.id!}
           asignaturaNombre={asigActual.nombre_display}
-          nivel={`${grupos.find(g => String(g.id) === grupoSelId)?.curso}º ${grupos.find(g => String(g.id) === grupoSelId)?.etapa}`}
+          nivel={`${grupo?.curso}º ${grupo?.etapa}`}
           onClose={() => { setManagerAbierto(false); setRefresco(r => r + 1) }}
         />
       )}

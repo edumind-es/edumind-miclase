@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { getGrupoDetalle } from '@/db/queries'
 import { imprimirHojaQR } from '@/utils/qrSheet'
 import { urlPublica } from '@/api'
@@ -74,6 +75,7 @@ function ListaGrupos() {
 function NuevoGrupo() {
   const navigate = useNavigate()
   const crearGrupo = useAppStore(s => s.crearGrupo)
+  const { elegirGrupo, recargarGrupos } = useClaseActiva()
   const [form, setForm] = useState({
     nombre: '', etapa: 'primaria', curso: '3', comunidad: 'Galicia', curso_escolar: '2025-2026', color: COLORES[0]
   })
@@ -85,8 +87,12 @@ function NuevoGrupo() {
     e.preventDefault()
     if (!form.nombre) return
     setGuardando(true)
-    await crearGrupo({ ...form, docente_id: 1 })
-    navigate('/grupos')
+    const id = await crearGrupo({ ...form, docente_id: 1 })
+    // La clase recién creada pasa a ser la activa: es la que el docente va a
+    // configurar a continuación, y así no tiene que volver a elegirla.
+    await recargarGrupos()
+    elegirGrupo(id)
+    navigate(`/grupos/${id}`)
   }
 
   const cursos = form.etapa === 'primaria' ? CURSOS_PRIMARIA : CURSOS_ESO

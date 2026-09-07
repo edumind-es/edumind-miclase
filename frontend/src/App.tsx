@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, NavLink } from 'react-router-dom'
+import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
+import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
 import Dashboard from '@/pages/Dashboard/Dashboard'
 import GruposPage from '@/pages/Grupos/GruposPage'
 import AlumnosPage from '@/pages/Alumnos/AlumnosPage'
@@ -11,6 +12,7 @@ import SesionesPage from '@/pages/Sesiones/SesionesPage'
 import EscanearPage from '@/pages/Escanear/EscanearPage'
 import SincronizarPage from '@/pages/Sincronizar/SincronizarPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
+import BarraClase from '@/components/BarraClase'
 import ExportImport from '@/components/ExportImport'
 import EstadoConexion from '@/components/EstadoConexion'
 import SyncAutomatica from '@/components/SyncAutomatica'
@@ -30,8 +32,30 @@ const NAV = [
 
 const K_PLEGADO = 'miclase_sidebar_plegado'
 
+// Pantallas que trabajan sobre una clase concreta y por tanto llevan la barra
+// de contexto. El escáner y la sincronización no: el escáner deduce el alumno
+// del propio código y la sincronización es de todo el dispositivo. La
+// configuración de la clase tampoco, porque ya lleva su propia cabecera.
+const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/informes']
+
+// El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
+// Informes lleva su propio «Periodo», que además ofrece el curso completo.
+const SIN_TRIMESTRE = ['/alumnos', '/informes']
+// El área no pinta nada donde se trabaja con la clase entera. En el
+// calificador tampoco: allí manda su fila de pestañas de área, que es más
+// visible y no cabe duplicarla en un desplegable.
+const SIN_AREA = ['/alumnos', '/sesiones', '/evaluacion', '/informes']
+
+function usarBarra(pathname: string) {
+  const raiz = '/' + (pathname.split('/')[1] ?? '')
+  if (!CON_BARRA.includes(raiz)) return null
+  return { conArea: !SIN_AREA.includes(raiz), conTrimestre: !SIN_TRIMESTRE.includes(raiz) }
+}
+
 function Layout() {
   const { modo, nombre, iniciarLogin, cerrarSesion, authConfig } = useAuth()
+  const { pathname } = useLocation()
+  const barra = usarBarra(pathname)
   const [exportOpen, setExportOpen] = useState(false)
   const [plegado, setPlegado] = useState(() => localStorage.getItem(K_PLEGADO) === '1')
 
@@ -146,6 +170,7 @@ function Layout() {
       </aside>
 
       <main className="main-content">
+        {barra && <BarraClase conArea={barra.conArea} conTrimestre={barra.conTrimestre} />}
         <Routes>
           <Route path="/"              element={<Dashboard />} />
           <Route path="/grupos/*"      element={<GruposPage />} />
@@ -172,7 +197,9 @@ function Layout() {
 export default function App() {
   return (
     <AuthProvider>
-      <Layout />
+      <ClaseActivaProvider>
+        <Layout />
+      </ClaseActivaProvider>
     </AuthProvider>
   )
 }

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import {
   crearAlumno as dbCrearAlumno, getAlumnosByGrupo,
   actualizarAlumno, eliminarAlumno,
 } from '@/db/queries'
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { useParametrosClase } from '@/contexto/useParametrosClase'
 import type { Alumno as DBAlumno } from '@/db/localDb'
 
 // ─── Parser de importación masiva ───────────────────────────────────────────
@@ -59,9 +61,9 @@ async function exportarCodigos(grupoId: string | null) {
 // ─── Componente principal ────────────────────────────────────────────────────
 
 export default function AlumnosPage() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const grupoParam = searchParams.get('grupo_id')
-  const { alumnos, cargarAlumnos, crearAlumno, grupos, cargarGrupos } = useAppStore()
+  useParametrosClase()
+  const { grupos, grupo: grupoActual, grupoId } = useClaseActiva()
+  const { alumnos, cargarAlumnos, crearAlumno } = useAppStore()
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
   const [alumnoGaleria, setAlumnoGaleria] = useState<DBAlumno | null>(null)
@@ -69,42 +71,24 @@ export default function AlumnosPage() {
   // edición y borrado existían en db/queries.ts sin que nada las llamara.
   const [alumnoEditar, setAlumnoEditar] = useState<DBAlumno | null>(null)
 
-  // El alumnado SIEMPRE pertenece a una clase concreta. Antes, entrando sin
-  // `grupo_id`, los alumnos nuevos caían en el grupo 1: aquí se elige de forma
-  // explícita y no se puede dar de alta a nadie sin clase.
-  const grupoId = grupoParam || (grupos.length === 1 ? String(grupos[0].id) : '')
-
-  useEffect(() => { cargarGrupos() }, [cargarGrupos])
+  // El alumnado SIEMPRE pertenece a una clase concreta: la activa. Antes,
+  // entrando sin `grupo_id`, los alumnos nuevos caían en el grupo 1.
   useEffect(() => {
-    if (grupoId) cargarAlumnos(Number(grupoId))
+    if (grupoId) cargarAlumnos(grupoId)
   }, [grupoId, cargarAlumnos])
-
-  const elegirGrupo = (id: string) => {
-    setSearchParams(id ? { grupo_id: id } : {}, { replace: true })
-  }
-
-  const grupoActual = grupos.find(g => String(g.id) === grupoId)
 
   const filtrados = alumnos.filter(a =>
     `${a.nombre} ${a.apellidos}`.toLowerCase().includes(busqueda.toLowerCase())
   )
 
   const recargar = () => {
-    if (grupoId) cargarAlumnos(Number(grupoId))
+    if (grupoId) cargarAlumnos(grupoId)
   }
 
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <h1 className="page-title" style={{ marginBottom: 0 }}>Alumnado</h1>
-          <select value={grupoId} onChange={e => elegirGrupo(e.target.value)} style={{ minWidth: 190 }}>
-            <option value="">— Elige una clase —</option>
-            {grupos.map(g => (
-              <option key={g.id} value={g.id}>{g.nombre} · {g.curso}º · {g.num_alumnos || 0} alumnos</option>
-            ))}
-          </select>
-        </div>
+        <h1 className="page-title" style={{ marginBottom: 0 }}>Alumnado</h1>
         <div style={{ display: 'flex', gap: 10 }}>
           <button className="btn-secondary" onClick={() => setModal('bulk')} disabled={!grupoId}>📋 Importar lista</button>
           <button className="btn-primary" onClick={() => setModal('individual')} disabled={!grupoId}>+ Añadir alumno</button>
@@ -118,18 +102,9 @@ export default function AlumnosPage() {
         </div>
       )}
 
-      {grupos.length > 0 && !grupoId && (
-        <div className="card" style={{ padding: 32, textAlign: 'center', color: 'var(--gris-600)' }}>
-          Elige arriba de qué clase quieres ver o añadir alumnado.
-        </div>
-      )}
-
       {grupoId && (
         <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 13, color: 'var(--gris-600)' }}>
-            Clase <strong>{grupoActual?.nombre}</strong> ·
-          </span>
-          <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(grupoId)}>
+          <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(String(grupoId))}>
             🔐 Descargar claves anonimización
           </button>
           <Link to={`/grupos/${grupoId}`} style={{ fontSize: 13, color: 'var(--azul-500)' }}>Ir a la ficha de la clase →</Link>
@@ -138,10 +113,10 @@ export default function AlumnosPage() {
 
       {modal === 'individual' && (
         <FormNuevoAlumno
-          grupoIdInicial={grupoId ? Number(grupoId) : undefined}
+          grupoIdInicial={grupoId ?? undefined}
           onGuardar={async (datos: Record<string, any>) => {
             if (!grupoId) return
-            await crearAlumno({ ...datos, grupo_id: Number(grupoId) })
+            await crearAlumno({ ...datos, grupo_id: grupoId })
             recargar()
             setModal(null)
           }}
@@ -151,7 +126,7 @@ export default function AlumnosPage() {
 
       {modal === 'bulk' && (
         <ImportadorMasivo
-          grupoId={grupoId}
+          grupoId={grupoId != null ? String(grupoId) : null}
           onCompletado={recargar}
           onCerrar={() => setModal(null)}
         />
@@ -211,7 +186,7 @@ export default function AlumnosPage() {
       {alumnoEditar && grupoId && (
         <EditarAlumno
           alumno={alumnoEditar}
-          grupoId={Number(grupoId)}
+          grupoId={grupoId}
           onCerrar={() => setAlumnoEditar(null)}
           onGuardado={() => { setAlumnoEditar(null); recargar() }}
         />
