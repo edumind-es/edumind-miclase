@@ -426,7 +426,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           {asignaturas.length === 0 && (
             <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 12 }}>
               Esta clase no tiene áreas configuradas.{' '}
-              <Link to={`/grupos/${grupo.id}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Configurarla →</Link>
+              <Link to={`/grupos/${grupo.id}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Configurarla →</Link>
             </div>
           )}
         </>

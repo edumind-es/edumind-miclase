@@ -18,16 +18,29 @@ import EstadoConexion from '@/components/EstadoConexion'
 import SyncAutomatica from '@/components/SyncAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
 
+// El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
+// cada día con lo que se toca una vez por trimestre. Separarlo en dos bloques
+// dice de un vistazo dónde se trabaja y dónde se configura.
 const NAV = [
-  { to: '/',            label: 'Inicio',      icon: '⊞' },
-  { to: '/grupos',      label: 'Mis clases',  icon: '👥' },
-  { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
-  { to: '/evaluacion',  label: 'Evaluación',  icon: '📋' },
-  { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
-  { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
-  { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
-  { to: '/informes',    label: 'Informes',    icon: '📄' },
-  { to: '/sincronizar', label: 'Sincronizar', icon: '🔄' },
+  {
+    bloque: 'Aula',
+    entradas: [
+      { to: '/',            label: 'Inicio',      icon: '⊞' },
+      { to: '/evaluacion',  label: 'Calificador', icon: '📋' },
+      { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
+      { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
+      { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
+      { to: '/informes',    label: 'Informes',    icon: '📄' },
+    ],
+  },
+  {
+    bloque: 'Configuración',
+    entradas: [
+      { to: '/grupos',      label: 'Mis clases',  icon: '👥' },
+      { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
+      { to: '/sincronizar', label: 'Sincronizar', icon: '🔄' },
+    ],
+  },
 ]
 
 const K_PLEGADO = 'miclase_sidebar_plegado'
@@ -97,12 +110,17 @@ function Layout() {
         </div>
 
         <nav>
-          {NAV.map(({ to, label, icon }) => (
-            <NavLink key={to} to={to} end={to === '/'} title={label}
-              className={({ isActive }) => isActive ? 'active' : ''}>
-              <span className="nav-icono" aria-hidden="true">{icon}</span>
-              <span className="nav-texto">{label}</span>
-            </NavLink>
+          {NAV.map(({ bloque, entradas }) => (
+            <div key={bloque} className="nav-bloque">
+              <div className="nav-bloque-titulo">{bloque}</div>
+              {entradas.map(({ to, label, icon }) => (
+                <NavLink key={to} to={to} end={to === '/'} title={label}
+                  className={({ isActive }) => isActive ? 'active' : ''}>
+                  <span className="nav-icono" aria-hidden="true">{icon}</span>
+                  <span className="nav-texto">{label}</span>
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 

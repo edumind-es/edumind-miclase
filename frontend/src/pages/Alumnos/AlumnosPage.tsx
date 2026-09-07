@@ -107,7 +107,7 @@ export default function AlumnosPage() {
           <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(String(grupoId))}>
             🔐 Descargar claves anonimización
           </button>
-          <Link to={`/grupos/${grupoId}`} style={{ fontSize: 13, color: 'var(--azul-500)' }}>Ir a la ficha de la clase →</Link>
+          <Link to={`/grupos/${grupoId}`} style={{ fontSize: 13, color: 'var(--azul-500)' }}>Configurar esta clase →</Link>
         </div>
       )}
 

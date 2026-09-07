@@ -128,7 +128,7 @@ export default function SeguimientoPage() {
       {asignaturas.length === 0 ? (
         <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
           Esta clase no tiene áreas todavía.{' '}
-          <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Elegir áreas →</Link>
+          <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Elegir áreas →</Link>
         </div>
       ) : (
         <>

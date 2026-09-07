@@ -609,3 +609,29 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
   color: var(--gris-600);
   line-height: 1.9;
 }
+
+/* ── Menú lateral en bloques ──────────────────────────────────────────── */
+.nav-bloque + .nav-bloque { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); }
+.nav-bloque-titulo {
+  padding: 0 20px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+}
+/* En rail de iconos y en móvil no cabe el rótulo; la separación la marca
+   el filete del bloque. */
+.layout.plegado .nav-bloque-titulo { display: none; }
+@media (max-width: 860px) {
+  .nav-bloque-titulo { display: none; }
+  .nav-bloque { display: flex; }
+  .nav-bloque + .nav-bloque {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    border-left: 1px solid rgba(255,255,255,0.12);
+    margin-left: 6px;
+    padding-left: 6px;
+  }
+}

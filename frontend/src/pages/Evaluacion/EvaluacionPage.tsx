@@ -176,7 +176,7 @@ export default function EvaluacionPage() {
             Esta clase aún no tiene áreas
           </strong>
           Elige las áreas que impartes y aparecerán aquí como pestañas, cada una con sus criterios LOMLOE.{' '}
-          <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+          <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
             Elegir áreas →
           </Link>
         </div>
@@ -216,7 +216,7 @@ export default function EvaluacionPage() {
             <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
               <strong>Esta área no tiene programación todavía.</strong>{' '}
               Sin unidades puedes calificar sobre todos los criterios, pero no sabrás con qué instrumento evaluar cada uno.{' '}
-              <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+              <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
                 Montar la programación →
               </Link>
             </div>
@@ -234,7 +234,7 @@ export default function EvaluacionPage() {
             <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
               Asígnales uno en la programación y podrás evaluarlos.{' '}
-              <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
+              <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
                 Ir a la programación →
               </Link>
             </div>
@@ -396,7 +396,7 @@ export default function EvaluacionPage() {
                     : 'Tu programación no dice todavía con qué se evalúa este criterio. Asígnale un instrumento (prueba, rúbrica, observación…) y la casilla quedará lista para calificar.'}
                 </p>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  <Link to={`/grupos/${grupoId}`} className="btn-primary"
+                  <Link to={`/grupos/${grupoId}?pestana=areas`} className="btn-primary"
                     style={{ padding: '9px 16px', borderRadius: 8, background: 'var(--azul-700)', color: 'white', fontWeight: 600, fontSize: 13.5 }}>
                     Ir a la programación →
                   </Link>

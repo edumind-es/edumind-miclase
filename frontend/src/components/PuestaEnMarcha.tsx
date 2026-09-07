@@ -21,7 +21,8 @@ export type Paso = {
 
 export function construirPasos(e: PasoEstado): Paso[] {
   const g = e.grupoPrincipalId
-  const config = g ? `/grupos/${g}` : '/grupos'
+  // Los tres pasos de configuración llevan a su pestaña, no a un scroll largo
+  const areas = g ? `/grupos/${g}?pestana=areas` : '/grupos'
   return [
     {
       n: 1,
@@ -47,7 +48,7 @@ export function construirPasos(e: PasoEstado): Paso[] {
       explicacion: 'Marca de una vez todas las áreas de esa clase. Aparecerán como pestañas en Evaluación, cada una con sus criterios LOMLOE ya cargados.',
       hecho: e.asignaturas > 0,
       cta: 'Elegir áreas',
-      destino: config,
+      destino: areas,
       detalle: e.asignaturas > 0 ? `${e.asignaturas} áreas` : undefined,
     },
     {
@@ -56,7 +57,7 @@ export function construirPasos(e: PasoEstado): Paso[] {
       explicacion: 'Reparte los criterios de evaluación entre tus unidades o situaciones de aprendizaje. Puedes generar la estructura automáticamente y ajustarla después.',
       hecho: e.unidades > 0 && e.criteriosVinculados > 0,
       cta: 'Ir a programación',
-      destino: config,
+      destino: areas,
       detalle: e.unidades > 0 ? `${e.unidades} unidades · ${e.criteriosVinculados} criterios` : undefined,
     },
     {
@@ -65,7 +66,7 @@ export function construirPasos(e: PasoEstado): Paso[] {
       explicacion: 'Asigna a cada criterio su instrumento: prueba, rúbrica, observación, trabajo… Es lo que hará que al pulsar una casilla del calificador sepas exactamente con qué estás evaluando.',
       hecho: e.criteriosConInstrumento > 0,
       cta: 'Asignar instrumentos',
-      destino: config,
+      destino: areas,
       detalle: e.criteriosConInstrumento > 0
         ? `${e.criteriosConInstrumento} criterios con instrumento`
         : (e.instrumentos > 0 ? `${e.instrumentos} instrumentos creados, sin asignar` : undefined),

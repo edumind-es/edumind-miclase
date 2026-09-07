@@ -23,6 +23,7 @@ edumind_miclase/
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteDirecto.ts + enlaceDirecto.ts
 │   │                   (sincronización entre dispositivos por WebRTC, sin servidor)
+│   ├── src/contexto/ ← ClaseActiva.tsx (clase, área y trimestre en curso)
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
@@ -75,6 +76,14 @@ edumind_miclase/
 - **El escaneo de QR necesita los dos motores.** `BarcodeDetector` no existe en
   WKWebView ni en Safari: sin el decodificador de reserva de `utils/lectorQR.ts`
   la función estrella desaparece justo en el iPad.
+- **La clase activa es una sola y vive en `contexto/ClaseActiva`.** Ninguna
+  pantalla monta su propio selector de grupo ni guarda su propio `grupo_id`:
+  eso ya pasó y dejó cinco selectores independientes, de modo que elegir la
+  clase en Evaluación no cambiaba nada en Asistencia y abrir la app desde el
+  icono aterrizaba sin ninguna. Los enlaces con `?grupo_id=` (los QR de mesa ya
+  impresos) entran por `useParametrosClase`, que fija el contexto y limpia la
+  URL. El trimestre no se persiste entre sesiones a propósito: heredar el de
+  diciembre en enero metería las notas nuevas en el trimestre equivocado.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 
