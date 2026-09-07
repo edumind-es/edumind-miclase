@@ -16,6 +16,9 @@ import InstalarApp from '@/components/InstalarApp'
 
 function hoyISO() { return new Date().toISOString().slice(0, 10) }
 
+/** `capitalize` del CSS pone en mayúscula cada palabra: «Lunes, 7 De Septiembre». */
+function conMayusculaInicial(s: string) { return s.charAt(0).toUpperCase() + s.slice(1) }
+
 export default function Dashboard() {
   const { grupos, grupo, grupoId, asignaturas, trimestre, cargando } = useClaseActiva()
   const [estado, setEstado] = useState<PasoEstado | null>(null)
@@ -32,7 +35,8 @@ export default function Dashboard() {
       .catch(() => setSesionHoy(null))
   }, [grupoId])
 
-  const fecha = new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })
+  const fecha = conMayusculaInicial(
+    new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }))
   const hora = new Date().getHours()
   const saludo = hora < 13 ? 'Buenos días' : hora < 20 ? 'Buenas tardes' : 'Buenas noches'
 
@@ -49,7 +53,7 @@ export default function Dashboard() {
       <div className="home-cabecera">
         <div>
           <h1 className="page-title" style={{ marginBottom: 2 }}>{saludo}</h1>
-          <p style={{ color: 'var(--gris-600)', textTransform: 'capitalize', fontSize: 14 }}>{fecha}</p>
+          <p style={{ color: 'var(--gris-600)', fontSize: 14 }}>{fecha}</p>
         </div>
         {grupo && (
           <div className="home-clase" style={{ borderLeftColor: grupo.color || 'var(--azul-500)' }}>
