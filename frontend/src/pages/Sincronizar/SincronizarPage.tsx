@@ -19,6 +19,7 @@ import { idDispositivo } from '@/db/ids'
 import { esNativo, plataforma, servidor, fijarServidor } from '@/api'
 import AlmacenamientoLocal from '@/components/AlmacenamientoLocal'
 import EmparejarDirecto from '@/components/EmparejarDirecto'
+import CompartirPaquete from '@/components/CompartirPaquete'
 
 const K_AUTO = 'miclase_sync_auto'
 
@@ -206,6 +207,12 @@ export default function SincronizarPage() {
           bloque que exige SSO. Es la unica forma de sincronizar sin dejar
           nada depositado en ningun sitio. */}
       <EmparejarDirecto onCambio={refrescar} />
+
+      {/* La otra vía sin servidor, y la única que no depende de la wifi: un
+          fichero cifrado que sale por AirDrop o por donde el docente quiera.
+          Muchas redes de centro aíslan los aparatos entre sí y dejan el
+          emparejamiento por QR sin conexión posible. */}
+      <CompartirPaquete onCambio={refrescar} />
 
       {/* Requisito: sesión SSO */}
       {!conectado ? (

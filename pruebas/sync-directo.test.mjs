@@ -270,11 +270,68 @@ await Promise.all([
   B.evaluate(() => window.sync.cerrarEnlace(window.canal3)),
 ])
 
-console.log('\n8. Los identificadores de los dos aparatos no chocan')
+console.log('\n8. La otra vía sin servidor: un paquete en un fichero (AirDrop y compañía)')
+// El enlace por QR exige wifi común y muchas redes de centro aíslan los
+// aparatos. Un fichero no la necesita: sale por la hoja de compartir del
+// sistema. Aquí se comprueba el fondo —empaquetar, cifrar, fusionar—, que es
+// lo que no depende del navegador.
+
+await A.evaluate(async () => {
+  const g = (await window.localDb.db.grupos.toArray())[0]
+  await window.queries.crearAlumno({ nombre: 'Xoán', apellidos: 'Ledo', neae: 0 }, g.id)
+})
+
+const paquete = await A.evaluate(async () => {
+  const { paquete } = await window.sync.empaquetarParaOtroDispositivo()
+  return paquete
+})
+ok(paquete.formato === 'miclase-sync' && paquete.sobres.length > 0,
+  'el paquete se genera', `${paquete.sobres.length} sobres`)
+ok(!!paquete.salt && !!paquete.verificador,
+  'y lleva sal y verificador, para que un aparato nuevo pueda desbloquear sin servidor')
+
+// Lo mismo que se le exige al buzón del servidor: que no se lea nada en claro
+const enTexto = JSON.stringify(paquete)
+ok(!enTexto.includes('Xoán') && !enTexto.includes('Ledo'),
+  'el nombre del alumnado NO aparece en el fichero')
+ok(!enTexto.includes('5ºB'), 'ni el nombre de la clase')
+ok(paquete.sobres.every((s) => s.iv && s.payload),
+  'cada sobre va con su vector de inicialización y su carga cifrada')
+
+const propio = await A.evaluate(async (pq) => {
+  try { await window.sync.aplicarPaquete(pq); return 'no falló' } catch (e) { return e.message }
+}, paquete)
+ok(/este mismo dispositivo/i.test(propio), 'un paquete no se aplica sobre quien lo generó', propio)
+
+const resPaquete = await B.evaluate(async (pq) => {
+  const p = window.sync.leerPaquete(JSON.stringify(pq))
+  return window.sync.aplicarPaquete(p)
+}, paquete)
+const traidos = await B.evaluate(async () =>
+  (await window.localDb.db.alumnos.toArray()).map((a) => `${a.nombre} ${a.apellidos}`))
+ok(traidos.includes('Xoán Ledo'), 'lo nuevo llega descifrado a la tablet, sin servidor ni wifi común')
+ok(resPaquete.errores.length === 0, 'sin errores al aplicarlo',
+  resPaquete.errores.join(' | ') || 'ninguno')
+
+// Aplicarlo dos veces no debe duplicar ni romper nada
+const repetido = await B.evaluate(async (pq) => {
+  const p = window.sync.leerPaquete(JSON.stringify(pq))
+  return window.sync.aplicarPaquete(p)
+}, paquete)
+const traidos2 = await B.evaluate(async () => window.localDb.db.alumnos.count())
+ok(repetido.errores.length === 0 && traidos2 === traidos.length,
+  'y aplicarlo otra vez no duplica nada', `${traidos2} fichas`)
+
+const basura = await B.evaluate(async () => {
+  try { window.sync.leerPaquete('{"formato":"otra-cosa"}'); return 'no falló' } catch (e) { return e.message }
+})
+ok(/no es un paquete de MiClase/i.test(basura), 'un fichero que no es un paquete se rechaza con claridad', basura)
+
+console.log('\n9. Los identificadores de los dos aparatos no chocan')
 const ids = await A.evaluate(async () => (await window.localDb.db.alumnos.toArray()).map((a) => a.id))
 ok(new Set(ids).size === ids.length, 'no hay dos registros con el mismo id', ids.join(', '))
 
-console.log('\n9. El servidor no ha pintado nada en la sincronizacion')
+console.log('\n10. El servidor no ha pintado nada en la sincronizacion')
 const deSync = apiTocadaPorB.filter((u) => u.startsWith('/api/sync'))
 ok(deSync.length === 0, 'la tablet no ha llamado al buzon ni una sola vez',
   deSync.join(', ') || 'ninguna llamada')
