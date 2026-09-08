@@ -70,7 +70,8 @@ await A.p.getByRole('link', { name: /Crear la primera clase|Crear mi primera cla
 await A.p.waitForURL('**/grupos/nuevo')
 await A.p.getByPlaceholder('Ej: 3ºA, 5ºB…').fill('4ºC')
 await A.p.getByRole('button', { name: /Crear grupo/ }).click()
-await A.p.waitForURL('**/grupos')
+// Crear una clase abre su configuración, no el listado
+await A.p.waitForURL(/\/grupos\/\d+/)
 
 await A.p.getByRole('link', { name: 'Alumnado', exact: true }).click()
 await A.p.waitForTimeout(600)
@@ -137,7 +138,7 @@ await B.p.screenshot({ path: process.env.SCRATCH + '/tiros/21-sync-B.png' })
 console.log('\n5. B ha recibido el curso de A')
 await B.p.getByRole('link', { name: 'Inicio', exact: true }).click()
 await B.p.waitForTimeout(1500)
-ok(await B.p.getByText('4ºC').first().isVisible(), 'la clase 4ºC aparece en la tablet')
+ok(await B.p.getByText('4ºC', { exact: true }).first().isVisible(), 'la clase 4ºC aparece en la tablet')
 await B.p.getByRole('link', { name: 'Alumnado', exact: true }).click()
 await B.p.waitForTimeout(1200)
 ok(await B.p.getByText('Rivas Pena').first().isVisible(), 'el alumnado llegó descifrado correctamente')
@@ -151,16 +152,16 @@ await B.p.getByRole('link', { name: /Nueva clase/ }).click()
 await B.p.waitForURL('**/grupos/nuevo')
 await B.p.getByPlaceholder('Ej: 3ºA, 5ºB…').fill('2ºB desde la tablet')
 await B.p.getByRole('button', { name: /Crear grupo/ }).click()
-await B.p.waitForURL('**/grupos')
+await B.p.waitForURL(/\/grupos\/\d+/)
 await B.p.waitForTimeout(600)
 await sincronizar(B.p)
 
 await sincronizar(A.p)
 await A.p.getByRole('link', { name: 'Inicio', exact: true }).click()
 await A.p.waitForTimeout(1600)
-ok(await A.p.getByText('2ºB desde la tablet').first().isVisible(),
+ok(await A.p.getByText('2ºB desde la tablet', { exact: true }).first().isVisible(),
    'lo creado en la tablet aparece en el portátil')
-ok(await A.p.getByText('4ºC').first().isVisible(), 'y lo suyo sigue estando')
+ok(await A.p.getByText('4ºC', { exact: true }).first().isVisible(), 'y lo suyo sigue estando')
 await A.p.screenshot({ path: process.env.SCRATCH + '/tiros/23-sync-A-fusionado.png' })
 
 console.log('\n7. Los identificadores de los dos dispositivos no chocan')
@@ -199,7 +200,7 @@ await sincronizar(A.p)
 
 await A.p.getByRole('link', { name: 'Inicio', exact: true }).click()
 await A.p.waitForTimeout(1600)
-ok(await A.p.getByText('4ºC (renombrada en la tablet)').first().isVisible(),
+ok(await A.p.getByText('4ºC (renombrada en la tablet)', { exact: true }).first().isVisible(),
    'el portátil adopta el nombre que puso la tablet, por ser posterior')
 ok((await A.p.getByText('4ºC (renombrada en el portátil)').count()) === 0,
    'y el nombre anterior desaparece')

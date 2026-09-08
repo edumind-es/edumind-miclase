@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
-  getGrupos, getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion,
+  getAlumnosByGrupo, getSesiones, crearSesion as dbCrearSesion,
   actualizarSesion, eliminarSesion, getAsistencia, saveAsistencia,
 } from '@/db/queries'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { useParametrosClase } from '@/contexto/useParametrosClase'
 
 type Alumno  = { id: number; nombre: string; apellidos: string }
 type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null }
@@ -25,11 +27,8 @@ function estadoSiguiente(actual: Estado | null): Estado {
 function hoy() { return new Date().toISOString().slice(0, 10) }
 
 export default function SesionesPage() {
-  const [params] = useSearchParams()
-  const grupoId = params.get('grupo_id')
-
-  const [grupos, setGrupos] = useState<any[]>([])
-  const [grupoSelId, setGrupoSelId] = useState(grupoId || '')
+  useParametrosClase()
+  const { grupos, grupoId, cargando: cargandoClase } = useClaseActiva()
   const [alumnos, setAlumnos] = useState<Alumno[]>([])
   const [sesiones, setSesiones] = useState<Sesion[]>([])
   const [sesionActiva, setSesionActiva] = useState<number | null>(null)
@@ -41,24 +40,17 @@ export default function SesionesPage() {
   const [diarioGuardado, setDiarioGuardado] = useState(false)
 
   useEffect(() => {
-    getGrupos().then(data => {
-      setGrupos(data)
-      if (!grupoSelId && data[0]) setGrupoSelId(String(data[0].id))
-    })
-  }, [])
-
-  useEffect(() => {
-    if (!grupoSelId) return
+    if (!grupoId) return
     Promise.all([
-      getAlumnosByGrupo(Number(grupoSelId)),
-      getSesiones(Number(grupoSelId)),
+      getAlumnosByGrupo(grupoId),
+      getSesiones(grupoId),
     ]).then(([als, ses]) => {
       setAlumnos(als as Alumno[])
       setSesiones(ses as Sesion[])
       setSesionActiva(null)
       setAsistencia({})
     })
-  }, [grupoSelId])
+  }, [grupoId])
 
   const cargarAsistencia = async (sesionId: number) => {
     setSesionActiva(sesionId)
@@ -122,23 +114,25 @@ export default function SesionesPage() {
   }
 
   const handleCrearSesion = async () => {
-    if (!nuevaSesion.fecha || !grupoSelId) return
+    if (!nuevaSesion.fecha || !grupoId) return
     setGuardando(true)
     const id = await dbCrearSesion({
-      grupo_id: Number(grupoSelId),
+      grupo_id: grupoId,
       fecha: nuevaSesion.fecha,
       tipo: nuevaSesion.tipo,
       notas: nuevaSesion.notas || undefined,
     })
     setFormNueva(false)
     setNuevaSesion({ fecha: hoy(), tipo: 'clase', notas: '' })
-    const ses = await getSesiones(Number(grupoSelId))
+    const ses = await getSesiones(grupoId)
     setSesiones(ses as Sesion[])
     cargarAsistencia(id)
     setGuardando(false)
   }
 
-  if (!grupoSelId && grupos.length === 0) {
+  if (cargandoClase) return <p style={{ color: 'var(--gris-600)' }}>Cargando…</p>
+
+  if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
         <p style={{ color: 'var(--gris-600)', marginBottom: 16 }}>Crea un grupo primero.</p>
@@ -151,14 +145,9 @@ export default function SesionesPage() {
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Sesiones y asistencia</h1>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <select value={grupoSelId} onChange={e => setGrupoSelId(e.target.value)}>
-            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
-          </select>
-          <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => setFormNueva(true)}>
-            + Nueva sesión
-          </button>
-        </div>
+        <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => setFormNueva(true)}>
+          + Nueva sesión
+        </button>
       </div>
 
       {formNueva && (

@@ -105,8 +105,10 @@ ok(tras.grupos[0].updated_at === '2025-09-01T08:00:00.000Z', 'el sello respeta l
 
 console.log('\n5. La app funciona con los datos migrados')
 await p.waitForTimeout(500)
-ok(await p.getByText('5ºB').first().isVisible(), 'la clase antigua aparece en el inicio')
-await p.getByRole('link', { name: 'Evaluación', exact: true }).click()
+// `exact` para no cazar la opción del desplegable de clase de la barra de
+// contexto, que no tiene caja y por tanto nunca es «visible».
+ok(await p.getByText('5ºB', { exact: true }).first().isVisible(), 'la clase antigua aparece en el inicio')
+await p.getByRole('link', { name: 'Calificador', exact: true }).click()
 await p.waitForTimeout(2500)
 const celdas = await p.locator('.celda-btn').count()
 ok(celdas > 0, 'el calificador nuevo pinta la matriz con los datos antiguos', `${celdas} casillas`)
@@ -122,7 +124,8 @@ await p.getByRole('link', { name: /Nueva clase/ }).click()
 await p.waitForURL('**/grupos/nuevo')
 await p.getByPlaceholder('Ej: 3ºA, 5ºB…').fill('6ºA')
 await p.getByRole('button', { name: /Crear grupo/ }).click()
-await p.waitForURL('**/grupos')
+// Crear una clase abre su configuración, no el listado
+await p.waitForURL(/\/grupos\/\d+/)
 await p.waitForTimeout(900)
 
 const ids = await p.evaluate(async () => {
@@ -142,7 +145,11 @@ const flamante = ids.grupos.find(g => g.nombre === '6ºA')
 ok(ids.base >= 1, 'el dispositivo se reserva su rango al primer alta', `base=${ids.base}`)
 ok(heredado && heredado.id === 1, 'la clase heredada conserva su id antiguo', `id=${heredado?.id}`)
 ok(flamante && flamante.id > 67108864, 'la clase nueva nace en el rango del dispositivo, sin chocar', `id=${flamante?.id}`)
-ok(await p.getByText('5ºB').first().isVisible() && await p.getByText('6ºA').first().isVisible(),
+// Crear una clase abre su configuración; el listado hay que pedirlo
+await p.getByRole('link', { name: 'Mis clases', exact: true }).click()
+await p.waitForTimeout(800)
+ok(await p.getByText('5ºB', { exact: true }).first().isVisible() &&
+   await p.getByText('6ºA', { exact: true }).first().isVisible(),
    'ambas conviven en el listado')
 
 console.log(`\n${fallos === 0 && errores.length === 0 ? '✅ MIGRACIÓN CORRECTA' : `❌ ${fallos} FALLO(S)`}`)

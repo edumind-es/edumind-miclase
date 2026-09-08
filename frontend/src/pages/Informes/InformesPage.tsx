@@ -9,14 +9,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getGrupos, getCalificacionesPorGrupo, exportarDatos, importarDatos,
+  getCalificacionesPorGrupo, exportarDatos, importarDatos,
 } from '@/db/queries'
 import { useAuth } from '@/auth/AuthProvider'
 import { imprimir, descargarHTML } from '@/informes/lamina'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { reunirDatosGrupo, evidenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
 import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea } from '@/informes/documentos'
 
-type Grupo = { id: number; nombre: string; etapa: string; curso: string; curso_escolar: string }
 
 function normalizar(s: string) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-')
@@ -25,8 +25,7 @@ function normalizar(s: string) {
 export default function InformesPage() {
   const { headers } = useAuth()
 
-  const [grupos, setGrupos] = useState<Grupo[]>([])
-  const [grupoId, setGrupoId] = useState('')
+  const { grupos, grupo, grupoId, cargando: cargandoClase } = useClaseActiva()
   const [datos, setDatos] = useState<DatosGrupo | null>(null)
   const [alumnoSelId, setAlumnoSelId] = useState('')
   const [areaSelId, setAreaSelId] = useState('')
@@ -40,25 +39,20 @@ export default function InformesPage() {
   const trim = trimestre ? Number(trimestre) : null
   const alumnos = datos?.alumnos ?? []
   const areas = datos?.areas ?? []
-  const grupo = grupos.find(g => String(g.id) === grupoId)
-
-  useEffect(() => {
-    getGrupos().then(d => {
-      setGrupos(d as unknown as Grupo[])
-      if (d[0]) setGrupoId(String(d[0].id))
-    })
-  }, [])
-
   useEffect(() => {
     if (!grupoId) { setDatos(null); return }
     setMsg(null)
     // El trimestre entra en la recogida de datos, no solo en el filtrado de
     // notas: la asistencia hay que recontarla del periodo del informe.
-    reunirDatosGrupo(Number(grupoId), headers, trim)
+    reunirDatosGrupo(grupoId, headers, trim)
       .then(d => {
         setDatos(d)
-        setAlumnoSelId(prev => prev || (d.alumnos[0]?.id ? String(d.alumnos[0].id) : ''))
-        setAreaSelId(prev => prev || (d.areas[0]?.asig.id ? String(d.areas[0].asig.id) : ''))
+        // Validar contra la clase recién cargada: al cambiar de clase en la
+        // barra, el alumno y el área elegidos antes ya no existen aquí.
+        setAlumnoSelId(prev => d.alumnos.some(a => String(a.id) === prev)
+          ? prev : (d.alumnos[0]?.id ? String(d.alumnos[0].id) : ''))
+        setAreaSelId(prev => d.areas.some(x => String(x.asig.id) === prev)
+          ? prev : (d.areas[0]?.asig.id ? String(d.areas[0].asig.id) : ''))
       })
       .catch(e => setMsg({ tipo: 'error', texto: e.message }))
   }, [grupoId, trim])
@@ -140,7 +134,7 @@ export default function InformesPage() {
     if (!grupoId || !grupo) return
     setGenerando('csv'); setMsg(null)
     try {
-      const { asignaturas, alumnos: als, calificaciones } = await getCalificacionesPorGrupo(Number(grupoId))
+      const { asignaturas, alumnos: als, calificaciones } = await getCalificacionesPorGrupo(grupoId)
       const instrById = new Map<number, { nombre: string; tipo: string; peso: number; asignatura_id: number }>()
       for (const a of asignaturas) {
         for (const i of a.instrumentos) {
@@ -223,6 +217,8 @@ export default function InformesPage() {
 
   // ── Render ───────────────────────────────────────────────────────────
 
+  if (cargandoClase) return <p style={{ color: 'var(--gris-600)' }}>Cargando…</p>
+
   if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48 }}>
@@ -241,12 +237,6 @@ export default function InformesPage() {
       {/* Barra de contexto */}
       <div className="card" style={{ marginBottom: 18 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13.5, fontWeight: 600 }}>
-            Clase
-            <select value={grupoId} onChange={e => setGrupoId(e.target.value)} style={{ minWidth: 170 }}>
-              {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre} · {g.curso}º · {g.curso_escolar}</option>)}
-            </select>
-          </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13.5, fontWeight: 600 }}>
             Periodo
             <select value={trimestre} onChange={e => setTrimestre(e.target.value)}>
