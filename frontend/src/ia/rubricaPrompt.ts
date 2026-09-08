@@ -21,10 +21,16 @@ export const NIVELES_DEFAULT: RubricaNivel[] = [
   { nombre: 'Insuficiente', valor: 1 },
 ]
 
-// Genera el prompt estructurado para pegar en cualquier IA
+// Genera el prompt estructurado para pegar en cualquier IA.
+//
+// El área, la etapa y el curso los sabe ya la app: se meten aquí solos. Antes
+// el docente tenía que escribirlos otra vez dentro del texto libre, y si se le
+// olvidaba, la IA devolvía una rúbrica genérica sin nivel educativo.
 export function generarPromptRubrica(params: {
   asignatura: string
   nivel: string
+  /** Para qué es la rúbrica: el nombre del instrumento («Rúbrica de cuaderno»). */
+  objetivo?: string
   contexto: string
   nIndicadores?: number
 }): string {
@@ -32,10 +38,12 @@ export function generarPromptRubrica(params: {
   return `Eres experto en evaluación educativa en España (LOMLOE). Crea una rúbrica holística para evaluar la siguiente situación:
 
 **Área/Asignatura**: ${params.asignatura}
-**Nivel educativo**: ${params.nivel}
+**Nivel educativo**: ${params.nivel}${params.objetivo ? `
+**Objetivo de la rúbrica**: ${params.objetivo}` : ''}
 **Situación o criterio a evaluar**: ${params.contexto}
 
 Genera una rúbrica con exactamente ${n} indicadores observables y concretos, adaptados al nivel y área indicados.
+Redacta los descriptores en términos de lo que el alumnado HACE, no de lo que le falta.
 Responde ÚNICAMENTE con la tabla markdown, sin texto adicional antes ni después:
 
 | Indicador | Excelente (4) | Notable (3) | Bien (2) | Insuficiente (1) |

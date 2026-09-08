@@ -5,6 +5,7 @@ import {
   rubricaVacia, NIVELES_DEFAULT,
   type RubricaParsed, type RubricaIndicador, type RubricaNivel,
 } from '@/ia/rubricaPrompt'
+import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 
 interface Props {
@@ -16,9 +17,13 @@ interface Props {
 }
 
 type Tab = 'diseniar' | 'ia'
+/** Antes de editar hay que decidir de dónde parte la rúbrica. */
+type Modo = 'cargando' | 'elegir' | 'editar'
 
 export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar }: Props) {
   const [tab, setTab] = useState<Tab>('diseniar')
+  const [modo, setModo] = useState<Modo>('cargando')
+  const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
   const [rubrica, setRubrica] = useState<RubricaParsed>(rubricaVacia(instrumentoNombre))
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
@@ -42,6 +47,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     return () => window.removeEventListener('keydown', alPulsar)
   }, [onCerrar])
 
+  // Una rúbrica que ya existe se abre para editarla. Una que no existe abría
+  // antes una tabla con «Indicador 1», «Indicador 2» y ocho celdas en blanco:
+  // el docente se encontraba el trabajo por hacer y sin pistas de por dónde.
+  // Ahora se le ofrece de dónde partir.
   useEffect(() => {
     getRubrica(instrumentoId).then(r => {
       if (r) {
@@ -51,9 +60,23 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           niveles: JSON.parse(r.niveles_json),
           indicadores: JSON.parse(r.indicadores_json),
         })
+        setModo('editar')
+      } else {
+        setModo('elegir')
       }
-    })
+    }).catch(() => setModo('elegir'))
   }, [instrumentoId])
+
+  const empezarEnBlanco = () => { setTab('diseniar'); setModo('editar') }
+  const empezarConIA = () => { setTab('ia'); setModo('editar') }
+  const empezarDesdePlantilla = (id: string) => {
+    const pl = PLANTILLAS_RUBRICA.find(p => p.id === id)
+    if (!pl) return
+    setRubrica(rubricaDesdePlantilla(pl, instrumentoNombre))
+    setTab('diseniar')
+    setModo('editar')
+    setMsg({ tipo: 'ok', texto: `Plantilla «${pl.nombre}» cargada. Ajústala a tu clase y guárdala.` })
+  }
 
   // ── Edición manual ─────────────────────────────────────────────────────
 
@@ -204,7 +227,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   // ── Generación con IA ──────────────────────────────────────────────────
 
-  const prompt = generarPromptRubrica({ asignatura: asignaturaNombre, nivel, contexto: iaContexto, nIndicadores: iaNIndicadores })
+  const prompt = generarPromptRubrica({
+    asignatura: asignaturaNombre, nivel, objetivo: instrumentoNombre,
+    contexto: iaContexto, nIndicadores: iaNIndicadores,
+  })
 
   const copiarPrompt = async () => {
     await navigator.clipboard.writeText(prompt)
@@ -248,7 +274,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       aria-label={`Rúbrica de ${instrumentoNombre}`}
       onClick={e => { if (e.target === e.currentTarget) onCerrar() }}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
+        // Anidado: se abre desde el gestor de instrumentos, que es otro modal
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 'var(--z-modal-anidado)',
         display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
         padding: '20px 16px', overflowY: 'auto',
       }}>
@@ -265,6 +292,23 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           <button onClick={onCerrar} style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
         </div>
 
+        {modo === 'cargando' && (
+          <div style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>
+        )}
+
+        {modo === 'elegir' && (
+          <PuntoDePartida
+            asignaturaNombre={asignaturaNombre}
+            nivel={nivel}
+            plantillasAbiertas={plantillasAbiertas}
+            onPlantillas={() => setPlantillasAbiertas(v => !v)}
+            onIA={empezarConIA}
+            onPlantilla={empezarDesdePlantilla}
+            onBlanco={empezarEnBlanco}
+          />
+        )}
+
+        {modo === 'editar' && (<>
         {/* Tabs */}
         <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-200)', background: 'var(--gris-50)' }}>
           {(['diseniar', 'ia'] as Tab[]).map(t => (
@@ -511,7 +555,99 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
             </div>
           )}
         </div>
+        </>)}
       </div>
     </div>
+  )
+}
+
+/**
+ * Punto de partida de una rúbrica nueva.
+ *
+ * El docente elige de dónde arranca en vez de encontrarse una tabla vacía.
+ * El contexto (área y nivel) se enseña aquí porque es lo que la app va a
+ * meter sola en el prompt: así se ve antes de generar nada.
+ */
+function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco }: {
+  asignaturaNombre: string
+  nivel: string
+  plantillasAbiertas: boolean
+  onPlantillas: () => void
+  onIA: () => void
+  onPlantilla: (id: string) => void
+  onBlanco: () => void
+}) {
+  return (
+    <div style={{ padding: 24 }}>
+      <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 4 }}>
+        Esta rúbrica todavía está vacía. Elige por dónde empezar:
+      </p>
+      <div style={{ fontSize: 12, color: 'var(--gris-500)', marginBottom: 18 }}>
+        Contexto que se usará: <strong>{asignaturaNombre}</strong> · <strong>{nivel}</strong>
+      </div>
+
+      <div style={{ display: 'grid', gap: 10, marginBottom: plantillasAbiertas ? 14 : 0 }}>
+        <BotonPartida
+          icono="🤖" titulo="Generar con IA" recomendado
+          texto="Describes qué quieres evaluar y la IA propone los indicadores y sus cuatro niveles. El área y el curso van solos en la petición."
+          onClick={onIA}
+        />
+        <BotonPartida
+          icono="📋" titulo="Partir de una plantilla"
+          texto="Cuaderno, exposición oral, trabajo en equipo o producción práctica. Vienen rellenas y se ajustan."
+          onClick={onPlantillas}
+        />
+        <BotonPartida
+          icono="✏️" titulo="Empezar en blanco"
+          texto="Escribes tú los indicadores y los descriptores, uno a uno."
+          onClick={onBlanco}
+        />
+      </div>
+
+      {plantillasAbiertas && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 10 }}>
+          {PLANTILLAS_RUBRICA.map(pl => (
+            <button key={pl.id} onClick={() => onPlantilla(pl.id)}
+              style={{
+                textAlign: 'left', background: 'white', border: '1px solid var(--gris-300)',
+                borderRadius: 10, padding: '12px 14px', cursor: 'pointer',
+              }}>
+              <div style={{ fontSize: 20, marginBottom: 4 }} aria-hidden="true">{pl.icono}</div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--azul-900)' }}>{pl.nombre}</div>
+              <div style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 3, lineHeight: 1.5 }}>{pl.descripcion}</div>
+              <div style={{ fontSize: 11, color: 'var(--gris-500)', marginTop: 6 }}>
+                {pl.filas.length} indicadores · 4 niveles
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function BotonPartida({ icono, titulo, texto, recomendado, onClick }: {
+  icono: string; titulo: string; texto: string; recomendado?: boolean; onClick: () => void
+}) {
+  return (
+    <button onClick={onClick}
+      style={{
+        display: 'flex', alignItems: 'flex-start', gap: 14, textAlign: 'left',
+        background: 'white', border: `1px solid ${recomendado ? 'var(--azul-300)' : 'var(--gris-300)'}`,
+        borderRadius: 10, padding: '14px 16px', cursor: 'pointer', width: '100%',
+      }}>
+      <span style={{ fontSize: 22, lineHeight: 1.1 }} aria-hidden="true">{icono}</span>
+      <span>
+        <span style={{ display: 'block', fontWeight: 700, fontSize: 14.5, color: 'var(--azul-900)' }}>
+          {titulo}
+          {recomendado && (
+            <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: 'var(--azul-500)' }}>recomendado</span>
+          )}
+        </span>
+        <span style={{ display: 'block', fontSize: 12.5, color: 'var(--gris-600)', marginTop: 3, lineHeight: 1.55 }}>
+          {texto}
+        </span>
+      </span>
+    </button>
   )
 }

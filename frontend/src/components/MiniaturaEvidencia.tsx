@@ -69,7 +69,7 @@ export default function MiniaturaEvidencia({ evidencia: ev, onBorrar, tamano = 7
       </div>
 
       {abierta && (
-        <div className="modal-overlay" style={{ zIndex: 1100 }}
+        <div className="modal-overlay" style={{ zIndex: 'var(--z-modal-anidado)' }}
           onClick={e => { if (e.target === e.currentTarget) setAbierta(false) }}>
           <div className="card" style={{ width: 'min(680px, 94vw)', maxHeight: '90vh', overflowY: 'auto', padding: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>

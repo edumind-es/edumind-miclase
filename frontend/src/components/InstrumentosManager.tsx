@@ -72,12 +72,20 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
   const crearNuevo = async () => {
     if (!nuevo?.nombre.trim()) return
-    await crearInstrumento(asignaturaId, {
-      nombre: nuevo.nombre.trim(), tipo: nuevo.tipo, peso: nuevo.peso,
+    const nombre = nuevo.nombre.trim()
+    const esRubrica = nuevo.tipo === 'rubrica'
+    const id = await crearInstrumento(asignaturaId, {
+      nombre, tipo: nuevo.tipo, peso: nuevo.peso,
       trimestres: '[1,2,3]', orden: instrumentos.length,
     })
     setNuevo(null)
     await cargar()
+    // Una rúbrica sin rúbrica no evalúa nada. Antes había que caer en la
+    // cuenta de que el botón «📊 Rúbrica» de la fila era el que la creaba;
+    // ahora se ofrece diseñarla en cuanto se elige el tipo.
+    if (esRubrica) {
+      setRubricaDe({ id, asignatura_id: asignaturaId, nombre, tipo: 'rubrica', peso: 0, trimestres: '[1,2,3]' } as Instrumento)
+    }
   }
 
   const total = instrumentos.reduce((s, i) => s + (i.peso || 0), 0)
