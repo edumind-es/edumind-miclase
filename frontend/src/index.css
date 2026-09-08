@@ -30,6 +30,13 @@
   --cal-insuficiente:  #d94040;
   --cal-sin-dato:      #c4c4c4;
 
+  /* Capas. Sin una escala, cada modal elegía su número a ojo: el editor de
+     rúbrica y el gestor de instrumentos empataban en 1000 y decidía el orden
+     del DOM, así que el gestor tapaba a la rúbrica que él mismo abría. */
+  --z-modal: 1000;          /* diálogo normal */
+  --z-modal-anidado: 1100;  /* diálogo abierto DESDE otro diálogo */
+  --z-aviso: 1200;          /* avisos flotantes: siempre por encima de todo */
+
   --radio-sm: 6px;
   --radio-md: 10px;
   --radio-lg: 16px;
@@ -125,7 +132,7 @@ input:focus, select:focus, textarea:focus {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
-  z-index: 1000;
+  z-index: var(--z-modal);
   display: flex;
   align-items: center;
   justify-content: center;
