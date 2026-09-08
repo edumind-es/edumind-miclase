@@ -20,7 +20,7 @@ import {
   transporteServidor,
   type Cabeceras, type EstadoSync, type RespuestaPush, type Transporte,
 } from './transporte'
-import { transporteDirecto } from './transporteDirecto'
+import { transporteDirecto, type OpcionesDirecto } from './transporteDirecto'
 import type { Enlace } from './enlaceDirecto'
 
 export type { EstadoSync } from './transporte'
@@ -640,10 +640,10 @@ const sesiones = new WeakMap<Enlace, Transporte>()
  * Ponerse a la escucha del otro dispositivo. Hay que llamarla en los dos lados
  * en cuanto el canal se abre, antes de pedirle nada.
  */
-export function atenderEnlace(enlace: Enlace): Transporte {
+export function atenderEnlace(enlace: Enlace, opciones?: OpcionesDirecto): Transporte {
   let canal = sesiones.get(enlace)
   if (!canal) {
-    canal = transporteDirecto(enlace, configLocal)
+    canal = transporteDirecto(enlace, configLocal, opciones)
     sesiones.set(enlace, canal)
   }
   return canal
@@ -657,6 +657,16 @@ export function atenderEnlace(enlace: Enlace): Transporte {
  */
 export async function sincronizarPorEnlace(enlace: Enlace): Promise<ResultadoSync> {
   return ejecutar(atenderEnlace(enlace))
+}
+
+/**
+ * Cierre ordenado del enlace directo: avisa al otro y espera su visto bueno
+ * antes de colgar, para no cortarle mientras aún está escribiendo.
+ */
+export async function cerrarEnlace(enlace: Enlace): Promise<void> {
+  try { await sesiones.get(enlace)?.despedirse?.() } catch { /* da igual: vamos a colgar */ }
+  sesiones.delete(enlace)
+  enlace.cerrar()
 }
 
 /**

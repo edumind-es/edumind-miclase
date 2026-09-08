@@ -197,11 +197,84 @@ const alumnosA = await A.evaluate(async () =>
 ok(alumnosA.includes('Antía Rial'), 'la alumna creada en la tablet aparece en el portátil', alumnosA.join(', '))
 ok(alumnosA.length === 3, 'y no se ha perdido nada de lo anterior')
 
-console.log('\n7. Los identificadores de los dos aparatos no chocan')
+console.log('\n7. El invitado tarda en escribir la contraseña y el otro no se rinde')
+// Reproduce el orden real de la pantalla de emparejamiento, que los apartados
+// anteriores no reproducían porque sincronizaban los dos a la vez: el
+// anfitrión arranca en cuanto lee el QR, y el invitado se queda en la
+// pantalla de contraseña hasta que el docente termina de teclear. Antes el
+// anfitrión esperaba un turno que no llegaba y moría con «el otro dispositivo
+// dejó de responder». Los tiempos van acortados para no tardar un minuto.
+
+const ESPERA_PRUEBA = 4000    // silencio tolerado
+const TECLEANDO = 10000       // lo que tarda el docente: más que la espera
+
+// Bastantes registros para que además haga falta más de una tanda (LOTE = 200)
+await A.evaluate(async () => {
+  const g = (await window.localDb.db.grupos.toArray())[0]
+  for (let i = 0; i < 260; i++) {
+    await window.queries.crearAlumno(
+      { nombre: `Proba${i}`, apellidos: 'Do Lote', neae: 0 }, g.id)
+  }
+})
+
+const oferta3 = await A.evaluate(async () => {
+  window.anfitrion3 = await window.enlace.invitar()
+  return window.anfitrion3.codigo
+})
+const respuesta3 = await B.evaluate(async (cod) => {
+  window.invitado3 = await window.enlace.aceptarInvitacion(cod)
+  window.canal3 = window.invitado3.enlace
+  return window.invitado3.codigo
+}, oferta3)
+await A.evaluate(async ([cod, espera]) => {
+  window.canal3 = await window.anfitrion3.aceptarRespuesta(cod)
+  window.sync.atenderEnlace(window.canal3, { espera, latido: 500 })
+}, [respuesta3, ESPERA_PRUEBA])
+await B.evaluate(async (espera) => {
+  window.canal3 = await window.canal3
+  window.sync.atenderEnlace(window.canal3, { espera, latido: 500 })
+}, ESPERA_PRUEBA)
+
+// El anfitrión arranca ya, sin esperar al otro
+await A.evaluate(() => {
+  window.promesaA = window.sync.sincronizarPorEnlace(window.canal3)
+    .then((r) => ({ fallo: null, errores: r.errores }))
+    .catch((e) => ({ fallo: e.message, errores: [] }))
+})
+
+// El invitado sigue tecleando la contraseña bastante más de lo que dura la espera
+await new Promise((r) => setTimeout(r, TECLEANDO))
+
+const tardio = await B.evaluate(async () => {
+  try {
+    const r = await window.sync.sincronizarPorEnlace(window.canal3)
+    return { fallo: null, errores: r.errores }
+  } catch (e) { return { fallo: e.message, errores: [] } }
+})
+const madrugador = await A.evaluate(() => window.promesaA)
+
+ok(!madrugador.fallo,
+  'el anfitrión aguanta mientras el otro siga vivo, aunque tarde',
+  madrugador.fallo || 'sin fallo')
+ok(!tardio.fallo, 'y el invitado sincroniza cuando por fin le toca', tardio.fallo || 'sin fallo')
+ok(madrugador.errores.length === 0 && tardio.errores.length === 0,
+  'sin errores de transporte por el camino',
+  [...madrugador.errores, ...tardio.errores].join(' | ') || 'ninguno')
+
+const totalB = await B.evaluate(async () => window.localDb.db.alumnos.count())
+ok(totalB === 263, 'la tablet recibe las 260 fichas del lote, no una parte', `${totalB} de 263`)
+
+// Y al colgar, cada uno se despide en vez de cortar al otro en seco
+await Promise.all([
+  A.evaluate(() => window.sync.cerrarEnlace(window.canal3)),
+  B.evaluate(() => window.sync.cerrarEnlace(window.canal3)),
+])
+
+console.log('\n8. Los identificadores de los dos aparatos no chocan')
 const ids = await A.evaluate(async () => (await window.localDb.db.alumnos.toArray()).map((a) => a.id))
 ok(new Set(ids).size === ids.length, 'no hay dos registros con el mismo id', ids.join(', '))
 
-console.log('\n8. El servidor no ha pintado nada en la sincronizacion')
+console.log('\n9. El servidor no ha pintado nada en la sincronizacion')
 const deSync = apiTocadaPorB.filter((u) => u.startsWith('/api/sync'))
 ok(deSync.length === 0, 'la tablet no ha llamado al buzon ni una sola vez',
   deSync.join(', ') || 'ninguna llamada')
