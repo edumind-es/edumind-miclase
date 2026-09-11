@@ -35,6 +35,7 @@
      del DOM, así que el gestor tapaba a la rúbrica que él mismo abría. */
   --z-modal: 1000;          /* diálogo normal */
   --z-modal-anidado: 1100;  /* diálogo abierto DESDE otro diálogo */
+  --z-modal-anidado-2: 1150;/* tercer piso: celda → instrumentos → rúbrica */
   --z-aviso: 1200;          /* avisos flotantes: siempre por encima de todo */
 
   --radio-sm: 6px;

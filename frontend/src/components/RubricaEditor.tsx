@@ -14,13 +14,20 @@ interface Props {
   asignaturaNombre: string
   nivel: string  // e.g. "6º Primaria"
   onCerrar: () => void
+  /**
+   * Capa en la que se dibuja. Por defecto el primer piso de anidamiento, que
+   * es como se abre desde el gestor de instrumentos. Cuando el gestor viene a
+   * su vez de otro modal (el panel de celda del calificador) hace falta subir
+   * un piso más o la rúbrica sale por debajo de quien la abrió.
+   */
+  capa?: string
 }
 
 type Tab = 'diseniar' | 'ia'
 /** Antes de editar hay que decidir de dónde parte la rúbrica. */
 type Modo = 'cargando' | 'elegir' | 'editar'
 
-export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar }: Props) {
+export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)' }: Props) {
   const [tab, setTab] = useState<Tab>('diseniar')
   const [modo, setModo] = useState<Modo>('cargando')
   const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
@@ -28,6 +35,12 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [tieneDatos, setTieneDatos] = useState(false)
+  // Trabajo hecho y todavía no guardado. Sin esto, cerrar con Esc, con la ✕ o
+  // pulsando fuera tiraba en silencio una rúbrica entera: ya pasó con una
+  // generada con IA que se dio por hecha y quedó en nada.
+  const [sucio, setSucio] = useState(false)
+  /** Si el contenido actual salió de una IA, para que quede registrado al guardar. */
+  const [vieneDeIA, setVieneDeIA] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
   const importRubricaRef = useRef<HTMLInputElement>(null)
 
@@ -38,14 +51,32 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const [iaNIndicadores, setIaNIndicadores] = useState(4)
   const [iaError, setIaError] = useState('')
   const [promptCopiado, setPromptCopiado] = useState(false)
+  // La generación local tarda minutos. Sin un segundero que se mueva, la
+  // pantalla quieta se lee como app colgada.
+  const [iaSegundos, setIaSegundos] = useState(0)
+
+  // Ningún camino de salida descarta trabajo sin preguntar: ni la ✕, ni Esc,
+  // ni el clic fuera del modal.
+  const cerrar = () => {
+    if (sucio && !confirm('Tienes cambios sin guardar en esta rúbrica. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
+    onCerrar()
+  }
 
   // Cerrar con Esc, como el resto de los modales de la app. Este era el único
   // que no lo hacía, y es el más grande de todos.
   useEffect(() => {
-    const alPulsar = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
+    const alPulsar = (e: KeyboardEvent) => { if (e.key === 'Escape') cerrar() }
     window.addEventListener('keydown', alPulsar)
     return () => window.removeEventListener('keydown', alPulsar)
-  }, [onCerrar])
+  }, [onCerrar, sucio])
+
+  // Segundero de la generación local.
+  useEffect(() => {
+    if (ai.status !== 'generando') { setIaSegundos(0); return }
+    const t0 = Date.now()
+    const id = setInterval(() => setIaSegundos(Math.round((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [ai.status])
 
   // Una rúbrica que ya existe se abre para editarla. Una que no existe abría
   // antes una tabla con «Indicador 1», «Indicador 2» y ocho celdas en blanco:
@@ -73,6 +104,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     const pl = PLANTILLAS_RUBRICA.find(p => p.id === id)
     if (!pl) return
     setRubrica(rubricaDesdePlantilla(pl, instrumentoNombre))
+    setSucio(true)
     setTab('diseniar')
     setModo('editar')
     setMsg({ tipo: 'ok', texto: `Plantilla «${pl.nombre}» cargada. Ajústala a tu clase y guárdala.` })
@@ -80,17 +112,23 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   // ── Edición manual ─────────────────────────────────────────────────────
 
-  const setTitulo = (titulo: string) => setRubrica(r => ({ ...r, titulo }))
+  /** Toda edición pasa por aquí: así no hay forma de cambiar algo sin que quede marcado. */
+  const editar = (fn: (r: RubricaParsed) => RubricaParsed) => {
+    setSucio(true)
+    setRubrica(fn)
+  }
+
+  const setTitulo = (titulo: string) => editar(r => ({ ...r, titulo }))
 
   const setIndicadorNombre = (idx: number, nombre: string) =>
-    setRubrica(r => {
+    editar(r => {
       const indicadores = [...r.indicadores]
       indicadores[idx] = { ...indicadores[idx], nombre }
       return { ...r, indicadores }
     })
 
   const setDescriptor = (indIdx: number, nivelNombre: string, texto: string) =>
-    setRubrica(r => {
+    editar(r => {
       const indicadores = [...r.indicadores]
       indicadores[indIdx] = {
         ...indicadores[indIdx],
@@ -100,7 +138,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     })
 
   const addIndicador = () =>
-    setRubrica(r => ({
+    editar(r => ({
       ...r,
       indicadores: [
         ...r.indicadores,
@@ -112,7 +150,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     }))
 
   const removeIndicador = (idx: number) =>
-    setRubrica(r => ({
+    editar(r => ({
       ...r,
       indicadores: r.indicadores.filter((_, i) => i !== idx),
     }))
@@ -133,6 +171,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       })
       setMsg({ tipo: 'ok', texto: 'Rúbrica guardada correctamente.' })
       setTieneDatos(true)
+      setSucio(false)
     } catch {
       setMsg({ tipo: 'error', texto: 'Error al guardar la rúbrica.' })
     } finally { setGuardando(false) }
@@ -143,6 +182,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     await eliminarRubrica(instrumentoId)
     setRubrica(rubricaVacia(instrumentoNombre))
     setTieneDatos(false)
+    setSucio(false)
     setMsg({ tipo: 'ok', texto: 'Rúbrica eliminada.' })
   }
 
@@ -203,6 +243,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         niveles: p.niveles,
         indicadores: p.indicadores,
       }))
+      setSucio(true)
       if (p.contexto) setIaContexto(p.contexto)
       const de = p.area && p.area !== asignaturaNombre ? ` (venía de ${p.area})` : ''
       setMsg({
@@ -221,6 +262,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     const parsed = parsearRespuestaIA(texto)
     if (!parsed) { setMsg({ tipo: 'error', texto: 'No se pudo leer la rúbrica del fichero. Verifica que tiene formato de tabla markdown.' }); return }
     setRubrica(parsed)
+    setSucio(true)
     setMsg({ tipo: 'ok', texto: `Rúbrica importada: "${parsed.titulo}" con ${parsed.indicadores.length} indicadores.` })
     e.target.value = ''
   }
@@ -243,6 +285,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     const parsed = parsearRespuestaIA(iaRespuesta)
     if (!parsed) { setIaError('No se encontró una tabla markdown válida. Asegúrate de pegar la respuesta completa.'); return }
     setRubrica(parsed)
+    setSucio(true)
+    setVieneDeIA(true)
     setTab('diseniar')
     setMsg({ tipo: 'ok', texto: `Rúbrica cargada: "${parsed.titulo}". Revísala y guárdala.` })
   }
@@ -250,16 +294,21 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const generarConIA = async () => {
     if (!iaContexto.trim()) { setIaError('Describe la situación o criterio a evaluar.'); return }
     setIaError('')
+    setIaRespuesta('')
     try {
-      const respuesta = await ai.generate(prompt)
-      setIaRespuesta(respuesta)
+      // El texto se va viendo en el cuadro de respuesta según lo escribe el
+      // modelo: es la única prueba de que sigue trabajando.
+      const respuesta = await ai.generate(prompt, setIaRespuesta)
+      if (!respuesta.trim()) { setIaError('Generación detenida: no dio tiempo a escribir nada.'); return }
       const parsed = parsearRespuestaIA(respuesta)
       if (parsed) {
         setRubrica(parsed)
+        setSucio(true)
+        setVieneDeIA(true)
         setTab('diseniar')
-        setMsg({ tipo: 'ok', texto: `Rúbrica generada con IA: "${parsed.titulo}". Revisa y guarda.` })
+        setMsg({ tipo: 'ok', texto: `Rúbrica generada con IA: "${parsed.titulo}". Revísala y pulsa «Guardar rúbrica».` })
       } else {
-        setIaError('La IA generó texto pero no tiene formato de tabla. Revisa la respuesta y usa "Cargar respuesta".')
+        setIaError('El modelo escribió texto pero no una tabla completa. Revísalo abajo, corrígelo si hace falta y pulsa «Cargar en editor».')
       }
     } catch (e: any) {
       setIaError(e.message || 'Error generando con IA.')
@@ -272,24 +321,30 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       role="dialog"
       aria-modal="true"
       aria-label={`Rúbrica de ${instrumentoNombre}`}
-      onClick={e => { if (e.target === e.currentTarget) onCerrar() }}
+      onClick={e => { if (e.target === e.currentTarget) cerrar() }}
       style={{
         // Anidado: se abre desde el gestor de instrumentos, que es otro modal
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 'var(--z-modal-anidado)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: capa,
         display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
         padding: '20px 16px', overflowY: 'auto',
       }}>
+      {/* Columna: cabecera arriba, cuerpo que rueda en medio y pie siempre a la
+          vista. El botón de guardar vivía al final del cuerpo, detrás de la
+          tabla entera y de cuatro botones de importar/exportar: con cinco
+          indicadores había que bajar mucho para encontrarlo, y en la pestaña
+          de IA no existía. */}
       <div style={{
         background: 'white', borderRadius: 12, width: '100%', maxWidth: 900,
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)', overflow: 'hidden',
+        maxHeight: '92vh', display: 'flex', flexDirection: 'column',
       }}>
         {/* Cabecera */}
-        <div style={{ background: 'var(--azul-700)', color: 'white', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--azul-700)', color: 'white', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div>
             <div style={{ fontSize: 12, opacity: .8, marginBottom: 2 }}>Rúbrica de evaluación</div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>{instrumentoNombre}</div>
           </div>
-          <button onClick={onCerrar} style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
+          <button onClick={cerrar} aria-label="Cerrar" style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
         </div>
 
         {modo === 'cargando' && (
@@ -297,6 +352,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         )}
 
         {modo === 'elegir' && (
+          <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
           <PuntoDePartida
             asignaturaNombre={asignaturaNombre}
             nivel={nivel}
@@ -306,11 +362,12 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
             onPlantilla={empezarDesdePlantilla}
             onBlanco={empezarEnBlanco}
           />
+          </div>
         )}
 
         {modo === 'editar' && (<>
         {/* Tabs */}
-        <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-200)', background: 'var(--gris-50)' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-200)', background: 'var(--gris-50)', flexShrink: 0 }}>
           {(['diseniar', 'ia'] as Tab[]).map(t => (
             <button key={t} onClick={() => setTab(t)} style={{
               padding: '10px 20px', border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
@@ -323,7 +380,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           ))}
         </div>
 
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: 20, overflowY: 'auto', flex: 1, minHeight: 0 }}>
           {msg && (
             <div style={{
               marginBottom: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13,
@@ -429,15 +486,6 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarMD} disabled={rubrica.indicadores.length === 0}>
                   ⬇ Exportar .md
                 </button>
-                {tieneDatos && (
-                  <button onClick={borrar}
-                    style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
-                    Eliminar rúbrica
-                  </button>
-                )}
-                <button className="btn-primary" style={{ fontSize: 13, padding: '7px 18px' }} onClick={() => guardar(false)} disabled={guardando}>
-                  {guardando ? 'Guardando…' : '💾 Guardar rúbrica'}
-                </button>
               </div>
             </>
           )}
@@ -475,11 +523,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 {hasWebGPU() && (
                   <>
                     <div style={{ flex: 1 }} />
-                    {ai.isReady ? (
-                      <button className="btn-primary" style={{ fontSize: 13 }} onClick={generarConIA}
-                        disabled={!iaContexto.trim() || ai.status === 'generando'}>
-                        {ai.status === 'generando' ? '⚡ Generando…' : '⚡ Generar con IA local'}
-                      </button>
+                    {ai.isReady || ai.status === 'generando' ? (
+                      ai.status === 'generando' ? (
+                        <button className="btn-secondary" style={{ fontSize: 13 }} onClick={ai.cancelar}>
+                          ✋ Detener generación
+                        </button>
+                      ) : (
+                        <button className="btn-primary" style={{ fontSize: 13 }} onClick={generarConIA}
+                          disabled={!iaContexto.trim()}>
+                          ⚡ Generar con IA local
+                        </button>
+                      )
                     ) : (
                       <button className="btn-primary" style={{ fontSize: 13, background: '#166534' }}
                         onClick={ai.cargarModelo}
@@ -493,6 +547,21 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                   </>
                 )}
               </div>
+
+              {/* Que el modelo tarde minutos no es un fallo; que la pantalla no lo
+                  diga, sí. Segundero, caracteres recibidos y el aviso de que el
+                  equipo va a ir lento mientras tanto. */}
+              {ai.status === 'generando' && (
+                <div style={{ padding: '10px 14px', background: 'var(--azul-100)', borderRadius: 8, fontSize: 12, color: 'var(--azul-900)', border: '1px solid var(--azul-300)' }}>
+                  <strong>⚡ Escribiendo la rúbrica… {iaSegundos}s</strong>
+                  {iaRespuesta.length > 0 && ` · ${iaRespuesta.length} caracteres`}
+                  <div style={{ marginTop: 4, color: 'var(--gris-600)' }}>
+                    Suele tardar entre uno y tres minutos y el equipo irá más lento
+                    mientras tanto: la app no está parada. Verás el texto aparecer
+                    abajo según lo escribe el modelo.
+                  </div>
+                </div>
+              )}
 
               {/* El motivo real del fallo. `useLocalAI` lo exponía en `error`
                   y nadie lo leía: el botón se limitaba a poner «Error —
@@ -554,6 +623,36 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
               </div>
             </div>
           )}
+        </div>
+
+        {/* Pie: guardar está aquí, fuera del cuerpo que rueda, y vale para las
+            dos pestañas. Una rúbrica generada con IA se guarda sin buscar nada. */}
+        <div style={{
+          flexShrink: 0, borderTop: '1px solid var(--gris-200)', background: 'var(--gris-50)',
+          padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+        }}>
+          <div style={{
+            flex: 1, minWidth: 140, fontSize: 12,
+            color: msg?.tipo === 'error' ? '#991b1b' : sucio ? '#92400e' : 'var(--gris-500)',
+            fontWeight: msg?.tipo === 'error' || sucio ? 700 : 400,
+          }}>
+            {msg?.tipo === 'error'
+              ? `❌ ${msg.texto}`
+              : sucio
+                ? '● Cambios sin guardar'
+                : tieneDatos ? '✅ Guardada en este dispositivo' : 'Todavía sin guardar'}
+          </div>
+          {tieneDatos && (
+            <button onClick={borrar}
+              style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
+              Eliminar rúbrica
+            </button>
+          )}
+          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={cerrar}>Cerrar</button>
+          <button className="btn-primary" style={{ fontSize: 13, padding: '8px 20px' }}
+            onClick={() => guardar(vieneDeIA)} disabled={guardando || rubrica.indicadores.length === 0}>
+            {guardando ? 'Guardando…' : '💾 Guardar rúbrica'}
+          </button>
         </div>
         </>)}
       </div>
