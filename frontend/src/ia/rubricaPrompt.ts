@@ -6,6 +6,14 @@ export interface RubricaNivel {
 export interface RubricaIndicador {
   nombre: string
   descriptores: Record<string, string>  // nivel.nombre → texto descriptor
+  /**
+   * Cuánto pesa este indicador dentro de la rúbrica, en %.
+   *
+   * Opcional a propósito: las rúbricas diseñadas antes de que existieran los
+   * pesos no lo traen, y esas reparten a partes iguales. Añadir el campo como
+   * obligatorio las habría dejado todas sin nota.
+   */
+  peso?: number
 }
 
 export interface RubricaParsed {
