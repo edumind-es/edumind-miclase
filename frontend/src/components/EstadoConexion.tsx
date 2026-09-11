@@ -30,7 +30,7 @@ export default function EstadoConexion() {
   return (
     <div role="status" aria-live="polite" style={{
       position: 'fixed', left: '50%', bottom: 18, transform: 'translateX(-50%)',
-      zIndex: 1200, borderRadius: 22, padding: '9px 18px',
+      zIndex: 'var(--z-aviso)', borderRadius: 22, padding: '9px 18px',
       fontSize: 13, fontWeight: 600, boxShadow: 'var(--sombra-md)',
       display: 'flex', alignItems: 'center', gap: 9, maxWidth: 'calc(100vw - 32px)',
       background: enLinea ? 'var(--verde-500)' : 'var(--gris-900)',

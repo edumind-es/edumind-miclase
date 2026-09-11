@@ -28,3 +28,7 @@ frontend/android/.idea/
 
 # Versiones publicadas: se generan al desplegar (ver desplegar.sh)
 frontend/releases/
+
+# Sesiones y worktrees de Claude Code: son de esta máquina, no del proyecto.
+# Un checkpoint automático llegó a subir el worktree como gitlink.
+.claude/

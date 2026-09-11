@@ -1,5 +1,6 @@
 import {
-  calcularNotaArea, calificativo, nivelANota, parsearPesosTrimestres,
+  calcularNotaArea, calificativo, nivelANota, notaDeRubrica, pesosAPartesIguales,
+  parsearPesosTrimestres,
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
 } from '../frontend/src/db/calculo'
 
@@ -97,18 +98,71 @@ console.log('\n8. Escala cualitativa LOMLOE')
 
 console.log('\n9. Conversión de niveles de rúbrica a escala 0-10')
 {
-  // Los niveles se reparten de extremo a extremo, como en iDoceo: el más bajo
-  // es 0 y el más alto 10, sin que el docente configure nada. Antes se
-  // dividía por el máximo y el nivel inferior de una rúbrica de cuatro daba
-  // 2,5: era imposible poner un 0 con una rúbrica.
+  // La escala se ancla en 0: un nivel vale su parte del máximo. Antes se
+  // repartía de extremo a extremo, de modo que el nivel más bajo PRESENTE
+  // valía 0 — se hizo así porque los niveles no se podían editar y no había
+  // otra forma de llegar al cero. Ahora sí se pueden, y el 0 es un nivel que
+  // el docente añade cuando quiere decir «no ejecuta».
   ok(nivelANota(4, 4) === 10,  'nivel 4 de 4 → 10')
-  ok(nivelANota(1, 4) === 0,   'nivel 1 de 4 → 0, no 2.5')
-  ok(nivelANota(2, 4) === 3.3, 'nivel 2 de 4 → 3.3')
-  ok(nivelANota(3, 4) === 6.7, 'nivel 3 de 4 → 6.7')
-  ok(nivelANota(3, 5) === 5,   'nivel 3 de 5 → 5, el punto medio')
-  ok(nivelANota(2, 0) === 2,   'una rúbrica de un solo nivel no divide por cero')
-  ok(nivelANota(0, 3, 0) === 0 && nivelANota(3, 3, 0) === 10,
-     'admite rúbricas que empiezan en 0')
+  ok(nivelANota(3, 4) === 7.5, 'nivel 3 de 4 → 7.5')
+  ok(nivelANota(2, 4) === 5,   'nivel 2 de 4 → 5')
+  ok(nivelANota(1, 4) === 2.5, 'el nivel más bajo descrito conserva su parte, no cae a 0')
+  ok(nivelANota(0, 4) === 0,   'el 0 sí da 0: es un nivel, no el escalón inferior')
+  ok(nivelANota(3, 5) === 6,   'nivel 3 de 5 → 6')
+  ok(nivelANota(2, 0) === 0,   'un máximo de 0 no divide por cero')
+}
+
+console.log('\n9b. Nota de una rúbrica calificada indicador a indicador')
+{
+  const NIVELES = [
+    { nombre: 'Excelente', valor: 4 }, { nombre: 'Notable', valor: 3 },
+    { nombre: 'Bien', valor: 2 }, { nombre: 'Insuficiente', valor: 1 },
+  ]
+  const tres = [{ nombre: 'A' }, { nombre: 'B' }, { nombre: 'C' }]
+
+  // Sin pesos declarados se reparte a partes iguales
+  ok(notaDeRubrica(tres, NIVELES, { A: 4, B: 4, C: 4 }).nota === 10, 'todo al máximo → 10')
+  ok(notaDeRubrica(tres, NIVELES, { A: 1, B: 1, C: 1 }).nota === 2.5,
+     'todo en el nivel más bajo descrito → 2.5, no 0')
+  ok(notaDeRubrica(tres, NIVELES, { A: 4, B: 3, C: 2 }).nota === 7.5,
+     'media de 4, 3 y 2 sobre 4 → 7.5', String(notaDeRubrica(tres, NIVELES, { A: 4, B: 3, C: 2 }).nota))
+
+  // El peso manda: el mismo reparto de niveles da notas distintas
+  const pesados = [{ nombre: 'A', peso: 80 }, { nombre: 'B', peso: 10 }, { nombre: 'C', peso: 10 }]
+  const r = notaDeRubrica(pesados, NIVELES, { A: 4, B: 1, C: 1 })
+  ok(r.nota === 8.5, 'el indicador que pesa 80% arrastra la nota', String(r.nota))
+  const inverso = notaDeRubrica(pesados, NIVELES, { A: 1, B: 4, C: 4 })
+  ok(inverso.nota === 4, 'y al revés la hunde, aunque los otros dos estén al máximo', String(inverso.nota))
+
+  // Lo no marcado no cuenta como cero
+  const parcial = notaDeRubrica(tres, NIVELES, { A: 4 })
+  ok(parcial.nota === 10, 'un solo indicador marcado al máximo → 10, no 3.3')
+  ok(parcial.evaluados === 1 && parcial.total === 3, 'y se dice que va 1 de 3')
+
+  // Sin marcar nada no hay nota que poner
+  ok(notaDeRubrica(tres, NIVELES, {}).nota === null, 'sin marcar nada la nota es null, no 0')
+
+  // El nivel 0, que es de lo que se trata
+  const CON_CERO = [...NIVELES, { nombre: 'No interviene', valor: 0 }]
+  ok(notaDeRubrica(tres, CON_CERO, { A: 0, B: 0, C: 0 }).nota === 0,
+     'todo en «No interviene» → 0')
+  ok(notaDeRubrica(tres, CON_CERO, { A: 1, B: 1, C: 1 }).nota === 2.5,
+     'y añadir el nivel 0 no cambia lo que vale el «Insuficiente»')
+
+  // Casos límite
+  ok(notaDeRubrica([], NIVELES, {}).nota === null, 'una rúbrica sin indicadores no da nota')
+  ok(notaDeRubrica(tres, [], { A: 1 }).nota === null, 'una rúbrica sin niveles tampoco')
+  ok(notaDeRubrica(tres, [{ nombre: 'Cero', valor: 0 }], { A: 0 }).nota === null,
+     'si el máximo es 0 no hay escala que repartir')
+}
+
+console.log('\n9c. Reparto de pesos a partes iguales')
+{
+  ok(pesosAPartesIguales(4).every(p => p === 25), 'cuatro indicadores → 25 cada uno')
+  const tres = pesosAPartesIguales(3)
+  ok(Math.round(tres.reduce((a, b) => a + b, 0)) === 100,
+     'con tres suma 100 exacto pese al decimal periódico', tres.join(' + '))
+  ok(pesosAPartesIguales(0).length === 0, 'sin indicadores no hay nada que repartir')
 }
 
 console.log('\n10. Pesos de trimestre mal formados')

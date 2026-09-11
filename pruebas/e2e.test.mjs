@@ -29,8 +29,8 @@ const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: fals
 console.log('\n1. Primer arranque')
 await p.goto(BASE, { waitUntil: 'networkidle' })
 await p.waitForTimeout(700)
-ok(await p.getByText('Puesta en marcha').isVisible(), 'el asistente de primeros pasos aparece solo')
-ok(await p.getByText('Crea tu clase').first().isVisible(), 'el paso 1 explica qué hacer')
+ok(await p.getByText('Bienvenido a EDUmind MiClase').isVisible(), 'sin clases, el Inicio da la bienvenida en vez de un checklist vacío')
+ok(await p.getByText(/se guarda .*en este dispositivo|en este dispositivo/).first().isVisible(), 'explica que los datos no salen del dispositivo')
 await foto('01-inicio')
 
 // ── 2 · Sidebar plegable ────────────────────────────────────────────────
@@ -60,16 +60,19 @@ await p.locator('select').first().selectOption('primaria')
 await p.locator('select').nth(1).selectOption('3')
 await p.locator('select').nth(2).selectOption('Galicia')
 await p.getByRole('button', { name: /Crear grupo/ }).click()
-await p.waitForURL('**/grupos')
-ok(await p.getByText('3ºA').first().isVisible(), 'la clase 3ºA aparece en el listado')
+// La clase recién creada pasa a ser la activa y se abre su configuración
+await p.waitForURL(/\/grupos\/\d+/)
+await p.waitForTimeout(900)
+ok(await p.getByText('3ºA').first().isVisible(), 'la clase recién creada abre su configuración')
+ok(await p.getByRole('tab', { name: 'Áreas y evaluación' }).isVisible(), 'la configuración se reparte en pestañas')
 
 // ── 4 · Alumnado ────────────────────────────────────────────────────────
 console.log('\n4. Alumnado')
 await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
 await p.waitForTimeout(500)
-// Con una sola clase se selecciona sola; comprobamos que no queda "sin clase"
-const selClase = p.locator('select').first()
-ok((await selClase.inputValue()) !== '', 'la clase se selecciona sola cuando solo hay una')
+// La clase ya no se elige aquí: la manda la barra de contexto, compartida
+const selClase = p.locator('.barra-clase select').first()
+ok((await selClase.inputValue()) !== '', 'la barra de contexto lleva la clase activa a Alumnado')
 
 await p.getByRole('button', { name: /Importar lista/ }).click()
 await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill(
@@ -90,6 +93,8 @@ await p.getByRole('link', { name: 'Mis clases', exact: true }).click()
 await p.waitForTimeout(400)
 await p.getByText('3ºA').first().click()
 await p.waitForTimeout(900)
+await p.getByRole('tab', { name: 'Áreas y evaluación' }).click()
+await p.waitForTimeout(600)
 await p.getByRole('button', { name: /\+ Añadir áreas/ }).click()
 await p.waitForTimeout(700)
 const casillas = p.locator('input[type="checkbox"]')
@@ -159,7 +164,7 @@ if (await chip.count()) {
 
 // ── 9 · Matriz de evaluación ────────────────────────────────────────────
 console.log('\n9. Calificador: pestañas, subpestañas y matriz')
-await p.getByRole('link', { name: 'Evaluación', exact: true }).click()
+await p.getByRole('link', { name: 'Calificador', exact: true }).click()
 await p.waitForTimeout(2000)
 
 const pestanasArea = await p.locator('.tab-area').count()

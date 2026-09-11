@@ -83,6 +83,20 @@ export interface Calificacion extends Sincronizable {
   fecha?: string
   observacion?: string | null
   unidad_id?: number | null   // unidad en la que se registró (trazabilidad)
+  /**
+   * Nivel marcado en cada indicador de la rúbrica: nombre del indicador →
+   * valor del nivel. Es la justificación de la nota, no la nota: `valor`
+   * sigue siendo lo que cuenta para las medias.
+   *
+   * Sin esto, al reabrir una casilla se veía el 7,5 pero no de dónde salía, y
+   * corregir un solo indicador obligaba a volver a marcarlos todos.
+   *
+   * No se indexa, así que no hace falta subir la versión del esquema: en
+   * Dexie `stores()` declara índices, no columnas. Las calificaciones puestas
+   * antes simplemente no lo traen, que es justo lo correcto — se pusieron de
+   * otra manera.
+   */
+  niveles_rubrica?: Record<string, number> | null
 }
 
 export interface Sesion extends Sincronizable {

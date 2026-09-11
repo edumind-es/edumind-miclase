@@ -5,6 +5,8 @@ import {
   rubricaVacia, NIVELES_DEFAULT,
   type RubricaParsed, type RubricaIndicador, type RubricaNivel,
 } from '@/ia/rubricaPrompt'
+import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
+import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 
 interface Props {
@@ -13,16 +15,45 @@ interface Props {
   asignaturaNombre: string
   nivel: string  // e.g. "6º Primaria"
   onCerrar: () => void
+  /**
+   * Capa en la que se dibuja. Por defecto el primer piso de anidamiento, que
+   * es como se abre desde el gestor de instrumentos. Cuando el gestor viene a
+   * su vez de otro modal (el panel de celda del calificador) hace falta subir
+   * un piso más o la rúbrica sale por debajo de quien la abrió.
+   */
+  capa?: string
+}
+
+/**
+ * El color de un nivel es el de la nota a la que equivale.
+ *
+ * Antes se pintaba por posición de columna —la cuarta siempre en rojo— y con
+ * los niveles ya editables eso mentiría: al añadir un quinto nivel, el rojo se
+ * quedaba en el cuarto y el 0 salía verde. Derivarlo del valor lo hace
+ * coherente con los colores de la matriz del calificador.
+ */
+function colorNivel(valor: number, maxNivel: number): string {
+  return calificativo(nivelANota(valor, maxNivel)).color
 }
 
 type Tab = 'diseniar' | 'ia'
+/** Antes de editar hay que decidir de dónde parte la rúbrica. */
+type Modo = 'cargando' | 'elegir' | 'editar'
 
-export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar }: Props) {
+export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)' }: Props) {
   const [tab, setTab] = useState<Tab>('diseniar')
+  const [modo, setModo] = useState<Modo>('cargando')
+  const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
   const [rubrica, setRubrica] = useState<RubricaParsed>(rubricaVacia(instrumentoNombre))
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [tieneDatos, setTieneDatos] = useState(false)
+  // Trabajo hecho y todavía no guardado. Sin esto, cerrar con Esc, con la ✕ o
+  // pulsando fuera tiraba en silencio una rúbrica entera: ya pasó con una
+  // generada con IA que se dio por hecha y quedó en nada.
+  const [sucio, setSucio] = useState(false)
+  /** Si el contenido actual salió de una IA, para que quede registrado al guardar. */
+  const [vieneDeIA, setVieneDeIA] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
   const importRubricaRef = useRef<HTMLInputElement>(null)
 
@@ -33,15 +64,37 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const [iaNIndicadores, setIaNIndicadores] = useState(4)
   const [iaError, setIaError] = useState('')
   const [promptCopiado, setPromptCopiado] = useState(false)
+  // La generación local tarda minutos. Sin un segundero que se mueva, la
+  // pantalla quieta se lee como app colgada.
+  const [iaSegundos, setIaSegundos] = useState(0)
+
+  // Ningún camino de salida descarta trabajo sin preguntar: ni la ✕, ni Esc,
+  // ni el clic fuera del modal.
+  const cerrar = () => {
+    if (sucio && !confirm('Tienes cambios sin guardar en esta rúbrica. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
+    onCerrar()
+  }
 
   // Cerrar con Esc, como el resto de los modales de la app. Este era el único
   // que no lo hacía, y es el más grande de todos.
   useEffect(() => {
-    const alPulsar = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
+    const alPulsar = (e: KeyboardEvent) => { if (e.key === 'Escape') cerrar() }
     window.addEventListener('keydown', alPulsar)
     return () => window.removeEventListener('keydown', alPulsar)
-  }, [onCerrar])
+  }, [onCerrar, sucio])
 
+  // Segundero de la generación local.
+  useEffect(() => {
+    if (ai.status !== 'generando') { setIaSegundos(0); return }
+    const t0 = Date.now()
+    const id = setInterval(() => setIaSegundos(Math.round((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [ai.status])
+
+  // Una rúbrica que ya existe se abre para editarla. Una que no existe abría
+  // antes una tabla con «Indicador 1», «Indicador 2» y ocho celdas en blanco:
+  // el docente se encontraba el trabajo por hacer y sin pistas de por dónde.
+  // Ahora se le ofrece de dónde partir.
   useEffect(() => {
     getRubrica(instrumentoId).then(r => {
       if (r) {
@@ -51,23 +104,44 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           niveles: JSON.parse(r.niveles_json),
           indicadores: JSON.parse(r.indicadores_json),
         })
+        setModo('editar')
+      } else {
+        setModo('elegir')
       }
-    })
+    }).catch(() => setModo('elegir'))
   }, [instrumentoId])
+
+  const empezarEnBlanco = () => { setTab('diseniar'); setModo('editar') }
+  const empezarConIA = () => { setTab('ia'); setModo('editar') }
+  const empezarDesdePlantilla = (id: string) => {
+    const pl = PLANTILLAS_RUBRICA.find(p => p.id === id)
+    if (!pl) return
+    setRubrica(rubricaDesdePlantilla(pl, instrumentoNombre))
+    setSucio(true)
+    setTab('diseniar')
+    setModo('editar')
+    setMsg({ tipo: 'ok', texto: `Plantilla «${pl.nombre}» cargada. Ajústala a tu clase y guárdala.` })
+  }
 
   // ── Edición manual ─────────────────────────────────────────────────────
 
-  const setTitulo = (titulo: string) => setRubrica(r => ({ ...r, titulo }))
+  /** Toda edición pasa por aquí: así no hay forma de cambiar algo sin que quede marcado. */
+  const editar = (fn: (r: RubricaParsed) => RubricaParsed) => {
+    setSucio(true)
+    setRubrica(fn)
+  }
+
+  const setTitulo = (titulo: string) => editar(r => ({ ...r, titulo }))
 
   const setIndicadorNombre = (idx: number, nombre: string) =>
-    setRubrica(r => {
+    editar(r => {
       const indicadores = [...r.indicadores]
       indicadores[idx] = { ...indicadores[idx], nombre }
       return { ...r, indicadores }
     })
 
   const setDescriptor = (indIdx: number, nivelNombre: string, texto: string) =>
-    setRubrica(r => {
+    editar(r => {
       const indicadores = [...r.indicadores]
       indicadores[indIdx] = {
         ...indicadores[indIdx],
@@ -76,8 +150,73 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       return { ...r, indicadores }
     })
 
+  const setIndicadorPeso = (idx: number, peso: number) =>
+    editar(r => {
+      const indicadores = [...r.indicadores]
+      indicadores[idx] = { ...indicadores[idx], peso }
+      return { ...r, indicadores }
+    })
+
+  /** Reparte 100 entre todos los indicadores, que es como nace una rúbrica. */
+  const repartirPesos = () =>
+    editar(r => {
+      const pesos = pesosAPartesIguales(r.indicadores.length)
+      return { ...r, indicadores: r.indicadores.map((ind, i) => ({ ...ind, peso: pesos[i] })) }
+    })
+
+  // ── Niveles ────────────────────────────────────────────────────────────
+  // Hasta ahora no se podían tocar: eran siempre los cuatro de
+  // NIVELES_DEFAULT. Eso dejaba fuera el nivel 0 («no ejecuta», «no
+  // interviene»), que es justo el que distingue no hacer la tarea de hacerla
+  // mal, y obligaba a falsear la escala para poder poner un cero.
+
+  /** Renombrar un nivel arrastra su descriptor en todos los indicadores. */
+  const setNivelNombre = (idx: number, nombre: string) =>
+    editar(r => {
+      const viejo = r.niveles[idx].nombre
+      if (nombre === viejo) return r
+      const niveles = r.niveles.map((n, i) => i === idx ? { ...n, nombre } : n)
+      const indicadores = r.indicadores.map(ind => {
+        const { [viejo]: texto, ...resto } = ind.descriptores
+        return { ...ind, descriptores: { ...resto, [nombre]: texto ?? '' } }
+      })
+      return { ...r, niveles, indicadores }
+    })
+
+  const setNivelValor = (idx: number, valor: number) =>
+    editar(r => ({ ...r, niveles: r.niveles.map((n, i) => i === idx ? { ...n, valor } : n) }))
+
+  const addNivel = () =>
+    editar(r => {
+      // El nuevo entra por abajo, que es donde hace falta: por arriba ya está
+      // el máximo y lo que se echa en falta es el escalón inferior.
+      const minimo = Math.min(...r.niveles.map(n => n.valor), 1)
+      const nombre = `Nivel ${minimo - 1 >= 0 ? minimo - 1 : r.niveles.length + 1}`
+      return {
+        ...r,
+        niveles: [...r.niveles, { nombre, valor: Math.max(0, minimo - 1) }],
+        indicadores: r.indicadores.map(ind => ({
+          ...ind, descriptores: { ...ind.descriptores, [nombre]: '' },
+        })),
+      }
+    })
+
+  const removeNivel = (idx: number) =>
+    editar(r => {
+      if (r.niveles.length <= 1) return r   // sin niveles no hay rúbrica
+      const fuera = r.niveles[idx].nombre
+      return {
+        ...r,
+        niveles: r.niveles.filter((_, i) => i !== idx),
+        indicadores: r.indicadores.map(ind => {
+          const { [fuera]: _quitado, ...resto } = ind.descriptores
+          return { ...ind, descriptores: resto }
+        }),
+      }
+    })
+
   const addIndicador = () =>
-    setRubrica(r => ({
+    editar(r => ({
       ...r,
       indicadores: [
         ...r.indicadores,
@@ -89,7 +228,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     }))
 
   const removeIndicador = (idx: number) =>
-    setRubrica(r => ({
+    editar(r => ({
       ...r,
       indicadores: r.indicadores.filter((_, i) => i !== idx),
     }))
@@ -110,6 +249,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       })
       setMsg({ tipo: 'ok', texto: 'Rúbrica guardada correctamente.' })
       setTieneDatos(true)
+      setSucio(false)
     } catch {
       setMsg({ tipo: 'error', texto: 'Error al guardar la rúbrica.' })
     } finally { setGuardando(false) }
@@ -120,6 +260,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     await eliminarRubrica(instrumentoId)
     setRubrica(rubricaVacia(instrumentoNombre))
     setTieneDatos(false)
+    setSucio(false)
     setMsg({ tipo: 'ok', texto: 'Rúbrica eliminada.' })
   }
 
@@ -180,6 +321,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         niveles: p.niveles,
         indicadores: p.indicadores,
       }))
+      setSucio(true)
       if (p.contexto) setIaContexto(p.contexto)
       const de = p.area && p.area !== asignaturaNombre ? ` (venía de ${p.area})` : ''
       setMsg({
@@ -198,13 +340,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     const parsed = parsearRespuestaIA(texto)
     if (!parsed) { setMsg({ tipo: 'error', texto: 'No se pudo leer la rúbrica del fichero. Verifica que tiene formato de tabla markdown.' }); return }
     setRubrica(parsed)
+    setSucio(true)
     setMsg({ tipo: 'ok', texto: `Rúbrica importada: "${parsed.titulo}" con ${parsed.indicadores.length} indicadores.` })
     e.target.value = ''
   }
 
   // ── Generación con IA ──────────────────────────────────────────────────
 
-  const prompt = generarPromptRubrica({ asignatura: asignaturaNombre, nivel, contexto: iaContexto, nIndicadores: iaNIndicadores })
+  const prompt = generarPromptRubrica({
+    asignatura: asignaturaNombre, nivel, objetivo: instrumentoNombre,
+    contexto: iaContexto, nIndicadores: iaNIndicadores,
+  })
 
   const copiarPrompt = async () => {
     await navigator.clipboard.writeText(prompt)
@@ -217,6 +363,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     const parsed = parsearRespuestaIA(iaRespuesta)
     if (!parsed) { setIaError('No se encontró una tabla markdown válida. Asegúrate de pegar la respuesta completa.'); return }
     setRubrica(parsed)
+    setSucio(true)
+    setVieneDeIA(true)
     setTab('diseniar')
     setMsg({ tipo: 'ok', texto: `Rúbrica cargada: "${parsed.titulo}". Revísala y guárdala.` })
   }
@@ -224,21 +372,37 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const generarConIA = async () => {
     if (!iaContexto.trim()) { setIaError('Describe la situación o criterio a evaluar.'); return }
     setIaError('')
+    setIaRespuesta('')
     try {
-      const respuesta = await ai.generate(prompt)
-      setIaRespuesta(respuesta)
+      // El texto se va viendo en el cuadro de respuesta según lo escribe el
+      // modelo: es la única prueba de que sigue trabajando.
+      const respuesta = await ai.generate(prompt, setIaRespuesta)
+      if (!respuesta.trim()) { setIaError('Generación detenida: no dio tiempo a escribir nada.'); return }
       const parsed = parsearRespuestaIA(respuesta)
       if (parsed) {
         setRubrica(parsed)
+        setSucio(true)
+        setVieneDeIA(true)
         setTab('diseniar')
-        setMsg({ tipo: 'ok', texto: `Rúbrica generada con IA: "${parsed.titulo}". Revisa y guarda.` })
+        setMsg({ tipo: 'ok', texto: `Rúbrica generada con IA: "${parsed.titulo}". Revísala y pulsa «Guardar rúbrica».` })
       } else {
-        setIaError('La IA generó texto pero no tiene formato de tabla. Revisa la respuesta y usa "Cargar respuesta".')
+        setIaError('El modelo escribió texto pero no una tabla completa. Revísalo abajo, corrígelo si hace falta y pulsa «Cargar en editor».')
       }
     } catch (e: any) {
       setIaError(e.message || 'Error generando con IA.')
     }
   }
+
+  // El nivel más alto es el que fija la escala: la nota de un nivel es su
+  // parte proporcional de ese máximo, no de la distancia al más bajo.
+  const maxNivel = rubrica.niveles.length ? Math.max(...rubrica.niveles.map(n => n.valor)) : 0
+  const pesoRepartido = rubrica.indicadores.length
+    ? Math.round((100 / rubrica.indicadores.length) * 10) / 10
+    : 0
+  // Solo se suman los pesos puestos a mano; los que están en blanco se reparten.
+  const pesoTotal = Math.round(
+    rubrica.indicadores.reduce((t, i) => t + (i.peso ?? pesoRepartido), 0) * 10) / 10
+  const pesosCuadran = Math.abs(pesoTotal - 100) < 0.5
 
   // ──────────────────────────────────────────────────────────────────────
   return (
@@ -246,27 +410,53 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       role="dialog"
       aria-modal="true"
       aria-label={`Rúbrica de ${instrumentoNombre}`}
-      onClick={e => { if (e.target === e.currentTarget) onCerrar() }}
+      onClick={e => { if (e.target === e.currentTarget) cerrar() }}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 1000,
+        // Anidado: se abre desde el gestor de instrumentos, que es otro modal
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: capa,
         display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
         padding: '20px 16px', overflowY: 'auto',
       }}>
+      {/* Columna: cabecera arriba, cuerpo que rueda en medio y pie siempre a la
+          vista. El botón de guardar vivía al final del cuerpo, detrás de la
+          tabla entera y de cuatro botones de importar/exportar: con cinco
+          indicadores había que bajar mucho para encontrarlo, y en la pestaña
+          de IA no existía. */}
       <div style={{
         background: 'white', borderRadius: 12, width: '100%', maxWidth: 900,
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)', overflow: 'hidden',
+        maxHeight: '92vh', display: 'flex', flexDirection: 'column',
       }}>
         {/* Cabecera */}
-        <div style={{ background: 'var(--azul-700)', color: 'white', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: 'var(--azul-700)', color: 'white', padding: '14px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <div>
             <div style={{ fontSize: 12, opacity: .8, marginBottom: 2 }}>Rúbrica de evaluación</div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>{instrumentoNombre}</div>
           </div>
-          <button onClick={onCerrar} style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
+          <button onClick={cerrar} aria-label="Cerrar" style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
         </div>
 
+        {modo === 'cargando' && (
+          <div style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>
+        )}
+
+        {modo === 'elegir' && (
+          <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
+          <PuntoDePartida
+            asignaturaNombre={asignaturaNombre}
+            nivel={nivel}
+            plantillasAbiertas={plantillasAbiertas}
+            onPlantillas={() => setPlantillasAbiertas(v => !v)}
+            onIA={empezarConIA}
+            onPlantilla={empezarDesdePlantilla}
+            onBlanco={empezarEnBlanco}
+          />
+          </div>
+        )}
+
+        {modo === 'editar' && (<>
         {/* Tabs */}
-        <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-200)', background: 'var(--gris-50)' }}>
+        <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-200)', background: 'var(--gris-50)', flexShrink: 0 }}>
           {(['diseniar', 'ia'] as Tab[]).map(t => (
             <button key={t} onClick={() => setTab(t)} style={{
               padding: '10px 20px', border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
@@ -279,7 +469,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           ))}
         </div>
 
-        <div style={{ padding: 20 }}>
+        <div style={{ padding: 20, overflowY: 'auto', flex: 1, minHeight: 0 }}>
           {msg && (
             <div style={{
               marginBottom: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13,
@@ -311,15 +501,40 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                     <tr>
                       <th style={{ background: 'var(--azul-700)', color: 'white', padding: '8px 10px', textAlign: 'left', minWidth: 160, borderRadius: '4px 0 0 0' }}>
                         Indicador
+                        <div style={{ fontSize: 10, fontWeight: 400, opacity: .8, marginTop: 2 }}>y cuánto pesa</div>
                       </th>
                       {rubrica.niveles.map((n, ni) => (
                         <th key={ni} style={{
-                          background: ni === 0 ? '#166534' : ni === 1 ? '#15803d' : ni === 2 ? '#16a34a' : '#dc2626',
-                          color: 'white', padding: '8px 10px', textAlign: 'center', minWidth: 140,
+                          background: colorNivel(n.valor, maxNivel), color: 'white',
+                          padding: '6px 8px', textAlign: 'center', minWidth: 150,
                           borderRadius: ni === rubrica.niveles.length - 1 ? '0 4px 0 0' : 0,
                         }}>
-                          <div style={{ fontWeight: 700 }}>{n.nombre}</div>
-                          <div style={{ fontSize: 10, opacity: .85 }}>({n.valor} pts)</div>
+                          <input
+                            value={n.nombre}
+                            onChange={e => setNivelNombre(ni, e.target.value)}
+                            aria-label={`Nombre del nivel ${ni + 1}`}
+                            style={{
+                              width: '100%', fontWeight: 700, fontSize: 12, textAlign: 'center',
+                              background: 'rgba(255,255,255,.15)', color: 'white',
+                              border: '1px solid rgba(255,255,255,.35)', borderRadius: 4, padding: '3px 4px',
+                            }} />
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 4 }}>
+                            <input
+                              type="number" min={0} max={100} step={1} value={n.valor}
+                              onChange={e => setNivelValor(ni, Number(e.target.value))}
+                              aria-label={`Puntos del nivel ${n.nombre}`}
+                              style={{
+                                width: 46, fontSize: 11, fontWeight: 700, textAlign: 'center',
+                                background: 'rgba(255,255,255,.15)', color: 'white',
+                                border: '1px solid rgba(255,255,255,.35)', borderRadius: 4, padding: '2px 3px',
+                              }} />
+                            <span style={{ fontSize: 10, opacity: .85 }}>pts → {nivelANota(n.valor, maxNivel)}</span>
+                            {rubrica.niveles.length > 1 && (
+                              <button onClick={() => removeNivel(ni)} title={`Quitar el nivel ${n.nombre}`}
+                                aria-label={`Quitar el nivel ${n.nombre}`}
+                                style={{ background: 'none', border: 'none', color: 'white', opacity: .8, cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: 0 }}>×</button>
+                            )}
+                          </div>
                         </th>
                       ))}
                       <th style={{ background: 'var(--gris-200)', width: 36 }} />
@@ -336,6 +551,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                             style={{ width: '100%', fontSize: 12, fontWeight: 600, resize: 'vertical', border: '1px solid var(--gris-300)', borderRadius: 4, padding: 4 }}
                             placeholder={`Indicador ${ii + 1}`}
                           />
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                            <input
+                              type="number" min={0} max={100} step={0.1}
+                              value={ind.peso ?? pesoRepartido}
+                              onChange={e => setIndicadorPeso(ii, Number(e.target.value))}
+                              aria-label={`Peso del indicador ${ii + 1}`}
+                              style={{ width: 58, fontSize: 11, fontWeight: 700, textAlign: 'center', border: '1px solid var(--gris-300)', borderRadius: 4, padding: '3px 2px' }} />
+                            <span style={{ fontSize: 10, color: 'var(--gris-600)' }}>
+                              %{ind.peso == null ? ' (repartido)' : ''}
+                            </span>
+                          </div>
                         </td>
                         {rubrica.niveles.map((n, ni) => (
                           <td key={ni} style={{ padding: 6, borderRight: '1px solid var(--gris-200)', verticalAlign: 'top' }}>
@@ -365,6 +591,18 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={addIndicador}>
                   + Añadir indicador
                 </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={addNivel}
+                  title="Añade un escalón por debajo. Es la forma de tener un nivel 0 para «no ejecuta» o «no interviene».">
+                  + Añadir nivel
+                </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={repartirPesos}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Pone el mismo peso a todos los indicadores">
+                  ⚖ Repartir pesos
+                </button>
+                <span style={{ fontSize: 11, fontWeight: 700, color: pesosCuadran ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
+                  {pesoTotal}%{pesosCuadran ? ' ✓' : pesoTotal > 100 ? ' (excede 100)' : ` (falta ${Math.round((100 - pesoTotal) * 10) / 10})`}
+                </span>
                 <div style={{ flex: 1 }} />
                 <button className="btn-secondary" style={{ fontSize: 12 }}
                   onClick={() => importRubricaRef.current?.click()}
@@ -384,15 +622,6 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 <input ref={importRef} type="file" accept=".md,.txt" style={{ display: 'none' }} onChange={importarMD} />
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarMD} disabled={rubrica.indicadores.length === 0}>
                   ⬇ Exportar .md
-                </button>
-                {tieneDatos && (
-                  <button onClick={borrar}
-                    style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
-                    Eliminar rúbrica
-                  </button>
-                )}
-                <button className="btn-primary" style={{ fontSize: 13, padding: '7px 18px' }} onClick={() => guardar(false)} disabled={guardando}>
-                  {guardando ? 'Guardando…' : '💾 Guardar rúbrica'}
                 </button>
               </div>
             </>
@@ -431,11 +660,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 {hasWebGPU() && (
                   <>
                     <div style={{ flex: 1 }} />
-                    {ai.isReady ? (
-                      <button className="btn-primary" style={{ fontSize: 13 }} onClick={generarConIA}
-                        disabled={!iaContexto.trim() || ai.status === 'generando'}>
-                        {ai.status === 'generando' ? '⚡ Generando…' : '⚡ Generar con IA local'}
-                      </button>
+                    {ai.isReady || ai.status === 'generando' ? (
+                      ai.status === 'generando' ? (
+                        <button className="btn-secondary" style={{ fontSize: 13 }} onClick={ai.cancelar}>
+                          ✋ Detener generación
+                        </button>
+                      ) : (
+                        <button className="btn-primary" style={{ fontSize: 13 }} onClick={generarConIA}
+                          disabled={!iaContexto.trim()}>
+                          ⚡ Generar con IA local
+                        </button>
+                      )
                     ) : (
                       <button className="btn-primary" style={{ fontSize: 13, background: '#166534' }}
                         onClick={ai.cargarModelo}
@@ -449,6 +684,21 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                   </>
                 )}
               </div>
+
+              {/* Que el modelo tarde minutos no es un fallo; que la pantalla no lo
+                  diga, sí. Segundero, caracteres recibidos y el aviso de que el
+                  equipo va a ir lento mientras tanto. */}
+              {ai.status === 'generando' && (
+                <div style={{ padding: '10px 14px', background: 'var(--azul-100)', borderRadius: 8, fontSize: 12, color: 'var(--azul-900)', border: '1px solid var(--azul-300)' }}>
+                  <strong>⚡ Escribiendo la rúbrica… {iaSegundos}s</strong>
+                  {iaRespuesta.length > 0 && ` · ${iaRespuesta.length} caracteres`}
+                  <div style={{ marginTop: 4, color: 'var(--gris-600)' }}>
+                    Suele tardar entre uno y tres minutos y el equipo irá más lento
+                    mientras tanto: la app no está parada. Verás el texto aparecer
+                    abajo según lo escribe el modelo.
+                  </div>
+                </div>
+              )}
 
               {/* El motivo real del fallo. `useLocalAI` lo exponía en `error`
                   y nadie lo leía: el botón se limitaba a poner «Error —
@@ -511,7 +761,129 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
             </div>
           )}
         </div>
+
+        {/* Pie: guardar está aquí, fuera del cuerpo que rueda, y vale para las
+            dos pestañas. Una rúbrica generada con IA se guarda sin buscar nada. */}
+        <div style={{
+          flexShrink: 0, borderTop: '1px solid var(--gris-200)', background: 'var(--gris-50)',
+          padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
+        }}>
+          <div style={{
+            flex: 1, minWidth: 140, fontSize: 12,
+            color: msg?.tipo === 'error' ? '#991b1b' : sucio ? '#92400e' : 'var(--gris-500)',
+            fontWeight: msg?.tipo === 'error' || sucio ? 700 : 400,
+          }}>
+            {msg?.tipo === 'error'
+              ? `❌ ${msg.texto}`
+              : sucio
+                ? '● Cambios sin guardar'
+                : tieneDatos ? '✅ Guardada en este dispositivo' : 'Todavía sin guardar'}
+          </div>
+          {tieneDatos && (
+            <button onClick={borrar}
+              style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
+              Eliminar rúbrica
+            </button>
+          )}
+          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={cerrar}>Cerrar</button>
+          <button className="btn-primary" style={{ fontSize: 13, padding: '8px 20px' }}
+            onClick={() => guardar(vieneDeIA)} disabled={guardando || rubrica.indicadores.length === 0}>
+            {guardando ? 'Guardando…' : '💾 Guardar rúbrica'}
+          </button>
+        </div>
+        </>)}
       </div>
     </div>
+  )
+}
+
+/**
+ * Punto de partida de una rúbrica nueva.
+ *
+ * El docente elige de dónde arranca en vez de encontrarse una tabla vacía.
+ * El contexto (área y nivel) se enseña aquí porque es lo que la app va a
+ * meter sola en el prompt: así se ve antes de generar nada.
+ */
+function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco }: {
+  asignaturaNombre: string
+  nivel: string
+  plantillasAbiertas: boolean
+  onPlantillas: () => void
+  onIA: () => void
+  onPlantilla: (id: string) => void
+  onBlanco: () => void
+}) {
+  return (
+    <div style={{ padding: 24 }}>
+      <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 4 }}>
+        Esta rúbrica todavía está vacía. Elige por dónde empezar:
+      </p>
+      <div style={{ fontSize: 12, color: 'var(--gris-500)', marginBottom: 18 }}>
+        Contexto que se usará: <strong>{asignaturaNombre}</strong> · <strong>{nivel}</strong>
+      </div>
+
+      <div style={{ display: 'grid', gap: 10, marginBottom: plantillasAbiertas ? 14 : 0 }}>
+        <BotonPartida
+          icono="🤖" titulo="Generar con IA" recomendado
+          texto="Describes qué quieres evaluar y la IA propone los indicadores y sus cuatro niveles. El área y el curso van solos en la petición."
+          onClick={onIA}
+        />
+        <BotonPartida
+          icono="📋" titulo="Partir de una plantilla"
+          texto="Cuaderno, exposición oral, trabajo en equipo o producción práctica. Vienen rellenas y se ajustan."
+          onClick={onPlantillas}
+        />
+        <BotonPartida
+          icono="✏️" titulo="Empezar en blanco"
+          texto="Escribes tú los indicadores y los descriptores, uno a uno."
+          onClick={onBlanco}
+        />
+      </div>
+
+      {plantillasAbiertas && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 10 }}>
+          {PLANTILLAS_RUBRICA.map(pl => (
+            <button key={pl.id} onClick={() => onPlantilla(pl.id)}
+              style={{
+                textAlign: 'left', background: 'white', border: '1px solid var(--gris-300)',
+                borderRadius: 10, padding: '12px 14px', cursor: 'pointer',
+              }}>
+              <div style={{ fontSize: 20, marginBottom: 4 }} aria-hidden="true">{pl.icono}</div>
+              <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--azul-900)' }}>{pl.nombre}</div>
+              <div style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 3, lineHeight: 1.5 }}>{pl.descripcion}</div>
+              <div style={{ fontSize: 11, color: 'var(--gris-500)', marginTop: 6 }}>
+                {pl.filas.length} indicadores · 4 niveles
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function BotonPartida({ icono, titulo, texto, recomendado, onClick }: {
+  icono: string; titulo: string; texto: string; recomendado?: boolean; onClick: () => void
+}) {
+  return (
+    <button onClick={onClick}
+      style={{
+        display: 'flex', alignItems: 'flex-start', gap: 14, textAlign: 'left',
+        background: 'white', border: `1px solid ${recomendado ? 'var(--azul-300)' : 'var(--gris-300)'}`,
+        borderRadius: 10, padding: '14px 16px', cursor: 'pointer', width: '100%',
+      }}>
+      <span style={{ fontSize: 22, lineHeight: 1.1 }} aria-hidden="true">{icono}</span>
+      <span>
+        <span style={{ display: 'block', fontWeight: 700, fontSize: 14.5, color: 'var(--azul-900)' }}>
+          {titulo}
+          {recomendado && (
+            <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: 'var(--azul-500)' }}>recomendado</span>
+          )}
+        </span>
+        <span style={{ display: 'block', fontSize: 12.5, color: 'var(--gris-600)', marginTop: 3, lineHeight: 1.55 }}>
+          {texto}
+        </span>
+      </span>
+    </button>
   )
 }

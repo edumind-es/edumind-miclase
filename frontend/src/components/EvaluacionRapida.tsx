@@ -16,7 +16,7 @@ import {
   getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura,
   type UnidadConCriterios,
 } from '@/db/queries'
-import { nivelANota, calificativo } from '@/db/calculo'
+import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
@@ -26,6 +26,7 @@ import { trimestreActual, aplicaEnTrimestre } from '@/db/calculo'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
+type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
 
 const CFG_KEY = 'miclase_evalrapida_cfg'
 
@@ -53,6 +54,9 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const [mapaInstr, setMapaInstr] = useState<Map<string, { instrumento_id: number; peso: number }[]>>(new Map())
   const [instrumentoId, setInstrumentoId] = useState<number | null>(null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
+  const [indicadores, setIndicadores] = useState<IndicadorRubrica[]>([])
+  /** nombre del indicador → valor del nivel marcado. */
+  const [marcado, setMarcado] = useState<Record<string, number>>({})
   const [valorActual, setValorActual] = useState<number | null>(null)
   const [observacion, setObservacion] = useState('')
   const [nEvidencias, setNEvidencias] = useState(0)
@@ -152,15 +156,19 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     setInstrumentoId(prev => (prev && lista.some(i => i.id === prev)) ? prev : (lista[0]?.id ?? null))
   }, [criterioId, instrumentosDelCriterio.lista])
 
-  // Rúbrica del instrumento elegido
+  // Rúbrica del instrumento elegido: niveles E indicadores. Aquí pasaba lo
+  // mismo que en el calificador — solo se leían los niveles, así que la
+  // rúbrica se despachaba con un clic y sus indicadores no salían nunca.
   useEffect(() => {
-    if (!instrumentoId) { setNiveles([]); return }
+    if (!instrumentoId) { setNiveles([]); setIndicadores([]); return }
     getRubrica(instrumentoId).then(r => {
-      if (!r) { setNiveles([]); return }
+      if (!r) { setNiveles([]); setIndicadores([]); return }
       try {
         const nvs = JSON.parse(r.niveles_json) as NivelRubrica[]
         setNiveles(nvs.filter(n => typeof n.valor === 'number'))
-      } catch { setNiveles([]) }
+        const inds = JSON.parse(r.indicadores_json) as IndicadorRubrica[]
+        setIndicadores(Array.isArray(inds) ? inds.filter(i => i?.nombre) : [])
+      } catch { setNiveles([]); setIndicadores([]) }
     })
   }, [instrumentoId])
 
@@ -168,7 +176,11 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   useEffect(() => {
     if (!instrumentoId || !criterioId) { setValorActual(null); return }
     getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre)
-      .then(c => { setValorActual(c?.valor ?? null); setObservacion(c?.observacion ?? '') })
+      .then(c => {
+        setValorActual(c?.valor ?? null)
+        setObservacion(c?.observacion ?? '')
+        setMarcado(c?.niveles_rubrica ?? {})
+      })
   }, [alumno.id, instrumentoId, criterioId, trimestre])
 
   // Recordar la configuración para el siguiente escaneo
@@ -179,7 +191,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     }))
   }, [grupo?.id, asignaturaId, unidadId, trimestre])
 
-  const guardarNota = async (valor: number) => {
+  const guardarNota = async (valor: number | null, niveles_rubrica?: Record<string, number> | null) => {
     if (!asig || !grupo || !instrumentoId || !criterioId) return
     setGuardando(true)
     try {
@@ -188,14 +200,30 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
         valor, observacion: observacion.trim() || null, unidad_id: unidadId,
+        ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
-      setMsg({ tipo: 'ok', texto: `${valor} guardado en ${criterioId}` })
+      setMsg({ tipo: 'ok', texto: valor == null ? 'Nota borrada' : `${valor} guardado en ${criterioId}` })
       setTimeout(() => setMsg(null), 2200)
     } catch {
       setMsg({ tipo: 'error', texto: 'No se pudo guardar la nota' })
     } finally { setGuardando(false) }
   }
+
+  /** Igual que en el calificador: la nota la calcula la rúbrica, no se teclea. */
+  const marcarIndicador = async (nombre: string, valor: number) => {
+    const siguiente = { ...marcado }
+    if (siguiente[nombre] === valor) delete siguiente[nombre]
+    else siguiente[nombre] = valor
+    setMarcado(siguiente)
+    const { nota } = notaDeRubrica(indicadores, niveles, siguiente)
+    await guardarNota(nota, siguiente)
+  }
+
+  const resumen = notaDeRubrica(indicadores, niveles, marcado)
+  const maxNivel = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
+  /** Con niveles e indicadores, la rúbrica pone la nota; si no, se teclea. */
+  const calificaPorRubrica = niveles.length > 0 && indicadores.length > 0
 
   const guardarEvidencia = async (ev: EvidenciaCapturada) => {
     setGuardando(true)
@@ -361,36 +389,84 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
             </div>
           )}
 
-          {/* Niveles de rúbrica repartidos de 0 a 10 de extremo a extremo */}
-          {niveles.length > 0 && criterioId && (() => {
-            const valores = niveles.map(n => n.valor)
-            const maxNivel = Math.max(...valores)
-            const minNivel = Math.min(...valores)
-            return (
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
-                {niveles.map(n => {
-                  const nota = nivelANota(n.valor, maxNivel, minNivel)
-                  const activo = valorActual === nota
-                  return (
-                    <button key={n.nombre} onClick={() => guardarNota(nota)} disabled={guardando}
-                      title={n.descripcion}
-                      style={{
-                        flex: '1 1 120px', minHeight: 54, borderRadius: 10, fontSize: 14, fontWeight: 700,
-                        cursor: 'pointer',
-                        border: `2px solid ${activo ? 'var(--azul-900)' : 'var(--azul-300)'}`,
-                        background: activo ? 'var(--azul-700)' : 'var(--azul-100)',
-                        color: activo ? 'white' : 'var(--azul-900)',
-                      }}>
-                      {n.nombre}<br /><span style={{ fontSize: 12, fontWeight: 500 }}>→ {nota}</span>
-                    </button>
-                  )
-                })}
+          {/* La rúbrica se califica indicador a indicador, igual que en el
+              calificador. La nota sale de lo marcado y sus pesos. */}
+          {calificaPorRubrica && criterioId && (
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+                  Rúbrica — marca cada indicador
+                </div>
+                <div style={{ flex: 1 }} />
+                <span style={{ fontSize: 11.5, fontWeight: 600, color: resumen.evaluados === resumen.total ? 'var(--verde-500)' : 'var(--gris-500)' }}>
+                  {resumen.evaluados} de {resumen.total}
+                </span>
+                {resumen.evaluados > 0 && (
+                  <button onClick={() => { setMarcado({}); guardarNota(null, {}) }} disabled={guardando}
+                    style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                    limpiar
+                  </button>
+                )}
               </div>
-            )
-          })()}
 
-          {/* Teclado de notas 0-10 */}
-          {criterioId && instrumentoId && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {indicadores.map((ind, ii) => (
+                  <div key={ind.nombre + ii} style={{
+                    border: '1px solid var(--gris-300)', borderRadius: 10, padding: '9px 11px',
+                    background: marcado[ind.nombre] != null ? 'var(--azul-100)' : 'white',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7 }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--azul-900)', flex: 1, lineHeight: 1.35 }}>
+                        {ind.nombre}
+                      </div>
+                      <span style={{ fontSize: 10.5, color: 'var(--gris-500)', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                        {ind.peso ?? Math.round((100 / indicadores.length) * 10) / 10}%
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                      {niveles.map(n => {
+                        const activo = marcado[ind.nombre] === n.valor
+                        const descriptor = ind.descriptores?.[n.nombre] || n.descripcion
+                        return (
+                          <button key={n.nombre}
+                            onClick={() => marcarIndicador(ind.nombre, n.valor)}
+                            disabled={guardando}
+                            title={descriptor ? `${n.nombre} (${n.valor} pts): ${descriptor}` : `${n.nombre} — ${n.valor} pts`}
+                            aria-pressed={activo}
+                            style={{
+                              // Más alto que en el calificador: aquí se pulsa de
+                              // pie, con la tablet en una mano y el patio detrás.
+                              flex: '1 1 120px', minHeight: 56, borderRadius: 10, padding: '7px 9px',
+                              fontSize: 13, fontWeight: 700, cursor: 'pointer', textAlign: 'left',
+                              border: `2px solid ${activo ? 'var(--azul-900)' : 'var(--gris-300)'}`,
+                              background: activo ? 'var(--azul-700)' : 'white',
+                              color: activo ? 'white' : 'var(--gris-900)',
+                            }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 6 }}>
+                              <span>{n.nombre}</span>
+                              <span style={{ fontWeight: 500, opacity: .75 }}>{nivelANota(n.valor, maxNivel)}</span>
+                            </div>
+                            {descriptor && (
+                              <div style={{
+                                fontSize: 10.5, fontWeight: 400, marginTop: 2, lineHeight: 1.3,
+                                opacity: activo ? .9 : .65,
+                                display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                              }}>
+                                {descriptor}
+                              </div>
+                            )}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Teclado de notas 0-10 — solo cuando no hay rúbrica que aplicar */}
+          {!calificaPorRubrica && criterioId && instrumentoId && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(11, 1fr)', gap: 6, marginBottom: 12 }}>
               {Array.from({ length: 11 }, (_, v) => (
                 <button key={v} onClick={() => guardarNota(v)} disabled={guardando}
@@ -426,7 +502,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           {asignaturas.length === 0 && (
             <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 12 }}>
               Esta clase no tiene áreas configuradas.{' '}
-              <Link to={`/grupos/${grupo.id}`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Configurarla →</Link>
+              <Link to={`/grupos/${grupo.id}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Configurarla →</Link>
             </div>
           )}
         </>

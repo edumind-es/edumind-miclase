@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Routes, Route, NavLink } from 'react-router-dom'
+import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
+import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
 import Dashboard from '@/pages/Dashboard/Dashboard'
 import GruposPage from '@/pages/Grupos/GruposPage'
 import AlumnosPage from '@/pages/Alumnos/AlumnosPage'
@@ -11,27 +12,63 @@ import SesionesPage from '@/pages/Sesiones/SesionesPage'
 import EscanearPage from '@/pages/Escanear/EscanearPage'
 import SincronizarPage from '@/pages/Sincronizar/SincronizarPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
+import BarraClase from '@/components/BarraClase'
 import ExportImport from '@/components/ExportImport'
 import EstadoConexion from '@/components/EstadoConexion'
 import SyncAutomatica from '@/components/SyncAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
 
+// El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
+// cada día con lo que se toca una vez por trimestre. Separarlo en dos bloques
+// dice de un vistazo dónde se trabaja y dónde se configura.
 const NAV = [
-  { to: '/',            label: 'Inicio',      icon: '⊞' },
-  { to: '/grupos',      label: 'Mis clases',  icon: '👥' },
-  { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
-  { to: '/evaluacion',  label: 'Evaluación',  icon: '📋' },
-  { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
-  { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
-  { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
-  { to: '/informes',    label: 'Informes',    icon: '📄' },
-  { to: '/sincronizar', label: 'Sincronizar', icon: '🔄' },
+  {
+    bloque: 'Aula',
+    entradas: [
+      { to: '/',            label: 'Inicio',      icon: '⊞' },
+      { to: '/evaluacion',  label: 'Calificador', icon: '📋' },
+      { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
+      { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
+      { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
+      { to: '/informes',    label: 'Informes',    icon: '📄' },
+    ],
+  },
+  {
+    bloque: 'Configuración',
+    entradas: [
+      { to: '/grupos',      label: 'Mis clases',  icon: '👥' },
+      { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
+      { to: '/sincronizar', label: 'Sincronizar', icon: '🔄' },
+    ],
+  },
 ]
 
 const K_PLEGADO = 'miclase_sidebar_plegado'
 
+// Pantallas que trabajan sobre una clase concreta y por tanto llevan la barra
+// de contexto. El escáner y la sincronización no: el escáner deduce el alumno
+// del propio código y la sincronización es de todo el dispositivo. La
+// configuración de la clase tampoco, porque ya lleva su propia cabecera.
+const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/informes']
+
+// El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
+// Informes lleva su propio «Periodo», que además ofrece el curso completo.
+const SIN_TRIMESTRE = ['/alumnos', '/informes']
+// El área no pinta nada donde se trabaja con la clase entera. En el
+// calificador tampoco: allí manda su fila de pestañas de área, que es más
+// visible y no cabe duplicarla en un desplegable.
+const SIN_AREA = ['/alumnos', '/sesiones', '/evaluacion', '/informes']
+
+function usarBarra(pathname: string) {
+  const raiz = '/' + (pathname.split('/')[1] ?? '')
+  if (!CON_BARRA.includes(raiz)) return null
+  return { conArea: !SIN_AREA.includes(raiz), conTrimestre: !SIN_TRIMESTRE.includes(raiz) }
+}
+
 function Layout() {
   const { modo, nombre, iniciarLogin, cerrarSesion, authConfig } = useAuth()
+  const { pathname } = useLocation()
+  const barra = usarBarra(pathname)
   const [exportOpen, setExportOpen] = useState(false)
   const [plegado, setPlegado] = useState(() => localStorage.getItem(K_PLEGADO) === '1')
 
@@ -73,12 +110,17 @@ function Layout() {
         </div>
 
         <nav>
-          {NAV.map(({ to, label, icon }) => (
-            <NavLink key={to} to={to} end={to === '/'} title={label}
-              className={({ isActive }) => isActive ? 'active' : ''}>
-              <span className="nav-icono" aria-hidden="true">{icon}</span>
-              <span className="nav-texto">{label}</span>
-            </NavLink>
+          {NAV.map(({ bloque, entradas }) => (
+            <div key={bloque} className="nav-bloque">
+              <div className="nav-bloque-titulo">{bloque}</div>
+              {entradas.map(({ to, label, icon }) => (
+                <NavLink key={to} to={to} end={to === '/'} title={label}
+                  className={({ isActive }) => isActive ? 'active' : ''}>
+                  <span className="nav-icono" aria-hidden="true">{icon}</span>
+                  <span className="nav-texto">{label}</span>
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 
@@ -146,6 +188,7 @@ function Layout() {
       </aside>
 
       <main className="main-content">
+        {barra && <BarraClase conArea={barra.conArea} conTrimestre={barra.conTrimestre} />}
         <Routes>
           <Route path="/"              element={<Dashboard />} />
           <Route path="/grupos/*"      element={<GruposPage />} />
@@ -172,7 +215,9 @@ function Layout() {
 export default function App() {
   return (
     <AuthProvider>
-      <Layout />
+      <ClaseActivaProvider>
+        <Layout />
+      </ClaseActivaProvider>
     </AuthProvider>
   )
 }

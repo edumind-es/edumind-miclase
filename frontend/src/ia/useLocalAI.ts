@@ -7,6 +7,9 @@ const MODEL_ID = 'Phi-3.5-mini-instruct-q4f16_1-MLC'
 // Estado del motor a nivel de módulo (persiste entre renders y re-montajes)
 let _engine: any = null
 let _moduloStatus: AIStatus = 'idle'
+// Petición de corte de la generación en curso. A nivel de módulo como el
+// motor: el bucle de streaming lo consulta en cada trozo.
+let _cancelado = false
 
 export function hasWebGPU(): boolean {
   return typeof navigator !== 'undefined' && 'gpu' in navigator
@@ -54,11 +57,23 @@ export function useLocalAI() {
     }
   }, [])
 
-  const generate = useCallback(async (prompt: string): Promise<string> => {
+  /**
+   * Genera en streaming.
+   *
+   * Antes esperaba a la respuesta entera: entre uno y tres minutos con la
+   * pantalla inmóvil, sin más señal que un botón que ponía «Generando…».
+   * Parecía que la app se había colgado y el docente la cerraba a medias.
+   * Ahora cada trozo se entrega según llega (`onTrozo`) y se puede cancelar.
+   */
+  const generate = useCallback(async (
+    prompt: string,
+    onTrozo?: (textoAcumulado: string) => void,
+  ): Promise<string> => {
     if (!_engine) throw new Error('Modelo no cargado')
     setStatus('generando')
+    _cancelado = false
     try {
-      const resp = await _engine.chat.completions.create({
+      const flujo = await _engine.chat.completions.create({
         messages: [
           {
             role: 'system',
@@ -68,14 +83,36 @@ export function useLocalAI() {
         ],
         temperature: 0.7,
         max_tokens: 1200,
+        stream: true,
       })
+
+      let acumulado = ''
+      for await (const trozo of flujo) {
+        // Parar de verdad: sin esto el modelo sigue ocupando la GPU hasta
+        // agotar los 1200 tokens aunque el docente ya haya cancelado.
+        if (_cancelado) {
+          try { await _engine.interruptGenerate?.() } catch { /* motor ya parado */ }
+          break
+        }
+        const delta = trozo?.choices?.[0]?.delta?.content
+        if (delta) {
+          acumulado += delta
+          onTrozo?.(acumulado)
+        }
+      }
+
       setStatus('listo')
-      return resp.choices[0].message.content || ''
+      return acumulado
     } catch (e: any) {
       setStatus('listo')
       throw e
+    } finally {
+      _cancelado = false
     }
   }, [])
+
+  /** Corta la generación en curso; el texto ya recibido se conserva. */
+  const cancelar = useCallback(() => { _cancelado = true }, [])
 
   return {
     status,
@@ -85,5 +122,6 @@ export function useLocalAI() {
     isReady: _engine !== null && status === 'listo',
     cargarModelo,
     generate,
+    cancelar,
   }
 }

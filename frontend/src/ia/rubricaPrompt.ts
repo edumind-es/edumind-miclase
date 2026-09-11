@@ -6,6 +6,14 @@ export interface RubricaNivel {
 export interface RubricaIndicador {
   nombre: string
   descriptores: Record<string, string>  // nivel.nombre → texto descriptor
+  /**
+   * Cuánto pesa este indicador dentro de la rúbrica, en %.
+   *
+   * Opcional a propósito: las rúbricas diseñadas antes de que existieran los
+   * pesos no lo traen, y esas reparten a partes iguales. Añadir el campo como
+   * obligatorio las habría dejado todas sin nota.
+   */
+  peso?: number
 }
 
 export interface RubricaParsed {
@@ -21,10 +29,16 @@ export const NIVELES_DEFAULT: RubricaNivel[] = [
   { nombre: 'Insuficiente', valor: 1 },
 ]
 
-// Genera el prompt estructurado para pegar en cualquier IA
+// Genera el prompt estructurado para pegar en cualquier IA.
+//
+// El área, la etapa y el curso los sabe ya la app: se meten aquí solos. Antes
+// el docente tenía que escribirlos otra vez dentro del texto libre, y si se le
+// olvidaba, la IA devolvía una rúbrica genérica sin nivel educativo.
 export function generarPromptRubrica(params: {
   asignatura: string
   nivel: string
+  /** Para qué es la rúbrica: el nombre del instrumento («Rúbrica de cuaderno»). */
+  objetivo?: string
   contexto: string
   nIndicadores?: number
 }): string {
@@ -32,16 +46,34 @@ export function generarPromptRubrica(params: {
   return `Eres experto en evaluación educativa en España (LOMLOE). Crea una rúbrica holística para evaluar la siguiente situación:
 
 **Área/Asignatura**: ${params.asignatura}
-**Nivel educativo**: ${params.nivel}
+**Nivel educativo**: ${params.nivel}${params.objetivo ? `
+**Objetivo de la rúbrica**: ${params.objetivo}` : ''}
 **Situación o criterio a evaluar**: ${params.contexto}
 
 Genera una rúbrica con exactamente ${n} indicadores observables y concretos, adaptados al nivel y área indicados.
+Redacta los descriptores en términos de lo que el alumnado HACE, no de lo que le falta.
 Responde ÚNICAMENTE con la tabla markdown, sin texto adicional antes ni después:
 
 | Indicador | Excelente (4) | Notable (3) | Bien (2) | Insuficiente (1) |
 |---|---|---|---|---|
 | [indicador 1] | [descriptor concreto] | [descriptor concreto] | [descriptor concreto] | [descriptor concreto] |
 | [indicador 2] | [descriptor concreto] | [descriptor concreto] | [descriptor concreto] | [descriptor concreto] |`
+}
+
+/**
+ * Parte una fila de tabla markdown en sus celdas, **por posición**.
+ *
+ * Descartar las celdas vacías (que es lo que hacía antes un `filter(Boolean)`)
+ * parece inofensivo hasta que la IA deja un descriptor en blanco: a partir de
+ * ahí todas las columnas de esa fila se corren una a la izquierda y los
+ * descriptores acaban en el nivel equivocado. Una celda vacía es un dato.
+ */
+function celdasDeFila(linea: string): string[] {
+  const partes = linea.split('|').map(c => c.trim())
+  // El `|` inicial y el final producen dos extremos vacíos que no son celdas.
+  if (partes.length && partes[0] === '') partes.shift()
+  if (partes.length && partes[partes.length - 1] === '') partes.pop()
+  return partes
 }
 
 // Parsea una respuesta markdown (de cualquier IA) → estructura de rúbrica editable
@@ -53,12 +85,14 @@ export function parsearRespuestaIA(texto: string): RubricaParsed | null {
   if (idxCab === -1) return null
 
   // Parsear niveles desde la cabecera
-  const celdas = lineas[idxCab].split('|').map(c => c.trim()).filter(Boolean)
+  const celdas = celdasDeFila(lineas[idxCab])
   const nivelRx = /^(.+?)\s*\((\d+(?:\.\d+)?)\)$/
-  const niveles: RubricaNivel[] = celdas.slice(1).map(c => {
-    const m = c.match(nivelRx)
-    return m ? { nombre: m[1].trim(), valor: Number(m[2]) } : { nombre: c, valor: 1 }
-  })
+  const niveles: RubricaNivel[] = celdas.slice(1)
+    .filter(c => c.length > 0)   // aquí sí: una columna sin nombre no es un nivel
+    .map(c => {
+      const m = c.match(nivelRx)
+      return m ? { nombre: m[1].trim(), valor: Number(m[2]) } : { nombre: c, valor: 1 }
+    })
   if (niveles.length === 0) return null
 
   // Saltar separador (---|---|...)
@@ -68,8 +102,9 @@ export function parsearRespuestaIA(texto: string): RubricaParsed | null {
   // Parsear filas de indicadores
   const indicadores: RubricaIndicador[] = []
   while (idx < lineas.length && lineas[idx].startsWith('|')) {
-    const cols = lineas[idx].split('|').map(c => c.trim()).filter(Boolean)
-    if (cols.length >= 2 && !cols[0].includes('---')) {
+    const cols = celdasDeFila(lineas[idx])
+    // Una fila sin nombre de indicador no se puede editar después: se ignora.
+    if (cols.length >= 2 && cols[0].length > 0 && !cols[0].includes('---')) {
       const descriptores: Record<string, string> = {}
       niveles.forEach((n, i) => { descriptores[n.nombre] = cols[i + 1] || '' })
       indicadores.push({ nombre: cols[0], descriptores })

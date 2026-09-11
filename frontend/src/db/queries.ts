@@ -38,6 +38,12 @@ export type CalItem = {
   valor: number | null
   observacion?: string | null
   unidad_id?: number | null
+  /**
+   * Nivel marcado en cada indicador de la rúbrica. `undefined` significa «no
+   * lo toques»: guardar una observación o borrar la nota no debe llevarse por
+   * delante la justificación. Para vaciarla se manda `{}` o `null`.
+   */
+  niveles_rubrica?: Record<string, number> | null
 }
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
@@ -483,10 +489,16 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
         .equals([item.alumno_id, item.instrumento_id, item.criterio_id, item.trimestre])
         .first()
       if (existing?.id != null) {
+        // Ojo: esta lista enumera los campos que se actualizan. Un campo
+        // nuevo que no se añada aquí se guarda al crear y se pierde en cada
+        // recalificación, en silencio.
         await db.calificaciones.update(existing.id, tocado({
           valor: item.valor,
           observacion: item.observacion ?? existing.observacion ?? null,
           unidad_id: item.unidad_id ?? existing.unidad_id ?? null,
+          niveles_rubrica: item.niveles_rubrica !== undefined
+            ? item.niveles_rubrica
+            : existing.niveles_rubrica ?? null,
           fecha: now(),
           deleted_at: null,
         }))
@@ -1109,28 +1121,50 @@ export type PasoEstado = {
   unidades: number
   criteriosVinculados: number
   criteriosConInstrumento: number
+  /** Criterios repartidos en la programación a los que aún no se les dijo con
+   *  qué se evalúan: son los que saldrían rayados en el calificador. */
+  criteriosSinInstrumento: number
   instrumentos: number
   calificaciones: number
-  /** Primer grupo, para enlazar los botones del asistente */
+  /** Clase a la que se refiere todo lo anterior */
   grupoPrincipalId: number | null
   asignaturaPrincipalId: number | null
 }
 
-export async function getEstadoConfiguracion(): Promise<PasoEstado> {
+/**
+ * Cómo de configurada está una clase. Sin argumento mira la primera; con él,
+ * la que se le pida — el Inicio pregunta siempre por la clase activa, que no
+ * tiene por qué ser la primera de la lista.
+ *
+ * Todos los recuentos van acotados a esa clase. Antes las unidades, los
+ * criterios y las calificaciones se contaban de todas a la vez, así que una
+ * clase recién creada aparecía como ya configurada si otra lo estaba.
+ */
+export async function getEstadoConfiguracion(grupoPedido?: number | null): Promise<PasoEstado> {
   const grupos = vivos(await db.grupos.toArray())
-  const grupoPrincipalId = grupos[0]?.id ?? null
+  const grupoPrincipalId = (grupoPedido != null && grupos.some(g => g.id === grupoPedido))
+    ? grupoPedido
+    : grupos[0]?.id ?? null
 
-  const asignaturas = vivos(await db.asignaturas.toArray())
   const asigDeGrupo = grupoPrincipalId
-    ? asignaturas.filter(a => a.grupo_id === grupoPrincipalId)
-    : asignaturas
+    ? vivos(await db.asignaturas.toArray()).filter(a => a.grupo_id === grupoPrincipalId)
+    : []
+  const idsAsig = new Set(asigDeGrupo.map(a => a.id!))
 
   const alumnos = grupoPrincipalId ? (await getAlumnosByGrupo(grupoPrincipalId)).length : 0
-  const unidades = vivos(await db.unidades.toArray())
-  const ucs = vivos(await db.unidad_criterios.toArray())
-  const cis = vivos(await db.criterio_instrumentos.toArray())
-  const instrumentos = vivos(await db.instrumentos.toArray())
-  const calificaciones = vivos(await db.calificaciones.toArray()).filter(c => c.valor != null)
+
+  const unidades = vivos(await db.unidades.toArray()).filter(u => idsAsig.has(u.asignatura_id))
+  const idsUnidad = new Set(unidades.map(u => u.id!))
+
+  const ucs = vivos(await db.unidad_criterios.toArray()).filter(uc => idsUnidad.has(uc.unidad_id))
+  const cis = vivos(await db.criterio_instrumentos.toArray()).filter(ci => idsUnidad.has(ci.unidad_id))
+  const instrumentos = vivos(await db.instrumentos.toArray()).filter(i => idsAsig.has(i.asignatura_id))
+  const idsInstr = new Set(instrumentos.map(i => i.id!))
+  const calificaciones = vivos(await db.calificaciones.toArray())
+    .filter(c => c.valor != null && idsInstr.has(c.instrumento_id))
+
+  const conInstrumento = new Set(cis.map(c => `${c.unidad_id}:${c.criterio_id}`))
+  const repartidos = new Set(ucs.map(uc => `${uc.unidad_id}:${uc.criterio_id}`))
 
   return {
     grupos: grupos.length,
@@ -1138,7 +1172,8 @@ export async function getEstadoConfiguracion(): Promise<PasoEstado> {
     asignaturas: asigDeGrupo.length,
     unidades: unidades.length,
     criteriosVinculados: ucs.length,
-    criteriosConInstrumento: new Set(cis.map(c => `${c.unidad_id}:${c.criterio_id}`)).size,
+    criteriosConInstrumento: conInstrumento.size,
+    criteriosSinInstrumento: [...repartidos].filter(k => !conInstrumento.has(k)).length,
     instrumentos: instrumentos.length,
     calificaciones: calificaciones.length,
     grupoPrincipalId,

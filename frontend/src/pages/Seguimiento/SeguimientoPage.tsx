@@ -1,18 +1,20 @@
 /**
  * Seguimiento del grupo: cómo va cada criterio y cada alumno.
  *
- * Antes esta pantalla solo funcionaba si se llegaba con `?grupo_id=` en la
- * URL; entrando por el menú lateral se quedaba en blanco. Ahora elige la
- * clase por sí misma y explica qué falta cuando no hay datos.
+ * La clase y el área salen de la barra de contexto (`ClaseActiva`), no de un
+ * selector propio: así seguir a un grupo aquí y calificarlo en el calificador
+ * es seguir al mismo grupo.
  */
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { getGrupos, getAsignaturas, getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
+import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { calcularNotaArea, calificativo, perfilCompetencial, type NotaCompetencia } from '@/db/calculo'
-import type { Alumno, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
+import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
 
 type FilaAlumno = {
   alumno: Alumno
@@ -22,11 +24,8 @@ type FilaAlumno = {
 }
 
 export default function SeguimientoPage() {
-  const [params, setParams] = useSearchParams()
-  const [grupos, setGrupos] = useState<any[]>([])
-  const [grupoId, setGrupoId] = useState(params.get('grupo_id') || '')
-  const [asignaturas, setAsignaturas] = useState<Asignatura[]>([])
-  const [asignaturaId, setAsignaturaId] = useState('')
+  useParametrosClase()
+  const { grupos, grupoId, asignaturas, asignaturaId, cargando: cargandoClase } = useClaseActiva()
   const [datosCriterios, setDatosCriterios] = useState<any[]>([])
   const [datosCompetencias, setDatosCompetencias] = useState<any[]>([])
   const [filas, setFilas] = useState<FilaAlumno[]>([])
@@ -34,30 +33,14 @@ export default function SeguimientoPage() {
   const [vista, setVista] = useState<'criterios' | 'competencias' | 'alumnado'>('criterios')
 
   useEffect(() => {
-    getGrupos().then(gs => {
-      setGrupos(gs)
-      setGrupoId(prev => prev || (gs[0]?.id ? String(gs[0].id) : ''))
-    })
-  }, [])
-
-  useEffect(() => {
-    if (!grupoId) { setAsignaturas([]); return }
-    setParams(grupoId ? { grupo_id: grupoId } : {}, { replace: true })
-    getAsignaturas(Number(grupoId)).then(d => {
-      setAsignaturas(d)
-      setAsignaturaId(prev => (prev && d.some(a => String(a.id) === prev)) ? prev : (d[0]?.id ? String(d[0].id) : ''))
-    })
-  }, [grupoId])
-
-  useEffect(() => {
     if (!asignaturaId || !grupoId) { setDatosCriterios([]); setFilas([]); return }
     setCargando(true)
 
     Promise.all([
-      getResumenPorCriterio(Number(asignaturaId)),
-      getCalificacionesPorGrupo(Number(grupoId)),
-      getInstrumentos(Number(asignaturaId)),
-      getUnidades(Number(asignaturaId)),
+      getResumenPorCriterio(asignaturaId),
+      getCalificacionesPorGrupo(grupoId),
+      getInstrumentos(asignaturaId),
+      getUnidades(asignaturaId),
     ]).then(([rows, { alumnos, calificaciones, asignaturas: asigsDet }, instrumentos, unidades]) => {
       // Gráfica por criterio
       const mapa: Record<string, any> = {}
@@ -69,7 +52,7 @@ export default function SeguimientoPage() {
         a.criterio.localeCompare(b.criterio, 'es', { numeric: true })))
 
       // Tabla por alumno con notas ponderadas de verdad
-      const asig = asigsDet.find(a => String(a.id) === asignaturaId)
+      const asig = asigsDet.find(a => a.id === asignaturaId)
       const instrIds = new Set(instrumentos.map(i => i.id!))
       const pesosCriterio = new Map<string, number>()
       for (const u of unidades) {
@@ -85,7 +68,7 @@ export default function SeguimientoPage() {
         const propias: Calificacion[] = calificaciones.filter(
           c => c.alumno_id === al.id && instrIds.has(c.instrumento_id))
         const n = calcularNotaArea(
-          Number(asignaturaId), propias, instrumentos as Instrumento[],
+          asignaturaId, propias, instrumentos as Instrumento[],
           asig?.pesos_trimestres, pesosCriterio)
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
@@ -125,6 +108,8 @@ export default function SeguimientoPage() {
 
   const enRiesgo = filas.filter(f => f.final != null && f.final < 5).length
 
+  if (cargandoClase) return <p style={{ color: 'var(--gris-600)' }}>Cargando…</p>
+
   if (grupos.length === 0) {
     return (
       <div className="card" style={{ textAlign: 'center', padding: 48, color: 'var(--gris-600)' }}>
@@ -138,22 +123,12 @@ export default function SeguimientoPage() {
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Seguimiento</h1>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <select value={grupoId} onChange={e => setGrupoId(e.target.value)} style={{ minWidth: 130 }}>
-            {grupos.map(g => <option key={g.id} value={g.id}>{g.nombre}</option>)}
-          </select>
-          <select value={asignaturaId} onChange={e => setAsignaturaId(e.target.value)} style={{ minWidth: 180 }} disabled={asignaturas.length === 0}>
-            {asignaturas.length === 0
-              ? <option value="">Sin áreas</option>
-              : asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)}
-          </select>
-        </div>
       </div>
 
       {asignaturas.length === 0 ? (
         <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
           Esta clase no tiene áreas todavía.{' '}
-          <Link to={`/grupos/${grupoId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Elegir áreas →</Link>
+          <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Elegir áreas →</Link>
         </div>
       ) : (
         <>
@@ -187,7 +162,7 @@ export default function SeguimientoPage() {
           {!cargando && datosCriterios.length === 0 && (
             <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
               Todavía no hay calificaciones en esta área.{' '}
-              <Link to={`/evaluacion?grupo_id=${grupoId}&asignatura_id=${asignaturaId}`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
+              <Link to="/evaluacion" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
                 Ir al calificador →
               </Link>
             </div>
