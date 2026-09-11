@@ -12,7 +12,20 @@
  *   {t:'config',  salt, verificador}
  *   {t:'sobres',  id, registros}      aquí van los míos
  *   {t:'recibo',  id, aceptados}      recibidos
- *   {t:'fin'}                         no tengo nada más
+ *   {t:'fin'}                         no tengo nada más que enviar
+ *   {t:'adios'}                       he terminado del todo, puedes cerrar
+ *   {t:'latido'}                      sigo aquí (aunque todavía no sincronice)
+ *
+ * El `latido` separa dos cosas que el transporte confundía: «no contesta» y
+ * «está vivo pero aún no le toca». Los dos aparatos no arrancan a la vez —el
+ * anfitrión empieza al leer el QR y el invitado se queda escribiendo la
+ * contraseña— así que el primero esperaba un turno que tardaba lo que tardase
+ * el docente en teclear, y se rendía a los sesenta segundos con «el otro
+ * dispositivo dejó de responder». Mientras lleguen latidos, se espera.
+ *
+ * El `adios` es lo que evita que el primero que acaba corte el canal con el
+ * otro todavía trabajando: cada lado avisa y espera —poco— a que el otro
+ * avise también antes de colgar.
  *
  * Encaje con la interfaz `Transporte`, que está pensada para un buzón:
  *   - `empujar()` manda una tanda y espera su recibo.
@@ -28,8 +41,19 @@ import type {
   EstadoSync, RespuestaPull, RespuestaPush, SobreEnvio, SobreRecibido, Transporte,
 } from './transporte'
 
-/** Cuánto se espera una respuesta del otro aparato antes de darlo por perdido. */
+/** Cuánto silencio del otro aparato se tolera antes de darlo por perdido. */
 const ESPERA = 60_000
+/** Cada cuánto se manda un latido mientras la sesión está abierta. */
+const LATIDO = 5_000
+/** Cuánto se espera el adiós del otro antes de colgar igualmente. */
+const ESPERA_ADIOS = 15_000
+
+export type OpcionesDirecto = {
+  /** Silencio tolerado, en ms. Se baja en las pruebas para no esperar un minuto. */
+  espera?: number
+  /** Periodo del latido, en ms. */
+  latido?: number
+}
 
 type Config = { salt: string | null; verificador: string | null }
 
@@ -40,14 +64,29 @@ type Config = { salt: string | null; verificador: string | null }
  */
 export type ConfigLocal = () => Promise<Config>
 
-export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Transporte {
+export function transporteDirecto(
+  enlace: Enlace, configLocal: ConfigLocal, opciones: OpcionesDirecto = {}
+): Transporte {
+  const espera = opciones.espera ?? ESPERA
+  const periodoLatido = opciones.latido ?? LATIDO
   // Sobres que ha ido mandando el otro lado y aún no ha recogido `traer()`
   const buzon: SobreRecibido[] = []
   let elOtroTermino = false
+  /** Distinto de `elOtroTermino`: este solo se marca si el otro lo dijo, no
+   *  si el canal se cayó. Es lo que separa un final normal de un corte. */
+  let finRecibido = false
+  let elOtroSeDespidio = false
   let caido: string | null = null
   let finEnviado = false
   let seq = 0
   let contador = 0
+  /** Cuándo se supo por última vez del otro aparato. Cualquier mensaje vale. */
+  let ultimaSenal = Date.now()
+
+  /** Latido: se manda desde que se abre la sesión, no desde que se empieza a
+   *  sincronizar — justo el hueco en el que el otro se quedaba esperando. */
+  let relojLatido: ReturnType<typeof setInterval> | null = null
+  const dejarDeLatir = () => { if (relojLatido) { clearInterval(relojLatido); relojLatido = null } }
 
   /** Respuestas que estamos esperando, por identificador de mensaje. */
   const esperando = new Map<string, (m: any) => void>()
@@ -57,15 +96,24 @@ export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Tra
   const mover = () => { despertar?.(); despertar = null }
 
   enlace.alCerrarse((motivo) => {
+    dejarDeLatir()
     caido = motivo
     elOtroTermino = true
+    // Si el canal se cae ya no va a llegar ningún adiós: quien lo espere debe
+    // seguir en vez de agotar los quince segundos para nada.
+    elOtroSeDespidio = true
     for (const resolver of esperando.values()) resolver({ error: motivo })
     esperando.clear()
     mover()
   })
 
   enlace.alRecibir((m: any) => {
+    // Cualquier mensaje —hasta un latido— demuestra que el otro sigue ahí.
+    ultimaSenal = Date.now()
     switch (m?.t) {
+      case 'latido':
+        return
+
       case 'config?':
         // La respuesta lleva el mismo `id` que la pregunta: es lo que permite
         // a `preguntar()` casarlas cuando los dos lados hablan a la vez.
@@ -89,6 +137,17 @@ export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Tra
 
       case 'fin':
         elOtroTermino = true
+        finRecibido = true
+        mover()
+        return
+
+      case 'adios':
+        // El otro ha terminado del todo. También implica `fin`: un aparato que
+        // se despide sin haberlo mandado (porque falló antes) no va a enviar
+        // ya nada, y sin esto quien esperase en `traer()` se quedaría colgado.
+        elOtroTermino = true
+        finRecibido = true
+        elOtroSeDespidio = true
         mover()
         return
 
@@ -117,6 +176,14 @@ export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Tra
     const m = await respuesta
     if (m?.error) throw new Error(m.error)
     return m
+  }
+
+  relojLatido = setInterval(() => { void avisar({ t: 'latido' }) }, periodoLatido)
+
+  /** Manda algo sin esperar respuesta. Un canal ya cerrado no es un fallo:
+   *  `fin` y `adios` son avisos de cortesía, no partes de la carga. */
+  async function avisar(mensaje: Record<string, unknown>): Promise<void> {
+    try { await enlace.enviar(mensaje) } catch { /* el otro ya colgó */ }
   }
 
   return {
@@ -168,20 +235,29 @@ export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Tra
       // lado se quedaría esperando por siempre.
       if (!finEnviado) {
         finEnviado = true
-        await enlace.enviar({ t: 'fin' })
+        await avisar({ t: 'fin' })
       }
 
-      // Esperar a que haya algo que servir, o a que el otro diga que terminó
+      // Esperar a que haya algo que servir, o a que el otro diga que terminó.
+      // Se despierta cada poco para mirar si el otro sigue dando señales: solo
+      // se abandona tras `espera` de silencio absoluto, no de mera inactividad.
+      // El invitado puede tardar lo que tarde el docente en teclear la
+      // contraseña, y eso no es que haya dejado de responder.
       while (!buzon.length && !elOtroTermino) {
         await new Promise<void>((listo) => {
-          const reloj = setTimeout(() => { despertar = null; listo() }, ESPERA)
+          const reloj = setTimeout(() => { despertar = null; listo() }, periodoLatido)
           despertar = () => { clearTimeout(reloj); listo() }
         })
-        if (!buzon.length && !elOtroTermino) {
+        if (buzon.length || elOtroTermino) break
+        if (Date.now() - ultimaSenal > espera) {
           throw new Error('El otro dispositivo dejó de responder a mitad de la sincronización')
         }
       }
-      if (caido && !buzon.length) throw new Error(caido)
+      // Un canal cerrado con sobres aún sin recoger no impide entregarlos: ya
+      // están aquí. Y cerrado sin nada pendiente solo es un fallo si el otro no
+      // había dicho que terminaba; si lo dijo, esto es el final normal —era
+      // justo lo que rompía la sincronización cuando el otro colgaba primero.
+      if (caido && !buzon.length && !finRecibido) throw new Error(caido)
 
       const tanda = buzon.splice(0, limite)
       seq += tanda.length
@@ -190,6 +266,24 @@ export function transporteDirecto(enlace: Enlace, configLocal: ConfigLocal): Tra
 
     async vaciar() {
       // Un enlace directo no guarda nada que vaciar.
+    },
+
+    /**
+     * Cierre ordenado: aviso de que he terminado y espero a que el otro avise.
+     *
+     * Sin esto, el aparato que acababa primero cerraba el canal y el otro se
+     * encontraba escribiendo sobre un canal muerto: salía «el otro dispositivo
+     * cerró la conexión» y la sincronización se abortaba a medias. La espera
+     * está acotada para que un aparato que se cuelgue no deje al otro clavado.
+     */
+    async despedirse() {
+      await avisar({ t: 'adios' })
+      dejarDeLatir()
+      if (elOtroSeDespidio) return
+      await new Promise<void>((listo) => {
+        const reloj = setTimeout(() => { despertar = null; listo() }, ESPERA_ADIOS)
+        despertar = () => { clearTimeout(reloj); listo() }
+      })
     },
   }
 }

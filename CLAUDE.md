@@ -21,7 +21,8 @@ edumind_miclase/
 │   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
-│   │                   transporte.ts (interfaz) · transporteDirecto.ts + enlaceDirecto.ts
+│   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
+│   │                   por AirDrop/Quick Share) · transporteDirecto.ts + enlaceDirecto.ts
 │   │                   (sincronización entre dispositivos por WebRTC, sin servidor)
 │   ├── src/contexto/ ← ClaseActiva.tsx (clase, área y trimestre en curso)
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
@@ -56,6 +57,20 @@ edumind_miclase/
   servidor y el enlace directo entre dispositivos. Meter una llamada `fetch`
   dentro de `sync.ts` rompería el enlace directo, que no tiene servidor al que
   llamar.
+- **Hay tres caminos para los sobres, y ninguno es obligatorio**: el buzón del
+  servidor, el enlace directo por QR (misma wifi) y un paquete en un fichero
+  (`transporteFichero.ts`), que sale por la hoja de compartir del sistema
+  —AirDrop, Quick Share— y es el único que no depende de la red del centro.
+  El de fichero son **dos** transportes, escritura y lectura, a propósito:
+  uno solo movería el cursor del lado equivocado, dando por enviado lo que
+  solo se ha recibido.
+- **En el enlace directo, callar no es haberse ido.** Los dos aparatos no
+  arrancan a la vez —uno empieza al leer el QR y el otro está escribiendo la
+  contraseña—, así que el transporte late cada pocos segundos desde que se
+  abre la sesión y solo abandona tras un minuto de silencio *absoluto*. Medir
+  inactividad en vez de silencio ya rompió la sincronización una vez. Y al
+  terminar se manda `adios` y se espera el del otro: colgar a secas corta al
+  que aún está escribiendo.
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.

@@ -81,6 +81,14 @@ export interface Transporte {
   traer(desde: number, limite: number, excluirDevice: string): Promise<RespuestaPull>
   /** Vacía el buzón. No toca los datos locales. */
   vaciar(): Promise<void>
+  /**
+   * Cierre ordenado, para los transportes que hablan con alguien al otro lado.
+   * El buzón no lo necesita —no hay nadie esperando— pero el enlace directo sí:
+   * sin despedirse, el primero que termina corta el canal y deja al otro a
+   * medias. Opcional a propósito: quien no tenga con quién despedirse, no lo
+   * implementa.
+   */
+  despedirse?(): Promise<void>
 }
 
 export type Cabeceras = () => Record<string, string>

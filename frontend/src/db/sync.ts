@@ -20,7 +20,10 @@ import {
   transporteServidor,
   type Cabeceras, type EstadoSync, type RespuestaPush, type Transporte,
 } from './transporte'
-import { transporteDirecto } from './transporteDirecto'
+import { transporteDirecto, type OpcionesDirecto } from './transporteDirecto'
+import {
+  transporteFicheroEscritura, transporteFicheroLectura, type PaqueteSync,
+} from './transporteFichero'
 import type { Enlace } from './enlaceDirecto'
 
 export type { EstadoSync } from './transporte'
@@ -640,10 +643,10 @@ const sesiones = new WeakMap<Enlace, Transporte>()
  * Ponerse a la escucha del otro dispositivo. Hay que llamarla en los dos lados
  * en cuanto el canal se abre, antes de pedirle nada.
  */
-export function atenderEnlace(enlace: Enlace): Transporte {
+export function atenderEnlace(enlace: Enlace, opciones?: OpcionesDirecto): Transporte {
   let canal = sesiones.get(enlace)
   if (!canal) {
-    canal = transporteDirecto(enlace, configLocal)
+    canal = transporteDirecto(enlace, configLocal, opciones)
     sesiones.set(enlace, canal)
   }
   return canal
@@ -660,11 +663,107 @@ export async function sincronizarPorEnlace(enlace: Enlace): Promise<ResultadoSyn
 }
 
 /**
+ * Cierre ordenado del enlace directo: avisa al otro y espera su visto bueno
+ * antes de colgar, para no cortarle mientras aún está escribiendo.
+ */
+export async function cerrarEnlace(enlace: Enlace): Promise<void> {
+  try { await sesiones.get(enlace)?.despedirse?.() } catch { /* da igual: vamos a colgar */ }
+  sesiones.delete(enlace)
+  enlace.cerrar()
+}
+
+/**
  * Desbloqueo de un dispositivo nuevo sin pasar por el servidor: la sal y el
  * verificador se los pide al aparato con el que se acaba de emparejar.
  */
 export async function desbloquearPorEnlace(password: string, enlace: Enlace): Promise<void> {
   await desbloquearCon(password, await atenderEnlace(enlace).estado())
+}
+
+// ─── Paquete para otro dispositivo (AirDrop, Quick Share, cable…) ────────
+
+/**
+ * Empaqueta lo pendiente de enviar en un objeto que se puede guardar como
+ * fichero y mandar por donde sea.
+ *
+ * Solo empuja: al escribir un paquete no se recibe nada, y correr también la
+ * recogida movería el cursor de lectura sin que hubiera llegado nada.
+ *
+ * Los sobres van cifrados uno a uno con la contraseña de sincronización, igual
+ * que los que se suben al buzón. El fichero enseña lo mismo que ve el
+ * servidor: tabla, id y fecha. Nada más.
+ */
+export async function empaquetarParaOtroDispositivo(): Promise<{
+  paquete: PaqueteSync
+  resultado: ResultadoSync
+}> {
+  const clave = await claveGuardada()
+  if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
+
+  const canal = transporteFicheroEscritura()
+  const resultado: ResultadoSync = {
+    enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0,
+    fusionados: 0, detalleFusion: [], errores: [],
+  }
+  await empujar(clave, canal, resultado)
+
+  const { salt, verificador } = await configLocal()
+  return {
+    paquete: {
+      formato: 'miclase-sync',
+      version: 1,
+      device_id: idDispositivo(),
+      creado: new Date().toISOString(),
+      salt,
+      verificador,
+      sobres: canal.sobres(),
+    },
+    resultado,
+  }
+}
+
+/** Lee un paquete y comprueba que es lo que dice ser. */
+export function leerPaquete(json: string): PaqueteSync {
+  let p: any
+  try { p = JSON.parse(json) } catch { throw new Error('Ese fichero no es un paquete de MiClase') }
+  if (p?.formato !== 'miclase-sync') throw new Error('Ese fichero no es un paquete de MiClase')
+  if (p.version !== 1) throw new Error('Ese paquete es de una versión más nueva de la app')
+  if (!Array.isArray(p.sobres)) throw new Error('El paquete está incompleto o dañado')
+  return p as PaqueteSync
+}
+
+/** Sal y verificador que trae el paquete, para desbloquear un aparato nuevo. */
+export async function desbloquearPorPaquete(password: string, paquete: PaqueteSync): Promise<void> {
+  await desbloquearCon(password, await transporteFicheroLectura(paquete).estado())
+}
+
+/**
+ * Aplica un paquete recibido: descifra sus sobres y los fusiona igual que si
+ * hubieran llegado por el buzón o por el enlace directo — misma fusión a tres
+ * bandas, mismos borrados lógicos.
+ *
+ * Solo recoge: un paquete ya escrito no admite nada de vuelta. Para responder,
+ * el otro dispositivo genera el suyo.
+ */
+export async function aplicarPaquete(paquete: PaqueteSync): Promise<ResultadoSync> {
+  const clave = await claveGuardada()
+  if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
+
+  if (paquete.device_id === idDispositivo()) {
+    throw new Error('Ese paquete lo generó este mismo dispositivo')
+  }
+
+  const canal = transporteFicheroLectura(paquete)
+  const res: ResultadoSync = {
+    enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0,
+    fusionados: 0, detalleFusion: [], errores: [],
+  }
+  // Cada paquete es independiente: su cursor de lectura empieza de cero, o el
+  // segundo fichero que llegara se daría por leído sin abrirlo.
+  await guardarMeta(cursor(K_PULL_SEQ, canal), 0)
+  await traer(clave, canal, res)
+  await guardarMeta(K_ULTIMA, new Date().toISOString())
+  return res
 }
 
 export async function ultimaSincronizacion(): Promise<string | null> {

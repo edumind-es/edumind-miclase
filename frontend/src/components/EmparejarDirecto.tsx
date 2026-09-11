@@ -16,8 +16,8 @@ import {
   aceptarInvitacion, invitar, type Anfitrion, type Enlace, type Invitado,
 } from '@/db/enlaceDirecto'
 import {
-  atenderEnlace, claveGuardada, desbloquearPorEnlace, estrenarSincronizacionLocal,
-  sincronizarPorEnlace, type ResultadoSync,
+  atenderEnlace, cerrarEnlace, claveGuardada, desbloquearPorEnlace,
+  estrenarSincronizacionLocal, sincronizarPorEnlace, type ResultadoSync,
 } from '@/db/sync'
 
 type Paso =
@@ -99,7 +99,10 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
       setError(e.message || 'No se ha podido sincronizar')
       setPaso('hecho')
     } finally {
-      enlace.cerrar()
+      // Despedirse antes de colgar: si se cierra a secas, el otro aparato —que
+      // está sincronizando a la vez— se queda escribiendo sobre un canal muerto.
+      await cerrarEnlace(enlace)
+      enlaceRef.current = null
     }
   }
 
