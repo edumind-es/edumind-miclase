@@ -45,6 +45,27 @@ const visible = async (loc) => {
   catch { return false }
 }
 
+// Calentar el servidor de desarrollo antes de medir nada.
+//
+// Vite pre-empaqueta cada dependencia la primera vez que alguien la pide, y
+// `jsqr` son 130 KB que hay que transformar. En este servidor tarda un
+// suspiro; en el runner del CI, con la tanda completa por medio, no cabía ni
+// en treinta segundos, y los dos asertos que dependen de que el decodificador
+// esté cargado caducaban. El segundo escenario de este mismo fichero pasaba
+// siempre, porque para entonces ya estaba caliente: era arranque en frío
+// contaminando la medida, no un fallo de la app.
+//
+// Se calienta en un contexto aparte y desechable: así el servidor tiene la
+// dependencia lista, pero la página que se mide estrena su propio historial de
+// recursos y la comprobación de carga diferida sigue siendo válida.
+{
+  const previo = await nav.newContext()
+  const pp = await previo.newPage()
+  await pp.goto(`${BASE}/escanear`, { waitUntil: 'domcontentloaded' })
+  await pp.evaluate(() => import('jsqr').then(() => true).catch(() => false))
+  await previo.close()
+}
+
 await p.goto(`${BASE}/escanear`, { waitUntil: 'networkidle' })
 
 ok(await p.evaluate(() => !('BarcodeDetector' in window)), 'el navegador simula no tener detector nativo')
