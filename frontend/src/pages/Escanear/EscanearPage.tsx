@@ -82,30 +82,49 @@ export default function EscanearPage() {
       setCamaraActiva(true)
       // El <video> se monta al cambiar el estado; conectar en el siguiente tick
       requestAnimationFrame(async () => {
-        if (!videoRef.current) return
-        videoRef.current.srcObject = stream
-        // `playsInline` es obligatorio en iOS: sin él el vídeo se abre a
-        // pantalla completa y no se puede escanear
-        videoRef.current.setAttribute('playsinline', 'true')
-        await videoRef.current.play()
+        try {
+          if (!videoRef.current) return
+          videoRef.current.srcObject = stream
+          // `playsInline` es obligatorio en iOS: sin él el vídeo se abre a
+          // pantalla completa y no se puede escanear
+          videoRef.current.setAttribute('playsinline', 'true')
 
-        const lector = await crearLector()
-        lectorRef.current = lector
-        setMotor(lector.motor)
+          // Reproducir y preparar el decodificador son cosas independientes, y
+          // encadenarlas rompía el escáner entero. Se hacía `await play()`
+          // antes de crear el lector, así que un play() que rechaza —Safari y
+          // WKWebView lo hacen en cuanto la política de autoarranque se mete
+          // por medio, y es justo donde hace falta el decodificador de
+          // reserva— dejaba la imagen en pantalla, el «Buscando código QR…»
+          // puesto y ni un solo fotograma decodificado. Sin error visible:
+          // el rechazo ocurría dentro de este callback, fuera del try de
+          // getUserMedia, y se perdía como promesa no gestionada.
+          //
+          // No es fatal que no arranque: el bucle ya espera a que el vídeo
+          // tenga datos (`readyState >= 2`) antes de leer nada.
+          void videoRef.current.play().catch(() => { /* el bucle ya espera datos */ })
 
-        // El decodificador en JavaScript necesita algo más de holgura entre
-        // fotogramas que el nativo para no saturar un iPad antiguo
-        const cadencia = lector.motor === 'nativo' ? 250 : 350
+          const lector = await crearLector()
+          lectorRef.current = lector
+          setMotor(lector.motor)
 
-        timerRef.current = window.setInterval(async () => {
-          if (ocupadoRef.current || !videoRef.current || videoRef.current.readyState < 2) return
-          ocupadoRef.current = true
-          try {
-            const valor = await lector.leer(videoRef.current)
-            if (valor) await abrirPorCodigo(valor)
-          } catch { /* fotograma no legible, seguir intentando */ }
-          ocupadoRef.current = false
-        }, cadencia)
+          // El decodificador en JavaScript necesita algo más de holgura entre
+          // fotogramas que el nativo para no saturar un iPad antiguo
+          const cadencia = lector.motor === 'nativo' ? 250 : 350
+
+          timerRef.current = window.setInterval(async () => {
+            if (ocupadoRef.current || !videoRef.current || videoRef.current.readyState < 2) return
+            ocupadoRef.current = true
+            try {
+              const valor = await lector.leer(videoRef.current)
+              if (valor) await abrirPorCodigo(valor)
+            } catch { /* fotograma no legible, seguir intentando */ }
+            ocupadoRef.current = false
+          }, cadencia)
+        } catch {
+          // Que el decodificador no llegue a montarse sí es fatal: hay que
+          // decirlo en vez de dejar la cámara mirando sin leer.
+          setErrorCamara('No se pudo preparar el lector de códigos. Prueba a recargar la página.')
+        }
       })
     } catch (e: any) {
       setErrorCamara(e?.name === 'NotAllowedError'

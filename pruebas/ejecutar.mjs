@@ -26,6 +26,12 @@ const BD_PRODUCCION = resolve(RAIZ, 'backend/data/miclase.db')
 const argumentos = new Set(process.argv.slice(2))
 const soloRapidas = argumentos.has('--rapido')
 const soloProduccion = argumentos.has('--produccion')
+// Una suite suelta, por nombre parcial: `npm test -- --solo=escáner`.
+// Cazar una prueba inestable exige repetirla veinte veces, y sin esto había
+// que pasar la tanda entera —tres minutos y medio— en cada intento.
+const soloEste = [...argumentos].find((a) => a.startsWith('--solo='))?.slice(7)
+// Repetir la selección: `--veces=20` para ver si una suite es inestable.
+const veces = Number([...argumentos].find((a) => a.startsWith('--veces='))?.slice(8) || 1)
 
 const scratch = mkdtempSync(join(tmpdir(), 'miclase-pruebas-'))
 // Algunas pruebas guardan capturas de pantalla ahí
@@ -53,14 +59,27 @@ function correr(comando, args, env = {}) {
   })
 }
 
+/** ¿Entra esta suite en la selección? Comparación laxa, sin tildes ni mayúsculas. */
+function seleccionada(nombre) {
+  if (!soloEste) return true
+  const plano = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  return plano(nombre).includes(plano(soloEste))
+}
+
 async function suite(nombre, comando, args, env = {}) {
-  process.stdout.write(gris(`  ${nombre}… `))
-  const inicio = Date.now()
-  const { bien, salida } = await correr(comando, args, env)
-  const seg = ((Date.now() - inicio) / 1000).toFixed(1)
-  console.log(bien ? verde(`✓ ${seg}s`) : rojo(`✗ ${seg}s`))
-  resultados.push({ nombre, bien, salida, seg })
-  return bien
+  if (!seleccionada(nombre)) return true
+  let todoBien = true
+  for (let i = 1; i <= veces; i++) {
+    const etiqueta = veces > 1 ? `${nombre} (${i}/${veces})` : nombre
+    process.stdout.write(gris(`  ${etiqueta}… `))
+    const inicio = Date.now()
+    const { bien, salida } = await correr(comando, args, env)
+    const seg = ((Date.now() - inicio) / 1000).toFixed(1)
+    console.log(bien ? verde(`✓ ${seg}s`) : rojo(`✗ ${seg}s`))
+    resultados.push({ nombre: etiqueta, bien, salida, seg })
+    if (!bien) todoBien = false
+  }
+  return todoBien
 }
 
 /** Empaqueta un módulo TypeScript para poder ejecutarlo con node. */

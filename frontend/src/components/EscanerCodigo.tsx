@@ -62,7 +62,11 @@ export default function EscanerCodigo({ titulo, onCodigo, onCancelar }: Props) {
         video.srcObject = stream
         // Obligatorio en iOS: sin esto el vídeo se abre a pantalla completa
         video.setAttribute('playsinline', 'true')
-        await video.play()
+        // Sin `await`: preparar el decodificador no depende de que el vídeo
+        // arranque, y encadenarlos dejaba el escáner mudo cuando play()
+        // rechazaba —que es lo que hace Safari con la política de
+        // autoarranque. El bucle ya espera a `readyState >= 2`.
+        void video.play().catch(() => { /* el bucle ya espera datos */ })
 
         const lector = await crearLector({ ladoMaximo: LADO })
         if (!vivo) { lector.liberar(); return }
