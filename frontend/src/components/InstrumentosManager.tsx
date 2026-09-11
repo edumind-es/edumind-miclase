@@ -20,6 +20,11 @@ interface Props {
   asignaturaNombre: string
   nivel: string            // p.ej. "5º primaria" (para el editor de rúbricas)
   onClose: () => void      // el llamante recarga sus datos al cerrar
+  /**
+   * Se abre desde otro modal (el panel de celda del calificador) y no desde una
+   * pantalla. Sin esto empata en capa con quien lo abrió y queda por debajo.
+   */
+  anidado?: boolean
 }
 
 function parseTrimestres(json: string | undefined): number[] {
@@ -29,7 +34,7 @@ function parseTrimestres(json: string | undefined): number[] {
   } catch { return [1, 2, 3] }
 }
 
-export default function InstrumentosManager({ asignaturaId, asignaturaNombre, nivel, onClose }: Props) {
+export default function InstrumentosManager({ asignaturaId, asignaturaNombre, nivel, onClose, anidado = false }: Props) {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([])
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string; peso: number } | null>(null)
   const [rubricaDe, setRubricaDe] = useState<Instrumento | null>(null)
@@ -99,11 +104,13 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
           instrumentoNombre={rubricaDe.nombre}
           asignaturaNombre={asignaturaNombre}
           nivel={nivel}
+          capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
           onCerrar={() => setRubricaDe(null)}
         />
       )}
 
-      <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="modal-overlay" style={anidado ? { zIndex: 'var(--z-modal-anidado)' } : undefined}
+        onClick={e => { if (e.target === e.currentTarget) onClose() }}>
         <div className="card" role="dialog" aria-modal="true" aria-label="Gestionar instrumentos de evaluación"
           style={{ width: 'min(720px, 94vw)', maxHeight: '88vh', overflowY: 'auto', padding: 24 }}>
 

@@ -14,6 +14,8 @@ import {
 } from '@/db/queries'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import MiniaturaEvidencia from './MiniaturaEvidencia'
+import InstrumentosManager from './InstrumentosManager'
+import RubricaEditor from './RubricaEditor'
 import { nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
@@ -48,6 +50,13 @@ export default function CeldaEvaluacion({
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [guardando, setGuardando] = useState(false)
+  // Atajos: corregir el instrumento o su rúbrica aquí mismo, sin cerrar el
+  // panel, salir del calificador y volver a bajar hasta la ficha del área.
+  const [instrumentosAbierto, setInstrumentosAbierto] = useState(false)
+  const [rubricaAbierta, setRubricaAbierta] = useState(false)
+  // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
+  // del instrumento, que si no se quedaba con los niveles de antes.
+  const [refrescoInstr, setRefrescoInstr] = useState(0)
 
   const instrumentoSel = instrumentos.find(i => i.instrumento_id === instrumentoId) ?? null
   const cfg = instrumentoSel ? getInstrConfig(instrumentoSel.tipo) : null
@@ -72,7 +81,7 @@ export default function CeldaEvaluacion({
         setNiveles(nvs.filter(n => typeof n.valor === 'number'))
       } catch { setNiveles([]) }
     })
-  }, [instrumentoId])
+  }, [instrumentoId, refrescoInstr])
 
   // Nota ya registrada + observación guardada
   useEffect(() => {
@@ -93,6 +102,9 @@ export default function CeldaEvaluacion({
   // Escape cierra; flechas cambian de alumno
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Con el gestor de instrumentos o el editor de rúbricas abiertos encima,
+      // Esc es suyo: cerrar los dos modales de golpe perdería el sitio.
+      if (instrumentosAbierto || rubricaAbierta) return
       if (e.key === 'Escape') { onCerrar(); return }
       const enCampo = (e.target as HTMLElement)?.tagName === 'INPUT' ||
                       (e.target as HTMLElement)?.tagName === 'TEXTAREA'
@@ -102,7 +114,7 @@ export default function CeldaEvaluacion({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onCerrar, onSiguiente, onAnterior])
+  }, [onCerrar, onSiguiente, onAnterior, instrumentosAbierto, rubricaAbierta])
 
   const guardarNota = async (valor: number | null) => {
     if (!instrumentoId) return
@@ -149,9 +161,41 @@ export default function CeldaEvaluacion({
     onGuardado()
   }
 
+  /**
+   * Tras tocar instrumentos o rúbrica hay dos vistas que se quedarían viejas:
+   * este panel (niveles y nota) y la matriz del calificador, que pinta el peso,
+   * el tipo y el punto de «tiene rúbrica» de cada instrumento. `onGuardado()`
+   * es justo la señal que el calificador ya usa para releer la matriz.
+   */
+  const trasEditarConfig = () => {
+    setRefrescoInstr(n => n + 1)
+    onGuardado()
+  }
+
   const cal = calificativo(valorActual)
 
   return (
+    <>
+    {instrumentosAbierto && (
+      <InstrumentosManager
+        asignaturaId={asig.id!}
+        asignaturaNombre={asig.nombre_display}
+        nivel={`${grupo.curso}º ${grupo.etapa}`}
+        anidado
+        onClose={() => { setInstrumentosAbierto(false); trasEditarConfig() }}
+      />
+    )}
+
+    {rubricaAbierta && instrumentoSel && (
+      <RubricaEditor
+        instrumentoId={instrumentoSel.instrumento_id}
+        instrumentoNombre={instrumentoSel.nombre}
+        asignaturaNombre={asig.nombre_display}
+        nivel={`${grupo.curso}º ${grupo.etapa}`}
+        onCerrar={() => { setRubricaAbierta(false); trasEditarConfig() }}
+      />
+    )}
+
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
       <div className="card" role="dialog" aria-modal="true"
         aria-label={`Evaluar ${criterio.id} de ${alumno.nombre}`}
@@ -194,8 +238,31 @@ export default function CeldaEvaluacion({
 
           {/* Instrumento(s) que evalúan este criterio */}
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 7 }}>
-              Se evalúa con {instrumentos.length > 1 && `— ${instrumentos.length} instrumentos`}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+                Se evalúa con {instrumentos.length > 1 && `— ${instrumentos.length} instrumentos`}
+              </div>
+              <div style={{ flex: 1 }} />
+              {/* Atajo: el peso, el tipo, los trimestres o la rúbrica se
+                  arreglan sin salir de aquí. Antes había que cerrar el panel,
+                  volver al calificador y abrir ⚙ Instrumentos. */}
+              <button onClick={() => setInstrumentosAbierto(true)}
+                title="Cambiar nombre, tipo, peso o trimestres de los instrumentos de esta área"
+                style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', background: 'white', color: 'var(--gris-600)', border: '1px solid var(--gris-300)' }}>
+                ⚙ Instrumentos
+              </button>
+              {instrumentoSel && (
+                <button onClick={() => setRubricaAbierta(true)}
+                  title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
+                  style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
+                    background: instrumentoSel.tiene_rubrica ? '#166534' : 'white',
+                    color: instrumentoSel.tiene_rubrica ? 'white' : 'var(--gris-600)',
+                    border: instrumentoSel.tiene_rubrica ? 'none' : '1px solid var(--gris-300)',
+                  }}>
+                  📊 {instrumentoSel.tiene_rubrica ? 'Rúbrica' : 'Crear rúbrica'}
+                </button>
+              )}
             </div>
             <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
               {instrumentos.map(ins => {
@@ -332,5 +399,6 @@ export default function CeldaEvaluacion({
         </div>
       </div>
     </div>
+    </>
   )
 }
