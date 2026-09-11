@@ -87,6 +87,10 @@ async function principal() {
     await paquete('pruebas/fusion.test.ts', fusion, ['--platform=node', '--format=esm'])
     await suite('fusión a tres bandas', 'node', [fusion])
 
+    const rubrica = join(scratch, 'rubrica.mjs')
+    await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
+    await suite('parseo de rúbricas', 'node', [rubrica])
+
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
   }
 
