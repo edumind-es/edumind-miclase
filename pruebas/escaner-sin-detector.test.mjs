@@ -33,7 +33,13 @@ p.on('pageerror', e => errores.push(e.message))
 // el fragmento de jsQR tarda lo que tarda la máquina: en el runner del CI, más
 // que en este servidor. Con esperas fijas la prueba fallaba de vez en cuando y
 // bloqueaba PRs correctos.
-const ESPERA = 15000
+// 30 s, no 15: aquí no se mide velocidad sino comportamiento, y arrancar la
+// cámara falsa y transformar jsQR en el servidor de desarrollo con cuatro
+// navegadores abiertos a la vez no cabe siempre en quince segundos. Con ese
+// plazo la suite fallaba una vez de cada cinco dentro de la tanda completa y
+// llegó a bloquear PRs correctos. Un fallo de verdad se sigue viendo igual,
+// solo que tarda el doble en cantarlo.
+const ESPERA = 30000
 const visible = async (loc) => {
   try { await loc.waitFor({ state: 'visible', timeout: ESPERA }); return true }
   catch { return false }
@@ -63,6 +69,45 @@ try {
   cargado = true
 } catch { /* se queda en false y lo canta el ok() */ }
 ok(cargado, 'el decodificador se descarga solo cuando hace falta (carga diferida)')
+
+// ── El vídeo no arranca, pero el escáner sí ──────────────────────────────
+//
+// Safari y WKWebView rechazan `play()` en cuanto la política de autoarranque
+// se mete por medio, justo en el iPad, que es el aparato que necesita el
+// decodificador de reserva. El código hacía `await play()` antes de crear el
+// lector: con play() rechazado la imagen salía, ponía «Buscando código QR…» y
+// no se decodificaba ni un fotograma. Sin error visible, porque el rechazo
+// caía fuera del try.
+console.log('\n  — con play() rechazado, como en iOS —')
+{
+  const ctx2 = await nav.newContext({ permissions: ['camera'], viewport: { width: 1100, height: 800 } })
+  await ctx2.addInitScript(() => {
+    delete window.BarcodeDetector
+    HTMLMediaElement.prototype.play = () => Promise.reject(new DOMException('NotAllowedError'))
+  })
+  const p2 = await ctx2.newPage()
+  const visible2 = async (loc) => {
+    try { await loc.waitFor({ state: 'visible', timeout: ESPERA }); return true }
+    catch { return false }
+  }
+
+  await p2.goto(`${BASE}/escanear`, { waitUntil: 'networkidle' })
+  await p2.getByRole('button', { name: /Activar cámara/ }).click()
+
+  ok(await visible2(p2.getByText(/lee más despacio/)),
+     'el decodificador se monta aunque el vídeo no llegue a reproducirse')
+
+  let cargado2 = false
+  try {
+    await p2.waitForFunction(
+      () => performance.getEntriesByType('resource').some(r => /jsQR/i.test(r.name)),
+      null, { timeout: ESPERA })
+    cargado2 = true
+  } catch { /* lo canta el ok() */ }
+  ok(cargado2, 'y jsQR se descarga igual: play() no es requisito para leer')
+
+  await ctx2.close()
+}
 
 console.log(`\n${fallos === 0 && errores.length === 0 ? '✅ ESCÁNER OK SIN DETECTOR NATIVO' : `❌ ${fallos} fallo(s)`}`)
 if (errores.length) errores.slice(0, 5).forEach(e => console.log('   ' + e))
