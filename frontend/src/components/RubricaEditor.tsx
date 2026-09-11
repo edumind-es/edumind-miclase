@@ -6,6 +6,7 @@ import {
   type RubricaParsed, type RubricaIndicador, type RubricaNivel,
 } from '@/ia/rubricaPrompt'
 import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
+import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 
 interface Props {
@@ -21,6 +22,18 @@ interface Props {
    * un piso más o la rúbrica sale por debajo de quien la abrió.
    */
   capa?: string
+}
+
+/**
+ * El color de un nivel es el de la nota a la que equivale.
+ *
+ * Antes se pintaba por posición de columna —la cuarta siempre en rojo— y con
+ * los niveles ya editables eso mentiría: al añadir un quinto nivel, el rojo se
+ * quedaba en el cuarto y el 0 salía verde. Derivarlo del valor lo hace
+ * coherente con los colores de la matriz del calificador.
+ */
+function colorNivel(valor: number, maxNivel: number): string {
+  return calificativo(nivelANota(valor, maxNivel)).color
 }
 
 type Tab = 'diseniar' | 'ia'
@@ -135,6 +148,71 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         descriptores: { ...indicadores[indIdx].descriptores, [nivelNombre]: texto },
       }
       return { ...r, indicadores }
+    })
+
+  const setIndicadorPeso = (idx: number, peso: number) =>
+    editar(r => {
+      const indicadores = [...r.indicadores]
+      indicadores[idx] = { ...indicadores[idx], peso }
+      return { ...r, indicadores }
+    })
+
+  /** Reparte 100 entre todos los indicadores, que es como nace una rúbrica. */
+  const repartirPesos = () =>
+    editar(r => {
+      const pesos = pesosAPartesIguales(r.indicadores.length)
+      return { ...r, indicadores: r.indicadores.map((ind, i) => ({ ...ind, peso: pesos[i] })) }
+    })
+
+  // ── Niveles ────────────────────────────────────────────────────────────
+  // Hasta ahora no se podían tocar: eran siempre los cuatro de
+  // NIVELES_DEFAULT. Eso dejaba fuera el nivel 0 («no ejecuta», «no
+  // interviene»), que es justo el que distingue no hacer la tarea de hacerla
+  // mal, y obligaba a falsear la escala para poder poner un cero.
+
+  /** Renombrar un nivel arrastra su descriptor en todos los indicadores. */
+  const setNivelNombre = (idx: number, nombre: string) =>
+    editar(r => {
+      const viejo = r.niveles[idx].nombre
+      if (nombre === viejo) return r
+      const niveles = r.niveles.map((n, i) => i === idx ? { ...n, nombre } : n)
+      const indicadores = r.indicadores.map(ind => {
+        const { [viejo]: texto, ...resto } = ind.descriptores
+        return { ...ind, descriptores: { ...resto, [nombre]: texto ?? '' } }
+      })
+      return { ...r, niveles, indicadores }
+    })
+
+  const setNivelValor = (idx: number, valor: number) =>
+    editar(r => ({ ...r, niveles: r.niveles.map((n, i) => i === idx ? { ...n, valor } : n) }))
+
+  const addNivel = () =>
+    editar(r => {
+      // El nuevo entra por abajo, que es donde hace falta: por arriba ya está
+      // el máximo y lo que se echa en falta es el escalón inferior.
+      const minimo = Math.min(...r.niveles.map(n => n.valor), 1)
+      const nombre = `Nivel ${minimo - 1 >= 0 ? minimo - 1 : r.niveles.length + 1}`
+      return {
+        ...r,
+        niveles: [...r.niveles, { nombre, valor: Math.max(0, minimo - 1) }],
+        indicadores: r.indicadores.map(ind => ({
+          ...ind, descriptores: { ...ind.descriptores, [nombre]: '' },
+        })),
+      }
+    })
+
+  const removeNivel = (idx: number) =>
+    editar(r => {
+      if (r.niveles.length <= 1) return r   // sin niveles no hay rúbrica
+      const fuera = r.niveles[idx].nombre
+      return {
+        ...r,
+        niveles: r.niveles.filter((_, i) => i !== idx),
+        indicadores: r.indicadores.map(ind => {
+          const { [fuera]: _quitado, ...resto } = ind.descriptores
+          return { ...ind, descriptores: resto }
+        }),
+      }
     })
 
   const addIndicador = () =>
@@ -315,6 +393,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     }
   }
 
+  // El nivel más alto es el que fija la escala: la nota de un nivel es su
+  // parte proporcional de ese máximo, no de la distancia al más bajo.
+  const maxNivel = rubrica.niveles.length ? Math.max(...rubrica.niveles.map(n => n.valor)) : 0
+  const pesoRepartido = rubrica.indicadores.length
+    ? Math.round((100 / rubrica.indicadores.length) * 10) / 10
+    : 0
+  // Solo se suman los pesos puestos a mano; los que están en blanco se reparten.
+  const pesoTotal = Math.round(
+    rubrica.indicadores.reduce((t, i) => t + (i.peso ?? pesoRepartido), 0) * 10) / 10
+  const pesosCuadran = Math.abs(pesoTotal - 100) < 0.5
+
   // ──────────────────────────────────────────────────────────────────────
   return (
     <div
@@ -412,15 +501,40 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                     <tr>
                       <th style={{ background: 'var(--azul-700)', color: 'white', padding: '8px 10px', textAlign: 'left', minWidth: 160, borderRadius: '4px 0 0 0' }}>
                         Indicador
+                        <div style={{ fontSize: 10, fontWeight: 400, opacity: .8, marginTop: 2 }}>y cuánto pesa</div>
                       </th>
                       {rubrica.niveles.map((n, ni) => (
                         <th key={ni} style={{
-                          background: ni === 0 ? '#166534' : ni === 1 ? '#15803d' : ni === 2 ? '#16a34a' : '#dc2626',
-                          color: 'white', padding: '8px 10px', textAlign: 'center', minWidth: 140,
+                          background: colorNivel(n.valor, maxNivel), color: 'white',
+                          padding: '6px 8px', textAlign: 'center', minWidth: 150,
                           borderRadius: ni === rubrica.niveles.length - 1 ? '0 4px 0 0' : 0,
                         }}>
-                          <div style={{ fontWeight: 700 }}>{n.nombre}</div>
-                          <div style={{ fontSize: 10, opacity: .85 }}>({n.valor} pts)</div>
+                          <input
+                            value={n.nombre}
+                            onChange={e => setNivelNombre(ni, e.target.value)}
+                            aria-label={`Nombre del nivel ${ni + 1}`}
+                            style={{
+                              width: '100%', fontWeight: 700, fontSize: 12, textAlign: 'center',
+                              background: 'rgba(255,255,255,.15)', color: 'white',
+                              border: '1px solid rgba(255,255,255,.35)', borderRadius: 4, padding: '3px 4px',
+                            }} />
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 4 }}>
+                            <input
+                              type="number" min={0} max={100} step={1} value={n.valor}
+                              onChange={e => setNivelValor(ni, Number(e.target.value))}
+                              aria-label={`Puntos del nivel ${n.nombre}`}
+                              style={{
+                                width: 46, fontSize: 11, fontWeight: 700, textAlign: 'center',
+                                background: 'rgba(255,255,255,.15)', color: 'white',
+                                border: '1px solid rgba(255,255,255,.35)', borderRadius: 4, padding: '2px 3px',
+                              }} />
+                            <span style={{ fontSize: 10, opacity: .85 }}>pts → {nivelANota(n.valor, maxNivel)}</span>
+                            {rubrica.niveles.length > 1 && (
+                              <button onClick={() => removeNivel(ni)} title={`Quitar el nivel ${n.nombre}`}
+                                aria-label={`Quitar el nivel ${n.nombre}`}
+                                style={{ background: 'none', border: 'none', color: 'white', opacity: .8, cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: 0 }}>×</button>
+                            )}
+                          </div>
                         </th>
                       ))}
                       <th style={{ background: 'var(--gris-200)', width: 36 }} />
@@ -437,6 +551,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                             style={{ width: '100%', fontSize: 12, fontWeight: 600, resize: 'vertical', border: '1px solid var(--gris-300)', borderRadius: 4, padding: 4 }}
                             placeholder={`Indicador ${ii + 1}`}
                           />
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 4 }}>
+                            <input
+                              type="number" min={0} max={100} step={0.1}
+                              value={ind.peso ?? pesoRepartido}
+                              onChange={e => setIndicadorPeso(ii, Number(e.target.value))}
+                              aria-label={`Peso del indicador ${ii + 1}`}
+                              style={{ width: 58, fontSize: 11, fontWeight: 700, textAlign: 'center', border: '1px solid var(--gris-300)', borderRadius: 4, padding: '3px 2px' }} />
+                            <span style={{ fontSize: 10, color: 'var(--gris-600)' }}>
+                              %{ind.peso == null ? ' (repartido)' : ''}
+                            </span>
+                          </div>
                         </td>
                         {rubrica.niveles.map((n, ni) => (
                           <td key={ni} style={{ padding: 6, borderRight: '1px solid var(--gris-200)', verticalAlign: 'top' }}>
@@ -466,6 +591,18 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={addIndicador}>
                   + Añadir indicador
                 </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={addNivel}
+                  title="Añade un escalón por debajo. Es la forma de tener un nivel 0 para «no ejecuta» o «no interviene».">
+                  + Añadir nivel
+                </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={repartirPesos}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Pone el mismo peso a todos los indicadores">
+                  ⚖ Repartir pesos
+                </button>
+                <span style={{ fontSize: 11, fontWeight: 700, color: pesosCuadran ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
+                  {pesoTotal}%{pesosCuadran ? ' ✓' : pesoTotal > 100 ? ' (excede 100)' : ` (falta ${Math.round((100 - pesoTotal) * 10) / 10})`}
+                </span>
                 <div style={{ flex: 1 }} />
                 <button className="btn-secondary" style={{ fontSize: 12 }}
                   onClick={() => importRubricaRef.current?.click()}

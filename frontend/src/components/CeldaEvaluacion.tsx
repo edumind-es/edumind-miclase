@@ -16,11 +16,12 @@ import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import MiniaturaEvidencia from './MiniaturaEvidencia'
 import InstrumentosManager from './InstrumentosManager'
 import RubricaEditor from './RubricaEditor'
-import { nivelANota, calificativo } from '@/db/calculo'
+import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
+type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
 
 interface Props {
   alumno: Alumno
@@ -45,6 +46,9 @@ export default function CeldaEvaluacion({
 }: Props) {
   const [instrumentoId, setInstrumentoId] = useState<number | null>(instrumentos[0]?.instrumento_id ?? null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
+  const [indicadores, setIndicadores] = useState<IndicadorRubrica[]>([])
+  /** nombre del indicador → valor del nivel marcado. */
+  const [marcado, setMarcado] = useState<Record<string, number>>({})
   const [valorActual, setValorActual] = useState<number | null>(null)
   const [observacion, setObservacion] = useState('')
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
@@ -73,13 +77,18 @@ export default function CeldaEvaluacion({
 
   // Rúbrica del instrumento seleccionado
   useEffect(() => {
-    if (!instrumentoId) { setNiveles([]); return }
+    if (!instrumentoId) { setNiveles([]); setIndicadores([]); return }
     getRubrica(instrumentoId).then(r => {
-      if (!r) { setNiveles([]); return }
+      if (!r) { setNiveles([]); setIndicadores([]); return }
       try {
         const nvs = JSON.parse(r.niveles_json) as NivelRubrica[]
         setNiveles(nvs.filter(n => typeof n.valor === 'number'))
-      } catch { setNiveles([]) }
+        // Los indicadores existían desde siempre en la rúbrica y no se leían
+        // aquí: se calificaba con un único nivel para todo el criterio y el
+        // trabajo de redactarlos no servía para nada al evaluar.
+        const inds = JSON.parse(r.indicadores_json) as IndicadorRubrica[]
+        setIndicadores(Array.isArray(inds) ? inds.filter(i => i?.nombre) : [])
+      } catch { setNiveles([]); setIndicadores([]) }
     })
   }, [instrumentoId, refrescoInstr])
 
@@ -89,6 +98,9 @@ export default function CeldaEvaluacion({
     getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre).then(c => {
       setValorActual(c?.valor ?? null)
       setObservacion(c?.observacion ?? '')
+      // Lo marcado en cada indicador la última vez. Una nota puesta antes de
+      // que esto existiera no lo trae: se muestra el número y ya.
+      setMarcado(c?.niveles_rubrica ?? {})
     })
   }, [alumno.id, instrumentoId, criterio.id, trimestre])
 
@@ -116,7 +128,7 @@ export default function CeldaEvaluacion({
     return () => window.removeEventListener('keydown', onKey)
   }, [onCerrar, onSiguiente, onAnterior, instrumentosAbierto, rubricaAbierta])
 
-  const guardarNota = async (valor: number | null) => {
+  const guardarNota = async (valor: number | null, niveles_rubrica?: Record<string, number> | null) => {
     if (!instrumentoId) return
     setGuardando(true)
     try {
@@ -125,6 +137,9 @@ export default function CeldaEvaluacion({
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
         valor, observacion: observacion.trim() || null, unidad_id: unidadId,
+        // `undefined` significa «no lo toques»: al borrar la nota o al
+        // escribir una observación no hay que perder lo marcado.
+        ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
       setMsg({ tipo: 'ok', texto: valor == null ? 'Nota borrada' : `${valor} guardado en ${criterio.id}` })
@@ -160,6 +175,36 @@ export default function CeldaEvaluacion({
     recargarEvidencias()
     onGuardado()
   }
+
+  /**
+   * Marcar un nivel en un indicador.
+   *
+   * La nota no se pide: sale de la rúbrica. Se recalcula con todos los
+   * indicadores marcados hasta ahora y se guarda junto con las marcas, para
+   * que al volver se pueda corregir uno solo sin rehacer el resto.
+   *
+   * Volver a pulsar el nivel ya marcado lo desmarca: equivocarse no puede
+   * obligar a borrar la nota entera y empezar de cero.
+   */
+  const marcarIndicador = async (nombre: string, valor: number) => {
+    const siguiente = { ...marcado }
+    if (siguiente[nombre] === valor) delete siguiente[nombre]
+    else siguiente[nombre] = valor
+    setMarcado(siguiente)
+    const { nota } = notaDeRubrica(indicadores, niveles, siguiente)
+    await guardarNota(nota, siguiente)
+  }
+
+  /** Quitar todas las marcas y la nota que salía de ellas. */
+  const limpiarRubrica = async () => {
+    setMarcado({})
+    await guardarNota(null, {})
+  }
+
+  const resumen = notaDeRubrica(indicadores, niveles, marcado)
+  const maxNivel = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
+  /** Con rúbrica de verdad —niveles e indicadores— la nota la pone ella. */
+  const calificaPorRubrica = niveles.length > 0 && indicadores.length > 0
 
   /**
    * Tras tocar instrumentos o rúbrica hay dos vistas que se quedarían viejas:
@@ -308,7 +353,7 @@ export default function CeldaEvaluacion({
                 ? <>Sin calificar con <strong>{instrumentoSel?.nombre ?? 'este instrumento'}</strong>.</>
                 : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
               {valorActual != null && (
-                <button onClick={() => guardarNota(null)} disabled={guardando}
+                <button onClick={() => calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
                   style={{ marginLeft: 8, background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                   borrar nota
                 </button>
@@ -316,55 +361,115 @@ export default function CeldaEvaluacion({
             </div>
           </div>
 
-          {/* Niveles de rúbrica — escala 1..max convertida a 0-10 */}
-          {niveles.length > 0 && (
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 6 }}>
-                Niveles de la rúbrica
+          {/* La rúbrica se califica indicador a indicador. La nota no se pide:
+              sale de lo marcado, ponderado por el peso de cada indicador. */}
+          {calificaPorRubrica && (
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
+                  Rúbrica — marca el nivel de cada indicador
+                </div>
+                <div style={{ flex: 1 }} />
+                <span style={{ fontSize: 11.5, color: resumen.evaluados === resumen.total ? 'var(--verde-500)' : 'var(--gris-500)', fontWeight: 600 }}>
+                  {resumen.evaluados} de {resumen.total} marcados
+                </span>
+                {resumen.evaluados > 0 && (
+                  <button onClick={limpiarRubrica} disabled={guardando}
+                    style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                    limpiar
+                  </button>
+                )}
               </div>
-              <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-                {(() => {
-                  // Los niveles se reparten de 0 a 10 de extremo a extremo,
-                  // así que hace falta también el más bajo, no solo el máximo.
-                  const valores = niveles.map(n => n.valor)
-                  const maxNivel = Math.max(...valores)
-                  const minNivel = Math.min(...valores)
-                  return niveles.map(n => {
-                    const nota = nivelANota(n.valor, maxNivel, minNivel)
-                    const activo = valorActual === nota
-                    return (
-                      <button key={n.nombre} onClick={() => guardarNota(nota)} disabled={guardando}
-                        title={n.descripcion}
-                        style={{
-                          flex: '1 1 120px', minHeight: 54, borderRadius: 10, fontSize: 13.5, fontWeight: 700,
-                          cursor: 'pointer',
-                          border: `2px solid ${activo ? 'var(--azul-900)' : 'var(--azul-300)'}`,
-                          background: activo ? 'var(--azul-700)' : 'var(--azul-100)',
-                          color: activo ? 'white' : 'var(--azul-900)',
-                        }}>
-                        {n.nombre}
-                        <br /><span style={{ fontSize: 11, fontWeight: 500 }}>→ {nota}</span>
-                      </button>
-                    )
-                  })
-                })()}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {indicadores.map((ind, ii) => {
+                  const pesoMostrado = ind.peso ?? Math.round((100 / indicadores.length) * 10) / 10
+                  return (
+                    <div key={ind.nombre + ii} style={{
+                      border: '1px solid var(--gris-300)', borderRadius: 10, padding: '9px 11px',
+                      background: marcado[ind.nombre] != null ? 'var(--azul-100)' : 'white',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7 }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', flex: 1, lineHeight: 1.35 }}>
+                          {ind.nombre}
+                        </div>
+                        <span style={{ fontSize: 10.5, color: 'var(--gris-500)', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                          {pesoMostrado}%
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        {niveles.map(n => {
+                          const activo = marcado[ind.nombre] === n.valor
+                          // El descriptor es lo que de verdad ayuda a decidir:
+                          // se enseña al pasar el ratón y se lee en voz alta.
+                          const descriptor = ind.descriptores?.[n.nombre] || n.descripcion
+                          return (
+                            <button key={n.nombre}
+                              onClick={() => marcarIndicador(ind.nombre, n.valor)}
+                              disabled={guardando}
+                              title={descriptor
+                                ? `${n.nombre} (${n.valor} pts): ${descriptor}`
+                                : `${n.nombre} — ${n.valor} pts`}
+                              aria-pressed={activo}
+                              style={{
+                                flex: '1 1 110px', minHeight: 50, borderRadius: 9, padding: '6px 8px',
+                                fontSize: 12.5, fontWeight: 700, cursor: 'pointer', textAlign: 'left',
+                                border: `2px solid ${activo ? 'var(--azul-900)' : 'var(--gris-300)'}`,
+                                background: activo ? 'var(--azul-700)' : 'white',
+                                color: activo ? 'white' : 'var(--gris-900)',
+                              }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 6 }}>
+                                <span>{n.nombre}</span>
+                                <span style={{ fontWeight: 500, opacity: .75, whiteSpace: 'nowrap' }}>
+                                  {nivelANota(n.valor, maxNivel)}
+                                </span>
+                              </div>
+                              {descriptor && (
+                                <div style={{
+                                  fontSize: 10.5, fontWeight: 400, marginTop: 2, lineHeight: 1.3,
+                                  opacity: activo ? .9 : .65,
+                                  display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                                }}>
+                                  {descriptor}
+                                </div>
+                              )}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
 
-          {/* Teclado 0-10 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(11, 1fr)', gap: 5, marginBottom: 14 }}>
-            {Array.from({ length: 11 }, (_, v) => (
-              <button key={v} onClick={() => guardarNota(v)} disabled={guardando || !instrumentoId}
-                className={`cal-${v}`}
-                style={{
-                  minHeight: 46, borderRadius: 9, fontSize: 16, fontWeight: 800, cursor: 'pointer',
-                  border: valorActual === v ? '3px solid var(--gris-900)' : '2px solid transparent',
-                }}>
-                {v}
-              </button>
-            ))}
-          </div>
+          {/* Sin rúbrica que aplicar, la nota se pone a mano. También cuando la
+              rúbrica está a medias —con niveles pero sin ningún indicador—, que
+              si no el criterio se quedaría sin forma de calificar. */}
+          {!calificaPorRubrica && (
+            <>
+              {niveles.length > 0 && indicadores.length === 0 && (
+                <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
+                  Esta rúbrica tiene niveles pero ningún indicador, así que no puede
+                  calcular la nota. Añádeselos en <strong>📊 Rúbrica</strong> y se
+                  calificará marcando cada uno.
+                </div>
+              )}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(11, 1fr)', gap: 5, marginBottom: 14 }}>
+                {Array.from({ length: 11 }, (_, v) => (
+                  <button key={v} onClick={() => guardarNota(v)} disabled={guardando || !instrumentoId}
+                    className={`cal-${v}`}
+                    style={{
+                      minHeight: 46, borderRadius: 9, fontSize: 16, fontWeight: 800, cursor: 'pointer',
+                      border: valorActual === v ? '3px solid var(--gris-900)' : '2px solid transparent',
+                    }}>
+                    {v}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Observación + evidencia */}
           <div style={{ marginBottom: 12 }}>

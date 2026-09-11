@@ -294,23 +294,104 @@ export function calificativo(nota: number | null | undefined): Calificativo {
 }
 
 /**
- * Convierte el nivel de una rúbrica a la escala 0-10 usada en toda la app,
- * repartiendo los niveles de extremo a extremo: el más bajo es 0 y el más
- * alto 10, sin que el docente tenga que configurar nada.
+ * Convierte el valor de un nivel de rúbrica a la escala 0-10, anclando la
+ * escala en 0: `valor / valorMáximo × 10`.
  *
- * Con cuatro niveles: 0 · 3,3 · 6,7 · 10.
+ * Con niveles 4·3·2·1 → 10 · 7,5 · 5 · 2,5.
+ * Con niveles 4·3·2·1·0 → 10 · 7,5 · 5 · 2,5 · 0.
  *
- * Antes se dividía por el máximo (`valor / max * 10`), así que el nivel más
- * bajo de una rúbrica de cuatro daba 2,5: un alumno en el escalón inferior de
- * todos los criterios sacaba un 2,5 y era imposible poner un 0.
+ * Esto revierte a conciencia una decisión anterior. Antes se repartía de
+ * extremo a extremo (`(valor − mín) / (máx − mín)`), de modo que el nivel más
+ * bajo *presente* valía 0. Se hizo así porque no había otra forma de llegar al
+ * cero: los niveles de la rúbrica no se podían editar y siempre eran cuatro.
  *
- * La conversión ocurre al pulsar el nivel y lo que se guarda es la nota, así
- * que este cambio no altera ninguna calificación ya puesta.
+ * Ahora sí se pueden, así que el cero es un nivel que el docente añade cuando
+ * quiere decir algo concreto —«no ejecuta», «no interviene»— y deja de ser un
+ * castigo automático al escalón inferior. Un «Insuficiente» describe algo que
+ * el alumno SÍ hace, y conserva su parte proporcional.
+ *
+ * Lo que se guarda es la nota ya convertida, así que ninguna calificación
+ * puesta hasta hoy cambia de valor.
  */
-export function nivelANota(valor: number, maxNivel: number, minNivel = 1): number {
-  const recorrido = maxNivel - minNivel
-  // Rúbrica de un solo nivel: no hay escala que repartir
-  if (!Number.isFinite(recorrido) || recorrido <= 0) return valor
-  const nota = ((valor - minNivel) / recorrido) * 10
+export function nivelANota(valor: number, maxNivel: number): number {
+  // Una rúbrica cuyo nivel más alto vale 0 no reparte nada: no hay escala.
+  if (!Number.isFinite(maxNivel) || maxNivel <= 0) return 0
+  const nota = (valor / maxNivel) * 10
   return Math.round(Math.max(0, Math.min(10, nota)) * 10) / 10
+}
+
+export type NivelDeRubrica = { nombre: string; valor: number }
+/** El peso es opcional: una rúbrica anterior a los pesos reparte a partes iguales. */
+export type IndicadorDeRubrica = { nombre: string; peso?: number }
+
+export type NotaDeRubrica = {
+  /** Null mientras no se haya marcado ningún indicador. */
+  nota: number | null
+  evaluados: number
+  total: number
+}
+
+/**
+ * Nota 0-10 de una rúbrica calificada **indicador a indicador**.
+ *
+ *   nota = Σ(peso × valor) ÷ Σ(peso × valorMáximo) × 10
+ *
+ * Antes esto no existía: el calificador pedía un único nivel para todo el
+ * criterio y los indicadores de la rúbrica —lo que el docente se molesta en
+ * redactar— no se leían en ningún momento. Se diseñaba una rúbrica de cinco
+ * filas y se calificaba con un clic.
+ *
+ * Los indicadores sin marcar **no cuentan como cero**: se promedia solo sobre
+ * lo observado. Un criterio que se evalúa a medias, porque la sesión se quedó
+ * corta, no debe hundir la nota; por eso se devuelve también cuántos van.
+ */
+export function notaDeRubrica(
+  indicadores: IndicadorDeRubrica[],
+  niveles: NivelDeRubrica[],
+  /** nombre del indicador → valor del nivel marcado */
+  elegido: Record<string, number>,
+): NotaDeRubrica {
+  const total = indicadores.length
+  const valorMax = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
+  if (!Number.isFinite(valorMax) || valorMax <= 0) return { nota: null, evaluados: 0, total }
+
+  // Sin pesos declarados se reparte a partes iguales. Da igual el número que
+  // se use mientras sea el mismo para todos: la fórmula normaliza.
+  const pesoPorDefecto = total > 0 ? 100 / total : 0
+
+  let suma = 0
+  let pesos = 0
+  let evaluados = 0
+  for (const ind of indicadores) {
+    const valor = elegido[ind.nombre]
+    if (typeof valor !== 'number') continue
+    const peso = typeof ind.peso === 'number' && ind.peso > 0 ? ind.peso : pesoPorDefecto
+    suma += peso * valor
+    pesos += peso
+    evaluados++
+  }
+
+  if (evaluados === 0 || pesos <= 0) return { nota: null, evaluados: 0, total }
+  const nota = (suma / (pesos * valorMax)) * 10
+  return {
+    nota: Math.round(Math.max(0, Math.min(10, nota)) * 10) / 10,
+    evaluados,
+    total,
+  }
+}
+
+/**
+ * Reparte 100 entre los indicadores dejando la suma exacta.
+ *
+ * Con tres indicadores salen 33,3 y el total daría 99,9: el resto se le da al
+ * primero, que es lo que hace que el aviso de «suma 100» no mienta por un
+ * decimal de redondeo.
+ */
+export function pesosAPartesIguales(n: number): number[] {
+  if (n <= 0) return []
+  const base = Math.floor((100 / n) * 10) / 10
+  const pesos = Array(n).fill(base)
+  const resto = Math.round((100 - base * n) * 10) / 10
+  pesos[0] = Math.round((pesos[0] + resto) * 10) / 10
+  return pesos
 }

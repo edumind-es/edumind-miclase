@@ -38,6 +38,12 @@ export type CalItem = {
   valor: number | null
   observacion?: string | null
   unidad_id?: number | null
+  /**
+   * Nivel marcado en cada indicador de la rúbrica. `undefined` significa «no
+   * lo toques»: guardar una observación o borrar la nota no debe llevarse por
+   * delante la justificación. Para vaciarla se manda `{}` o `null`.
+   */
+  niveles_rubrica?: Record<string, number> | null
 }
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
@@ -483,10 +489,16 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
         .equals([item.alumno_id, item.instrumento_id, item.criterio_id, item.trimestre])
         .first()
       if (existing?.id != null) {
+        // Ojo: esta lista enumera los campos que se actualizan. Un campo
+        // nuevo que no se añada aquí se guarda al crear y se pierde en cada
+        // recalificación, en silencio.
         await db.calificaciones.update(existing.id, tocado({
           valor: item.valor,
           observacion: item.observacion ?? existing.observacion ?? null,
           unidad_id: item.unidad_id ?? existing.unidad_id ?? null,
+          niveles_rubrica: item.niveles_rubrica !== undefined
+            ? item.niveles_rubrica
+            : existing.niveles_rubrica ?? null,
           fecha: now(),
           deleted_at: null,
         }))
