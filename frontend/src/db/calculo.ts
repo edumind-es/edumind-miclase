@@ -117,18 +117,83 @@ export function parsearPesosTrimestres(json: string | undefined): Record<number,
 }
 
 /**
+ * Pesos declarados de un instrumento dentro de un criterio concreto.
+ *
+ * Dos mapas porque el vínculo vive por unidad y las notas se agrupan por
+ * trimestre: si el mismo criterio se evalúa en dos unidades con repartos
+ * distintos, se usa el de la unidad en la que se puso la nota —que la propia
+ * nota guarda en `unidad_id`— y solo cuando no consta se recurre al general.
+ */
+export type PesosVinculo = {
+  /** `criterio|instrumento|unidad` → peso declarado */
+  porUnidad: Map<string, number>
+  /** `criterio|instrumento` → peso declarado, cuando no se sabe la unidad */
+  porCriterio: Map<string, number>
+}
+
+export const SIN_PESOS_VINCULO: PesosVinculo = {
+  porUnidad: new Map(), porCriterio: new Map(),
+}
+
+/**
+ * Arma los pesos declarados a partir de la programación ya cargada.
+ *
+ * Se le pasa lo que devuelve `getUnidades()`; se pide con una forma mínima
+ * para que el cálculo no dependa de la capa de base de datos.
+ */
+export function pesosVinculoDeUnidades(
+  unidades: {
+    id?: number
+    criterios: { criterio_id: string; instrumentos: { instrumento_id: number; peso_criterio?: number | null }[] }[]
+  }[]
+): PesosVinculo {
+  const porUnidad = new Map<string, number>()
+  const porCriterio = new Map<string, number>()
+  for (const u of unidades) {
+    for (const c of u.criterios) {
+      for (const i of c.instrumentos) {
+        if (i.peso_criterio == null) continue
+        if (u.id != null) porUnidad.set(`${c.criterio_id}|${i.instrumento_id}|${u.id}`, i.peso_criterio)
+        // El general solo se usa cuando la nota no dice de qué unidad salió.
+        // Gana el primero declarado: si dos unidades reparten distinto, sin
+        // `unidad_id` en la nota no hay forma de saber cuál le tocaba.
+        const clave = `${c.criterio_id}|${i.instrumento_id}`
+        if (!porCriterio.has(clave)) porCriterio.set(clave, i.peso_criterio)
+      }
+    }
+  }
+  return { porUnidad, porCriterio }
+}
+
+/** El peso declarado que le toca a esta nota, o null si no hay ninguno. */
+function pesoDeclarado(
+  pesos: PesosVinculo, criterio_id: string, instrumento_id: number, unidad_id?: number | null
+): number | null {
+  // Si se sabe de qué unidad salió la nota, manda esa unidad y punto: caer
+  // al mapa general heredaría el reparto de OTRA unidad, que es peor que no
+  // tener ninguno. Una unidad que no declara reparto usa el peso global.
+  if (unidad_id != null) {
+    return pesos.porUnidad.get(`${criterio_id}|${instrumento_id}|${unidad_id}`) ?? null
+  }
+  // Solo las notas antiguas, sin unidad anotada, recurren al general.
+  return pesos.porCriterio.get(`${criterio_id}|${instrumento_id}`) ?? null
+}
+
+/**
  * Calcula las notas de un alumno en un área.
  *
  * @param calificaciones notas del alumno en esa área (todos los trimestres)
- * @param instrumentos   instrumentos del área (aportan el peso)
+ * @param instrumentos   instrumentos del área (aportan el peso por defecto)
  * @param pesosCriterio  peso de cada criterio en la programación (por defecto 1)
+ * @param pesosVinculo   reparto propio de cada criterio, si lo tiene declarado
  */
 export function calcularNotaArea(
   asignatura_id: number,
   calificaciones: Calificacion[],
   instrumentos: Instrumento[],
   pesosTrimestresJson: string | undefined,
-  pesosCriterio: Map<string, number> = new Map()
+  pesosCriterio: Map<string, number> = new Map(),
+  pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO
 ): NotaArea {
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
   const conValor = calificaciones.filter(c => c.valor != null)
@@ -139,9 +204,14 @@ export function calcularNotaArea(
 
   for (const c of conValor) {
     const ins = instrById.get(c.instrumento_id)
+    // El reparto propio del criterio manda sobre el peso global del
+    // instrumento: un criterio de investigación puede evaluarse con prueba,
+    // cuaderno y lista de control contando por igual, sin que eso obligue a
+    // mover el peso de esos instrumentos en el resto del área.
+    const declarado = pesoDeclarado(pesosVinculo, c.criterio_id, c.instrumento_id, c.unidad_id)
     // Una nota cuyo instrumento ya no existe conserva valor histórico con peso 1
-    const peso = ins ? (ins.peso > 0 ? ins.peso : 0) : 1
-    if (peso === 0) continue
+    const peso = declarado ?? (ins ? (ins.peso > 0 ? ins.peso : 0) : 1)
+    if (peso <= 0) continue
 
     if (!porCriterio.has(c.criterio_id)) porCriterio.set(c.criterio_id, new Map())
     const porTrim = porCriterio.get(c.criterio_id)!

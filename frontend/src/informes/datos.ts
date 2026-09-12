@@ -10,7 +10,7 @@ import {
   getCalificacionesPorGrupo, getEvidenciasAlumno, getResumenAsistencia,
   getUnidades,
 } from '@/db/queries'
-import { calcularNotaArea, type NotaArea } from '@/db/calculo'
+import { calcularNotaArea, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
 import { api } from '@/api'
 
@@ -21,6 +21,8 @@ export type AreaInforme = {
   descripciones: Map<string, string>
   /** criterio_id → peso en la programación */
   pesosCriterio: Map<string, number>
+  /** Reparto propio de cada criterio, cuando la programación lo declara. */
+  pesosVinculo: PesosVinculo
 }
 
 export type DatosGrupo = {
@@ -84,7 +86,10 @@ export async function reunirDatosGrupo(
         pesosCriterio.set(c.criterio_id, Math.max(pesosCriterio.get(c.criterio_id) ?? 0, c.peso || 1))
       }
     }
-    areas.push({ asig, instrumentos, descripciones, pesosCriterio })
+    areas.push({
+      asig, instrumentos, descripciones, pesosCriterio,
+      pesosVinculo: pesosVinculoDeUnidades(unidades),
+    })
   }
 
   return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre }
@@ -100,7 +105,7 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
       area,
       nota: calcularNotaArea(
         area.asig.id!, propias, area.instrumentos,
-        area.asig.pesos_trimestres, area.pesosCriterio
+        area.asig.pesos_trimestres, area.pesosCriterio, area.pesosVinculo
       ),
     }
   })

@@ -120,11 +120,19 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
             </h2>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
           </div>
-          <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14 }}>
-            Los cambios se guardan al instante. Peso total:{' '}
+          {/* Este peso es el reparto POR DEFECTO, no el definitivo: desde que un
+              criterio puede declarar el suyo en la programación, decir «peso
+              total» a secas hacía creer que mandaba siempre. */}
+          <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.55 }}>
+            Los cambios se guardan al instante. Reparto por defecto:{' '}
             <strong style={{ color: totalOk ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
               {total}%{totalOk ? ' ✓' : total > 100 ? ' (excede 100)' : ` (falta ${100 - total})`}
             </strong>
+            <div style={{ fontSize: 11, color: 'var(--gris-500)', marginTop: 3 }}>
+              Es lo que se aplica a los criterios que no declaran el suyo. Un criterio
+              concreto puede repartir distinto —por ejemplo, que prueba, cuaderno y lista
+              de control cuenten por igual— desde 📋 Programación, sin tocar esto.
+            </div>
           </div>
 
           {instrumentos.length === 0 && !nuevo && (

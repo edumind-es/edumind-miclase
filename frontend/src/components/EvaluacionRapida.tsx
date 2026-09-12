@@ -13,7 +13,7 @@ import {
   getGruposDeAlumno, getAsignaturas, getInstrumentos, getUnidades,
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, contarEvidenciasAlumno,
-  getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura,
+  getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura, type VinculoInstrumento,
   type UnidadConCriterios,
 } from '@/db/queries'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
@@ -51,7 +51,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const [trimestre, setTrimestre] = useState<number>(() => leerCfg().trimestre || trimestreActual())
   const [criterios, setCriterios] = useState<Criterio[]>([])
   const [criterioId, setCriterioId] = useState<string>('')
-  const [mapaInstr, setMapaInstr] = useState<Map<string, { instrumento_id: number; peso: number }[]>>(new Map())
+  const [mapaInstr, setMapaInstr] = useState<Map<string, VinculoInstrumento[]>>(new Map())
   const [instrumentoId, setInstrumentoId] = useState<number | null>(null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
   const [indicadores, setIndicadores] = useState<IndicadorRubrica[]>([])
@@ -121,7 +121,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     const p = unidadId
       ? getMapaCriterioInstrumento(unidadId)
       : getMapaCriterioInstrumentoAsignatura(asignaturaId)
-    p.then(m => setMapaInstr(m as Map<string, { instrumento_id: number; peso: number }[]>))
+    p.then(m => setMapaInstr(m as Map<string, VinculoInstrumento[]>))
   }, [asignaturaId, unidadId, refrescoInstr])
 
   // 5) Criterios del currículo, filtrados por la unidad activa
