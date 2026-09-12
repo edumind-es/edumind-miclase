@@ -22,7 +22,7 @@ export type UnidadConCriterios = Unidad & {
     criterio_id: string
     peso: number
     descripcion: string | null
-    instrumentos: { instrumento_id: number; peso: number }[]
+    instrumentos: VinculoInstrumento[]
   }[]
 }
 
@@ -363,6 +363,15 @@ export async function moverInstrumento(asignatura_id: number, instrumento_id: nu
 
 // ─── CRITERIO ↔ INSTRUMENTO (el vínculo de la programación) ──────────────────
 
+/** Un instrumento asignado a un criterio, con lo que pesa dentro de él. */
+export type VinculoInstrumento = {
+  instrumento_id: number
+  /** Campo histórico, sin uso. Ver `CriterioInstrumento.peso`. */
+  peso: number
+  /** Peso declarado dentro del criterio, o null si se usa el global. */
+  peso_criterio: number | null
+}
+
 export async function getCriterioInstrumentos(unidad_id: number): Promise<CriterioInstrumento[]> {
   return vivos(await db.criterio_instrumentos.where('unidad_id').equals(unidad_id).toArray())
 }
@@ -370,15 +379,58 @@ export async function getCriterioInstrumentos(unidad_id: number): Promise<Criter
 /** Mapa criterio → instrumentos asignados, para una unidad. */
 export async function getMapaCriterioInstrumento(
   unidad_id: number
-): Promise<Map<string, { instrumento_id: number; peso: number }[]>> {
+): Promise<Map<string, VinculoInstrumento[]>> {
   const filas = await getCriterioInstrumentos(unidad_id)
-  const mapa = new Map<string, { instrumento_id: number; peso: number }[]>()
+  const mapa = new Map<string, VinculoInstrumento[]>()
   for (const f of filas) {
     const lista = mapa.get(f.criterio_id) || []
-    lista.push({ instrumento_id: f.instrumento_id, peso: f.peso })
+    lista.push({
+      instrumento_id: f.instrumento_id,
+      peso: f.peso,
+      peso_criterio: f.peso_criterio ?? null,
+    })
     mapa.set(f.criterio_id, lista)
   }
   return mapa
+}
+
+/**
+ * Deja declarado cuánto pesa cada instrumento dentro de un criterio.
+ *
+ * Se escriben **todos** los instrumentos del criterio de una vez, no uno
+ * suelto: mezclar pesos declarados con pesos globales dentro del mismo
+ * criterio daría una nota que no sabría explicar ni quien la puso.
+ *
+ * Pasar `null` borra el reparto propio y devuelve el criterio al peso global
+ * de cada instrumento, que es como se comportaba antes de que esto existiera.
+ */
+/**
+ * Borra el reparto declarado de TODOS los criterios de una unidad.
+ *
+ * Hace falta cuando se toca la lista de instrumentos en bloque: un reparto
+ * escrito para tres instrumentos deja de sumar 100 en cuanto entra un cuarto,
+ * y el criterio quedaría mezclando pesos declarados con pesos globales.
+ */
+export async function limpiarPesosDeUnidad(unidad_id: number): Promise<void> {
+  const filas = vivos(await db.criterio_instrumentos.where('unidad_id').equals(unidad_id).toArray())
+  for (const fila of filas) {
+    if (fila.peso_criterio == null) continue
+    await db.criterio_instrumentos.update(fila.id!, tocado({ peso_criterio: null }))
+  }
+}
+
+export async function fijarPesosDeCriterio(
+  unidad_id: number, criterio_id: string, pesos: Map<number, number> | null
+): Promise<void> {
+  const filas = await db.criterio_instrumentos
+    .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).toArray()
+
+  for (const fila of filas) {
+    if (fila.deleted_at) continue
+    const valor = pesos ? pesos.get(fila.instrumento_id) ?? null : null
+    if ((fila.peso_criterio ?? null) === valor) continue
+    await db.criterio_instrumentos.update(fila.id!, tocado({ peso_criterio: valor }))
+  }
 }
 
 /**
@@ -388,10 +440,10 @@ export async function getMapaCriterioInstrumento(
  */
 export async function getMapaCriterioInstrumentoAsignatura(
   asignatura_id: number
-): Promise<Map<string, { instrumento_id: number; peso: number; unidad_id: number }[]>> {
+): Promise<Map<string, (VinculoInstrumento & { unidad_id: number })[]>> {
   const unidades = await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()
   const ids = vivos(unidades).map(u => u.id!)
-  const mapa = new Map<string, { instrumento_id: number; peso: number; unidad_id: number }[]>()
+  const mapa = new Map<string, (VinculoInstrumento & { unidad_id: number })[]>()
   if (!ids.length) return mapa
 
   const filas = vivos(await db.criterio_instrumentos.where('unidad_id').anyOf(ids).toArray())
@@ -399,7 +451,12 @@ export async function getMapaCriterioInstrumentoAsignatura(
     const lista = mapa.get(f.criterio_id) || []
     // Evitar duplicar el mismo instrumento si aparece en varias unidades
     if (!lista.some(x => x.instrumento_id === f.instrumento_id)) {
-      lista.push({ instrumento_id: f.instrumento_id, peso: f.peso, unidad_id: f.unidad_id })
+      lista.push({
+        instrumento_id: f.instrumento_id,
+        peso: f.peso,
+        peso_criterio: f.peso_criterio ?? null,
+        unidad_id: f.unidad_id,
+      })
     }
     mapa.set(f.criterio_id, lista)
   }

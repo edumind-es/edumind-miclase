@@ -152,7 +152,31 @@ export interface CriterioInstrumento extends Sincronizable {
   unidad_id: number
   criterio_id: string
   instrumento_id: number
+  /**
+   * Campo histórico: se escribe siempre a 1.0 y nadie lo lee. Se conserva
+   * para no romper lo ya sincronizado. El que manda es `peso_criterio`.
+   */
   peso: number
+  /**
+   * Cuánto pesa ESTE instrumento dentro de ESTE criterio, en tanto por ciento.
+   *
+   * Sin declarar (`undefined`) el criterio se pondera como siempre: con el
+   * peso global del instrumento en el área. Declarado, manda sobre él.
+   *
+   * Lo que resuelve: un criterio de investigación puede evaluarse con prueba
+   * escrita, cuaderno y lista de control a la vez, y el docente querer que
+   * cuenten por igual. Con el peso global eso era imposible sin mover el
+   * reparto de toda el área, porque el peso del instrumento es uno solo para
+   * todos los criterios.
+   *
+   * Es la misma regla que ya usan los indicadores dentro de una rúbrica (ver
+   * `notaDeRubrica`): sin pesos declarados, a partes iguales.
+   *
+   * No va indexado a propósito: Dexie solo exige subir de versión cuando
+   * cambian los índices, así que esto no necesita migración. Y el sync lo
+   * arrastra solo, porque `aSobre` serializa el registro entero.
+   */
+  peso_criterio?: number | null
 }
 
 export interface Rubrica extends Sincronizable {

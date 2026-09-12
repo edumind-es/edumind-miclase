@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import {
   getUnidades, crearUnidad as dbCrearUnidad, eliminarUnidad as dbEliminarUnidad,
   actualizarUnidad, vincularCriterio, desvincularCriterio, generarPlantillaUnidades,
-  fijarInstrumentosDeCriterio, asignarInstrumentoAUnidad, borrarProgramacion,
+  fijarInstrumentosDeCriterio, fijarPesosDeCriterio, limpiarPesosDeUnidad,
+  asignarInstrumentoAUnidad, borrarProgramacion,
   type UnidadConCriterios,
 } from '@/db/queries'
 import { useAppStore } from '@/store/useAppStore'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { pesosAPartesIguales } from '@/db/calculo'
+import { sugerirInstrumentos, BLOOM, DOK } from '@/ia/taxonomias'
 import { api } from '@/api'
 
 const TIPOS_UNIDAD = [
@@ -131,15 +134,56 @@ export default function ProgramacionPanel({
     cargar()
   }
 
+  // ── Sugerencia de instrumentos ──────────────────────────────────────────
+  // Qué criterio tiene la sugerencia desplegada, y con qué demanda declarada.
+  // La demanda no se guarda: es una ayuda para elegir, no un dato del criterio.
+  const [sugerenciaAbierta, setSugerenciaAbierta] = useState<string | null>(null)
+  const [demanda, setDemanda] = useState<Record<string, 1 | 2 | 3 | 4>>({})
+
   // ── Instrumento por criterio ────────────────────────────────────────────
 
   const cambiarInstrumentos = async (unidadId: number, criterioId: string, ids: number[]) => {
     await fijarInstrumentosDeCriterio(unidadId, criterioId, ids)
+    // Quitar o añadir un instrumento deja el reparto declarado sin sentido:
+    // sumaría distinto de 100 y la nota saldría de una cuenta que el docente
+    // no reconocería. Se vuelve al peso global hasta que lo declare otra vez.
+    await fijarPesosDeCriterio(unidadId, criterioId, null)
+    cargar()
+  }
+
+  /** Reparte 100 entre los instrumentos del criterio, a partes iguales. */
+  const repartirPesos = async (unidadId: number, criterioId: string, ids: number[]) => {
+    const reparto = pesosAPartesIguales(ids.length)
+    await fijarPesosDeCriterio(unidadId, criterioId, new Map(ids.map((id, i) => [id, reparto[i]])))
+    cargar()
+  }
+
+  const cambiarPeso = async (
+    unidadId: number, criterioId: string,
+    instrumentos: { instrumento_id: number; peso_criterio: number | null }[],
+    instrumentoId: number, valor: number,
+  ) => {
+    // Al tocar el primer peso hay que darle un valor a todos, o el criterio
+    // mezclaría pesos declarados con pesos globales y la nota no se podría
+    // explicar. Los que no tienen parten del reparto a partes iguales.
+    const reparto = pesosAPartesIguales(instrumentos.length)
+    const pesos = new Map(instrumentos.map((x, i) => [
+      x.instrumento_id,
+      x.instrumento_id === instrumentoId ? valor : (x.peso_criterio ?? reparto[i]),
+    ]))
+    await fijarPesosDeCriterio(unidadId, criterioId, pesos)
+    cargar()
+  }
+
+  const volverAPesoGlobal = async (unidadId: number, criterioId: string) => {
+    await fijarPesosDeCriterio(unidadId, criterioId, null)
     cargar()
   }
 
   const aplicarATodos = async (unidadId: number, instrumentoId: number) => {
     const n = await asignarInstrumentoAUnidad(unidadId, instrumentoId)
+    // Un instrumento más deja sin sentido cualquier reparto ya escrito
+    await limpiarPesosDeUnidad(unidadId)
     setMensaje(`✅ Instrumento asignado a los ${n} criterios de la unidad`)
     setTimeout(() => setMensaje(''), 3500)
     cargar()
@@ -354,8 +398,186 @@ export default function ProgramacionPanel({
                                       ← elige con qué se evalúa
                                     </span>
                                   )}
+                                  <button
+                                    onClick={() => setSugerenciaAbierta(v => v === `${u.id}|${cr.id}` ? null : `${u.id}|${cr.id}`)}
+                                    title="Ver qué instrumentos suelen encajar con este criterio"
+                                    style={{
+                                      fontSize: 10.5, padding: '3px 8px', borderRadius: 11, cursor: 'pointer',
+                                      fontWeight: 600, background: 'white', color: 'var(--gris-500)',
+                                      border: '1px dashed var(--gris-300)', marginLeft: 'auto',
+                                    }}>
+                                    💡 sugerencia
+                                  </button>
                                 </div>
                               )}
+
+                              {enUnidad && sugerenciaAbierta === `${u.id}|${cr.id}` && (() => {
+                                const clave = `${u.id}|${cr.id}`
+                                const dok = demanda[clave]
+                                const sug = sugerirInstrumentos(cr.descripcion, dok)
+                                const nivelBloom = BLOOM.find(b => b.id === sug.bloom)
+                                return (
+                                  <div style={{
+                                    marginTop: 6, padding: '8px 10px', borderRadius: 8,
+                                    background: 'var(--gris-100)', border: '1px solid var(--gris-300)',
+                                  }}>
+                                    <div style={{ fontSize: 11, color: 'var(--gris-600)', lineHeight: 1.5, marginBottom: 6 }}>
+                                      {sug.verbo && <>El criterio empieza por <strong>«{sug.verbo}»</strong>. </>}
+                                      {nivelBloom
+                                        ? <>Apunta a <strong>{nivelBloom.nombre}</strong> en la taxonomía de Bloom.</>
+                                        : sug.motivo === 'ambiguo'
+                                          ? <>Ese verbo <strong>no dice el nivel por sí solo</strong>: en el currículo aparece
+                                              tanto en tareas de repetir como de investigar.</>
+                                          : <>Ese verbo no está en la tabla, así que no arriesgo un nivel.</>}
+                                    </div>
+
+                                    {/* El DOK se pregunta, no se calcula: depende de la complejidad
+                                        de lo que se pida, no del verbo del enunciado. */}
+                                    <div style={{ fontSize: 11, color: 'var(--gris-600)', marginBottom: 4 }}>
+                                      <strong>¿Qué le vas a pedir de verdad?</strong> La profundidad no sale del
+                                      enunciado, sale de lo que exijas en clase.
+                                    </div>
+                                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 7 }}>
+                                      {DOK.map(d => (
+                                        <button key={d.nivel}
+                                          onClick={() => setDemanda(m => ({ ...m, [clave]: d.nivel }))}
+                                          title={d.pregunta}
+                                          style={{
+                                            fontSize: 10.5, padding: '3px 8px', borderRadius: 9, cursor: 'pointer',
+                                            fontWeight: 600,
+                                            background: dok === d.nivel ? 'var(--azul-700)' : 'white',
+                                            color: dok === d.nivel ? 'white' : 'var(--gris-600)',
+                                            border: `1px solid ${dok === d.nivel ? 'var(--azul-700)' : 'var(--gris-300)'}`,
+                                          }}>
+                                          {d.nivel}. {d.nombre}
+                                        </button>
+                                      ))}
+                                    </div>
+
+                                    {sug.etiquetas.length > 0 ? (
+                                      <div style={{ fontSize: 11, color: 'var(--gris-600)', lineHeight: 1.6 }}>
+                                        Suelen encajar:{' '}
+                                        {sug.etiquetas.map(e => `${e.icon} ${e.label}`).join(' · ')}
+                                        {(() => {
+                                          const tuyos = instrumentos.filter(i => sug.tipos.includes(i.tipo) && !asignados.includes(i.id))
+                                          if (!tuyos.length) return null
+                                          return (
+                                            <div style={{ marginTop: 5, display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+                                              <span style={{ fontSize: 10.5 }}>De los tuyos:</span>
+                                              {tuyos.map(ins => (
+                                                <button key={ins.id}
+                                                  onClick={() => cambiarInstrumentos(u.id!, cr.id, [...asignados, ins.id])}
+                                                  style={{
+                                                    fontSize: 10.5, padding: '2px 8px', borderRadius: 9, cursor: 'pointer',
+                                                    fontWeight: 600, background: 'white', color: 'var(--azul-900)',
+                                                    border: '1px solid var(--azul-700)',
+                                                  }}>
+                                                  + {getInstrConfig(ins.tipo).icon} {ins.nombre}
+                                                </button>
+                                              ))}
+                                            </div>
+                                          )
+                                        })()}
+                                      </div>
+                                    ) : (
+                                      <div style={{ fontSize: 11, color: 'var(--gris-500)', fontStyle: 'italic' }}>
+                                        Elige arriba qué vas a pedir y te digo qué suele encajar.
+                                      </div>
+                                    )}
+
+                                    <div style={{ fontSize: 10, color: 'var(--gris-500)', marginTop: 7, lineHeight: 1.5 }}>
+                                      Es una sugerencia para no partir de cero, no una clasificación del criterio.
+                                      Decide tú.
+                                    </div>
+                                  </div>
+                                )
+                              })()}
+
+                              {/* Reparto dentro del criterio. Solo con dos o más
+                                  instrumentos: con uno, el peso es siempre el 100%. */}
+                              {enUnidad && asignados.length > 1 && (() => {
+                                const vinculos = enUnidad.instrumentos
+                                const declarado = vinculos.some(v => v.peso_criterio != null)
+                                const suma = vinculos.reduce((t, v) => t + (v.peso_criterio ?? 0), 0)
+                                const redondeada = Math.round(suma * 10) / 10
+                                return (
+                                  <div style={{
+                                    display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center',
+                                    marginTop: 6, paddingTop: 6, borderTop: '1px dashed var(--gris-300)',
+                                  }}>
+                                    <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--gris-500)', textTransform: 'uppercase', letterSpacing: '.05em' }}>
+                                      Reparto
+                                    </span>
+
+                                    {!declarado ? (
+                                      <>
+                                        <span style={{ fontSize: 10.5, color: 'var(--gris-500)' }}>
+                                          según el peso de cada instrumento en el área
+                                        </span>
+                                        <button onClick={() => repartirPesos(u.id!, cr.id, asignados)}
+                                          title="Que los instrumentos de este criterio cuenten por igual, sin tocar el resto del área"
+                                          style={{
+                                            fontSize: 10.5, padding: '2px 8px', borderRadius: 9, cursor: 'pointer',
+                                            fontWeight: 600, background: 'white', color: 'var(--azul-900)',
+                                            border: '1px solid var(--gris-300)',
+                                          }}>
+                                          ⚖️ a partes iguales
+                                        </button>
+                                      </>
+                                    ) : (
+                                      <>
+                                        {vinculos.map((v, vi) => {
+                                          const ins = instrumentos.find(x => x.id === v.instrumento_id)
+                                          if (!ins) return null
+                                          return (
+                                            <label key={v.instrumento_id}
+                                              title={`Cuánto pesa «${ins.nombre}» dentro de este criterio`}
+                                              style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 10.5, color: 'var(--gris-600)' }}>
+                                              {getInstrConfig(ins.tipo).icon}
+                                              {/* La casilla no se controla, así que hay que remontarla cuando el
+                                                  valor cambia por otra vía —«a partes iguales»—, o seguiría
+                                                  enseñando el número viejo. De ahí el peso en la clave. */}
+                                              <input type="number" min={0} max={100} step="0.1"
+                                                key={`${v.instrumento_id}|${v.peso_criterio ?? ''}`}
+                                                defaultValue={v.peso_criterio ?? pesosAPartesIguales(vinculos.length)[vi]}
+                                                onBlur={e => {
+                                                  const bruto = e.target.value.trim()
+                                                  const n = Number(bruto)
+                                                  // Dejar la casilla en blanco NO es escribir un cero: un cero
+                                                  // saca del criterio todas las notas de ese instrumento.
+                                                  if (bruto === '' || !Number.isFinite(n) || n < 0 || n > 100) {
+                                                    e.target.value = String(v.peso_criterio ?? pesosAPartesIguales(vinculos.length)[vi])
+                                                    return
+                                                  }
+                                                  if (n !== v.peso_criterio) {
+                                                    cambiarPeso(u.id!, cr.id, vinculos, v.instrumento_id, n)
+                                                  }
+                                                }}
+                                                style={{ width: 46, fontSize: 10.5, padding: '1px 4px', borderRadius: 5, border: '1px solid var(--gris-300)' }} />
+                                              %
+                                            </label>
+                                          )
+                                        })}
+                                        <span style={{
+                                          fontSize: 10.5, fontWeight: 700,
+                                          color: redondeada === 100 ? 'var(--verde-500)' : 'var(--ambar-500)',
+                                        }}>
+                                          {redondeada}%{redondeada === 100 ? ' ✓' : ' (no suma 100)'}
+                                        </span>
+                                        <button onClick={() => repartirPesos(u.id!, cr.id, asignados)}
+                                          style={{ fontSize: 10.5, background: 'none', border: 'none', color: 'var(--azul-700)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                                          a partes iguales
+                                        </button>
+                                        <button onClick={() => volverAPesoGlobal(u.id!, cr.id)}
+                                          title="Volver a ponderar con el peso que cada instrumento tiene en el área"
+                                          style={{ fontSize: 10.5, background: 'none', border: 'none', color: 'var(--gris-500)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                                          quitar reparto
+                                        </button>
+                                      </>
+                                    )}
+                                  </div>
+                                )
+                              })()}
                             </div>
                           </div>
                         )

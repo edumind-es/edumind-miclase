@@ -13,7 +13,7 @@ import {
 import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { calcularNotaArea, calificativo, perfilCompetencial, type NotaCompetencia } from '@/db/calculo'
+import { calcularNotaArea, calificativo, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
 
 type FilaAlumno = {
@@ -60,6 +60,7 @@ export default function SeguimientoPage() {
           pesosCriterio.set(c.criterio_id, Math.max(pesosCriterio.get(c.criterio_id) ?? 0, c.peso || 1))
         }
       }
+      const pesosVinculo = pesosVinculoDeUnidades(unidades)
 
       // Perfil competencial del grupo: media de las notas de cada alumno
       const acumulado = new Map<string, { etiqueta: string; suma: Record<number, number[]>; final: number[] }>()
@@ -69,7 +70,7 @@ export default function SeguimientoPage() {
           c => c.alumno_id === al.id && instrIds.has(c.instrumento_id))
         const n = calcularNotaArea(
           asignaturaId, propias, instrumentos as Instrumento[],
-          asig?.pesos_trimestres, pesosCriterio)
+          asig?.pesos_trimestres, pesosCriterio, pesosVinculo)
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
           const e = acumulado.get(comp.numero) ??

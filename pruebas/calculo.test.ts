@@ -2,6 +2,7 @@ import {
   calcularNotaArea, calificativo, nivelANota, notaDeRubrica, pesosAPartesIguales,
   parsearPesosTrimestres,
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
+  pesosVinculoDeUnidades,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -25,6 +26,112 @@ console.log('\n1. Ponderación por peso de instrumento')
     [instr(10, 'Examen', 70), instr(20, 'Observación', 30)],
     '{"1":100,"2":0,"3":0}')
   ok(r.criterios[0].trimestres[1] === 8.5, 'pondera 70/30 correctamente', `da ${r.criterios[0].trimestres[1]} (media simple daría 7.5)`)
+}
+
+console.log('\n1b. Reparto propio del criterio, por encima del peso global')
+{
+  // El caso real que lo motiva: un criterio de investigación evaluado con
+  // prueba escrita, cuaderno y lista de control. Con los pesos globales del
+  // área (50/30/20) la prueba arrastraría la nota. El docente quiere que las
+  // tres cuenten por igual EN ESTE criterio, sin tocar el resto del área.
+  const instrs = [instr(10, 'Prueba escrita', 50), instr(20, 'Cuaderno', 30), instr(30, 'Lista de control', 20)]
+  const cals = [
+    cal(1, 10, 'CE1.2', 1, 10), cal(1, 20, 'CE1.2', 1, 7), cal(1, 30, 'CE1.2', 1, 4),
+  ]
+
+  const global = calcularNotaArea(1, cals, instrs, '{"1":100,"2":0,"3":0}')
+  // (10·50 + 7·30 + 4·20) / 100 = 7.9
+  ok(global.criterios[0].trimestres[1] === 7.9,
+    'sin declarar nada, sigue mandando el peso global del instrumento', String(global.criterios[0].trimestres[1]))
+
+  const aPartesIguales = pesosVinculoDeUnidades([{
+    id: 5,
+    criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: 33.4 },
+      { instrumento_id: 20, peso_criterio: 33.3 },
+      { instrumento_id: 30, peso_criterio: 33.3 },
+    ] }],
+  }])
+  const medio = calcularNotaArea(1, cals, instrs, '{"1":100,"2":0,"3":0}', new Map(), aPartesIguales)
+  // Media aritmética de 10, 7 y 4 = 7
+  ok(medio.criterios[0].trimestres[1] === 7,
+    'declarado a partes iguales, sale la media aritmética', String(medio.criterios[0].trimestres[1]))
+
+  // Y el peso global de esos mismos instrumentos sigue mandando en OTRO criterio
+  const otro = calcularNotaArea(1,
+    [...cals, cal(1, 10, 'CE1.5', 1, 10), cal(1, 20, 'CE1.5', 1, 5)],
+    instrs, '{"1":100,"2":0,"3":0}', new Map(), aPartesIguales)
+  const ce15 = otro.criterios.find(c => c.criterio_id === 'CE1.5')
+  // (10·50 + 5·30) / 80 = 8.125 → 8.13
+  ok(ce15?.trimestres[1] === 8.13,
+    'y el criterio de al lado conserva el reparto global', String(ce15?.trimestres[1]))
+}
+
+console.log('\n1c. El reparto se busca en la unidad donde se puso la nota')
+{
+  const instrs = [instr(10, 'Prueba escrita', 50), instr(20, 'Cuaderno', 50)]
+  // El mismo criterio en dos unidades del mismo trimestre, con repartos distintos
+  const pesos = pesosVinculoDeUnidades([
+    { id: 7, criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: 90 }, { instrumento_id: 20, peso_criterio: 10 }] }] },
+    { id: 8, criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: 10 }, { instrumento_id: 20, peso_criterio: 90 }] }] },
+  ])
+
+  const enSiete = [
+    { ...cal(1, 10, 'CE1.2', 1, 10), unidad_id: 7 },
+    { ...cal(1, 20, 'CE1.2', 1, 0), unidad_id: 7 },
+  ] as any[]
+  const r7 = calcularNotaArea(1, enSiete, instrs, '{"1":100,"2":0,"3":0}', new Map(), pesos)
+  ok(r7.criterios[0].trimestres[1] === 9,
+    'con la nota puesta en la unidad 7 manda el reparto 90/10', String(r7.criterios[0].trimestres[1]))
+
+  const enOcho = [
+    { ...cal(1, 10, 'CE1.2', 1, 10), unidad_id: 8 },
+    { ...cal(1, 20, 'CE1.2', 1, 0), unidad_id: 8 },
+  ] as any[]
+  const r8 = calcularNotaArea(1, enOcho, instrs, '{"1":100,"2":0,"3":0}', new Map(), pesos)
+  ok(r8.criterios[0].trimestres[1] === 1,
+    'y en la unidad 8, el 10/90', String(r8.criterios[0].trimestres[1]))
+
+  // Una unidad que NO declara reparto usa el peso global, no el de la vecina.
+  // Heredarlo era peor que no tener ninguno: la nota cambiaba sin que nadie
+  // hubiera tocado esa unidad.
+  const pesosSoloEnSiete = pesosVinculoDeUnidades([
+    { id: 7, criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: 90 }, { instrumento_id: 20, peso_criterio: 10 }] }] },
+    { id: 9, criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: null }, { instrumento_id: 20, peso_criterio: null }] }] },
+  ])
+  const enNueve = [
+    { ...cal(1, 10, 'CE1.2', 1, 10), unidad_id: 9 },
+    { ...cal(1, 20, 'CE1.2', 1, 0), unidad_id: 9 },
+  ] as any[]
+  const r9 = calcularNotaArea(1, enNueve, instrs, '{"1":100,"2":0,"3":0}', new Map(), pesosSoloEnSiete)
+  ok(r9.criterios[0].trimestres[1] === 5,
+    'una unidad sin reparto propio usa el peso global, no hereda el de la vecina',
+    `${r9.criterios[0].trimestres[1]} (heredarlo daría 9)`)
+
+  // Una nota antigua, sin unidad anotada, cae en el primero declarado
+  const sinUnidad = [cal(1, 10, 'CE1.2', 1, 10), cal(1, 20, 'CE1.2', 1, 0)]
+  const rs = calcularNotaArea(1, sinUnidad, instrs, '{"1":100,"2":0,"3":0}', new Map(), pesos)
+  ok(rs.criterios[0].trimestres[1] === 9,
+    'y una nota sin unidad anotada no rompe: usa el primero declarado', String(rs.criterios[0].trimestres[1]))
+}
+
+console.log('\n1d. Un instrumento con peso declarado 0 no cuenta')
+{
+  const instrs = [instr(10, 'Prueba escrita', 50), instr(20, 'Cuaderno', 50)]
+  const pesos = pesosVinculoDeUnidades([{
+    id: 1,
+    criterios: [{ criterio_id: 'CE1.2', instrumentos: [
+      { instrumento_id: 10, peso_criterio: 100 }, { instrumento_id: 20, peso_criterio: 0 }] }],
+  }])
+  const r = calcularNotaArea(1,
+    [cal(1, 10, 'CE1.2', 1, 10), cal(1, 20, 'CE1.2', 1, 0)],
+    instrs, '{"1":100,"2":0,"3":0}', new Map(), pesos)
+  ok(r.criterios[0].trimestres[1] === 10,
+    'el que pesa 0 se queda fuera en vez de hundir la nota', String(r.criterios[0].trimestres[1]))
 }
 
 console.log('\n2. Ponderación por trimestre')
