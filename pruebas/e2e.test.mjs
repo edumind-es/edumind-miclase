@@ -250,6 +250,78 @@ const fondoNota = await p.locator('.celda-btn.cal-8').first().evaluate(e => getC
 ok(fondoNota === 'rgb(58, 155, 213)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
 await foto('12-matriz-con-nota')
 
+// ── 10b · Calificar sobre la rúbrica, indicador a indicador ─────────────
+console.log('\n10b. Calificar sobre la rúbrica, indicador a indicador')
+// Hasta aquí se ha calificado con el botón numérico de siempre. Esto recorre
+// el otro camino: el que lee los indicadores que el docente se molestó en
+// redactar y saca la nota de ellos. Las cuentas están probadas en
+// `calculo.test.ts`; lo que falta comprobar es que la pantalla las use.
+await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
+await p.waitForTimeout(900)
+const panel = p.getByRole('dialog', { name: /^Evaluar / })
+
+// El instrumento todavía no tiene rúbrica: el botón ofrece crearla
+await panel.getByRole('button', { name: /Crear rúbrica/ }).click()
+await p.waitForTimeout(800)
+const editor = p.getByRole('dialog', { name: /^Rúbrica de / })
+await editor.getByRole('button', { name: /Partir de una plantilla/ }).click()
+await p.waitForTimeout(400)
+await editor.getByRole('button', { name: /Cuaderno o portfolio/ }).click()
+await p.waitForTimeout(700)
+ok(await editor.getByText(/cargada/).isVisible(), 'una plantilla llena la rúbrica sin escribirla a mano')
+await editor.getByRole('button', { name: /Guardar rúbrica/ }).click()
+await p.waitForTimeout(1200)
+ok(await editor.getByText(/guardada correctamente/).isVisible(), 'y se guarda')
+await foto('11b-rubrica-plantilla')
+// Dos botones se llaman «Cerrar»: la × de la cabecera y el del pie. Se usa
+// el del pie, que es el que se pulsa de verdad al terminar.
+await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+await p.waitForTimeout(1200)
+
+ok(await panel.getByText(/marca el nivel de cada indicador/).isVisible(),
+  'al volver, el calificador pide la rúbrica en vez de un número suelto')
+ok(await panel.getByText('0 de 4 marcados').isVisible(),
+  'con sus cuatro indicadores todavía sin marcar')
+
+// Los botones de nivel son los únicos con `aria-pressed` del panel: cuatro
+// niveles por indicador, en orden. El primero de cada bloque es el más alto.
+const niveles = panel.locator('button[aria-pressed]')
+ok(await niveles.count() === 16, 'cuatro niveles por cada uno de los cuatro indicadores',
+  `${await niveles.count()} botones`)
+
+await niveles.nth(0).click()
+await p.waitForTimeout(900)
+ok(await panel.getByText('1 de 4 marcados').isVisible(), 'marcar un indicador cuenta uno, no cuatro')
+ok(await panel.getByText(/Sobresaliente con/).isVisible(),
+  'y un solo indicador al máximo da 10, no 2,5: lo no observado no cuenta como cero')
+await foto('11c-rubrica-un-indicador')
+
+for (const i of [4, 8, 12]) { await niveles.nth(i).click(); await p.waitForTimeout(700) }
+ok(await panel.getByText('4 de 4 marcados').isVisible(), 'se marcan los cuatro')
+ok(await panel.getByText(/Sobresaliente con/).isVisible(), 'y todos al máximo siguen dando 10')
+
+// Bajar UN indicador a «Bien» (2 de 4) debe mover la nota, no dejarla igual:
+// (4+4+4+2) ÷ (4×4) × 10 = 8,8
+await niveles.nth(2).click()
+await p.waitForTimeout(900)
+ok(await panel.getByText(/Notable con/).isVisible(),
+  'bajar un indicador baja la nota ponderada, no la deja intacta')
+await foto('11d-rubrica-completa')
+
+await panel.getByRole('button', { name: 'limpiar' }).click()
+await p.waitForTimeout(900)
+ok(await panel.getByText('0 de 4 marcados').isVisible(), '«limpiar» deja la rúbrica sin marcar')
+ok(await panel.getByText(/Sin calificar con/).isVisible(), 'y la nota desaparece con ella')
+
+// Se vuelve a dejar calificada: los apartados 13 y 15 leen esta nota para el
+// informe y la copia de seguridad, y salir de aquí con la casilla en blanco
+// les quitaba los datos por debajo.
+for (const i of [0, 4, 8, 12]) { await niveles.nth(i).click(); await p.waitForTimeout(700) }
+ok(await panel.getByText('4 de 4 marcados').isVisible(), 'y se puede volver a calificar desde cero')
+
+await p.keyboard.press('Escape')
+await p.waitForTimeout(800)
+
 // ── 11 · Casilla sin instrumento ────────────────────────────────────────
 console.log('\n11. Criterio sin instrumento asignado')
 await p.locator('.tab-unidad').nth(2).click()

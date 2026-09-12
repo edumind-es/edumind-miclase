@@ -28,8 +28,10 @@ suites y lo mata todo al terminar.
 | `tipos` | `tsc` sobre todo el frontend | — |
 | `calculo.test.ts` | notas ponderadas, trimestres, escala LOMLOE | — |
 | `fusion.test.ts` | fusión a tres bandas, campo a campo | — |
+| `transporte-directo.test.ts` | el protocolo y **el reloj** del enlace directo, con un canal de mentira | — |
 | `lectorqr.test.mjs` | decodificación de QR | — |
 | `taxonomias.test.ts` | la sugerencia de instrumentos: sobre todo, que se calle cuando el verbo no dice el nivel | — |
+| `empaquetado-nativo.test.mjs` | android/ios a la par de la versión de Capacitor, y `webDir` sin enlaces rotos | — |
 | `enlace-directo.test.mjs` | emparejamiento WebRTC y troceado de 3 MB | navegador |
 | `sync.test.mjs` | buzón del servidor: cuotas, fechas, rechazos | backend |
 | `e2e.test.mjs` | recorrido por la interfaz | backend + web |

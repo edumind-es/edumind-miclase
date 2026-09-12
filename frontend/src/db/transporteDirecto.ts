@@ -83,6 +83,11 @@ export function transporteDirecto(
   /** Cuándo se supo por última vez del otro aparato. Cualquier mensaje vale. */
   let ultimaSenal = Date.now()
 
+  /** Apunta que se ha sabido del otro, sin dejar que el reloj vaya atrás. */
+  const escuchado = (cuando: number) => {
+    if (cuando > ultimaSenal) ultimaSenal = cuando
+  }
+
   /** Latido: se manda desde que se abre la sesión, no desde que se empieza a
    *  sincronizar — justo el hueco en el que el otro se quedaba esperando. */
   let relojLatido: ReturnType<typeof setInterval> | null = null
@@ -109,7 +114,7 @@ export function transporteDirecto(
 
   enlace.alRecibir((m: any) => {
     // Cualquier mensaje —hasta un latido— demuestra que el otro sigue ahí.
-    ultimaSenal = Date.now()
+    escuchado(Date.now())
     switch (m?.t) {
       case 'latido':
         return
@@ -237,6 +242,12 @@ export function transporteDirecto(
         finEnviado = true
         await avisar({ t: 'fin' })
       }
+
+      // El silencio se cuenta desde que uno se pone a escuchar. Cifrar el lote
+      // de salida deja el hilo un buen rato sin atender el canal, y ese atasco
+      // es nuestro, no del otro: arrastrarlo hasta aquí hacía que la primera
+      // comprobación diese por muerto a un aparato que estaba mandando latidos.
+      escuchado(Date.now())
 
       // Esperar a que haya algo que servir, o a que el otro diga que terminó.
       // Se despierta cada poco para mirar si el otro sigue dando señales: solo

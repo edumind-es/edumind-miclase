@@ -1,4 +1,16 @@
+import { existsSync, realpathSync } from 'node:fs'
 import type { CapacitorConfig } from '@capacitor/cli'
+
+/**
+ * `dist` es un enlace simbólico: desplegar.sh publica cada versión en
+ * `releases/<sello>` y mueve el enlace. Capacitor copia el enlace en lugar de
+ * seguirlo, y deja `android/app/src/main/assets/public` apuntando a una ruta
+ * relativa que ahí no existe; el siguiente `copy` falla con ENOENT al intentar
+ * crear un directorio sobre un enlace roto. Resolviéndolo aquí, Capacitor ve
+ * un directorio de verdad. Si todavía no se ha compilado, se deja el nombre
+ * tal cual para que el error que salga sea el de siempre: «falta dist».
+ */
+const webDir = existsSync('dist') ? realpathSync('dist') : 'dist'
 
 /**
  * Empaquetado nativo de EDUmind MiClase.
@@ -14,7 +26,7 @@ import type { CapacitorConfig } from '@capacitor/cli'
 const config: CapacitorConfig = {
   appId: 'es.edumind.miclase',
   appName: 'EDUmind MiClase',
-  webDir: 'dist',
+  webDir,
 
   // El contenedor sirve la app desde https://localhost, no desde el servidor.
   // Las llamadas al API se resuelven con `src/api.ts`, que en nativo apunta
