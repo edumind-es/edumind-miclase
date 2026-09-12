@@ -369,7 +369,9 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                             const barColor = ok ? '#166534' : over ? '#dc2626' : '#b45309'
                             const barBg = ok ? '#dcfce7' : over ? '#fee2e2' : '#fef3c7'
                             return (
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, padding: '6px 10px', background: barBg, borderRadius: 6 }}>
+                              <div
+                                title="Reparto por defecto de los instrumentos en el área. Es el que se aplica a los criterios que no declaran el suyo propio en la programación."
+                                style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, padding: '6px 10px', background: barBg, borderRadius: 6 }}>
                                 <div style={{ flex: 1, height: 5, background: '#e5e7eb', borderRadius: 3 }}>
                                   <div style={{ width: `${Math.min(total, 100)}%`, height: '100%', background: barColor, borderRadius: 3, transition: 'width .3s' }} />
                                 </div>
