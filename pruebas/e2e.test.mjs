@@ -221,6 +221,56 @@ const colorPunto = await p.locator('.criterio-th-instr i').first().evaluate(e =>
 ok(colorPunto !== 'rgba(0, 0, 0, 0)', 'los puntos llevan el color del tipo de instrumento', colorPunto)
 const bgCelda = await p.locator('.celda-btn.cal-8').first().evaluate(e => getComputedStyle(e).backgroundColor).catch(() => null)
 
+// ── 9b · El criterio entero, al insistir sobre su cabecera ──────────────
+console.log('\n9b. El criterio completo se abre al insistir en la cabecera')
+// La cabecera recorta el criterio a dos líneas para que la matriz quepa. Se
+// abre entero manteniéndose encima, y NO al roce: la cabecera se cruza sin
+// querer todo el rato al recorrer la matriz.
+{
+  const cabecera = p.locator('.criterio-th').first()
+  const textoCompleto = await cabecera.locator('.criterio-th-desc').innerText()
+
+  await cabecera.hover()
+  await p.waitForTimeout(700)
+  ok(await p.locator('.criterio-ampliado').count() === 0,
+    'al roce NO se abre: haría parpadear la matriz entera')
+
+  await p.waitForTimeout(1800)   // pasados los 2 s de espera
+  const panel = p.locator('.criterio-ampliado')
+  ok(await panel.count() === 1, 'manteniéndose encima, sí se abre')
+  ok(await panel.isVisible(), 'y se ve')
+
+  // Lo que enseña es el criterio de esa columna, no otro
+  const id = await cabecera.locator('.criterio-th-id').innerText()
+  ok((await panel.locator('.criterio-ampliado-id').innerText()) === id,
+    'enseña el criterio de la columna sobre la que se está', id)
+  const ampliado = await panel.locator('.criterio-ampliado-desc').innerText()
+  ok(ampliado.length >= textoCompleto.length,
+    'y su texto no está recortado como el de la cabecera',
+    `${ampliado.length} caracteres frente a ${textoCompleto.length}`)
+
+  // No debe taparse a sí mismo el paso: la matriz sigue siendo pulsable
+  const pasa = await panel.evaluate(e => getComputedStyle(e).pointerEvents)
+  ok(pasa === 'none', 'no se interpone entre el docente y la matriz', pasa)
+
+  ok(!await cabecera.evaluate(e => e.hasAttribute('title')),
+    'y no queda el aviso del navegador diciendo lo mismo por debajo')
+  await foto('10b-criterio-ampliado')
+
+  // Se va al irse el cursor
+  await p.locator('.col-alumno').first().hover()
+  await p.waitForTimeout(400)
+  ok(await p.locator('.criterio-ampliado').count() === 0, 'se cierra al mover el cursor a otro sitio')
+
+  // Y al pulsar, aunque se siga encima
+  await cabecera.hover()
+  await p.waitForTimeout(2300)
+  ok(await p.locator('.criterio-ampliado').count() === 1, 'se vuelve a abrir')
+  await p.mouse.down(); await p.mouse.up()
+  await p.waitForTimeout(400)
+  ok(await p.locator('.criterio-ampliado').count() === 0, 'y un clic lo cierra')
+}
+
 // ── 10 · Evaluar una casilla ────────────────────────────────────────────
 console.log('\n10. Evaluar pulsando una casilla')
 await p.locator('.celda-btn:not(.sin-instrumento)').first().click()

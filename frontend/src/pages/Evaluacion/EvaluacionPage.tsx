@@ -6,7 +6,7 @@
  * que se evalúa ese criterio; al pulsarla se abre el panel de evaluación.
  * Un criterio sin instrumento asignado sale rayado y explica cómo arreglarlo.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion,
@@ -24,6 +24,22 @@ import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
 type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number }
+
+/** Lo que hace falta para pintar el criterio ampliado donde toca. */
+type CriterioAmpliado = {
+  criterio: Criterio
+  /** Rectángulo de la cabecera, en coordenadas de ventana. */
+  ancla: { left: number; right: number; bottom: number }
+}
+
+/**
+ * Cuánto hay que insistir para que se abra el criterio completo.
+ *
+ * Dos segundos, y no menos: la cabecera se cruza constantemente al recorrer la
+ * matriz con el ratón, y abrirse al roce convertiría el calificador en un
+ * parpadeo. Quien lo abre es porque ha ido a buscarlo.
+ */
+const ESPERA_AMPLIAR = 2000
 
 function claseNota(v: number | null | undefined) {
   if (v == null) return ''
@@ -51,6 +67,51 @@ export default function EvaluacionPage() {
   const [managerAbierto, setManagerAbierto] = useState(false)
   const [refresco, setRefresco] = useState(0)
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio } | null>(null)
+
+  // ── Criterio ampliado ───────────────────────────────────────────────────
+  // La cabecera recorta el criterio a dos líneas. Insistiendo sobre ella —con
+  // el ratón quieto o manteniendo el dedo— se abre entero, porque para decidir
+  // con qué evaluar hay que leerlo completo y no a trozos.
+  const [ampliado, setAmpliado] = useState<CriterioAmpliado | null>(null)
+  const relojAmpliar = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const cancelarAmpliar = () => {
+    if (relojAmpliar.current) { clearTimeout(relojAmpliar.current); relojAmpliar.current = null }
+  }
+  const cerrarAmpliado = () => { cancelarAmpliar(); setAmpliado(null) }
+
+  /** Arranca la cuenta atrás. El rectángulo se mide al abrir, no al empezar:
+   *  entre medias se puede haber desplazado la tabla de lado. */
+  const empezarAmpliar = (criterio: Criterio, th: HTMLElement) => {
+    cancelarAmpliar()
+    relojAmpliar.current = setTimeout(() => {
+      const r = th.getBoundingClientRect()
+      setAmpliado({ criterio, ancla: { left: r.left, right: r.right, bottom: r.bottom } })
+    }, ESPERA_AMPLIAR)
+  }
+
+  // Se va con cualquier gesto que diga «ya no estoy mirando esto»: un clic, la
+  // tecla de escape, o mover la tabla debajo —si no, quedaría flotando sobre
+  // una columna que ya no es la suya—.
+  useEffect(() => {
+    if (!ampliado) return
+    const fuera = () => cerrarAmpliado()
+    const tecla = (e: KeyboardEvent) => { if (e.key === 'Escape') cerrarAmpliado() }
+    window.addEventListener('click', fuera)
+    window.addEventListener('keydown', tecla)
+    window.addEventListener('scroll', fuera, true)   // true: también al rodar la tabla
+    window.addEventListener('resize', fuera)
+    return () => {
+      window.removeEventListener('click', fuera)
+      window.removeEventListener('keydown', tecla)
+      window.removeEventListener('scroll', fuera, true)
+      window.removeEventListener('resize', fuera)
+    }
+  }, [ampliado])
+
+  // Un temporizador a medias cuando la pantalla se desmonta abriría el panel
+  // sobre otra cosa, o sobre nada.
+  useEffect(() => cancelarAmpliar, [])
 
   // La unidad sigue siendo de esta pantalla: es una subdivisión del
   // calificador, no del contexto de trabajo.
@@ -279,7 +340,18 @@ export default function EvaluacionPage() {
                       {columnas.map(cr => {
                         const instrs = matriz.porCriterio.get(cr.id) ?? []
                         return (
-                          <th key={cr.id} scope="col" title={cr.descripcion}>
+                          // Sin `title`: el aviso del navegador saldría a la vez
+                          // que el panel y diría lo mismo, recortado y peor puesto.
+                          <th key={cr.id} scope="col" className="criterio-th"
+                            onMouseEnter={e => empezarAmpliar(cr, e.currentTarget)}
+                            onMouseLeave={cerrarAmpliado}
+                            // Con el dedo no hay «pasar por encima»: vale mantener
+                            // pulsado. Se cancela en cuanto se desliza, que es lo
+                            // que pasa al rodar la tabla de lado.
+                            onTouchStart={e => empezarAmpliar(cr, e.currentTarget)}
+                            onTouchEnd={cancelarAmpliar}
+                            onTouchMove={cerrarAmpliado}
+                            onTouchCancel={cerrarAmpliado}>
                             <div className="criterio-th-id">{cr.id}</div>
                             <div className="criterio-th-desc">{cr.descripcion}</div>
                             <div className="criterio-th-instr">
@@ -370,6 +442,29 @@ export default function EvaluacionPage() {
           )}
         </>
       )}
+
+      {/* Criterio completo, al insistir sobre su cabecera.
+          Va fijo a la ventana y no dentro de la tabla: la tabla rueda de lado
+          y tiene la cabecera pegada, así que cualquier posición relativa
+          acababa recortada por el propio `overflow`. */}
+      {ampliado && (() => {
+        const ANCHO = 320
+        const MARGEN = 10
+        // Centrado sobre su columna, pero sin salirse de la pantalla: las
+        // últimas columnas quedan pegadas al borde derecho.
+        const centro = (ampliado.ancla.left + ampliado.ancla.right) / 2
+        const izquierda = Math.max(
+          MARGEN,
+          Math.min(centro - ANCHO / 2, window.innerWidth - ANCHO - MARGEN),
+        )
+        return (
+          <div className="criterio-ampliado" role="tooltip"
+            style={{ left: izquierda, top: ampliado.ancla.bottom + 6, width: ANCHO }}>
+            <div className="criterio-ampliado-id">{ampliado.criterio.id}</div>
+            <div className="criterio-ampliado-desc">{ampliado.criterio.descripcion}</div>
+          </div>
+        )
+      })()}
 
       {/* Panel de evaluación de una celda */}
       {celda && matriz && (() => {
