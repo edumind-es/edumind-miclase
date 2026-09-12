@@ -106,6 +106,10 @@ async function principal() {
     await paquete('pruebas/fusion.test.ts', fusion, ['--platform=node', '--format=esm'])
     await suite('fusión a tres bandas', 'node', [fusion])
 
+    const paqueteFichero = join(scratch, 'paquete-fichero.mjs')
+    await paquete('pruebas/paquete-fichero.test.ts', paqueteFichero, ['--platform=node', '--format=esm'])
+    await suite('paquete por fichero (AirDrop)', 'node', [paqueteFichero])
+
     const taxonomias = join(scratch, 'taxonomias.mjs')
     await paquete('pruebas/taxonomias.test.ts', taxonomias, ['--platform=node', '--format=esm'])
     await suite('sugerencia de instrumentos', 'node', [taxonomias])

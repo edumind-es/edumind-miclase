@@ -126,8 +126,16 @@ export default function CompartirPaquete({ onCambio }: { onCambio?: () => void }
         <button className="btn-secondary" onClick={() => { limpiar(); ficheroRef.current?.click() }} disabled={!!trabajando}>
           {trabajando === 'recibiendo' ? 'Aplicando…' : '📥 Recibir un paquete'}
         </button>
+        {/* Sin `accept` a propósito: en iPadOS el selector filtra por el tipo
+            declarado del fichero, no por la extensión que se escriba aquí, y
+            bastaba con que ese tipo no se resolviera para que el paquete
+            recibido por AirDrop saliera en gris y no hubiera forma de elegirlo.
+            Quien decide de verdad si un fichero vale es `leerPaquete`, que mira
+            el contenido y explica con claridad qué pasa cuando no lo es.
+            Filtrar aquí no aportaba seguridad: solo quitaba de en medio el
+            fichero que se quería abrir. */}
         <input
-          ref={ficheroRef} type="file" accept={`${EXTENSION},application/json`} hidden
+          ref={ficheroRef} type="file" hidden
           onChange={(e) => {
             const f = e.target.files?.[0]
             e.target.value = ''          // permite volver a elegir el mismo fichero
