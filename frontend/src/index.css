@@ -439,6 +439,41 @@ input:focus, select:focus, textarea:focus {
 }
 .criterio-th-instr .aviso { font-size: 10px; line-height: 1; }
 
+/* El criterio de evaluación, entero.
+   La cabecera lo recorta a dos líneas para que la matriz quepa; insistiendo
+   sobre ella —ratón quieto o dedo mantenido— se abre completo. Va `fixed`
+   porque la tabla rueda de lado y su `overflow` recortaría cualquier cosa
+   posicionada dentro. */
+.criterio-ampliado {
+  position: fixed;
+  z-index: 60;
+  background: var(--azul-900, #0f2d4a);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 13px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.3);
+  pointer-events: none;          /* no se interpone entre el docente y la matriz */
+  animation: criterio-ampliado-entra .12s ease-out;
+}
+.criterio-ampliado-id {
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
+  opacity: .75; margin-bottom: 3px;
+}
+.criterio-ampliado-desc {
+  font-size: 13px; font-weight: 400; line-height: 1.5;
+  text-align: left; white-space: normal;
+}
+@keyframes criterio-ampliado-entra {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: none; }
+}
+/* Quien no quiera animaciones tampoco las quiere aquí */
+@media (prefers-reduced-motion: reduce) {
+  .criterio-ampliado { animation: none; }
+}
+/* Pista de que la cabecera guarda algo más */
+.criterio-th { cursor: help; }
+
 /* --- Identidad Sistema Lámina EDUmind (nivel 1) ---
    Canon: edumind.es/design/lamina.html · tokens en /vendor/lamina-v1.css */
 .lm-plate-fixed {
