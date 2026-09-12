@@ -110,7 +110,12 @@ async function principal() {
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
 
+    const directo = join(scratch, 'transporte-directo.mjs')
+    await paquete('pruebas/transporte-directo.test.ts', directo, ['--platform=node', '--format=esm'])
+    await suite('transporte del enlace directo', 'node', [directo])
+
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
+    await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
   }
 
   // ── Con navegador, pero sin servidor ───────────────────────────────
