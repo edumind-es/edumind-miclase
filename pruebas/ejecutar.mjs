@@ -111,6 +111,7 @@ async function principal() {
     await suite('parseo de rúbricas', 'node', [rubrica])
 
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
+    await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
   }
 
   // ── Con navegador, pero sin servidor ───────────────────────────────

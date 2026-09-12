@@ -29,6 +29,7 @@ suites y lo mata todo al terminar.
 | `calculo.test.ts` | notas ponderadas, trimestres, escala LOMLOE | — |
 | `fusion.test.ts` | fusión a tres bandas, campo a campo | — |
 | `lectorqr.test.mjs` | decodificación de QR | — |
+| `empaquetado-nativo.test.mjs` | android/ios a la par de la versión de Capacitor, y `webDir` sin enlaces rotos | — |
 | `enlace-directo.test.mjs` | emparejamiento WebRTC y troceado de 3 MB | navegador |
 | `sync.test.mjs` | buzón del servidor: cuotas, fechas, rechazos | backend |
 | `e2e.test.mjs` | recorrido por la interfaz | backend + web |
