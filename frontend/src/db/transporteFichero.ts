@@ -35,7 +35,21 @@ export type PaqueteSync = {
   sobres: SobreEnvio[]
 }
 
-export const EXTENSION = '.miclasesync'
+/**
+ * Termina en `.json` a propósito, y no es cosmético.
+ *
+ * iPadOS no filtra el selector de archivos por la extensión que se escriba en
+ * `accept`, sino por el **tipo declarado** del fichero (UTType). Una extensión
+ * que ninguna app del sistema declara —`.miclasesync` a secas— no se resuelve
+ * a ningún tipo conocido, así que un paquete recibido por AirDrop llegaba como
+ * tipo genérico y el selector lo pintaba en gris: se recibía bien y no había
+ * forma de elegirlo desde la app. Acabando en `.json`, iPadOS lo reconoce como
+ * `public.json` y deja seleccionarlo.
+ *
+ * Se conserva `.miclasesync` delante para que siga distinguiéndose de
+ * cualquier otro JSON de un vistazo.
+ */
+export const EXTENSION = '.miclasesync.json'
 export const MIME = 'application/json'
 
 /** Transporte de solo escritura: acumula lo que `empujar()` le vaya dando. */
