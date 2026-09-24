@@ -16,7 +16,8 @@ edumind_miclase/
 │   ├── data/         ← SQLite (miclase.db): currículo + docentes (auth) + buzón de sync cifrado
 │   ├── src/plugins/auth.js  ← auth dual local + Authentik OIDC
 │   ├── src/routes/auth.js
-│   └── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
+│   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
+│   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
 ├── frontend/         ← React + Vite + TypeScript
 │   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
@@ -25,6 +26,8 @@ edumind_miclase/
 │   │                   por AirDrop/Quick Share) · transporteDirecto.ts + enlaceDirecto.ts
 │   │                   (sincronización entre dispositivos por WebRTC, sin servidor)
 │   ├── src/contexto/ ← ClaseActiva.tsx (clase, área y trimestre en curso)
+│   ├── src/programacion/ ← proens.ts: lector de programaciones de PROENS (Xunta) → unidades,
+│   │                   criterios con mínimo e instrumento. Puro; se prueba con pruebas/fixtures/
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
@@ -99,6 +102,13 @@ edumind_miclase/
   impresos) entran por `useParametrosClase`, que fija el contexto y limpia la
   URL. El trimestre no se persiste entre sesiones a propósito: heredar el de
   diciembre en enero metería las notas nuevas en el trimestre equivocado.
+- **El lector de PROENS trabaja por columnas, no por líneas.** El texto llega
+  de `pdftotext -layout` y las posiciones de las cabeceras («Mínimos de
+  consecución», «IA», «%») son lo que separa el criterio de su mínimo y lo
+  que permite saber qué criterios cubre una celda combinada de instrumento
+  (va centrada en su bloque y no se repite si salta de página). Normalizar
+  espacios antes de parsear lo rompe todo. El fixture se regenera con
+  `pruebas/lib/proens_gemelo.py`; el PDF real de Luis aún no ha pasado por él.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 

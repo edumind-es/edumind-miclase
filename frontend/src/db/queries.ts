@@ -21,6 +21,8 @@ export type UnidadConCriterios = Unidad & {
   criterios: {
     criterio_id: string
     peso: number
+    /** Mínimo de consecución declarado en la programación, si lo hay. */
+    minimo: string | null
     descripcion: string | null
     instrumentos: VinculoInstrumento[]
   }[]
@@ -752,6 +754,7 @@ export async function getUnidades(
       criterios: ucs.map(uc => ({
         criterio_id: uc.criterio_id,
         peso: uc.peso,
+        minimo: uc.minimo || null,
         descripcion: descMap.get(uc.criterio_id) ?? null,
         instrumentos: mapaInstr.get(uc.criterio_id) ?? [],
       })),
@@ -779,15 +782,27 @@ export async function eliminarUnidad(id: number): Promise<void> {
 }
 
 export async function vincularCriterio(
-  unidad_id: number, criterio_id: string, peso = 1.0
+  unidad_id: number, criterio_id: string, peso = 1.0, minimo?: string
 ): Promise<void> {
   const existing = await db.unidad_criterios
     .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).first()
+  // `minimo` sin declarar no toca el que hubiera: marcar la casilla en la
+  // programación no debe borrar el mínimo importado de PROENS.
+  const extra = minimo === undefined ? {} : { minimo }
   if (existing?.id != null) {
-    await db.unidad_criterios.update(existing.id, tocado({ peso, deleted_at: null }))
+    await db.unidad_criterios.update(existing.id, tocado({ peso, deleted_at: null, ...extra }))
   } else {
-    await db.unidad_criterios.add(nuevo({ unidad_id, criterio_id, peso }))
+    await db.unidad_criterios.add(nuevo({ unidad_id, criterio_id, peso, ...extra }))
   }
+}
+
+/** Cambia solo el mínimo de consecución de un criterio en una unidad. */
+export async function fijarMinimoDeCriterio(
+  unidad_id: number, criterio_id: string, minimo: string
+): Promise<void> {
+  await db.unidad_criterios
+    .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id])
+    .modify(tocado({ minimo }))
 }
 
 export async function desvincularCriterio(unidad_id: number, criterio_id: string): Promise<void> {
@@ -865,6 +880,104 @@ export async function generarPlantillaUnidades(
   }
 
   return { creadas: aCrear, conservadas: existentes.length, criteriosRepartidos: pendientes.length }
+}
+
+// ─── IMPORTAR UNA PROGRAMACIÓN OFICIAL (PROENS) ──────────────────────────────
+
+const claveNombre = (s: string) =>
+  s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '')
+
+export interface ProgramacionImportable {
+  instrumentos: { abrev: string; nombre: string; tipo: string; peso: number | null }[]
+  unidades: {
+    numero: number
+    titulo: string
+    descripcion: string
+    peso: number | null
+    sesiones: number | null
+    trimestre: 1 | 2 | 3 | null
+    contenidos: string[]
+    criterios: { codigoCurriculo: string; minimo: string; instrumento: string | null }[]
+  }[]
+}
+
+export interface ResultadoImportacion {
+  instrumentosCreados: number
+  instrumentosReutilizados: number
+  unidadesCreadas: number
+  unidadesActualizadas: number
+  criteriosVinculados: number
+  criteriosSinInstrumento: number
+}
+
+/**
+ * Vuelca en un área la programación leída de PROENS.
+ *
+ * NO destructiva, como el resto de la programación: un instrumento con el
+ * mismo nombre se reutiliza (y se le pone el peso de la programación), una
+ * unidad con el mismo título se actualiza en vez de duplicarse, y los
+ * criterios se vinculan con su mínimo y su instrumento sin tocar las
+ * calificaciones que ya hubiera. Repetir la importación deja lo mismo.
+ *
+ * Los criterios llegan ya con el código del currículo (CE2.1); quien llama
+ * ha debido filtrar antes los que el currículo cargado no conozca.
+ */
+export async function aplicarProgramacionImportada(
+  asignatura_id: number, prog: ProgramacionImportable
+): Promise<ResultadoImportacion> {
+  const r: ResultadoImportacion = {
+    instrumentosCreados: 0, instrumentosReutilizados: 0,
+    unidadesCreadas: 0, unidadesActualizadas: 0,
+    criteriosVinculados: 0, criteriosSinInstrumento: 0,
+  }
+
+  // Instrumentos: por nombre, sin acentos ni mayúsculas
+  const existentes = await getInstrumentos(asignatura_id)
+  const idPorAbrev = new Map<string, number>()
+  for (const ins of prog.instrumentos) {
+    const ya = existentes.find(e => claveNombre(e.nombre) === claveNombre(ins.nombre))
+    if (ya) {
+      if (ins.peso != null && ins.peso !== ya.peso) await actualizarInstrumento(ya.id!, { peso: ins.peso })
+      idPorAbrev.set(ins.abrev, ya.id!)
+      r.instrumentosReutilizados++
+    } else {
+      const id = await crearInstrumento(asignatura_id, {
+        nombre: ins.nombre, tipo: ins.tipo, peso: ins.peso ?? 1,
+        trimestres: '[1,2,3]', orden: existentes.length + r.instrumentosCreados,
+      })
+      idPorAbrev.set(ins.abrev, id)
+      r.instrumentosCreados++
+    }
+  }
+
+  // Unidades: por título
+  const unidadesPrevias = vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray())
+  for (const u of prog.unidades) {
+    const datos = {
+      nombre: u.titulo, tipo: 'unidad', descripcion: u.descripcion || undefined,
+      trimestre: u.trimestre, orden: u.numero - 1, activa: 1,
+      sesiones: u.sesiones, peso: u.peso,
+      contenidos: u.contenidos.length ? u.contenidos.map(c => '- ' + c).join('\n') : undefined,
+    }
+    const previa = unidadesPrevias.find(p => claveNombre(p.nombre) === claveNombre(u.titulo))
+    let unidad_id: number
+    if (previa) {
+      unidad_id = previa.id!
+      await actualizarUnidad(unidad_id, datos)
+      r.unidadesActualizadas++
+    } else {
+      unidad_id = await crearUnidad({ ...datos, asignatura_id })
+      r.unidadesCreadas++
+    }
+    for (const c of u.criterios) {
+      await vincularCriterio(unidad_id, c.codigoCurriculo, 1.0, c.minimo)
+      r.criteriosVinculados++
+      const iid = c.instrumento ? idPorAbrev.get(c.instrumento) : undefined
+      if (iid != null) await fijarInstrumentosDeCriterio(unidad_id, c.codigoCurriculo, [iid])
+      else r.criteriosSinInstrumento++
+    }
+  }
+  return r
 }
 
 /** Borra toda la programación de una asignatura (acción explícita del docente). */

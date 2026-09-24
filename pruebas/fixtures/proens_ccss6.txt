@@ -1,0 +1,724 @@
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+PROGRAMACIÓN DIDÁCTICA LOMLOE
+Centro educativo
+Código                Centro                                 Concello                   Ano académico
+36006420              CEP Campolongo                         Pontevedra                 2026/2027
+
+Área/materia/ámbito
+Ensinanza                      Nome da área/materia/ámbito                Curso     Sesións          Sesións
+                                                                                    semanais         anuais
+Educación primaria             Ciencias Sociais                           6º Pri.   2                70
+
+Tipo de oferta
+                       Tipo de oferta
+                       Réxime xeral-ordinario
+                                                     r
+                                                  do
+                                        rra
+                               Bo
+
+
+
+
+22/09/2026 20:22:24                                                                                 Páxina 1 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+1. Introdución
+Programación didáctica para a Área de Ciencias Sociais de Sexto de Primaria. Todo isto levarase a cabo nas 9 unidades
+didácticas, quedando tres unidades en cada trimestre.
+
+2. Obxectivos e súa contribución ao desenvolvemento das competencias
+Obxectivos                                                                  CCL              CP            STEM           CD
+OBX1 - Utilizar dispositivos e recursos dixitais de forma segura,           3                2             4              1-2-3-4-5
+responsable e eficiente.
+
+3.1. Relación de unidades didácticas
+UD    Título                           Descrición                                                 %            Nº ses    1º    2º     3º
+                                                                                                  Peso         ións      tr    tr     tr
+                                                                                                  materi                 i     i      i
+                                                                                                  a                      m     m      m
+                                                                                                                         .     .      .
+1     O MUNDO QUE NOS                  Comprender a relación entre a cartografía e a              15           10        X
+      RODEA                            realidade.
+                                       Describir correctamente planos e mapas, incluíndo
+                                       os planisferios, interpretando a súa escala e signos
+                                       convencionais.
+                                       Coñecer os principais tipos de mapas (físicos,
+                                       políticos e temáticos) e as partes que os compoñen.
+                                       Aprender a localizar nun mapa países, cidades ou
+                                       accidentes xeográficos.
+2     ºO CLIMA E A PAISAXE             Diferenciar entre clima e tempo atmosférico.               14           10        X
+                                                         r
+
+                                       Recoñecer os principais elementos do clima
+                                                 do
+
+
+                                       (temperatura e precipitacións).
+                                       Valorar a influencia do clima na nosa vida.
+3     O HOME E A TERRA                 Coñecer a influencia do comportamento humano no            15           8         X
+                                       rra
+
+
+
+
+                                       medio natural.
+                                       Identificar o emprego sostible dos recursos naturais.
+4     A ORGANIZACIÓN                   Explicar que é a Unión Europea e cales son os seus         15           8               X
+                              Bo
+
+
+
+
+      POLÍTICO-TERRITORIAL             obxectivos políticos e económicos.
+      DA NOSA CONTORNA                 Identificar as formas de organización política e
+                                       territorial de Galicia.
+5     A XENTE DO PLANETA               Definir a poboación dun territorio e identificar os        15           8               X
+      TERRA                            factores que inciden nela.
+                                       Identificar os problemas actuais da poboación:
+                                       envellecemento, inmigración, superpoboación etc.
+6     A ECONOMÍA E O SEU               Identificar e caracterizar os sectores económicos.         11           6                      X
+      FUNCIONAMENTO                    Tomar conciencia do valor do diñeiro e dos seus
+                                       usos responsables.
+7     DESCUBRINDO A                    Comprender e empregar de maneira elemental as              15           20                     X
+      HISTORIA                         técnicas e métodos de traballo do historiador.
+                                       Coñecer os grandes períodos da Historia, os
+                                       diferentes criterios para establecelos e os feitos
+                                       máis significativos dentro dos mesmos.
+
+3.2. Distribución currículo nas unidades didácticas
+UD        Título da UD                                                                                                         Duraci
+                                                                                                                               ón
+1         O MUNDO QUE NOS RODEA                                                                                                10
+
+
+
+
+22/09/2026 20:22:24                                                                                                     Páxina 2 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                  Mínimos de consecución                         IA                %
+CA2.1 - Identificar as características, a organización   Identificar certas características e
+e as propiedades dos elementos do medio natural,         elementos do medio natural, social e
+social e cultural a través de metodoloxías de            cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.                                                                                     PE                80
+CA2.2 - Establecer conexións sinxelas entre              Relacionar, de xeito sinxelo, elementos do
+diferentes elementos do medio natural, social e          medio natural, social e cultural.
+cultural, mostrando comprensión das relacións que
+se establecen.
+CA1.1 - Utilizar recursos dixitais de acordo coas        Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura        recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións         Amosar curiosidade polo medio natural,
+razoadas sobre o medio natural, social ou cultural,      social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                 Realizar actividades no contexto da
+información, de diferentes fontes seguras e fiables,     comunidade escolar de forma cooperativa.
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en
+investigacións relacionadas co medio natural, social
+                                                                                                        TI                20
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando        Participar en experimentos guiados e no
+diferentes técnicas de indagación e modelos,             rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+                                                         r
+
+dispositivos apropiados, realizando observacións e
+                                                 do
+
+
+medicións precisas e rexistrándoas correctamente.
+CA3.1 - Analizar os procesos xeográficos, históricos     Coñecer como está conformada a
+                                        rra
+
+
+
+
+e culturais que conformaron a sociedade actual,          sociedade actual.
+valorando a diversidade etnocultural ou
+afectivo-sexual e a cohesión social, e mostrando
+                              Bo
+
+
+
+
+empatía e respecto por outras culturas e a
+igualdade de xénero.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- O clima e o planeta. Introdución á dinámica atmosférica e ás grandes áreas climáticas do mundo. Os principais ecosistemas e
+as súas paisaxes.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+2          ºO CLIMA E A PAISAXE                                                                                                10
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 3 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                   Mínimos de consecución                        IA                %
+CA2.1 - Identificar as características, a organización    Identificar certas características e
+e as propiedades dos elementos do medio natural,          elementos do medio natural, social e
+social e cultural a través de metodoloxías de             cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.
+CA2.2 - Establecer conexións sinxelas entre               Relacionar, de xeito sinxelo, os elementos
+diferentes elementos do medio natural, social e           do medio natural, social e cultural.
+                                                                                                        PE                80
+cultural, mostrando comprensión das relacións que
+se establecen.
+CA2.3 - Promover estilos de vida sustentable e            Coñecer diferentes problemáticas
+consecuentes co respecto, cos coidados, coa               ecosociais e participar na conservación e
+corresponsabilidade e coa protección das persoas e        mellora da contorna favorecendo o
+do planeta, a partir da análise crítica da intervención   desenvolvemento sustentable
+humana na contorna.
+CA1.1 - Utilizar recursos dixitais de acordo coas         Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura         recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións          Amosar curiosidade polo medio natural,
+razoadas sobre o medio natural, social ou cultural,       social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                  Utilizar algunha fonte de información para
+información, de diferentes fontes seguras e fiables,      as súas investigacións.
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en
+                                                          r
+
+investigacións relacionadas co medio natural, social
+                                                  do
+
+
+                                                                                                        TI                20
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando         Participar en experimentos guiados e no
+                                         rra
+
+
+
+
+diferentes técnicas de indagación e modelos,              rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+dispositivos apropiados, realizando observacións e
+                               Bo
+
+
+
+
+medicións precisas e rexistrándoas correctamente.
+CA2.4 - Participar con actitude emprendedora na           articipa con actitude emprendedora na
+procura, no contraste e na avaliación de propostas        procura, contraste e avaliación de
+para afrontar problemas ecosociais, buscar                propostas para afrontar problemas
+solucións e actuar para a súa resolución, a partir da     ecosociais, buscar solucións
+análise crítica das causas e consecuencias da
+intervención humana na contorna.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- O cambio climático. Responsabilidade ecosocial. Ecodependencia, interdependencia e interrelación entre persoas,
+sociedades e medio natural.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+3          O HOME E A TERRA                                                                                                    8
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 4 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                  Mínimos de consecución                         IA                %
+CA2.1 - Identificar as características, a organización   Identificar certas características de
+e as propiedades dos elementos do medio natural,         elementos de medio natural, social e
+social e cultural a través de metodoloxías de            cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.
+CA2.2 - Establecer conexións sinxelas entre              Relacionar de xeito sinxelo os elementos
+diferentes elementos do medio natural, social e          do medio natural, social e cultural.
+cultural, mostrando comprensión das relacións que                                                       PE                80
+se establecen.
+CA3.1 - Analizar os procesos xeográficos, históricos     Coñecer como está conformada a
+e culturais que conformaron a sociedade actual,          sociedade actual.
+valorando a diversidade etnocultural ou
+afectivo-sexual e a cohesión social, e mostrando
+empatía e respecto por outras culturas e a
+igualdade de xénero.
+CA1.1 - Utilizar recursos dixitais de acordo coas        Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura        recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións         Amosar curiosidade polo medio natural,
+razoadas sobre o medio natural, social ou cultural,      social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                 Realizar actividades no contexto da
+información, de diferentes fontes seguras e fiables,     comunidade escolar de forma cooperativa.
+usando os criterios de fiabilidade de fontes,
+                                                         r
+
+adquirindo léxico científico básico, utilizándoa en                                                     TI                20
+                                                 do
+
+
+investigacións relacionadas co medio natural, social
+e cultural.
+                                        rra
+
+
+
+
+CA1.4 - Realizar experimentos guiados, utilizando        Participar en experimentos guiados e no
+diferentes técnicas de indagación e modelos,             rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+                              Bo
+
+
+
+
+dispositivos apropiados, realizando observacións e
+medicións precisas e rexistrándoas correctamente.
+CA3.2 - Promover actitudes de igualdade de xénero        Adoptar unha actitude tolerante có resto.
+e condutas non sexistas, analizando e contrastando
+diferentes modelos na nosa sociedade.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- Estilos de vida sustentable: a pegada ecolóxica.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+4          A ORGANIZACIÓN POLÍTICO-TERRITORIAL DA NOSA CONTORNA                                                                8
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 5 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                  Mínimos de consecución                         IA                %
+CA2.1 - Identificar as características, a organización   Identificar certas características e
+e as propiedades dos elementos do medio natural,         elementos do medio natural, social e
+social e cultural a través de metodoloxías de            cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.                                                                                     PE                80
+CA2.2 - Establecer conexións sinxelas entre              Relacionar, de xeito sinxelo, os elementos
+diferentes elementos do medio natural, social e          do medio natural, social e cultural.
+cultural, mostrando comprensión das relacións que
+se establecen.
+CA1.1 - Utilizar recursos dixitais de acordo coas        Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura        recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións         Amosar curiosidade polo medio natural,
+razoadas sobre o medio natural, social ou cultural,      social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                 Utilizar algunha fonte de información para
+información, de diferentes fontes seguras e fiables,     as súas investigacións.
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en
+investigacións relacionadas co medio natural, social
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando        Participar en experimentos guiados e no
+diferentes técnicas de indagación e modelos,             rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+                                                         r
+
+dispositivos apropiados, realizando observacións e
+                                                 do
+
+
+medicións precisas e rexistrándoas correctamente.
+CA2.4 - Participar con actitude emprendedora na          Participar con actitude emprendedora ante
+                                                                                                        TI                20
+                                        rra
+
+
+
+
+procura, no contraste e na avaliación de propostas       problemas ecosociais.
+para afrontar problemas ecosociais, buscar
+solucións e actuar para a súa resolución, a partir da
+                              Bo
+
+
+
+
+análise crítica das causas e consecuencias da
+intervención humana na contorna.
+CA3.3 - Resolver de forma pacífica e dialogada os        Coñecer algunhas institucións
+conflitos, promovendo unha interacción respectuosa       autonómicas, estatais e europeas e as
+e equitativa a partir da linguaxe inclusiva e non        súas funcións básicas para manter a paz.
+violenta e explicando e exercitando as principais
+normas, dereitos, deberes e liberdades que forman
+parte da Constitución española e da Unión Europea,
+e coñecendo a función que o Estado e as súas
+institucións desempeñan no mantemento da paz, da
+seguridade integral cidadá e no recoñecemento das
+vítimas da violencia
+CA3.4 - Explicar o funcionamento xeral dos órganos       Coñecer algúns dos órganos de goberno e
+de goberno do concello, das comunidades                  servizos públicos básicos.
+autónomas, do Estado español e da Unión Europea,
+valorando as súas funcións e a xestión dos servizos
+públicos para a cidadanía.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 6 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Contidos
+- España e a Unión Europea. Formas de goberno. Fórmulas para a participación da cidadanía na vida pública.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+5          A XENTE DO PLANETA TERRA                                                                                            8
+
+
+Criterios de avaliación                                 Mínimos de consecución                          IA                %
+CA3.1 - Analizar os procesos xeográficos, históricos    Coñecer como está conformada a
+e culturais que conformaron a sociedade actual,         sociedade actual.
+valorando a diversidade etnocultural ou
+afectivo-sexual e a cohesión social, e mostrando
+empatía e respecto por outras culturas e a
+igualdade de xénero.                                                                                    PE                80
+CA3.4 - Explicar o funcionamento xeral dos órganos      Coñecer algúns dos órganos de goberno e
+de goberno do concello, das comunidades                 servizos públicos básicos.
+autónomas, do Estado español e da Unión Europea,
+valorando as súas funcións e a xestión dos servizos
+públicos para a cidadanía.
+CA1.1 - Utilizar recursos dixitais de acordo coas       Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura       recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións        Amosar curiosidade polo medio natural,
+                                                         r
+
+razoadas sobre o medio natural, social ou cultural,     social e cultural máis próximo.
+                                                 do
+
+
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                Utilizar algunha fonte de información para
+                                       rra
+
+
+
+
+información, de diferentes fontes seguras e fiables,    as súas investigacións.
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en                                                     TI                20
+investigacións relacionadas co medio natural, social
+                              Bo
+
+
+
+
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando       Participar en experimentos guiados e no
+diferentes técnicas de indagación e modelos,            rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+dispositivos apropiados, realizando observacións e
+medicións precisas e rexistrándoas correctamente.
+CA4.4 - Promover actitudes de igualdade de xénero       Promove actitudes de igualdade de xénero
+e condutas non sexistas, analizando e contrastando      e condutas non sexistas
+diferentes modelos na nosa sociedade.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- Seguridade viaria. Normas básicas de circulación, sinais de tráfico e marcas viarias.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+6          A ECONOMÍA E O SEU FUNCIONAMENTO                                                                                    6
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 7 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                   Mínimos de consecución                        IA                %
+CA2.1 - Identificar as características, a organización    Identificar certas características e
+e as propiedades dos elementos do medio natural,          elementos do medio natural, social e
+social e cultural a través de metodoloxías de             cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.
+CA2.3 - Promover estilos de vida sustentable e            Coñecer diferentes problemáticas
+consecuentes co respecto, cos coidados, coa               ecosociais e participar na conservación e
+corresponsabilidade e coa protección das persoas e        mellora da contorna favorecendo o
+                                                                                                        PE                80
+do planeta, a partir da análise crítica da intervención   desenvolvemento sustentable.
+humana na contorna.
+CA2.4 - Participar con actitude emprendedora na           Propor solucións básicas para distintos
+procura, no contraste e na avaliación de propostas        problemas sociais.
+para afrontar problemas ecosociais, buscar
+solucións e actuar para a súa resolución, a partir da
+análise crítica das causas e consecuencias da
+intervención humana na contorna.
+CA1.1 - Utilizar recursos dixitais de acordo coas         Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura         recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións          Amosar curiosidade polo medio natural,
+razoadas sobre o medio natural, social ou cultural,       social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                  Utilizar algunha fonte de información para
+                                                          r
+
+información, de diferentes fontes seguras e fiables,      as súas investigacións.
+                                                  do
+
+
+                                                                                                        TI                20
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en
+investigacións relacionadas co medio natural, social
+                                         rra
+
+
+
+
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando         Participar en experimentos guiados e no
+                               Bo
+
+
+
+
+diferentes técnicas de indagación e modelos,              rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+dispositivos apropiados, realizando observacións e
+medicións precisas e rexistrándoas correctamente.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- Economía verde. A influencia dos mercados (de bens, financeiro e laboral) na vida da cidadanía.
+
+
+UD         Título da UD                                                                                                        Duraci
+                                                                                                                               ón
+7          DESCUBRINDO A HISTORIA                                                                                              20
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 8 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Criterios de avaliación                                    Mínimos de consecución                       IA                %
+CA2.1 - Identificar as características, a organización     Identificar certas características e
+e as propiedades dos elementos do medio natural,           elementos do medio natural, social e
+social e cultural a través de metodoloxías de              cultural.
+indagación e utilizando as ferramentas e os
+procesos adecuados.
+CA2.2 - Establecer conexións sinxelas entre                Relacionar, de xeito sinxelo, os elementos
+diferentes elementos do medio natural, social e            do medio natural, social e cultural.
+cultural, mostrando comprensión das relacións que
+se establecen.
+CA3.1 - Analizar os procesos xeográficos, históricos       Coñecer as características básicas da
+e culturais que conformaron a sociedade actual,            sociedade na actualidade aceptando a
+valorando a diversidade etnocultural ou                    diversidade cultural.
+afectivo-sexual e a cohesión social, e mostrando
+                                                                                                        PE                80
+empatía e respecto por outras culturas e a
+igualdade de xénero.
+CA4.2 - Analizar relacións de causalidade,                 Identificar feitos da contorna social e
+simultaneidade e sucesión entre diferentes                 cultural desde a Idade Media ata a
+elementos do medio social e cultural desde a Idade         actualidade.
+Media ata a actualidade, situando cronoloxicamente
+os feitos.
+CA4.3 - Coñecer persoas, grupos sociais relevantes         Coñecer persoas, grupos sociais
+e formas de vida das sociedades desde a Idade              relevantes e formas de vida das
+Media ata a actualidade, incorporando a perspectiva        sociedades desde a Idade Media ata a
+de xénero, situándoas cronoloxicamente e                   actualidade, incorporando a identidade de
+identificando trazos significativos sociais en distintas   xénero.
+                                                           r
+
+épocas da historia.
+                                                   do
+
+
+CA1.1 - Utilizar recursos dixitais de acordo coas          Utilizar determinados dispositivos e
+necesidades do contexto educativo de forma segura          recursos dixitais de acordo co contexto.
+e eficiente, buscando información, comunicándose e
+                                         rra
+
+
+
+
+traballando de forma individual, en equipo e en rede.
+CA1.2 - Formular preguntas e realizar predicións           Amosar curiosidade polo medio natural,
+                               Bo
+
+
+
+
+razoadas sobre o medio natural, social ou cultural,        social e cultural máis próximo.
+mostrando e mantendo a curiosidade.
+CA1.3 - Buscar, seleccionar e contrastar                   Utilizar algunha fonte de información nas
+información, de diferentes fontes seguras e fiables,       súas investigacións.                         TI                20
+usando os criterios de fiabilidade de fontes,
+adquirindo léxico científico básico, utilizándoa en
+investigacións relacionadas co medio natural, social
+e cultural.
+CA1.4 - Realizar experimentos guiados, utilizando          Participar en experimentos guiados e no
+diferentes técnicas de indagación e modelos,               rexistro dos datos correspondentes.
+empregando de forma segura os instrumentos e
+dispositivos apropiados, realizando observacións e
+medicións precisas e rexistrándoas correctamente.
+CA4.1 - Valorar, protexer e mostrar actitudes de
+conservación e mellora do patrimonio natural e
+cultural a través de propostas e accións que reflictan                                                  Baleiro           0
+compromisos e condutas en favor da
+sustentabilidade.
+Lenda: IA: Instrumento de Avaliación, %: Peso orientativo; PE: Proba escrita, TI: Táboa de indicadores
+
+Contidos
+- Fases da investigación científica (observación, formulación de preguntas e predicións, planificación e realización de
+experimentos, recollida e análises de información e datos, comunicación de resultados...). Iniciativa emprendedora.
+- Técnicas para unha adecuada exposición oral dos resultados dunha investigación, con claridade e orde. Presentación de
+resultados en formatos diversos.
+
+
+
+
+22/09/2026 20:22:24                                                                                                Páxina 9 de 22
+XUNTA DE GALICIA | CONSELLERÍA DE EDUCACIÓN, CIENCIA, UNIVERSIDADES E FORMACIÓN PROFESIONAL
+
+
+
+
+Contidos
+- Vocabulario científico básico relacionado coas diferentes investigacións. Realización dun glosario.
+- As fontes históricas: clasificación e utilización das distintas fontes (orais, escritas, patrimoniais). As pegadas da historia na
+contorna.
+- O papel da muller na historia e os principais movementos en defensa dos seus dereitos. Situación actual e retos de futuro na
+igualdade de xénero.
+
+
+
+4.1. Concrecións metodolóxicas
+A metodoloxía será activa, participativa e comunicativa.
+
+4.2. Materiais e recursos didácticos
+Denominación
+Libro de texto dixital (Netex)
+Google Earth
+
+5.1. Procedemento para a avaliación inicial
+O proceso de avaliación inicial durará as dúas primeiras semanas lectivas do curso.
+
+5.2. Criterios de cualificación e recuperación
+Pesos dos instrumentos de avaliación por UD:
+ Unidade didáctica       UD 1            UD 2            UD 3            UD 4            UD 5            UD 6            UD 7
+                                                            r
+
+ Peso UD/ Tipo           15              14              15              15              15              11              15
+                                                   do
+
+
+ Ins.
+ Proba escrita           80              80              80              80              80              80              80
+                                         rra
+
+
+
+
+ Táboa de                20              20              20              20              20              20              20
+ indicadores
+                                 Bo
+
+
+
+
+                                                 Unidade didáctica       Total
+                                                 Peso UD/ Tipo           100
+                                                 Ins.
+                                                 Proba escrita           80
+                                                 Táboa de                20
+                                                 indicadores
+Criterios de cualificación:
+PRIMEIRA PARTE: PROBAS ESCRITAS - PESO 80%. SEGUNDA PARTE: INDICADORES DE LOGRO - PESO 20%.
+
+6. Medidas de atención á diversidade
+Na etapa da educación primaria poñerase especial énfase na atención á diversidade do alumnado.
+
+
+
+
+22/09/2026 20:22:24                                                                                                    Páxina 10 de 22
+

@@ -12,6 +12,7 @@ import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { pesosAPartesIguales } from '@/db/calculo'
 import { sugerirInstrumentos, BLOOM, DOK } from '@/ia/taxonomias'
 import { api } from '@/api'
+import ImportarProens from './ImportarProens'
 
 const TIPOS_UNIDAD = [
   { value: 'unidad',    label: 'Unidad Didáctica', short: 'UD'   },
@@ -58,6 +59,7 @@ export default function ProgramacionPanel({
   const [guardando, setGuardando] = useState(false)
 
   const [formPlantilla, setFormPlantilla] = useState(false)
+  const [formProens, setFormProens] = useState(false)
   const [plantillaCfg, setPlantillaCfg] = useState({ n: 9, tipo: 'situacion' })
   const [mensaje, setMensaje] = useState('')
   const [formNueva, setFormNueva] = useState<number | null>(null)
@@ -231,6 +233,8 @@ export default function ProgramacionPanel({
     (s, u) => s + u.criterios.filter(c => c.instrumentos.length === 0).length, 0)
 
   const sinInstrumentosCreados = instrumentos.length === 0
+  // PROENS es la aplicación de programaciones de la Xunta: fuera de Galicia el botón solo estorba
+  const esGalicia = /galicia/i.test(grupoComunidad)
 
   // ── Render de una unidad ────────────────────────────────────────────────
 
@@ -369,6 +373,11 @@ export default function ProgramacionPanel({
                                 <span style={{ fontWeight: 700, fontSize: 11.5, color, marginRight: 6 }}>{cr.id}</span>
                                 <span style={{ fontSize: 11.5, color: 'var(--gris-600)', lineHeight: 1.45 }}>{cr.descripcion}</span>
                               </div>
+                              {enUnidad?.minimo && (
+                                <div style={{ fontSize: 11, color: '#166534', marginTop: 3, lineHeight: 1.4 }} title="Mínimo de consecución de la programación">
+                                  <strong>Mínimo:</strong> {enUnidad.minimo}
+                                </div>
+                              )}
 
                               {enUnidad && (
                                 <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 5, alignItems: 'center' }}>
@@ -600,7 +609,7 @@ export default function ProgramacionPanel({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
         <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
           <span style={{ fontWeight: 600, color: 'var(--azul-700)' }}>Programación didáctica</span>
-          {' · '}{unidades.length} unidades · {totalCriterios}/{criteriosCurr.length} criterios
+          {' · '}{unidades.length} unidades · {criteriosAsignados.size}/{criteriosCurr.length} criterios
           {critSinAsignar.length > 0 && (
             <span style={{ color: '#b45309', marginLeft: 6 }}>({critSinAsignar.length} sin unidad)</span>
           )}
@@ -608,9 +617,16 @@ export default function ProgramacionPanel({
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           <button className={unidades.length === 0 ? 'btn-primary' : 'btn-secondary'}
             style={{ fontSize: 12, padding: '5px 12px' }}
-            onClick={() => { setFormPlantilla(true); setMensaje('') }}>
+            onClick={() => { setFormPlantilla(true); setFormProens(false); setMensaje('') }}>
             {unidades.length === 0 ? '✨ Generar estructura' : '✨ Completar estructura'}
           </button>
+          {esGalicia && (
+            <button className="btn-secondary" style={{ fontSize: 12, padding: '5px 12px' }}
+              title="Crear las unidades, criterios, mínimos e instrumentos a partir del PDF de PROENS"
+              onClick={() => { setFormProens(true); setFormPlantilla(false); setMensaje('') }}>
+              📄 Importar de PROENS
+            </button>
+          )}
           {unidades.length > 0 && (
             <button style={{ fontSize: 12, padding: '5px 12px', background: 'none', border: '1px solid var(--gris-300)', color: 'var(--gris-500)', borderRadius: 6, cursor: 'pointer' }}
               onClick={handleBorrarTodo}>
@@ -636,6 +652,18 @@ export default function ProgramacionPanel({
         }}>
           {mensaje}
         </div>
+      )}
+
+      {formProens && (
+        <ImportarProens
+          asignaturaId={asignaturaId}
+          asignaturaNombre={asignaturaNombre}
+          grupoCurso={grupoCurso}
+          grupoEtapa={grupoEtapa}
+          criteriosCurr={criteriosCurr}
+          onHecho={cargar}
+          onCerrar={() => setFormProens(false)}
+        />
       )}
 
       {formPlantilla && (

@@ -16,6 +16,7 @@ import curriculumRoutes from './routes/curriculum.js'
 import authRoutes from './routes/auth.js'
 import authPlugin from './plugins/auth.js'
 import syncRoutes from './routes/sync.js'
+import programacionRoutes from './routes/programacion.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -85,6 +86,8 @@ await app.register(authPlugin)
 await app.register(authRoutes, { prefix: '/api/auth' })
 await app.register(curriculumRoutes, { prefix: '/api/curriculum' })
 await app.register(syncRoutes, { prefix: '/api/sync' })
+// Texto plano de un PDF de PROENS; el servidor no lo interpreta ni lo guarda
+await app.register(programacionRoutes, { prefix: '/api/programacion' })
 
 app.get('/api/health', async () => ({ status: 'ok', version: '0.1.0' }))
 

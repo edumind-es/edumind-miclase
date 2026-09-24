@@ -132,6 +132,15 @@ export interface Unidad extends Sincronizable {
   fecha_fin?: string
   activa: number
   created_at?: string
+  /**
+   * Lo que trae una programación oficial (PROENS) y la app no tenía dónde
+   * guardar: sesiones previstas, % de peso de la unidad en el área y los
+   * contenidos («contidos»). Informativos: el cálculo no pondera por unidad.
+   * No van indexados, así que no exigen versión nueva del esquema.
+   */
+  sesiones?: number | null
+  peso?: number | null
+  contenidos?: string
 }
 
 export interface UnidadCriterio extends Sincronizable {
@@ -139,6 +148,12 @@ export interface UnidadCriterio extends Sincronizable {
   unidad_id: number
   criterio_id: string
   peso: number
+  /**
+   * Mínimo de consecución: lo que el docente fija como umbral de superación
+   * de este criterio en esta unidad. Es el nivel «suficiente» que la
+   * programación oficial pide declarar por criterio y unidad. Sin índice.
+   */
+  minimo?: string
 }
 
 /**
