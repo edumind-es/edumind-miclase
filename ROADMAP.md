@@ -75,6 +75,19 @@ diez segundos (QR de mesa → panel táctil → nota + foto).
     aviso de trabajo sin conexión y panel de salud del almacenamiento.
   - `jspdf` y `html2canvas` retirados: ya no se usaban.
 
+- **Importar la programación oficial (PROENS, septiembre 2026)**: en Galicia
+  la programación didáctica se redacta en PROENS y sale como PDF. Ahora ese
+  PDF entra en MiClase y monta el área entera: unidades con trimestre,
+  sesiones y peso; cada criterio con su **mínimo de consecución** y el
+  instrumento con el que se evalúa (leído de la celda combinada de la
+  columna IA); y los instrumentos con su peso (tabla 5.2). Los códigos
+  CAx.y de PROENS se casan con los CEx.y del currículo cargado, y lo que el
+  currículo no conoce se enseña y se deja fuera. Vista previa editable antes
+  de guardar; no destructivo. El servidor solo convierte el PDF a texto
+  (`pdftotext -layout`) y no lo guarda. Pendiente: validar contra un PDF
+  real de PROENS (el parser se probó con un gemelo generado con reportlab) y
+  que el cálculo pondere por el peso de la unidad, que hoy solo se guarda.
+
 ## Auditoría de agosto de 2026
 
 Una revisión a fondo (modelo de datos, backend, producción y pantallas)

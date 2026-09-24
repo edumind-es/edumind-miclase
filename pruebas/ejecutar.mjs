@@ -118,6 +118,10 @@ async function principal() {
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
 
+    const proens = join(scratch, 'proens.mjs')
+    await paquete('pruebas/proens.test.ts', proens, ['--platform=node', '--format=esm'])
+    await suite('lectura de programaciones PROENS', 'node', [proens])
+
     const directo = join(scratch, 'transporte-directo.mjs')
     await paquete('pruebas/transporte-directo.test.ts', directo, ['--platform=node', '--format=esm'])
     await suite('transporte del enlace directo', 'node', [directo])
@@ -168,6 +172,8 @@ async function principal() {
 
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
+    await suite('texto de un PDF de PROENS', 'node', ['pruebas/proens-api.test.mjs'], entorno)
+    await suite('importar PROENS desde la interfaz', 'node', ['pruebas/proens-ui.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)

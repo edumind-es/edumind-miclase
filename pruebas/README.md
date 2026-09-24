@@ -32,6 +32,9 @@ suites y lo mata todo al terminar.
 | `lectorqr.test.mjs` | decodificación de QR | — |
 | `paquete-fichero.test.ts` | el paquete de AirDrop: que el nombre lo entienda iPadOS y que el contenido sea quien valide | — |
 | `taxonomias.test.ts` | la sugerencia de instrumentos: sobre todo, que se calle cuando el verbo no dice el nivel | — |
+| `proens.test.ts` | lectura de una programación de PROENS: unidades, trimestres, mínimos, instrumentos por celda combinada | — |
+| `proens-api.test.mjs` | `/api/programacion/texto`: el PDF vuelve como texto con columnas; lo que no es PDF se rechaza | backend |
+| `proens-ui.test.mjs` | importar el PDF gemelo desde el panel de programación: vista previa, aplicar, lo guardado en IndexedDB, repetir sin duplicar | backend + navegador |
 | `empaquetado-nativo.test.mjs` | android/ios a la par de la versión de Capacitor, y `webDir` sin enlaces rotos | — |
 | `enlace-directo.test.mjs` | emparejamiento WebRTC y troceado de 3 MB | navegador |
 | `sync.test.mjs` | buzón del servidor: cuotas, fechas, rechazos | backend |
