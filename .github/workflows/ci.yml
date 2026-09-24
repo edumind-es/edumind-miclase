@@ -36,6 +36,11 @@ jobs:
           npm --prefix frontend ci || npm --prefix frontend install
           npm --prefix backend ci || npm --prefix backend install
 
+      # El lector de PROENS pasa el PDF por pdftotext (poppler). El runner de
+      # ubuntu-latest no lo trae de serie, a diferencia del servidor.
+      - name: Instalar poppler-utils
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
       # Solo Chromium: es el único navegador que usan las pruebas.
       - name: Instalar el navegador
         run: npx playwright install --with-deps chromium
