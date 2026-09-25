@@ -31,6 +31,17 @@ const TRIM = [
   { n: 1, label: '1er trim.' }, { n: 2, label: '2º trim.' }, { n: 3, label: '3er trim.' },
 ]
 
+/** Contenido de un fichero en base64 (sin el prefijo data:). */
+async function aBase64(f: File): Promise<string> {
+  const bytes = new Uint8Array(await f.arrayBuffer())
+  let binario = ''
+  // Por trozos: String.fromCharCode con cientos de miles de argumentos revienta la pila
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binario += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  }
+  return btoa(binario)
+}
+
 const clave = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '')
 
 /** ¿«ciencias-sociales» y «Ciencias Sociais» son la misma área? Prefijo común ≥ 70 %. */
@@ -69,11 +80,21 @@ export default function ImportarProens({
       if (/\.txt$/i.test(f.name)) {
         texto = await f.text()
       } else {
-        const r = await fetch(api('/api/programacion/texto'), {
-          method: 'POST',
-          headers: { ...headers(), 'Content-Type': 'application/pdf' },
-          body: f,
-        })
+        // El PDF va en base64 dentro de un JSON. Mandar el File tal cual
+        // como cuerpo fallaba en Safari y en el iPad con «Load failed» antes
+        // de salir del dispositivo; un JSON es el mismo camino que usa el
+        // resto del API y funciona en la web y en la app nativa.
+        const pdf = await aBase64(f)
+        let r: Response
+        try {
+          r = await fetch(api('/api/programacion/texto'), {
+            method: 'POST',
+            headers: { ...headers(), 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pdf }),
+          })
+        } catch {
+          throw new Error('No se ha podido enviar el PDF al servidor. Comprueba la conexión y vuelve a intentarlo.')
+        }
         const datos = await r.json().catch(() => ({}))
         if (!r.ok) throw new Error(datos.error || `El servidor ha respondido ${r.status}`)
         texto = datos.texto
