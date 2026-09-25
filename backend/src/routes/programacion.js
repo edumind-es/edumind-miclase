@@ -26,9 +26,15 @@ export default async function programacionRoutes(app) {
     (req, cuerpo, hecho) => hecho(null, cuerpo))
 
   app.post('/texto', async (req, reply) => {
-    const pdf = req.body
-    if (!Buffer.isBuffer(pdf) || pdf.length === 0) {
-      return reply.status(400).send({ error: 'Se esperaba un PDF (Content-Type: application/pdf).' })
+    // El navegador manda el PDF en base64 dentro de un JSON ({ pdf }): en
+    // Safari y en el iPad, enviar el File directamente como cuerpo fallaba
+    // con «Load failed» antes de llegar al servidor. El cuerpo binario
+    // (Content-Type: application/pdf) se sigue aceptando para curl y pruebas.
+    const pdf = Buffer.isBuffer(req.body)
+      ? req.body
+      : typeof req.body?.pdf === 'string' ? Buffer.from(req.body.pdf, 'base64') : null
+    if (!pdf || pdf.length === 0) {
+      return reply.status(400).send({ error: 'Se esperaba un PDF (application/pdf, o JSON { pdf } en base64).' })
     }
     if (pdf.subarray(0, 5).toString('latin1') !== '%PDF-') {
       return reply.status(400).send({ error: 'El fichero no es un PDF.' })

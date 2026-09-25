@@ -38,6 +38,13 @@ console.log('\n1. PDF de PROENS')
   ok(/Lenda: IA: Instrumento de Avaliación/.test(texto), 'con los acentos bien (UTF-8)')
 }
 
+console.log('\n1b. El mismo PDF en base64 dentro de un JSON (como lo manda la app)')
+{
+  const r = await enviar(JSON.stringify({ pdf: pdf.toString('base64') }), 'application/json')
+  ok(r.status === 200, 'responde 200', String(r.status))
+  ok((r.body.texto || '').includes('CA2.1 - Identificar'), 'y devuelve el mismo texto')
+}
+
 console.log('\n2. Lo que no es un PDF')
 {
   const r = await enviar(Buffer.from('esto no es un pdf'))
@@ -46,7 +53,7 @@ console.log('\n2. Lo que no es un PDF')
 }
 {
   const r = await enviar('{}', 'application/json')
-  ok(r.status === 400, 'un JSON da 400', String(r.status))
+  ok(r.status === 400, 'un JSON sin pdf da 400', String(r.status))
 }
 {
   const r = await enviar(Buffer.alloc(0))
