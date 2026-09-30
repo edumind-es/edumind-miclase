@@ -166,14 +166,15 @@ export default function SincronizarPage() {
           🔐 Cómo funciona
         </h2>
         <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.65, marginBottom: 10 }}>
-          Tus datos se cifran <strong>en este navegador</strong> antes de salir. El servidor guarda
-          sobres que no puede abrir: no ve nombres, ni notas, ni fotos. Solo sabe cuántos sobres hay
-          y de qué fecha son, lo justo para repartirlos entre tus dispositivos.
+          Tus datos viven en este dispositivo. Para tenerlos también en otro hay dos caminos que{' '}
+          <strong>no pasan por ningún servidor ni necesitan cuenta</strong>: el enlace directo por
+          QR (los dos aparatos en la misma wifi) y un fichero por AirDrop. En los dos, lo que viaja
+          va cifrado con tu contraseña de sincronización.
         </p>
         <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.65 }}>
-          La contraseña de sincronización <strong>no se envía nunca</strong> y no se puede recuperar.
-          Si la pierdes, el contenido del buzón es irrecuperable — también para EDUmind. Sigue
-          descargando tu <Link to="/informes" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>copia de seguridad</Link> de vez en cuando.
+          Esa contraseña <strong>no se envía nunca</strong> y no se puede recuperar: es la misma en
+          todos tus dispositivos y la creas una sola vez. Sigue descargando tu{' '}
+          <Link to="/informes" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>copia de seguridad</Link> de vez en cuando.
         </p>
       </div>
 
@@ -214,18 +215,24 @@ export default function SincronizarPage() {
           emparejamiento por QR sin conexión posible. */}
       <CompartirPaquete onCambio={refrescar} desbloqueado={desbloqueado} />
 
-      {/* Requisito: sesión SSO */}
+      {/* El tercer camino, el buzón del servidor, es opcional y exige cuenta.
+          Iba en una tarjeta grande que decía «Necesitas iniciar sesión»: se leía
+          como un requisito de toda la pantalla, cuando los dos caminos de arriba
+          no lo necesitan. Plegado y en su sitio, al final. */}
       {!conectado ? (
-        <div className="card" style={{ padding: 28, textAlign: 'center' }}>
-          <div style={{ fontSize: 34, marginBottom: 10 }}>🔑</div>
-          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Necesitas iniciar sesión con EDUmind</h2>
-          <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 18, maxWidth: 520, margin: '0 auto 18px' }}>
-            La sincronización necesita saber de quién es cada buzón. Es lo único para lo que se usa
-            tu cuenta: el contenido sigue siendo ilegible para el servidor.
-            {' '}En modo local puedes seguir usando toda la app y las copias de seguridad manuales.
+        <details className="card" style={{ padding: '14px 20px', color: 'var(--gris-600)' }}>
+          <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 700, color: 'var(--gris-700)' }}>
+            Buzón en el servidor (opcional, con cuenta EDUmind)
+          </summary>
+          <p style={{ fontSize: 13, lineHeight: 1.6, margin: '10px 0 12px' }}>
+            Una tercera vía para quien quiera que los aparatos se sincronicen solos aunque no
+            estén juntos: los sobres cifrados se depositan en el servidor de EDUmind, que no puede
+            abrirlos —no ve nombres, ni notas, ni fotos— y los reparte entre tus dispositivos.
+            Hace falta una cuenta para saber de quién es cada buzón; es lo único para lo que se usa.
+            <strong> No la necesitas para el enlace directo ni para el fichero.</strong>
           </p>
           {authConfig?.enabled ? (
-            <button className="btn-primary" onClick={iniciarLogin} style={{ padding: '10px 22px' }}>
+            <button className="btn-secondary" onClick={iniciarLogin}>
               Conectar con EDUmind
             </button>
           ) : (
@@ -233,7 +240,7 @@ export default function SincronizarPage() {
               Este servidor no tiene configurado el acceso con EDUmind.
             </p>
           )}
-        </div>
+        </details>
       ) : (
         <>
           {errorEstado && (
