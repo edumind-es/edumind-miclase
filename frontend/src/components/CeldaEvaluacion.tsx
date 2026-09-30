@@ -6,16 +6,21 @@
  * (o instrumentos) que la programación le ha asignado, su rúbrica si la tiene,
  * y solo entonces la nota. Además deja adjuntar la evidencia en el momento.
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
-  type CeldaInstrumento,
+  getPrueba, getPruebasDeInstrumento,
+  type CeldaInstrumento, type PruebaGuardada,
 } from '@/db/queries'
+import { notaDePrueba } from '@/db/prueba'
+import PruebaEditor from './PruebaEditor'
+import CorregirPrueba from './CorregirPrueba'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import MiniaturaEvidencia from './MiniaturaEvidencia'
 import InstrumentosManager from './InstrumentosManager'
 import RubricaEditor from './RubricaEditor'
+import CriteriosHermanos from './CriteriosHermanos'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
@@ -38,11 +43,18 @@ interface Props {
   onAnterior?: () => void
   onSiguiente?: () => void
   posicion?: string
+  /**
+   * Los otros criterios que un instrumento evalúa en lo que se está viendo.
+   * Con ellos se ofrece copiar la nota o vincularlos; sin la función, nada.
+   */
+  hermanosDe?: (instrumentoId: number) => { id: string; descripcion: string }[]
+  /** Toda la clase, para copiar una columna entera. */
+  alumnoIds?: number[]
 }
 
 export default function CeldaEvaluacion({
   alumno, criterio, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
-  onGuardado, onCerrar, onAnterior, onSiguiente, posicion,
+  onGuardado, onCerrar, onAnterior, onSiguiente, posicion, hermanosDe, alumnoIds,
 }: Props) {
   const [instrumentoId, setInstrumentoId] = useState<number | null>(instrumentos[0]?.instrumento_id ?? null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
@@ -53,17 +65,38 @@ export default function CeldaEvaluacion({
   const [observacion, setObservacion] = useState('')
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
+  const relojMsg = useRef<ReturnType<typeof setTimeout> | null>(null)
+  /**
+   * Pone un mensaje; con `ms`, se quita solo. Uno nuevo cancela el borrado
+   * pendiente del anterior: si no, el temporizador de «8 guardado» se llevaba
+   * por delante el mensaje siguiente —el resumen de una copia— sin dar tiempo
+   * a leerlo.
+   */
+  const avisar = (m: { tipo: 'ok' | 'error'; texto: string } | null, ms?: number) => {
+    if (relojMsg.current) { clearTimeout(relojMsg.current); relojMsg.current = null }
+    setMsg(m)
+    if (m && ms) relojMsg.current = setTimeout(() => setMsg(null), ms)
+  }
+  useEffect(() => () => { if (relojMsg.current) clearTimeout(relojMsg.current) }, [])
   const [guardando, setGuardando] = useState(false)
   // Atajos: corregir el instrumento o su rúbrica aquí mismo, sin cerrar el
   // panel, salir del calificador y volver a bajar hasta la ficha del área.
   const [instrumentosAbierto, setInstrumentosAbierto] = useState(false)
   const [rubricaAbierta, setRubricaAbierta] = useState(false)
+  const [pruebaAbierta, setPruebaAbierta] = useState(false)
+  /** El examen con el que se corrige aquí, si el instrumento es una prueba escrita y lo tiene. */
+  const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
+  /** Hay exámenes definidos, pero por unidad, y se está mirando «Todo el curso». */
+  const [pruebaSoloPorUnidad, setPruebaSoloPorUnidad] = useState(false)
   // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
   // del instrumento, que si no se quedaba con los niveles de antes.
   const [refrescoInstr, setRefrescoInstr] = useState(0)
 
   const instrumentoSel = instrumentos.find(i => i.instrumento_id === instrumentoId) ?? null
   const cfg = instrumentoSel ? getInstrConfig(instrumentoSel.tipo) : null
+  /** Criterios que este instrumento evalúa en lo que se está viendo: este y sus hermanos. */
+  const hermanos = instrumentoSel && hermanosDe ? hermanosDe(instrumentoSel.instrumento_id) : []
+  const destinosPrueba = [criterio.id, ...hermanos.map(h => h.id)]
 
   // Al cambiar de alumno, reiniciar el instrumento al primero disponible
   useEffect(() => {
@@ -72,7 +105,7 @@ export default function CeldaEvaluacion({
         ? prev
         : (instrumentos[0]?.instrumento_id ?? null))
     setObservacion('')
-    setMsg(null)
+    avisar(null)
   }, [alumno.id, criterio.id])
 
   // Rúbrica del instrumento seleccionado
@@ -92,17 +125,45 @@ export default function CeldaEvaluacion({
     })
   }, [instrumentoId, refrescoInstr])
 
+  // Examen del instrumento para esta unidad (o el general)
+  const esPruebaEscrita = instrumentoSel?.tipo === 'prueba-escrita'
+  useEffect(() => {
+    if (!instrumentoId || !esPruebaEscrita) { setPrueba(null); setPruebaSoloPorUnidad(false); return }
+    let vigente = true
+    Promise.all([getPrueba(instrumentoId, unidadId), getPruebasDeInstrumento(instrumentoId)]).then(([p, todas]) => {
+      if (!vigente) return
+      setPrueba(p)
+      setPruebaSoloPorUnidad(!p && todas.length > 0)
+    })
+    return () => { vigente = false }
+  }, [instrumentoId, esPruebaEscrita, unidadId, refrescoInstr])
+
   // Nota ya registrada + observación guardada
   useEffect(() => {
     if (!instrumentoId) { setValorActual(null); return }
-    getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre).then(c => {
-      setValorActual(c?.valor ?? null)
-      setObservacion(c?.observacion ?? '')
+    let vigente = true
+    ;(async () => {
+      const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre)
       // Lo marcado en cada indicador la última vez. Una nota puesta antes de
       // que esto existiera no lo trae: se muestra el número y ya.
-      setMarcado(c?.niveles_rubrica ?? {})
-    })
-  }, [alumno.id, instrumentoId, criterio.id, trimestre])
+      let marcas = c?.niveles_rubrica ?? {}
+      // Un examen repartido por criterios puede no tener ninguna pregunta de
+      // este: entonces aquí no hay nota, pero el examen sí está corregido. Se
+      // traen las respuestas de otro de sus criterios, o parecería sin
+      // corregir y anotar una pregunta borraría las demás.
+      if (prueba && Object.keys(marcas).length === 0) {
+        for (const h of hermanos) {
+          const otra = await getCalificacionUnica(alumno.id!, instrumentoId, h.id, trimestre)
+          if (otra?.niveles_rubrica && Object.keys(otra.niveles_rubrica).length) { marcas = otra.niveles_rubrica; break }
+        }
+      }
+      if (!vigente) return
+      setValorActual(c?.valor ?? null)
+      setObservacion(c?.observacion ?? '')
+      setMarcado(marcas)
+    })()
+    return () => { vigente = false }
+  }, [alumno.id, instrumentoId, criterio.id, trimestre, prueba])
 
   // Evidencias de este alumno en este criterio
   const recargarEvidencias = () => {
@@ -116,7 +177,7 @@ export default function CeldaEvaluacion({
     const onKey = (e: KeyboardEvent) => {
       // Con el gestor de instrumentos o el editor de rúbricas abiertos encima,
       // Esc es suyo: cerrar los dos modales de golpe perdería el sitio.
-      if (instrumentosAbierto || rubricaAbierta) return
+      if (instrumentosAbierto || rubricaAbierta || pruebaAbierta) return
       if (e.key === 'Escape') { onCerrar(); return }
       const enCampo = (e.target as HTMLElement)?.tagName === 'INPUT' ||
                       (e.target as HTMLElement)?.tagName === 'TEXTAREA'
@@ -126,13 +187,13 @@ export default function CeldaEvaluacion({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onCerrar, onSiguiente, onAnterior, instrumentosAbierto, rubricaAbierta])
+  }, [onCerrar, onSiguiente, onAnterior, instrumentosAbierto, rubricaAbierta, pruebaAbierta])
 
   const guardarNota = async (valor: number | null, niveles_rubrica?: Record<string, number> | null) => {
     if (!instrumentoId) return
     setGuardando(true)
     try {
-      await saveCalificaciones([{
+      const vinculadas = await saveCalificaciones([{
         alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: criterio.id,
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
@@ -142,11 +203,13 @@ export default function CeldaEvaluacion({
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
-      setMsg({ tipo: 'ok', texto: valor == null ? 'Nota borrada' : `${valor} guardado en ${criterio.id}` })
-      setTimeout(() => setMsg(null), 2000)
+      // Si la nota ha ido a más casillas, se dice: que un vínculo escriba en
+      // otro criterio sin avisar sería justo lo que no debe pasar.
+      const tambien = vinculadas > 0 ? ` y en ${vinculadas} criterio${vinculadas !== 1 ? 's' : ''} vinculado${vinculadas !== 1 ? 's' : ''}` : ''
+      avisar({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterio.id}${tambien}` }, 2000)
       onGuardado()
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la nota' })
+      avisar({ tipo: 'error', texto: 'No se pudo guardar la nota' })
     } finally { setGuardando(false) }
   }
 
@@ -161,11 +224,10 @@ export default function CeldaEvaluacion({
       })
       recargarEvidencias()
       const nombre = ev.tipo === 'foto' ? 'Foto' : ev.tipo === 'audio' ? 'Audio' : 'Vídeo'
-      setMsg({ tipo: 'ok', texto: `${nombre} guardado como evidencia` })
-      setTimeout(() => setMsg(null), 2200)
+      avisar({ tipo: 'ok', texto: `${nombre} guardado como evidencia` }, 2200)
       onGuardado()
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
+      avisar({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
     } finally { setGuardando(false) }
   }
 
@@ -201,10 +263,51 @@ export default function CeldaEvaluacion({
     await guardarNota(null, {})
   }
 
+  /**
+   * Guardar lo anotado en el examen.
+   *
+   * Un examen se corrige una vez y pone nota en todos los criterios que evalúa
+   * —la misma, o a cada uno la de sus preguntas—. En todos se guardan las
+   * respuestas completas, para que el examen se vea entero se abra desde el
+   * criterio que se abra.
+   *
+   * No pasa por los vínculos: el reparto ya lo decide el examen.
+   */
+  const guardarRespuestas = async (respuestas: Record<string, number>) => {
+    if (!instrumentoId || !prueba) return
+    setMarcado(respuestas)
+    const r = notaDePrueba(prueba.def, respuestas, destinosPrueba)
+    const criterios = destinosPrueba.filter(c => c in r.porCriterio)
+    setGuardando(true)
+    try {
+      await saveCalificaciones(criterios.map(c => ({
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: c,
+        asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
+        comunidad: asig.comunidad || grupo.comunidad, trimestre,
+        valor: r.porCriterio[c], unidad_id: unidadId, niveles_rubrica: respuestas,
+        // La observación es de este criterio; en los demás no se toca.
+        ...(c === criterio.id ? { observacion: observacion.trim() || null } : {}),
+      })), { sinVinculos: true })
+      const mia = r.porCriterio[criterio.id] ?? null
+      setValorActual(criterio.id in r.porCriterio ? mia : valorActual)
+      avisar({
+        tipo: 'ok',
+        texto: r.nota == null
+          ? 'Examen sin anotar: nota borrada'
+          : `Examen: ${r.nota}${criterios.length > 1 ? ` · nota puesta en ${criterios.join(', ')}` : ` guardado en ${criterio.id}`}`,
+      }, 2500)
+      onGuardado()
+    } catch {
+      avisar({ tipo: 'error', texto: 'No se pudo guardar el examen' })
+    } finally { setGuardando(false) }
+  }
+
   const resumen = notaDeRubrica(indicadores, niveles, marcado)
   const maxNivel = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
   /** Con rúbrica de verdad —niveles e indicadores— la nota la pone ella. */
-  const calificaPorRubrica = niveles.length > 0 && indicadores.length > 0
+  const calificaPorPrueba = !!prueba
+  // Con examen definido manda el examen: es lo que el docente ha dicho que corrige.
+  const calificaPorRubrica = !calificaPorPrueba && niveles.length > 0 && indicadores.length > 0
 
   /**
    * Tras tocar instrumentos o rúbrica hay dos vistas que se quedarían viejas:
@@ -228,6 +331,17 @@ export default function CeldaEvaluacion({
         nivel={`${grupo.curso}º ${grupo.etapa}`}
         anidado
         onClose={() => { setInstrumentosAbierto(false); trasEditarConfig() }}
+      />
+    )}
+
+    {pruebaAbierta && instrumentoSel && (
+      <PruebaEditor
+        instrumentoId={instrumentoSel.instrumento_id}
+        instrumentoNombre={instrumentoSel.nombre}
+        unidadId={unidadId}
+        unidadNombre={unidadNombre}
+        criterios={[criterio, ...hermanos]}
+        onCerrar={() => { setPruebaAbierta(false); trasEditarConfig() }}
       />
     )}
 
@@ -296,6 +410,20 @@ export default function CeldaEvaluacion({
                 style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', background: 'white', color: 'var(--gris-600)', border: '1px solid var(--gris-300)' }}>
                 ⚙ Instrumentos
               </button>
+              {instrumentoSel && esPruebaEscrita && (
+                <button onClick={() => setPruebaAbierta(true)}
+                  title={prueba
+                    ? `Ver o editar el examen «${prueba.def.titulo}»`
+                    : 'Definir el examen: tipo, preguntas y lo que vale cada una. Después se corrige pregunta a pregunta.'}
+                  style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
+                    background: prueba ? 'var(--azul-700)' : 'white',
+                    color: prueba ? 'white' : 'var(--gris-600)',
+                    border: prueba ? 'none' : '1px solid var(--gris-300)',
+                  }}>
+                  📝 {prueba ? 'Examen' : 'Definir examen'}
+                </button>
+              )}
               {instrumentoSel && (
                 <button onClick={() => setRubricaAbierta(true)}
                   title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
@@ -326,7 +454,7 @@ export default function CeldaEvaluacion({
                     <span>
                       {ins.nombre}
                       <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
-                        {c.label} · {ins.peso}%{ins.tiene_rubrica ? ' · con rúbrica' : ''}
+                        {c.label} · {ins.peso}%{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
                       </span>
                     </span>
                   </button>
@@ -334,6 +462,21 @@ export default function CeldaEvaluacion({
               })}
             </div>
           </div>
+
+          {/* El mismo instrumento para varios criterios: copiar o vincular */}
+          {instrumentoSel && hermanosDe && !calificaPorPrueba && (
+            <CriteriosHermanos
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanos}
+              alumno={alumno}
+              alumnoIds={alumnoIds ?? [alumno.id!]}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              tieneNota={valorActual != null}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }); onGuardado() }}
+            />
+          )}
 
           {/* Nota actual */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
@@ -353,13 +496,25 @@ export default function CeldaEvaluacion({
                 ? <>Sin calificar con <strong>{instrumentoSel?.nombre ?? 'este instrumento'}</strong>.</>
                 : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
               {valorActual != null && (
-                <button onClick={() => calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
+                <button onClick={() => calificaPorPrueba ? guardarRespuestas({}) : calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
                   style={{ marginLeft: 8, background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                   borrar nota
                 </button>
               )}
             </div>
           </div>
+
+          {/* Con examen definido se corrige pregunta a pregunta. */}
+          {calificaPorPrueba && prueba && (
+            <CorregirPrueba
+              def={prueba.def}
+              respuestas={marcado}
+              destinos={destinosPrueba}
+              criterioActual={criterio.id}
+              guardando={guardando}
+              onCambio={guardarRespuestas}
+            />
+          )}
 
           {/* La rúbrica se califica indicador a indicador. La nota no se pide:
               sale de lo marcado, ponderado por el peso de cada indicador. */}
@@ -447,8 +602,15 @@ export default function CeldaEvaluacion({
           {/* Sin rúbrica que aplicar, la nota se pone a mano. También cuando la
               rúbrica está a medias —con niveles pero sin ningún indicador—, que
               si no el criterio se quedaría sin forma de calificar. */}
-          {!calificaPorRubrica && (
+          {!calificaPorRubrica && !calificaPorPrueba && (
             <>
+              {esPruebaEscrita && (
+                <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8, lineHeight: 1.5 }}>
+                  {pruebaSoloPorUnidad
+                    ? <>Los exámenes de «{instrumentoSel?.nombre}» están definidos por unidad: entra en la pestaña de la unidad para corregir pregunta a pregunta.</>
+                    : <>¿Corriges por preguntas? Pulsa <strong>📝 Definir examen</strong> y la nota saldrá sola al anotar cada una.</>}
+                </div>
+              )}
               {niveles.length > 0 && indicadores.length === 0 && (
                 <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
                   Esta rúbrica tiene niveles pero ningún indicador, así que no puede

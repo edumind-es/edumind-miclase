@@ -109,6 +109,25 @@ edumind_miclase/
   (va centrada en su bloque y no se repite si salta de página). Normalizar
   espacios antes de parsear lo rompe todo. El fixture se regenera con
   `pruebas/lib/proens_gemelo.py`; el PDF real de Luis aún no ha pasado por él.
+- **La tabla `rubricas` guarda tres cosas.** La rúbrica de un instrumento, las
+  copias del banco del docente (`instrumento_id = INSTRUMENTO_BANCO`, que no
+  cuelgan de ningún instrumento y sobreviven al borrado de la clase) y las
+  definiciones de prueba escrita (`tipo: 'prueba'`, una por instrumento y
+  unidad, o general con `unidad_id` null). Comparten tabla para sincronizarse
+  sin tocar el esquema ni el servidor. Toda consulta de rúbricas filtra con
+  `esRubrica`: sin él, un examen se abriría como una rúbrica vacía.
+- **La réplica a criterios vinculados vive en `saveCalificaciones`**, no en las
+  pantallas: es el único sitio por el que pasan las notas (panel de celda,
+  evaluación rápida, QR). Quién va con quién lo decide `db/vinculos.ts`,
+  cerrando por transitividad entre unidades del trimestre, porque la nota se
+  guarda por alumno, instrumento, criterio y trimestre, no por unidad. Copiar
+  notas y corregir un examen escriben con `sinVinculos`: su reparto ya está
+  decidido. Nada se replica sin que el docente lo haya pedido.
+- **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
+  `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
+  `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
+  reciben nota los criterios que alguna pregunta nombra y que la programación
+  asigna al instrumento.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 

@@ -192,10 +192,31 @@ export interface CriterioInstrumento extends Sincronizable {
    * arrastra solo, porque `aSobre` serializa el registro entero.
    */
   peso_criterio?: number | null
+  /**
+   * 1 si este criterio va **vinculado** con los demás criterios marcados del
+   * mismo instrumento en esta unidad: calificar uno pone la misma nota en
+   * todos. Es para el instrumento que se corrige una vez y cuenta para varios
+   * criterios (un cuaderno, una exposición), que antes obligaba a repetir la
+   * nota casilla por casilla.
+   *
+   * Lo declara el docente, nunca se activa solo. Quién va con quién se decide
+   * en `vinculos.ts`; la réplica la hace `saveCalificaciones`. Sin índice.
+   */
+  vinculado?: number | null
 }
+
+/**
+ * Las rúbricas del banco no cuelgan de ningún instrumento: llevan este valor
+ * en `instrumento_id`. Así viven en la misma tabla —se sincronizan y entran en
+ * la copia de seguridad sin tocar el esquema ni el servidor— y sobreviven al
+ * borrado de la clase en la que nacieron, que arrastra solo las rúbricas de
+ * sus instrumentos.
+ */
+export const INSTRUMENTO_BANCO = 0
 
 export interface Rubrica extends Sincronizable {
   id?: number
+  /** Instrumento al que pertenece, o `INSTRUMENTO_BANCO` si es una copia del banco. */
   instrumento_id: number
   titulo: string
   contexto?: string      // descripción SA/UD usada para generar
@@ -204,6 +225,29 @@ export interface Rubrica extends Sincronizable {
   indicadores_json: string // JSON: RubricaIndicador[]
   generada_ia: number    // 0 | 1
   created_at?: string
+  /**
+   * Área y curso en los que se guardó, solo en las copias del banco: es lo que
+   * queda para reconocerla cuando la clase de origen ya no existe. Sin índice.
+   */
+  area?: string
+  nivel?: string
+  /**
+   * `'prueba'` si esta fila no es una rúbrica sino la definición de una prueba
+   * escrita (ver `prueba.ts`). Comparte tabla a propósito: se sincroniza, entra
+   * en la copia de seguridad y cae con su instrumento sin tocar el esquema ni
+   * el servidor. Entonces `niveles_json` e `indicadores_json` van vacíos —una
+   * versión anterior de la app la ve como una rúbrica sin nada— y lo que
+   * cuenta es `prueba_json`. Sin índice.
+   */
+  tipo?: 'prueba'
+  /** JSON: `PruebaDef`. Solo con `tipo: 'prueba'`. */
+  prueba_json?: string
+  /**
+   * Unidad a la que pertenece el examen, o null si vale para todas las del
+   * instrumento. Un mismo instrumento («Prueba escrita») se usa en varias
+   * unidades y cada una tiene su examen. Solo con `tipo: 'prueba'`.
+   */
+  unidad_id?: number | null
 }
 
 /**
