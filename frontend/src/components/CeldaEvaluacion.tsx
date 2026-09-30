@@ -16,6 +16,7 @@ import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import MiniaturaEvidencia from './MiniaturaEvidencia'
 import InstrumentosManager from './InstrumentosManager'
 import RubricaEditor from './RubricaEditor'
+import CriteriosHermanos from './CriteriosHermanos'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
@@ -38,11 +39,18 @@ interface Props {
   onAnterior?: () => void
   onSiguiente?: () => void
   posicion?: string
+  /**
+   * Los otros criterios que un instrumento evalúa en lo que se está viendo.
+   * Con ellos se ofrece copiar la nota o vincularlos; sin la función, nada.
+   */
+  hermanosDe?: (instrumentoId: number) => { id: string; descripcion: string }[]
+  /** Toda la clase, para copiar una columna entera. */
+  alumnoIds?: number[]
 }
 
 export default function CeldaEvaluacion({
   alumno, criterio, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
-  onGuardado, onCerrar, onAnterior, onSiguiente, posicion,
+  onGuardado, onCerrar, onAnterior, onSiguiente, posicion, hermanosDe, alumnoIds,
 }: Props) {
   const [instrumentoId, setInstrumentoId] = useState<number | null>(instrumentos[0]?.instrumento_id ?? null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
@@ -132,7 +140,7 @@ export default function CeldaEvaluacion({
     if (!instrumentoId) return
     setGuardando(true)
     try {
-      await saveCalificaciones([{
+      const vinculadas = await saveCalificaciones([{
         alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: criterio.id,
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
@@ -142,7 +150,10 @@ export default function CeldaEvaluacion({
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
-      setMsg({ tipo: 'ok', texto: valor == null ? 'Nota borrada' : `${valor} guardado en ${criterio.id}` })
+      // Si la nota ha ido a más casillas, se dice: que un vínculo escriba en
+      // otro criterio sin avisar sería justo lo que no debe pasar.
+      const tambien = vinculadas > 0 ? ` y en ${vinculadas} criterio${vinculadas !== 1 ? 's' : ''} vinculado${vinculadas !== 1 ? 's' : ''}` : ''
+      setMsg({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterio.id}${tambien}` })
       setTimeout(() => setMsg(null), 2000)
       onGuardado()
     } catch {
@@ -334,6 +345,21 @@ export default function CeldaEvaluacion({
               })}
             </div>
           </div>
+
+          {/* El mismo instrumento para varios criterios: copiar o vincular */}
+          {instrumentoSel && hermanosDe && (
+            <CriteriosHermanos
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanosDe(instrumentoSel.instrumento_id)}
+              alumno={alumno}
+              alumnoIds={alumnoIds ?? [alumno.id!]}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              tieneNota={valorActual != null}
+              onCambio={texto => { setMsg({ tipo: 'ok', texto }); onGuardado() }}
+            />
+          )}
 
           {/* Nota actual */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>

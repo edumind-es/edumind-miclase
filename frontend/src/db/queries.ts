@@ -3,6 +3,7 @@ import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
 import { reiniciarEstadoDeSincronizacion } from './sync'
+import { criteriosVinculados } from './vinculos'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -540,7 +541,123 @@ export async function getCalificacionUnica(
   return c && !c.deleted_at ? c : undefined
 }
 
-export async function saveCalificaciones(items: CalItem[]): Promise<void> {
+/**
+ * Filas criterio ↔ instrumento de un instrumento en las unidades que cuentan
+ * para un trimestre (las de ese trimestre y las que no tienen ninguno). Si se
+ * da `unidad_id`, solo las de esa unidad.
+ */
+async function filasDeInstrumentoEnTrimestre(
+  instrumento_id: number, trimestre: number, unidad_id?: number | null
+): Promise<CriterioInstrumento[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(f => !unidad_id || f.unidad_id === unidad_id)
+  if (!filas.length) return []
+  const unidades = new Map(
+    vivos(await db.unidades.where('id').anyOf([...new Set(filas.map(f => f.unidad_id))]).toArray())
+      .map(u => [u.id!, u]))
+  return filas.filter(f => {
+    const u = unidades.get(f.unidad_id)
+    return !!u && (u.trimestre == null || u.trimestre === trimestre)
+  })
+}
+
+/** Con qué criterios va vinculado este, para un instrumento y un trimestre. */
+export async function getCriteriosVinculados(
+  instrumento_id: number, criterio_id: string, trimestre: number
+): Promise<string[]> {
+  return criteriosVinculados(await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre), criterio_id)
+}
+
+/**
+ * Deja vinculados EXACTAMENTE estos criterios para el instrumento (menos de
+ * dos = sin vínculo). Con `unidad_id`, solo en esa unidad; sin él —la vista
+ * «Todo el curso»—, en todas las del trimestre donde el instrumento los evalúa.
+ *
+ * No toca ninguna nota: el vínculo vale de aquí en adelante.
+ */
+export async function fijarVinculoDeInstrumento(
+  instrumento_id: number, trimestre: number, unidad_id: number | null, criterios: string[]
+): Promise<void> {
+  const quedan = new Set(criterios.length >= 2 ? criterios : [])
+  const filas = await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre, unidad_id)
+  for (const f of filas) {
+    const debe = quedan.has(f.criterio_id) ? 1 : null
+    if ((f.vinculado || null) !== debe) await db.criterio_instrumentos.update(f.id!, tocado({ vinculado: debe }))
+  }
+}
+
+/**
+ * Copia las notas de un criterio a otros, para el mismo instrumento y
+ * trimestre. Es una copia puntual: después cada casilla va por su cuenta.
+ *
+ * Una casilla de destino que ya tiene nota se respeta salvo que se pida
+ * `sobrescribir`: copiar una columna no puede llevarse por delante lo que el
+ * docente ya había puesto a mano.
+ */
+export async function copiarNotasACriterios(p: {
+  instrumento_id: number
+  trimestre: number
+  origen: string
+  destinos: string[]
+  alumno_ids: number[]
+  sobrescribir: boolean
+}): Promise<{ copiadas: number; respetadas: number; sinNota: number }> {
+  let copiadas = 0, respetadas = 0, sinNota = 0
+  const items: CalItem[] = []
+  for (const alumno_id of p.alumno_ids) {
+    const src = await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    if (!src || src.valor == null) { sinNota++; continue }
+    for (const destino of p.destinos) {
+      if (destino === p.origen) continue
+      const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, destino, p.trimestre)
+      if (ya?.valor != null && !p.sobrescribir) { respetadas++; continue }
+      items.push({
+        alumno_id, instrumento_id: p.instrumento_id, criterio_id: destino,
+        asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
+        trimestre: p.trimestre, valor: src.valor, observacion: src.observacion ?? null,
+        unidad_id: src.unidad_id ?? null, niveles_rubrica: src.niveles_rubrica ?? null,
+      })
+      copiadas++
+    }
+  }
+  // Sin réplica: se copia a donde se ha pedido, no a lo que cuelgue de ahí.
+  await saveCalificaciones(items, { sinVinculos: true })
+  return { copiadas, respetadas, sinNota }
+}
+
+/**
+ * Guarda notas. Es el único sitio por el que pasan —panel de celda,
+ * evaluación rápida, QR—, y por eso la réplica a los criterios vinculados se
+ * hace aquí: un vínculo tiene que valer igual se califique por donde se
+ * califique. Devuelve cuántas casillas vinculadas se han escrito además de
+ * las pedidas.
+ */
+export async function saveCalificaciones(
+  items: CalItem[], opciones: { sinVinculos?: boolean } = {}
+): Promise<number> {
+  let replicadas = 0
+  if (!opciones.sinVinculos && items.length) {
+    const clave = (i: Pick<CalItem, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre'>) =>
+      `${i.alumno_id}:${i.instrumento_id}:${i.criterio_id}:${i.trimestre}`
+    // Lo que se pide explícitamente manda sobre lo que llegaría por réplica.
+    const pedidas = new Set(items.map(clave))
+    const cache = new Map<string, string[]>()
+    const extra: CalItem[] = []
+    for (const item of items) {
+      const k = `${item.instrumento_id}:${item.criterio_id}:${item.trimestre}`
+      let hermanos = cache.get(k)
+      if (!hermanos) cache.set(k, hermanos = await getCriteriosVinculados(item.instrumento_id, item.criterio_id, item.trimestre))
+      for (const criterio_id of hermanos) {
+        const copia = { ...item, criterio_id }
+        if (pedidas.has(clave(copia))) continue
+        pedidas.add(clave(copia))
+        extra.push(copia)
+      }
+    }
+    replicadas = extra.length
+    items = [...items, ...extra]
+  }
+
   await db.transaction('rw', db.calificaciones, async () => {
     for (const item of items) {
       const existing = await db.calificaciones
@@ -566,6 +683,7 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
       }
     }
   })
+  return replicadas
 }
 
 /** Todas las notas de un alumno en una asignatura (para su ficha y los informes). */
@@ -1272,6 +1390,8 @@ export type CeldaInstrumento = {
   tipo: string
   peso: number
   tiene_rubrica: boolean
+  /** Criterios con los que este va vinculado para este instrumento (vacío = ninguno). */
+  vinculados: string[]
 }
 
 export type MatrizEvaluacion = {
@@ -1329,6 +1449,15 @@ export async function getMatrizEvaluacion(
     ? await getMapaCriterioInstrumento(unidad_id)
     : await getMapaCriterioInstrumentoAsignatura(asignatura_id)
 
+  // Los vínculos se calculan como al guardar (todas las unidades del trimestre),
+  // no solo con la unidad que se mira: lo que se enseña es lo que va a pasar.
+  const filasVinculo = new Map<number, CriterioInstrumento[]>()
+  for (const ins of instrumentos) {
+    if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
+    const filas = await filasDeInstrumentoEnTrimestre(ins.id!, trimestre)
+    if (filas.some(f => f.vinculado)) filasVinculo.set(ins.id!, filas)
+  }
+
   const porCriterio = new Map<string, CeldaInstrumento[]>()
   const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
@@ -1348,6 +1477,7 @@ export async function getMatrizEvaluacion(
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
+        vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
       })
     }
     if (celdas.length) porCriterio.set(criterio, celdas)

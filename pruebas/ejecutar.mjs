@@ -122,6 +122,10 @@ async function principal() {
     await paquete('pruebas/rubrica-importar.test.ts', rubricaImportar, ['--platform=node', '--format=esm'])
     await suite('importar rúbricas (xlsx, md, json)', 'node', [rubricaImportar])
 
+    const vinculos = join(scratch, 'vinculos.mjs')
+    await paquete('pruebas/vinculos.test.ts', vinculos, ['--platform=node', '--format=esm'])
+    await suite('criterios vinculados', 'node', [vinculos])
+
     const proens = join(scratch, 'proens.mjs')
     await paquete('pruebas/proens.test.ts', proens, ['--platform=node', '--format=esm'])
     await suite('lectura de programaciones PROENS', 'node', [proens])
@@ -180,6 +184,7 @@ async function principal() {
     await suite('importar PROENS desde la interfaz', 'node', ['pruebas/proens-ui.test.mjs'], entorno)
     await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)
     await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
+    await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)

@@ -362,6 +362,11 @@ export default function EvaluacionPage() {
                                       style={{ background: getInstrConfig(i.tipo).color }}
                                       title={`${i.nombre} · ${getInstrConfig(i.tipo).label} · ${i.peso}%`} />
                                   ))}
+                              {instrs.some(i => i.vinculados.length > 0) && (
+                                <span className="vinculo" style={{ fontSize: 9, lineHeight: 1 }}
+                                  title={instrs.filter(i => i.vinculados.length > 0)
+                                    .map(i => `${i.nombre}: vinculado con ${i.vinculados.join(', ')}`).join('\n')}>🔗</span>
+                              )}
                             </div>
                           </th>
                         )
@@ -515,6 +520,11 @@ export default function EvaluacionPage() {
             posicion={`${celda.alumnoIdx + 1}/${alumnos.length}`}
             onGuardado={() => setRefresco(r => r + 1)}
             onCerrar={() => setCelda(null)}
+            alumnoIds={alumnos.map(a => a.id!)}
+            hermanosDe={iid => columnas
+              .filter(c => c.id !== celda.criterio.id
+                && (matriz.porCriterio.get(c.id) ?? []).some(i => i.instrumento_id === iid))
+              .map(c => ({ id: c.id, descripcion: c.descripcion }))}
             onAnterior={celda.alumnoIdx > 0
               ? () => setCelda(c => c && { ...c, alumnoIdx: c.alumnoIdx - 1 })
               : undefined}

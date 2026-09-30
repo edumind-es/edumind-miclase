@@ -192,6 +192,17 @@ export interface CriterioInstrumento extends Sincronizable {
    * arrastra solo, porque `aSobre` serializa el registro entero.
    */
   peso_criterio?: number | null
+  /**
+   * 1 si este criterio va **vinculado** con los demás criterios marcados del
+   * mismo instrumento en esta unidad: calificar uno pone la misma nota en
+   * todos. Es para el instrumento que se corrige una vez y cuenta para varios
+   * criterios (un cuaderno, una exposición), que antes obligaba a repetir la
+   * nota casilla por casilla.
+   *
+   * Lo declara el docente, nunca se activa solo. Quién va con quién se decide
+   * en `vinculos.ts`; la réplica la hace `saveCalificaciones`. Sin índice.
+   */
+  vinculado?: number | null
 }
 
 /**
