@@ -32,3 +32,7 @@ frontend/releases/
 # Sesiones y worktrees de Claude Code: son de esta máquina, no del proyecto.
 # Un checkpoint automático llegó a subir el worktree como gitlink.
 .claude/
+
+# Temporales de pruebas/migracion.test.mjs
+frontend/public/__dexie-tmp.mjs
+frontend/public/__sembrar-v3.html
