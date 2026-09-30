@@ -231,6 +231,23 @@ export interface Rubrica extends Sincronizable {
    */
   area?: string
   nivel?: string
+  /**
+   * `'prueba'` si esta fila no es una rúbrica sino la definición de una prueba
+   * escrita (ver `prueba.ts`). Comparte tabla a propósito: se sincroniza, entra
+   * en la copia de seguridad y cae con su instrumento sin tocar el esquema ni
+   * el servidor. Entonces `niveles_json` e `indicadores_json` van vacíos —una
+   * versión anterior de la app la ve como una rúbrica sin nada— y lo que
+   * cuenta es `prueba_json`. Sin índice.
+   */
+  tipo?: 'prueba'
+  /** JSON: `PruebaDef`. Solo con `tipo: 'prueba'`. */
+  prueba_json?: string
+  /**
+   * Unidad a la que pertenece el examen, o null si vale para todas las del
+   * instrumento. Un mismo instrumento («Prueba escrita») se usa en varias
+   * unidades y cada una tiene su examen. Solo con `tipo: 'prueba'`.
+   */
+  unidad_id?: number | null
 }
 
 /**

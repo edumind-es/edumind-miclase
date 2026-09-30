@@ -4,6 +4,7 @@ import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
 import { reiniciarEstadoDeSincronizacion } from './sync'
 import { criteriosVinculados } from './vinculos'
+import { normalizarPrueba, type PruebaDef } from './prueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -1112,13 +1113,19 @@ export async function borrarProgramacion(asignatura_id: number): Promise<void> {
 
 // ─── RÚBRICAS ─────────────────────────────────────────────────────────────────
 
+// En la tabla conviven las rúbricas y las definiciones de prueba escrita
+// (`tipo: 'prueba'`). Todo lo de este bloque es de rúbricas: las pruebas se
+// apartan siempre, o un examen se abriría como una rúbrica vacía.
+const esRubrica = (r: Rubrica) => r.tipo !== 'prueba'
+
 export async function getRubrica(instrumento_id: number): Promise<Rubrica | null> {
-  const r = await db.rubricas.where('instrumento_id').equals(instrumento_id).first()
-  return r && !r.deleted_at ? r : null
+  const filas = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray()).filter(esRubrica)
+  return vivos(filas)[0] ?? null
 }
 
 export async function guardarRubrica(data: Omit<Rubrica, 'id' | 'created_at'> & { id?: number }): Promise<number> {
-  const existing = await db.rubricas.where('instrumento_id').equals(data.instrumento_id).first()
+  // Se reutiliza la fila aunque esté borrada: una rúbrica por instrumento.
+  const existing = (await db.rubricas.where('instrumento_id').equals(data.instrumento_id).toArray()).find(esRubrica)
   if (existing?.id != null) {
     await db.rubricas.update(existing.id, tocado({ ...data, deleted_at: null, created_at: now() }))
     return existing.id
@@ -1130,8 +1137,67 @@ export async function guardarRubrica(data: Omit<Rubrica, 'id' | 'created_at'> & 
 
 export async function eliminarRubrica(instrumento_id: number): Promise<void> {
   const t = sello()
-  await db.rubricas.where('instrumento_id').equals(instrumento_id)
+  await db.rubricas.where('instrumento_id').equals(instrumento_id).filter(esRubrica)
     .modify({ deleted_at: t, updated_at: t })
+}
+
+// ─── PRUEBAS ESCRITAS ─────────────────────────────────────────────────────────
+
+export type PruebaGuardada = {
+  id: number
+  /** Unidad del examen, o null si es el general del instrumento. */
+  unidad_id: number | null
+  def: PruebaDef
+}
+
+function aPrueba(r: Rubrica): PruebaGuardada | null {
+  try { return { id: r.id!, unidad_id: r.unidad_id ?? null, def: normalizarPrueba(JSON.parse(r.prueba_json || 'null')) } }
+  catch { return null }
+}
+
+/** Todos los exámenes de un instrumento: el general y los de cada unidad. */
+export async function getPruebasDeInstrumento(instrumento_id: number): Promise<PruebaGuardada[]> {
+  return vivos(await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(r => r.tipo === 'prueba')
+    .map(aPrueba)
+    .filter((p): p is PruebaGuardada => !!p && p.def.preguntas.length > 0)
+}
+
+/**
+ * El examen con el que se corrige en una unidad: el suyo si lo tiene y, si no,
+ * el general del instrumento. Sin unidad («Todo el curso»), solo el general:
+ * no se puede adivinar de cuál de los exámenes por unidad se trata.
+ */
+export async function getPrueba(instrumento_id: number, unidad_id: number | null): Promise<PruebaGuardada | null> {
+  const todas = await getPruebasDeInstrumento(instrumento_id)
+  return (unidad_id != null ? todas.find(p => p.unidad_id === unidad_id) : undefined)
+    ?? todas.find(p => p.unidad_id == null)
+    ?? null
+}
+
+/** Guarda el examen de un instrumento para una unidad (o el general, con null). Uno por ámbito. */
+export async function guardarPrueba(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+  const limpia = normalizarPrueba(def)
+  const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
+  const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
+  if (existente?.id != null) {
+    await db.rubricas.update(existente.id, tocado({ ...campos, deleted_at: null }))
+    return existente.id
+  }
+  const reg = nuevo({
+    ...campos, instrumento_id, tipo: 'prueba' as const,
+    niveles_json: '[]', indicadores_json: '[]', generada_ia: 0, created_at: now(),
+  })
+  await db.rubricas.add(reg)
+  return reg.id
+}
+
+/** Quita la definición del examen. Las notas ya puestas con él se conservan. */
+export async function eliminarPrueba(id: number): Promise<void> {
+  const r = await db.rubricas.get(id)
+  if (!r || r.tipo !== 'prueba') return
+  await db.rubricas.update(id, tocado({ deleted_at: sello() }))
 }
 
 // ─── BANCO DE RÚBRICAS ────────────────────────────────────────────────────────
@@ -1177,7 +1243,7 @@ function firmaRubrica(r: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_
  * sola vez, con sus tres usos: si no, el banco sería una lista de repetidas.
  */
 export async function getBancoRubricas(): Promise<RubricaDeBanco[]> {
-  const todas = vivos(await db.rubricas.toArray())
+  const todas = vivos(await db.rubricas.toArray()).filter(esRubrica)
   const instrumentos = new Map(vivos(await db.instrumentos.toArray()).map(i => [i.id!, i]))
   const asignaturas = new Map(vivos(await db.asignaturas.toArray()).map(a => [a.id!, a]))
   const grupos = new Map(vivos(await db.grupos.toArray()).map(g => [g.id!, g]))
@@ -1231,7 +1297,7 @@ export async function guardarEnBanco(
   data: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_json' | 'contexto' | 'generada_ia' | 'area' | 'nivel'>
 ): Promise<{ id: number; yaEstaba: boolean }> {
   const firma = firmaRubrica(data)
-  const delBanco = vivos(await db.rubricas.where('instrumento_id').equals(INSTRUMENTO_BANCO).toArray())
+  const delBanco = vivos(await db.rubricas.where('instrumento_id').equals(INSTRUMENTO_BANCO).toArray()).filter(esRubrica)
   const igual = delBanco.find(r => firmaRubrica(r) === firma)
   if (igual) return { id: igual.id!, yaEstaba: true }
   const reg = nuevo({ ...data, instrumento_id: INSTRUMENTO_BANCO, created_at: now() })
@@ -1390,6 +1456,8 @@ export type CeldaInstrumento = {
   tipo: string
   peso: number
   tiene_rubrica: boolean
+  /** Tiene una prueba escrita definida (la de la unidad que se mira o la general). */
+  tiene_prueba: boolean
   /** Criterios con los que este va vinculado para este instrumento (vacío = ninguno). */
   vinculados: string[]
 }
@@ -1440,10 +1508,12 @@ export async function getMatrizEvaluacion(
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
 
   // Qué instrumentos tienen rúbrica (para pintar el icono en la celda)
-  const conRubrica = new Set(
-    vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
-      .map(r => r.instrumento_id)
-  )
+  const delosInstrumentos = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
+  const conRubrica = new Set(delosInstrumentos.filter(esRubrica).map(r => r.instrumento_id))
+  // Con examen definido para lo que se está viendo: el de la unidad o el general.
+  const conPrueba = new Set(delosInstrumentos
+    .filter(r => r.tipo === 'prueba' && (r.unidad_id == null || r.unidad_id === unidad_id))
+    .map(r => r.instrumento_id))
 
   const crudo = unidad_id
     ? await getMapaCriterioInstrumento(unidad_id)
@@ -1477,6 +1547,7 @@ export async function getMatrizEvaluacion(
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
+        tiene_prueba: conPrueba.has(ins.id!),
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
       })
     }

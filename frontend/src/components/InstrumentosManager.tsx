@@ -14,6 +14,7 @@ import {
 import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import RubricaEditor from './RubricaEditor'
+import PruebaEditor from './PruebaEditor'
 
 interface Props {
   asignaturaId: number
@@ -38,6 +39,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([])
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string; peso: number } | null>(null)
   const [rubricaDe, setRubricaDe] = useState<Instrumento | null>(null)
+  const [pruebaDe, setPruebaDe] = useState<Instrumento | null>(null)
 
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
@@ -46,10 +48,10 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   useEffect(() => { cargar() }, [asignaturaId])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !rubricaDe) onClose() }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !rubricaDe && !pruebaDe) onClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose, rubricaDe])
+  }, [onClose, rubricaDe, pruebaDe])
 
   // Guardado inmediato campo a campo
   const cambiar = async (id: number, fields: Parameters<typeof actualizarInstrumento>[1]) => {
@@ -106,6 +108,19 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
           nivel={nivel}
           capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
           onCerrar={() => setRubricaDe(null)}
+        />
+      )}
+
+      {pruebaDe && (
+        // Desde aquí no hay unidad: se edita el examen general del instrumento.
+        // El de cada unidad se define desde el calificador, dentro de la unidad.
+        <PruebaEditor
+          instrumentoId={pruebaDe.id!}
+          instrumentoNombre={pruebaDe.nombre}
+          unidadId={null}
+          criterios={[]}
+          capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
+          onCerrar={() => setPruebaDe(null)}
         />
       )}
 
@@ -192,6 +207,16 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                       </label>
                     ))}
                     <div style={{ flex: 1 }} />
+                    {ins.tipo === 'prueba-escrita' && (
+                      <button onClick={() => setPruebaDe(ins)}
+                        title="Examen general del instrumento: tipo, preguntas y puntos. El de cada unidad se define desde el calificador."
+                        style={{
+                          fontSize: 11, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
+                          background: 'var(--azul-700)', color: 'white', border: 'none',
+                        }}>
+                        📝 Examen
+                      </button>
+                    )}
                     <button onClick={() => setRubricaDe(ins)}
                       style={{
                         fontSize: 11, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
