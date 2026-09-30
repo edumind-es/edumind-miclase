@@ -194,8 +194,18 @@ export interface CriterioInstrumento extends Sincronizable {
   peso_criterio?: number | null
 }
 
+/**
+ * Las rúbricas del banco no cuelgan de ningún instrumento: llevan este valor
+ * en `instrumento_id`. Así viven en la misma tabla —se sincronizan y entran en
+ * la copia de seguridad sin tocar el esquema ni el servidor— y sobreviven al
+ * borrado de la clase en la que nacieron, que arrastra solo las rúbricas de
+ * sus instrumentos.
+ */
+export const INSTRUMENTO_BANCO = 0
+
 export interface Rubrica extends Sincronizable {
   id?: number
+  /** Instrumento al que pertenece, o `INSTRUMENTO_BANCO` si es una copia del banco. */
   instrumento_id: number
   titulo: string
   contexto?: string      // descripción SA/UD usada para generar
@@ -204,6 +214,12 @@ export interface Rubrica extends Sincronizable {
   indicadores_json: string // JSON: RubricaIndicador[]
   generada_ia: number    // 0 | 1
   created_at?: string
+  /**
+   * Área y curso en los que se guardó, solo en las copias del banco: es lo que
+   * queda para reconocerla cuando la clase de origen ya no existe. Sin índice.
+   */
+  area?: string
+  nivel?: string
 }
 
 /**

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { getRubrica, guardarRubrica, eliminarRubrica } from '@/db/queries'
+import { getRubrica, guardarRubrica, eliminarRubrica, guardarEnBanco, type RubricaDeBanco } from '@/db/queries'
 import {
   parsearRespuestaIA, generarPromptRubrica,
   rubricaVacia, NIVELES_DEFAULT,
@@ -7,6 +7,7 @@ import {
 } from '@/ia/rubricaPrompt'
 import { importarRubrica, rubricaAXlsx, rubricaAMarkdown, rubricaAJson } from '@/ia/rubricaImportar'
 import AyudaImportarRubrica, { TIPO_XLSX } from './AyudaImportarRubrica'
+import BancoRubricas from './BancoRubricas'
 import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
@@ -59,6 +60,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const importRef = useRef<HTMLInputElement>(null)
   /** La explicación de cómo debe venir el fichero, plegada hasta que se pide. */
   const [ayudaImportar, setAyudaImportar] = useState(false)
+  const [bancoAbierto, setBancoAbierto] = useState(false)
+  const [refrescoBanco, setRefrescoBanco] = useState(0)
 
   // IA
   const ai = useLocalAI()
@@ -302,6 +305,53 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   }
 
   /**
+   * Importar o cargar del banco sustituye lo que hay en el editor. Si eso es
+   * trabajo sin guardar, se pregunta: es la misma regla que al cerrar.
+   */
+  const puedeReemplazar = () =>
+    !sucio || confirm('Tienes cambios sin guardar en esta rúbrica. Si cargas otra encima se pierden.\n\n¿Cargarla de todos modos?')
+
+  /** Elegir una rúbrica del banco la COPIA aquí: adaptarla no toca la original. */
+  const cargarDelBanco = (elegida: RubricaParsed, origen: RubricaDeBanco) => {
+    if (!puedeReemplazar()) return
+    setRubrica(elegida)
+    setSucio(true)
+    setVieneDeIA(!!origen.generada_ia)
+    if (origen.contexto) setIaContexto(origen.contexto)
+    setTab('diseniar')
+    setModo('editar')
+    setBancoAbierto(false)
+    setMsg({ tipo: 'ok', texto: `«${elegida.titulo}» copiada de tu banco. Adáptala si hace falta y pulsa «Guardar rúbrica».` })
+  }
+
+  /**
+   * Copia aparte en el banco. Las rúbricas en uso ya salen en él, pero
+   * desaparecen con su instrumento o su clase; esta no.
+   */
+  const guardarEnMiBanco = async () => {
+    if (rubrica.indicadores.length === 0) return
+    try {
+      const { yaEstaba } = await guardarEnBanco({
+        titulo: rubrica.titulo,
+        niveles_json: JSON.stringify(rubrica.niveles),
+        indicadores_json: JSON.stringify(rubrica.indicadores),
+        contexto: iaContexto || undefined,
+        generada_ia: vieneDeIA ? 1 : 0,
+        area: asignaturaNombre, nivel,
+      })
+      setRefrescoBanco(n => n + 1)
+      setMsg({
+        tipo: 'ok',
+        texto: yaEstaba
+          ? `«${rubrica.titulo}» ya estaba en tu banco, tal cual.`
+          : `«${rubrica.titulo}» guardada en tu banco. Seguirá ahí aunque borres este instrumento o la clase.`,
+      })
+    } catch {
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar en el banco.' })
+    }
+  }
+
+  /**
    * Un solo botón para los tres formatos (.xlsx, .md, .json): el tipo se
    * decide mirando el contenido, no la extensión. Antes había dos botones, uno
    * por formato, y ninguno decía qué forma debía tener el fichero.
@@ -311,7 +361,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const importarFichero = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
-    if (!file) return
+    if (!file || !puedeReemplazar()) return
     try {
       const { rubrica: leida, avisos, contexto, area } = await importarRubrica(file.name, await file.arrayBuffer())
       setRubrica(leida)
@@ -450,7 +500,14 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
             onImportar={() => importRef.current?.click()}
             ayudaImportar={ayudaImportar}
             onAyudaImportar={() => setAyudaImportar(v => !v)}
+            onBanco={() => setBancoAbierto(v => !v)}
           />
+          {bancoAbierto && (
+            <div style={{ padding: '0 24px 8px' }}>
+              <BancoRubricas instrumentoId={instrumentoId} refresco={refrescoBanco}
+                onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
+            </div>
+          )}
           </div>
         )}
 
@@ -484,6 +541,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           {tab === 'diseniar' && (
             <>
               {ayudaImportar && <AyudaImportarRubrica onCerrar={() => setAyudaImportar(false)} />}
+              {bancoAbierto && (
+                <BancoRubricas instrumentoId={instrumentoId} refresco={refrescoBanco}
+                  onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
+              )}
 
               {/* Título */}
               <div style={{ marginBottom: 16 }}>
@@ -606,6 +667,16 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                   {pesoTotal}%{pesosCuadran ? ' ✓' : pesoTotal > 100 ? ' (excede 100)' : ` (falta ${Math.round((100 - pesoTotal) * 10) / 10})`}
                 </span>
                 <div style={{ flex: 1 }} />
+                <button className="btn-secondary" style={{ fontSize: 12 }}
+                  onClick={() => setBancoAbierto(v => !v)} aria-expanded={bancoAbierto}
+                  title="Elegir una de tus rúbricas, de cualquier clase y área">
+                  📚 Mi banco
+                </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={guardarEnMiBanco}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Guardar una copia en tu banco, que no desaparece si borras el instrumento o la clase">
+                  ⭐ Guardar en mi banco
+                </button>
                 <button className="btn-secondary" style={{ fontSize: 12 }}
                   onClick={() => importRef.current?.click()}
                   title="Cargar una rúbrica desde una hoja de cálculo (.xlsx), un Markdown (.md) o un fichero de rúbrica (.json)">
@@ -812,7 +883,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
  * El contexto (área y nivel) se enseña aquí porque es lo que la app va a
  * meter sola en el prompt: así se ve antes de generar nada.
  */
-function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco, onImportar, ayudaImportar, onAyudaImportar }: {
+function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco, onImportar, ayudaImportar, onAyudaImportar, onBanco }: {
   asignaturaNombre: string
   nivel: string
   plantillasAbiertas: boolean
@@ -823,6 +894,7 @@ function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantil
   onImportar: () => void
   ayudaImportar: boolean
   onAyudaImportar: () => void
+  onBanco: () => void
 }) {
   return (
     <div style={{ padding: 24 }}>
@@ -843,6 +915,11 @@ function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantil
           icono="📋" titulo="Partir de una plantilla"
           texto="Cuaderno, exposición oral, trabajo en equipo o producción práctica. Vienen rellenas y se ajustan."
           onClick={onPlantillas}
+        />
+        <BotonPartida
+          icono="📚" titulo="Elegir de mi banco"
+          texto="Las rúbricas que ya tienes, de cualquier clase y área. Se copia aquí y la adaptas."
+          onClick={onBanco}
         />
         <BotonPartida
           icono="📥" titulo="Importar de un fichero"

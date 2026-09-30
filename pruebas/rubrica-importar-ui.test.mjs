@@ -31,7 +31,7 @@ const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
-const fichero = p.locator('input[type="file"][accept*="xlsx"]')
+const fichero = p.locator('input[type="file"][accept*="xlsx"]:not([data-uso])')
 
 try {
   console.log('\n1. Clase con un área y un instrumento de tipo rúbrica')

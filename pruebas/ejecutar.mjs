@@ -179,6 +179,7 @@ async function principal() {
     await suite('texto de un PDF de PROENS', 'node', ['pruebas/proens-api.test.mjs'], entorno)
     await suite('importar PROENS desde la interfaz', 'node', ['pruebas/proens-ui.test.mjs'], entorno)
     await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)
+    await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)

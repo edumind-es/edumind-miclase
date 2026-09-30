@@ -1,4 +1,4 @@
-import { db, TABLAS_SINC } from './localDb'
+import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
@@ -1014,6 +1014,118 @@ export async function eliminarRubrica(instrumento_id: number): Promise<void> {
   const t = sello()
   await db.rubricas.where('instrumento_id').equals(instrumento_id)
     .modify({ deleted_at: t, updated_at: t })
+}
+
+// ─── BANCO DE RÚBRICAS ────────────────────────────────────────────────────────
+
+/** Una rúbrica del banco, con dónde se está usando. */
+export type RubricaDeBanco = {
+  /** Registro de `rubricas` que la representa. */
+  id: number
+  titulo: string
+  niveles_json: string
+  indicadores_json: string
+  contexto?: string
+  generada_ia: number
+  /**
+   * Tiene copia propia en el banco. Las que no, existen solo dentro de un
+   * instrumento y desaparecen con él (o con su clase).
+   */
+  enBanco: boolean
+  /** Id de la copia del banco, si la tiene: es lo que se quita con «Quitar del banco». */
+  bancoId: number | null
+  /** «6ºA · Ciencias Sociales · Juegos populares», uno por instrumento que la usa. */
+  usos: string[]
+  /** Instrumentos que la usan, para no ofrecerle a uno su propia rúbrica. */
+  instrumentoIds: number[]
+  area?: string
+  nivel?: string
+  nIndicadores: number
+  nNiveles: number
+  updated_at: string
+}
+
+/** Dos rúbricas son la misma si dicen lo mismo, estén donde estén. */
+function firmaRubrica(r: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_json'>): string {
+  const canon = (json: string) => { try { return JSON.stringify(JSON.parse(json)) } catch { return json } }
+  return `${r.titulo.trim()}\u0000${canon(r.niveles_json)}\u0000${canon(r.indicadores_json)}`
+}
+
+/**
+ * El banco del docente: todas sus rúbricas, de cualquier clase y área.
+ *
+ * Son las copias guardadas aparte (`INSTRUMENTO_BANCO`) más las que están en
+ * uso dentro de algún instrumento. La misma rúbrica en tres clases sale una
+ * sola vez, con sus tres usos: si no, el banco sería una lista de repetidas.
+ */
+export async function getBancoRubricas(): Promise<RubricaDeBanco[]> {
+  const todas = vivos(await db.rubricas.toArray())
+  const instrumentos = new Map(vivos(await db.instrumentos.toArray()).map(i => [i.id!, i]))
+  const asignaturas = new Map(vivos(await db.asignaturas.toArray()).map(a => [a.id!, a]))
+  const grupos = new Map(vivos(await db.grupos.toArray()).map(g => [g.id!, g]))
+
+  const porFirma = new Map<string, RubricaDeBanco>()
+  // Primero las del banco: si una rúbrica tiene copia propia, esa es la que manda.
+  const ordenadas = [...todas].sort((a, b) =>
+    Number(b.instrumento_id === INSTRUMENTO_BANCO) - Number(a.instrumento_id === INSTRUMENTO_BANCO))
+  for (const r of ordenadas) {
+    const esDelBanco = r.instrumento_id === INSTRUMENTO_BANCO
+    const ins = esDelBanco ? undefined : instrumentos.get(r.instrumento_id)
+    // Rúbrica de un instrumento que ya no existe: no es de nadie.
+    if (!esDelBanco && !ins) continue
+    const asig = ins ? asignaturas.get(ins.asignatura_id) : undefined
+    const grupo = asig ? grupos.get(asig.grupo_id) : undefined
+
+    const firma = firmaRubrica(r)
+    let entrada = porFirma.get(firma)
+    if (!entrada) {
+      let nIndicadores = 0, nNiveles = 0
+      try {
+        nIndicadores = JSON.parse(r.indicadores_json).length
+        nNiveles = JSON.parse(r.niveles_json).length
+      } catch { continue }   // una rúbrica ilegible no se puede ofrecer
+      entrada = {
+        id: r.id!, titulo: r.titulo, niveles_json: r.niveles_json, indicadores_json: r.indicadores_json,
+        contexto: r.contexto, generada_ia: r.generada_ia,
+        enBanco: esDelBanco, bancoId: esDelBanco ? r.id! : null,
+        usos: [], instrumentoIds: [],
+        area: r.area ?? asig?.nombre_display,
+        nivel: r.nivel ?? (grupo ? `${grupo.curso}º ${grupo.etapa}` : undefined),
+        nIndicadores, nNiveles,
+        updated_at: r.updated_at || r.created_at || '',
+      }
+      porFirma.set(firma, entrada)
+    }
+    if (ins) {
+      entrada.usos.push([grupo?.nombre, asig?.nombre_display, ins.nombre].filter(Boolean).join(' · '))
+      entrada.instrumentoIds.push(ins.id!)
+      if ((r.updated_at || '') > entrada.updated_at) entrada.updated_at = r.updated_at || ''
+    }
+  }
+  return [...porFirma.values()].sort((a, b) => b.updated_at.localeCompare(a.updated_at))
+}
+
+/**
+ * Guarda una copia en el banco. Si ya hay una idéntica no la duplica: el
+ * resultado dice cuál de las dos cosas ha pasado.
+ */
+export async function guardarEnBanco(
+  data: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_json' | 'contexto' | 'generada_ia' | 'area' | 'nivel'>
+): Promise<{ id: number; yaEstaba: boolean }> {
+  const firma = firmaRubrica(data)
+  const delBanco = vivos(await db.rubricas.where('instrumento_id').equals(INSTRUMENTO_BANCO).toArray())
+  const igual = delBanco.find(r => firmaRubrica(r) === firma)
+  if (igual) return { id: igual.id!, yaEstaba: true }
+  const reg = nuevo({ ...data, instrumento_id: INSTRUMENTO_BANCO, created_at: now() })
+  await db.rubricas.add(reg)
+  return { id: reg.id, yaEstaba: false }
+}
+
+/** Quita la copia del banco. Las rúbricas que los instrumentos ya tienen puestas no se tocan. */
+export async function eliminarDelBanco(id: number): Promise<void> {
+  const r = await db.rubricas.get(id)
+  if (!r || r.instrumento_id !== INSTRUMENTO_BANCO) return
+  await db.rubricas.update(id, tocado({ deleted_at: sello() }))
 }
 
 // ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
