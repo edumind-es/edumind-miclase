@@ -440,7 +440,9 @@ console.log('\n14. Sincronización')
 await p.getByRole('link', { name: 'Sincronizar', exact: true }).click()
 await p.waitForTimeout(1400)
 ok(await p.getByText('Cómo funciona').isVisible(), 'explica el modelo de privacidad antes que nada')
-ok(await p.getByText(/Necesitas iniciar sesión con EDUmind/).isVisible(), 'en modo local pide SSO en vez de fallar')
+ok(await p.getByText(/no pasan por ningún servidor ni necesitan cuenta/).isVisible(), 'deja claro que el QR y el fichero no necesitan cuenta')
+ok(await p.getByText(/Buzón en el servidor \(opcional/).isVisible(), 'el buzón con cuenta queda como opción plegada, no como requisito')
+ok(await p.getByRole('button', { name: 'Invitar al otro dispositivo' }).isVisible(), 'y el enlace directo está disponible sin sesión')
 await foto('18-sincronizar')
 
 // ── 15 · Copia de seguridad ─────────────────────────────────────────────
