@@ -48,6 +48,9 @@ export type CalItem = {
    * delante la justificación. Para vaciarla se manda `{}` o `null`.
    */
   niveles_rubrica?: Record<string, number> | null
+  /** Nota fantasma (ver `Calificacion.valor_anterior`). `undefined` = no tocarla. */
+  valor_anterior?: number | null
+  anterior_motivo?: string | null
 }
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
@@ -684,6 +687,9 @@ export async function saveCalificaciones(
           niveles_rubrica: item.niveles_rubrica !== undefined
             ? item.niveles_rubrica
             : existing.niveles_rubrica ?? null,
+          ...(item.valor_anterior !== undefined
+            ? { valor_anterior: item.valor_anterior, anterior_motivo: item.anterior_motivo ?? null }
+            : {}),
           fecha: now(),
           deleted_at: null,
         }))
@@ -1287,16 +1293,20 @@ export async function contarCorregidosDeExamen(instrumento_id: number, unidad_id
  * (otro tipo, otros puntos, otro reparto). Las respuestas anotadas no se
  * tocan: solo lo que valen.
  *
- * Si con el examen nuevo un criterio deja de recibir nota —se pasó de nota
- * única a reparto por criterios y ninguna pregunta lo nombra—, la que tenía
- * se retira: la había puesto el examen, y dejarla sería una nota que ya no
- * sale de ningún sitio.
+ * **Ninguna nota se pierde.** La que cambia —o la que se queda sin nota
+ * porque con el examen nuevo ninguna pregunta nombra su criterio— deja su
+ * valor anterior como fantasma (`valor_anterior`): a la vista, sin contar, y
+ * recuperable. Se llegó a retirar sin más, y una nota que desaparece al tocar
+ * la configuración de un examen no es algo que el docente espere.
  */
-export async function recalcularNotasDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+export async function recalcularNotasDeExamen(
+  instrumento_id: number, unidad_id: number | null, def: PruebaDef, motivo: string
+): Promise<{ alumnos: number; fantasmas: number }> {
   const grupos = await correccionesDeExamen(instrumento_id, unidad_id, def)
   const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
   const items: CalItem[] = []
   const alumnos = new Set<number>()
+  let fantasmas = 0
   for (const cals of grupos) {
     const base = cals[0]
     const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
@@ -1308,13 +1318,42 @@ export async function recalcularNotasDeExamen(instrumento_id: number, unidad_id:
       asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,
     }
     for (const c of destinos) {
-      if (c in r.porCriterio) items.push({ ...comun, criterio_id: c, valor: r.porCriterio[c], niveles_rubrica: respuestas })
-      else if (cals.some(x => x.criterio_id === c)) items.push({ ...comun, criterio_id: c, valor: null, niveles_rubrica: {} })
+      const previa = cals.find(x => x.criterio_id === c)
+      const recibe = c in r.porCriterio
+      if (!recibe && !previa) continue
+      const valor = recibe ? r.porCriterio[c] : null
+      // Solo hay fantasma si había nota y deja de ser la que era. Si la
+      // casilla ya estaba sin nota, se conserva el fantasma que tuviera.
+      const cambia = previa?.valor != null && previa.valor !== valor
+      if (cambia) fantasmas++
+      items.push({
+        ...comun, criterio_id: c, valor, niveles_rubrica: respuestas,
+        ...(cambia ? { valor_anterior: previa!.valor, anterior_motivo: motivo } : {}),
+      })
     }
     alumnos.add(base.alumno_id)
   }
   await saveCalificaciones(items, { sinVinculos: true })
-  return alumnos.size
+  return { alumnos: alumnos.size, fantasmas }
+}
+
+/**
+ * La nota fantasma vuelve a ser la que cuenta. La que contaba hasta ahora
+ * pasa a ser el fantasma: es un intercambio, así que se puede deshacer.
+ */
+export async function recuperarNotaAnterior(calificacion_id: number): Promise<void> {
+  const c = await db.calificaciones.get(calificacion_id)
+  if (!c || c.valor_anterior == null) return
+  await db.calificaciones.update(calificacion_id, tocado({
+    valor: c.valor_anterior,
+    valor_anterior: c.valor ?? null,
+    anterior_motivo: c.valor != null ? 'Nota sustituida al recuperar la anterior' : null,
+  }))
+}
+
+/** Quita la nota fantasma. La nota que cuenta no se toca. */
+export async function descartarNotaAnterior(calificacion_id: number): Promise<void> {
+  await db.calificaciones.update(calificacion_id, tocado({ valor_anterior: null, anterior_motivo: null }))
 }
 
 /** Quita la definición del examen. Las notas ya puestas con él se conservan. */

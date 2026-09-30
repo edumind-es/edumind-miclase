@@ -11,6 +11,7 @@ import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
   getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
+  recuperarNotaAnterior, descartarNotaAnterior,
   type CeldaInstrumento, type PruebaGuardada,
 } from '@/db/queries'
 import PruebaEditor from './PruebaEditor'
@@ -87,6 +88,9 @@ export default function CeldaEvaluacion({
   const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
   /** Hay exámenes definidos, pero por unidad, y se está mirando «Todo el curso». */
   const [pruebaSoloPorUnidad, setPruebaSoloPorUnidad] = useState(false)
+  /** Nota fantasma de esta casilla: la anterior a un recálculo. Visible, pero no cuenta. */
+  const [fantasma, setFantasma] = useState<{ id: number; valor: number; motivo: string | null } | null>(null)
+  const [recarga, setRecarga] = useState(0)
   // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
   // del instrumento, que si no se quedaba con los niveles de antes.
   const [refrescoInstr, setRefrescoInstr] = useState(0)
@@ -157,9 +161,11 @@ export default function CeldaEvaluacion({
       setValorActual(c?.valor ?? null)
       setObservacion(c?.observacion ?? '')
       setMarcado(marcas)
+      setFantasma(c?.id != null && c.valor_anterior != null
+        ? { id: c.id, valor: c.valor_anterior, motivo: c.anterior_motivo ?? null } : null)
     })()
     return () => { vigente = false }
-  }, [alumno.id, instrumentoId, criterio.id, trimestre, prueba])
+  }, [alumno.id, instrumentoId, criterio.id, trimestre, prueba, recarga])
 
   // Evidencias de este alumno en este criterio
   const recargarEvidencias = () => {
@@ -496,6 +502,41 @@ export default function CeldaEvaluacion({
               )}
             </div>
           </div>
+
+          {/* Nota fantasma: la anterior a un recálculo. No se pierde ni cuenta. */}
+          {fantasma && (
+            <div data-fantasma style={{
+              display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12,
+              padding: '9px 12px', borderRadius: 9, border: '1px dashed var(--gris-500)', background: 'var(--gris-50)',
+            }}>
+              <span style={{
+                minWidth: 40, height: 34, padding: '0 8px', borderRadius: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 800, fontSize: 15, color: 'white', background: calificativo(fantasma.valor).color, opacity: .45,
+              }}>{fantasma.valor}</span>
+              <div style={{ flex: '1 1 200px', fontSize: 12, color: 'var(--gris-600)', lineHeight: 1.45 }}>
+                <strong>Nota anterior: no cuenta.</strong>{' '}
+                {fantasma.motivo || 'Es la que había antes de recalcular.'}
+              </div>
+              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
+                title="Esta nota vuelve a ser la que cuenta; la actual pasa a ser la anterior"
+                onClick={async () => {
+                  await recuperarNotaAnterior(fantasma.id)
+                  avisar({ tipo: 'ok', texto: `${fantasma.valor} recuperado como nota de ${criterio.id}` })
+                  setRecarga(n => n + 1); onGuardado()
+                }}>
+                Recuperar
+              </button>
+              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
+                title="Quitar la nota anterior. La nota que cuenta no se toca."
+                onClick={async () => {
+                  if (!confirm(`¿Descartar la nota anterior (${fantasma.valor})? Esta sí se pierde.`)) return
+                  await descartarNotaAnterior(fantasma.id)
+                  setRecarga(n => n + 1); onGuardado()
+                }}>
+                Descartar
+              </button>
+            </div>
+          )}
 
           {/* Con examen definido se corrige pregunta a pregunta. */}
           {calificaPorPrueba && prueba && (

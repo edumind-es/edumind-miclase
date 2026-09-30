@@ -6,7 +6,7 @@
  * que se evalúa ese criterio; al pulsarla se abre el panel de evaluación.
  * Un criterio sin instrumento asignado sale rayado y explica cómo arreglarlo.
  */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion,
@@ -181,6 +181,24 @@ export default function EvaluacionPage() {
     return columnas.filter(c => matriz.criteriosFueraDeTrimestre.has(c.id)).length
   }, [columnas, matriz])
 
+  /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
+  const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
+    if (!matriz) return null
+    for (const ins of instrs) {
+      const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${ins.instrumento_id}:${trimestre}`]
+      if (c?.valor_anterior != null) return { valor: c.valor_anterior, motivo: c.anterior_motivo ?? '' }
+    }
+    return null
+  }
+
+  // Criterios con alguna nota fantasma: su columna se duplica. La copia va
+  // delante, semitranslúcida, con la nota anterior; la de siempre es la que cuenta.
+  const conFantasma = useMemo(() => {
+    const ids = new Set<string>()
+    if (matriz) for (const c of Object.values(matriz.calificaciones)) if (c.valor_anterior != null) ids.add(c.criterio_id)
+    return ids
+  }, [matriz])
+
   const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
     if (!matriz || !instrs.length) return null
     // Con varios instrumentos, la celda muestra la media ponderada de los que tengan nota
@@ -339,10 +357,17 @@ export default function EvaluacionPage() {
                       </th>
                       {columnas.map(cr => {
                         const instrs = matriz.porCriterio.get(cr.id) ?? []
-                        return (
-                          // Sin `title`: el aviso del navegador saldría a la vez
-                          // que el panel y diría lo mismo, recortado y peor puesto.
-                          <th key={cr.id} scope="col" className="criterio-th"
+                        return (<Fragment key={cr.id}>
+                          {conFantasma.has(cr.id) && (
+                            <th scope="col" className="criterio-th fantasma" style={{ opacity: .45 }}
+                              title={`Notas anteriores de ${cr.id}: se conservan a la vista, pero no cuentan`}>
+                              <div className="criterio-th-id">{cr.id}</div>
+                              <div className="criterio-th-desc">nota anterior · no cuenta</div>
+                            </th>
+                          )}
+                          {/* Sin `title`: el aviso del navegador saldría a la vez
+                              que el panel y diría lo mismo, recortado y peor puesto. */}
+                          <th scope="col" className="criterio-th"
                             onMouseEnter={e => empezarAmpliar(cr, e.currentTarget)}
                             onMouseLeave={cerrarAmpliado}
                             // Con el dedo no hay «pasar por encima»: vale mantener
@@ -369,7 +394,7 @@ export default function EvaluacionPage() {
                               )}
                             </div>
                           </th>
-                        )
+                        </Fragment>)
                       })}
                     </tr>
                   </thead>
@@ -386,8 +411,20 @@ export default function EvaluacionPage() {
                           const nEvid = matriz.evidencias.get(`${al.id}:${cr.id}`) ?? 0
                           const sinInstr = instrs.length === 0
 
-                          return (
-                            <td key={cr.id} className="celda">
+                          const anterior = conFantasma.has(cr.id) ? fantasmaCelda(al.id!, cr.id, instrs) : null
+                          return (<Fragment key={cr.id}>
+                            {conFantasma.has(cr.id) && (
+                              <td className="celda fantasma">
+                                {anterior && (
+                                  <button className={`celda-btn ${claseNota(anterior.valor)}`} style={{ opacity: .4 }}
+                                    onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
+                                    title={`Nota anterior de ${cr.id}: ${anterior.valor}. No cuenta.\n${anterior.motivo}\nPulsa para recuperarla o descartarla.`}>
+                                    <span>{anterior.valor}</span>
+                                  </button>
+                                )}
+                              </td>
+                            )}
+                            <td className="celda">
                               <button
                                 className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
                                 onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
@@ -411,7 +448,7 @@ export default function EvaluacionPage() {
                                 )}
                               </button>
                             </td>
-                          )
+                          </Fragment>)
                         })}
                       </tr>
                     ))}
