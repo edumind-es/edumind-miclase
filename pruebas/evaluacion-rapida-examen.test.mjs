@@ -62,9 +62,9 @@ const bd = () => p.evaluate(async () => {
 
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
 const abrirCelda = async (fila, criterio, instrumento) => {
-  const ids = await p.locator('.criterio-th-id').allTextContents()
+  const ids = await p.locator('th.criterio-th:not(.fantasma) .criterio-th-id').allTextContents()
   const col = ids.findIndex(t => t.trim() === criterio)
-  await p.locator('table.matriz tbody tr').nth(fila).locator('td.celda').nth(col).locator('button').click()
+  await p.locator('table.matriz tbody tr').nth(fila).locator('td.celda:not(.fantasma)').nth(col).locator('button').click()
   await panel.waitFor({ timeout: 8000 })
   const chip = panel.getByRole('button', { name: new RegExp(instrumento) })
   if (await chip.count()) await chip.first().click()

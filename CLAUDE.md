@@ -132,6 +132,12 @@ edumind_miclase/
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
   examen ya corregido ofrece `recalcularNotasDeExamen`; no se hace sin preguntar.
+- **Una nota puesta no se pierde nunca por un recálculo.** La que cambia —o la
+  que se queda sin nota— deja su valor como fantasma en
+  `Calificacion.valor_anterior`: a la vista (columna duplicada y
+  semitranslúcida en la matriz), sin contar —todo el cálculo lee `valor`— y
+  recuperable desde el panel de la casilla. Decisión expresa de Luis: retirar
+  la nota sin más, aunque fuera coherente, no es aceptable.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`

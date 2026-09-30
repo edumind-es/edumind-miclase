@@ -97,6 +97,18 @@ export interface Calificacion extends Sincronizable {
    * otra manera.
    */
   niveles_rubrica?: Record<string, number> | null
+  /**
+   * Nota «fantasma»: la que había en esta casilla antes de que un recálculo
+   * (cambiar un examen ya corregido) la sustituyera o la dejara sin nota.
+   *
+   * Una nota puesta no se pierde nunca: se queda aquí, a la vista —en la
+   * matriz sale en una columna duplicada y semitranslúcida— y **no cuenta**.
+   * Todo el cálculo lee `valor`, así que no hay nada que excluir en
+   * `calculo.ts`. El docente puede recuperarla o descartarla. Sin índice.
+   */
+  valor_anterior?: number | null
+  /** De dónde viene la nota fantasma, para decírselo al docente. */
+  anterior_motivo?: string | null
 }
 
 export interface Sesion extends Sincronizable {

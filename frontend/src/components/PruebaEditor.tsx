@@ -156,9 +156,12 @@ export default function PruebaEditor({
       const corregidos = await contarCorregidosDeExamen(instrumentoId, unidadDestino, limpia)
       let recalculo = ''
       if (corregidos > 0) {
-        if (confirm(`Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora? Lo anotado en cada pregunta no se toca.`)) {
-          const n = await recalcularNotasDeExamen(instrumentoId, unidadDestino, limpia)
-          recalculo = ` Notas recalculadas para ${n} alumno${n !== 1 ? 's' : ''}.`
+        if (confirm(`Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`)) {
+          const hoy = new Date().toLocaleDateString('es-ES')
+          const r = await recalcularNotasDeExamen(instrumentoId, unidadDestino, limpia,
+            `Nota de «${limpia.titulo}» antes de cambiar el examen el ${hoy}`)
+          recalculo = ` Notas recalculadas para ${r.alumnos} alumno${r.alumnos !== 1 ? 's' : ''}.`
+            + (r.fantasmas ? ` ${r.fantasmas} nota${r.fantasmas !== 1 ? 's' : ''} anterior${r.fantasmas !== 1 ? 'es quedan' : ' queda'} a la vista en el calificador, sin contar.` : '')
         } else {
           recalculo = ' Las notas ya puestas se quedan como estaban.'
         }

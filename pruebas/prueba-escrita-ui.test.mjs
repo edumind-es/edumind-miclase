@@ -58,7 +58,7 @@ const bd = () => p.evaluate(async () => {
     /** Por alumno: criterio → { valor, nº de respuestas guardadas }. */
     notas: alumnos.map(a => Object.fromEntries(cals
       .filter(c => c.alumno_id === a.id && c.instrumento_id === prueba?.id)
-      .map(c => [c.criterio_id, { valor: c.valor, respuestas: Object.keys(c.niveles_rubrica || {}).length }]))),
+      .map(c => [c.criterio_id, { valor: c.valor, anterior: c.valor_anterior ?? null, respuestas: Object.keys(c.niveles_rubrica || {}).length }]))),
     examenes: rubricas.filter(r => r.tipo === 'prueba').map(r => ({ titulo: r.titulo, unidad_id: r.unidad_id, def: JSON.parse(r.prueba_json) })),
     rubricas: rubricas.filter(r => r.tipo !== 'prueba').length,
     ud1: ud1.id,
@@ -72,10 +72,10 @@ const aparece = (loc) => loc.waitFor({ timeout: 6000 }).then(() => true, () => f
 
 /** Abre la casilla de un alumno (por fila) en la columna de un criterio. */
 const abrirCelda = async (fila, criterio) => {
-  const ids = await p.locator('.criterio-th-id').allTextContents()
+  const ids = await p.locator('th.criterio-th:not(.fantasma) .criterio-th-id').allTextContents()
   const col = ids.findIndex(t => t.trim() === criterio)
   if (col < 0) throw new Error(`No hay columna para ${criterio}: ${ids.join(', ')}`)
-  await p.locator('table.matriz tbody tr').nth(fila).locator('td.celda').nth(col).locator('button').click()
+  await p.locator('table.matriz tbody tr').nth(fila).locator('td.celda:not(.fantasma)').nth(col).locator('button').click()
   await panel.waitFor({ timeout: 8000 })
   const chip = panel.getByRole('button', { name: /Proba escrita/ })
   if (await chip.count()) await chip.first().click()
@@ -224,6 +224,9 @@ try {
   ok(inicio.criterios.every(c => d.notas[0][c]?.valor === 8) && Object.keys(d.notas[0]).length === inicio.criterios.length,
     'sus notas pasan a ser las del examen nuevo, en todos los criterios', JSON.stringify(d.notas[0]))
   ok(d.notas[0][cA].respuestas === 4, 'sin tocar lo anotado en cada pregunta')
+  ok(d.notas[0][cA].anterior === 5 && d.notas[0][cB].anterior === 3,
+    'y las notas que había (5 y 3) no se pierden: quedan como nota anterior', JSON.stringify(d.notas[0]))
+  ok(await aparece(editor.getByText(/2 notas anteriores quedan a la vista/)), 'el editor lo dice')
   await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
   await examen.waitFor({ timeout: 6000 })
   for (const n of [1, 2, 3]) {
@@ -241,7 +244,45 @@ try {
   ok(await p.locator('[data-hermanos]').count() === 0, 'con examen no se ofrece copiar ni vincular: el reparto lo decide el examen')
   await foto('prueba-03-test')
 
-  console.log('\n7. Quitar el examen conserva las notas')
+  console.log('\n7. De nota única a por criterios: el criterio que el examen ya no nombra')
+  await panel.getByRole('button', { name: '📝 Examen' }).click()
+  await editor.waitFor({ timeout: 8000 })
+  await aparece(editor.getByLabel('Título del examen'))
+  await editor.getByRole('radio', { name: /Se reparte por criterios/ }).check()
+  await editor.getByRole('button', { name: /Guardar examen/ }).click()
+  ok(await aparece(editor.getByText(/Notas recalculadas para 2 alumnos/)), 'recalcula a los dos alumnos')
+  await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+  await cerrarPanel()
+  d = await bd()
+  // Ninguna pregunta nombra cC: deja de recibir nota, pero la que tenía sigue ahí.
+  ok(d.notas[0][cC]?.valor == null && d.notas[0][cC]?.anterior === 8,
+    `${cC} de Ana se queda sin nota que cuente, con su 8 como nota anterior`, JSON.stringify(d.notas[0][cC]))
+  ok(d.notas[1][cC]?.valor == null && d.notas[1][cC]?.anterior === 7.5,
+    `y el de Bruno, con su 7,5`, JSON.stringify(d.notas[1][cC]))
+  ok(d.notas[1][cA]?.valor === 6.43 && d.notas[1][cA]?.anterior === 7.5,
+    `${cA} de Bruno pasa a la nota de sus preguntas (6,43) y guarda la anterior (7,5)`, JSON.stringify(d.notas[1][cA]))
+  const cabeceras = await p.locator('th.criterio-th.fantasma .criterio-th-id').allTextContents()
+  ok(cabeceras.map(t => t.trim()).includes(cC) && cabeceras.length === inicio.criterios.length,
+    'en la matriz, cada criterio con nota anterior duplica su columna, semitranslúcida', cabeceras.join(', '))
+  ok(await p.locator('td.celda.fantasma button').first().evaluate(e => getComputedStyle(e).opacity) === '0.4', 'con la nota anterior atenuada')
+  await foto('prueba-04-fantasma')
+
+  await abrirCelda(0, cC)
+  const caja = panel.locator('[data-fantasma]')
+  ok(await aparece(caja.getByText(/Nota anterior: no cuenta/)), 'el panel enseña la nota anterior y dice que no cuenta')
+  await caja.getByRole('button', { name: 'Recuperar' }).click()
+  ok(await aparece(panel.getByText(new RegExp(`8 recuperado como nota de ${cC.replace('.', '\\.')}`))), 'se puede recuperar')
+  await p.waitForTimeout(400)
+  d = await bd()
+  ok(d.notas[0][cC]?.valor === 8 && d.notas[0][cC]?.anterior == null, 'vuelve a ser la nota que cuenta, sin fantasma', JSON.stringify(d.notas[0][cC]))
+  await cerrarPanel()
+  await abrirCelda(1, cA)
+  await caja.getByRole('button', { name: 'Descartar' }).click()
+  await p.waitForTimeout(500)
+  d = await bd()
+  ok(d.notas[1][cA]?.valor === 6.43 && d.notas[1][cA]?.anterior == null, 'descartar quita la anterior y deja la que cuenta', JSON.stringify(d.notas[1][cA]))
+
+  console.log('\n8. Quitar el examen conserva las notas')
   await panel.getByRole('button', { name: '📝 Examen' }).click()
   await editor.waitFor({ timeout: 8000 })
   await editor.getByRole('button', { name: 'Eliminar examen' }).click()
@@ -249,7 +290,7 @@ try {
   await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
   ok(await aparece(panel.locator('button.cal-8')), 'el panel vuelve a la nota a mano')
   d = await bd()
-  ok(d.examenes.length === 0 && d.notas[1][cA]?.valor === 7.5, 'sin examen, y la nota sigue ahí')
+  ok(d.examenes.length === 0 && d.notas[1][cA]?.valor === 6.43, 'sin examen, y la nota sigue ahí')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
