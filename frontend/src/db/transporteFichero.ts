@@ -72,14 +72,13 @@ export function transporteFicheroEscritura(): Transporte & { sobres(): SobreEnvi
 
     async empujar(_deviceId: string, registros: SobreEnvio[]): Promise<RespuestaPush> {
       acumulado.push(...registros)
-      // Se acepta todo: un fichero no tiene cuota ni tope por registro. Lo que
-      // no quepa en memoria fallará antes, al serializar, y eso se ve.
-      return {
-        escritos: registros.length,
-        descartados: 0,
-        aceptados: registros.map(s => ({ tabla: s.tabla, registro_id: s.registro_id })),
-        rechazados: [],
-      }
+      // Todo entra en el fichero —no tiene cuota ni tope por registro—, pero
+      // no se da nada por «aceptado»: escribir un paquete no es entregarlo.
+      // Puede cancelarse la hoja de compartir, perderse por el camino o no
+      // abrirse nunca. `aceptados` es lo que `sync.ts` toma como terreno común
+      // para la fusión a tres bandas, y un terreno común que el otro aparato
+      // nunca recibió hace que la fusión dé por suyos cambios que no ha hecho.
+      return { escritos: registros.length, descartados: 0, aceptados: [], rechazados: [] }
     },
 
     async traer(): Promise<RespuestaPull> {

@@ -94,6 +94,8 @@ export type ResultadoSync = {
   fusionados: number
   detalleFusion: string[]
   errores: string[]
+  /** Sobres recibidos que no se pudieron descifrar: la señal de otra contraseña. */
+  sinDescifrar?: number
 }
 
 // ─── Utilidades binarias ─────────────────────────────────────────────────
@@ -533,7 +535,15 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
         const aplicado = await fusionar(fila.tabla as TablaSinc, remoto, res)
         aplicado ? res.aplicados++ : res.descartados++
       } catch (e: any) {
-        res.errores.push(`${fila.tabla}#${fila.registro_id}: ${e.message || 'no se pudo descifrar'}`)
+        // WebCrypto falla al descifrar con un `OperationError` cuyo texto es
+        // distinto en cada navegador y no dice nada. Se cuenta aparte: que
+        // TODO falle así es la firma de dos contraseñas distintas.
+        if (e?.name === 'OperationError') {
+          res.sinDescifrar = (res.sinDescifrar ?? 0) + 1
+          res.errores.push(`${fila.tabla}#${fila.registro_id}: no se pudo descifrar`)
+        } else {
+          res.errores.push(`${fila.tabla}#${fila.registro_id}: ${e.message || 'no se pudo aplicar'}`)
+        }
       }
     }
 
@@ -680,6 +690,76 @@ export async function desbloquearPorEnlace(password: string, enlace: Enlace): Pr
   await desbloquearCon(password, await atenderEnlace(enlace).estado())
 }
 
+/**
+ * ¿Tienen los dos aparatos la misma contraseña de sincronización?
+ *
+ * Se compara la sal, que no es secreta y es única de cada contraseña creada.
+ * Sin esta comprobación, dos dispositivos que hubieran creado la contraseña
+ * cada uno por su lado —aunque fuese con las mismas letras— sincronizaban
+ * «con éxito» sin poder abrir nada del otro, y nadie lo decía.
+ */
+export type Concordancia =
+  | 'igual'      // misma contraseña: se puede sincronizar
+  | 'distinta'   // los dos tienen, y no es la misma
+  | 'solo-aqui'  // solo este dispositivo tiene contraseña
+  | 'solo-alli'  // solo la tiene el otro
+  | 'ninguno'    // hay que crearla
+
+export async function compararContrasenaConElOtro(enlace: Enlace): Promise<Concordancia> {
+  const canal = atenderEnlace(enlace)
+  const remota = await canal.configDelOtro!()
+  const propia = await configLocal()
+  const aqui = !!(propia.salt && propia.verificador && await claveGuardada())
+  const alli = !!(remota.salt && remota.verificador)
+  if (aqui && alli) return propia.salt === remota.salt ? 'igual' : 'distinta'
+  if (aqui) return 'solo-aqui'
+  return alli ? 'solo-alli' : 'ninguno'
+}
+
+/**
+ * Deja los caminos sin servidor (enlace directo y fichero) como recién
+ * estrenados: todo se volverá a enviar y la fusión parte de cero.
+ *
+ * Hace falta cuando lo enviado no llegó a aplicarse en el otro lado —dos
+ * contraseñas distintas, un paquete que se perdió—: los cursores ya habían
+ * avanzado y los intentos siguientes decían «no hay nada nuevo que pasar».
+ * Reenviar de más no hace daño: lo que el otro ya tenga se descarta al fusionar.
+ */
+export async function reenviarTodoSinServidor(): Promise<void> {
+  for (const id of ['directo', 'carpeta']) {
+    await guardarMeta(`${K_PUSH_DESDE}:${id}`, '')
+    await guardarMeta(`${K_PULL_SEQ}:${id}`, 0)
+    await guardarMeta(`${K_CUARENTENA}:${id}`, {})
+  }
+  await db.sync_base.clear()
+}
+
+/**
+ * Este dispositivo adopta la contraseña del otro (hay que escribirla: se
+ * comprueba contra su verificador) y se prepara para reenviarlo todo, porque
+ * lo que mandó con la contraseña vieja el otro no pudo abrirlo.
+ */
+export async function unificarContrasenaPorEnlace(password: string, enlace: Enlace): Promise<void> {
+  const remota = await atenderEnlace(enlace).configDelOtro!()
+  await desbloquearCon(password, {
+    iniciado: !!(remota.salt && remota.verificador), salt: remota.salt, verificador: remota.verificador,
+    seq: 0, registros: 0, actualizado: null,
+  })
+  await reenviarTodoSinServidor()
+}
+
+/** ¿Está el paquete cifrado con una contraseña que no es la de este dispositivo? */
+export async function paqueteConOtraContrasena(paquete: PaqueteSync): Promise<boolean> {
+  const propia = await configLocal()
+  return !!(propia.salt && paquete.salt && propia.salt !== paquete.salt && await claveGuardada())
+}
+
+/** Como `unificarContrasenaPorEnlace`, con la sal que trae el paquete. */
+export async function unificarContrasenaPorPaquete(password: string, paquete: PaqueteSync): Promise<void> {
+  await desbloquearPorPaquete(password, paquete)
+  await reenviarTodoSinServidor()
+}
+
 // ─── Paquete para otro dispositivo (AirDrop, Quick Share, cable…) ────────
 
 /**
@@ -693,14 +773,25 @@ export async function desbloquearPorEnlace(password: string, enlace: Enlace): Pr
  * que los que se suben al buzón. El fichero enseña lo mismo que ve el
  * servidor: tabla, id y fecha. Nada más.
  */
-export async function empaquetarParaOtroDispositivo(): Promise<{
+export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean } = {}): Promise<{
   paquete: PaqueteSync
   resultado: ResultadoSync
+  /**
+   * Deja el cursor de envío donde estaba. Hay que llamarla si el paquete no
+   * llega a salir (se cierra la hoja de compartir, falla la descarga): si no,
+   * lo empaquetado se da por enviado y el siguiente intento dice que no hay
+   * nada nuevo.
+   */
+  deshacer: () => Promise<void>
 }> {
   const clave = await claveGuardada()
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
   const canal = transporteFicheroEscritura()
+  const kDesde = cursor(K_PUSH_DESDE, canal)
+  const antes: string = await leerMeta(kDesde, '')
+  // «Todo» es para cuando un paquete anterior se perdió por el camino.
+  if (opciones.todo) await guardarMeta(kDesde, '')
   const resultado: ResultadoSync = {
     enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0,
     fusionados: 0, detalleFusion: [], errores: [],
@@ -719,6 +810,7 @@ export async function empaquetarParaOtroDispositivo(): Promise<{
       sobres: canal.sobres(),
     },
     resultado,
+    deshacer: () => guardarMeta(kDesde, antes),
   }
 }
 

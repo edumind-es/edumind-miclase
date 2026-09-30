@@ -197,6 +197,7 @@ async function principal() {
     await suite('sync por buzón, dos dispositivos', 'node', ['pruebas/sync-dos-dispositivos.test.mjs'], entorno)
     await suite('sync directa, sin servidor', 'node', ['pruebas/sync-directo.test.mjs'], entorno)
     await suite('emparejamiento por pantalla', 'node', ['pruebas/emparejar-ui.test.mjs'], entorno)
+    await suite('sincronizar sin silencios', 'node', ['pruebas/sync-sin-silencios.test.mjs'], entorno)
   }
 
   // ── Contra producción ──────────────────────────────────────────────

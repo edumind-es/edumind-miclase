@@ -13,11 +13,12 @@ import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
 import EscanerCodigo from './EscanerCodigo'
 import {
-  aceptarInvitacion, invitar, type Anfitrion, type Enlace, type Invitado,
+  aceptarInvitacion, invitar, type Anfitrion, type Enlace, type EstadoEnlace, type Invitado,
 } from '@/db/enlaceDirecto'
 import {
-  atenderEnlace, cerrarEnlace, claveGuardada, desbloquearPorEnlace,
-  estrenarSincronizacionLocal, sincronizarPorEnlace, type ResultadoSync,
+  atenderEnlace, cerrarEnlace, compararContrasenaConElOtro, desbloquearPorEnlace,
+  estrenarSincronizacionLocal, reenviarTodoSinServidor, sincronizarPorEnlace,
+  unificarContrasenaPorEnlace, type ResultadoSync,
 } from '@/db/sync'
 
 type Paso =
@@ -27,6 +28,7 @@ type Paso =
   | 'leyendo-invitacion'     // invitado: escanea el QR del anfitrión
   | 'mostrando-respuesta'    // invitado: enseña el suyo y espera
   | 'contrasena'             // hace falta desbloquear este dispositivo
+  | 'unificar'               // los dos tienen contraseña, y no es la misma
   | 'sincronizando'
   | 'hecho'
 
@@ -44,6 +46,14 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
   // un iPad. Siempre hay que poder pegar el codigo a mano.
   const [pegado, setPegado] = useState('')
 
+  // Qué está pasando con la conexión, para que esperar no sea mirar una
+  // pantalla quieta: «no pasa nada» y «está en ello» se veían igual.
+  const [conexion, setConexion] = useState<EstadoEnlace>('esperando')
+  const [segundos, setSegundos] = useState(0)
+  const [nota, setNota] = useState('')
+  /** Quién invitó. Rompe los empates: la contraseña la crea —o la pone— el anfitrión. */
+  const papelRef = useRef<'anfitrion' | 'invitado'>('anfitrion')
+
   const anfitrionRef = useRef<Anfitrion | null>(null)
   const invitadoRef = useRef<Invitado | null>(null)
   const enlaceRef = useRef<Enlace | null>(null)
@@ -59,6 +69,14 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     }).then(setImagenQR).catch(() => setError('No se ha podido dibujar el código'))
   }, [codigo])
 
+  // Segundero mientras se conecta y se pasan los datos
+  useEffect(() => {
+    if (paso !== 'sincronizando') { setSegundos(0); return }
+    const t0 = Date.now()
+    const id = setInterval(() => setSegundos(Math.round((Date.now() - t0) / 1000)), 1000)
+    return () => clearInterval(id)
+  }, [paso])
+
   // Al desmontar, cerrar lo que haya quedado a medias
   useEffect(() => () => {
     anfitrionRef.current?.cancelar()
@@ -70,7 +88,8 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     anfitrionRef.current?.cancelar(); anfitrionRef.current = null
     invitadoRef.current?.cancelar(); invitadoRef.current = null
     enlaceRef.current?.cerrar(); enlaceRef.current = null
-    setCodigo(''); setError(''); setPassword(''); setResultado(null)
+    setCodigo(''); setError(''); setPassword(''); setResultado(null); setNota('')
+    setConexion('esperando')
     setPaso('inicio')
   }
 
@@ -79,12 +98,22 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     enlaceRef.current = enlace
     // A la escucha cuanto antes: el otro aparato puede preguntar enseguida.
     atenderEnlace(enlace)
-    if (!(await claveGuardada())) {
-      const canal = atenderEnlace(enlace)
-      const estado = await canal.estado().catch(() => null)
-      setEstrenando(!estado?.iniciado)
+    // Antes de pasar nada: ¿tienen los dos la misma contraseña? Sin esto, dos
+    // aparatos con contraseñas creadas por separado «sincronizaban» sin poder
+    // abrir nada del otro, y los intentos siguientes no mandaban nada.
+    const concordancia = await compararContrasenaConElOtro(enlace)
+    if (concordancia === 'ninguno' || concordancia === 'solo-alli') {
+      setEstrenando(concordancia === 'ninguno')
       setPaso('contrasena')
       return
+    }
+    if (concordancia === 'distinta') {
+      if (papelRef.current === 'invitado') { setPaso('unificar'); return }
+      // Vale la de quien invitó. Lo que este aparato mandó antes el otro no
+      // pudo abrirlo: se reenvía todo.
+      await reenviarTodoSinServidor()
+      setNota('El otro dispositivo tenía una contraseña de sincronización distinta. ' +
+        'Te la está pidiendo: escribe allí la contraseña de ESTE dispositivo y quedarán unificadas.')
     }
     await sincronizar(enlace)
   }
@@ -112,6 +141,8 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     setError('')
     try {
       const a = await invitar()
+      papelRef.current = 'anfitrion'
+      a.alCambiar(setConexion)
       anfitrionRef.current = a
       setCodigo(a.codigo)
       setPaso('mostrando-invitacion')
@@ -137,6 +168,8 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     setError('')
     try {
       const i = await aceptarInvitacion(texto)
+      papelRef.current = 'invitado'
+      i.alCambiar(setConexion)
       invitadoRef.current = i
       setCodigo(i.codigo)
       setPaso('mostrando-respuesta')
@@ -158,12 +191,26 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
     const enlace = enlaceRef.current
     if (!enlace) return
     try {
-      if (estrenando) {
-        if (password.length < 10) {
-          setError('Usa al menos 10 caracteres: es la unica llave de tus datos.')
+      if (paso === 'unificar') {
+        await unificarContrasenaPorEnlace(password, enlace)
+      } else if (estrenando) {
+        // Los dos aparatos llegan aquí a la vez. Si cada uno creara la suya
+        // saldrían dos contraseñas distintas —aunque tuvieran las mismas
+        // letras— y ninguno podría abrir lo del otro. Así que la crea solo
+        // quien invitó, y el otro la comprueba contra él.
+        const ahora = await compararContrasenaConElOtro(enlace)
+        if (ahora === 'solo-alli') {
+          await desbloquearPorEnlace(password, enlace)
+        } else if (papelRef.current === 'invitado') {
+          setError('Crea primero la contraseña en el otro dispositivo (el que mostró el primer código). Después escribe aquí la misma.')
           return
+        } else {
+          if (password.length < 10) {
+            setError('Usa al menos 10 caracteres: es la unica llave de tus datos.')
+            return
+          }
+          await estrenarSincronizacionLocal(password)
         }
-        await estrenarSincronizacionLocal(password)
       } else {
         await desbloquearPorEnlace(password, enlace)
       }
@@ -179,7 +226,7 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
   const aviso = error && (
     <p role="alert" style={{
       marginTop: 12, padding: '10px 14px', borderRadius: 8, fontSize: 13.5,
-      background: 'var(--rojo-100)', color: 'var(--rojo-500)',
+      background: 'var(--rojo-100)', color: 'var(--rojo-500)', whiteSpace: 'pre-line',
     }}>❌ {error}</p>
   )
 
@@ -240,8 +287,10 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
               </button>
             )}
             {paso === 'mostrando-respuesta' && (
-              <span style={{ fontSize: 13, color: 'var(--gris-600)', alignSelf: 'center' }}>
-                Esperando a que lo lea…
+              <span role="status" style={{ fontSize: 13, color: 'var(--gris-600)', alignSelf: 'center' }}>
+                {conexion === 'conectado' ? 'Conectado. Abriendo el canal…'
+                  : conexion === 'caido' ? 'Se ha perdido el contacto con el otro dispositivo. Cancela y vuelve a emparejar.'
+                  : 'Esperando a que el otro dispositivo lea este código… No cierres ni cambies de app.'}
               </span>
             )}
             <button className="btn" onClick={reiniciar}>Cancelar</button>
@@ -282,13 +331,23 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
         </div>
       )}
 
-      {paso === 'contrasena' && (
+      {(paso === 'contrasena' || paso === 'unificar') && (
         <div>
-          <p style={{ fontSize: 13.5, marginBottom: 10 }}>
-            {estrenando
+          <p style={{ fontSize: 13.5, marginBottom: 10, lineHeight: 1.55 }}>
+            {paso === 'unificar'
+              ? 'Los dos dispositivos tienen contraseñas de sincronización distintas ' +
+                '(se crearon por separado), así que ninguno puede abrir los datos del otro. ' +
+                'Para unificarlas, escribe aquí la contraseña del OTRO dispositivo: ' +
+                'este pasará a usarla y se volverá a enviar todo. Tus datos de aquí no se tocan.'
+              : estrenando && papelRef.current === 'invitado'
+              ? 'Ninguno de los dos dispositivos tiene todavía contraseña de ' +
+                'sincronización. Créala en el OTRO dispositivo (te la está pidiendo ahora) ' +
+                'y después escribe aquí la misma.'
+              : estrenando
               ? 'Ninguno de los dos dispositivos tiene todavía contraseña de ' +
                 'sincronización. Elige una larga que puedas recordar: es la llave ' +
-                'de tus datos y no hay forma de recuperarla.'
+                'de tus datos y no hay forma de recuperarla. Después la escribirás ' +
+                'también en el otro dispositivo.'
               : 'Este dispositivo todavía no está desbloqueado. Escribe la ' +
                 'contraseña de sincronización: se comprueba contra el otro aparato, ' +
                 'no contra ningún servidor.'}
@@ -302,7 +361,9 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
               aria-label="Contraseña de sincronización"
               style={{ flex: '1 1 240px', minWidth: 200 }} />
             <button className="btn-primary" disabled={!password} onClick={desbloquearYSincronizar}>
-              {estrenando ? 'Crear contraseña y sincronizar' : 'Desbloquear y sincronizar'}
+              {paso === 'unificar' ? 'Unificar y sincronizar'
+                : estrenando && papelRef.current === 'anfitrion' ? 'Crear contraseña y sincronizar'
+                : 'Desbloquear y sincronizar'}
             </button>
             <button className="btn" onClick={reiniciar}>Cancelar</button>
           </div>
@@ -310,11 +371,32 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
       )}
 
       {paso === 'sincronizando' && (
-        <p style={{ fontSize: 13.5 }}>Conectando y pasando los datos…</p>
+        <div role="status" style={{ fontSize: 13.5, lineHeight: 1.55 }}>
+          <p>
+            {conexion === 'conectado'
+              ? `Conectado. Pasando los datos… ${segundos}s`
+              : `Buscando al otro dispositivo en la red… ${segundos}s`}
+          </p>
+          <p style={{ fontSize: 12.5, color: 'var(--gris-600)' }}>
+            {conexion === 'conectado'
+              ? 'Con muchos datos o fotos puede tardar unos minutos. No cierres ni cambies de app en ninguno de los dos.'
+              : 'Si en medio minuto no se encuentran, se explicará por qué.'}
+          </p>
+          {nota && <p style={{ fontSize: 12.5, color: '#92400e', marginTop: 6 }}>{nota}</p>}
+        </div>
       )}
 
       {paso === 'hecho' && (
         <div>
+          {resultado && (resultado.sinDescifrar ?? 0) > 0 && (
+            <p role="alert" style={{
+              marginBottom: 10, padding: '10px 14px', borderRadius: 8, fontSize: 13.5,
+              background: 'var(--rojo-100)', color: 'var(--rojo-500)',
+            }}>
+              ❌ {resultado.sinDescifrar} registros del otro dispositivo no se han podido abrir:
+              están cifrados con otra contraseña. Vuelve a emparejar para unificarlas.
+            </p>
+          )}
           {resultado && (
             <div style={{
               fontSize: 13, color: 'var(--gris-600)', background: 'var(--gris-100)',
@@ -326,6 +408,7 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
               {resultado.errores.length > 0 && (
                 <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
                   {resultado.errores.slice(0, 6).map((e, i) => <li key={i}>{e}</li>)}
+                  {resultado.errores.length > 6 && <li>…y {resultado.errores.length - 6} más</li>}
                 </ul>
               )}
             </div>
