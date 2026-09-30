@@ -212,7 +212,7 @@ export default function SincronizarPage() {
           fichero cifrado que sale por AirDrop o por donde el docente quiera.
           Muchas redes de centro aíslan los aparatos entre sí y dejan el
           emparejamiento por QR sin conexión posible. */}
-      <CompartirPaquete onCambio={refrescar} />
+      <CompartirPaquete onCambio={refrescar} desbloqueado={desbloqueado} />
 
       {/* Requisito: sesión SSO */}
       {!conectado ? (
