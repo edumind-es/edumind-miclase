@@ -11,7 +11,8 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import {
-  getPruebasDeInstrumento, guardarPrueba, eliminarPrueba, type PruebaGuardada,
+  getPruebasDeInstrumento, guardarPrueba, eliminarPrueba,
+  contarCorregidosDeExamen, recalcularNotasDeExamen, type PruebaGuardada,
 } from '@/db/queries'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva,
@@ -149,7 +150,20 @@ export default function PruebaEditor({
       setCargadaId(id)
       setGuardadas(await getPruebasDeInstrumento(instrumentoId))
       setSucio(false)
-      setMsg({ tipo: 'ok', texto: 'Examen guardado. Al abrir a un alumno en el calificador lo corregirás pregunta a pregunta.' })
+      // Un examen ya corregido que cambia deja notas que no salen del examen
+      // nuevo. Se ofrece recalcularlas; no se hace sin preguntar, porque son
+      // notas ya puestas.
+      const corregidos = await contarCorregidosDeExamen(instrumentoId, unidadDestino, limpia)
+      let recalculo = ''
+      if (corregidos > 0) {
+        if (confirm(`Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora? Lo anotado en cada pregunta no se toca.`)) {
+          const n = await recalcularNotasDeExamen(instrumentoId, unidadDestino, limpia)
+          recalculo = ` Notas recalculadas para ${n} alumno${n !== 1 ? 's' : ''}.`
+        } else {
+          recalculo = ' Las notas ya puestas se quedan como estaban.'
+        }
+      }
+      setMsg({ tipo: 'ok', texto: `Examen guardado.${recalculo || ' Al abrir a un alumno lo corregirás pregunta a pregunta.'}` })
     } catch {
       setMsg({ tipo: 'error', texto: 'No se pudo guardar el examen.' })
     } finally { setGuardando(false) }

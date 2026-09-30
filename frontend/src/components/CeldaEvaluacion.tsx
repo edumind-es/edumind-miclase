@@ -10,10 +10,9 @@ import { useEffect, useRef, useState } from 'react'
 import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
-  getPrueba, getPruebasDeInstrumento,
+  getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
   type CeldaInstrumento, type PruebaGuardada,
 } from '@/db/queries'
-import { notaDePrueba } from '@/db/prueba'
 import PruebaEditor from './PruebaEditor'
 import CorregirPrueba from './CorregirPrueba'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
@@ -152,10 +151,7 @@ export default function CeldaEvaluacion({
       // traen las respuestas de otro de sus criterios, o parecería sin
       // corregir y anotar una pregunta borraría las demás.
       if (prueba && Object.keys(marcas).length === 0) {
-        for (const h of hermanos) {
-          const otra = await getCalificacionUnica(alumno.id!, instrumentoId, h.id, trimestre)
-          if (otra?.niveles_rubrica && Object.keys(otra.niveles_rubrica).length) { marcas = otra.niveles_rubrica; break }
-        }
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, hermanos.map(h => h.id))
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)
@@ -276,18 +272,15 @@ export default function CeldaEvaluacion({
   const guardarRespuestas = async (respuestas: Record<string, number>) => {
     if (!instrumentoId || !prueba) return
     setMarcado(respuestas)
-    const r = notaDePrueba(prueba.def, respuestas, destinosPrueba)
-    const criterios = destinosPrueba.filter(c => c in r.porCriterio)
     setGuardando(true)
     try {
-      await saveCalificaciones(criterios.map(c => ({
-        alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: c,
-        asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
-        comunidad: asig.comunidad || grupo.comunidad, trimestre,
-        valor: r.porCriterio[c], unidad_id: unidadId, niveles_rubrica: respuestas,
-        // La observación es de este criterio; en los demás no se toca.
-        ...(c === criterio.id ? { observacion: observacion.trim() || null } : {}),
-      })), { sinVinculos: true })
+      const r = await guardarExamenDeAlumno({
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+        def: prueba.def, respuestas, destinos: destinosPrueba,
+        area: { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad },
+        observacion: { criterio_id: criterio.id, texto: observacion.trim() || null },
+      })
+      const criterios = r.criterios
       const mia = r.porCriterio[criterio.id] ?? null
       setValorActual(criterio.id in r.porCriterio ? mia : valorActual)
       avisar({

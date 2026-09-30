@@ -72,7 +72,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   }
 
   const borrar = async (ins: Instrumento) => {
-    if (!confirm(`¿Eliminar «${ins.nombre}» y TODAS sus calificaciones? No se puede deshacer.`)) return
+    if (!confirm(`¿Eliminar «${ins.nombre}» y TODAS sus calificaciones? No se puede deshacer.\n\nSi tiene rúbrica, se conserva una copia en tu banco.`)) return
     await eliminarInstrumento(ins.id!)
     await cargar()
   }

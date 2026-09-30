@@ -14,8 +14,10 @@ import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, contarEvidenciasAlumno,
   getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura, type VinculoInstrumento,
-  type UnidadConCriterios,
+  getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
+  type UnidadConCriterios, type PruebaGuardada,
 } from '@/db/queries'
+import CorregirPrueba from './CorregirPrueba'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
@@ -64,6 +66,9 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   const [guardando, setGuardando] = useState(false)
   const [managerAbierto, setManagerAbierto] = useState(false)
   const [refrescoInstr, setRefrescoInstr] = useState(0)
+  /** El examen con el que se corrige, si el instrumento es una prueba escrita y lo tiene. */
+  const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
+  const [pruebaSoloPorUnidad, setPruebaSoloPorUnidad] = useState(false)
 
   const asig = asignaturas.find(a => a.id === asignaturaId) || null
   const instrById = useMemo(() => new Map(instrumentos.map(i => [i.id!, i])), [instrumentos])
@@ -83,6 +88,17 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   }, [mapaInstr, criterioId, instrById, instrumentos, trimestre])
 
   const instrumentoSel = instrumentosDelCriterio.lista.find(i => i.id === instrumentoId) || null
+
+  // Criterios en los que un examen pone nota: los que la programación da a
+  // este instrumento en la unidad elegida (o en toda el área), igual que en el
+  // calificador. Si los dos sitios no repartieran a los mismos, corregir el
+  // mismo examen daría notas distintas según por dónde se entrase.
+  const destinosPrueba = useMemo(() => {
+    const otros = [...mapaInstr.entries()]
+      .filter(([c, lista]) => c !== criterioId && lista.some(x => x.instrumento_id === instrumentoId))
+      .map(([c]) => c)
+    return criterioId ? [criterioId, ...otros.sort()] : []
+  }, [mapaInstr, criterioId, instrumentoId])
 
   // 1) Grupos del alumno → grupo activo (preferir el de la última configuración)
   useEffect(() => {
@@ -172,16 +188,37 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     })
   }, [instrumentoId])
 
+  // Examen del instrumento para la unidad elegida (o el general)
+  const esPruebaEscrita = instrumentoSel?.tipo === 'prueba-escrita'
+  useEffect(() => {
+    if (!instrumentoId || !esPruebaEscrita) { setPrueba(null); setPruebaSoloPorUnidad(false); return }
+    let vigente = true
+    Promise.all([getPrueba(instrumentoId, unidadId), getPruebasDeInstrumento(instrumentoId)]).then(([p, todas]) => {
+      if (!vigente) return
+      setPrueba(p)
+      setPruebaSoloPorUnidad(!p && todas.length > 0)
+    })
+    return () => { vigente = false }
+  }, [instrumentoId, esPruebaEscrita, unidadId, refrescoInstr])
+
   // Nota ya registrada
   useEffect(() => {
     if (!instrumentoId || !criterioId) { setValorActual(null); return }
-    getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre)
-      .then(c => {
-        setValorActual(c?.valor ?? null)
-        setObservacion(c?.observacion ?? '')
-        setMarcado(c?.niveles_rubrica ?? {})
-      })
-  }, [alumno.id, instrumentoId, criterioId, trimestre])
+    let vigente = true
+    ;(async () => {
+      const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre)
+      let marcas = c?.niveles_rubrica ?? {}
+      // El examen puede estar corregido aunque este criterio no tenga nota suya.
+      if (prueba && Object.keys(marcas).length === 0) {
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, destinosPrueba)
+      }
+      if (!vigente) return
+      setValorActual(c?.valor ?? null)
+      setObservacion(c?.observacion ?? '')
+      setMarcado(marcas)
+    })()
+    return () => { vigente = false }
+  }, [alumno.id, instrumentoId, criterioId, trimestre, prueba])
 
   // Recordar la configuración para el siguiente escaneo
   useEffect(() => {
@@ -195,7 +232,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     if (!asig || !grupo || !instrumentoId || !criterioId) return
     setGuardando(true)
     try {
-      await saveCalificaciones([{
+      const vinculadas = await saveCalificaciones([{
         alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: criterioId,
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
@@ -203,7 +240,9 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
-      setMsg({ tipo: 'ok', texto: valor == null ? 'Nota borrada' : `${valor} guardado en ${criterioId}` })
+      // Un vínculo puesto en el calificador vale también aquí, y se dice.
+      const tambien = vinculadas > 0 ? ` y en ${vinculadas} criterio${vinculadas !== 1 ? 's' : ''} vinculado${vinculadas !== 1 ? 's' : ''}` : ''
+      setMsg({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterioId}${tambien}` })
       setTimeout(() => setMsg(null), 2200)
     } catch {
       setMsg({ tipo: 'error', texto: 'No se pudo guardar la nota' })
@@ -220,10 +259,35 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     await guardarNota(nota, siguiente)
   }
 
+  /** Corregir el examen: mismo reparto que en el calificador (`guardarExamenDeAlumno`). */
+  const guardarRespuestas = async (respuestas: Record<string, number>) => {
+    if (!asig || !grupo || !instrumentoId || !criterioId || !prueba) return
+    setMarcado(respuestas)
+    setGuardando(true)
+    try {
+      const r = await guardarExamenDeAlumno({
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+        def: prueba.def, respuestas, destinos: destinosPrueba,
+        area: { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad },
+        observacion: { criterio_id: criterioId, texto: observacion.trim() || null },
+      })
+      if (criterioId in r.porCriterio) setValorActual(r.porCriterio[criterioId])
+      setMsg({
+        tipo: 'ok',
+        texto: r.nota == null
+          ? 'Examen sin anotar: nota borrada'
+          : `Examen: ${r.nota}${r.criterios.length > 1 ? ` · nota puesta en ${r.criterios.join(', ')}` : ` guardado en ${criterioId}`}`,
+      })
+    } catch {
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar el examen' })
+    } finally { setGuardando(false) }
+  }
+
   const resumen = notaDeRubrica(indicadores, niveles, marcado)
   const maxNivel = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
   /** Con niveles e indicadores, la rúbrica pone la nota; si no, se teclea. */
-  const calificaPorRubrica = niveles.length > 0 && indicadores.length > 0
+  const calificaPorPrueba = !!prueba
+  const calificaPorRubrica = !calificaPorPrueba && niveles.length > 0 && indicadores.length > 0
 
   const guardarEvidencia = async (ev: EvidenciaCapturada) => {
     setGuardando(true)
@@ -377,7 +441,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, fontSize: 12.5, color: 'var(--gris-600)' }}>
               <span style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                minWidth: 40, height: 30, borderRadius: 7, fontWeight: 800, fontSize: 15,
+                minWidth: 40, height: 30, padding: '0 7px', borderRadius: 7, fontWeight: 800, fontSize: 15,
                 background: valorActual == null ? 'var(--gris-100)' : cal.color,
                 color: valorActual == null ? 'var(--gris-500)' : 'white',
               }}>
@@ -387,6 +451,18 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
                 ? <>Sin calificar con <strong>{instrumentoSel?.nombre}</strong></>
                 : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong></>}
             </div>
+          )}
+
+          {/* Con examen definido se corrige pregunta a pregunta, como en el calificador. */}
+          {calificaPorPrueba && prueba && criterioId && (
+            <CorregirPrueba
+              def={prueba.def}
+              respuestas={marcado}
+              destinos={destinosPrueba}
+              criterioActual={criterioId}
+              guardando={guardando}
+              onCambio={guardarRespuestas}
+            />
           )}
 
           {/* La rúbrica se califica indicador a indicador, igual que en el
@@ -466,7 +542,12 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           )}
 
           {/* Teclado de notas 0-10 — solo cuando no hay rúbrica que aplicar */}
-          {!calificaPorRubrica && criterioId && instrumentoId && (
+          {!calificaPorRubrica && !calificaPorPrueba && criterioId && instrumentoId && pruebaSoloPorUnidad && (
+            <div style={{ fontSize: 12.5, color: 'var(--gris-600)', marginBottom: 8, lineHeight: 1.5 }}>
+              Los exámenes de «{instrumentoSel?.nombre}» están definidos por unidad: elige la unidad arriba para corregir pregunta a pregunta.
+            </div>
+          )}
+          {!calificaPorRubrica && !calificaPorPrueba && criterioId && instrumentoId && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(11, 1fr)', gap: 6, marginBottom: 12 }}>
               {Array.from({ length: 11 }, (_, v) => (
                 <button key={v} onClick={() => guardarNota(v)} disabled={guardando}

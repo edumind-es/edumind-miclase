@@ -128,6 +128,12 @@ edumind_miclase/
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
   reciben nota los criterios que alguna pregunta nombra y que la programación
   asigna al instrumento.
+- **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
+  montando las notas en la pantalla: se corrige desde el panel de la casilla y
+  desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
+  examen ya corregido ofrece `recalcularNotasDeExamen`; no se hace sin preguntar.
+- **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
+  banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 

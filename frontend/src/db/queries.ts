@@ -4,7 +4,7 @@ import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
 import { reiniciarEstadoDeSincronizacion } from './sync'
 import { criteriosVinculados } from './vinculos'
-import { normalizarPrueba, type PruebaDef } from './prueba'
+import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba } from './prueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -127,6 +127,11 @@ export async function actualizarGrupo(id: number, data: Partial<Grupo>): Promise
  */
 export async function eliminarGrupo(id: number): Promise<void> {
   const t = sello()
+  const suyas = vivos(await db.asignaturas.where('grupo_id').equals(id).toArray()).map(a => a.id!)
+  if (suyas.length) {
+    await conservarRubricasEnBanco(
+      vivos(await db.instrumentos.where('asignatura_id').anyOf(suyas).toArray()).map(i => i.id!))
+  }
   await db.transaction('rw',
     [db.grupos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
@@ -288,6 +293,8 @@ export async function actualizarAsignatura(id: number, data: Partial<Asignatura>
 }
 
 export async function eliminarAsignatura(id: number): Promise<void> {
+  await conservarRubricasEnBanco(
+    vivos(await db.instrumentos.where('asignatura_id').equals(id).toArray()).map(i => i.id!))
   const t = sello()
   const marcar = { deleted_at: t, updated_at: t }
   await db.transaction('rw',
@@ -338,6 +345,7 @@ export async function actualizarInstrumento(
 
 /** Al borrar un instrumento caen sus notas, su rúbrica y sus vínculos con criterios. */
 export async function eliminarInstrumento(instrumento_id: number): Promise<void> {
+  await conservarRubricasEnBanco([instrumento_id])
   const t = sello()
   const marcar = { deleted_at: t, updated_at: t }
   await db.transaction('rw',
@@ -1193,6 +1201,122 @@ export async function guardarPrueba(instrumento_id: number, unidad_id: number | 
   return reg.id
 }
 
+/** Los campos de una nota que no dependen del criterio ni del alumno. */
+export type DatosDeArea = Pick<CalItem, 'asignatura' | 'curso' | 'etapa' | 'comunidad'>
+
+/**
+ * Guarda lo anotado en el examen de un alumno.
+ *
+ * Un examen se corrige una vez y pone nota en todos los criterios que evalúa
+ * —la misma, o a cada uno la de sus preguntas—. En todos se guardan las
+ * respuestas completas, para que el examen se vea entero se abra desde el
+ * criterio que se abra.
+ *
+ * Vive aquí y no en una pantalla porque se corrige desde dos sitios, el panel
+ * de la casilla y la evaluación rápida, y los dos tienen que repartir igual.
+ * No pasa por los vínculos: el reparto ya lo decide el examen.
+ */
+export async function guardarExamenDeAlumno(p: {
+  alumno_id: number
+  instrumento_id: number
+  trimestre: number
+  unidad_id: number | null
+  def: PruebaDef
+  respuestas: Record<string, number>
+  /** Criterios que el instrumento evalúa en lo que se está viendo. */
+  destinos: string[]
+  area: DatosDeArea
+  /** La observación es de un criterio concreto; en los demás no se toca. */
+  observacion?: { criterio_id: string; texto: string | null }
+}): Promise<ResultadoPrueba & { criterios: string[] }> {
+  const r = notaDePrueba(p.def, p.respuestas, p.destinos)
+  const criterios = p.destinos.filter(c => c in r.porCriterio)
+  await saveCalificaciones(criterios.map(c => ({
+    alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
+    trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
+    ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
+  })), { sinVinculos: true })
+  return { ...r, criterios }
+}
+
+/**
+ * Las respuestas de examen ya guardadas para un alumno, vengan del criterio
+ * que vengan. Un examen repartido por criterios puede no tener ninguna
+ * pregunta del que se está mirando: ahí no hay nota, pero el examen sí está
+ * corregido, y enseñarlo en blanco haría que anotar una pregunta borrase las demás.
+ */
+export async function getRespuestasDeExamen(
+  alumno_id: number, instrumento_id: number, trimestre: number, criterios: string[]
+): Promise<Record<string, number>> {
+  for (const c of criterios) {
+    const cal = await getCalificacionUnica(alumno_id, instrumento_id, c, trimestre)
+    if (cal?.niveles_rubrica && Object.keys(cal.niveles_rubrica).length) return cal.niveles_rubrica
+  }
+  return {}
+}
+
+/**
+ * Correcciones ya hechas con el examen de un ámbito (una unidad, o el general),
+ * agrupadas por alumno y trimestre.
+ *
+ * Son las notas del instrumento que guardan respuestas de examen. Las del
+ * examen general son las de las unidades que no tienen examen propio.
+ */
+async function correccionesDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef) {
+  const otras = new Set((await getPruebasDeInstrumento(instrumento_id))
+    .map(p => p.unidad_id).filter((u): u is number => u != null))
+  const esRespuesta = (clave: string) => /^p\d+$/.test(clave) || def.preguntas.some(q => q.id === clave)
+  const cals = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).some(esRespuesta))
+    .filter(c => unidad_id != null ? c.unidad_id === unidad_id : c.unidad_id == null || !otras.has(c.unidad_id))
+  const grupos = new Map<string, Calificacion[]>()
+  for (const c of cals) {
+    const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id ?? ''}`
+    grupos.set(k, [...(grupos.get(k) ?? []), c])
+  }
+  return [...grupos.values()]
+}
+
+/** Cuántos alumnos tienen ya corregido el examen de este ámbito. */
+export async function contarCorregidosDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+  return new Set((await correccionesDeExamen(instrumento_id, unidad_id, def)).map(g => g[0].alumno_id)).size
+}
+
+/**
+ * Vuelve a calcular las notas ya puestas con un examen después de cambiarlo
+ * (otro tipo, otros puntos, otro reparto). Las respuestas anotadas no se
+ * tocan: solo lo que valen.
+ *
+ * Si con el examen nuevo un criterio deja de recibir nota —se pasó de nota
+ * única a reparto por criterios y ninguna pregunta lo nombra—, la que tenía
+ * se retira: la había puesto el examen, y dejarla sería una nota que ya no
+ * sale de ningún sitio.
+ */
+export async function recalcularNotasDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+  const grupos = await correccionesDeExamen(instrumento_id, unidad_id, def)
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+  const items: CalItem[] = []
+  const alumnos = new Set<number>()
+  for (const cals of grupos) {
+    const base = cals[0]
+    const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
+    const enUnidad = base.unidad_id != null ? filas.filter(f => f.unidad_id === base.unidad_id) : filas
+    const destinos = [...new Set([...enUnidad.map(f => f.criterio_id), ...cals.map(c => c.criterio_id)])]
+    const r = notaDePrueba(def, respuestas, destinos)
+    const comun = {
+      alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id ?? null,
+      asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,
+    }
+    for (const c of destinos) {
+      if (c in r.porCriterio) items.push({ ...comun, criterio_id: c, valor: r.porCriterio[c], niveles_rubrica: respuestas })
+      else if (cals.some(x => x.criterio_id === c)) items.push({ ...comun, criterio_id: c, valor: null, niveles_rubrica: {} })
+    }
+    alumnos.add(base.alumno_id)
+  }
+  await saveCalificaciones(items, { sinVinculos: true })
+  return alumnos.size
+}
+
 /** Quita la definición del examen. Las notas ya puestas con él se conservan. */
 export async function eliminarPrueba(id: number): Promise<void> {
   const r = await db.rubricas.get(id)
@@ -1303,6 +1427,37 @@ export async function guardarEnBanco(
   const reg = nuevo({ ...data, instrumento_id: INSTRUMENTO_BANCO, created_at: now() })
   await db.rubricas.add(reg)
   return { id: reg.id, yaEstaba: false }
+}
+
+/**
+ * Antes de borrar instrumentos —sueltos, o con su área o su clase—, deja en el
+ * banco una copia de sus rúbricas.
+ *
+ * Una rúbrica es trabajo del docente, no un dato del grupo: al borrar en junio
+ * las clases del curso pasado se iban con ellas todas las rúbricas que no se
+ * hubieran guardado aparte a mano. No duplica las que ya están en el banco, y
+ * no conserva las vacías. El botón «Eliminar rúbrica» del editor no pasa por
+ * aquí: ese sí es borrar la rúbrica a propósito.
+ */
+async function conservarRubricasEnBanco(instrumento_ids: number[]): Promise<number> {
+  if (!instrumento_ids.length) return 0
+  const rubricas = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumento_ids).toArray()).filter(esRubrica)
+  let nuevas = 0
+  for (const r of rubricas) {
+    let indicadores = 0
+    try { indicadores = JSON.parse(r.indicadores_json).length } catch { continue }
+    if (!indicadores) continue
+    const ins = await db.instrumentos.get(r.instrumento_id)
+    const asig = ins ? await db.asignaturas.get(ins.asignatura_id) : undefined
+    const grupo = asig ? await db.grupos.get(asig.grupo_id) : undefined
+    const { yaEstaba } = await guardarEnBanco({
+      titulo: r.titulo, niveles_json: r.niveles_json, indicadores_json: r.indicadores_json,
+      contexto: r.contexto, generada_ia: r.generada_ia,
+      area: asig?.nombre_display, nivel: grupo ? `${grupo.curso}º ${grupo.etapa}` : undefined,
+    })
+    if (!yaEstaba) nuevas++
+  }
+  return nuevas
 }
 
 /** Quita la copia del banco. Las rúbricas que los instrumentos ya tienen puestas no se tocan. */

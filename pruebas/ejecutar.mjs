@@ -190,6 +190,7 @@ async function principal() {
     await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
     await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
+    await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)
