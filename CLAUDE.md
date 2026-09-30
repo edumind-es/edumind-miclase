@@ -77,6 +77,20 @@ edumind_miclase/
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
+- **Antes de pasar nada por el enlace directo se comparan las contraseñas**
+  (`compararContrasenaConElOtro`, por la sal). Dos aparatos con contraseñas
+  creadas por separado no pueden abrir nada del otro, y sin la comprobación
+  «sincronizaban» sin error y después ya no mandaban nada. La contraseña la
+  crea solo el anfitrión (quien invita); el invitado la comprueba contra él.
+  Unificar (`unificarContrasena…`) reinicia los cursores sin servidor
+  (`reenviarTodoSinServidor`), porque lo enviado con la clave vieja nunca se aplicó.
+- **Escribir un paquete no es entregarlo.** El transporte de fichero no da nada
+  por «aceptado» (sin terreno común para la fusión) y `empaquetarParaOtroDispositivo`
+  devuelve `deshacer()` para cuando la hoja de compartir se cancela.
+- **Nada de sincronizar se queda callado.** Cada acción termina diciendo qué ha
+  pasado, también cuando no ha pasado nada; los sobres que no se pueden
+  descifrar se cuentan en `sinDescifrar` y se explican como «otra contraseña»;
+  los fallos de conexión traen diagnóstico (direcciones ofrecidas, estado ICE).
 - **La sal y el verificador viven también en el dispositivo**, no solo en el
   buzón. Si solo estuvieran en el servidor, un aparato nuevo no podría
   desbloquear sin él y el enlace directo no serviría de nada.
