@@ -217,7 +217,13 @@ try {
   const [descarga] = await Promise.all([p.waitForEvent('download'), editor.getByRole('button', { name: '⬇ .xlsx' }).click()])
   ok(descarga.suggestedFilename() === 'examen-examen-de-la-unidad-1.xlsx', 'el examen se descarga como hoja de cálculo', descarga.suggestedFilename())
   await editor.getByRole('button', { name: /Guardar examen/ }).click()
-  await aparece(editor.getByText('✅ Guardado en este dispositivo'))
+  // El examen ya estaba corregido para Ana: pregunta si recalcular (se acepta).
+  ok(await aparece(editor.getByText(/Notas recalculadas para 1 alumno/)), 'al cambiar un examen ya corregido ofrece recalcular, y lo hace')
+  d = await bd()
+  // Lo anotado a Ana (2 · 1,5 · 1,5 · 0) leído como test: tres aciertos y una en blanco → 8 de 10.
+  ok(inicio.criterios.every(c => d.notas[0][c]?.valor === 8) && Object.keys(d.notas[0]).length === inicio.criterios.length,
+    'sus notas pasan a ser las del examen nuevo, en todos los criterios', JSON.stringify(d.notas[0]))
+  ok(d.notas[0][cA].respuestas === 4, 'sin tocar lo anotado en cada pregunta')
   await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
   await examen.waitFor({ timeout: 6000 })
   for (const n of [1, 2, 3]) {
@@ -231,7 +237,7 @@ try {
   d = await bd()
   ok(inicio.criterios.every(c => d.notas[1][c]?.valor === 7.5) && Object.keys(d.notas[1]).length === inicio.criterios.length,
     'nota única: el 7,5 va a todos los criterios de la prueba en la unidad', JSON.stringify(d.notas[1]))
-  ok(d.notas[0][cA]?.valor === 5 && d.notas[0][cB]?.valor === 3, 'las notas ya puestas al otro alumno no se recalculan solas')
+  ok(d.notas[0][cA]?.valor === 8, 'y la del otro alumno sigue siendo la recalculada')
   ok(await p.locator('[data-hermanos]').count() === 0, 'con examen no se ofrece copiar ni vincular: el reparto lo decide el examen')
   await foto('prueba-03-test')
 

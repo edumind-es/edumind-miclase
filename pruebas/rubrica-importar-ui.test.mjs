@@ -80,7 +80,9 @@ try {
 
   console.log('\n3. Un fichero que no es una rúbrica')
   await fichero.setInputFiles({ name: 'notas.txt', mimeType: 'text/plain', buffer: Buffer.from('Esto no es una tabla.') })
-  ok(await editor.getByText(/No se reconoce el fichero/).isVisible(), 'lo dice sin salir del punto de partida')
+  // Leer el fichero es asíncrono: el mensaje se espera, no se mira al vuelo.
+  ok(await editor.getByText(/No se reconoce el fichero/).waitFor({ timeout: 6000 }).then(() => true, () => false),
+    'lo dice sin salir del punto de partida')
 
   console.log('\n4. Importar la hoja de cálculo')
   await fichero.setInputFiles(XLSX)

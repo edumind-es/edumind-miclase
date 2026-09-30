@@ -158,6 +158,25 @@ try {
   bd = await rubricasEnBD()
   ok(bd.length === 1 && bd[0].titulo === 'Rúbrica de cuaderno', 'queda solo la otra', JSON.stringify(bd))
 
+  console.log('\n8. Borrar un instrumento conserva su rúbrica en el banco')
+  await editor.locator('input[type="file"]:not([data-uso])').setInputFiles(XLSX)
+  await editor.getByText(/importada con 3 indicadores/).waitFor({ timeout: 8000 })
+  await editor.getByRole('button', { name: /Guardar rúbrica/ }).click()
+  await editor.getByText('✅ Guardada en este dispositivo').waitFor({ timeout: 5000 })
+  await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+  ok((await rubricasEnBD()).filter(r => r.titulo === 'Rúbrica de juegos populares' && r.instrumento_id === 0).length === 0,
+    'la rúbrica está solo en el instrumento, no en el banco')
+  await gestor.getByRole('button', { name: 'Eliminar' }).first().click()
+  await p.waitForTimeout(500)
+  bd = await rubricasEnBD()
+  const salvada = bd.filter(r => r.titulo === 'Rúbrica de juegos populares')
+  ok(salvada.length === 1 && salvada[0].instrumento_id === 0 && salvada[0].area === 'Ciencias Sociales',
+    'al borrar el instrumento queda una copia en el banco, con su área', JSON.stringify(salvada))
+  editor = await nuevaRubrica('Nueva')
+  await editor.getByRole('button', { name: /Elegir de mi banco/ }).click()
+  ok(await aparece(editor.locator('[data-rubrica-banco="Rúbrica de juegos populares"]').getByText('⭐ En el banco')),
+    'y se puede elegir desde otro instrumento')
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('rubrica-banco-error').catch(() => {})
