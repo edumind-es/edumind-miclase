@@ -6,7 +6,7 @@
  * (o instrumentos) que la programación le ha asignado, su rúbrica si la tiene,
  * y solo entonces la nota. Además deja adjuntar la evidencia en el momento.
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
@@ -61,6 +61,19 @@ export default function CeldaEvaluacion({
   const [observacion, setObservacion] = useState('')
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
+  const relojMsg = useRef<ReturnType<typeof setTimeout> | null>(null)
+  /**
+   * Pone un mensaje; con `ms`, se quita solo. Uno nuevo cancela el borrado
+   * pendiente del anterior: si no, el temporizador de «8 guardado» se llevaba
+   * por delante el mensaje siguiente —el resumen de una copia— sin dar tiempo
+   * a leerlo.
+   */
+  const avisar = (m: { tipo: 'ok' | 'error'; texto: string } | null, ms?: number) => {
+    if (relojMsg.current) { clearTimeout(relojMsg.current); relojMsg.current = null }
+    setMsg(m)
+    if (m && ms) relojMsg.current = setTimeout(() => setMsg(null), ms)
+  }
+  useEffect(() => () => { if (relojMsg.current) clearTimeout(relojMsg.current) }, [])
   const [guardando, setGuardando] = useState(false)
   // Atajos: corregir el instrumento o su rúbrica aquí mismo, sin cerrar el
   // panel, salir del calificador y volver a bajar hasta la ficha del área.
@@ -80,7 +93,7 @@ export default function CeldaEvaluacion({
         ? prev
         : (instrumentos[0]?.instrumento_id ?? null))
     setObservacion('')
-    setMsg(null)
+    avisar(null)
   }, [alumno.id, criterio.id])
 
   // Rúbrica del instrumento seleccionado
@@ -153,11 +166,10 @@ export default function CeldaEvaluacion({
       // Si la nota ha ido a más casillas, se dice: que un vínculo escriba en
       // otro criterio sin avisar sería justo lo que no debe pasar.
       const tambien = vinculadas > 0 ? ` y en ${vinculadas} criterio${vinculadas !== 1 ? 's' : ''} vinculado${vinculadas !== 1 ? 's' : ''}` : ''
-      setMsg({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterio.id}${tambien}` })
-      setTimeout(() => setMsg(null), 2000)
+      avisar({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterio.id}${tambien}` }, 2000)
       onGuardado()
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la nota' })
+      avisar({ tipo: 'error', texto: 'No se pudo guardar la nota' })
     } finally { setGuardando(false) }
   }
 
@@ -172,11 +184,10 @@ export default function CeldaEvaluacion({
       })
       recargarEvidencias()
       const nombre = ev.tipo === 'foto' ? 'Foto' : ev.tipo === 'audio' ? 'Audio' : 'Vídeo'
-      setMsg({ tipo: 'ok', texto: `${nombre} guardado como evidencia` })
-      setTimeout(() => setMsg(null), 2200)
+      avisar({ tipo: 'ok', texto: `${nombre} guardado como evidencia` }, 2200)
       onGuardado()
     } catch {
-      setMsg({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
+      avisar({ tipo: 'error', texto: 'No se pudo guardar la evidencia' })
     } finally { setGuardando(false) }
   }
 
@@ -357,7 +368,7 @@ export default function CeldaEvaluacion({
               trimestre={trimestre}
               unidadId={unidadId}
               tieneNota={valorActual != null}
-              onCambio={texto => { setMsg({ tipo: 'ok', texto }); onGuardado() }}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }); onGuardado() }}
             />
           )}
 
