@@ -13,6 +13,7 @@ import {
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
+import { miniTendencia } from '@/db/diario'
 import { useAppStore } from '@/store/useAppStore'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
@@ -410,6 +411,8 @@ export default function EvaluacionPage() {
                           const valor = notaCelda(al.id!, cr.id, instrs)
                           const nEvid = matriz.evidencias.get(`${al.id}:${cr.id}`) ?? 0
                           const sinInstr = instrs.length === 0
+                          // Registros del diario del primer instrumento que los tenga
+                          const diario = instrs.map(i => matriz.diario[`${al.id}:${cr.id}:${i.instrumento_id}`]).find(Boolean)
 
                           const anterior = conFantasma.has(cr.id) ? fantasmaCelda(al.id!, cr.id, instrs) : null
                           return (<Fragment key={cr.id}>
@@ -443,6 +446,11 @@ export default function EvaluacionPage() {
                                           style={{ background: getInstrConfig(i.tipo).color }} />
                                       ))}
                                       {nEvid > 0 && <b title={`${nEvid} evidencia(s) adjunta(s)`}>{nEvid}</b>}
+                                      {diario && (
+                                        <small className="celda-diario" title={`${diario.n} registro(s) del diario: ${diario.niveles.join(' · ')}`}>
+                                          {miniTendencia(diario.niveles)}
+                                        </small>
+                                      )}
                                     </span>
                                   </>
                                 )}
@@ -479,6 +487,9 @@ export default function EvaluacionPage() {
               </span>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                 <b style={{ fontSize: 11 }}>2</b> evidencias adjuntas
+              </span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <small style={{ fontFamily: 'monospace', fontSize: 10 }}>2·3·4</small> registros del diario
               </span>
             </div>
           )}
