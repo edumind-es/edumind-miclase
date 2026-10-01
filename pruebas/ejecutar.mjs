@@ -130,6 +130,10 @@ async function principal() {
     await paquete('pruebas/vinculos.test.ts', vinculos, ['--platform=node', '--format=esm'])
     await suite('criterios vinculados', 'node', [vinculos])
 
+    const diario = join(scratch, 'diario.mjs')
+    await paquete('pruebas/diario.test.ts', diario, ['--platform=node', '--format=esm'])
+    await suite('diario de evaluación', 'node', [diario])
+
     const proens = join(scratch, 'proens.mjs')
     await paquete('pruebas/proens.test.ts', proens, ['--platform=node', '--format=esm'])
     await suite('lectura de programaciones PROENS', 'node', [proens])
@@ -189,6 +193,7 @@ async function principal() {
     await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)
     await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
     await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
+    await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
