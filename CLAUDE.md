@@ -19,8 +19,9 @@ edumind_miclase/
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
 │   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v6) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
 │   │                   por AirDrop/Quick Share) · transporteDirecto.ts + enlaceDirecto.ts
@@ -154,6 +155,21 @@ edumind_miclase/
   la nota sin más, aunque fuera coherente, no es aceptable.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
+- **El diario de evaluación no pisa nada.** La tabla `diario` guarda una
+  observación fechada por registro (nivel 1-4) y la nota del criterio se
+  DERIVA en `materializarDiario` (`queries.ts`), nunca en una pantalla, con la
+  regla de `Instrumento.agregacion` (`db/diario.ts`). La nota derivada se
+  escribe en `calificaciones` con `origen: 'diario'` y `sinVinculos`, para que
+  informes, matriz, fantasma y sync sigan leyendo lo de siempre. Reglas que no
+  se deben romper: (1) la materialización es determinista (orden por fecha e
+  id) y **solo escribe si cambia `valor` u `origen`** —cada aparato la repite
+  tras sincronizar (`alAplicarCambios` en `sync.ts`) y si escribiera siempre
+  habría un ping-pong sin fin—; (2) los criterios de un registro se fijan al
+  crearlo en `criterios_json`, así que cambiar la programación no vacía notas
+  derivadas; (3) una nota a mano sobre una casilla derivada la vuelve manual y
+  el siguiente registro la manda a fantasma: nada se pierde. El backend tiene
+  la tabla en la lista blanca de `routes/sync.js`; sin eso los registros van a
+  cuarentena y no viajan.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 
@@ -204,5 +220,8 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes
+  `updated_at` en los registros existentes. Una tabla nueva va además en
+  `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
+  backend (`routes/sync.js`) y en las pruebas que leen la versión
+  (`migracion.test.mjs`, `e2e.test.mjs`)
 - No probar la sincronización contra la BD de producción: usar una copia

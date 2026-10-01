@@ -414,6 +414,12 @@ input:focus, select:focus, textarea:focus {
   font-size: 9px; font-weight: 700; opacity: .9;
   padding-left: 2px;
 }
+/* Mini-tendencia del diario: los últimos niveles, «2·3·3·4». */
+.celda-instr .celda-diario {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8.5px; font-weight: 600; opacity: .85; letter-spacing: .02em;
+  padding-left: 2px; white-space: nowrap;
+}
 .celda-btn.sin-instrumento {
   background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 5px, #ffedd5 5px, #ffedd5 10px);
   color: var(--ambar-500);

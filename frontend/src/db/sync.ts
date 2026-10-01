@@ -614,6 +614,31 @@ async function fusionar(
   return true
 }
 
+// ─── Ganchos ─────────────────────────────────────────────────────────────
+
+type TrasAplicar = (res: ResultadoSync) => Promise<void>
+const ganchosTrasAplicar: TrasAplicar[] = []
+
+/**
+ * Qué debe pasar cuando han entrado cambios de otro aparato (por ejemplo,
+ * volver a derivar las notas del diario). Se registra desde fuera porque
+ * `queries.ts` importa este módulo y no al revés: importarlo desde aquí
+ * sería un ciclo.
+ */
+export function alAplicarCambios(fn: TrasAplicar): void {
+  ganchosTrasAplicar.push(fn)
+}
+
+/** Nada de sincronizar se queda callado: un gancho que falla lo dice en `res.errores`. */
+async function avisarTrasAplicar(res: ResultadoSync): Promise<void> {
+  if (res.aplicados <= 0) return
+  for (const fn of ganchosTrasAplicar) {
+    try { await fn(res) } catch (e) {
+      res.errores.push(`Tras aplicar los cambios: ${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+}
+
 // ─── Ciclo completo ──────────────────────────────────────────────────────
 
 async function ejecutar(canal: Transporte): Promise<ResultadoSync> {
@@ -629,6 +654,7 @@ async function ejecutar(canal: Transporte): Promise<ResultadoSync> {
   // fusión que llegue antes de haber publicado los propios cambios.
   await empujar(clave, canal, res)
   await traer(clave, canal, res)
+  await avisarTrasAplicar(res)
 
   await guardarMeta(K_ULTIMA, new Date().toISOString())
   return res
@@ -854,6 +880,7 @@ export async function aplicarPaquete(paquete: PaqueteSync): Promise<ResultadoSyn
   // segundo fichero que llegara se daría por leído sin abrirlo.
   await guardarMeta(cursor(K_PULL_SEQ, canal), 0)
   await traer(clave, canal, res)
+  await avisarTrasAplicar(res)
   await guardarMeta(K_ULTIMA, new Date().toISOString())
   return res
 }
