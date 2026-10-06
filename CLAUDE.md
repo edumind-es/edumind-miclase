@@ -177,6 +177,17 @@ edumind_miclase/
   `getMatrizEvaluacion` (`CeldaInstrumento.color`). Nunca es la única pista:
   al lado va siempre la abreviatura (`abreviatura`). Los colores del tipo
   (`TIPOS_INSTRUMENTO`) quedan para iconos y fondos del gestor.
+- **El Calificador abre por instrumento** en cuanto el área tiene alguno, salvo
+  elección guardada en `localStorage` (`miclase.calificador.vista`). La primera
+  vez por área sale la tarjeta `PresentacionCalificador` (cuatro pasos y las
+  familias con lo que hay dentro), que se recuerda en
+  `miclase.calificador.presentado`. Las pruebas que miran la matriz LOMLOE
+  pulsan antes `[data-vista="criterios"]`.
+- **Pegar una columna de Excel** (`PegarColumna` + `utils/pegarNotas.ts`,
+  puro) asigna por orden de lista si no hay nombres y por nombre si los hay
+  —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
+  Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
+  en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo

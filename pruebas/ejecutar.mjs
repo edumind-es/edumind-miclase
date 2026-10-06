@@ -118,6 +118,10 @@ async function principal() {
     await paquete('pruebas/taxonomias.test.ts', taxonomias, ['--platform=node', '--format=esm'])
     await suite('sugerencia de instrumentos', 'node', [taxonomias])
 
+    const pegar = join(scratch, 'pegar-notas.mjs')
+    await paquete('pruebas/pegar-notas.test.ts', pegar, ['--platform=node', '--format=esm'])
+    await suite('columna de notas pegada de Excel', 'node', [pegar])
+
     const familias = join(scratch, 'familias.mjs')
     await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
     await suite('plantillas de hijos por familia', 'node', [familias])
@@ -205,6 +209,7 @@ async function principal() {
     await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
     await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
+    await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)

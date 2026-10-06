@@ -28,6 +28,8 @@ import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
+import PegarColumna from '@/components/PegarColumna'
+import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
@@ -52,8 +54,23 @@ const ESPERA_AMPLIAR = 2000
 type Vista = 'criterios' | 'instrumentos'
 /** La vista elegida se recuerda en este aparato: es una comodidad, no un dato. */
 const CLAVE_VISTA = 'miclase.calificador.vista'
-function vistaGuardada(): Vista {
-  try { return localStorage.getItem(CLAVE_VISTA) === 'instrumentos' ? 'instrumentos' : 'criterios' } catch { return 'criterios' }
+/** Sin elección guardada, null: se decide con los datos (hay instrumentos → por instrumento). */
+function vistaGuardada(): Vista | null {
+  try {
+    const v = localStorage.getItem(CLAVE_VISTA)
+    return v === 'instrumentos' || v === 'criterios' ? v : null
+  } catch { return null }
+}
+/** Áreas cuya tarjeta de presentación ya se cerró en este aparato. */
+const CLAVE_PRESENTADO = 'miclase.calificador.presentado'
+function yaPresentada(asignaturaId: number): boolean {
+  try { return (JSON.parse(localStorage.getItem(CLAVE_PRESENTADO) || '[]') as number[]).includes(asignaturaId) } catch { return false }
+}
+function marcarPresentada(asignaturaId: number) {
+  try {
+    const lista = JSON.parse(localStorage.getItem(CLAVE_PRESENTADO) || '[]') as number[]
+    if (!lista.includes(asignaturaId)) localStorage.setItem(CLAVE_PRESENTADO, JSON.stringify([...lista, asignaturaId]))
+  } catch { /* sin almacenamiento: saldrá otra vez, y ya */ }
 }
 
 function claseNota(v: number | null | undefined) {
@@ -87,11 +104,13 @@ export default function EvaluacionPage() {
    * que cubre, en vez de en un criterio y sus instrumentos.
    */
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
-  const [vista, setVista] = useState<Vista>(vistaGuardada)
+  const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
+  const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  const [presentacionCerrada, setPresentacionCerrada] = useState(false)
 
   const cambiarVista = (v: Vista) => {
-    setVista(v)
+    setVistaElegida(v)
     try { localStorage.setItem(CLAVE_VISTA, v) } catch { /* sin almacenamiento: se olvida y ya */ }
   }
 
@@ -192,6 +211,8 @@ export default function EvaluacionPage() {
 
   const alumnos: Alumno[] = matriz?.alumnos ?? []
   const unidadActual = unidades.find(u => u.id === unidadId)
+  // Al cambiar de área vuelve a decidirse si toca presentarla.
+  useEffect(() => { setPresentacionCerrada(false) }, [asignaturaId])
 
   /** Las columnas de la vista por instrumento: cada uno con los criterios que cubre aquí. */
   const columnasInstr = useMemo(
@@ -201,6 +222,13 @@ export default function EvaluacionPage() {
   /** Abrir el panel de un alumno centrado en un instrumento. */
   const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
     setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+
+  // Sin elección guardada, la vista por instrumento en cuanto hay con qué:
+  // es la que habla el idioma del aula. La matriz LOMLOE queda a un clic.
+  const vista: Vista = vistaElegida ?? (columnasInstr.length > 0 ? 'instrumentos' : 'criterios')
+  const mostrarPresentacion = !!asignaturaId && !presentacionCerrada && !yaPresentada(asignaturaId)
+    && !!matriz && alumnos.length > 0 && columnasInstr.length > 0
+  const cerrarPresentacion = () => { if (asignaturaId) marcarPresentada(asignaturaId); setPresentacionCerrada(true) }
 
   // Dos motivos distintos para que una casilla salga rayada, y el docente
   // arregla cada uno en un sitio: uno en la programación, el otro cambiando
@@ -398,6 +426,15 @@ export default function EvaluacionPage() {
 
           {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
 
+          {!cargando && mostrarPresentacion && (
+            <PresentacionCalificador
+              area={asigActual?.nombre_display ?? ''}
+              columnas={columnasInstr}
+              onAjustar={() => { setManagerAbierto(true) }}
+              onCerrar={cerrarPresentacion}
+            />
+          )}
+
           {/* Matriz */}
           {!cargando && matriz && (
             alumnos.length === 0 ? (
@@ -430,6 +467,7 @@ export default function EvaluacionPage() {
                   onCelda={abrirPorInstrumento}
                   onSesion={col => setSesion(col)}
                   onCorregir={col => abrirPorInstrumento(0, col)}
+                  onPegar={col => setPegarEn(col)}
                 />
               )
             ) : (
@@ -703,6 +741,19 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {pegarEn && matriz && (
+        <PegarColumna
+          instrumento={pegarEn.ins}
+          criterios={pegarEn.criterios}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onGuardado={() => { setPegarEn(null); setRefresco(r => r + 1) }}
+          onCerrar={() => setPegarEn(null)}
         />
       )}
 

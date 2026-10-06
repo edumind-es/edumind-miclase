@@ -129,10 +129,14 @@ Lo siguiente son mejoras, no deudas:
    «Evaluar hoy» para pasar por toda la clase con un instrumento en el diario;
    «Corregir» desde la columna del examen; el panel de la casilla centrado en
    el instrumento con sus criterios como fichas; y «la misma nota a toda la
-   clase» en «Copiar nota». Pendiente de la hoja de ruta del diario: plantillas
-   de aula (exit ticket, cuaderno, equipo) con sugerencia inversa de criterios,
-   plegado de columnas por competencia en la vista por criterio, y panel de
-   cobertura (qué criterios de la unidad siguen sin ninguna nota).
+   clase» en «Copiar nota». Y en la segunda tanda (PRs #64-#68, octubre 2026):
+   **familias e hijos** —lo que trae PROENS agrupa lo que la docente hace—, el
+   asistente «¿qué haces dentro?» con las destrezas de idioma, columnas
+   agrupadas por familia con color de identidad por instrumento, el cuarto paso
+   de la importación de PROENS, la tarjeta de aterrizaje y «pegar columna» desde
+   Excel. Pendiente: plegado de columnas por competencia en la vista por
+   criterio, panel de cobertura (qué criterios siguen sin nota), y la prueba con
+   una docente real que viene de Excel (fase 6 del plan).
 
 0.b **Soberanía del dato: quitarle al servidor el papel de depositario**
    (decidido con Luis, agosto 2026). Hoy el servidor ya no guarda datos de

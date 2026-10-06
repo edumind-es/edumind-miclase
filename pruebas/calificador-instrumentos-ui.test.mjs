@@ -92,6 +92,10 @@ try {
   console.log('\n2. Vista por instrumento en la primera unidad')
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
+  // Por defecto ya abre por instrumento; esta suite compara las dos vistas,
+  // así que empieza por la de criterios y cierra la tarjeta de bienvenida.
+  await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
+  await p.locator('[data-vista="criterios"]').click()
   await p.locator('.tab-unidad').nth(1).click()
   await p.waitForTimeout(1200)
   const nCriterios = await p.locator('th.criterio-th').count()
