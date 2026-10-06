@@ -11,7 +11,7 @@ import {
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
   getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
-  recuperarNotaAnterior, descartarNotaAnterior,
+  recuperarNotaAnterior, descartarNotaAnterior, getRegistrosDeCelda,
   type CeldaInstrumento, type PruebaGuardada,
 } from '@/db/queries'
 import PruebaEditor from './PruebaEditor'
@@ -21,9 +21,11 @@ import MiniaturaEvidencia from './MiniaturaEvidencia'
 import InstrumentosManager from './InstrumentosManager'
 import RubricaEditor from './RubricaEditor'
 import CriteriosHermanos from './CriteriosHermanos'
+import DiarioCelda from './DiarioCelda'
+import { etiquetaAgregacion } from '@/db/diario'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
-import type { Alumno, Asignatura, Grupo, Evidencia } from '@/db/localDb'
+import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
@@ -91,6 +93,12 @@ export default function CeldaEvaluacion({
   /** Nota fantasma de esta casilla: la anterior a un recálculo. Visible, pero no cuenta. */
   const [fantasma, setFantasma] = useState<{ id: number; valor: number; motivo: string | null } | null>(null)
   const [recarga, setRecarga] = useState(0)
+  /** Registros del diario de esta casilla, en orden cronológico. */
+  const [registros, setRegistros] = useState<RegistroDiario[]>([])
+  /** 'diario' si la nota actual la deriva el diario y no se puso a mano. */
+  const [origenActual, setOrigenActual] = useState<'diario' | null>(null)
+  /** La parrilla 0-10 y la rúbrica, plegadas cuando la nota sale del diario. */
+  const [manualAbierta, setManualAbierta] = useState(false)
   // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
   // del instrumento, que si no se quedaba con los niveles de antes.
   const [refrescoInstr, setRefrescoInstr] = useState(0)
@@ -146,7 +154,10 @@ export default function CeldaEvaluacion({
     if (!instrumentoId) { setValorActual(null); return }
     let vigente = true
     ;(async () => {
-      const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre)
+      const [c, regs] = await Promise.all([
+        getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre),
+        getRegistrosDeCelda(alumno.id!, instrumentoId, trimestre, criterio.id),
+      ])
       // Lo marcado en cada indicador la última vez. Una nota puesta antes de
       // que esto existiera no lo trae: se muestra el número y ya.
       let marcas = c?.niveles_rubrica ?? {}
@@ -159,6 +170,9 @@ export default function CeldaEvaluacion({
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)
+      setOrigenActual(c?.origen === 'diario' ? 'diario' : null)
+      setRegistros(regs)
+      setManualAbierta(false)
       setObservacion(c?.observacion ?? '')
       setMarcado(marcas)
       setFantasma(c?.id != null && c.valor_anterior != null
@@ -204,6 +218,9 @@ export default function CeldaEvaluacion({
         // escribir una observación no hay que perder lo marcado.
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
+      // Misma regla que `saveCalificaciones`: otra nota a mano sobre una
+      // casilla derivada del diario la vuelve manual.
+      if (valor !== valorActual) setOrigenActual(null)
       setValorActual(valor)
       // Si la nota ha ido a más casillas, se dice: que un vínculo escriba en
       // otro criterio sin avisar sería justo lo que no debe pasar.
@@ -305,6 +322,8 @@ export default function CeldaEvaluacion({
   const maxNivel = niveles.length ? Math.max(...niveles.map(n => n.valor)) : 0
   /** Con rúbrica de verdad —niveles e indicadores— la nota la pone ella. */
   const calificaPorPrueba = !!prueba
+  /** La nota sale del diario: hay registros, o la casilla aún lleva la marca. */
+  const calificaPorDiario = !calificaPorPrueba && (registros.length > 0 || origenActual === 'diario')
   // Con examen definido manda el examen: es lo que el docente ha dicho que corrige.
   const calificaPorRubrica = !calificaPorPrueba && niveles.length > 0 && indicadores.length > 0
 
@@ -493,8 +512,10 @@ export default function CeldaEvaluacion({
             <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5 }}>
               {valorActual == null
                 ? <>Sin calificar con <strong>{instrumentoSel?.nombre ?? 'este instrumento'}</strong>.</>
-                : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
-              {valorActual != null && (
+                : origenActual === 'diario'
+                  ? <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong> · calculada del diario ({etiquetaAgregacion(instrumentoSel?.agregacion).toLowerCase()} de {registros.length} registro{registros.length !== 1 ? 's' : ''}).</>
+                  : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
+              {valorActual != null && origenActual !== 'diario' && (
                 <button onClick={() => calificaPorPrueba ? guardarRespuestas({}) : calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
                   style={{ marginLeft: 8, background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                   borrar nota
@@ -538,6 +559,36 @@ export default function CeldaEvaluacion({
             </div>
           )}
 
+          {/* Diario de evaluación: varias observaciones que no se pisan. */}
+          {instrumentoSel && !calificaPorPrueba && (
+            <DiarioCelda
+              alumno={alumno}
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanos}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
+              registros={registros}
+              guardando={guardando}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }, 2500); setRecarga(n => n + 1); onGuardado() }}
+              onError={texto => avisar({ tipo: 'error', texto })}
+            />
+          )}
+
+          {/* Con la nota derivada del diario, poner otra a mano es una decisión:
+              se avisa de que el diario deja de contar hasta el próximo registro. */}
+          {calificaPorDiario && !manualAbierta && (
+            <div style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
+              <button data-diario-manual onClick={() => {
+                  if (confirm('Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?')) setManualAbierta(true)
+                }}
+                style={{ background: 'none', border: 'none', color: 'var(--azul-700)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                poner la nota a mano
+              </button>
+            </div>
+          )}
+
           {/* Con examen definido se corrige pregunta a pregunta. */}
           {calificaPorPrueba && prueba && (
             <CorregirPrueba
@@ -552,7 +603,7 @@ export default function CeldaEvaluacion({
 
           {/* La rúbrica se califica indicador a indicador. La nota no se pide:
               sale de lo marcado, ponderado por el peso de cada indicador. */}
-          {calificaPorRubrica && (
+          {calificaPorRubrica && (!calificaPorDiario || manualAbierta) && (
             <div style={{ marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
@@ -636,7 +687,7 @@ export default function CeldaEvaluacion({
           {/* Sin rúbrica que aplicar, la nota se pone a mano. También cuando la
               rúbrica está a medias —con niveles pero sin ningún indicador—, que
               si no el criterio se quedaría sin forma de calificar. */}
-          {!calificaPorRubrica && !calificaPorPrueba && (
+          {!calificaPorRubrica && !calificaPorPrueba && (!calificaPorDiario || manualAbierta) && (
             <>
               {esPruebaEscrita && (
                 <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8, lineHeight: 1.5 }}>

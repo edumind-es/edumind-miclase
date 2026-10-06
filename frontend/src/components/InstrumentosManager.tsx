@@ -11,8 +11,9 @@ import {
   getAsignaturaDetalle, crearInstrumento, eliminarInstrumento,
   actualizarInstrumento, moverInstrumento,
 } from '@/db/queries'
-import type { Instrumento } from '@/db/localDb'
+import type { Instrumento, Agregacion } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
+import { AGREGACIONES } from '@/db/diario'
 import RubricaEditor from './RubricaEditor'
 import PruebaEditor from './PruebaEditor'
 
@@ -206,6 +207,14 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                         {t}º trim.
                       </label>
                     ))}
+                    <label data-agregacion title="Si un alumno tiene varios registros del diario con este instrumento, así se funden en su nota"
+                      style={{ fontSize: 11, color: 'var(--gris-600)', fontWeight: 600, display: 'flex', gap: 4, alignItems: 'center' }}>
+                      Varios registros:
+                      <select value={ins.agregacion ?? 'media'} onChange={e => cambiar(ins.id!, { agregacion: e.target.value as Agregacion })}
+                        style={{ fontSize: 11, padding: '2px 4px' }}>
+                        {AGREGACIONES.map(a => <option key={a.value} value={a.value} title={a.ayuda}>{a.label}</option>)}
+                      </select>
+                    </label>
                     <div style={{ flex: 1 }} />
                     {ins.tipo === 'prueba-escrita' && (
                       <button onClick={() => setPruebaDe(ins)}
