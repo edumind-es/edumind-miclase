@@ -5,8 +5,10 @@
  * criterios. Hasta ahora había que repetir la nota casilla por casilla. Aquí
  * el docente elige, cada vez y a petición suya:
  *
- *  - **Copiar**: pasa la nota ya puesta a otros criterios, para este alumno o
- *    para toda la clase. Puntual: después cada casilla va por su cuenta.
+ *  - **Copiar**: pasa la nota ya puesta a otros criterios, para este alumno;
+ *    o la misma nota de este alumno a toda la clase («todos han entregado el
+ *    cuaderno bien»); o la nota que cada alumno tenga en este criterio a sus
+ *    otras columnas. Puntual: después cada casilla va por su cuenta.
  *  - **Vincular**: de ahí en adelante, calificar uno pone la misma nota en
  *    todos. Se guarda en la programación y vale también en la evaluación
  *    rápida y por QR.
@@ -30,6 +32,8 @@ interface Props {
   unidadId: number | null
   /** Hay nota en esta casilla: sin ella no hay nada que copiar para este alumno. */
   tieneNota: boolean
+  /** La nota de la casilla, para decir qué se va a poner a toda la clase. */
+  valor?: number | null
   /** Algo ha cambiado (notas o vínculo): el llamante relee la matriz. */
   onCambio: (mensaje: string) => void
 }
@@ -37,11 +41,17 @@ interface Props {
 type Modo = 'copiar' | 'vincular' | null
 
 export default function CriteriosHermanos({
-  instrumento, criterio, hermanos, alumno, alumnoIds, trimestre, unidadId, tieneNota, onCambio,
+  instrumento, criterio, hermanos, alumno, alumnoIds, trimestre, unidadId, tieneNota, valor, onCambio,
 }: Props) {
   const [modo, setModo] = useState<Modo>(null)
   const [elegidos, setElegidos] = useState<Set<string>>(new Set())
-  const [alcance, setAlcance] = useState<'alumno' | 'clase'>('alumno')
+  /**
+   * 'alumno': su nota, a sus otros criterios · 'misma': la nota de este
+   * alumno, a toda la clase · 'cada': la nota de cada alumno, a sus otros
+   * criterios. Antes solo había las de los extremos y «toda la clase» se
+   * leía como la del medio: copiaba a los demás alumnos... su propia nota.
+   */
+  const [alcance, setAlcance] = useState<'alumno' | 'misma' | 'cada'>('alumno')
   const [sobrescribir, setSobrescribir] = useState(false)
   const [trabajando, setTrabajando] = useState(false)
 
@@ -56,7 +66,7 @@ export default function CriteriosHermanos({
     setElegidos(new Set(m === 'vincular' && hayVinculo
       ? hermanos.filter(h => vinculados.includes(h.id)).map(h => h.id)
       : hermanos.map(h => h.id)))
-    setAlcance(tieneNota ? 'alumno' : 'clase')
+    setAlcance(tieneNota ? 'alumno' : 'cada')
     setSobrescribir(false)
     setModo(m)
   }
@@ -72,17 +82,22 @@ export default function CriteriosHermanos({
   const copiar = async () => {
     setTrabajando(true)
     try {
-      const destinos = [...elegidos]
+      // Con la misma nota para todos, el propio criterio también es destino:
+      // es la columna que el docente quiere rellenar.
+      const destinos = alcance === 'misma' ? [criterio.id, ...elegidos] : [...elegidos]
       const r = await copiarNotasACriterios({
         instrumento_id: instrumento.instrumento_id, trimestre, origen: criterio.id, destinos,
         alumno_ids: alcance === 'alumno' ? [alumno.id!] : alumnoIds, sobrescribir,
+        desde_alumno_id: alcance === 'misma' ? alumno.id! : undefined,
       })
       const partes = [
         r.copiadas
-          ? `${r.copiadas} nota${r.copiadas !== 1 ? 's' : ''} copiada${r.copiadas !== 1 ? 's' : ''} de ${criterio.id} a ${lista(destinos)}`
+          ? alcance === 'misma'
+            ? `${valor} puesto en ${r.copiadas} casilla${r.copiadas !== 1 ? 's' : ''} de la clase (${lista(destinos)})`
+            : `${r.copiadas} nota${r.copiadas !== 1 ? 's' : ''} copiada${r.copiadas !== 1 ? 's' : ''} de ${criterio.id} a ${lista(destinos)}`
           : 'No se ha copiado ninguna nota',
         r.respetadas ? `${r.respetadas} casilla${r.respetadas !== 1 ? 's' : ''} ya tenía${r.respetadas !== 1 ? 'n' : ''} nota y se ha${r.respetadas !== 1 ? 'n' : ''} respetado` : '',
-        r.sinNota && alcance === 'clase' ? `${r.sinNota} alumno${r.sinNota !== 1 ? 's' : ''} sin nota en ${criterio.id}` : '',
+        r.sinNota && alcance === 'cada' ? `${r.sinNota} alumno${r.sinNota !== 1 ? 's' : ''} sin nota en ${criterio.id}` : '',
       ].filter(Boolean)
       setModo(null)
       onCambio(partes.join(' · '))
@@ -132,9 +147,28 @@ export default function CriteriosHermanos({
 
       {modo && (
         <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--gris-300)' }}>
+          {modo === 'copiar' && (
+            <div data-alcance-copia style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, color: 'var(--azul-900)', marginBottom: 2 }}>¿A quién?</div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: tieneNota ? 'pointer' : 'default', opacity: tieneNota ? 1 : .5 }}>
+                <input type="radio" name="alcance-copia" checked={alcance === 'alumno'} disabled={!tieneNota}
+                  onChange={() => setAlcance('alumno')} />
+                <span>Solo {alumno.nombre}: su nota de {criterio.id}{valor != null ? ` (${valor})` : ''} a los criterios marcados</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: tieneNota ? 'pointer' : 'default', opacity: tieneNota ? 1 : .5 }}>
+                <input type="radio" name="alcance-copia" checked={alcance === 'misma'} disabled={!tieneNota}
+                  onChange={() => setAlcance('misma')} />
+                <span>Toda la clase ({alumnoIds.length}), <strong>la misma nota{valor != null ? ` (${valor})` : ''}</strong>: en {criterio.id} y en los criterios marcados</span>
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                <input type="radio" name="alcance-copia" checked={alcance === 'cada'} onChange={() => setAlcance('cada')} />
+                <span>Toda la clase ({alumnoIds.length}), <strong>cada alumno con su propia nota</strong> de {criterio.id}, a los criterios marcados</span>
+              </label>
+            </div>
+          )}
           <div style={{ fontWeight: 700, color: 'var(--azul-900)', marginBottom: 6 }}>
             {modo === 'copiar'
-              ? `Copiar la nota de ${criterio.id} a:`
+              ? (alcance === 'misma' ? `Además de ${criterio.id}, también a:` : `Copiar la nota de ${criterio.id} a:`)
               : `Vincular ${criterio.id} con:`}
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
@@ -148,17 +182,6 @@ export default function CriteriosHermanos({
 
           {modo === 'copiar' && (
             <>
-              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 6 }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: tieneNota ? 'pointer' : 'default', opacity: tieneNota ? 1 : .5 }}>
-                  <input type="radio" name="alcance-copia" checked={alcance === 'alumno'} disabled={!tieneNota}
-                    onChange={() => setAlcance('alumno')} />
-                  Solo {alumno.nombre}
-                </label>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
-                  <input type="radio" name="alcance-copia" checked={alcance === 'clase'} onChange={() => setAlcance('clase')} />
-                  Toda la clase ({alumnoIds.length})
-                </label>
-              </div>
               <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', marginBottom: 8 }}>
                 <input type="checkbox" checked={sobrescribir} onChange={e => setSobrescribir(e.target.checked)} />
                 Sobrescribir las casillas que ya tienen nota
@@ -167,7 +190,7 @@ export default function CriteriosHermanos({
                 Se copia la nota con lo marcado en la rúbrica y la observación. Es una copia de este momento: si luego cambias una, la otra no se mueve.
               </div>
               <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={copiar}
-                disabled={trabajando || elegidos.size === 0}>
+                disabled={trabajando || (elegidos.size === 0 && alcance !== 'misma')}>
                 Copiar
               </button>
             </>

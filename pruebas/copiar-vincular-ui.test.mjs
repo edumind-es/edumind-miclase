@@ -150,7 +150,7 @@ try {
 
   console.log('\n5. Copiar la columna a toda la clase, sin pisar')
   await caja.getByRole('button', { name: 'Copiar nota…' }).click()
-  await caja.getByLabel(/Toda la clase \(3\)/).check()
+  await caja.getByLabel(/Toda la clase \(3\), cada alumno con su propia nota/).check()
   await caja.getByRole('button', { name: 'Copiar', exact: true }).click()
   ok(await aviso(/ya tenían? nota y se han? respetado/), 'dice cuántas casillas ha respetado')
   ok(await aviso(/1 alumno sin nota/), 'y cuántos alumnos no tenían nota que copiar')
@@ -160,6 +160,18 @@ try {
     'el segundo alumno recibe su 6 en todos', JSON.stringify(n[1]))
   ok(Object.keys(n[2]).length === 0, 'el tercero, sin nota en el origen, sigue sin nada')
   await foto('copiar-vincular-02-columna')
+
+  console.log('\n5b. La misma nota a toda la clase, pisando: el 5 del primero va a todos')
+  await caja.getByRole('button', { name: 'Copiar nota…' }).click()
+  await caja.getByLabel(/Toda la clase \(3\), la misma nota/).check()
+  await caja.getByLabel(/Sobrescribir/).check()
+  await caja.getByRole('button', { name: 'Copiar', exact: true }).click()
+  ok(await aviso(/5 puesto en \d+ casillas de la clase/), 'dice qué nota ha puesto y en cuántas casillas')
+  n = await notas()
+  const todosLosCriterios = [origen, ...copiados]
+  ok([0, 1, 2].every(i => todosLosCriterios.every(c => n[i][c] === 5)),
+    'los tres alumnos tienen 5 en el origen y en todos los hermanos', JSON.stringify(n))
+  await foto('copiar-vincular-02b-misma-nota')
 
   console.log('\n6. Quitar el vínculo')
   await caja.getByRole('button', { name: /Cambiar vínculo…/ }).click()
@@ -171,8 +183,9 @@ try {
   await p.waitForTimeout(400)
   await poner(7)
   n = await notas()
-  ok(Object.keys(n[2]).length === 1 && n[2][origen] === 7, 'la nota nueva ya no se replica', JSON.stringify(n[2]))
-  ok(n[0][vinculado] === 5 && n[1][vinculado] === 6, 'y las replicadas antes se quedan como estaban')
+  // Tras 5b los tres alumnos tienen 5 en todo: el 7 solo debe mover el origen.
+  ok(n[2][origen] === 7 && copiados.every(c => n[2][c] === 5), 'la nota nueva ya no se replica', JSON.stringify(n[2]))
+  ok(n[0][vinculado] === 5 && n[1][vinculado] === 5, 'y las replicadas antes se quedan como estaban')
   ok(await p.locator('.criterio-th-instr .vinculo').count() === 0, 'la marca 🔗 desaparece de la cabecera')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))

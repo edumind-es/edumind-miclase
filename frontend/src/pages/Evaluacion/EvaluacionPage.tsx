@@ -5,6 +5,11 @@
  * Cada celda muestra la nota y el instrumento con el que la programación dice
  * que se evalúa ese criterio; al pulsarla se abre el panel de evaluación.
  * Un criterio sin instrumento asignado sale rayado y explica cómo arreglarlo.
+ *
+ * Dos vistas de los mismos datos: por criterio (la matriz LOMLOE, 40 columnas
+ * en un área real) y por instrumento (una columna por examen, cuaderno o
+ * billete de salida, que es como el docente corrige de verdad). El panel de la
+ * casilla es el mismo en las dos; lo que cambia es por dónde se entra.
  */
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
@@ -21,6 +26,8 @@ import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
+import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
+import SesionInstrumento from '@/components/SesionInstrumento'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
@@ -41,6 +48,13 @@ type CriterioAmpliado = {
  * parpadeo. Quien lo abre es porque ha ido a buscarlo.
  */
 const ESPERA_AMPLIAR = 2000
+
+type Vista = 'criterios' | 'instrumentos'
+/** La vista elegida se recuerda en este aparato: es una comodidad, no un dato. */
+const CLAVE_VISTA = 'miclase.calificador.vista'
+function vistaGuardada(): Vista {
+  try { return localStorage.getItem(CLAVE_VISTA) === 'instrumentos' ? 'instrumentos' : 'criterios' } catch { return 'criterios' }
+}
 
 function claseNota(v: number | null | undefined) {
   if (v == null) return ''
@@ -67,7 +81,19 @@ export default function EvaluacionPage() {
   const [errorCurriculo, setErrorCurriculo] = useState(false)
   const [managerAbierto, setManagerAbierto] = useState(false)
   const [refresco, setRefresco] = useState(0)
-  const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio } | null>(null)
+  /**
+   * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
+   * instrumento: el panel se centra en ese instrumento y en los criterios
+   * que cubre, en vez de en un criterio y sus instrumentos.
+   */
+  const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
+  const [vista, setVista] = useState<Vista>(vistaGuardada)
+  const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
+
+  const cambiarVista = (v: Vista) => {
+    setVista(v)
+    try { localStorage.setItem(CLAVE_VISTA, v) } catch { /* sin almacenamiento: se olvida y ya */ }
+  }
 
   // ── Criterio ampliado ───────────────────────────────────────────────────
   // La cabecera recorta el criterio a dos líneas. Insistiendo sobre ella —con
@@ -167,6 +193,15 @@ export default function EvaluacionPage() {
   const alumnos: Alumno[] = matriz?.alumnos ?? []
   const unidadActual = unidades.find(u => u.id === unidadId)
 
+  /** Las columnas de la vista por instrumento: cada uno con los criterios que cubre aquí. */
+  const columnasInstr = useMemo(
+    () => (matriz ? columnasPorInstrumento(matriz, columnas) : []),
+    [matriz, columnas])
+
+  /** Abrir el panel de un alumno centrado en un instrumento. */
+  const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
+    setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+
   // Dos motivos distintos para que una casilla salga rayada, y el docente
   // arregla cada uno en un sitio: uno en la programación, el otro cambiando
   // de pestaña de trimestre.
@@ -238,6 +273,20 @@ export default function EvaluacionPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          {asignaturaId && (
+            <div className="vista-conmutador" role="group" aria-label="Vista del calificador">
+              <button type="button" data-vista="criterios" aria-pressed={vista === 'criterios'}
+                onClick={() => cambiarVista('criterios')}
+                title="Una columna por criterio de evaluación">
+                Por criterio
+              </button>
+              <button type="button" data-vista="instrumentos" aria-pressed={vista === 'instrumentos'}
+                onClick={() => cambiarVista('instrumentos')}
+                title="Una columna por instrumento: examen, cuaderno, billete de salida…">
+                Por instrumento
+              </button>
+            </div>
+          )}
           {asignaturaId && (
             <button className="btn-secondary" style={{ fontSize: 13 }}
               onClick={() => setManagerAbierto(true)}
@@ -345,6 +394,25 @@ export default function EvaluacionPage() {
                   ? 'Esta unidad no tiene criterios vinculados. Añádeselos desde la programación.'
                   : 'No hay criterios disponibles para esta área en el currículo de tu comunidad.'}
               </div>
+            ) : vista === 'instrumentos' ? (
+              columnasInstr.length === 0 ? (
+                <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+                  Ningún instrumento evalúa estos criterios en el {trimestre}º trimestre.{' '}
+                  {sinInstrumento > 0
+                    ? <>Asigna instrumentos a los criterios en la programación y aparecerán aquí como columnas.</>
+                    : <>Cambia de trimestre o revisa en <strong>⚙ Instrumentos</strong> en qué trimestres se usa cada uno.</>}
+                </div>
+              ) : (
+                <MatrizInstrumentos
+                  matriz={matriz}
+                  columnas={columnasInstr}
+                  alumnos={alumnos}
+                  trimestre={trimestre}
+                  onCelda={abrirPorInstrumento}
+                  onSesion={col => setSesion(col)}
+                  onCorregir={col => abrirPorInstrumento(0, col)}
+                />
+              )
             ) : (
               <div className="matriz-wrap">
                 <table className="matriz">
@@ -469,7 +537,7 @@ export default function EvaluacionPage() {
           {/* Leyenda */}
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
-              <span>Pulsa una casilla para evaluar.</span>
+              <span>{vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)
                 return (
@@ -479,12 +547,18 @@ export default function EvaluacionPage() {
                   </span>
                 )
               })}
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                <span style={{ display: 'inline-flex', gap: 2 }}>
-                  <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
+              {vista === 'criterios' ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ display: 'inline-flex', gap: 2 }}>
+                    <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
+                  </span>
+                  cada punto es un instrumento
                 </span>
-                cada punto es un instrumento
-              </span>
+              ) : (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <b style={{ fontSize: 11 }}>2/3</b> criterios con nota de los que cubre
+                </span>
+              )}
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                 <b style={{ fontSize: 11 }}>2</b> evidencias adjuntas
               </span>
@@ -523,7 +597,12 @@ export default function EvaluacionPage() {
       {celda && matriz && (() => {
         const al = alumnos[celda.alumnoIdx]
         if (!al) return null
-        const instrs = matriz.porCriterio.get(celda.criterio.id) ?? []
+        const todos = matriz.porCriterio.get(celda.criterio.id) ?? []
+        // Desde la vista por instrumento solo interesa ese: los demás que
+        // evalúen el mismo criterio se corrigen desde su propia columna.
+        const instrs = celda.instrumentoId != null
+          ? todos.filter(i => i.instrumento_id === celda.instrumentoId)
+          : todos
 
         if (instrs.length === 0) {
           const soloOtroTrimestre = matriz.criteriosFueraDeTrimestre.has(celda.criterio.id)
@@ -569,6 +648,10 @@ export default function EvaluacionPage() {
             onGuardado={() => setRefresco(r => r + 1)}
             onCerrar={() => setCelda(null)}
             alumnoIds={alumnos.map(a => a.id!)}
+            enfoque={celda.instrumentoId != null ? 'instrumento' : 'criterio'}
+            onElegirCriterio={celda.instrumentoId != null
+              ? c => setCelda(prev => prev && { ...prev, criterio: { id: c.id, descripcion: c.descripcion } })
+              : undefined}
             hermanosDe={iid => columnas
               .filter(c => c.id !== celda.criterio.id
                 && (matriz.porCriterio.get(c.id) ?? []).some(i => i.instrumento_id === iid))
@@ -582,6 +665,20 @@ export default function EvaluacionPage() {
           />
         )
       })()}
+
+      {sesion && matriz && (
+        <SesionInstrumento
+          instrumento={sesion.ins}
+          criterios={sesion.criterios}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setSesion(null)}
+        />
+      )}
 
       {managerAbierto && asigActual && (
         <InstrumentosManager
