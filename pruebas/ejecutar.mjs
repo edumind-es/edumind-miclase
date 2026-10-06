@@ -4,6 +4,7 @@
  *   npm test              todo
  *   npm run test:rapido   solo lo que no necesita navegador (unos segundos)
  *   npm run test:prod     comprobación contra https://miclase.edumind.es
+ *   npm test -- --solo=<nombre> --conservar   una suite, y guarda sus capturas
  *
  * Qué resuelve, que antes había que hacer a mano y salía mal:
  *  - Monta el backend y el servidor de desarrollo en puertos libres, espera a
@@ -30,6 +31,9 @@ const soloProduccion = argumentos.has('--produccion')
 // Cazar una prueba inestable exige repetirla veinte veces, y sin esto había
 // que pasar la tanda entera —tres minutos y medio— en cada intento.
 const soloEste = [...argumentos].find((a) => a.startsWith('--solo='))?.slice(7)
+// Conservar el temporal aunque todo pase: para mirar las capturas de una
+// pantalla nueva sin tener que provocar un fallo.
+const conservar = argumentos.has('--conservar')
 // Repetir la selección: `--veces=20` para ver si una suite es inestable.
 const veces = Number([...argumentos].find((a) => a.startsWith('--veces='))?.slice(8) || 1)
 
@@ -114,6 +118,10 @@ async function principal() {
     await paquete('pruebas/taxonomias.test.ts', taxonomias, ['--platform=node', '--format=esm'])
     await suite('sugerencia de instrumentos', 'node', [taxonomias])
 
+    const familias = join(scratch, 'familias.mjs')
+    await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
+    await suite('plantillas de hijos por familia', 'node', [familias])
+
     const rubrica = join(scratch, 'rubrica.mjs')
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
@@ -195,6 +203,7 @@ async function principal() {
     await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
     await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
     await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
+    await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
@@ -240,7 +249,7 @@ console.log(
     ? rojo(`\n${bien}/${total} suites correctas · ${fallidas.map((f) => f.nombre).join(', ')}`)
     : verde(`\n${bien}/${total} suites correctas`))
 
-if (fallidas.length || salida) {
+if (fallidas.length || salida || conservar) {
   console.log(gris(`\nCapturas y temporales en ${scratch}`))
 } else {
   rmSync(scratch, { recursive: true, force: true })

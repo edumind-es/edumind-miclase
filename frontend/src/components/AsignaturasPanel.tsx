@@ -43,6 +43,7 @@ interface Instrumento {
   nombre: string
   tipo: string
   peso: number
+  familia_id?: number | null
 }
 
 interface Asignatura {
@@ -508,7 +509,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                       grupoCurso={curso}
                       grupoComunidad={comunidad}
                       grupoId={Number(grupoId)}
-                      instrumentos={a.instrumentos || []}
+                      instrumentos={(a.instrumentos || []).filter(i => i.familia_id == null)}
                       onIrAInstrumentos={() => setTab(a.id, 'instrumentos')}
                       onCambio={cargar}
                     />
