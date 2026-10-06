@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGuardarSesion } from '@/auth/AuthProvider'
+import { useGuardarSesion, REDIRECT_KEY } from '@/auth/AuthProvider'
 import { api } from '@/api'
 
 export default function CallbackPage() {
@@ -40,15 +40,19 @@ export default function CallbackPage() {
     }
 
     const nonce = sessionStorage.getItem('oidc_nonce')
+    // La app nativa vuelve por su esquema propio; el canje debe repetir el
+    // mismo redirect_uri con el que se pidió el código.
+    const redirect_uri = sessionStorage.getItem(REDIRECT_KEY)
 
     sessionStorage.removeItem('pkce_verifier')
     sessionStorage.removeItem('oidc_state')
     sessionStorage.removeItem('oidc_nonce')
+    sessionStorage.removeItem(REDIRECT_KEY)
 
     fetch(api('/api/auth/callback'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, code_verifier: verifier, nonce }),
+      body: JSON.stringify({ code, code_verifier: verifier, nonce, redirect_uri }),
     })
       .then(r => r.json())
       .then(data => {

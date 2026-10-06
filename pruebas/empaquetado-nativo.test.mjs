@@ -106,5 +106,26 @@ ok(mayores.size === 1,
   'core, android, ios y cli comparten versión mayor',
   nucleos.map((n) => `${n}@${deps[n]}`).join(', '))
 
+console.log('\n4. La vuelta del login en el navegador del sistema está declarada en iOS, Android y el servidor')
+
+// El esquema propio por el que Authentik devuelve el código a la app nativa.
+// Lo fija el backend; iOS y Android tienen que registrarlo o la vuelta se pierde.
+const authBackend = readFileSync(join(RAIZ, 'backend/src/routes/auth.js'), 'utf8')
+const redirectNativo = sacar(authBackend, /AUTHENTIK_REDIRECT_URI_NATIVO\s*\|\|\s*'([^']+)'/)
+const esquema = redirectNativo?.split('://')[0]
+ok(!!esquema && redirectNativo.includes('://auth/callback'),
+  'el backend declara un redirect_uri nativo con esquema propio', redirectNativo ?? 'no encontrado')
+
+const plist = leer('ios/App/App/Info.plist')
+ok(new RegExp(`<key>CFBundleURLSchemes</key>\\s*<array>\\s*<string>${esquema}</string>`).test(plist),
+  'Info.plist registra ese esquema en CFBundleURLTypes')
+
+const manifiesto = leer('android/app/src/main/AndroidManifest.xml')
+ok(manifiesto.includes(`android:scheme="${esquema}"`) && manifiesto.includes('android.intent.category.BROWSABLE'),
+  'AndroidManifest tiene el intent-filter navegable con ese esquema')
+
+ok(deps['@capacitor/browser'] && mayor(deps['@capacitor/browser']) === [...mayores][0],
+  'el plugin de navegador del sistema está instalado y a la par de core', deps['@capacitor/browser'] ?? 'falta')
+
 console.log(fallos ? `\n❌ ${fallos} FALLO(S)` : '\n✅ EMPAQUETADO NATIVO COHERENTE')
 process.exit(fallos ? 1 : 0)
