@@ -744,3 +744,31 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 }
 .instr-th-accion.secundaria { margin-top: 4px; background: transparent; font-weight: 600; opacity: .85; }
 .instr-th-accion.secundaria:hover { background: rgba(255,255,255,.16); opacity: 1; }
+
+/* ── Competencias plegables en la matriz por criterio ─────────────────── */
+.matriz-criterios thead tr.fila-competencias th { top: 0; text-align: left; padding: 5px 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .04em; background: var(--azul-900); border-bottom: 1px solid rgba(255,255,255,.15); cursor: pointer; user-select: none; }
+.matriz-criterios thead tr.fila-competencias th:hover { background: #163a5e; }
+.matriz-criterios thead tr.fila-competencias th .peso { font-weight: 500; opacity: .7; margin-left: 6px; }
+.matriz-criterios thead tr.fila-competencias th .comp-flecha { opacity: .8; }
+.matriz-criterios thead tr:not(.fila-competencias) th.criterio-th { top: 26px; }
+.matriz-criterios thead th.col-alumno { top: 0; }
+.criterio-th.plegado { cursor: pointer; background: #163a5e; }
+.celda.plegado .celda-btn { border-style: dashed; border-color: var(--gris-300); }
+
+/* ── Panel de cobertura ───────────────────────────────────────────────── */
+.cobertura { margin-bottom: 10px; border: 1px solid var(--gris-300); border-radius: var(--radio-md); background: var(--blanco); }
+.cobertura.completa { border-color: var(--verde-500); }
+.cobertura-resumen { display: flex; align-items: center; gap: 8px; width: 100%; border: none; background: transparent;
+  padding: 8px 12px; font-size: 12.5px; color: var(--gris-900); cursor: pointer; text-align: left; }
+.cobertura-barra { width: 90px; height: 7px; border-radius: 4px; background: var(--gris-100); overflow: hidden; flex-shrink: 0; }
+.cobertura-barra i { display: block; height: 100%; background: var(--azul-500); }
+.cobertura.completa .cobertura-barra i { background: var(--verde-500); }
+.cobertura-flecha { margin-left: auto; color: var(--gris-500); }
+.cobertura-detalle { padding: 0 12px 10px; display: flex; flex-direction: column; gap: 6px; }
+.cobertura-detalle > div { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.cobertura-rotulo { font-size: 11px; font-weight: 700; color: var(--gris-600); text-transform: uppercase; letter-spacing: .05em; margin-right: 4px; }
+.cobertura-chip { font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 12px; border: 1.5px solid var(--ambar-500);
+  background: var(--ambar-100); color: #92400e; cursor: pointer; }
+.cobertura-chip.suave { border-color: var(--gris-300); background: var(--gris-100); color: var(--gris-600); cursor: default; }
+.cobertura-chip small { font-weight: 500; }
