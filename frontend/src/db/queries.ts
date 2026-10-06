@@ -626,14 +626,27 @@ export async function copiarNotasACriterios(p: {
   destinos: string[]
   alumno_ids: number[]
   sobrescribir: boolean
+  /**
+   * Con esto, la nota que se copia es la de ESTE alumno en `origen`, y va a
+   * todos los `alumno_ids` (también en `origen`, si está entre los destinos).
+   * Sin ello, cada alumno reparte su propia nota a los otros criterios. Son
+   * dos gestos distintos: «todos han hecho bien el billete de salida» frente
+   * a «ya corregí la columna, rellena las hermanas».
+   */
+  desde_alumno_id?: number
 }): Promise<{ copiadas: number; respetadas: number; sinNota: number }> {
   let copiadas = 0, respetadas = 0, sinNota = 0
   const items: CalItem[] = []
+  const comun = p.desde_alumno_id != null
+    ? await getCalificacionUnica(p.desde_alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    : null
+  if (p.desde_alumno_id != null && (!comun || comun.valor == null)) return { copiadas, respetadas, sinNota: 1 }
   for (const alumno_id of p.alumno_ids) {
-    const src = await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    const src = comun ?? await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre)
     if (!src || src.valor == null) { sinNota++; continue }
     for (const destino of p.destinos) {
-      if (destino === p.origen) continue
+      // La propia casilla de partida no se copia sobre sí misma.
+      if (destino === p.origen && (comun ? alumno_id === p.desde_alumno_id : true)) continue
       const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, destino, p.trimestre)
       if (ya?.valor != null && !p.sobrescribir) { respetadas++; continue }
       items.push({

@@ -52,11 +52,21 @@ interface Props {
   hermanosDe?: (instrumentoId: number) => { id: string; descripcion: string }[]
   /** Toda la clase, para copiar una columna entera. */
   alumnoIds?: number[]
+  /**
+   * Desde dónde se ha entrado. Por criterio (lo de siempre) la cabecera es
+   * el criterio y debajo van sus instrumentos; por instrumento la cabecera es
+   * el instrumento con todos los criterios que cubre, y se puede saltar de
+   * uno a otro sin cerrar el panel.
+   */
+  enfoque?: 'criterio' | 'instrumento'
+  /** Con enfoque de instrumento: pasar a otro de sus criterios. */
+  onElegirCriterio?: (criterio: { id: string; descripcion: string }) => void
 }
 
 export default function CeldaEvaluacion({
   alumno, criterio, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
   onGuardado, onCerrar, onAnterior, onSiguiente, posicion, hermanosDe, alumnoIds,
+  enfoque = 'criterio', onElegirCriterio,
 }: Props) {
   const [instrumentoId, setInstrumentoId] = useState<number | null>(instrumentos[0]?.instrumento_id ?? null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
@@ -403,15 +413,50 @@ export default function CeldaEvaluacion({
         </div>
 
         <div style={{ padding: 18 }}>
-          {/* Criterio */}
-          <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
-              CRITERIO {criterio.id}
+          {/* Cabecera del panel: el criterio, o el instrumento con sus criterios */}
+          {enfoque === 'instrumento' && instrumentoSel ? (
+            <div data-enfoque-instrumento style={{ background: cfg?.bg ?? 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: cfg?.color ?? 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
+                INSTRUMENTO · {instrumentoSel.nombre}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8 }}>
+                Evalúa {destinosPrueba.length} criterio{destinosPrueba.length !== 1 ? 's' : ''}{unidadNombre ? ` en ${unidadNombre}` : ''}
+                {calificaPorPrueba ? ' · el examen pone nota en todos a la vez' : ' · un registro del diario reparte a todos'}
+              </div>
+              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+                {/* En orden fijo: la ficha pulsada no debe saltar al principio. */}
+                {[criterio, ...hermanos].sort((a, b) => a.id.localeCompare(b.id, 'es', { numeric: true })).map(c => {
+                  const activo = c.id === criterio.id
+                  return (
+                    <button key={c.id} type="button" data-criterio-chip aria-pressed={activo}
+                      onClick={() => !activo && onElegirCriterio?.(c)}
+                      disabled={!onElegirCriterio && !activo}
+                      title={c.descripcion}
+                      style={{
+                        fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 14, cursor: activo || !onElegirCriterio ? 'default' : 'pointer',
+                        border: `1.5px solid ${activo ? (cfg?.color ?? 'var(--azul-700)') : 'var(--gris-300)'}`,
+                        background: activo ? (cfg?.color ?? 'var(--azul-700)') : 'white',
+                        color: activo ? 'white' : 'var(--gris-900)',
+                      }}>
+                      {c.id}
+                    </button>
+                  )
+                })}
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--gris-900)', lineHeight: 1.5 }}>
+                <strong style={{ color: 'var(--azul-700)' }}>{criterio.id}</strong> — {criterio.descripcion}
+              </div>
             </div>
-            <div style={{ fontSize: 13.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
-              {criterio.descripcion}
+          ) : (
+            <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
+                CRITERIO {criterio.id}
+              </div>
+              <div style={{ fontSize: 13.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
+                {criterio.descripcion}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Instrumento(s) que evalúan este criterio */}
           <div style={{ marginBottom: 14 }}>
@@ -492,7 +537,8 @@ export default function CeldaEvaluacion({
               trimestre={trimestre}
               unidadId={unidadId}
               tieneNota={valorActual != null}
-              onCambio={texto => { avisar({ tipo: 'ok', texto }); onGuardado() }}
+              valor={valorActual}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }); setRecarga(n => n + 1); onGuardado() }}
             />
           )}
 

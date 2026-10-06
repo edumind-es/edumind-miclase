@@ -138,6 +138,21 @@ edumind_miclase/
   guarda por alumno, instrumento, criterio y trimestre, no por unidad. Copiar
   notas y corregir un examen escriben con `sinVinculos`: su reparto ya está
   decidido. Nada se replica sin que el docente lo haya pedido.
+- **«Copiar nota» tiene tres alcances y ninguno se da por supuesto**: la nota
+  del alumno a sus otros criterios; la misma nota de ese alumno a toda la clase
+  (`desde_alumno_id`), que es lo que un docente entiende por «a toda la clase»;
+  y la nota que cada alumno tenga en el criterio a sus otras columnas. Antes
+  solo existían la primera y la tercera, y la tercera se llamaba «toda la
+  clase»: Luis la pulsó esperando la segunda.
+- **El Calificador tiene dos vistas de los mismos datos** (`EvaluacionPage`):
+  por criterio (la matriz LOMLOE) y por instrumento (`MatrizInstrumentos`, una
+  columna por examen, cuaderno o billete de salida con los criterios que cubre).
+  Ninguna guarda nada por su cuenta: las dos abren `CeldaEvaluacion`, con
+  `enfoque` distinto, y «Evaluar hoy» (`SesionInstrumento`) escribe solo por
+  `anadirRegistro`/`editarRegistro`/`borrarRegistro` del diario. Un alumno tiene
+  un solo registro por instrumento y día desde esa pantalla: cambiar de botón
+  edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
+  porque es una comodidad del aparato, no un dato.
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
