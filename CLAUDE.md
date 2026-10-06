@@ -153,6 +153,21 @@ edumind_miclase/
   un solo registro por instrumento y día desde esa pantalla: cambiar de botón
   edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
   porque es una comodidad del aparato, no un dato.
+- **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
+  y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
+  examen de cada unidad, el billete de salida, speaking, listening. Un hijo
+  es un `Instrumento` con `familia_id` (sin índice), tipo y color propios, un
+  **subconjunto** de los criterios de su familia en cada unidad
+  (`fijarCriteriosDeHijo` lo comprueba y falla si se sale) y un `peso`
+  relativo DENTRO de la familia (1 por defecto). La familia entra en el área
+  con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
+  (`calculo.ts`) y la usan tanto `calcularNotaArea` como la matriz: una nota
+  directa de la familia (anterior a tener hijos) cuenta como un hijo más con
+  peso 1, y un hijo sin familia viva cuenta como instrumento suelto. Las
+  notas y el diario se guardan con el id del hijo; la nota de la familia en
+  la matriz es **virtual** (`Calificacion.virtual`, sin `id`, nunca se
+  guarda). Las familias son lo único que suma el 100 % del gestor
+  (`getFamilias`); borrar una familia se lleva a sus hijos.
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
