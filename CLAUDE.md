@@ -19,8 +19,9 @@ edumind_miclase/
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
 │   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v6) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
 │   │                   por AirDrop/Quick Share) · transporteDirecto.ts + enlaceDirecto.ts
@@ -137,6 +138,21 @@ edumind_miclase/
   guarda por alumno, instrumento, criterio y trimestre, no por unidad. Copiar
   notas y corregir un examen escriben con `sinVinculos`: su reparto ya está
   decidido. Nada se replica sin que el docente lo haya pedido.
+- **«Copiar nota» tiene tres alcances y ninguno se da por supuesto**: la nota
+  del alumno a sus otros criterios; la misma nota de ese alumno a toda la clase
+  (`desde_alumno_id`), que es lo que un docente entiende por «a toda la clase»;
+  y la nota que cada alumno tenga en el criterio a sus otras columnas. Antes
+  solo existían la primera y la tercera, y la tercera se llamaba «toda la
+  clase»: Luis la pulsó esperando la segunda.
+- **El Calificador tiene dos vistas de los mismos datos** (`EvaluacionPage`):
+  por criterio (la matriz LOMLOE) y por instrumento (`MatrizInstrumentos`, una
+  columna por examen, cuaderno o billete de salida con los criterios que cubre).
+  Ninguna guarda nada por su cuenta: las dos abren `CeldaEvaluacion`, con
+  `enfoque` distinto, y «Evaluar hoy» (`SesionInstrumento`) escribe solo por
+  `anadirRegistro`/`editarRegistro`/`borrarRegistro` del diario. Un alumno tiene
+  un solo registro por instrumento y día desde esa pantalla: cambiar de botón
+  edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
+  porque es una comodidad del aparato, no un dato.
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
@@ -154,6 +170,21 @@ edumind_miclase/
   la nota sin más, aunque fuera coherente, no es aceptable.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
+- **El diario de evaluación no pisa nada.** La tabla `diario` guarda una
+  observación fechada por registro (nivel 1-4) y la nota del criterio se
+  DERIVA en `materializarDiario` (`queries.ts`), nunca en una pantalla, con la
+  regla de `Instrumento.agregacion` (`db/diario.ts`). La nota derivada se
+  escribe en `calificaciones` con `origen: 'diario'` y `sinVinculos`, para que
+  informes, matriz, fantasma y sync sigan leyendo lo de siempre. Reglas que no
+  se deben romper: (1) la materialización es determinista (orden por fecha e
+  id) y **solo escribe si cambia `valor` u `origen`** —cada aparato la repite
+  tras sincronizar (`alAplicarCambios` en `sync.ts`) y si escribiera siempre
+  habría un ping-pong sin fin—; (2) los criterios de un registro se fijan al
+  crearlo en `criterios_json`, así que cambiar la programación no vacía notas
+  derivadas; (3) una nota a mano sobre una casilla derivada la vuelve manual y
+  el siguiente registro la manda a fantasma: nada se pierde. El backend tiene
+  la tabla en la lista blanca de `routes/sync.js`; sin eso los registros van a
+  cuarentena y no viajan.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 
@@ -204,5 +235,8 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes
+  `updated_at` en los registros existentes. Una tabla nueva va además en
+  `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
+  backend (`routes/sync.js`) y en las pruebas que leen la versión
+  (`migracion.test.mjs`, `e2e.test.mjs`)
 - No probar la sincronización contra la BD de producción: usar una copia

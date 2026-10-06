@@ -58,6 +58,9 @@ export interface Asignatura extends Sincronizable {
   created_at?: string
 }
 
+/** Cómo se funden varios registros del diario en la nota del criterio. */
+export type Agregacion = 'media' | 'ultima' | 'tendencia' | 'mediana'
+
 export interface Instrumento extends Sincronizable {
   id?: number
   asignatura_id: number
@@ -67,6 +70,12 @@ export interface Instrumento extends Sincronizable {
   trimestres: string
   orden: number
   created_at?: string
+  /**
+   * Regla con la que varios registros del diario de evaluación se convierten
+   * en la nota del criterio. Sin declarar vale 'media'. No se indexa: no
+   * exige versión de esquema.
+   */
+  agregacion?: Agregacion | null
 }
 
 export interface Calificacion extends Sincronizable {
@@ -83,6 +92,13 @@ export interface Calificacion extends Sincronizable {
   fecha?: string
   observacion?: string | null
   unidad_id?: number | null   // unidad en la que se registró (trazabilidad)
+  /**
+   * 'diario' cuando `valor` se deriva de los registros del diario de
+   * evaluación y no se puso a mano. El panel avisa antes de dejar editarla y
+   * la reconciliación tras un sync solo reescribe las que llevan esta marca.
+   * Sin índice.
+   */
+  origen?: 'diario' | null
   /**
    * Nivel marcado en cada indicador de la rúbrica: nombre del indicador →
    * valor del nivel. Es la justificación de la nota, no la nota: `valor`
@@ -285,6 +301,36 @@ export interface Evidencia extends Sincronizable {
   fecha: string
 }
 
+/**
+ * Diario de evaluación: una observación fechada de un alumno con un
+ * instrumento. Varias observaciones no se pisan; la nota del criterio se
+ * deriva de todas según `Instrumento.agregacion` (ver `db/diario.ts`).
+ */
+export interface RegistroDiario extends Sincronizable {
+  id?: number
+  alumno_id: number
+  instrumento_id: number
+  unidad_id: number | null
+  trimestre: number
+  /** ISO-8601 con hora: es lo que ordena los registros. */
+  fecha: string
+  /** Nivel 1-4. */
+  valor: number
+  observacion?: string | null
+  /**
+   * JSON con los criterios (string[]) a los que aplica. Se fija al crear el
+   * registro con lo que la programación asigna al instrumento en esa unidad,
+   * y nunca está vacío: así la derivación no depende de que la programación
+   * haya llegado ya al otro aparato, y retirar un criterio del instrumento
+   * no vacía la nota derivada.
+   */
+  criterios_json: string
+  asignatura: string
+  curso: string
+  etapa: string
+  comunidad: string
+}
+
 // Plano de clase: dimensiones de la cuadrícula por grupo
 export interface Plano extends Sincronizable {
   id?: number
@@ -336,6 +382,7 @@ class MiClaseDB extends Dexie {
   criterio_instrumentos!: Table<CriterioInstrumento>
   rubricas!: Table<Rubrica>
   evidencias!: Table<Evidencia>
+  diario!: Table<RegistroDiario>
   planos!: Table<Plano>
   asientos!: Table<Asiento>
   meta!: Table<Meta>
@@ -405,6 +452,19 @@ class MiClaseDB extends Dexie {
     this.version(5).stores({
       sync_base: 'clave',
     })
+
+    // v6 — diario de evaluación. Tabla nueva y vacía. `updated_at` va
+    // indexado porque es la consulta del sync. El sello del upgrade es el
+    // mismo de la v4, por si algún registro llegara sin él (idempotente).
+    this.version(6).stores({
+      diario: '++id, alumno_id, instrumento_id, [alumno_id+instrumento_id+trimestre], updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      await tx.table('diario').toCollection().modify(r => {
+        if (!r.updated_at) r.updated_at = r.fecha || sello
+        if (r.deleted_at === undefined) r.deleted_at = null
+      })
+    })
   }
 }
 
@@ -413,7 +473,7 @@ export const db = new MiClaseDB()
 /** Tablas que participan en backup y sincronización, en orden de dependencia. */
 export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
-  'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones',
+  'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos',
 ] as const
 

@@ -414,6 +414,12 @@ input:focus, select:focus, textarea:focus {
   font-size: 9px; font-weight: 700; opacity: .9;
   padding-left: 2px;
 }
+/* Mini-tendencia del diario: los últimos niveles, «2·3·3·4». */
+.celda-instr .celda-diario {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8.5px; font-weight: 600; opacity: .85; letter-spacing: .02em;
+  padding-left: 2px; white-space: nowrap;
+}
 .celda-btn.sin-instrumento {
   background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 5px, #ffedd5 5px, #ffedd5 10px);
   color: var(--ambar-500);
@@ -678,3 +684,34 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
     padding-left: 6px;
   }
 }
+
+/* ── Calificador: conmutador de vista y matriz por instrumento ────────── */
+.vista-conmutador {
+  display: inline-flex; border: 1.5px solid var(--gris-300); border-radius: 20px;
+  overflow: hidden; background: var(--blanco);
+}
+.vista-conmutador button {
+  border: none; background: transparent; color: var(--gris-600);
+  font-size: 12.5px; font-weight: 600; padding: 6px 14px; cursor: pointer;
+}
+.vista-conmutador button[aria-pressed="true"] { background: var(--azul-700); color: var(--blanco); }
+.vista-conmutador button:focus-visible { outline: 2px solid var(--azul-500); outline-offset: -2px; }
+
+.matriz-instrumentos thead th.instr-th {
+  min-width: 170px; max-width: 210px; text-align: left; padding: 8px 10px 9px;
+}
+.instr-th-nombre { font-size: 13px; font-weight: 700; line-height: 1.25; }
+.instr-th-tipo { font-size: 10px; opacity: .8; font-weight: 400; margin-top: 2px; }
+.instr-th-criterios {
+  font-size: 9.5px; opacity: .85; font-weight: 500; margin-top: 5px; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.instr-th-accion {
+  margin-top: 7px; width: 100%; border: none; border-radius: var(--radio-sm);
+  background: rgba(255,255,255,.16); color: var(--blanco);
+  font-size: 11.5px; font-weight: 700; padding: 6px 8px; cursor: pointer;
+}
+.instr-th-accion:hover { background: rgba(255,255,255,.3); }
+.instr-th-accion:focus-visible { outline: 2px solid var(--blanco); outline-offset: 1px; }
+.matriz-instrumentos .celda-btn { min-height: 44px; }
+.matriz-instrumentos .celda-instr b { font-size: 9.5px; }

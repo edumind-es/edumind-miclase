@@ -122,6 +122,18 @@ Lo siguiente son mejoras, no deudas:
    Es la pieza que más acercaría la app a iDoceo en comodidad de uso, y es
    trabajo de diseño además de código: no está empezada.
 
+0.a **Calificador más sencillo** (pedido por Luis, octubre 2026, a partir de
+   una captura real: 46 columnas de criterios, y «quiero revisar los apuntes»
+   sin saber en qué columna cae eso). Hecho: vista por instrumento con una
+   columna por examen, cuaderno o billete de salida y los criterios que cubre;
+   «Evaluar hoy» para pasar por toda la clase con un instrumento en el diario;
+   «Corregir» desde la columna del examen; el panel de la casilla centrado en
+   el instrumento con sus criterios como fichas; y «la misma nota a toda la
+   clase» en «Copiar nota». Pendiente de la hoja de ruta del diario: plantillas
+   de aula (exit ticket, cuaderno, equipo) con sugerencia inversa de criterios,
+   plegado de columnas por competencia en la vista por criterio, y panel de
+   cobertura (qué criterios de la unidad siguen sin ninguna nota).
+
 0.b **Soberanía del dato: quitarle al servidor el papel de depositario**
    (decidido con Luis, agosto 2026). Hoy el servidor ya no guarda datos de
    alumnado en claro, pero sigue albergando el buzón cifrado, y eso es
