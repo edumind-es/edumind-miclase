@@ -16,7 +16,7 @@ import {
   type CriteriosDeFamiliaPorUnidad,
 } from '@/db/queries'
 import type { Instrumento } from '@/db/localDb'
-import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
+import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrumento } from '@/ia/instrumentosConfig'
 import AsistenteFamilia from './AsistenteFamilia'
 
 interface Props {
@@ -136,17 +136,27 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
           {hijos.map((h, idx) => {
             const cfg = getInstrConfig(h.tipo)
+            const color = colorDeInstrumento(h, idx)
             const n = totalCriterios(h)
             const abierto = editando === h.id
             const pct = Math.round(((h.peso > 0 ? h.peso : 1) / sumaPesos) * 100)
             return (
-              <div key={h.id} data-hijo data-nombre={h.nombre} style={{ background: 'white', border: `1px solid ${cfg.color}40`, borderLeft: `4px solid ${cfg.color}`, borderRadius: 8, padding: '6px 10px' }}>
+              <div key={h.id} data-hijo data-nombre={h.nombre} style={{ background: 'white', border: `1px solid ${color}40`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '6px 10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <button onClick={() => moverInstrumento(h.asignatura_id, h.id!, -1).then(cambiado)} disabled={idx === 0} aria-label="Subir"
                       style={{ background: 'none', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', fontSize: 10, padding: 0, opacity: idx === 0 ? .3 : 1, lineHeight: 1.1 }}>▲</button>
                     <button onClick={() => moverInstrumento(h.asignatura_id, h.id!, 1).then(cambiado)} disabled={idx === hijos.length - 1} aria-label="Bajar"
                       style={{ background: 'none', border: 'none', cursor: idx === hijos.length - 1 ? 'default' : 'pointer', fontSize: 10, padding: 0, opacity: idx === hijos.length - 1 ? .3 : 1, lineHeight: 1.1 }}>▼</button>
+                  </div>
+                  {/* Color de identidad: es lo que la docente distingue en la matriz. */}
+                  <div data-color-hijo style={{ display: 'flex', gap: 3 }} title="Color con el que se ve en el calificador">
+                    {PALETA_INSTRUMENTOS.map(c => (
+                      <button key={c} type="button" aria-label={`Color ${c}`} aria-pressed={color === c}
+                        onClick={() => actualizarInstrumento(h.id!, { color: c }).then(cambiado)}
+                        style={{ width: 14, height: 14, borderRadius: '50%', background: c, cursor: 'pointer', padding: 0,
+                          border: `2px solid ${color === c ? 'var(--gris-900)' : 'transparent'}` }} />
+                    ))}
                   </div>
                   <span aria-hidden="true" style={{ fontSize: 15 }}>{cfg.icon}</span>
                   <input defaultValue={h.nombre} aria-label="Nombre"
@@ -191,8 +201,8 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                                   onClick={() => alternarCriterio(h, u, c)}
                                   style={{
                                     fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 14, cursor: 'pointer',
-                                    border: `1.5px solid ${activo ? cfg.color : 'var(--gris-300)'}`,
-                                    background: activo ? cfg.color : 'white', color: activo ? 'white' : 'var(--gris-600)',
+                                    border: `1.5px solid ${activo ? color : 'var(--gris-300)'}`,
+                                    background: activo ? color : 'white', color: activo ? 'white' : 'var(--gris-600)',
                                   }}>{c}</button>
                               )
                             })}

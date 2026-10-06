@@ -124,7 +124,7 @@ export default function SesionInstrumento({
       <div className="card" role="dialog" aria-modal="true" aria-label={`Evaluar hoy: ${instrumento.nombre}`}
         style={{ width: 'min(720px, 96vw)', maxHeight: '92vh', overflowY: 'auto', padding: 0 }}>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderBottom: '1px solid var(--gris-300)', borderTop: `4px solid ${cfg.color}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderBottom: '1px solid var(--gris-300)', borderTop: `4px solid ${instrumento.color}` }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--azul-900)' }}>
               <span aria-hidden="true">{cfg.icon}</span> {instrumento.nombre}

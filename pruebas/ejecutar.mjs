@@ -204,6 +204,7 @@ async function principal() {
     await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
     await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
     await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
+    await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)

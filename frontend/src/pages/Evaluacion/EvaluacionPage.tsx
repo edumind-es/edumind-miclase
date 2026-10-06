@@ -22,7 +22,7 @@ import { miniTendencia } from '@/db/diario'
 import { useAppStore } from '@/store/useAppStore'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { abreviatura } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
@@ -235,14 +235,33 @@ export default function EvaluacionPage() {
     return ids
   }, [matriz])
 
+  /**
+   * Lo que pesa en el área de cada casilla: las familias (o instrumentos
+   * sueltos), una vez, con su color. Los hijos quedan dentro de la suya.
+   */
+  const cabecerasDe = (instrs: CeldaInstrumento[]) => {
+    const vistos = new Map<number, { id: number; nombre: string; peso: number; color: string; hijos: CeldaInstrumento[] }>()
+    for (const i of instrs) {
+      const id = i.familia_id ?? i.instrumento_id
+      const cab = vistos.get(id) ?? { id, nombre: i.familia_nombre ?? i.nombre, peso: i.familia_peso, color: i.color, hijos: [] }
+      if (i.familia_id != null) cab.hijos.push(i)
+      else cab.color = i.color
+      vistos.set(id, cab)
+    }
+    // El color de una familia con hijos es el del primero: la columna de la familia no existe como tal.
+    for (const cab of vistos.values()) if (cab.hijos.length && !instrs.some(i => i.instrumento_id === cab.id)) cab.color = cab.hijos[0].color
+    return [...vistos.values()]
+  }
+
   const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
     if (!matriz || !instrs.length) return null
-    // Con varios instrumentos, la celda muestra la media ponderada de los que tengan nota
+    // La media ponderada de las familias con nota: la de una familia con hijos
+    // es la nota virtual que funde a sus hijos, la misma del boletín.
     let suma = 0, pesos = 0
-    for (const ins of instrs) {
-      const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${ins.instrumento_id}:${trimestre}`]
+    for (const cab of cabecerasDe(instrs)) {
+      const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${cab.id}:${trimestre}`]
       if (c?.valor == null) continue
-      const p = ins.peso > 0 ? ins.peso : 1
+      const p = cab.peso > 0 ? cab.peso : 1
       suma += c.valor * p
       pesos += p
     }
@@ -446,15 +465,23 @@ export default function EvaluacionPage() {
                             onTouchEnd={cancelarAmpliar}
                             onTouchMove={cerrarAmpliado}
                             onTouchCancel={cerrarAmpliado}>
+                            {/* Franja de identidad: un segmento por familia, con su color,
+                                y debajo la abreviatura, para que el color no sea la única pista. */}
+                            {instrs.length > 0 && (
+                              <div className="criterio-th-franja" aria-hidden="true">
+                                {cabecerasDe(instrs).map(cab => <span key={cab.id} style={{ background: cab.color }} />)}
+                              </div>
+                            )}
                             <div className="criterio-th-id">{cr.id}</div>
                             <div className="criterio-th-desc">{cr.descripcion}</div>
                             <div className="criterio-th-instr">
                               {instrs.length === 0
                                 ? <span className="aviso" title="Sin instrumento asignado en la programación">⚠</span>
-                                : instrs.map(i => (
-                                    <i key={i.instrumento_id}
-                                      style={{ background: getInstrConfig(i.tipo).color }}
-                                      title={`${i.nombre} · ${getInstrConfig(i.tipo).label} · ${i.peso}%`} />
+                                : cabecerasDe(instrs).map(cab => (
+                                    <i key={cab.id} className="abrev" style={{ background: cab.color }}
+                                      title={`${cab.nombre} · ${cab.peso}%${cab.hijos.length ? `\nDentro: ${cab.hijos.map(h => h.nombre).join(', ')}` : ''}`}>
+                                      {abreviatura(cab.nombre)}
+                                    </i>
                                   ))}
                               {instrs.some(i => i.vinculados.length > 0) && (
                                 <span className="vinculo" style={{ fontSize: 9, lineHeight: 1 }}
@@ -501,7 +528,7 @@ export default function EvaluacionPage() {
                                 onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
                                 title={sinInstr
                                   ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
-                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${instrs.map(i => i.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
+                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${cabecerasDe(instrs).map(c => c.hijos.length ? `${c.nombre} (${c.hijos.map(h => h.nombre).join(', ')})` : c.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
                               >
                                 {sinInstr ? (
                                   <span>sin instr.</span>
@@ -509,9 +536,8 @@ export default function EvaluacionPage() {
                                   <>
                                     <span>{valor == null ? '·' : valor}</span>
                                     <span className="celda-instr">
-                                      {instrs.map(i => (
-                                        <i key={i.instrumento_id}
-                                          style={{ background: getInstrConfig(i.tipo).color }} />
+                                      {cabecerasDe(instrs).map(cab => (
+                                        <i key={cab.id} style={{ background: cab.color }} />
                                       ))}
                                       {nEvid > 0 && <b title={`${nEvid} evidencia(s) adjunta(s)`}>{nEvid}</b>}
                                       {diario && (
@@ -552,7 +578,7 @@ export default function EvaluacionPage() {
                   <span style={{ display: 'inline-flex', gap: 2 }}>
                     <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
                   </span>
-                  cada punto es un instrumento
+                  cada color es un instrumento de la programación; sus siglas van en la cabecera
                 </span>
               ) : (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>

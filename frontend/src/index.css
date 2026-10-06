@@ -715,3 +715,30 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .instr-th-accion:focus-visible { outline: 2px solid var(--blanco); outline-offset: 1px; }
 .matriz-instrumentos .celda-btn { min-height: 44px; }
 .matriz-instrumentos .celda-instr b { font-size: 9.5px; }
+
+/* ── Identidad de instrumento en la cabecera por criterio ─────────────── */
+.matriz thead th.criterio-th { position: sticky; padding-top: 0; }
+.criterio-th-franja {
+  display: flex; height: 5px; margin: 0 -8px 6px; overflow: hidden;
+}
+.criterio-th-franja span { flex: 1; display: block; }
+.criterio-th-instr .abrev {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 14px; padding: 0 4px; border-radius: 3px;
+  font-style: normal; font-size: 9.5px; font-weight: 800; letter-spacing: .04em;
+  color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}
+.matriz-instrumentos thead tr.fila-familias th {
+  top: 0; text-align: left; padding: 6px 10px 4px; font-size: 11px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; background: var(--azul-900);
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+.matriz-instrumentos thead tr.fila-familias th .peso { font-weight: 500; opacity: .75; text-transform: none; letter-spacing: 0; margin-left: 6px; }
+.matriz-instrumentos.con-familias thead tr.fila-instrumentos th.instr-th { top: 27px; }
+.matriz-instrumentos thead th.col-alumno { top: 0; }
+.instr-th-nombre .abrev {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 15px; padding: 0 4px; border-radius: 3px; margin-right: 4px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .04em; color: #fff; vertical-align: 1px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}

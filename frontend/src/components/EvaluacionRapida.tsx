@@ -10,7 +10,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getGruposDeAlumno, getAsignaturas, getFamilias, getUnidades,
+  getGruposDeAlumno, getAsignaturas, getInstrumentos, getUnidades,
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, contarEvidenciasAlumno,
   getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura, type VinculoInstrumento,
@@ -79,11 +79,16 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   // según por dónde se entre.
   // Sin programación, se ofrecen todos los del área para no bloquear.
   const instrumentosDelCriterio = useMemo(() => {
-    const asignados = (mapaInstr.get(criterioId) || [])
+    const candidatos = (mapaInstr.get(criterioId) || [])
       .map(x => instrById.get(x.instrumento_id))
       .filter((i): i is Instrumento => !!i)
       .filter(i => aplicaEnTrimestre(i.trimestres, trimestre))
-    const sueltos = instrumentos.filter(i => aplicaEnTrimestre(i.trimestres, trimestre))
+    // Misma regla que la matriz: si un hijo evalúa el criterio, se califica
+    // con el hijo y la familia solo resume.
+    const conHijo = new Set(candidatos.map(i => i.familia_id).filter((f): f is number => f != null))
+    const asignados = candidatos.filter(i => !conHijo.has(i.id!))
+    // Sin programación, solo lo de primer nivel: los hijos no tienen criterios propios fuera de ella.
+    const sueltos = instrumentos.filter(i => i.familia_id == null && aplicaEnTrimestre(i.trimestres, trimestre))
     return { lista: asignados.length ? asignados : sueltos, segunProgramacion: asignados.length > 0 }
   }, [mapaInstr, criterioId, instrById, instrumentos, trimestre])
 
@@ -124,8 +129,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   useEffect(() => {
     if (!asignaturaId) { setInstrumentos([]); setUnidades([]); return }
     const cfg = leerCfg()
-    // Familias: los hijos entran en la evaluación rápida en una fase posterior.
-    getFamilias(asignaturaId).then(setInstrumentos)
+    getInstrumentos(asignaturaId).then(setInstrumentos)
     getUnidades(asignaturaId).then(us => {
       setUnidades(us)
       setUnidadId(us.some(u => u.id === cfg.unidad_id) ? cfg.unidad_id : null)
