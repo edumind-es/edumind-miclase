@@ -215,6 +215,7 @@ async function principal() {
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
+    await suite('importar backup reconoce un paquete', 'node', ['pruebas/importar-paquete-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
