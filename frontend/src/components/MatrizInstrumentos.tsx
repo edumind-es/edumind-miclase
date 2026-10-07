@@ -8,7 +8,7 @@
  * Nada se guarda aquí: pulsar una casilla abre el mismo panel de siempre, y
  * «Evaluar hoy» abre la pasada de clase del diario.
  */
-import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import { etiquetaAgregacion, miniTendencia } from '@/db/diario'
 import type { CeldaInstrumento, MatrizEvaluacion } from '@/db/queries'
 import type { Alumno } from '@/db/localDb'
@@ -21,9 +21,20 @@ export type ColumnaInstrumento = {
   criterios: Criterio[]
 }
 
+/** Un grupo de columnas: la familia y lo que hay dentro (o ella sola). */
+export type GrupoFamilia = {
+  id: number
+  nombre: string
+  peso: number
+  columnas: ColumnaInstrumento[]
+  /** La familia no tiene hijos aquí: la única columna es ella misma. */
+  sola: boolean
+}
+
 /**
  * Invierte el mapa criterio → instrumentos de la matriz. Los instrumentos
- * salen en el orden del gestor (`orden`), que es el que el docente ha elegido.
+ * salen en el orden del gestor (`orden`), que es el que el docente ha elegido;
+ * los hijos, detrás de su familia.
  */
 export function columnasPorInstrumento(matriz: MatrizEvaluacion, criterios: Criterio[]): ColumnaInstrumento[] {
   const porId = new Map<number, ColumnaInstrumento>()
@@ -35,8 +46,30 @@ export function columnasPorInstrumento(matriz: MatrizEvaluacion, criterios: Crit
     }
   }
   const orden = new Map(matriz.instrumentos.map((i, k) => [i.id!, k]))
-  return [...porId.values()].sort((a, b) =>
-    (orden.get(a.ins.instrumento_id) ?? 999) - (orden.get(b.ins.instrumento_id) ?? 999))
+  const clave = (c: ColumnaInstrumento) => [
+    orden.get(c.ins.familia_id ?? c.ins.instrumento_id) ?? 999,
+    c.ins.familia_id == null ? -1 : (orden.get(c.ins.instrumento_id) ?? 999),
+  ]
+  return [...porId.values()].sort((a, b) => {
+    const [fa, ha] = clave(a), [fb, hb] = clave(b)
+    return fa - fb || ha - hb
+  })
+}
+
+/** Agrupa las columnas por familia, en el mismo orden. */
+export function gruposPorFamilia(columnas: ColumnaInstrumento[]): GrupoFamilia[] {
+  const grupos: GrupoFamilia[] = []
+  for (const col of columnas) {
+    const id = col.ins.familia_id ?? col.ins.instrumento_id
+    let g = grupos.find(x => x.id === id)
+    if (!g) {
+      g = { id, nombre: col.ins.familia_nombre ?? col.ins.nombre, peso: col.ins.familia_peso, columnas: [], sola: col.ins.familia_id == null }
+      grupos.push(g)
+    }
+    g.columnas.push(col)
+    if (col.ins.familia_id != null) g.sola = false
+  }
+  return grupos
 }
 
 export type ResumenCelda = {
@@ -83,31 +116,58 @@ interface Props {
 }
 
 export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir }: Props) {
+  const grupos = gruposPorFamilia(columnas)
+  const hayFamilias = grupos.some(g => !g.sola)
   return (
     <div className="matriz-wrap">
-      <table className="matriz matriz-instrumentos">
+      <table className={`matriz matriz-instrumentos${hayFamilias ? ' con-familias' : ''}`}>
         <thead>
-          <tr>
-            <th className="col-alumno" scope="col">
-              Alumno
-              <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
-                {alumnos.length} · {columnas.length} instrumento{columnas.length !== 1 ? 's' : ''}
-              </div>
-            </th>
+          {/* Fila de familias: lo que pesa en el área. Solo si alguna tiene hijos;
+              si no, sería repetir el nombre de cada columna encima de sí misma. */}
+          {hayFamilias && (
+            <tr className="fila-familias">
+              <th className="col-alumno" scope="col" rowSpan={2}>
+                Alumno
+                <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
+                  {alumnos.length} · {columnas.length} instrumento{columnas.length !== 1 ? 's' : ''}
+                </div>
+              </th>
+              {grupos.map(g => (
+                <th key={g.id} scope="colgroup" colSpan={g.columnas.length} data-familia-th data-nombre={g.nombre}
+                  style={{ borderTop: `4px solid ${g.columnas[0].ins.color}` }}
+                  title={g.sola ? `${g.nombre} · ${g.peso}% del área` : `${g.nombre} · ${g.peso}% del área · dentro: ${g.columnas.map(c => c.ins.nombre).join(', ')}`}>
+                  {g.sola ? <span style={{ opacity: .55 }}>—</span> : g.nombre}
+                  <span className="peso">{g.peso}%</span>
+                </th>
+              ))}
+            </tr>
+          )}
+          <tr className="fila-instrumentos">
+            {!hayFamilias && (
+              <th className="col-alumno" scope="col">
+                Alumno
+                <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
+                  {alumnos.length} · {columnas.length} instrumento{columnas.length !== 1 ? 's' : ''}
+                </div>
+              </th>
+            )}
             {columnas.map(col => {
               const cfg = getInstrConfig(col.ins.tipo)
               const esExamen = col.ins.tipo === 'prueba-escrita'
               const ids = col.criterios.map(c => c.id)
+              const esHijo = col.ins.familia_id != null
               return (
                 <th key={col.ins.instrumento_id} scope="col" className="instr-th"
                   data-instr-th data-nombre={col.ins.nombre} data-tipo={col.ins.tipo} data-con-examen={col.ins.tiene_prueba || undefined}
-                  style={{ borderTop: `4px solid ${cfg.color}` }}
+                  data-familia={col.ins.familia_id ?? undefined}
+                  style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
                   title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
                   <div className="instr-th-nombre">
+                    <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
                     <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
                   </div>
                   <div className="instr-th-tipo">
-                    {cfg.label} · {col.ins.peso}%
+                    {cfg.label}{esHijo ? ` · peso ${col.ins.peso}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   <div className="instr-th-criterios">

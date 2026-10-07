@@ -167,7 +167,16 @@ edumind_miclase/
   notas y el diario se guardan con el id del hijo; la nota de la familia en
   la matriz es **virtual** (`Calificacion.virtual`, sin `id`, nunca se
   guarda). Las familias son lo único que suma el 100 % del gestor
-  (`getFamilias`); borrar una familia se lleva a sus hijos.
+  (`getFamilias`); borrar una familia se lleva a sus hijos. En la matriz,
+  `porCriterio` trae a los hijos con `familia_id` y aparta a la familia en
+  cuanto un hijo evalúa el criterio: se califica con el hijo y la familia
+  resume. La misma regla aplica la evaluación rápida.
+- **El color identifica al instrumento, no a su tipo.** Ocho tonos de
+  Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
+  entre iguales (`colorDeInstrumento`), resueltos una vez en
+  `getMatrizEvaluacion` (`CeldaInstrumento.color`). Nunca es la única pista:
+  al lado va siempre la abreviatura (`abreviatura`). Los colores del tipo
+  (`TIPOS_INSTRUMENTO`) quedan para iconos y fondos del gestor.
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo

@@ -28,6 +28,21 @@ import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
+
+/** Los instrumentos de la casilla, agrupados por familia y en su orden. */
+function gruposDeInstrumentos(lista: CeldaInstrumento[]) {
+  const grupos: { id: number; rotulo: string | null; peso: number; miembros: CeldaInstrumento[] }[] = []
+  for (const ins of lista) {
+    const id = ins.familia_id ?? ins.instrumento_id
+    let g = grupos.find(x => x.id === id)
+    if (!g) {
+      g = { id, rotulo: ins.familia_id != null ? ins.familia_nombre : null, peso: ins.familia_peso, miembros: [] }
+      grupos.push(g)
+    }
+    g.miembros.push(ins)
+  }
+  return grupos
+}
 type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
 
 interface Props {
@@ -415,9 +430,9 @@ export default function CeldaEvaluacion({
         <div style={{ padding: 18 }}>
           {/* Cabecera del panel: el criterio, o el instrumento con sus criterios */}
           {enfoque === 'instrumento' && instrumentoSel ? (
-            <div data-enfoque-instrumento style={{ background: cfg?.bg ?? 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: cfg?.color ?? 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
-                INSTRUMENTO · {instrumentoSel.nombre}
+            <div data-enfoque-instrumento style={{ background: 'var(--gris-100)', borderLeft: `6px solid ${instrumentoSel.color}`, borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: instrumentoSel.color, letterSpacing: '.03em', marginBottom: 3 }}>
+                INSTRUMENTO · {instrumentoSel.nombre}{instrumentoSel.familia_id != null ? <span style={{ fontWeight: 600, color: 'var(--gris-600)' }}> · dentro de {instrumentoSel.familia_nombre} ({instrumentoSel.familia_peso}%)</span> : null}
               </div>
               <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8 }}>
                 Evalúa {destinosPrueba.length} criterio{destinosPrueba.length !== 1 ? 's' : ''}{unidadNombre ? ` en ${unidadNombre}` : ''}
@@ -434,8 +449,8 @@ export default function CeldaEvaluacion({
                       title={c.descripcion}
                       style={{
                         fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 14, cursor: activo || !onElegirCriterio ? 'default' : 'pointer',
-                        border: `1.5px solid ${activo ? (cfg?.color ?? 'var(--azul-700)') : 'var(--gris-300)'}`,
-                        background: activo ? (cfg?.color ?? 'var(--azul-700)') : 'white',
+                        border: `1.5px solid ${activo ? instrumentoSel.color : 'var(--gris-300)'}`,
+                        background: activo ? instrumentoSel.color : 'white',
                         color: activo ? 'white' : 'var(--gris-900)',
                       }}>
                       {c.id}
@@ -500,29 +515,43 @@ export default function CeldaEvaluacion({
                 </button>
               )}
             </div>
-            <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-              {instrumentos.map(ins => {
-                const c = getInstrConfig(ins.tipo)
-                const activo = ins.instrumento_id === instrumentoId
-                return (
-                  <button key={ins.instrumento_id} onClick={() => setInstrumentoId(ins.instrumento_id)}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 7, padding: '9px 14px',
-                      borderRadius: 9, cursor: 'pointer', fontSize: 13, fontWeight: 700,
-                      background: activo ? c.color : c.bg,
-                      color: activo ? 'white' : c.color,
-                      border: `2px solid ${activo ? c.color : 'transparent'}`,
-                    }}>
-                    <span style={{ fontSize: 17 }}>{c.icon}</span>
-                    <span>
-                      {ins.nombre}
-                      <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
-                        {c.label} · {ins.peso}%{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
-                      </span>
-                    </span>
-                  </button>
-                )
-              })}
+            {/* Agrupados por familia: «Táboa de indicadores · 20 %» y debajo lo
+                que hay dentro. Un instrumento suelto es su propio grupo sin rótulo. */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {gruposDeInstrumentos(instrumentos).map(g => (
+                <div key={g.id} data-grupo-familia={g.rotulo ?? undefined}>
+                  {g.rotulo && (
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', marginBottom: 4 }}>
+                      {g.rotulo} <span style={{ fontWeight: 500 }}>· {g.peso}% del área · dentro:</span>
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
+                    {g.miembros.map(ins => {
+                      const c = getInstrConfig(ins.tipo)
+                      const activo = ins.instrumento_id === instrumentoId
+                      return (
+                        <button key={ins.instrumento_id} onClick={() => setInstrumentoId(ins.instrumento_id)} data-instrumento-chip={ins.nombre}
+                          data-activo={activo || undefined} aria-current={activo ? 'true' : undefined}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 7, padding: '9px 14px',
+                            borderRadius: 9, cursor: 'pointer', fontSize: 13, fontWeight: 700,
+                            background: activo ? ins.color : 'white',
+                            color: activo ? 'white' : 'var(--gris-900)',
+                            border: `2px solid ${ins.color}`,
+                          }}>
+                          <span style={{ fontSize: 17 }}>{c.icon}</span>
+                          <span>
+                            {ins.nombre}
+                            <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
+                              {c.label}{ins.familia_id != null ? ` · peso ${ins.peso} en ${ins.familia_nombre}` : ` · ${ins.peso}%`}{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
+                            </span>
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 

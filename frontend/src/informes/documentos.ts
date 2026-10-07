@@ -338,9 +338,11 @@ export function actaArea(datos: DatosGrupo, asignaturaId: number, trimestre: num
 
   const instrumentos = area.instrumentos.length
     ? `<table><thead><tr><th>Instrumento</th><th>Tipo</th><th class="n">Peso</th></tr></thead><tbody>
-        ${area.instrumentos.map(i => `<tr>
-          <td>${esc(i.nombre)}</td><td class="desc">${esc(i.tipo)}</td><td class="n">${i.peso}%</td>
-        </tr>`).join('')}
+        ${area.instrumentos.filter(i => i.familia_id == null).map(f => `<tr>
+          <td>${esc(f.nombre)}</td><td class="desc">${esc(f.tipo)}</td><td class="n">${f.peso}%</td>
+        </tr>${area.instrumentos.filter(h => h.familia_id === f.id).map(h => `<tr>
+          <td class="desc">&nbsp;&nbsp;↳ ${esc(h.nombre)}</td><td class="desc">${esc(h.tipo)}</td><td class="n desc">peso ${h.peso}</td>
+        </tr>`).join('')}`).join('')}
       </tbody></table>`
     : `<p class="vacio">El área no tiene instrumentos configurados.</p>`
 

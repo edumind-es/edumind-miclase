@@ -2,6 +2,7 @@ import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias } from './calculo'
+import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada } from './diario'
@@ -462,7 +463,7 @@ export async function crearInstrumento(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color'>>
 ): Promise<void> {
   const antes = 'agregacion' in fields ? (await db.instrumentos.get(id))?.agregacion ?? 'media' : null
   await db.instrumentos.update(id, tocado(fields))
@@ -1998,6 +1999,13 @@ export type CeldaInstrumento = {
   vinculados: string[]
   /** Regla con la que el diario funde varios registros (ver `db/diario.ts`). */
   agregacion: Agregacion
+  /** Familia de la que cuelga, si es un hijo; null si es familia o instrumento suelto. */
+  familia_id: number | null
+  familia_nombre: string | null
+  /** Peso de la familia en el área (el de la propia fila si es familia). */
+  familia_peso: number
+  /** Color de identidad, ya resuelto (propio o por orden). */
+  color: string
 }
 
 export type MatrizEvaluacion = {
@@ -2068,6 +2076,17 @@ export async function getMatrizEvaluacion(
     if (filas.some(f => f.vinculado)) filasVinculo.set(ins.id!, filas)
   }
 
+  // Color de cada instrumento: el suyo, o por orden entre sus iguales (las
+  // familias entre sí; los hijos dentro de su familia).
+  const colorPorId = new Map<number, string>()
+  {
+    const familias = instrumentos.filter(i => i.familia_id == null || !instrById.has(i.familia_id))
+    familias.forEach((f, k) => colorPorId.set(f.id!, colorDeInstrumento(f, k)))
+    for (const f of familias) {
+      instrumentos.filter(i => i.familia_id === f.id).forEach((h, k) => colorPorId.set(h.id!, colorDeInstrumento(h, k)))
+    }
+  }
+
   const porCriterio = new Map<string, CeldaInstrumento[]>()
   const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
@@ -2076,9 +2095,9 @@ export async function getMatrizEvaluacion(
     for (const item of lista) {
       const ins = instrById.get(item.instrumento_id)
       if (!ins) continue   // instrumento borrado: se ignora, la nota histórica se conserva
-      // Los hijos no son columnas de la matriz por criterio: su familia los representa.
-      if (ins.familia_id != null && instrById.has(ins.familia_id)) continue
       habiaAlguno = true
+      // Un hijo entra con su familia a cuestas: las pantallas agrupan por ella.
+      const familia = ins.familia_id != null ? instrById.get(ins.familia_id) ?? null : null
       // El trimestre configurado en el instrumento por fin sirve para algo:
       // hasta ahora se podía marcar «solo 1er trimestre» y el instrumento
       // seguía apareciendo —y puntuando— en los tres.
@@ -2092,9 +2111,17 @@ export async function getMatrizEvaluacion(
         tiene_prueba: conPrueba.has(ins.id!),
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
         agregacion: ins.agregacion ?? 'media',
+        familia_id: familia?.id ?? null,
+        familia_nombre: familia?.nombre ?? null,
+        familia_peso: familia ? familia.peso : ins.peso,
+        color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
       })
     }
-    if (celdas.length) porCriterio.set(criterio, celdas)
+    // Si algún hijo evalúa este criterio, la familia deja de ser una opción
+    // directa aquí: se califica con el hijo y la familia resume.
+    const conHijo = new Set(celdas.map(c => c.familia_id).filter((f): f is number => f != null))
+    const utiles = celdas.filter(c => !conHijo.has(c.instrumento_id))
+    if (utiles.length) porCriterio.set(criterio, utiles)
     else if (habiaAlguno) criteriosFueraDeTrimestre.add(criterio)
   }
 

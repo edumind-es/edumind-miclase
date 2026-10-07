@@ -90,6 +90,8 @@ export interface Instrumento extends Sincronizable {
    * una familia (o un instrumento suelto, que es lo mismo).
    */
   familia_id?: number | null
+  /** Color propio (#rrggbb). Sin él, el que le toca por orden (`colorDeInstrumento`). Sin índice. */
+  color?: string | null
 }
 
 export interface Calificacion extends Sincronizable {
