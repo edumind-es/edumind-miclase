@@ -50,7 +50,8 @@ try {
   await p.getByRole('link', { name: /Recibir un paquete/ }).click()
   await p.waitForURL(/\/sincronizar/, { timeout: 5000 })
   ok(await p.getByRole('dialog', { name: /Exportar|Importar/ }).count() === 0, 'el cuadro se ha cerrado')
-  ok((await p.locator('body').textContent()).includes('Recibir un paquete'), 'y en Sincronizar se habla de «Recibir un paquete»')
+  await p.getByText(/Recibir un paquete/).first().waitFor({ timeout: 8000 })
+  ok(true, 'y en Sincronizar se habla de «Recibir un paquete»')
 
   ok(errores.length === 0, 'sin errores de página', errores.join(' | '))
 } catch (e) {
