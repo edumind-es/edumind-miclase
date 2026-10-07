@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { cifrarExport, descifrarExport, descargarBlob, type ExportCifrado } from '@/auth/crypto'
 import { exportarDatos, importarDatos } from '@/db/queries'
+import { EXTENSION as EXTENSION_PAQUETE } from '@/db/transporteFichero'
 
 interface Props { onClose: () => void }
 
@@ -13,6 +15,8 @@ export default function ExportImport({ onClose }: Props) {
   const [trabajando, setTrabajando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [datosImport, setDatosImport] = useState<any>(null)
+  /** Lo elegido es un paquete de sincronización, no una copia: se le dice dónde va. */
+  const [esPaquete, setEsPaquete] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -52,8 +56,18 @@ export default function ExportImport({ onClose }: Props) {
     if (!file) return
     const reader = new FileReader()
     reader.onload = ev => {
+      setEsPaquete(false)
       try {
-        const cifrado: ExportCifrado = JSON.parse(ev.target?.result as string)
+        const leido = JSON.parse(ev.target?.result as string)
+        // El paquete de AirDrop acaba en .json como la copia, y la copia de
+        // seguridad es la puerta que todo el mundo prueba primero: en vez de
+        // «no es válido», se dice qué es y dónde se abre.
+        if (leido?.formato === 'miclase-sync' || file.name.endsWith(EXTENSION_PAQUETE)) {
+          setEsPaquete(true)
+          setMsg(null)
+          return
+        }
+        const cifrado: ExportCifrado = leido
         if (!cifrado.version || !cifrado.datos) throw new Error('Formato de archivo no válido.')
         setDatosImport(cifrado)
         setPaso('importar_preview')
@@ -150,6 +164,19 @@ export default function ExportImport({ onClose }: Props) {
             </div>
             <input ref={fileRef} type="file" accept=".miclase,.json" onChange={leerArchivo}
               style={{ padding: '8px 0' }} />
+            {esPaquete && (
+              <div data-es-paquete style={{ fontSize: 13, background: 'var(--azul-100)', color: 'var(--azul-900)', padding: '10px 12px', borderRadius: 8, lineHeight: 1.55 }}>
+                <strong>Esto es un paquete de sincronización</strong>, no una copia de seguridad: lo
+                generó «Compartir paquete» en otro dispositivo para pasarte sus cambios, y se aplica
+                sin borrar nada. Ábrelo en{' '}
+                <Link to="/sincronizar" onClick={onClose} style={{ fontWeight: 700, color: 'var(--azul-700)' }}>
+                  Sincronizar → Recibir un paquete →
+                </Link>
+                <div style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 4 }}>
+                  Las copias de seguridad acaban en <code>.miclase</code> y salen de «Exportar».
+                </div>
+              </div>
+            )}
             {msg && <Aviso {...msg} />}
             <button className="btn-secondary" onClick={() => setPaso('menu')}>Cancelar</button>
           </div>
