@@ -66,6 +66,18 @@ const bd = () => p.evaluate(async () => {
 })
 
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
+
+// El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+
+// vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+
+const abrirMas = async () => {
+
+  const t = panel.locator('[data-mas-toggle]')
+
+  if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+
+}
 const editor = p.getByRole('dialog', { name: /^Examen de / })
 const examen = panel.locator('[data-corregir-prueba]')
 const aparece = (loc) => loc.waitFor({ timeout: 6000 }).then(() => true, () => false)
@@ -77,6 +89,7 @@ const abrirCelda = async (fila, criterio) => {
   if (col < 0) throw new Error(`No hay columna para ${criterio}: ${ids.join(', ')}`)
   await p.locator('table.matriz tbody tr').nth(fila).locator('td.celda:not(.fantasma)').nth(col).locator('button').click()
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   const chip = panel.getByRole('button', { name: /Proba escrita/ })
   if (await chip.count()) await chip.first().click()
   await p.waitForTimeout(300)

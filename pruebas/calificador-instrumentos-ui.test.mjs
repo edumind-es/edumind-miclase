@@ -161,7 +161,14 @@ try {
   ok(await celda.locator('.celda-diario').count() === 1, 'y enseña la mini-tendencia del diario')
   await celda.click()
   const panel = p.getByRole('dialog', { name: /^Evaluar / })
+  // El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+  // vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+  const abrirMas = async () => {
+    const t = panel.locator('[data-mas-toggle]')
+    if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+  }
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   await panel.locator('[data-enfoque-instrumento]').waitFor({ timeout: 5000 })
   ok(await panel.getByText(`INSTRUMENTO · ${nombreInstr}`).count() === 1, 'el panel se centra en el instrumento')
   const chips = panel.locator('[data-criterio-chip]')
@@ -182,6 +189,7 @@ try {
   if (await colExamen.count()) {
     await colExamen.locator('[data-corregir-abrir]').click()
     await panel.waitFor({ timeout: 8000 })
+    await abrirMas()
     ok(await panel.getByText(/Abad Ríos, Ana/).count() === 1, 'se abre por el primer alumno')
     ok(await panel.getByRole('button', { name: /Definir examen|Examen/ }).count() >= 1, 'con el examen al alcance')
     await p.keyboard.press('Escape')

@@ -7,7 +7,15 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // El registro del service worker lo hace ActualizacionApp.tsx, no la
+      // línea que inyectaba el plugin: esa solo registraba y nunca volvía a
+      // preguntar, así que una PWA abierta días no se enteraba de los
+      // despliegues y la recién abierta veía la versión nueva a la segunda.
+      // En modo «prompt» la versión nueva se descarga sola y entra cuando el
+      // docente pulsa «Actualizar» o en la siguiente apertura, nunca a mitad
+      // de una calificación.
+      registerType: 'prompt',
+      injectRegister: false,
       workbox: {
         maximumFileSizeToCacheInBytes: 7_000_000,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],

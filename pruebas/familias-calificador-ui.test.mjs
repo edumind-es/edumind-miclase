@@ -159,7 +159,14 @@ try {
   ok((await celda.textContent()).startsWith('7.5'), 'con un solo hijo con nota, la casilla vale 7,5', await celda.textContent())
   await celda.click()
   const panel = p.getByRole('dialog', { name: /^Evaluar / })
+  // El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+  // vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+  const abrirMas = async () => {
+    const t = panel.locator('[data-mas-toggle]')
+    if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+  }
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   const chips = await panel.locator('[data-instrumento-chip]').evaluateAll(bs => bs.map(b => b.dataset.instrumentoChip))
   ok(chips.includes('Speaking') && chips.includes('Cuaderno') && !chips.some(c => /T[aá]boa/.test(c)), 'el panel ofrece los hijos y no la familia', chips.join(' | '))
   ok(await panel.locator('[data-grupo-familia]').count() === 1, 'y los agrupa bajo el rótulo de la familia')

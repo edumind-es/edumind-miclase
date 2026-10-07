@@ -28,6 +28,8 @@ interface Props {
   guardando: boolean
   onCambio: (texto: string) => void
   onError: (texto: string) => void
+  /** El diario es el instrumento de esta casilla: los cuatro niveles salen ya a la vista. */
+  abiertoPorDefecto?: boolean
 }
 
 const fechaCorta = (iso: string) =>
@@ -35,9 +37,9 @@ const fechaCorta = (iso: string) =>
 
 export default function DiarioCelda({
   alumno, instrumento, criterio, hermanos, trimestre, unidadId, area,
-  registros, guardando, onCambio, onError,
+  registros, guardando, onCambio, onError, abiertoPorDefecto = false,
 }: Props) {
-  const [abierto, setAbierto] = useState(false)
+  const [abierto, setAbierto] = useState(abiertoPorDefecto)
   const [nivel, setNivel] = useState<number | null>(null)
   const [texto, setTexto] = useState('')
   const [soloEste, setSoloEste] = useState(false)
@@ -134,9 +136,9 @@ export default function DiarioCelda({
               return (
                 <button key={n} className={`nivel-${n}`} onClick={() => setNivel(n)} disabled={bloqueado} aria-pressed={activo}
                   style={{
-                    minHeight: 50, borderRadius: 9, cursor: 'pointer', padding: '6px 4px',
+                    minHeight: 60, borderRadius: 10, cursor: 'pointer', padding: '6px 4px',
                     border: `2px solid ${activo ? 'var(--gris-900)' : 'transparent'}`,
-                    background: c.color, color: 'white', fontWeight: 800, fontSize: 16, lineHeight: 1.1,
+                    background: c.color, color: 'white', fontWeight: 800, fontSize: 18, lineHeight: 1.1,
                   }}>
                   {n}
                   <span style={{ display: 'block', fontSize: 10, fontWeight: 600, opacity: .9, marginTop: 2 }}>{ETIQUETAS_NIVEL[n]}</span>
@@ -156,9 +158,11 @@ export default function DiarioCelda({
             <button data-diario-guardar className="btn-primary" onClick={guardar} disabled={bloqueado || nivel == null} style={{ fontSize: 12.5 }}>
               Guardar registro
             </button>
-            <button className="btn-secondary" onClick={() => { setAbierto(false); setNivel(null); setTexto('') }} disabled={bloqueado} style={{ fontSize: 12.5 }}>
-              Cancelar
-            </button>
+            {!abiertoPorDefecto && (
+              <button className="btn-secondary" onClick={() => { setAbierto(false); setNivel(null); setTexto('') }} disabled={bloqueado} style={{ fontSize: 12.5 }}>
+                Cancelar
+              </button>
+            )}
           </div>
         </div>
       )}

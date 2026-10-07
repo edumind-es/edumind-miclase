@@ -46,6 +46,18 @@ const notas = () => p.evaluate(async () => {
 })
 
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
+
+// El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+
+// vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+
+const abrirMas = async () => {
+
+  const t = panel.locator('[data-mas-toggle]')
+
+  if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+
+}
 const caja = panel.locator('[data-hermanos]')
 const aviso = texto => panel.getByText(texto).waitFor({ timeout: 6000 }).then(() => true, () => false)
 const poner = async (n) => { await panel.locator(`button.cal-${n}`).click(); await aviso(new RegExp(`^✅ ${n} guardado`)) }
@@ -97,6 +109,7 @@ try {
   await p.waitForTimeout(1200)
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   await caja.waitFor({ timeout: 5000 })
   const origen = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
   const textoCaja = await caja.textContent()

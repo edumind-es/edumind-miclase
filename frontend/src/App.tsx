@@ -15,6 +15,7 @@ import CallbackPage from '@/pages/Auth/CallbackPage'
 import BarraClase from '@/components/BarraClase'
 import ExportImport from '@/components/ExportImport'
 import EstadoConexion from '@/components/EstadoConexion'
+import ActualizacionApp from '@/components/ActualizacionApp'
 import SyncAutomatica from '@/components/SyncAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
 
@@ -207,6 +208,7 @@ function Layout() {
 
       {exportOpen && <ExportImport onClose={() => setExportOpen(false)} />}
       <EstadoConexion />
+      <ActualizacionApp />
       <SyncAutomatica />
     </div>
   )
