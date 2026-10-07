@@ -1,7 +1,7 @@
 import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
+import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias } from './calculo'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada } from './diario'
@@ -332,6 +332,85 @@ export async function eliminarAsignatura(id: number): Promise<void> {
 
 // ─── INSTRUMENTOS ────────────────────────────────────────────────────────────
 
+/** Solo las familias (y los instrumentos sueltos): lo que pesa en el área. */
+export async function getFamilias(asignatura_id: number): Promise<Instrumento[]> {
+  return (await getInstrumentos(asignatura_id)).filter(i => i.familia_id == null)
+}
+
+/** Los hijos de una familia, en su orden. */
+export async function getHijos(familia_id: number): Promise<Instrumento[]> {
+  // `familia_id` no está indexado: se filtra en memoria dentro del área.
+  const familia = await db.instrumentos.get(familia_id)
+  if (!familia) return []
+  const todos = vivos(await db.instrumentos.where('asignatura_id').equals(familia.asignatura_id).toArray())
+    .filter(i => i.familia_id === familia_id)
+  todos.sort((a, b) => a.orden - b.orden || a.id! - b.id!)
+  return todos
+}
+
+/**
+ * Da de alta un hijo dentro de una familia. Hereda área y trimestres; su
+ * `peso` es relativo dentro de la familia (1 = igual que los demás).
+ */
+export async function crearInstrumentoHijo(
+  familia_id: number,
+  data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
+): Promise<number> {
+  const familia = await db.instrumentos.get(familia_id)
+  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
+  if (familia.familia_id != null) throw new Error('Un hijo no puede tener hijos: cuélgalo de la familia')
+  const hermanos = await getHijos(familia_id)
+  const reg = nuevo({
+    asignatura_id: familia.asignatura_id, familia_id,
+    nombre: data.nombre.trim(), tipo: data.tipo,
+    peso: data.peso != null && data.peso > 0 ? data.peso : 1,
+    trimestres: familia.trimestres, orden: hermanos.length,
+    agregacion: data.agregacion ?? null, created_at: now(),
+  })
+  await db.instrumentos.add(reg)
+  return reg.id
+}
+
+/** Criterios que un hijo evalúa en una unidad (según la programación). */
+export async function criteriosDeHijo(unidad_id: number, hijo_id: number): Promise<string[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
+  return [...new Set(filas.filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))].sort()
+}
+
+/**
+ * Fija qué criterios de la unidad evalúa un hijo. Tienen que ser un
+ * subconjunto de los de su familia en esa unidad: la programación dice qué
+ * cubre «Táboa de indicadores», y speaking no puede salirse de ahí. Si se
+ * intenta, falla nombrando los criterios que sobran.
+ */
+export async function fijarCriteriosDeHijo(
+  unidad_id: number, hijo_id: number, criterios: string[]
+): Promise<void> {
+  const hijo = await db.instrumentos.get(hijo_id)
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  const deFamilia = new Set(
+    vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo.familia_id).toArray())
+      .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
+  const fuera = criterios.filter(c => !deFamilia.has(c))
+  if (fuera.length) {
+    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} de la familia en esta unidad`)
+  }
+  const pedidos = new Set(criterios)
+  const actuales = await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray()
+  const conocidos = new Set<string>()
+  for (const fila of actuales) {
+    if (fila.unidad_id !== unidad_id) continue
+    conocidos.add(fila.criterio_id)
+    const debeEstar = pedidos.has(fila.criterio_id)
+    const esta = !fila.deleted_at
+    if (debeEstar && !esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: null }))
+    if (!debeEstar && esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+  }
+  for (const c of pedidos) {
+    if (!conocidos.has(c)) await db.criterio_instrumentos.add(nuevo({ unidad_id, criterio_id: c, instrumento_id: hijo_id, peso: 1.0 }))
+  }
+}
+
 export async function getInstrumentos(asignatura_id: number): Promise<Instrumento[]> {
   const instrumentos = vivos(await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray())
   instrumentos.sort((a, b) => a.orden - b.orden || a.id! - b.id!)
@@ -360,6 +439,8 @@ export async function actualizarInstrumento(
 
 /** Al borrar un instrumento caen sus notas, su rúbrica y sus vínculos con criterios. */
 export async function eliminarInstrumento(instrumento_id: number): Promise<void> {
+  // Borrar una familia se lleva a sus hijos: sin ella no pesan en nada.
+  for (const h of await getHijos(instrumento_id)) await eliminarInstrumento(h.id!)
   await conservarRubricasEnBanco([instrumento_id])
   const t = sello()
   const marcar = { deleted_at: t, updated_at: t }
@@ -377,7 +458,10 @@ export async function eliminarInstrumento(instrumento_id: number): Promise<void>
 
 // Subir/bajar un instrumento en el orden de su asignatura
 export async function moverInstrumento(asignatura_id: number, instrumento_id: number, dir: -1 | 1): Promise<void> {
-  const instrs = await getInstrumentos(asignatura_id)
+  // Se reordena entre iguales: las familias entre sí, o los hijos de una misma familia.
+  const propio = await db.instrumentos.get(instrumento_id)
+  const instrs = (await getInstrumentos(asignatura_id))
+    .filter(i => (i.familia_id ?? null) === (propio?.familia_id ?? null))
   const idx = instrs.findIndex(i => i.id === instrumento_id)
   const destino = idx + dir
   if (idx < 0 || destino < 0 || destino >= instrs.length) return
@@ -1096,8 +1180,9 @@ export async function aplicarProgramacionImportada(
     criteriosVinculados: 0, criteriosSinInstrumento: 0,
   }
 
-  // Instrumentos: por nombre, sin acentos ni mayúsculas
-  const existentes = await getInstrumentos(asignatura_id)
+  // Instrumentos: por nombre, sin acentos ni mayúsculas. Solo las familias:
+  // un hijo que se llame igual que lo que trae PROENS no es lo mismo.
+  const existentes = await getFamilias(asignatura_id)
   const idPorAbrev = new Map<string, number>()
   for (const ins of prog.instrumentos) {
     const ya = existentes.find(e => claveNombre(e.nombre) === claveNombre(ins.nombre))
@@ -1955,6 +2040,8 @@ export async function getMatrizEvaluacion(
     for (const item of lista) {
       const ins = instrById.get(item.instrumento_id)
       if (!ins) continue   // instrumento borrado: se ignora, la nota histórica se conserva
+      // Los hijos no son columnas de la matriz por criterio: su familia los representa.
+      if (ins.familia_id != null && instrById.has(ins.familia_id)) continue
       habiaAlguno = true
       // El trimestre configurado en el instrumento por fin sirve para algo:
       // hasta ahora se podía marcar «solo 1er trimestre» y el instrumento
@@ -1980,9 +2067,15 @@ export async function getMatrizEvaluacion(
     ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
         .filter(c => c.trimestre === trimestre).toArray())
     : []
+  // Las notas de los hijos se funden en la de su familia, con la misma
+  // función que el cálculo del área: la casilla enseña el mismo número que el
+  // boletín. Las de los hijos siguen disponibles por su propia clave.
   const calificaciones: Record<string, Calificacion> = {}
   for (const c of cals) {
     calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
+  }
+  for (const c of fundirHijosEnFamilias(cals, instrumentos)) {
+    if (c.virtual) calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
   }
 
   const evidencias = await getEvidenciasPorCriterio(alumnos.map(a => a.id!))

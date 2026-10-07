@@ -44,7 +44,8 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
-    setInstrumentos(det?.instrumentos || [])
+    // Solo las familias: los hijos (fase 2) no pesan en el área y no van en esta lista.
+    setInstrumentos((det?.instrumentos || []).filter(i => i.familia_id == null))
   }
   useEffect(() => { cargar() }, [asignaturaId])
 

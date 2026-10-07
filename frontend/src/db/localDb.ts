@@ -76,6 +76,20 @@ export interface Instrumento extends Sincronizable {
    * exige versión de esquema.
    */
   agregacion?: Agregacion | null
+  /**
+   * Familia de la que cuelga este instrumento, si es un hijo.
+   *
+   * Lo que trae una programación oficial («Proba escrita» 80 %, «Táboa de
+   * indicadores» 20 %) no son instrumentos sino FAMILIAS: dentro de cada una
+   * el docente mete lo que de verdad hace —el examen de cada unidad, el
+   * billete de salida, speaking, listening—. Un hijo tiene nombre, tipo y
+   * criterios propios (un subconjunto de los de su familia en cada unidad) y
+   * su `peso` es relativo DENTRO de la familia (1 por defecto: todos los hijos
+   * cuentan igual). La familia entra en la nota del área con su peso de
+   * siempre. Sin índice: no exige versión de esquema. Null o ausente = es
+   * una familia (o un instrumento suelto, que es lo mismo).
+   */
+  familia_id?: number | null
 }
 
 export interface Calificacion extends Sincronizable {
@@ -125,6 +139,11 @@ export interface Calificacion extends Sincronizable {
   valor_anterior?: number | null
   /** De dónde viene la nota fantasma, para decírselo al docente. */
   anterior_motivo?: string | null
+  /**
+   * Solo en memoria, nunca en la base: la nota de una familia fundida a
+   * partir de las de sus hijos (`fundirHijosEnFamilias`). No tiene `id`.
+   */
+  virtual?: boolean
 }
 
 export interface Sesion extends Sincronizable {
