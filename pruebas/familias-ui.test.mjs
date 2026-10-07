@@ -101,6 +101,8 @@ try {
   const gestor = p.getByRole('dialog', { name: 'Gestionar instrumentos de evaluación' })
   await gestor.waitFor({ timeout: 5000 })
   const bloques = gestor.locator('[data-familia-hijos]')
+  // Cada bloque carga sus hijos aparte: en el CI el segundo tardaba más que la cuenta.
+  await bloques.nth(1).waitFor({ timeout: 8000 })
   ok(await bloques.count() === 2, 'cada familia tiene su bloque «dentro de esta familia»', `${await bloques.count()}`)
   ok(await gestor.getByText(/100%/).count() >= 1, 'el reparto de las familias suma 100 %')
   const taboa = bloques.nth(1)
