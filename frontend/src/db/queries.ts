@@ -371,6 +371,39 @@ export async function crearInstrumentoHijo(
   return reg.id
 }
 
+export type CriteriosDeFamiliaPorUnidad = {
+  unidad_id: number
+  nombre: string
+  trimestre: number | null
+  criterios: string[]
+}
+
+/**
+ * Qué criterios cubre una familia en cada unidad: el techo de lo que puede
+ * evaluar cualquiera de sus hijos. Solo unidades donde cubre alguno.
+ */
+export async function criteriosDeFamiliaPorUnidad(familia_id: number): Promise<CriteriosDeFamiliaPorUnidad[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray())
+  if (!filas.length) return []
+  const porUnidad = new Map<number, Set<string>>()
+  for (const f of filas) (porUnidad.get(f.unidad_id) ?? porUnidad.set(f.unidad_id, new Set()).get(f.unidad_id)!).add(f.criterio_id)
+  const unidades = vivos(await db.unidades.where('id').anyOf([...porUnidad.keys()]).toArray())
+  unidades.sort((a, b) => (a.trimestre ?? 9) - (b.trimestre ?? 9) || a.orden - b.orden || a.id! - b.id!)
+  return unidades.map(u => ({
+    unidad_id: u.id!, nombre: u.nombre, trimestre: u.trimestre ?? null,
+    criterios: [...porUnidad.get(u.id!)!].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })),
+  }))
+}
+
+/** Criterios de un hijo en todas sus unidades: `unidad_id` → criterios. */
+export async function criteriosDeHijoPorUnidad(hijo_id: number): Promise<Map<number, string[]>> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
+  const m = new Map<number, string[]>()
+  for (const f of filas) (m.get(f.unidad_id) ?? m.set(f.unidad_id, []).get(f.unidad_id)!).push(f.criterio_id)
+  for (const lista of m.values()) lista.sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+  return m
+}
+
 /** Criterios que un hijo evalúa en una unidad (según la programación). */
 export async function criteriosDeHijo(unidad_id: number, hijo_id: number): Promise<string[]> {
   const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
@@ -994,10 +1027,13 @@ export async function getUnidades(
   unidades.sort((a, b) => (a.trimestre ?? 9) - (b.trimestre ?? 9) || a.orden - b.orden || a.id! - b.id!)
 
   const descMap = new Map(criteriosCurr.map(c => [c.id, c.descripcion]))
+  // La programación habla de familias: los hijos no se asignan desde ahí.
+  const hijos = new Set((await getInstrumentos(asignatura_id)).filter(i => i.familia_id != null).map(i => i.id!))
 
   return Promise.all(unidades.map(async u => {
     const ucs = vivos(await db.unidad_criterios.where('unidad_id').equals(u.id!).toArray())
     const mapaInstr = await getMapaCriterioInstrumento(u.id!)
+    for (const [c, lista] of mapaInstr) mapaInstr.set(c, lista.filter(v => !hijos.has(v.instrumento_id)))
     return {
       ...u,
       criterios: ucs.map(uc => ({

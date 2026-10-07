@@ -10,7 +10,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getGruposDeAlumno, getAsignaturas, getInstrumentos, getUnidades,
+  getGruposDeAlumno, getAsignaturas, getFamilias, getUnidades,
   getRubrica, getCalificacionUnica, saveCalificaciones,
   crearEvidencia, contarEvidenciasAlumno,
   getMapaCriterioInstrumento, getMapaCriterioInstrumentoAsignatura, type VinculoInstrumento,
@@ -124,7 +124,8 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   useEffect(() => {
     if (!asignaturaId) { setInstrumentos([]); setUnidades([]); return }
     const cfg = leerCfg()
-    getInstrumentos(asignaturaId).then(setInstrumentos)
+    // Familias: los hijos entran en la evaluación rápida en una fase posterior.
+    getFamilias(asignaturaId).then(setInstrumentos)
     getUnidades(asignaturaId).then(us => {
       setUnidades(us)
       setUnidadId(us.some(u => u.id === cfg.unidad_id) ? cfg.unidad_id : null)
