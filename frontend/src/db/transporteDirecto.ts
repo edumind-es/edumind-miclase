@@ -219,6 +219,11 @@ export function transporteDirecto(
       }
     },
 
+    async configDelOtro(): Promise<Config> {
+      const m = await preguntar({ t: 'config?' })
+      return { salt: m.salt ?? null, verificador: m.verificador ?? null }
+    },
+
     async configurar() {
       // No hay nada que publicar: en un enlace directo la sal se guarda en
       // cada aparato y se la piden entre ellos al emparejarse.

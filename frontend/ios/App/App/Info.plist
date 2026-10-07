@@ -10,6 +10,19 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<!-- Esquema propio por el que el navegador del sistema devuelve el código
+	     de Authentik a la app (es.edumind.miclase://auth/callback). -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>es.edumind.miclase</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>es.edumind.miclase</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

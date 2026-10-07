@@ -4,6 +4,7 @@
  *   npm test              todo
  *   npm run test:rapido   solo lo que no necesita navegador (unos segundos)
  *   npm run test:prod     comprobación contra https://miclase.edumind.es
+ *   npm test -- --solo=<nombre> --conservar   una suite, y guarda sus capturas
  *
  * Qué resuelve, que antes había que hacer a mano y salía mal:
  *  - Monta el backend y el servidor de desarrollo en puertos libres, espera a
@@ -30,6 +31,9 @@ const soloProduccion = argumentos.has('--produccion')
 // Cazar una prueba inestable exige repetirla veinte veces, y sin esto había
 // que pasar la tanda entera —tres minutos y medio— en cada intento.
 const soloEste = [...argumentos].find((a) => a.startsWith('--solo='))?.slice(7)
+// Conservar el temporal aunque todo pase: para mirar las capturas de una
+// pantalla nueva sin tener que provocar un fallo.
+const conservar = argumentos.has('--conservar')
 // Repetir la selección: `--veces=20` para ver si una suite es inestable.
 const veces = Number([...argumentos].find((a) => a.startsWith('--veces='))?.slice(8) || 1)
 
@@ -114,9 +118,37 @@ async function principal() {
     await paquete('pruebas/taxonomias.test.ts', taxonomias, ['--platform=node', '--format=esm'])
     await suite('sugerencia de instrumentos', 'node', [taxonomias])
 
+    const cobertura = join(scratch, 'cobertura.mjs')
+    await paquete('pruebas/cobertura.test.ts', cobertura, ['--platform=node', '--format=esm'])
+    await suite('competencias y cobertura', 'node', [cobertura])
+
+    const pegar = join(scratch, 'pegar-notas.mjs')
+    await paquete('pruebas/pegar-notas.test.ts', pegar, ['--platform=node', '--format=esm'])
+    await suite('columna de notas pegada de Excel', 'node', [pegar])
+
+    const familias = join(scratch, 'familias.mjs')
+    await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
+    await suite('plantillas de hijos por familia', 'node', [familias])
+
     const rubrica = join(scratch, 'rubrica.mjs')
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
+
+    const rubricaImportar = join(scratch, 'rubrica-importar.mjs')
+    await paquete('pruebas/rubrica-importar.test.ts', rubricaImportar, ['--platform=node', '--format=esm'])
+    await suite('importar rúbricas (xlsx, md, json)', 'node', [rubricaImportar])
+
+    const pruebaEscrita = join(scratch, 'prueba-escrita.mjs')
+    await paquete('pruebas/prueba-escrita.test.ts', pruebaEscrita, ['--platform=node', '--format=esm'])
+    await suite('prueba escrita: nota e importación', 'node', [pruebaEscrita])
+
+    const vinculos = join(scratch, 'vinculos.mjs')
+    await paquete('pruebas/vinculos.test.ts', vinculos, ['--platform=node', '--format=esm'])
+    await suite('criterios vinculados', 'node', [vinculos])
+
+    const diario = join(scratch, 'diario.mjs')
+    await paquete('pruebas/diario.test.ts', diario, ['--platform=node', '--format=esm'])
+    await suite('diario de evaluación', 'node', [diario])
 
     const proens = join(scratch, 'proens.mjs')
     await paquete('pruebas/proens.test.ts', proens, ['--platform=node', '--format=esm'])
@@ -174,12 +206,24 @@ async function principal() {
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
     await suite('texto de un PDF de PROENS', 'node', ['pruebas/proens-api.test.mjs'], entorno)
     await suite('importar PROENS desde la interfaz', 'node', ['pruebas/proens-ui.test.mjs'], entorno)
+    await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)
+    await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
+    await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
+    await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
+    await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
+    await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
+    await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
+    await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
+    await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
+    await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
+    await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)
     await suite('sync por buzón, dos dispositivos', 'node', ['pruebas/sync-dos-dispositivos.test.mjs'], entorno)
     await suite('sync directa, sin servidor', 'node', ['pruebas/sync-directo.test.mjs'], entorno)
     await suite('emparejamiento por pantalla', 'node', ['pruebas/emparejar-ui.test.mjs'], entorno)
+    await suite('sincronizar sin silencios', 'node', ['pruebas/sync-sin-silencios.test.mjs'], entorno)
   }
 
   // ── Contra producción ──────────────────────────────────────────────
@@ -216,7 +260,7 @@ console.log(
     ? rojo(`\n${bien}/${total} suites correctas · ${fallidas.map((f) => f.nombre).join(', ')}`)
     : verde(`\n${bien}/${total} suites correctas`))
 
-if (fallidas.length || salida) {
+if (fallidas.length || salida || conservar) {
   console.log(gris(`\nCapturas y temporales en ${scratch}`))
 } else {
   rmSync(scratch, { recursive: true, force: true })

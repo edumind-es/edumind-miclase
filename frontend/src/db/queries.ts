@@ -1,12 +1,16 @@
-import { db, TABLAS_SINC } from './localDb'
+import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha } from './calculo'
-import { reiniciarEstadoDeSincronizacion } from './sync'
+import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias } from './calculo'
+import { colorDeInstrumento } from '../ia/instrumentosConfig'
+import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
+import { criteriosVinculados } from './vinculos'
+import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada } from './diario'
+import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba } from './prueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
-  Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable,
+  Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
 } from './localDb'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
@@ -46,6 +50,15 @@ export type CalItem = {
    * delante la justificación. Para vaciarla se manda `{}` o `null`.
    */
   niveles_rubrica?: Record<string, number> | null
+  /** Nota fantasma (ver `Calificacion.valor_anterior`). `undefined` = no tocarla. */
+  valor_anterior?: number | null
+  anterior_motivo?: string | null
+  /**
+   * 'diario' si la nota la deriva el diario de evaluación. `undefined` =
+   * decidir por la regla de `saveCalificaciones`: otra nota a mano sobre una
+   * casilla derivada la vuelve manual; la misma nota la deja como está.
+   */
+  origen?: 'diario' | null
 }
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
@@ -125,9 +138,14 @@ export async function actualizarGrupo(id: number, data: Partial<Grupo>): Promise
  */
 export async function eliminarGrupo(id: number): Promise<void> {
   const t = sello()
+  const suyas = vivos(await db.asignaturas.where('grupo_id').equals(id).toArray()).map(a => a.id!)
+  if (suyas.length) {
+    await conservarRubricasEnBanco(
+      vivos(await db.instrumentos.where('asignatura_id').anyOf(suyas).toArray()).map(i => i.id!))
+  }
   await db.transaction('rw',
     [db.grupos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
-     db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
+     db.calificaciones, db.diario, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos],
     async () => {
       const marcar = { deleted_at: t, updated_at: t }
@@ -137,6 +155,7 @@ export async function eliminarGrupo(id: number): Promise<void> {
         const instrs = await db.instrumentos.where('asignatura_id').equals(a.id!).toArray()
         for (const i of instrs) {
           await db.calificaciones.where('instrumento_id').equals(i.id!).modify(marcar)
+          await db.diario.where('instrumento_id').equals(i.id!).modify(marcar)
           await db.rubricas.where('instrumento_id').equals(i.id!).modify(marcar)
         }
         await db.instrumentos.where('asignatura_id').equals(a.id!).modify(marcar)
@@ -286,15 +305,18 @@ export async function actualizarAsignatura(id: number, data: Partial<Asignatura>
 }
 
 export async function eliminarAsignatura(id: number): Promise<void> {
+  await conservarRubricasEnBanco(
+    vivos(await db.instrumentos.where('asignatura_id').equals(id).toArray()).map(i => i.id!))
   const t = sello()
   const marcar = { deleted_at: t, updated_at: t }
   await db.transaction('rw',
-    [db.asignaturas, db.instrumentos, db.calificaciones, db.rubricas,
+    [db.asignaturas, db.instrumentos, db.calificaciones, db.diario, db.rubricas,
      db.unidades, db.unidad_criterios, db.criterio_instrumentos],
     async () => {
       const instrs = await db.instrumentos.where('asignatura_id').equals(id).toArray()
       for (const i of instrs) {
         await db.calificaciones.where('instrumento_id').equals(i.id!).modify(marcar)
+        await db.diario.where('instrumento_id').equals(i.id!).modify(marcar)
         await db.rubricas.where('instrumento_id').equals(i.id!).modify(marcar)
       }
       await db.instrumentos.where('asignatura_id').equals(id).modify(marcar)
@@ -310,6 +332,118 @@ export async function eliminarAsignatura(id: number): Promise<void> {
 }
 
 // ─── INSTRUMENTOS ────────────────────────────────────────────────────────────
+
+/** Solo las familias (y los instrumentos sueltos): lo que pesa en el área. */
+export async function getFamilias(asignatura_id: number): Promise<Instrumento[]> {
+  return (await getInstrumentos(asignatura_id)).filter(i => i.familia_id == null)
+}
+
+/** Los hijos de una familia, en su orden. */
+export async function getHijos(familia_id: number): Promise<Instrumento[]> {
+  // `familia_id` no está indexado: se filtra en memoria dentro del área.
+  const familia = await db.instrumentos.get(familia_id)
+  if (!familia) return []
+  const todos = vivos(await db.instrumentos.where('asignatura_id').equals(familia.asignatura_id).toArray())
+    .filter(i => i.familia_id === familia_id)
+  todos.sort((a, b) => a.orden - b.orden || a.id! - b.id!)
+  return todos
+}
+
+/**
+ * Da de alta un hijo dentro de una familia. Hereda área y trimestres; su
+ * `peso` es relativo dentro de la familia (1 = igual que los demás).
+ */
+export async function crearInstrumentoHijo(
+  familia_id: number,
+  data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
+): Promise<number> {
+  const familia = await db.instrumentos.get(familia_id)
+  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
+  if (familia.familia_id != null) throw new Error('Un hijo no puede tener hijos: cuélgalo de la familia')
+  const hermanos = await getHijos(familia_id)
+  const reg = nuevo({
+    asignatura_id: familia.asignatura_id, familia_id,
+    nombre: data.nombre.trim(), tipo: data.tipo,
+    peso: data.peso != null && data.peso > 0 ? data.peso : 1,
+    trimestres: familia.trimestres, orden: hermanos.length,
+    agregacion: data.agregacion ?? null, created_at: now(),
+  })
+  await db.instrumentos.add(reg)
+  return reg.id
+}
+
+export type CriteriosDeFamiliaPorUnidad = {
+  unidad_id: number
+  nombre: string
+  trimestre: number | null
+  criterios: string[]
+}
+
+/**
+ * Qué criterios cubre una familia en cada unidad: el techo de lo que puede
+ * evaluar cualquiera de sus hijos. Solo unidades donde cubre alguno.
+ */
+export async function criteriosDeFamiliaPorUnidad(familia_id: number): Promise<CriteriosDeFamiliaPorUnidad[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray())
+  if (!filas.length) return []
+  const porUnidad = new Map<number, Set<string>>()
+  for (const f of filas) (porUnidad.get(f.unidad_id) ?? porUnidad.set(f.unidad_id, new Set()).get(f.unidad_id)!).add(f.criterio_id)
+  const unidades = vivos(await db.unidades.where('id').anyOf([...porUnidad.keys()]).toArray())
+  unidades.sort((a, b) => (a.trimestre ?? 9) - (b.trimestre ?? 9) || a.orden - b.orden || a.id! - b.id!)
+  return unidades.map(u => ({
+    unidad_id: u.id!, nombre: u.nombre, trimestre: u.trimestre ?? null,
+    criterios: [...porUnidad.get(u.id!)!].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })),
+  }))
+}
+
+/** Criterios de un hijo en todas sus unidades: `unidad_id` → criterios. */
+export async function criteriosDeHijoPorUnidad(hijo_id: number): Promise<Map<number, string[]>> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
+  const m = new Map<number, string[]>()
+  for (const f of filas) (m.get(f.unidad_id) ?? m.set(f.unidad_id, []).get(f.unidad_id)!).push(f.criterio_id)
+  for (const lista of m.values()) lista.sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+  return m
+}
+
+/** Criterios que un hijo evalúa en una unidad (según la programación). */
+export async function criteriosDeHijo(unidad_id: number, hijo_id: number): Promise<string[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
+  return [...new Set(filas.filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))].sort()
+}
+
+/**
+ * Fija qué criterios de la unidad evalúa un hijo. Tienen que ser un
+ * subconjunto de los de su familia en esa unidad: la programación dice qué
+ * cubre «Táboa de indicadores», y speaking no puede salirse de ahí. Si se
+ * intenta, falla nombrando los criterios que sobran.
+ */
+export async function fijarCriteriosDeHijo(
+  unidad_id: number, hijo_id: number, criterios: string[]
+): Promise<void> {
+  const hijo = await db.instrumentos.get(hijo_id)
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  const deFamilia = new Set(
+    vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo.familia_id).toArray())
+      .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
+  const fuera = criterios.filter(c => !deFamilia.has(c))
+  if (fuera.length) {
+    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} de la familia en esta unidad`)
+  }
+  const pedidos = new Set(criterios)
+  const actuales = await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray()
+  const conocidos = new Set<string>()
+  for (const fila of actuales) {
+    if (fila.unidad_id !== unidad_id) continue
+    conocidos.add(fila.criterio_id)
+    const debeEstar = pedidos.has(fila.criterio_id)
+    const esta = !fila.deleted_at
+    if (debeEstar && !esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: null }))
+    if (!debeEstar && esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+  }
+  for (const c of pedidos) {
+    if (!conocidos.has(c)) await db.criterio_instrumentos.add(nuevo({ unidad_id, criterio_id: c, instrumento_id: hijo_id, peso: 1.0 }))
+  }
+}
 
 export async function getInstrumentos(asignatura_id: number): Promise<Instrumento[]> {
   const instrumentos = vivos(await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray())
@@ -329,19 +463,26 @@ export async function crearInstrumento(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color'>>
 ): Promise<void> {
+  const antes = 'agregacion' in fields ? (await db.instrumentos.get(id))?.agregacion ?? 'media' : null
   await db.instrumentos.update(id, tocado(fields))
+  // Otra regla de agregación cambia la nota de todas las casillas con diario.
+  if ('agregacion' in fields && (fields.agregacion ?? 'media') !== antes) await rematerializarInstrumento(id)
 }
 
 /** Al borrar un instrumento caen sus notas, su rúbrica y sus vínculos con criterios. */
 export async function eliminarInstrumento(instrumento_id: number): Promise<void> {
+  // Borrar una familia se lleva a sus hijos: sin ella no pesan en nada.
+  for (const h of await getHijos(instrumento_id)) await eliminarInstrumento(h.id!)
+  await conservarRubricasEnBanco([instrumento_id])
   const t = sello()
   const marcar = { deleted_at: t, updated_at: t }
   await db.transaction('rw',
-    [db.instrumentos, db.calificaciones, db.rubricas, db.criterio_instrumentos],
+    [db.instrumentos, db.calificaciones, db.diario, db.rubricas, db.criterio_instrumentos],
     async () => {
       await db.calificaciones.where('instrumento_id').equals(instrumento_id).modify(marcar)
+      await db.diario.where('instrumento_id').equals(instrumento_id).modify(marcar)
       await db.rubricas.where('instrumento_id').equals(instrumento_id).modify(marcar)
       await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).modify(marcar)
       await db.instrumentos.update(instrumento_id, marcar)
@@ -351,7 +492,10 @@ export async function eliminarInstrumento(instrumento_id: number): Promise<void>
 
 // Subir/bajar un instrumento en el orden de su asignatura
 export async function moverInstrumento(asignatura_id: number, instrumento_id: number, dir: -1 | 1): Promise<void> {
-  const instrs = await getInstrumentos(asignatura_id)
+  // Se reordena entre iguales: las familias entre sí, o los hijos de una misma familia.
+  const propio = await db.instrumentos.get(instrumento_id)
+  const instrs = (await getInstrumentos(asignatura_id))
+    .filter(i => (i.familia_id ?? null) === (propio?.familia_id ?? null))
   const idx = instrs.findIndex(i => i.id === instrumento_id)
   const destino = idx + dir
   if (idx < 0 || destino < 0 || destino >= instrs.length) return
@@ -540,7 +684,136 @@ export async function getCalificacionUnica(
   return c && !c.deleted_at ? c : undefined
 }
 
-export async function saveCalificaciones(items: CalItem[]): Promise<void> {
+/**
+ * Filas criterio ↔ instrumento de un instrumento en las unidades que cuentan
+ * para un trimestre (las de ese trimestre y las que no tienen ninguno). Si se
+ * da `unidad_id`, solo las de esa unidad.
+ */
+async function filasDeInstrumentoEnTrimestre(
+  instrumento_id: number, trimestre: number, unidad_id?: number | null
+): Promise<CriterioInstrumento[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(f => !unidad_id || f.unidad_id === unidad_id)
+  if (!filas.length) return []
+  const unidades = new Map(
+    vivos(await db.unidades.where('id').anyOf([...new Set(filas.map(f => f.unidad_id))]).toArray())
+      .map(u => [u.id!, u]))
+  return filas.filter(f => {
+    const u = unidades.get(f.unidad_id)
+    return !!u && (u.trimestre == null || u.trimestre === trimestre)
+  })
+}
+
+/** Con qué criterios va vinculado este, para un instrumento y un trimestre. */
+export async function getCriteriosVinculados(
+  instrumento_id: number, criterio_id: string, trimestre: number
+): Promise<string[]> {
+  return criteriosVinculados(await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre), criterio_id)
+}
+
+/**
+ * Deja vinculados EXACTAMENTE estos criterios para el instrumento (menos de
+ * dos = sin vínculo). Con `unidad_id`, solo en esa unidad; sin él —la vista
+ * «Todo el curso»—, en todas las del trimestre donde el instrumento los evalúa.
+ *
+ * No toca ninguna nota: el vínculo vale de aquí en adelante.
+ */
+export async function fijarVinculoDeInstrumento(
+  instrumento_id: number, trimestre: number, unidad_id: number | null, criterios: string[]
+): Promise<void> {
+  const quedan = new Set(criterios.length >= 2 ? criterios : [])
+  const filas = await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre, unidad_id)
+  for (const f of filas) {
+    const debe = quedan.has(f.criterio_id) ? 1 : null
+    if ((f.vinculado || null) !== debe) await db.criterio_instrumentos.update(f.id!, tocado({ vinculado: debe }))
+  }
+}
+
+/**
+ * Copia las notas de un criterio a otros, para el mismo instrumento y
+ * trimestre. Es una copia puntual: después cada casilla va por su cuenta.
+ *
+ * Una casilla de destino que ya tiene nota se respeta salvo que se pida
+ * `sobrescribir`: copiar una columna no puede llevarse por delante lo que el
+ * docente ya había puesto a mano.
+ */
+export async function copiarNotasACriterios(p: {
+  instrumento_id: number
+  trimestre: number
+  origen: string
+  destinos: string[]
+  alumno_ids: number[]
+  sobrescribir: boolean
+  /**
+   * Con esto, la nota que se copia es la de ESTE alumno en `origen`, y va a
+   * todos los `alumno_ids` (también en `origen`, si está entre los destinos).
+   * Sin ello, cada alumno reparte su propia nota a los otros criterios. Son
+   * dos gestos distintos: «todos han hecho bien el billete de salida» frente
+   * a «ya corregí la columna, rellena las hermanas».
+   */
+  desde_alumno_id?: number
+}): Promise<{ copiadas: number; respetadas: number; sinNota: number }> {
+  let copiadas = 0, respetadas = 0, sinNota = 0
+  const items: CalItem[] = []
+  const comun = p.desde_alumno_id != null
+    ? await getCalificacionUnica(p.desde_alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    : null
+  if (p.desde_alumno_id != null && (!comun || comun.valor == null)) return { copiadas, respetadas, sinNota: 1 }
+  for (const alumno_id of p.alumno_ids) {
+    const src = comun ?? await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    if (!src || src.valor == null) { sinNota++; continue }
+    for (const destino of p.destinos) {
+      // La propia casilla de partida no se copia sobre sí misma.
+      if (destino === p.origen && (comun ? alumno_id === p.desde_alumno_id : true)) continue
+      const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, destino, p.trimestre)
+      if (ya?.valor != null && !p.sobrescribir) { respetadas++; continue }
+      items.push({
+        alumno_id, instrumento_id: p.instrumento_id, criterio_id: destino,
+        asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
+        trimestre: p.trimestre, valor: src.valor, observacion: src.observacion ?? null,
+        unidad_id: src.unidad_id ?? null, niveles_rubrica: src.niveles_rubrica ?? null,
+      })
+      copiadas++
+    }
+  }
+  // Sin réplica: se copia a donde se ha pedido, no a lo que cuelgue de ahí.
+  await saveCalificaciones(items, { sinVinculos: true })
+  return { copiadas, respetadas, sinNota }
+}
+
+/**
+ * Guarda notas. Es el único sitio por el que pasan —panel de celda,
+ * evaluación rápida, QR—, y por eso la réplica a los criterios vinculados se
+ * hace aquí: un vínculo tiene que valer igual se califique por donde se
+ * califique. Devuelve cuántas casillas vinculadas se han escrito además de
+ * las pedidas.
+ */
+export async function saveCalificaciones(
+  items: CalItem[], opciones: { sinVinculos?: boolean } = {}
+): Promise<number> {
+  let replicadas = 0
+  if (!opciones.sinVinculos && items.length) {
+    const clave = (i: Pick<CalItem, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre'>) =>
+      `${i.alumno_id}:${i.instrumento_id}:${i.criterio_id}:${i.trimestre}`
+    // Lo que se pide explícitamente manda sobre lo que llegaría por réplica.
+    const pedidas = new Set(items.map(clave))
+    const cache = new Map<string, string[]>()
+    const extra: CalItem[] = []
+    for (const item of items) {
+      const k = `${item.instrumento_id}:${item.criterio_id}:${item.trimestre}`
+      let hermanos = cache.get(k)
+      if (!hermanos) cache.set(k, hermanos = await getCriteriosVinculados(item.instrumento_id, item.criterio_id, item.trimestre))
+      for (const criterio_id of hermanos) {
+        const copia = { ...item, criterio_id }
+        if (pedidas.has(clave(copia))) continue
+        pedidas.add(clave(copia))
+        extra.push(copia)
+      }
+    }
+    replicadas = extra.length
+    items = [...items, ...extra]
+  }
+
   await db.transaction('rw', db.calificaciones, async () => {
     for (const item of items) {
       const existing = await db.calificaciones
@@ -558,6 +831,15 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
           niveles_rubrica: item.niveles_rubrica !== undefined
             ? item.niveles_rubrica
             : existing.niveles_rubrica ?? null,
+          ...(item.valor_anterior !== undefined
+            ? { valor_anterior: item.valor_anterior, anterior_motivo: item.anterior_motivo ?? null }
+            : {}),
+          origen: item.origen !== undefined
+            ? item.origen
+            // Una nota distinta puesta a mano sobre una casilla derivada del
+            // diario la vuelve manual; guardar una observación con la misma
+            // nota no la desmarca.
+            : (existing.origen === 'diario' && item.valor !== existing.valor ? null : existing.origen ?? null),
           fecha: now(),
           deleted_at: null,
         }))
@@ -566,6 +848,7 @@ export async function saveCalificaciones(items: CalItem[]): Promise<void> {
       }
     }
   })
+  return replicadas
 }
 
 /** Todas las notas de un alumno en una asignatura (para su ficha y los informes). */
@@ -745,10 +1028,13 @@ export async function getUnidades(
   unidades.sort((a, b) => (a.trimestre ?? 9) - (b.trimestre ?? 9) || a.orden - b.orden || a.id! - b.id!)
 
   const descMap = new Map(criteriosCurr.map(c => [c.id, c.descripcion]))
+  // La programación habla de familias: los hijos no se asignan desde ahí.
+  const hijos = new Set((await getInstrumentos(asignatura_id)).filter(i => i.familia_id != null).map(i => i.id!))
 
   return Promise.all(unidades.map(async u => {
     const ucs = vivos(await db.unidad_criterios.where('unidad_id').equals(u.id!).toArray())
     const mapaInstr = await getMapaCriterioInstrumento(u.id!)
+    for (const [c, lista] of mapaInstr) mapaInstr.set(c, lista.filter(v => !hijos.has(v.instrumento_id)))
     return {
       ...u,
       criterios: ucs.map(uc => ({
@@ -931,8 +1217,9 @@ export async function aplicarProgramacionImportada(
     criteriosVinculados: 0, criteriosSinInstrumento: 0,
   }
 
-  // Instrumentos: por nombre, sin acentos ni mayúsculas
-  const existentes = await getInstrumentos(asignatura_id)
+  // Instrumentos: por nombre, sin acentos ni mayúsculas. Solo las familias:
+  // un hijo que se llame igual que lo que trae PROENS no es lo mismo.
+  const existentes = await getFamilias(asignatura_id)
   const idPorAbrev = new Map<string, number>()
   for (const ins of prog.instrumentos) {
     const ya = existentes.find(e => claveNombre(e.nombre) === claveNombre(ins.nombre))
@@ -994,13 +1281,19 @@ export async function borrarProgramacion(asignatura_id: number): Promise<void> {
 
 // ─── RÚBRICAS ─────────────────────────────────────────────────────────────────
 
+// En la tabla conviven las rúbricas y las definiciones de prueba escrita
+// (`tipo: 'prueba'`). Todo lo de este bloque es de rúbricas: las pruebas se
+// apartan siempre, o un examen se abriría como una rúbrica vacía.
+const esRubrica = (r: Rubrica) => r.tipo !== 'prueba'
+
 export async function getRubrica(instrumento_id: number): Promise<Rubrica | null> {
-  const r = await db.rubricas.where('instrumento_id').equals(instrumento_id).first()
-  return r && !r.deleted_at ? r : null
+  const filas = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray()).filter(esRubrica)
+  return vivos(filas)[0] ?? null
 }
 
 export async function guardarRubrica(data: Omit<Rubrica, 'id' | 'created_at'> & { id?: number }): Promise<number> {
-  const existing = await db.rubricas.where('instrumento_id').equals(data.instrumento_id).first()
+  // Se reutiliza la fila aunque esté borrada: una rúbrica por instrumento.
+  const existing = (await db.rubricas.where('instrumento_id').equals(data.instrumento_id).toArray()).find(esRubrica)
   if (existing?.id != null) {
     await db.rubricas.update(existing.id, tocado({ ...data, deleted_at: null, created_at: now() }))
     return existing.id
@@ -1012,8 +1305,361 @@ export async function guardarRubrica(data: Omit<Rubrica, 'id' | 'created_at'> & 
 
 export async function eliminarRubrica(instrumento_id: number): Promise<void> {
   const t = sello()
-  await db.rubricas.where('instrumento_id').equals(instrumento_id)
+  await db.rubricas.where('instrumento_id').equals(instrumento_id).filter(esRubrica)
     .modify({ deleted_at: t, updated_at: t })
+}
+
+// ─── PRUEBAS ESCRITAS ─────────────────────────────────────────────────────────
+
+export type PruebaGuardada = {
+  id: number
+  /** Unidad del examen, o null si es el general del instrumento. */
+  unidad_id: number | null
+  def: PruebaDef
+}
+
+function aPrueba(r: Rubrica): PruebaGuardada | null {
+  try { return { id: r.id!, unidad_id: r.unidad_id ?? null, def: normalizarPrueba(JSON.parse(r.prueba_json || 'null')) } }
+  catch { return null }
+}
+
+/** Todos los exámenes de un instrumento: el general y los de cada unidad. */
+export async function getPruebasDeInstrumento(instrumento_id: number): Promise<PruebaGuardada[]> {
+  return vivos(await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(r => r.tipo === 'prueba')
+    .map(aPrueba)
+    .filter((p): p is PruebaGuardada => !!p && p.def.preguntas.length > 0)
+}
+
+/**
+ * El examen con el que se corrige en una unidad: el suyo si lo tiene y, si no,
+ * el general del instrumento. Sin unidad («Todo el curso»), solo el general:
+ * no se puede adivinar de cuál de los exámenes por unidad se trata.
+ */
+export async function getPrueba(instrumento_id: number, unidad_id: number | null): Promise<PruebaGuardada | null> {
+  const todas = await getPruebasDeInstrumento(instrumento_id)
+  return (unidad_id != null ? todas.find(p => p.unidad_id === unidad_id) : undefined)
+    ?? todas.find(p => p.unidad_id == null)
+    ?? null
+}
+
+/** Guarda el examen de un instrumento para una unidad (o el general, con null). Uno por ámbito. */
+export async function guardarPrueba(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+  const limpia = normalizarPrueba(def)
+  const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
+  const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
+  if (existente?.id != null) {
+    await db.rubricas.update(existente.id, tocado({ ...campos, deleted_at: null }))
+    return existente.id
+  }
+  const reg = nuevo({
+    ...campos, instrumento_id, tipo: 'prueba' as const,
+    niveles_json: '[]', indicadores_json: '[]', generada_ia: 0, created_at: now(),
+  })
+  await db.rubricas.add(reg)
+  return reg.id
+}
+
+/** Los campos de una nota que no dependen del criterio ni del alumno. */
+export type DatosDeArea = Pick<CalItem, 'asignatura' | 'curso' | 'etapa' | 'comunidad'>
+
+/**
+ * Guarda lo anotado en el examen de un alumno.
+ *
+ * Un examen se corrige una vez y pone nota en todos los criterios que evalúa
+ * —la misma, o a cada uno la de sus preguntas—. En todos se guardan las
+ * respuestas completas, para que el examen se vea entero se abra desde el
+ * criterio que se abra.
+ *
+ * Vive aquí y no en una pantalla porque se corrige desde dos sitios, el panel
+ * de la casilla y la evaluación rápida, y los dos tienen que repartir igual.
+ * No pasa por los vínculos: el reparto ya lo decide el examen.
+ */
+export async function guardarExamenDeAlumno(p: {
+  alumno_id: number
+  instrumento_id: number
+  trimestre: number
+  unidad_id: number | null
+  def: PruebaDef
+  respuestas: Record<string, number>
+  /** Criterios que el instrumento evalúa en lo que se está viendo. */
+  destinos: string[]
+  area: DatosDeArea
+  /** La observación es de un criterio concreto; en los demás no se toca. */
+  observacion?: { criterio_id: string; texto: string | null }
+}): Promise<ResultadoPrueba & { criterios: string[] }> {
+  const r = notaDePrueba(p.def, p.respuestas, p.destinos)
+  const criterios = p.destinos.filter(c => c in r.porCriterio)
+  await saveCalificaciones(criterios.map(c => ({
+    alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
+    trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
+    ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
+  })), { sinVinculos: true })
+  return { ...r, criterios }
+}
+
+/**
+ * Las respuestas de examen ya guardadas para un alumno, vengan del criterio
+ * que vengan. Un examen repartido por criterios puede no tener ninguna
+ * pregunta del que se está mirando: ahí no hay nota, pero el examen sí está
+ * corregido, y enseñarlo en blanco haría que anotar una pregunta borrase las demás.
+ */
+export async function getRespuestasDeExamen(
+  alumno_id: number, instrumento_id: number, trimestre: number, criterios: string[]
+): Promise<Record<string, number>> {
+  for (const c of criterios) {
+    const cal = await getCalificacionUnica(alumno_id, instrumento_id, c, trimestre)
+    if (cal?.niveles_rubrica && Object.keys(cal.niveles_rubrica).length) return cal.niveles_rubrica
+  }
+  return {}
+}
+
+/**
+ * Correcciones ya hechas con el examen de un ámbito (una unidad, o el general),
+ * agrupadas por alumno y trimestre.
+ *
+ * Son las notas del instrumento que guardan respuestas de examen. Las del
+ * examen general son las de las unidades que no tienen examen propio.
+ */
+async function correccionesDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef) {
+  const otras = new Set((await getPruebasDeInstrumento(instrumento_id))
+    .map(p => p.unidad_id).filter((u): u is number => u != null))
+  const esRespuesta = (clave: string) => /^p\d+$/.test(clave) || def.preguntas.some(q => q.id === clave)
+  const cals = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).some(esRespuesta))
+    .filter(c => unidad_id != null ? c.unidad_id === unidad_id : c.unidad_id == null || !otras.has(c.unidad_id))
+  const grupos = new Map<string, Calificacion[]>()
+  for (const c of cals) {
+    const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id ?? ''}`
+    grupos.set(k, [...(grupos.get(k) ?? []), c])
+  }
+  return [...grupos.values()]
+}
+
+/** Cuántos alumnos tienen ya corregido el examen de este ámbito. */
+export async function contarCorregidosDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+  return new Set((await correccionesDeExamen(instrumento_id, unidad_id, def)).map(g => g[0].alumno_id)).size
+}
+
+/**
+ * Vuelve a calcular las notas ya puestas con un examen después de cambiarlo
+ * (otro tipo, otros puntos, otro reparto). Las respuestas anotadas no se
+ * tocan: solo lo que valen.
+ *
+ * **Ninguna nota se pierde.** La que cambia —o la que se queda sin nota
+ * porque con el examen nuevo ninguna pregunta nombra su criterio— deja su
+ * valor anterior como fantasma (`valor_anterior`): a la vista, sin contar, y
+ * recuperable. Se llegó a retirar sin más, y una nota que desaparece al tocar
+ * la configuración de un examen no es algo que el docente espere.
+ */
+export async function recalcularNotasDeExamen(
+  instrumento_id: number, unidad_id: number | null, def: PruebaDef, motivo: string
+): Promise<{ alumnos: number; fantasmas: number }> {
+  const grupos = await correccionesDeExamen(instrumento_id, unidad_id, def)
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+  const items: CalItem[] = []
+  const alumnos = new Set<number>()
+  let fantasmas = 0
+  for (const cals of grupos) {
+    const base = cals[0]
+    const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
+    const enUnidad = base.unidad_id != null ? filas.filter(f => f.unidad_id === base.unidad_id) : filas
+    const destinos = [...new Set([...enUnidad.map(f => f.criterio_id), ...cals.map(c => c.criterio_id)])]
+    const r = notaDePrueba(def, respuestas, destinos)
+    const comun = {
+      alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id ?? null,
+      asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,
+    }
+    for (const c of destinos) {
+      const previa = cals.find(x => x.criterio_id === c)
+      const recibe = c in r.porCriterio
+      if (!recibe && !previa) continue
+      const valor = recibe ? r.porCriterio[c] : null
+      // Solo hay fantasma si había nota y deja de ser la que era. Si la
+      // casilla ya estaba sin nota, se conserva el fantasma que tuviera.
+      const cambia = previa?.valor != null && previa.valor !== valor
+      if (cambia) fantasmas++
+      items.push({
+        ...comun, criterio_id: c, valor, niveles_rubrica: respuestas,
+        ...(cambia ? { valor_anterior: previa!.valor, anterior_motivo: motivo } : {}),
+      })
+    }
+    alumnos.add(base.alumno_id)
+  }
+  await saveCalificaciones(items, { sinVinculos: true })
+  return { alumnos: alumnos.size, fantasmas }
+}
+
+/**
+ * La nota fantasma vuelve a ser la que cuenta. La que contaba hasta ahora
+ * pasa a ser el fantasma: es un intercambio, así que se puede deshacer.
+ */
+export async function recuperarNotaAnterior(calificacion_id: number): Promise<void> {
+  const c = await db.calificaciones.get(calificacion_id)
+  if (!c || c.valor_anterior == null) return
+  await db.calificaciones.update(calificacion_id, tocado({
+    valor: c.valor_anterior,
+    valor_anterior: c.valor ?? null,
+    anterior_motivo: c.valor != null ? 'Nota sustituida al recuperar la anterior' : null,
+    // Recuperar la nota manual es volver a mano.
+    origen: null,
+  }))
+}
+
+/** Quita la nota fantasma. La nota que cuenta no se toca. */
+export async function descartarNotaAnterior(calificacion_id: number): Promise<void> {
+  await db.calificaciones.update(calificacion_id, tocado({ valor_anterior: null, anterior_motivo: null }))
+}
+
+/** Quita la definición del examen. Las notas ya puestas con él se conservan. */
+export async function eliminarPrueba(id: number): Promise<void> {
+  const r = await db.rubricas.get(id)
+  if (!r || r.tipo !== 'prueba') return
+  await db.rubricas.update(id, tocado({ deleted_at: sello() }))
+}
+
+// ─── BANCO DE RÚBRICAS ────────────────────────────────────────────────────────
+
+/** Una rúbrica del banco, con dónde se está usando. */
+export type RubricaDeBanco = {
+  /** Registro de `rubricas` que la representa. */
+  id: number
+  titulo: string
+  niveles_json: string
+  indicadores_json: string
+  contexto?: string
+  generada_ia: number
+  /**
+   * Tiene copia propia en el banco. Las que no, existen solo dentro de un
+   * instrumento y desaparecen con él (o con su clase).
+   */
+  enBanco: boolean
+  /** Id de la copia del banco, si la tiene: es lo que se quita con «Quitar del banco». */
+  bancoId: number | null
+  /** «6ºA · Ciencias Sociales · Juegos populares», uno por instrumento que la usa. */
+  usos: string[]
+  /** Instrumentos que la usan, para no ofrecerle a uno su propia rúbrica. */
+  instrumentoIds: number[]
+  area?: string
+  nivel?: string
+  nIndicadores: number
+  nNiveles: number
+  updated_at: string
+}
+
+/** Dos rúbricas son la misma si dicen lo mismo, estén donde estén. */
+function firmaRubrica(r: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_json'>): string {
+  const canon = (json: string) => { try { return JSON.stringify(JSON.parse(json)) } catch { return json } }
+  return `${r.titulo.trim()}\u0000${canon(r.niveles_json)}\u0000${canon(r.indicadores_json)}`
+}
+
+/**
+ * El banco del docente: todas sus rúbricas, de cualquier clase y área.
+ *
+ * Son las copias guardadas aparte (`INSTRUMENTO_BANCO`) más las que están en
+ * uso dentro de algún instrumento. La misma rúbrica en tres clases sale una
+ * sola vez, con sus tres usos: si no, el banco sería una lista de repetidas.
+ */
+export async function getBancoRubricas(): Promise<RubricaDeBanco[]> {
+  const todas = vivos(await db.rubricas.toArray()).filter(esRubrica)
+  const instrumentos = new Map(vivos(await db.instrumentos.toArray()).map(i => [i.id!, i]))
+  const asignaturas = new Map(vivos(await db.asignaturas.toArray()).map(a => [a.id!, a]))
+  const grupos = new Map(vivos(await db.grupos.toArray()).map(g => [g.id!, g]))
+
+  const porFirma = new Map<string, RubricaDeBanco>()
+  // Primero las del banco: si una rúbrica tiene copia propia, esa es la que manda.
+  const ordenadas = [...todas].sort((a, b) =>
+    Number(b.instrumento_id === INSTRUMENTO_BANCO) - Number(a.instrumento_id === INSTRUMENTO_BANCO))
+  for (const r of ordenadas) {
+    const esDelBanco = r.instrumento_id === INSTRUMENTO_BANCO
+    const ins = esDelBanco ? undefined : instrumentos.get(r.instrumento_id)
+    // Rúbrica de un instrumento que ya no existe: no es de nadie.
+    if (!esDelBanco && !ins) continue
+    const asig = ins ? asignaturas.get(ins.asignatura_id) : undefined
+    const grupo = asig ? grupos.get(asig.grupo_id) : undefined
+
+    const firma = firmaRubrica(r)
+    let entrada = porFirma.get(firma)
+    if (!entrada) {
+      let nIndicadores = 0, nNiveles = 0
+      try {
+        nIndicadores = JSON.parse(r.indicadores_json).length
+        nNiveles = JSON.parse(r.niveles_json).length
+      } catch { continue }   // una rúbrica ilegible no se puede ofrecer
+      entrada = {
+        id: r.id!, titulo: r.titulo, niveles_json: r.niveles_json, indicadores_json: r.indicadores_json,
+        contexto: r.contexto, generada_ia: r.generada_ia,
+        enBanco: esDelBanco, bancoId: esDelBanco ? r.id! : null,
+        usos: [], instrumentoIds: [],
+        area: r.area ?? asig?.nombre_display,
+        nivel: r.nivel ?? (grupo ? `${grupo.curso}º ${grupo.etapa}` : undefined),
+        nIndicadores, nNiveles,
+        updated_at: r.updated_at || r.created_at || '',
+      }
+      porFirma.set(firma, entrada)
+    }
+    if (ins) {
+      entrada.usos.push([grupo?.nombre, asig?.nombre_display, ins.nombre].filter(Boolean).join(' · '))
+      entrada.instrumentoIds.push(ins.id!)
+      if ((r.updated_at || '') > entrada.updated_at) entrada.updated_at = r.updated_at || ''
+    }
+  }
+  return [...porFirma.values()].sort((a, b) => b.updated_at.localeCompare(a.updated_at))
+}
+
+/**
+ * Guarda una copia en el banco. Si ya hay una idéntica no la duplica: el
+ * resultado dice cuál de las dos cosas ha pasado.
+ */
+export async function guardarEnBanco(
+  data: Pick<Rubrica, 'titulo' | 'niveles_json' | 'indicadores_json' | 'contexto' | 'generada_ia' | 'area' | 'nivel'>
+): Promise<{ id: number; yaEstaba: boolean }> {
+  const firma = firmaRubrica(data)
+  const delBanco = vivos(await db.rubricas.where('instrumento_id').equals(INSTRUMENTO_BANCO).toArray()).filter(esRubrica)
+  const igual = delBanco.find(r => firmaRubrica(r) === firma)
+  if (igual) return { id: igual.id!, yaEstaba: true }
+  const reg = nuevo({ ...data, instrumento_id: INSTRUMENTO_BANCO, created_at: now() })
+  await db.rubricas.add(reg)
+  return { id: reg.id, yaEstaba: false }
+}
+
+/**
+ * Antes de borrar instrumentos —sueltos, o con su área o su clase—, deja en el
+ * banco una copia de sus rúbricas.
+ *
+ * Una rúbrica es trabajo del docente, no un dato del grupo: al borrar en junio
+ * las clases del curso pasado se iban con ellas todas las rúbricas que no se
+ * hubieran guardado aparte a mano. No duplica las que ya están en el banco, y
+ * no conserva las vacías. El botón «Eliminar rúbrica» del editor no pasa por
+ * aquí: ese sí es borrar la rúbrica a propósito.
+ */
+async function conservarRubricasEnBanco(instrumento_ids: number[]): Promise<number> {
+  if (!instrumento_ids.length) return 0
+  const rubricas = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumento_ids).toArray()).filter(esRubrica)
+  let nuevas = 0
+  for (const r of rubricas) {
+    let indicadores = 0
+    try { indicadores = JSON.parse(r.indicadores_json).length } catch { continue }
+    if (!indicadores) continue
+    const ins = await db.instrumentos.get(r.instrumento_id)
+    const asig = ins ? await db.asignaturas.get(ins.asignatura_id) : undefined
+    const grupo = asig ? await db.grupos.get(asig.grupo_id) : undefined
+    const { yaEstaba } = await guardarEnBanco({
+      titulo: r.titulo, niveles_json: r.niveles_json, indicadores_json: r.indicadores_json,
+      contexto: r.contexto, generada_ia: r.generada_ia,
+      area: asig?.nombre_display, nivel: grupo ? `${grupo.curso}º ${grupo.etapa}` : undefined,
+    })
+    if (!yaEstaba) nuevas++
+  }
+  return nuevas
+}
+
+/** Quita la copia del banco. Las rúbricas que los instrumentos ya tienen puestas no se tocan. */
+export async function eliminarDelBanco(id: number): Promise<void> {
+  const r = await db.rubricas.get(id)
+  if (!r || r.instrumento_id !== INSTRUMENTO_BANCO) return
+  await db.rubricas.update(id, tocado({ deleted_at: sello() }))
 }
 
 // ─── EVIDENCIAS ───────────────────────────────────────────────────────────────
@@ -1152,6 +1798,193 @@ export async function quitarAsiento(grupo_id: number, alumno_id: number): Promis
     .modify({ deleted_at: t, updated_at: t })
 }
 
+// ─── DIARIO DE EVALUACIÓN ─────────────────────────────────────────────────────
+//
+// Varias observaciones fechadas que no se pisan. La nota del criterio se
+// deriva de ellas (`db/diario.ts`) y se MATERIALIZA en `calificaciones` con
+// `origen: 'diario'`, para que informes, matriz, fantasma y sync sigan
+// leyendo lo de siempre. La materialización es determinista y solo escribe
+// si cambia algo: cada aparato la hace por su cuenta tras sincronizar y el
+// sync no debe ver ahí un cambio (sería un ping-pong sin fin).
+
+const MOTIVO_SUSTITUIDA_POR_DIARIO = 'Nota puesta a mano, sustituida por el diario de evaluación'
+
+export type RegistroNuevo = {
+  alumno_id: number
+  instrumento_id: number
+  trimestre: number
+  unidad_id: number | null
+  /** Nivel 1-4. */
+  valor: number
+  observacion?: string | null
+  /** Criterios a los que aplica. El llamante los resuelve (`criteriosDeInstrumento`). */
+  criterios: string[]
+  area: DatosDeArea
+  /** Por defecto ahora; el modo «sesión de hoy» pasará la fecha de la sesión. */
+  fecha?: string
+}
+
+/**
+ * Criterios que el instrumento evalúa según la programación: los de la unidad
+ * dada o, con `unidad_id` null («Todo el curso»), los de todas las unidades
+ * del trimestre. Es lo que un registro del diario reparte por defecto.
+ */
+export async function criteriosDeInstrumento(
+  instrumento_id: number, trimestre: number, unidad_id: number | null
+): Promise<string[]> {
+  const filas = await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre, unidad_id)
+  return [...new Set(filas.map(f => f.criterio_id))].sort()
+}
+
+/** Registros vivos de un alumno con un instrumento en un trimestre, en orden cronológico. */
+export async function getRegistrosDeCelda(
+  alumno_id: number, instrumento_id: number, trimestre: number, criterio_id?: string
+): Promise<RegistroDiario[]> {
+  const regs = vivos(await db.diario
+    .where('[alumno_id+instrumento_id+trimestre]').equals([alumno_id, instrumento_id, trimestre]).toArray())
+  return ordenarRegistros(criterio_id ? regs.filter(r => criteriosDe(r).includes(criterio_id)) : regs)
+}
+
+/**
+ * Añade un registro y vuelve a derivar la nota. Reutilizable desde el panel
+ * de la casilla y desde la futura «sesión de hoy». Devuelve las notas
+ * derivadas por criterio tras el alta.
+ */
+export async function anadirRegistro(p: RegistroNuevo): Promise<{ id: number; notas: Record<string, number | null> }> {
+  if (!Number.isInteger(p.valor) || p.valor < 1 || p.valor > 4) throw new Error('El nivel del registro va de 1 a 4')
+  if (!p.criterios.length) throw new Error('Un registro del diario necesita al menos un criterio')
+  const reg = nuevo({
+    alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
+    unidad_id: p.unidad_id ?? null, fecha: p.fecha ?? now(), valor: p.valor,
+    observacion: p.observacion ?? null,
+    criterios_json: JSON.stringify([...new Set(p.criterios)]),
+    ...p.area,
+  })
+  await db.diario.add(reg)
+  const notas = await materializarDiario(p.alumno_id, p.instrumento_id, p.trimestre, { forzarSobreManual: true })
+  return { id: reg.id, notas }
+}
+
+export async function editarRegistro(
+  id: number, cambios: Partial<Pick<RegistroDiario, 'valor' | 'observacion' | 'fecha'>>
+): Promise<void> {
+  const r = await db.diario.get(id)
+  if (!r || r.deleted_at) return
+  if (cambios.valor != null && (!Number.isInteger(cambios.valor) || cambios.valor < 1 || cambios.valor > 4)) {
+    throw new Error('El nivel del registro va de 1 a 4')
+  }
+  await db.diario.update(id, tocado(cambios))
+  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, { forzarSobreManual: true })
+}
+
+/** Borrado lógico del registro. Si era el último, la casilla se queda sin nota. */
+export async function borrarRegistro(id: number): Promise<void> {
+  const r = await db.diario.get(id)
+  if (!r || r.deleted_at) return
+  await db.diario.update(id, tocado({ deleted_at: now() }))
+  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, { forzarSobreManual: true })
+}
+
+/**
+ * Deriva y escribe las notas de un alumno con un instrumento en un trimestre.
+ *
+ * Solo escribe las casillas cuyo `valor` u `origen` cambian. Una casilla con
+ * nota puesta a mano se respeta salvo `forzarSobreManual` (una acción expresa
+ * del docente sobre el diario): entonces la manual pasa a fantasma. Escribe
+ * con `sinVinculos`: el reparto ya está en los registros.
+ */
+export async function materializarDiario(
+  alumno_id: number, instrumento_id: number, trimestre: number,
+  opciones: { forzarSobreManual?: boolean } = {}
+): Promise<Record<string, number | null>> {
+  const regs = await getRegistrosDeCelda(alumno_id, instrumento_id, trimestre)
+  const instrumento = await db.instrumentos.get(instrumento_id)
+  const derivadas: Map<string, NotaDerivada> = derivarNotas(regs, instrumento?.agregacion ?? 'media')
+
+  const existentes = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id)
+    .filter(c => c.alumno_id === alumno_id && c.trimestre === trimestre).toArray())
+  const previaDe = new Map(existentes.map(c => [c.criterio_id, c]))
+
+  // Destinos: los que derivan nota y los que la tenían derivada y ya no (se vacían).
+  const destinos = new Set<string>(derivadas.keys())
+  for (const c of existentes) if (c.origen === 'diario') destinos.add(c.criterio_id)
+
+  const ultimo = regs[regs.length - 1]
+  const items: CalItem[] = []
+  const notas: Record<string, number | null> = {}
+  for (const criterio_id of destinos) {
+    const valor = derivadas.get(criterio_id)?.valor ?? null
+    const previa = previaDe.get(criterio_id)
+    const origen: 'diario' | null = valor == null ? null : 'diario'
+    notas[criterio_id] = valor
+
+    const esManual = !!previa && previa.origen !== 'diario' && previa.valor != null
+    if (esManual && !opciones.forzarSobreManual) { notas[criterio_id] = previa.valor ?? null; continue }
+    if (previa && (previa.valor ?? null) === valor && (previa.origen ?? null) === origen) continue
+
+    const area: DatosDeArea = previa
+      ? { asignatura: previa.asignatura, curso: previa.curso, etapa: previa.etapa, comunidad: previa.comunidad }
+      : { asignatura: ultimo.asignatura, curso: ultimo.curso, etapa: ultimo.etapa, comunidad: ultimo.comunidad }
+    const fantasma = esManual && previa!.valor !== valor
+      ? { valor_anterior: previa!.valor, anterior_motivo: MOTIVO_SUSTITUIDA_POR_DIARIO }
+      : {}
+    items.push({
+      ...area, alumno_id, instrumento_id, trimestre, criterio_id, valor, origen,
+      unidad_id: ultimo?.unidad_id ?? previa?.unidad_id ?? null,
+      ...fantasma,
+    })
+  }
+  if (items.length) await saveCalificaciones(items, { sinVinculos: true })
+  return notas
+}
+
+/** Vuelve a derivar todas las casillas con diario de un instrumento (cambio de regla). */
+export async function rematerializarInstrumento(instrumento_id: number): Promise<void> {
+  const regs = vivos(await db.diario.where('instrumento_id').equals(instrumento_id).toArray())
+  const claves = new Set(regs.map(r => `${r.alumno_id}:${r.trimestre}`))
+  for (const k of claves) {
+    const [a, t] = k.split(':').map(Number)
+    await materializarDiario(a, instrumento_id, t, { forzarSobreManual: true })
+  }
+}
+
+/**
+ * Tras un sync: vuelve a derivar todas las celdas con registros o con nota
+ * derivada. Las manuales no se tocan. Si dos aparatos crearon la misma casilla
+ * derivada antes de sincronizar, se conserva la de menor id (igual en ambos)
+ * y las demás se marcan borradas. Devuelve cuántas celdas se han revisado.
+ */
+export async function reconciliarDiario(): Promise<number> {
+  const regs = vivos(await db.diario.toArray())
+  const derivadasVivas = vivos(await db.calificaciones.filter(c => c.origen === 'diario').toArray())
+
+  // Duplicados por creación simultánea en dos aparatos.
+  const porClave = new Map<string, Calificacion[]>()
+  for (const c of derivadasVivas) {
+    const k = `${c.alumno_id}:${c.instrumento_id}:${c.criterio_id}:${c.trimestre}`
+    porClave.set(k, [...(porClave.get(k) ?? []), c])
+  }
+  const t = now()
+  for (const lista of porClave.values()) {
+    if (lista.length < 2) continue
+    lista.sort((a, b) => a.id! - b.id!)
+    for (const sobra of lista.slice(1)) await db.calificaciones.update(sobra.id!, { deleted_at: t, updated_at: t })
+  }
+
+  const claves = new Set<string>()
+  for (const r of regs) claves.add(`${r.alumno_id}:${r.instrumento_id}:${r.trimestre}`)
+  for (const c of derivadasVivas) claves.add(`${c.alumno_id}:${c.instrumento_id}:${c.trimestre}`)
+  for (const k of claves) {
+    const [a, i, tr] = k.split(':').map(Number)
+    await materializarDiario(a, i, tr)
+  }
+  return claves.size
+}
+
+// Lo que llega de otro aparato puede traer registros del diario o cambiar la
+// regla de un instrumento: se vuelve a derivar aquí, no en ninguna pantalla.
+alAplicarCambios(async () => { await reconciliarDiario() })
+
 // ─── MATRIZ DE EVALUACIÓN ─────────────────────────────────────────────────────
 
 export type CeldaInstrumento = {
@@ -1160,6 +1993,19 @@ export type CeldaInstrumento = {
   tipo: string
   peso: number
   tiene_rubrica: boolean
+  /** Tiene una prueba escrita definida (la de la unidad que se mira o la general). */
+  tiene_prueba: boolean
+  /** Criterios con los que este va vinculado para este instrumento (vacío = ninguno). */
+  vinculados: string[]
+  /** Regla con la que el diario funde varios registros (ver `db/diario.ts`). */
+  agregacion: Agregacion
+  /** Familia de la que cuelga, si es un hijo; null si es familia o instrumento suelto. */
+  familia_id: number | null
+  familia_nombre: string | null
+  /** Peso de la familia en el área (el de la propia fila si es familia). */
+  familia_peso: number
+  /** Color de identidad, ya resuelto (propio o por orden). */
+  color: string
 }
 
 export type MatrizEvaluacion = {
@@ -1180,6 +2026,8 @@ export type MatrizEvaluacion = {
   calificaciones: Record<string, Calificacion>
   /** `alumno:criterio` → nº de evidencias */
   evidencias: Map<string, number>
+  /** `alumno:criterio:instrumento` → registros del diario (en orden cronológico) */
+  diario: Record<string, { n: number; niveles: number[] }>
   /** Criterios de la unidad activa (vacío = todos los de la asignatura) */
   criteriosDeUnidad: Set<string> | null
 }
@@ -1208,14 +2056,36 @@ export async function getMatrizEvaluacion(
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
 
   // Qué instrumentos tienen rúbrica (para pintar el icono en la celda)
-  const conRubrica = new Set(
-    vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
-      .map(r => r.instrumento_id)
-  )
+  const delosInstrumentos = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
+  const conRubrica = new Set(delosInstrumentos.filter(esRubrica).map(r => r.instrumento_id))
+  // Con examen definido para lo que se está viendo: el de la unidad o el general.
+  const conPrueba = new Set(delosInstrumentos
+    .filter(r => r.tipo === 'prueba' && (r.unidad_id == null || r.unidad_id === unidad_id))
+    .map(r => r.instrumento_id))
 
   const crudo = unidad_id
     ? await getMapaCriterioInstrumento(unidad_id)
     : await getMapaCriterioInstrumentoAsignatura(asignatura_id)
+
+  // Los vínculos se calculan como al guardar (todas las unidades del trimestre),
+  // no solo con la unidad que se mira: lo que se enseña es lo que va a pasar.
+  const filasVinculo = new Map<number, CriterioInstrumento[]>()
+  for (const ins of instrumentos) {
+    if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
+    const filas = await filasDeInstrumentoEnTrimestre(ins.id!, trimestre)
+    if (filas.some(f => f.vinculado)) filasVinculo.set(ins.id!, filas)
+  }
+
+  // Color de cada instrumento: el suyo, o por orden entre sus iguales (las
+  // familias entre sí; los hijos dentro de su familia).
+  const colorPorId = new Map<number, string>()
+  {
+    const familias = instrumentos.filter(i => i.familia_id == null || !instrById.has(i.familia_id))
+    familias.forEach((f, k) => colorPorId.set(f.id!, colorDeInstrumento(f, k)))
+    for (const f of familias) {
+      instrumentos.filter(i => i.familia_id === f.id).forEach((h, k) => colorPorId.set(h.id!, colorDeInstrumento(h, k)))
+    }
+  }
 
   const porCriterio = new Map<string, CeldaInstrumento[]>()
   const criteriosFueraDeTrimestre = new Set<string>()
@@ -1226,6 +2096,8 @@ export async function getMatrizEvaluacion(
       const ins = instrById.get(item.instrumento_id)
       if (!ins) continue   // instrumento borrado: se ignora, la nota histórica se conserva
       habiaAlguno = true
+      // Un hijo entra con su familia a cuestas: las pantallas agrupan por ella.
+      const familia = ins.familia_id != null ? instrById.get(ins.familia_id) ?? null : null
       // El trimestre configurado en el instrumento por fin sirve para algo:
       // hasta ahora se podía marcar «solo 1er trimestre» y el instrumento
       // seguía apareciendo —y puntuando— en los tres.
@@ -1236,9 +2108,20 @@ export async function getMatrizEvaluacion(
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
+        tiene_prueba: conPrueba.has(ins.id!),
+        vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
+        agregacion: ins.agregacion ?? 'media',
+        familia_id: familia?.id ?? null,
+        familia_nombre: familia?.nombre ?? null,
+        familia_peso: familia ? familia.peso : ins.peso,
+        color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
       })
     }
-    if (celdas.length) porCriterio.set(criterio, celdas)
+    // Si algún hijo evalúa este criterio, la familia deja de ser una opción
+    // directa aquí: se califica con el hijo y la familia resume.
+    const conHijo = new Set(celdas.map(c => c.familia_id).filter((f): f is number => f != null))
+    const utiles = celdas.filter(c => !conHijo.has(c.instrumento_id))
+    if (utiles.length) porCriterio.set(criterio, utiles)
     else if (habiaAlguno) criteriosFueraDeTrimestre.add(criterio)
   }
 
@@ -1247,12 +2130,32 @@ export async function getMatrizEvaluacion(
     ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
         .filter(c => c.trimestre === trimestre).toArray())
     : []
+  // Las notas de los hijos se funden en la de su familia, con la misma
+  // función que el cálculo del área: la casilla enseña el mismo número que el
+  // boletín. Las de los hijos siguen disponibles por su propia clave.
   const calificaciones: Record<string, Calificacion> = {}
   for (const c of cals) {
     calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
   }
+  for (const c of fundirHijosEnFamilias(cals, instrumentos)) {
+    if (c.virtual) calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
+  }
 
   const evidencias = await getEvidenciasPorCriterio(alumnos.map(a => a.id!))
+
+  const diario: MatrizEvaluacion['diario'] = {}
+  const regs = instrIds.length
+    ? ordenarRegistros(vivos(await db.diario.where('instrumento_id').anyOf(instrIds)
+        .filter(r => r.trimestre === trimestre).toArray()))
+    : []
+  for (const r of regs) {
+    for (const c of criteriosDe(r)) {
+      const k = `${r.alumno_id}:${c}:${r.instrumento_id}`
+      const d = diario[k] ?? (diario[k] = { n: 0, niveles: [] })
+      d.n++
+      d.niveles.push(r.valor)
+    }
+  }
 
   let criteriosDeUnidad: Set<string> | null = null
   if (unidad_id) {
@@ -1262,7 +2165,7 @@ export async function getMatrizEvaluacion(
 
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
-    criteriosFueraDeTrimestre, calificaciones, evidencias, criteriosDeUnidad,
+    criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
   }
 }
 
@@ -1373,7 +2276,7 @@ function base64ABlob(b64: string, mime: string): Blob {
 export async function exportarDatos(): Promise<string> {
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
-         criterio_instrumentos, rubricas, evidencias, planos, asientos] = await Promise.all([
+         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario] = await Promise.all([
     db.grupos.toArray(),
     db.alumnos.toArray(),
     db.grupo_alumnos.toArray(),
@@ -1389,6 +2292,7 @@ export async function exportarDatos(): Promise<string> {
     db.evidencias.toArray(),
     db.planos.toArray(),
     db.asientos.toArray(),
+    db.diario.toArray(),
   ])
 
   // Serializar los blobs de evidencias a base64
@@ -1398,20 +2302,20 @@ export async function exportarDatos(): Promise<string> {
   }))
 
   return JSON.stringify({
-    // La versión del backup sigue a la del esquema Dexie, que va por la v5.
-    // Estaba clavada en 4 desde antes de que existiera sync_base.
-    version: 5,
+    // La versión del backup sigue a la del esquema Dexie, que va por la v6
+    // (diario de evaluación).
+    version: 6,
     exported_at: now(),
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
     criterio_instrumentos, rubricas,
-    evidencias: evidenciasSerial, planos, asientos,
+    evidencias: evidenciasSerial, planos, asientos, diario,
   }, null, 2)
 }
 
 export async function importarDatos(json: string): Promise<void> {
   const data = JSON.parse(json)
-  if (![1, 2, 3, 4, 5].includes(data.version)) throw new Error('Versión de backup no compatible')
+  if (![1, 2, 3, 4, 5, 6].includes(data.version)) throw new Error('Versión de backup no compatible')
 
   // Reconstruir blobs fuera de la transacción (FileReader no puede vivir dentro)
   const evidencias: Evidencia[] = (data.evidencias || []).map((ev: any) => {
@@ -1429,7 +2333,7 @@ export async function importarDatos(json: string): Promise<void> {
   await db.transaction('rw',
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
-     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos,
+     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.diario,
      // La restauración también toca el estado de sincronización: ver abajo.
      db.sync_base, db.meta],
     async () => {
@@ -1438,7 +2342,7 @@ export async function importarDatos(json: string): Promise<void> {
         db.asignaturas.clear(), db.instrumentos.clear(), db.calificaciones.clear(),
         db.sesiones.clear(), db.asistencia.clear(), db.unidades.clear(),
         db.unidad_criterios.clear(), db.criterio_instrumentos.clear(), db.rubricas.clear(),
-        db.evidencias.clear(), db.planos.clear(), db.asientos.clear(),
+        db.evidencias.clear(), db.planos.clear(), db.asientos.clear(), db.diario.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))
@@ -1455,6 +2359,7 @@ export async function importarDatos(json: string): Promise<void> {
       await db.evidencias.bulkAdd(sellar(evidencias))
       await db.planos.bulkAdd(sellar(data.planos || []))
       await db.asientos.bulkAdd(sellar(data.asientos || []))
+      await db.diario.bulkAdd(sellar(data.diario || []))
 
       // Los ids siguen existiendo pero su contenido es otro. Si no se
       // reinicia, la base de fusión apunta a versiones que ya no tienen nada

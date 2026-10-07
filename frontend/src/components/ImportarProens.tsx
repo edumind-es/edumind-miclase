@@ -2,8 +2,13 @@ import { useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 import { parsearProens, type ProgramacionProens } from '@/programacion/proens'
-import { aplicarProgramacionImportada, type ResultadoImportacion } from '@/db/queries'
+import {
+  aplicarProgramacionImportada, getFamilias, getHijos, criteriosDeFamiliaPorUnidad,
+  type ResultadoImportacion, type CriteriosDeFamiliaPorUnidad,
+} from '@/db/queries'
+import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
+import AsistenteFamilia from './AsistenteFamilia'
 
 /**
  * Importar la programación didáctica oficial (PROENS) en un área.
@@ -15,6 +20,11 @@ import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
  * cargado no conozca (un código de criterio que no existe en esa área y
  * curso) se enseña y se deja fuera: importarlo daría casillas huérfanas en
  * el calificador.
+ *
+ * Y un cuarto paso, al acabar: lo que trae PROENS son familias («Proba
+ * escrita», «Táboa de indicadores»), no lo que la docente hace de verdad.
+ * Por cada familia importada se ofrece el asistente «¿qué haces dentro?»,
+ * que es el mismo de ⚙ Instrumentos. Se puede saltar: queda ahí para luego.
  */
 
 interface Props {
@@ -65,6 +75,19 @@ export default function ImportarProens({
   const [abierta, setAbierta] = useState<number | null>(null)
   const [aplicando, setAplicando] = useState(false)
   const [resultado, setResultado] = useState<ResultadoImportacion | null>(null)
+  /** Paso 4: las familias ya guardadas, con lo que cubren y cuántos hijos tienen. */
+  const [familias, setFamilias] = useState<{ familia: Instrumento; cobertura: CriteriosDeFamiliaPorUnidad[]; hijos: string[] }[]>([])
+  const [asistenteDe, setAsistenteDe] = useState<number | null>(null)
+
+  const cargarFamilias = async () => {
+    const fams = await getFamilias(asignaturaId)
+    const lista = []
+    for (const f of fams) {
+      const [cobertura, hijos] = await Promise.all([criteriosDeFamiliaPorUnidad(f.id!), getHijos(f.id!)])
+      if (cobertura.length) lista.push({ familia: f, cobertura, hijos: hijos.map(h => h.nombre) })
+    }
+    setFamilias(lista)
+  }
 
   const conocidos = useMemo(() => new Set(criteriosCurr.map(c => c.id)), [criteriosCurr])
 
@@ -167,6 +190,7 @@ export default function ImportarProens({
         })),
       })
       setResultado(r)
+      await cargarFamilias()
       onHecho()
     } catch (err: any) {
       setError(err?.message || 'No se ha podido importar.')
@@ -193,13 +217,65 @@ export default function ImportarProens({
       </div>
 
       {resultado ? (
-        <div style={{ fontSize: 13, color: '#166534', background: '#dcfce7', border: '1px solid #86efac', borderRadius: 7, padding: '10px 14px', lineHeight: 1.6 }}>
-          <strong>Programación importada.</strong>{' '}
-          {resultado.unidadesCreadas} unidades nuevas{resultado.unidadesActualizadas ? ` y ${resultado.unidadesActualizadas} actualizadas` : ''} ·{' '}
-          {resultado.instrumentosCreados} instrumentos nuevos{resultado.instrumentosReutilizados ? ` y ${resultado.instrumentosReutilizados} reutilizados` : ''} ·{' '}
-          {resultado.criteriosVinculados} criterios con su mínimo
-          {resultado.criteriosSinInstrumento > 0 && `, ${resultado.criteriosSinInstrumento} sin instrumento (saldrán rayados en el calificador)`}.
-        </div>
+        <>
+          <div style={{ fontSize: 13, color: '#166534', background: '#dcfce7', border: '1px solid #86efac', borderRadius: 7, padding: '10px 14px', lineHeight: 1.6 }}>
+            <strong>Programación importada.</strong>{' '}
+            {resultado.unidadesCreadas} unidades nuevas{resultado.unidadesActualizadas ? ` y ${resultado.unidadesActualizadas} actualizadas` : ''} ·{' '}
+            {resultado.instrumentosCreados} instrumentos nuevos{resultado.instrumentosReutilizados ? ` y ${resultado.instrumentosReutilizados} reutilizados` : ''} ·{' '}
+            {resultado.criteriosVinculados} criterios con su mínimo
+            {resultado.criteriosSinInstrumento > 0 && `, ${resultado.criteriosSinInstrumento} sin instrumento (saldrán rayados en el calificador)`}.
+          </div>
+
+          {/* Paso 4: lo que haces dentro de cada familia */}
+          {familias.length > 0 && (
+            <div data-paso-familias style={{ marginTop: 12, background: 'white', border: '1px solid #c7d2fe', borderRadius: 8, padding: '12px 14px' }}>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--azul-900)', marginBottom: 4 }}>
+                ¿Qué haces dentro de cada uno?
+              </div>
+              <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.55, marginBottom: 10 }}>
+                Lo que trae la programación son <strong>familias</strong> con su peso. Lo que tú corriges de verdad
+                —el examen de cada unidad, el cuaderno, speaking, listening, el billete de salida— va dentro.
+                Dilo ahora y el calificador tendrá una columna por cada cosa; o déjalo para después, desde ⚙ Instrumentos.
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {familias.map(({ familia, cobertura, hijos }) => {
+                  const cfg = getInstrConfig(familia.tipo)
+                  const nCriterios = new Set(cobertura.flatMap(u => u.criterios)).size
+                  return (
+                    <div key={familia.id} data-familia-importada={familia.nombre}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '7px 10px', borderRadius: 7, background: cfg.bg, border: `1px solid ${cfg.color}30` }}>
+                      <span aria-hidden="true">{cfg.icon}</span>
+                      <div style={{ flex: '1 1 200px', fontSize: 12.5 }}>
+                        <strong>{familia.nombre}</strong> · {familia.peso} % · {nCriterios} criterio{nCriterios !== 1 ? 's' : ''}
+                        <div style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
+                          {hijos.length === 0 ? 'Nada dentro todavía: se califica directamente con la familia.' : `Dentro: ${hijos.join(', ')}.`}
+                        </div>
+                      </div>
+                      <button data-familia-asistente className="btn-primary" style={{ fontSize: 12 }} onClick={() => setAsistenteDe(familia.id!)}>
+                        ✨ ¿Qué haces dentro?
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {asistenteDe != null && (() => {
+            const f = familias.find(x => x.familia.id === asistenteDe)
+            if (!f) return null
+            return (
+              <AsistenteFamilia
+                familia={f.familia}
+                asignaturaNombre={asignaturaNombre}
+                cobertura={f.cobertura}
+                criterios={criteriosCurr}
+                yaExisten={f.hijos}
+                onCerrar={async creados => { setAsistenteDe(null); if (creados) { await cargarFamilias(); onHecho() } }}
+              />
+            )
+          })()}
+        </>
       ) : !prog ? (
         <>
           <div style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.55, marginBottom: 12 }}>
@@ -207,7 +283,8 @@ export default function ImportarProens({
             sesiones y peso, cada criterio con su <strong>mínimo de consecución</strong> y el instrumento
             con el que se evalúa, y los instrumentos con su peso. Antes de guardar nada verás lo leído y
             podrás corregirlo. <strong>No borra</strong> lo que ya tengas: una unidad con el mismo título se
-            actualiza y las calificaciones no se tocan.
+            actualiza y las calificaciones no se tocan. Al terminar podrás decir qué haces dentro de cada
+            instrumento (el examen de cada unidad, el cuaderno, speaking…).
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button className="btn-primary" style={{ fontSize: 13 }} disabled={leyendo} onClick={() => fileRef.current?.click()}>

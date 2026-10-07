@@ -58,6 +58,9 @@ export interface Asignatura extends Sincronizable {
   created_at?: string
 }
 
+/** Cómo se funden varios registros del diario en la nota del criterio. */
+export type Agregacion = 'media' | 'ultima' | 'tendencia' | 'mediana'
+
 export interface Instrumento extends Sincronizable {
   id?: number
   asignatura_id: number
@@ -67,6 +70,28 @@ export interface Instrumento extends Sincronizable {
   trimestres: string
   orden: number
   created_at?: string
+  /**
+   * Regla con la que varios registros del diario de evaluación se convierten
+   * en la nota del criterio. Sin declarar vale 'media'. No se indexa: no
+   * exige versión de esquema.
+   */
+  agregacion?: Agregacion | null
+  /**
+   * Familia de la que cuelga este instrumento, si es un hijo.
+   *
+   * Lo que trae una programación oficial («Proba escrita» 80 %, «Táboa de
+   * indicadores» 20 %) no son instrumentos sino FAMILIAS: dentro de cada una
+   * el docente mete lo que de verdad hace —el examen de cada unidad, el
+   * billete de salida, speaking, listening—. Un hijo tiene nombre, tipo y
+   * criterios propios (un subconjunto de los de su familia en cada unidad) y
+   * su `peso` es relativo DENTRO de la familia (1 por defecto: todos los hijos
+   * cuentan igual). La familia entra en la nota del área con su peso de
+   * siempre. Sin índice: no exige versión de esquema. Null o ausente = es
+   * una familia (o un instrumento suelto, que es lo mismo).
+   */
+  familia_id?: number | null
+  /** Color propio (#rrggbb). Sin él, el que le toca por orden (`colorDeInstrumento`). Sin índice. */
+  color?: string | null
 }
 
 export interface Calificacion extends Sincronizable {
@@ -84,6 +109,13 @@ export interface Calificacion extends Sincronizable {
   observacion?: string | null
   unidad_id?: number | null   // unidad en la que se registró (trazabilidad)
   /**
+   * 'diario' cuando `valor` se deriva de los registros del diario de
+   * evaluación y no se puso a mano. El panel avisa antes de dejar editarla y
+   * la reconciliación tras un sync solo reescribe las que llevan esta marca.
+   * Sin índice.
+   */
+  origen?: 'diario' | null
+  /**
    * Nivel marcado en cada indicador de la rúbrica: nombre del indicador →
    * valor del nivel. Es la justificación de la nota, no la nota: `valor`
    * sigue siendo lo que cuenta para las medias.
@@ -97,6 +129,23 @@ export interface Calificacion extends Sincronizable {
    * otra manera.
    */
   niveles_rubrica?: Record<string, number> | null
+  /**
+   * Nota «fantasma»: la que había en esta casilla antes de que un recálculo
+   * (cambiar un examen ya corregido) la sustituyera o la dejara sin nota.
+   *
+   * Una nota puesta no se pierde nunca: se queda aquí, a la vista —en la
+   * matriz sale en una columna duplicada y semitranslúcida— y **no cuenta**.
+   * Todo el cálculo lee `valor`, así que no hay nada que excluir en
+   * `calculo.ts`. El docente puede recuperarla o descartarla. Sin índice.
+   */
+  valor_anterior?: number | null
+  /** De dónde viene la nota fantasma, para decírselo al docente. */
+  anterior_motivo?: string | null
+  /**
+   * Solo en memoria, nunca en la base: la nota de una familia fundida a
+   * partir de las de sus hijos (`fundirHijosEnFamilias`). No tiene `id`.
+   */
+  virtual?: boolean
 }
 
 export interface Sesion extends Sincronizable {
@@ -192,10 +241,31 @@ export interface CriterioInstrumento extends Sincronizable {
    * arrastra solo, porque `aSobre` serializa el registro entero.
    */
   peso_criterio?: number | null
+  /**
+   * 1 si este criterio va **vinculado** con los demás criterios marcados del
+   * mismo instrumento en esta unidad: calificar uno pone la misma nota en
+   * todos. Es para el instrumento que se corrige una vez y cuenta para varios
+   * criterios (un cuaderno, una exposición), que antes obligaba a repetir la
+   * nota casilla por casilla.
+   *
+   * Lo declara el docente, nunca se activa solo. Quién va con quién se decide
+   * en `vinculos.ts`; la réplica la hace `saveCalificaciones`. Sin índice.
+   */
+  vinculado?: number | null
 }
+
+/**
+ * Las rúbricas del banco no cuelgan de ningún instrumento: llevan este valor
+ * en `instrumento_id`. Así viven en la misma tabla —se sincronizan y entran en
+ * la copia de seguridad sin tocar el esquema ni el servidor— y sobreviven al
+ * borrado de la clase en la que nacieron, que arrastra solo las rúbricas de
+ * sus instrumentos.
+ */
+export const INSTRUMENTO_BANCO = 0
 
 export interface Rubrica extends Sincronizable {
   id?: number
+  /** Instrumento al que pertenece, o `INSTRUMENTO_BANCO` si es una copia del banco. */
   instrumento_id: number
   titulo: string
   contexto?: string      // descripción SA/UD usada para generar
@@ -204,6 +274,29 @@ export interface Rubrica extends Sincronizable {
   indicadores_json: string // JSON: RubricaIndicador[]
   generada_ia: number    // 0 | 1
   created_at?: string
+  /**
+   * Área y curso en los que se guardó, solo en las copias del banco: es lo que
+   * queda para reconocerla cuando la clase de origen ya no existe. Sin índice.
+   */
+  area?: string
+  nivel?: string
+  /**
+   * `'prueba'` si esta fila no es una rúbrica sino la definición de una prueba
+   * escrita (ver `prueba.ts`). Comparte tabla a propósito: se sincroniza, entra
+   * en la copia de seguridad y cae con su instrumento sin tocar el esquema ni
+   * el servidor. Entonces `niveles_json` e `indicadores_json` van vacíos —una
+   * versión anterior de la app la ve como una rúbrica sin nada— y lo que
+   * cuenta es `prueba_json`. Sin índice.
+   */
+  tipo?: 'prueba'
+  /** JSON: `PruebaDef`. Solo con `tipo: 'prueba'`. */
+  prueba_json?: string
+  /**
+   * Unidad a la que pertenece el examen, o null si vale para todas las del
+   * instrumento. Un mismo instrumento («Prueba escrita») se usa en varias
+   * unidades y cada una tiene su examen. Solo con `tipo: 'prueba'`.
+   */
+  unidad_id?: number | null
 }
 
 /**
@@ -227,6 +320,36 @@ export interface Evidencia extends Sincronizable {
   duracion_ms?: number | null
   descripcion?: string
   fecha: string
+}
+
+/**
+ * Diario de evaluación: una observación fechada de un alumno con un
+ * instrumento. Varias observaciones no se pisan; la nota del criterio se
+ * deriva de todas según `Instrumento.agregacion` (ver `db/diario.ts`).
+ */
+export interface RegistroDiario extends Sincronizable {
+  id?: number
+  alumno_id: number
+  instrumento_id: number
+  unidad_id: number | null
+  trimestre: number
+  /** ISO-8601 con hora: es lo que ordena los registros. */
+  fecha: string
+  /** Nivel 1-4. */
+  valor: number
+  observacion?: string | null
+  /**
+   * JSON con los criterios (string[]) a los que aplica. Se fija al crear el
+   * registro con lo que la programación asigna al instrumento en esa unidad,
+   * y nunca está vacío: así la derivación no depende de que la programación
+   * haya llegado ya al otro aparato, y retirar un criterio del instrumento
+   * no vacía la nota derivada.
+   */
+  criterios_json: string
+  asignatura: string
+  curso: string
+  etapa: string
+  comunidad: string
 }
 
 // Plano de clase: dimensiones de la cuadrícula por grupo
@@ -280,6 +403,7 @@ class MiClaseDB extends Dexie {
   criterio_instrumentos!: Table<CriterioInstrumento>
   rubricas!: Table<Rubrica>
   evidencias!: Table<Evidencia>
+  diario!: Table<RegistroDiario>
   planos!: Table<Plano>
   asientos!: Table<Asiento>
   meta!: Table<Meta>
@@ -349,6 +473,19 @@ class MiClaseDB extends Dexie {
     this.version(5).stores({
       sync_base: 'clave',
     })
+
+    // v6 — diario de evaluación. Tabla nueva y vacía. `updated_at` va
+    // indexado porque es la consulta del sync. El sello del upgrade es el
+    // mismo de la v4, por si algún registro llegara sin él (idempotente).
+    this.version(6).stores({
+      diario: '++id, alumno_id, instrumento_id, [alumno_id+instrumento_id+trimestre], updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      await tx.table('diario').toCollection().modify(r => {
+        if (!r.updated_at) r.updated_at = r.fecha || sello
+        if (r.deleted_at === undefined) r.deleted_at = null
+      })
+    })
   }
 }
 
@@ -357,7 +494,7 @@ export const db = new MiClaseDB()
 /** Tablas que participan en backup y sincronización, en orden de dependencia. */
 export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
-  'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones',
+  'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos',
 ] as const
 

@@ -42,15 +42,26 @@ export async function compartirFichero(
   const blob = new Blob([contenido], { type: mime })
 
   if (puedeCompartirFicheros()) {
-    try {
-      await navigator.share({ files: [new File([blob], nombre, { type: mime })], title: titulo })
-      return 'compartido'
-    } catch (e: any) {
-      // Que el docente cierre la hoja no es un fallo del que haya que informar
-      if (e?.name === 'AbortError') return 'cancelado'
-      // Cualquier otro problema: al menos que se lleve el fichero
-      descargar(nombre, blob)
-      return 'descargado'
+    // La hoja de compartir no admite cualquier tipo en todos los sistemas, y
+    // `puedeCompartirFicheros` pregunta con un fichero de mentira. Aquí se
+    // pregunta con el de verdad; si su tipo no pasa, se ofrece como texto
+    // —conserva el nombre acabado en .json, que es lo que mira el sistema al
+    // recibirlo— antes de rendirse a la descarga, que en una app instalada en
+    // la pantalla de inicio del iPad puede no hacer nada visible.
+    const candidatos = [
+      new File([blob], nombre, { type: mime }),
+      new File([blob], nombre, { type: 'text/plain' }),
+    ]
+    const fichero = candidatos.find(f => { try { return navigator.canShare({ files: [f] }) } catch { return false } })
+    if (fichero) {
+      try {
+        await navigator.share({ files: [fichero], title: titulo })
+        return 'compartido'
+      } catch (e: any) {
+        // Que el docente cierre la hoja no es un fallo del que haya que informar
+        if (e?.name === 'AbortError') return 'cancelado'
+        // Cualquier otro problema: al menos que se lleve el fichero
+      }
     }
   }
 

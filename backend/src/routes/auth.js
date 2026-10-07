@@ -16,6 +16,10 @@ const AUTHENTIK_SLUG   = process.env.AUTHENTIK_SLUG           || 'miclase'
 const CLIENT_ID        = process.env.AUTHENTIK_CLIENT_ID      || ''
 const CLIENT_SECRET    = process.env.AUTHENTIK_CLIENT_SECRET  || ''
 const REDIRECT_URI     = process.env.AUTHENTIK_REDIRECT_URI   || 'https://miclase.edumind.es/auth/callback'
+// Vuelta a la app nativa (iOS/Android) por esquema propio. Tiene que estar
+// dada de alta también en el proveedor de Authentik.
+const REDIRECT_URI_NATIVO = process.env.AUTHENTIK_REDIRECT_URI_NATIVO || 'es.edumind.miclase://auth/callback'
+const REDIRECT_URIS_PERMITIDOS = new Set([REDIRECT_URI, REDIRECT_URI_NATIVO])
 const SESSION_TTL      = 60 * 60 * 24 * 7  // 7 días en segundos
 
 const issuerBase = () => `${AUTHENTIK_URL}/application/o/${AUTHENTIK_SLUG}`
@@ -44,6 +48,7 @@ export default async function authRoutes(app) {
     authentik_url: AUTHENTIK_URL,
     client_id:     CLIENT_ID,
     redirect_uri:  REDIRECT_URI,
+    redirect_uri_nativo: REDIRECT_URI_NATIVO,
     slug:          AUTHENTIK_SLUG,
     authorize_url: `${AUTHENTIK_URL}/application/o/authorize/`,
     scopes:        'openid profile email',
@@ -54,9 +59,15 @@ export default async function authRoutes(app) {
     if (!CLIENT_ID || !CLIENT_SECRET) {
       return reply.status(503).send({ error: 'Authentik no configurado en este servidor' })
     }
-    const { code, code_verifier, nonce } = req.body || {}
+    const { code, code_verifier, nonce, redirect_uri } = req.body || {}
     if (!code || !code_verifier) {
       return reply.status(400).send({ error: 'code y code_verifier son obligatorios' })
+    }
+    // El redirect_uri del canje debe ser el mismo con el que se pidió el
+    // código, y solo se admiten los dos nuestros (web y app nativa).
+    const redirectUri = redirect_uri || REDIRECT_URI
+    if (!REDIRECT_URIS_PERMITIDOS.has(redirectUri)) {
+      return reply.status(400).send({ error: 'redirect_uri no permitido' })
     }
 
     const tokenRes = await fetch(`${AUTHENTIK_URL}/application/o/token/`, {
@@ -67,7 +78,7 @@ export default async function authRoutes(app) {
         client_id:     CLIENT_ID,
         client_secret: CLIENT_SECRET,
         code,
-        redirect_uri:  REDIRECT_URI,
+        redirect_uri:  redirectUri,
         code_verifier,
       }),
     })

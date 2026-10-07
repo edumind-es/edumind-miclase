@@ -165,6 +165,8 @@ if (await chip.count()) {
 // ── 9 · Matriz de evaluación ────────────────────────────────────────────
 console.log('\n9. Calificador: pestañas, subpestañas y matriz')
 await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+// Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
 await p.waitForTimeout(2000)
 
 const pestanasArea = await p.locator('.tab-area').count()
@@ -440,7 +442,9 @@ console.log('\n14. Sincronización')
 await p.getByRole('link', { name: 'Sincronizar', exact: true }).click()
 await p.waitForTimeout(1400)
 ok(await p.getByText('Cómo funciona').isVisible(), 'explica el modelo de privacidad antes que nada')
-ok(await p.getByText(/Necesitas iniciar sesión con EDUmind/).isVisible(), 'en modo local pide SSO en vez de fallar')
+ok(await p.getByText(/no pasan por ningún servidor ni necesitan cuenta/).isVisible(), 'deja claro que el QR y el fichero no necesitan cuenta')
+ok(await p.getByText(/Buzón en el servidor \(opcional/).isVisible(), 'el buzón con cuenta queda como opción plegada, no como requisito')
+ok(await p.getByRole('button', { name: 'Invitar al otro dispositivo' }).isVisible(), 'y el enlace directo está disponible sin sesión')
 await foto('18-sincronizar')
 
 // ── 15 · Copia de seguridad ─────────────────────────────────────────────
@@ -453,7 +457,8 @@ const fBackup = await descargaBackup
 const rutaBackup = process.env.SCRATCH + '/backup.json'
 await fBackup.saveAs(rutaBackup)
 const backup = JSON.parse(readFileSync(rutaBackup, 'utf8'))
-ok(backup.version === 5, 'el backup es de la versión 5, la del esquema actual')
+ok(backup.version === 6, 'el backup es de la versión 6, la del esquema actual')
+ok(Array.isArray(backup.diario), 'incluye la tabla del diario de evaluación')
 ok(Array.isArray(backup.criterio_instrumentos) && backup.criterio_instrumentos.length > 0,
    'incluye las asignaciones criterio↔instrumento', `${backup.criterio_instrumentos.length} vínculos`)
 ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y alumnado')

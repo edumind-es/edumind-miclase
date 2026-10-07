@@ -5,21 +5,32 @@
  * Cada celda muestra la nota y el instrumento con el que la programación dice
  * que se evalúa ese criterio; al pulsarla se abre el panel de evaluación.
  * Un criterio sin instrumento asignado sale rayado y explica cómo arreglarlo.
+ *
+ * Dos vistas de los mismos datos: por criterio (la matriz LOMLOE, 40 columnas
+ * en un área real) y por instrumento (una columna por examen, cuaderno o
+ * billete de salida, que es como el docente corrige de verdad). El panel de la
+ * casilla es el mismo en las dos; lo que cambia es por dónde se entra.
  */
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
+import { agruparPorCompetencia, calcularCobertura, mediaDe } from '@/db/cobertura'
+import { miniTendencia } from '@/db/diario'
 import { useAppStore } from '@/store/useAppStore'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { getInstrConfig } from '@/ia/instrumentosConfig'
+import { abreviatura } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
+import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
+import SesionInstrumento from '@/components/SesionInstrumento'
+import PegarColumna from '@/components/PegarColumna'
+import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
@@ -40,6 +51,44 @@ type CriterioAmpliado = {
  * parpadeo. Quien lo abre es porque ha ido a buscarlo.
  */
 const ESPERA_AMPLIAR = 2000
+
+type Vista = 'criterios' | 'instrumentos'
+/** La vista elegida se recuerda en este aparato: es una comodidad, no un dato. */
+const CLAVE_VISTA = 'miclase.calificador.vista'
+/** Sin elección guardada, null: se decide con los datos (hay instrumentos → por instrumento). */
+function vistaGuardada(): Vista | null {
+  try {
+    const v = localStorage.getItem(CLAVE_VISTA)
+    return v === 'instrumentos' || v === 'criterios' ? v : null
+  } catch { return null }
+}
+/** Competencias plegadas por área, en este aparato. */
+const CLAVE_PLEGADAS = 'miclase.calificador.plegadas'
+function plegadasGuardadas(asignaturaId: number | null): Set<string> {
+  if (!asignaturaId) return new Set()
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_PLEGADAS) || '{}') as Record<string, string[]>
+    return new Set(todo[String(asignaturaId)] ?? [])
+  } catch { return new Set() }
+}
+function guardarPlegadas(asignaturaId: number, plegadas: Set<string>) {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_PLEGADAS) || '{}') as Record<string, string[]>
+    todo[String(asignaturaId)] = [...plegadas]
+    localStorage.setItem(CLAVE_PLEGADAS, JSON.stringify(todo))
+  } catch { /* sin almacenamiento: se olvida y ya */ }
+}
+/** Áreas cuya tarjeta de presentación ya se cerró en este aparato. */
+const CLAVE_PRESENTADO = 'miclase.calificador.presentado'
+function yaPresentada(asignaturaId: number): boolean {
+  try { return (JSON.parse(localStorage.getItem(CLAVE_PRESENTADO) || '[]') as number[]).includes(asignaturaId) } catch { return false }
+}
+function marcarPresentada(asignaturaId: number) {
+  try {
+    const lista = JSON.parse(localStorage.getItem(CLAVE_PRESENTADO) || '[]') as number[]
+    if (!lista.includes(asignaturaId)) localStorage.setItem(CLAVE_PRESENTADO, JSON.stringify([...lista, asignaturaId]))
+  } catch { /* sin almacenamiento: saldrá otra vez, y ya */ }
+}
 
 function claseNota(v: number | null | undefined) {
   if (v == null) return ''
@@ -66,7 +115,31 @@ export default function EvaluacionPage() {
   const [errorCurriculo, setErrorCurriculo] = useState(false)
   const [managerAbierto, setManagerAbierto] = useState(false)
   const [refresco, setRefresco] = useState(0)
-  const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio } | null>(null)
+  /**
+   * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
+   * instrumento: el panel se centra en ese instrumento y en los criterios
+   * que cubre, en vez de en un criterio y sus instrumentos.
+   */
+  const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
+  const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
+  const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
+  const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  const [presentacionCerrada, setPresentacionCerrada] = useState(false)
+  /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
+  const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
+  const [coberturaAbierta, setCoberturaAbierta] = useState(false)
+  useEffect(() => { setPlegadas(plegadasGuardadas(asignaturaId)) }, [asignaturaId])
+  const alternarPlegada = (numero: string) => setPlegadas(prev => {
+    const s = new Set(prev)
+    if (s.has(numero)) s.delete(numero); else s.add(numero)
+    if (asignaturaId) guardarPlegadas(asignaturaId, s)
+    return s
+  })
+
+  const cambiarVista = (v: Vista) => {
+    setVistaElegida(v)
+    try { localStorage.setItem(CLAVE_VISTA, v) } catch { /* sin almacenamiento: se olvida y ya */ }
+  }
 
   // ── Criterio ampliado ───────────────────────────────────────────────────
   // La cabecera recorta el criterio a dos líneas. Insistiendo sobre ella —con
@@ -165,6 +238,24 @@ export default function EvaluacionPage() {
 
   const alumnos: Alumno[] = matriz?.alumnos ?? []
   const unidadActual = unidades.find(u => u.id === unidadId)
+  // Al cambiar de área vuelve a decidirse si toca presentarla.
+  useEffect(() => { setPresentacionCerrada(false) }, [asignaturaId])
+
+  /** Las columnas de la vista por instrumento: cada uno con los criterios que cubre aquí. */
+  const columnasInstr = useMemo(
+    () => (matriz ? columnasPorInstrumento(matriz, columnas) : []),
+    [matriz, columnas])
+
+  /** Abrir el panel de un alumno centrado en un instrumento. */
+  const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
+    setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+
+  // Sin elección guardada, la vista por instrumento en cuanto hay con qué:
+  // es la que habla el idioma del aula. La matriz LOMLOE queda a un clic.
+  const vista: Vista = vistaElegida ?? (columnasInstr.length > 0 ? 'instrumentos' : 'criterios')
+  const mostrarPresentacion = !!asignaturaId && !presentacionCerrada && !yaPresentada(asignaturaId)
+    && !!matriz && alumnos.length > 0 && columnasInstr.length > 0
+  const cerrarPresentacion = () => { if (asignaturaId) marcarPresentada(asignaturaId); setPresentacionCerrada(true) }
 
   // Dos motivos distintos para que una casilla salga rayada, y el docente
   // arregla cada uno en un sitio: uno en la programación, el otro cambiando
@@ -181,18 +272,89 @@ export default function EvaluacionPage() {
     return columnas.filter(c => matriz.criteriosFueraDeTrimestre.has(c.id)).length
   }, [columnas, matriz])
 
-  const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
-    if (!matriz || !instrs.length) return null
-    // Con varios instrumentos, la celda muestra la media ponderada de los que tengan nota
-    let suma = 0, pesos = 0
+  /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
+  const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
+    if (!matriz) return null
     for (const ins of instrs) {
       const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${ins.instrumento_id}:${trimestre}`]
+      if (c?.valor_anterior != null) return { valor: c.valor_anterior, motivo: c.anterior_motivo ?? '' }
+    }
+    return null
+  }
+
+  // Criterios con alguna nota fantasma: su columna se duplica. La copia va
+  // delante, semitranslúcida, con la nota anterior; la de siempre es la que cuenta.
+  const conFantasma = useMemo(() => {
+    const ids = new Set<string>()
+    if (matriz) for (const c of Object.values(matriz.calificaciones)) if (c.valor_anterior != null) ids.add(c.criterio_id)
+    return ids
+  }, [matriz])
+
+  /**
+   * Lo que pesa en el área de cada casilla: las familias (o instrumentos
+   * sueltos), una vez, con su color. Los hijos quedan dentro de la suya.
+   */
+  const cabecerasDe = (instrs: CeldaInstrumento[]) => {
+    const vistos = new Map<number, { id: number; nombre: string; peso: number; color: string; hijos: CeldaInstrumento[] }>()
+    for (const i of instrs) {
+      const id = i.familia_id ?? i.instrumento_id
+      const cab = vistos.get(id) ?? { id, nombre: i.familia_nombre ?? i.nombre, peso: i.familia_peso, color: i.color, hijos: [] }
+      if (i.familia_id != null) cab.hijos.push(i)
+      else cab.color = i.color
+      vistos.set(id, cab)
+    }
+    // El color de una familia con hijos es el del primero: la columna de la familia no existe como tal.
+    for (const cab of vistos.values()) if (cab.hijos.length && !instrs.some(i => i.instrumento_id === cab.id)) cab.color = cab.hijos[0].color
+    return [...vistos.values()]
+  }
+
+  const notaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
+    if (!matriz || !instrs.length) return null
+    // La media ponderada de las familias con nota: la de una familia con hijos
+    // es la nota virtual que funde a sus hijos, la misma del boletín.
+    let suma = 0, pesos = 0
+    for (const cab of cabecerasDe(instrs)) {
+      const c = matriz.calificaciones[`${alumnoId}:${criterioId}:${cab.id}:${trimestre}`]
       if (c?.valor == null) continue
-      const p = ins.peso > 0 ? ins.peso : 1
+      const p = cab.peso > 0 ? cab.peso : 1
       suma += c.valor * p
       pesos += p
     }
     return pesos > 0 ? Math.round((suma / pesos) * 10) / 10 : null
+  }
+
+  /** Las columnas por competencia; cada grupo sabe si está plegado. */
+  const competencias = useMemo(() => agruparPorCompetencia(columnas).map(g => ({ ...g, plegada: plegadas.has(g.numero) })), [columnas, plegadas])
+
+  /** Qué queda por evaluar en lo que se mira, con la misma nota que pinta la casilla. */
+  const cobertura = useMemo(() => {
+    if (!matriz) return null
+    const evaluables = columnas.filter(c => (matriz.porCriterio.get(c.id)?.length ?? 0) > 0).map(c => c.id)
+    return calcularCobertura(alumnos.map(a => a.id!), evaluables,
+      (a, c) => notaCelda(a, c, matriz.porCriterio.get(c) ?? []))
+  }, [matriz, columnas, alumnos, trimestre])
+
+  /** Cabecera de una competencia plegada: una sola columna. */
+  const thPlegado = (g: typeof competencias[number]) => (
+    <th key={`plegado-${g.numero}`} scope="col" className="criterio-th plegado" data-plegado={g.etiqueta}
+      onClick={() => alternarPlegada(g.numero)} title={`${g.etiqueta}: ${g.criterios.map(c => c.id).join(', ')}. Pulsa para desplegar.`}>
+      <div className="criterio-th-id">{g.etiqueta} ▸</div>
+      <div className="criterio-th-desc">{g.criterios.length} criterios plegados · media</div>
+    </th>
+  )
+  /** Casilla de una competencia plegada: la media del alumno en sus criterios. */
+  const tdPlegado = (al: Alumno, g: typeof competencias[number]) => {
+    const { media, conNota } = mediaDe(g.criterios.map(c => notaCelda(al.id!, c.id, matriz?.porCriterio.get(c.id) ?? [])))
+    return (
+      <td key={`plegado-${g.numero}`} className="celda plegado">
+        <button type="button" className={`celda-btn ${claseNota(media)}`} data-celda-plegada
+          onClick={() => alternarPlegada(g.numero)}
+          title={`${al.apellidos}, ${al.nombre} · ${g.etiqueta}: media de ${conNota} de ${g.criterios.length} criterios. Pulsa para desplegar.`}>
+          <span>{media == null ? '·' : media}</span>
+          {conNota > 0 && conNota < g.criterios.length && <span className="celda-instr"><b>{conNota}/{g.criterios.length}</b></span>}
+        </button>
+      </td>
+    )
   }
 
   // ── Estados vacíos ────────────────────────────────────────────────────
@@ -219,6 +381,20 @@ export default function EvaluacionPage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          {asignaturaId && (
+            <div className="vista-conmutador" role="group" aria-label="Vista del calificador">
+              <button type="button" data-vista="criterios" aria-pressed={vista === 'criterios'}
+                onClick={() => cambiarVista('criterios')}
+                title="Una columna por criterio de evaluación">
+                Por criterio
+              </button>
+              <button type="button" data-vista="instrumentos" aria-pressed={vista === 'instrumentos'}
+                onClick={() => cambiarVista('instrumentos')}
+                title="Una columna por instrumento: examen, cuaderno, billete de salida…">
+                Por instrumento
+              </button>
+            </div>
+          )}
           {asignaturaId && (
             <button className="btn-secondary" style={{ fontSize: 13 }}
               onClick={() => setManagerAbierto(true)}
@@ -311,6 +487,59 @@ export default function EvaluacionPage() {
 
           {cargando && <p style={{ color: 'var(--gris-600)' }}>Cargando calificador…</p>}
 
+          {!cargando && cobertura && alumnos.length > 0 && cobertura.evaluables > 0 && (
+            <div data-cobertura className={`cobertura${cobertura.sinNota.length === 0 && cobertura.alumnosSinNota.length === 0 ? ' completa' : ''}`}>
+              <button type="button" className="cobertura-resumen" data-cobertura-toggle aria-expanded={coberturaAbierta}
+                onClick={() => setCoberturaAbierta(a => !a)}>
+                <span className="cobertura-barra" aria-hidden="true">
+                  <i style={{ width: `${cobertura.casillas.total ? Math.round((cobertura.casillas.conNota / cobertura.casillas.total) * 100) : 0}%` }} />
+                </span>
+                <strong>{cobertura.conAlgunaNota} de {cobertura.evaluables}</strong> criterios con alguna nota
+                {cobertura.sinNota.length > 0 && <> · <strong>{cobertura.sinNota.length}</strong> sin ninguna</>}
+                {cobertura.alumnosSinNota.length > 0 && <> · <strong>{cobertura.alumnosSinNota.length}</strong> alumno{cobertura.alumnosSinNota.length !== 1 ? 's' : ''} sin nada</>}
+                <span className="cobertura-flecha">{coberturaAbierta ? '▴' : '▾'}</span>
+              </button>
+              {coberturaAbierta && (
+                <div className="cobertura-detalle" data-cobertura-detalle>
+                  {cobertura.sinNota.length > 0 && (
+                    <div><span className="cobertura-rotulo">Sin ninguna nota</span>
+                      {cobertura.sinNota.map(id => (
+                        <button key={id} type="button" className="cobertura-chip" title={columnas.find(c => c.id === id)?.descripcion}
+                          onClick={() => { cambiarVista('criterios'); const n = agruparPorCompetencia([{ id }])[0].numero; if (plegadas.has(n)) alternarPlegada(n) }}>
+                          {id}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  {cobertura.aMedias.length > 0 && (
+                    <div><span className="cobertura-rotulo">A medias</span>
+                      {cobertura.aMedias.map(x => (
+                        <span key={x.id} className="cobertura-chip suave" title={`${x.conNota} de ${alumnos.length} alumnos con nota`}>{x.id} <small>{x.conNota}/{alumnos.length}</small></span>
+                      ))}
+                    </div>
+                  )}
+                  {cobertura.alumnosSinNota.length > 0 && (
+                    <div><span className="cobertura-rotulo">Alumnado sin ninguna nota</span>
+                      <span style={{ fontSize: 12 }}>{alumnos.filter(a => cobertura.alumnosSinNota.includes(a.id!)).map(a => `${a.apellidos}, ${a.nombre}`).join(' · ')}</span>
+                    </div>
+                  )}
+                  {cobertura.sinNota.length === 0 && cobertura.alumnosSinNota.length === 0 && (
+                    <div style={{ fontSize: 12.5, color: 'var(--verde-500)', fontWeight: 600 }}>Todo lo evaluable tiene al menos una nota.</div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {!cargando && mostrarPresentacion && (
+            <PresentacionCalificador
+              area={asigActual?.nombre_display ?? ''}
+              columnas={columnasInstr}
+              onAjustar={() => { setManagerAbierto(true) }}
+              onCerrar={cerrarPresentacion}
+            />
+          )}
+
           {/* Matriz */}
           {!cargando && matriz && (
             alumnos.length === 0 ? (
@@ -326,23 +555,64 @@ export default function EvaluacionPage() {
                   ? 'Esta unidad no tiene criterios vinculados. Añádeselos desde la programación.'
                   : 'No hay criterios disponibles para esta área en el currículo de tu comunidad.'}
               </div>
+            ) : vista === 'instrumentos' ? (
+              columnasInstr.length === 0 ? (
+                <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
+                  Ningún instrumento evalúa estos criterios en el {trimestre}º trimestre.{' '}
+                  {sinInstrumento > 0
+                    ? <>Asigna instrumentos a los criterios en la programación y aparecerán aquí como columnas.</>
+                    : <>Cambia de trimestre o revisa en <strong>⚙ Instrumentos</strong> en qué trimestres se usa cada uno.</>}
+                </div>
+              ) : (
+                <MatrizInstrumentos
+                  matriz={matriz}
+                  columnas={columnasInstr}
+                  alumnos={alumnos}
+                  trimestre={trimestre}
+                  onCelda={abrirPorInstrumento}
+                  onSesion={col => setSesion(col)}
+                  onCorregir={col => abrirPorInstrumento(0, col)}
+                  onPegar={col => setPegarEn(col)}
+                />
+              )
             ) : (
               <div className="matriz-wrap">
-                <table className="matriz">
+                <table className="matriz matriz-criterios">
                   <thead>
-                    <tr>
-                      <th className="col-alumno" scope="col">
+                    {/* Fila de competencias: pulsar una pliega sus criterios a una columna.
+                        Con 40 criterios, ver CE1 · CE2 · CE3 de un vistazo es lo que
+                        permite llegar a la columna buscada sin recorrerlas todas. */}
+                    <tr className="fila-competencias">
+                      <th className="col-alumno" scope="col" rowSpan={2}>
                         Alumno
                         <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
                           {alumnos.length} · {columnas.length} criterios
                         </div>
                       </th>
-                      {columnas.map(cr => {
+                      {competencias.map(g => (
+                        <th key={g.numero} scope="colgroup" data-competencia-th={g.etiqueta} aria-pressed={g.plegada}
+                          colSpan={g.plegada ? 1 : g.criterios.reduce((s, c) => s + (conFantasma.has(c.id) ? 2 : 1), 0)}
+                          onClick={() => alternarPlegada(g.numero)}
+                          title={g.plegada ? `Desplegar ${g.etiqueta}` : `Plegar ${g.etiqueta} en una sola columna con la media`}>
+                          <span className="comp-flecha">{g.plegada ? '▸' : '▾'}</span> {g.etiqueta}
+                          <span className="peso">{g.criterios.length}</span>
+                        </th>
+                      ))}
+                    </tr>
+                    <tr>
+                      {competencias.flatMap(g => g.plegada ? [thPlegado(g)] : g.criterios.map(cr => {
                         const instrs = matriz.porCriterio.get(cr.id) ?? []
-                        return (
-                          // Sin `title`: el aviso del navegador saldría a la vez
-                          // que el panel y diría lo mismo, recortado y peor puesto.
-                          <th key={cr.id} scope="col" className="criterio-th"
+                        return (<Fragment key={cr.id}>
+                          {conFantasma.has(cr.id) && (
+                            <th scope="col" className="criterio-th fantasma" style={{ opacity: .45 }}
+                              title={`Notas anteriores de ${cr.id}: se conservan a la vista, pero no cuentan`}>
+                              <div className="criterio-th-id">{cr.id}</div>
+                              <div className="criterio-th-desc">nota anterior · no cuenta</div>
+                            </th>
+                          )}
+                          {/* Sin `title`: el aviso del navegador saldría a la vez
+                              que el panel y diría lo mismo, recortado y peor puesto. */}
+                          <th scope="col" className="criterio-th"
                             onMouseEnter={e => empezarAmpliar(cr, e.currentTarget)}
                             onMouseLeave={cerrarAmpliado}
                             // Con el dedo no hay «pasar por encima»: vale mantener
@@ -352,20 +622,33 @@ export default function EvaluacionPage() {
                             onTouchEnd={cancelarAmpliar}
                             onTouchMove={cerrarAmpliado}
                             onTouchCancel={cerrarAmpliado}>
+                            {/* Franja de identidad: un segmento por familia, con su color,
+                                y debajo la abreviatura, para que el color no sea la única pista. */}
+                            {instrs.length > 0 && (
+                              <div className="criterio-th-franja" aria-hidden="true">
+                                {cabecerasDe(instrs).map(cab => <span key={cab.id} style={{ background: cab.color }} />)}
+                              </div>
+                            )}
                             <div className="criterio-th-id">{cr.id}</div>
                             <div className="criterio-th-desc">{cr.descripcion}</div>
                             <div className="criterio-th-instr">
                               {instrs.length === 0
                                 ? <span className="aviso" title="Sin instrumento asignado en la programación">⚠</span>
-                                : instrs.map(i => (
-                                    <i key={i.instrumento_id}
-                                      style={{ background: getInstrConfig(i.tipo).color }}
-                                      title={`${i.nombre} · ${getInstrConfig(i.tipo).label} · ${i.peso}%`} />
+                                : cabecerasDe(instrs).map(cab => (
+                                    <i key={cab.id} className="abrev" style={{ background: cab.color }}
+                                      title={`${cab.nombre} · ${cab.peso}%${cab.hijos.length ? `\nDentro: ${cab.hijos.map(h => h.nombre).join(', ')}` : ''}`}>
+                                      {abreviatura(cab.nombre)}
+                                    </i>
                                   ))}
+                              {instrs.some(i => i.vinculados.length > 0) && (
+                                <span className="vinculo" style={{ fontSize: 9, lineHeight: 1 }}
+                                  title={instrs.filter(i => i.vinculados.length > 0)
+                                    .map(i => `${i.nombre}: vinculado con ${i.vinculados.join(', ')}`).join('\n')}>🔗</span>
+                              )}
                             </div>
                           </th>
-                        )
-                      })}
+                        </Fragment>)
+                      }))}
                     </tr>
                   </thead>
                   <tbody>
@@ -375,20 +658,34 @@ export default function EvaluacionPage() {
                           {al.apellidos}, {al.nombre}
                           {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                         </td>
-                        {columnas.map(cr => {
+                        {competencias.flatMap(g => g.plegada ? [tdPlegado(al, g)] : g.criterios.map(cr => {
                           const instrs = matriz.porCriterio.get(cr.id) ?? []
                           const valor = notaCelda(al.id!, cr.id, instrs)
                           const nEvid = matriz.evidencias.get(`${al.id}:${cr.id}`) ?? 0
                           const sinInstr = instrs.length === 0
+                          // Registros del diario del primer instrumento que los tenga
+                          const diario = instrs.map(i => matriz.diario[`${al.id}:${cr.id}:${i.instrumento_id}`]).find(Boolean)
 
-                          return (
-                            <td key={cr.id} className="celda">
+                          const anterior = conFantasma.has(cr.id) ? fantasmaCelda(al.id!, cr.id, instrs) : null
+                          return (<Fragment key={cr.id}>
+                            {conFantasma.has(cr.id) && (
+                              <td className="celda fantasma">
+                                {anterior && (
+                                  <button className={`celda-btn ${claseNota(anterior.valor)}`} style={{ opacity: .4 }}
+                                    onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
+                                    title={`Nota anterior de ${cr.id}: ${anterior.valor}. No cuenta.\n${anterior.motivo}\nPulsa para recuperarla o descartarla.`}>
+                                    <span>{anterior.valor}</span>
+                                  </button>
+                                )}
+                              </td>
+                            )}
+                            <td className="celda">
                               <button
                                 className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
                                 onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
                                 title={sinInstr
                                   ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
-                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${instrs.map(i => i.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
+                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${cabecerasDe(instrs).map(c => c.hijos.length ? `${c.nombre} (${c.hijos.map(h => h.nombre).join(', ')})` : c.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
                               >
                                 {sinInstr ? (
                                   <span>sin instr.</span>
@@ -396,18 +693,22 @@ export default function EvaluacionPage() {
                                   <>
                                     <span>{valor == null ? '·' : valor}</span>
                                     <span className="celda-instr">
-                                      {instrs.map(i => (
-                                        <i key={i.instrumento_id}
-                                          style={{ background: getInstrConfig(i.tipo).color }} />
+                                      {cabecerasDe(instrs).map(cab => (
+                                        <i key={cab.id} style={{ background: cab.color }} />
                                       ))}
                                       {nEvid > 0 && <b title={`${nEvid} evidencia(s) adjunta(s)`}>{nEvid}</b>}
+                                      {diario && (
+                                        <small className="celda-diario" title={`${diario.n} registro(s) del diario: ${diario.niveles.join(' · ')}`}>
+                                          {miniTendencia(diario.niveles)}
+                                        </small>
+                                      )}
                                     </span>
                                   </>
                                 )}
                               </button>
                             </td>
-                          )
-                        })}
+                          </Fragment>)
+                        }))}
                       </tr>
                     ))}
                   </tbody>
@@ -419,7 +720,7 @@ export default function EvaluacionPage() {
           {/* Leyenda */}
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
-              <span>Pulsa una casilla para evaluar.</span>
+              <span>{vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)
                 return (
@@ -429,14 +730,23 @@ export default function EvaluacionPage() {
                   </span>
                 )
               })}
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-                <span style={{ display: 'inline-flex', gap: 2 }}>
-                  <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
+              {vista === 'criterios' ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ display: 'inline-flex', gap: 2 }}>
+                    <i style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--gris-500)', display: 'inline-block' }} />
+                  </span>
+                  cada color es un instrumento de la programación; sus siglas van en la cabecera
                 </span>
-                cada punto es un instrumento
-              </span>
+              ) : (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                  <b style={{ fontSize: 11 }}>2/3</b> criterios con nota de los que cubre
+                </span>
+              )}
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
                 <b style={{ fontSize: 11 }}>2</b> evidencias adjuntas
+              </span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <small style={{ fontFamily: 'monospace', fontSize: 10 }}>2·3·4</small> registros del diario
               </span>
             </div>
           )}
@@ -470,7 +780,12 @@ export default function EvaluacionPage() {
       {celda && matriz && (() => {
         const al = alumnos[celda.alumnoIdx]
         if (!al) return null
-        const instrs = matriz.porCriterio.get(celda.criterio.id) ?? []
+        const todos = matriz.porCriterio.get(celda.criterio.id) ?? []
+        // Desde la vista por instrumento solo interesa ese: los demás que
+        // evalúen el mismo criterio se corrigen desde su propia columna.
+        const instrs = celda.instrumentoId != null
+          ? todos.filter(i => i.instrumento_id === celda.instrumentoId)
+          : todos
 
         if (instrs.length === 0) {
           const soloOtroTrimestre = matriz.criteriosFueraDeTrimestre.has(celda.criterio.id)
@@ -515,6 +830,15 @@ export default function EvaluacionPage() {
             posicion={`${celda.alumnoIdx + 1}/${alumnos.length}`}
             onGuardado={() => setRefresco(r => r + 1)}
             onCerrar={() => setCelda(null)}
+            alumnoIds={alumnos.map(a => a.id!)}
+            enfoque={celda.instrumentoId != null ? 'instrumento' : 'criterio'}
+            onElegirCriterio={celda.instrumentoId != null
+              ? c => setCelda(prev => prev && { ...prev, criterio: { id: c.id, descripcion: c.descripcion } })
+              : undefined}
+            hermanosDe={iid => columnas
+              .filter(c => c.id !== celda.criterio.id
+                && (matriz.porCriterio.get(c.id) ?? []).some(i => i.instrumento_id === iid))
+              .map(c => ({ id: c.id, descripcion: c.descripcion }))}
             onAnterior={celda.alumnoIdx > 0
               ? () => setCelda(c => c && { ...c, alumnoIdx: c.alumnoIdx - 1 })
               : undefined}
@@ -524,6 +848,33 @@ export default function EvaluacionPage() {
           />
         )
       })()}
+
+      {sesion && matriz && (
+        <SesionInstrumento
+          instrumento={sesion.ins}
+          criterios={sesion.criterios}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {pegarEn && matriz && (
+        <PegarColumna
+          instrumento={pegarEn.ins}
+          criterios={pegarEn.criterios}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onGuardado={() => { setPegarEn(null); setRefresco(r => r + 1) }}
+          onCerrar={() => setPegarEn(null)}
+        />
+      )}
 
       {managerAbierto && asigActual && (
         <InstrumentosManager

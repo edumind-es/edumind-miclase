@@ -25,6 +25,8 @@
 const PREFIJO = 'MICLASE1'
 const ESPERA_ICE = 4000       // ms recogiendo candidatos antes de dar por cerrado el saludo
 const ESPERA_CONEXION = 30000 // ms hasta dar el emparejamiento por fallido
+/** Cuánto aguanta el invitado enseñando su código sin que nadie lo lea. */
+const ESPERA_LECTURA = 5 * 60_000
 
 /** Trozo máximo por mensaje. El canal declara 256 KB; se deja margen. */
 const TROZO = 48 * 1024
@@ -98,6 +100,60 @@ export async function abrirSaludo(codigo: string): Promise<Saludo> {
     ? await descomprimir(bytes)
     : new TextDecoder().decode(bytes)
   return { tipo: m[1] as 'O' | 'R', sdp }
+}
+
+// ─── Diagnóstico ─────────────────────────────────────────────────────────
+
+/**
+ * Cuántas direcciones de red ofrece un saludo, y de qué clase.
+ *
+ * Los navegadores esconden la IP local detrás de un nombre `.local` (mDNS)
+ * salvo que se les haya dado permiso de cámara. Con IP el otro aparato conecta
+ * directo; con nombre tiene que resolverlo, y ahí es donde fallan las redes
+ * que bloquean mDNS. Saber qué se ha ofrecido es medio diagnóstico.
+ */
+export function direccionesDe(sdp: string | undefined | null): { ip: number; nombre: number } {
+  let ip = 0, nombre = 0
+  for (const linea of (sdp ?? '').split(/\r?\n/)) {
+    const m = /^a=candidate:\S+ \d+ \S+ \d+ (\S+) \d+ typ host/.exec(linea)
+    if (!m) continue
+    if (m[1].endsWith('.local')) nombre++; else ip++
+  }
+  return { ip, nombre }
+}
+
+const SIN_RED =
+  'Este dispositivo no ha encontrado ninguna dirección de red local que ofrecer al otro. ' +
+  'Comprueba que está conectado a la wifi (no solo a datos móviles) y, en un Mac, que el ' +
+  'navegador tiene permiso en Ajustes del Sistema → Privacidad y seguridad → Red local.'
+
+/** Lo que se le cuenta al docente cuando los dos aparatos no llegan a verse. */
+function porQueNoConecta(pc: RTCPeerConnection): string {
+  const mias = direccionesDe(pc.localDescription?.sdp)
+  const suyas = direccionesDe(pc.remoteDescription?.sdp)
+  return 'No se ha podido conectar con el otro dispositivo. Lo habitual, por orden:\n' +
+    '1. No están en la misma wifi (o uno va por datos móviles o por una VPN).\n' +
+    '2. La red aísla los aparatos entre sí: pasa en wifis de centro y de invitados. ' +
+    'Prueba con la wifi de casa o compartiendo internet desde el móvil, o usa el paquete por fichero.\n' +
+    '3. En el Mac, el navegador no tiene permiso de «Red local» ' +
+    '(Ajustes del Sistema → Privacidad y seguridad → Red local). Safari no lo necesita.\n' +
+    `Diagnóstico: este dispositivo ofreció ${mias.ip} IP y ${mias.nombre} nombres .local; ` +
+    `el otro, ${suyas.ip} IP y ${suyas.nombre} nombres .local; estado «${pc.iceConnectionState}».`
+}
+
+/** Traduce el estado de la conexión a algo que se pueda enseñar mientras se espera. */
+export type EstadoEnlace = 'esperando' | 'conectando' | 'conectado' | 'caido'
+
+function vigilar(pc: RTCPeerConnection, avisar: () => ((e: EstadoEnlace) => void) | null) {
+  pc.addEventListener('iceconnectionstatechange', () => {
+    const s = pc.iceConnectionState
+    const e: EstadoEnlace =
+      s === 'checking' ? 'conectando'
+      : s === 'connected' || s === 'completed' ? 'conectado'
+      : s === 'failed' || s === 'disconnected' || s === 'closed' ? 'caido'
+      : 'esperando'
+    avisar()?.(e)
+  })
 }
 
 // ─── Canal ───────────────────────────────────────────────────────────────
@@ -199,11 +255,10 @@ function envolver(pc: RTCPeerConnection, canal: RTCDataChannel): Enlace {
 function esperarApertura(pc: RTCPeerConnection, canal: RTCDataChannel): Promise<Enlace> {
   return new Promise((listo, fallo) => {
     const reloj = setTimeout(() => {
+      // El porqué se calcula antes de cerrar: después ya no hay estado que leer.
+      const porque = porQueNoConecta(pc)
       pc.close()
-      fallo(new Error(
-        'No se ha podido conectar con el otro dispositivo. Comprueba que los dos ' +
-        'están en la misma red wifi: algunas redes de centro aíslan los aparatos ' +
-        'entre sí y no dejan que se vean.'))
+      fallo(new Error(porque))
     }, ESPERA_CONEXION)
 
     if (canal.readyState === 'open') {
@@ -217,7 +272,7 @@ function esperarApertura(pc: RTCPeerConnection, canal: RTCDataChannel): Promise<
     pc.addEventListener('connectionstatechange', () => {
       if (pc.connectionState === 'failed') {
         clearTimeout(reloj)
-        fallo(new Error('La conexión directa ha fallado. Los dos dispositivos deben estar en la misma red.'))
+        fallo(new Error(porQueNoConecta(pc)))
       }
     })
   })
@@ -230,6 +285,8 @@ export type Anfitrion = {
   codigo: string
   /** Se le pasa el código que devuelve el invitado. Resuelve con el canal ya abierto. */
   aceptarRespuesta(codigoRespuesta: string): Promise<Enlace>
+  /** Se llama cada vez que cambia el estado de la conexión, para enseñarlo. */
+  alCambiar(cb: (e: EstadoEnlace) => void): void
   cancelar(): void
 }
 
@@ -237,11 +294,18 @@ export type Anfitrion = {
 export async function invitar(): Promise<Anfitrion> {
   const pc = nuevaConexion()
   const canal = pc.createDataChannel('miclase', { ordered: true })
+  let alCambiarCb: ((e: EstadoEnlace) => void) | null = null
+  vigilar(pc, () => alCambiarCb)
 
   await pc.setLocalDescription(await pc.createOffer())
   await esperarCandidatos(pc)
+  // Un código sin ninguna dirección dentro no puede funcionar: mejor decirlo
+  // ahora que dejar que el docente lo escanee y espere medio minuto para nada.
+  const mias = direccionesDe(pc.localDescription!.sdp)
+  if (mias.ip + mias.nombre === 0) { pc.close(); throw new Error(SIN_RED) }
 
   return {
+    alCambiar(cb) { alCambiarCb = cb },
     codigo: await empaquetar('O', pc.localDescription!.sdp),
     async aceptarRespuesta(codigoRespuesta) {
       const { tipo, sdp } = await abrirSaludo(codigoRespuesta)
@@ -260,6 +324,7 @@ export type Invitado = {
   codigo: string
   /** Resuelve con el canal abierto en cuanto el anfitrión lee la respuesta. */
   enlace: Promise<Enlace>
+  alCambiar(cb: (e: EstadoEnlace) => void): void
   cancelar(): void
 }
 
@@ -271,15 +336,31 @@ export async function aceptarInvitacion(codigoOferta: string): Promise<Invitado>
   }
 
   const pc = nuevaConexion()
-  const llega = new Promise<RTCDataChannel>((listo) => {
-    pc.addEventListener('datachannel', (ev) => listo(ev.channel))
+  let alCambiarCb: ((e: EstadoEnlace) => void) | null = null
+  vigilar(pc, () => alCambiarCb)
+  // Antes esta espera no tenía fin: si el otro aparato no llegaba a conectar,
+  // este se quedaba en «Esperando a que lo lea…» para siempre, sin decir nada.
+  const llega = new Promise<RTCDataChannel>((listo, fallo) => {
+    const reloj = setTimeout(() => {
+      const porque = porQueNoConecta(pc)
+      pc.close()
+      fallo(new Error(
+        'El otro dispositivo no ha llegado a conectar después de leer este código ' +
+        '(o no lo ha leído). Si al leerlo le salió un error, el motivo está allí.\n' + porque))
+    }, ESPERA_LECTURA)
+    pc.addEventListener('datachannel', (ev) => { clearTimeout(reloj); listo(ev.channel) })
   })
+  // Si se cancela antes, que el rechazo del reloj no quede sin dueño.
+  llega.catch(() => {})
 
   await pc.setRemoteDescription({ type: 'offer', sdp })
   await pc.setLocalDescription(await pc.createAnswer())
   await esperarCandidatos(pc)
+  const mias = direccionesDe(pc.localDescription!.sdp)
+  if (mias.ip + mias.nombre === 0) { pc.close(); throw new Error(SIN_RED) }
 
   return {
+    alCambiar(cb) { alCambiarCb = cb },
     codigo: await empaquetar('R', pc.localDescription!.sdp),
     enlace: llega.then((canal) => esperarApertura(pc, canal)),
     cancelar() { pc.close() },

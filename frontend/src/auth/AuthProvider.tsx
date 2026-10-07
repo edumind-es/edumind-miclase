@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { App as AppNativa } from '@capacitor/app'
+import { Browser } from '@capacitor/browser'
 import { generarPKCE, valorOpaco } from './crypto'
-import { api } from '@/api'
+import { api, esNativo } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 
 interface AuthConfig {
@@ -8,6 +11,8 @@ interface AuthConfig {
   authentik_url: string
   client_id: string
   redirect_uri: string
+  /** Vuelta a la app nativa (esquema propio); en la web no se usa. */
+  redirect_uri_nativo?: string
   authorize_url: string
   scopes: string
   slug: string
@@ -27,12 +32,33 @@ const AuthContext = createContext<AuthState | null>(null)
 
 const TOKEN_KEY = 'miclase_session_token'
 const NOMBRE_KEY = 'miclase_nombre'
+/** Con qué redirect_uri se pidió el código: el canje tiene que repetirlo. */
+export const REDIRECT_KEY = 'oidc_redirect_uri'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [modo, setModo] = useState<'local' | 'authentik' | 'cargando'>('cargando')
   const [token, setToken] = useState<string | null>(null)
   const [nombre, setNombre] = useState<string | null>(null)
   const [authConfig, setAuthConfig] = useState<AuthConfig | null>(null)
+  const navigate = useNavigate()
+
+  // En la app nativa el login de Authentik se abre en el navegador del
+  // sistema (no en la vista web embebida, donde el diálogo de llaves de
+  // acceso del sistema sale recortado) y vuelve por el esquema propio
+  // `es.edumind.miclase://auth/callback?code=…&state=…`. Aquí se recoge esa
+  // vuelta y se entrega a la misma página de callback que usa la web.
+  useEffect(() => {
+    if (!esNativo()) return
+    const esperado = authConfig?.redirect_uri_nativo
+    if (!esperado) return
+    const escucha = AppNativa.addListener('appUrlOpen', ({ url }) => {
+      if (!url.startsWith(esperado)) return
+      Browser.close().catch(() => {})
+      const search = url.slice(url.indexOf('?'))
+      navigate(`/auth/callback${search.startsWith('?') ? search : ''}`, { replace: true })
+    })
+    return () => { escucha.then(h => h.remove()).catch(() => {}) }
+  }, [authConfig, navigate])
 
   useEffect(() => {
     // Cargar config de Authentik desde el backend
@@ -82,17 +108,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem('oidc_state', state)
     sessionStorage.setItem('oidc_nonce', nonce)
 
+    const nativo = esNativo() && !!authConfig.redirect_uri_nativo
+    const redirectUri = nativo ? authConfig.redirect_uri_nativo! : authConfig.redirect_uri
+    sessionStorage.setItem(REDIRECT_KEY, redirectUri)
+
     const params = new URLSearchParams({
       response_type:         'code',
       client_id:             authConfig.client_id,
-      redirect_uri:          authConfig.redirect_uri,
+      redirect_uri:          redirectUri,
       scope:                 authConfig.scopes,
       code_challenge:        challenge,
       code_challenge_method: 'S256',
       state,
       nonce,
     })
-    window.location.href = `${authConfig.authorize_url}?${params}`
+    const url = `${authConfig.authorize_url}?${params}`
+    if (nativo) {
+      // Navegador del sistema: la hoja de llaves de acceso se ve entera y
+      // las llaves guardadas en el dispositivo están disponibles.
+      await Browser.open({ url })
+      return
+    }
+    window.location.href = url
   }
 
   // Sincronizar token con el store global (para que useAppStore pueda usarlo en fetch)

@@ -19,6 +19,40 @@ export const TIPOS_INSTRUMENTO: TipoInstrumento[] = [
   { value: 'otro',            label: 'Otro',                    icon: '📌', color: '#374151', bg: '#f3f4f6' },
 ]
 
+/**
+ * Paleta de identidad de los instrumentos: ocho tonos que se distinguen entre
+ * sí también con daltonismo (de la paleta de Okabe-Ito). El color del TIPO
+ * no servía: tres azules y dos morados, y dos instrumentos del mismo tipo
+ * salían idénticos. Aquí cada instrumento tiene el suyo, por orden, salvo que
+ * el docente le ponga otro.
+ */
+export const PALETA_INSTRUMENTOS = [
+  '#0072B2', // azul
+  '#D55E00', // bermellón
+  '#009E73', // verde azulado
+  '#CC79A7', // rosa
+  '#E69F00', // naranja
+  '#7B3FA0', // morado
+  '#56B4E9', // celeste
+  '#8C564B', // marrón
+] as const
+
+/** El color propio del instrumento, o el que le toca por su posición. */
+export function colorDeInstrumento(ins: { color?: string | null }, indice: number): string {
+  return ins.color && /^#[0-9a-fA-F]{6}$/.test(ins.color) ? ins.color : PALETA_INSTRUMENTOS[((indice % 8) + 8) % 8]
+}
+
+/**
+ * Abreviatura legible de un instrumento, para cabeceras estrechas: iniciales
+ * de las palabras («Táboa de indicadores» → TI, «Billete de salida» → BS) o
+ * las tres primeras letras si es una sola («Speaking» → SPE).
+ */
+export function abreviatura(nombre: string): string {
+  const palabras = nombre.split(/[\s·\-–—]+/).filter(w => w && !/^(de|da|do|del|la|el|los|las|y|e|o|a|en|the|of|and|por|con)$/i.test(w))
+  if (palabras.length >= 2) return palabras.slice(0, 3).map(w => w[0]).join('').toUpperCase()
+  return (palabras[0] ?? nombre).slice(0, 3).toUpperCase()
+}
+
 export function getInstrConfig(tipo: string): TipoInstrumento {
   return TIPOS_INSTRUMENTO.find(t => t.value === tipo) ?? TIPOS_INSTRUMENTO[TIPOS_INSTRUMENTO.length - 1]
 }

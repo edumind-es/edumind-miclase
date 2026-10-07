@@ -68,7 +68,7 @@ Responde ÚNICAMENTE con la tabla markdown, sin texto adicional antes ni despué
  * ahí todas las columnas de esa fila se corren una a la izquierda y los
  * descriptores acaban en el nivel equivocado. Una celda vacía es un dato.
  */
-function celdasDeFila(linea: string): string[] {
+export function celdasDeFila(linea: string): string[] {
   const partes = linea.split('|').map(c => c.trim())
   // El `|` inicial y el final producen dos extremos vacíos que no son celdas.
   if (partes.length && partes[0] === '') partes.shift()

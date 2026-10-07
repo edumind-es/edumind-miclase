@@ -414,6 +414,12 @@ input:focus, select:focus, textarea:focus {
   font-size: 9px; font-weight: 700; opacity: .9;
   padding-left: 2px;
 }
+/* Mini-tendencia del diario: los últimos niveles, «2·3·3·4». */
+.celda-instr .celda-diario {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8.5px; font-weight: 600; opacity: .85; letter-spacing: .02em;
+  padding-left: 2px; white-space: nowrap;
+}
 .celda-btn.sin-instrumento {
   background: repeating-linear-gradient(45deg, #fff7ed, #fff7ed 5px, #ffedd5 5px, #ffedd5 10px);
   color: var(--ambar-500);
@@ -678,3 +684,91 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
     padding-left: 6px;
   }
 }
+
+/* ── Calificador: conmutador de vista y matriz por instrumento ────────── */
+.vista-conmutador {
+  display: inline-flex; border: 1.5px solid var(--gris-300); border-radius: 20px;
+  overflow: hidden; background: var(--blanco);
+}
+.vista-conmutador button {
+  border: none; background: transparent; color: var(--gris-600);
+  font-size: 12.5px; font-weight: 600; padding: 6px 14px; cursor: pointer;
+}
+.vista-conmutador button[aria-pressed="true"] { background: var(--azul-700); color: var(--blanco); }
+.vista-conmutador button:focus-visible { outline: 2px solid var(--azul-500); outline-offset: -2px; }
+
+.matriz-instrumentos thead th.instr-th {
+  min-width: 170px; max-width: 210px; text-align: left; padding: 8px 10px 9px;
+}
+.instr-th-nombre { font-size: 13px; font-weight: 700; line-height: 1.25; }
+.instr-th-tipo { font-size: 10px; opacity: .8; font-weight: 400; margin-top: 2px; }
+.instr-th-criterios {
+  font-size: 9.5px; opacity: .85; font-weight: 500; margin-top: 5px; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.instr-th-accion {
+  margin-top: 7px; width: 100%; border: none; border-radius: var(--radio-sm);
+  background: rgba(255,255,255,.16); color: var(--blanco);
+  font-size: 11.5px; font-weight: 700; padding: 6px 8px; cursor: pointer;
+}
+.instr-th-accion:hover { background: rgba(255,255,255,.3); }
+.instr-th-accion:focus-visible { outline: 2px solid var(--blanco); outline-offset: 1px; }
+.matriz-instrumentos .celda-btn { min-height: 44px; }
+.matriz-instrumentos .celda-instr b { font-size: 9.5px; }
+
+/* ── Identidad de instrumento en la cabecera por criterio ─────────────── */
+.matriz thead th.criterio-th { position: sticky; padding-top: 0; }
+.criterio-th-franja {
+  display: flex; height: 5px; margin: 0 -8px 6px; overflow: hidden;
+}
+.criterio-th-franja span { flex: 1; display: block; }
+.criterio-th-instr .abrev {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 14px; padding: 0 4px; border-radius: 3px;
+  font-style: normal; font-size: 9.5px; font-weight: 800; letter-spacing: .04em;
+  color: #fff; box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}
+.matriz-instrumentos thead tr.fila-familias th {
+  top: 0; text-align: left; padding: 6px 10px 4px; font-size: 11px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; background: var(--azul-900);
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+.matriz-instrumentos thead tr.fila-familias th .peso { font-weight: 500; opacity: .75; text-transform: none; letter-spacing: 0; margin-left: 6px; }
+.matriz-instrumentos.con-familias thead tr.fila-instrumentos th.instr-th { top: 27px; }
+.matriz-instrumentos thead th.col-alumno { top: 0; }
+.instr-th-nombre .abrev {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 15px; padding: 0 4px; border-radius: 3px; margin-right: 4px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .04em; color: #fff; vertical-align: 1px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+}
+.instr-th-accion.secundaria { margin-top: 4px; background: transparent; font-weight: 600; opacity: .85; }
+.instr-th-accion.secundaria:hover { background: rgba(255,255,255,.16); opacity: 1; }
+
+/* ── Competencias plegables en la matriz por criterio ─────────────────── */
+.matriz-criterios thead tr.fila-competencias th { top: 0; text-align: left; padding: 5px 10px; font-size: 11px; font-weight: 700;
+  letter-spacing: .04em; background: var(--azul-900); border-bottom: 1px solid rgba(255,255,255,.15); cursor: pointer; user-select: none; }
+.matriz-criterios thead tr.fila-competencias th:hover { background: #163a5e; }
+.matriz-criterios thead tr.fila-competencias th .peso { font-weight: 500; opacity: .7; margin-left: 6px; }
+.matriz-criterios thead tr.fila-competencias th .comp-flecha { opacity: .8; }
+.matriz-criterios thead tr:not(.fila-competencias) th.criterio-th { top: 26px; }
+.matriz-criterios thead th.col-alumno { top: 0; }
+.criterio-th.plegado { cursor: pointer; background: #163a5e; }
+.celda.plegado .celda-btn { border-style: dashed; border-color: var(--gris-300); }
+
+/* ── Panel de cobertura ───────────────────────────────────────────────── */
+.cobertura { margin-bottom: 10px; border: 1px solid var(--gris-300); border-radius: var(--radio-md); background: var(--blanco); }
+.cobertura.completa { border-color: var(--verde-500); }
+.cobertura-resumen { display: flex; align-items: center; gap: 8px; width: 100%; border: none; background: transparent;
+  padding: 8px 12px; font-size: 12.5px; color: var(--gris-900); cursor: pointer; text-align: left; }
+.cobertura-barra { width: 90px; height: 7px; border-radius: 4px; background: var(--gris-100); overflow: hidden; flex-shrink: 0; }
+.cobertura-barra i { display: block; height: 100%; background: var(--azul-500); }
+.cobertura.completa .cobertura-barra i { background: var(--verde-500); }
+.cobertura-flecha { margin-left: auto; color: var(--gris-500); }
+.cobertura-detalle { padding: 0 12px 10px; display: flex; flex-direction: column; gap: 6px; }
+.cobertura-detalle > div { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.cobertura-rotulo { font-size: 11px; font-weight: 700; color: var(--gris-600); text-transform: uppercase; letter-spacing: .05em; margin-right: 4px; }
+.cobertura-chip { font-size: 11.5px; font-weight: 700; padding: 2px 9px; border-radius: 12px; border: 1.5px solid var(--ambar-500);
+  background: var(--ambar-100); color: #92400e; cursor: pointer; }
+.cobertura-chip.suave { border-color: var(--gris-300); background: var(--gris-100); color: var(--gris-600); cursor: default; }
+.cobertura-chip small { font-weight: 500; }

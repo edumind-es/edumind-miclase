@@ -89,6 +89,13 @@ export interface Transporte {
    * implementa.
    */
   despedirse?(): Promise<void>
+  /**
+   * La sal y el verificador que tiene el OTRO aparato, sin mezclar con los
+   * propios. Solo el enlace directo tiene a quién preguntar. Hace falta para
+   * saber si los dos dispositivos tienen la misma contraseña antes de
+   * intercambiar nada: `estado()` los funde y no deja verlo.
+   */
+  configDelOtro?(): Promise<{ salt: string | null; verificador: string | null }>
 }
 
 export type Cabeceras = () => Record<string, string>
