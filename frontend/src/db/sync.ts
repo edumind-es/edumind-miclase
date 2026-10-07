@@ -250,6 +250,26 @@ export async function configLocal(): Promise<{ salt: string | null; verificador:
   }
 }
 
+/**
+ * Publicar en el buzón la contraseña que este dispositivo ya tiene.
+ *
+ * Quien estrenó la sincronización sin buzón (para AirDrop o el enlace directo)
+ * y después conecta su cuenta EDUmind se encontraba con «Sin configurar» y un
+ * ciclo que fallaba tabla por tabla con «configura primero la contraseña».
+ * Pedirle que escribiera otra sería crear una segunda llave: con esto la sal y
+ * el verificador que ya tiene suben al buzón y los demás aparatos lo
+ * desbloquean con la misma contraseña de siempre. No viaja ningún secreto.
+ */
+export async function publicarContrasenaEnBuzon(headers: Cabeceras): Promise<void> {
+  const { salt, verificador } = await configLocal()
+  if (!salt || !verificador || !(await claveGuardada())) {
+    throw new Error('Este dispositivo no tiene contraseña de sincronización que publicar')
+  }
+  const estado = await transporte(headers).estado()
+  if (estado.iniciado) throw new Error('El buzón ya tiene una contraseña: desbloquea con ella')
+  await transporte(headers).configurar(salt, verificador, false)
+}
+
 /** Dispositivo nuevo: descarga la sal, deriva y comprueba el verificador. */
 export async function desbloquear(password: string, headers: Cabeceras): Promise<void> {
   await desbloquearCon(password, await consultarEstado(headers))

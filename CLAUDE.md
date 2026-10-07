@@ -93,7 +93,10 @@ edumind_miclase/
   descifrar se cuentan en `sinDescifrar` y se explican como «otra contraseña»;
   los fallos de conexión traen diagnóstico (direcciones ofrecidas, estado ICE).
 - **La sal y el verificador viven también en el dispositivo**, no solo en el
-  buzón. Si solo estuvieran en el servidor, un aparato nuevo no podría
+  buzón. Y al revés: quien estrenó la contraseña sin buzón y luego conecta su
+  cuenta la **publica** con `publicarContrasenaEnBuzon` (misma sal, mismo
+  verificador), nunca crea otra; hasta entonces ni la pantalla ni
+  `SyncAutomatica` sincronizan contra un buzón sin configurar (`iniciado`). Si solo estuvieran en el servidor, un aparato nuevo no podría
   desbloquear sin él y el enlace directo no serviría de nada.
 - **La fusión de sincronización mantiene su base.** `sync_base` guarda la
   última versión común de cada registro; sin ella el merge cae al
