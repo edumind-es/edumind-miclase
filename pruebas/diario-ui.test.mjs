@@ -165,6 +165,8 @@ try {
   const gestor = p.getByRole('dialog', { name: 'Gestionar instrumentos de evaluación' })
   await gestor.waitFor({ timeout: 5000 })
   const selects = gestor.locator('[data-agregacion] select')
+  // Contra producción el gestor tarda más en cargar los instrumentos que en el servidor de desarrollo.
+  await selects.first().waitFor({ timeout: 8000 })
   ok(await selects.count() >= 1, 'cada instrumento tiene su regla de agregación', `${await selects.count()} instrumentos`)
   for (let i = 0; i < await selects.count(); i++) await selects.nth(i).selectOption('ultima')
   await p.waitForTimeout(600)
