@@ -188,6 +188,11 @@ edumind_miclase/
   —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
   Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
   en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
+- **Plegado por competencia y cobertura** (`db/cobertura.ts`, puro): la vista
+  por criterio lleva una fila CE1 · CE2 · CE3 que pliega sus criterios a una
+  columna con la media simple del alumno (se recuerda por área en
+  `miclase.calificador.plegadas`); el panel de cobertura usa la misma
+  `notaCelda` que pinta la casilla, para que nunca discrepen.
 - **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
   `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
