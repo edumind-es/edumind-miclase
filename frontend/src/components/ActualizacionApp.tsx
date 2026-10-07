@@ -6,14 +6,19 @@
  * la recién abierta pinta la pantalla con la caché vieja antes de que el
  * service worker nuevo tome el control: la versión nueva se veía a la
  * segunda apertura. Aquí se pregunta al abrir, al volver a primer plano y
- * cada media hora; cuando la versión nueva ya está descargada se avisa y se
- * recarga con un toque. No se recarga a traición: perdería lo que el docente
- * esté escribiendo. Si no pulsa nada, la versión nueva entra sola en la
- * siguiente apertura.
+ * cada media hora, y la versión nueva entra sola en dos momentos en los que
+ * no hay nada a medias que perder: si aparece en los primeros segundos tras
+ * abrir (la «segunda apertura» deja de existir), y al volver a la app tras
+ * haberla dejado en segundo plano. Entre medias se avisa con un botón, y no
+ * se recarga a traición: perdería lo que el docente esté escribiendo.
  */
+import { useEffect, useRef } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 const CADA = 30 * 60 * 1000
+/** Hasta aquí desde el arranque, aplicar sin preguntar: aún no se ha empezado a trabajar. */
+const RECIEN_ABIERTA = 20 * 1000
+const arranque = Date.now()
 
 export default function ActualizacionApp() {
   const {
@@ -34,6 +39,22 @@ export default function ActualizacionApp() {
 
   // Tras «Actualizar», el plugin manda SKIP_WAITING al service worker en
   // espera y recarga la página él mismo en cuanto ese toma el control.
+  const aplicando = useRef(false)
+  const aplicar = () => {
+    if (aplicando.current) return
+    aplicando.current = true
+    updateServiceWorker(true)
+  }
+
+  // Automático cuando no hay nada que perder: recién abierta, o al volver
+  // del segundo plano (el docente no estaba escribiendo en ella).
+  useEffect(() => {
+    if (!lista) return
+    if (Date.now() - arranque < RECIEN_ABIERTA) { aplicar(); return }
+    const alVolver = () => { if (document.visibilityState === 'visible') aplicar() }
+    document.addEventListener('visibilitychange', alVolver)
+    return () => document.removeEventListener('visibilitychange', alVolver)
+  }, [lista])
 
   if (!lista) return null
 
@@ -47,7 +68,7 @@ export default function ActualizacionApp() {
     }}>
       <span>Hay una versión nueva de MiClase</span>
       <button
-        onClick={() => updateServiceWorker(true)}
+        onClick={aplicar}
         style={{
           border: 'none', borderRadius: 16, padding: '6px 14px', cursor: 'pointer',
           background: 'white', color: 'var(--azul-700)', fontWeight: 700, fontSize: 13,
