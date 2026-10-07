@@ -124,6 +124,8 @@ export default function CeldaEvaluacion({
   const [origenActual, setOrigenActual] = useState<'diario' | null>(null)
   /** La parrilla 0-10 y la rúbrica, plegadas cuando la nota sale del diario. */
   const [manualAbierta, setManualAbierta] = useState(false)
+  /** «Más»: lo que no es el instrumento, plegado al final. Abierto, se queda abierto al cambiar de alumno. */
+  const [masAbierto, setMasAbierto] = useState(false)
   // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
   // del instrumento, que si no se quedaba con los niveles de antes.
   const [refrescoInstr, setRefrescoInstr] = useState(0)
@@ -401,7 +403,7 @@ export default function CeldaEvaluacion({
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
       <div className="card" role="dialog" aria-modal="true"
         aria-label={`Evaluar ${criterio.id} de ${alumno.nombre}`}
-        style={{ width: 'min(620px, 96vw)', maxHeight: '92vh', overflowY: 'auto', padding: 0 }}>
+        style={{ width: 'min(900px, 96vw)', maxHeight: '94vh', overflowY: 'auto', padding: 0 }}>
 
         {/* Cabecera: alumno + navegación */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 18px', borderBottom: '1px solid var(--gris-300)' }}>
@@ -427,94 +429,55 @@ export default function CeldaEvaluacion({
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 
-        <div style={{ padding: 18 }}>
-          {/* Cabecera del panel: el criterio, o el instrumento con sus criterios */}
-          {enfoque === 'instrumento' && instrumentoSel ? (
-            <div data-enfoque-instrumento style={{ background: 'var(--gris-100)', borderLeft: `6px solid ${instrumentoSel.color}`, borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: instrumentoSel.color, letterSpacing: '.03em', marginBottom: 3 }}>
-                INSTRUMENTO · {instrumentoSel.nombre}{instrumentoSel.familia_id != null ? <span style={{ fontWeight: 600, color: 'var(--gris-600)' }}> · dentro de {instrumentoSel.familia_nombre} ({instrumentoSel.familia_peso}%)</span> : null}
+        <div style={{ padding: '14px 18px 18px' }}>
+          {/* 1. Franja del instrumento: qué se corrige y con qué nota va. Lo
+              primero que se ve es el instrumento, no el criterio: el docente
+              corrige el cuaderno o el examen, y el criterio es la etiqueta. */}
+          <div data-franja-instrumento style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '10px 14px', marginBottom: 12, borderRadius: 10, background: 'var(--gris-100)', borderLeft: `6px solid ${instrumentoSel?.color ?? 'var(--azul-700)'}` }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: instrumentoSel?.color ?? 'var(--azul-900)', lineHeight: 1.2 }}>
+                {cfg && <span aria-hidden="true" style={{ marginRight: 6 }}>{cfg.icon}</span>}{instrumentoSel?.nombre ?? 'Sin instrumento'}
+                {instrumentoSel?.familia_id != null && <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--gris-600)', marginLeft: 8 }}>dentro de {instrumentoSel.familia_nombre} · {instrumentoSel.familia_peso}%</span>}
+                {instrumentoSel && instrumentoSel.familia_id == null && <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--gris-600)', marginLeft: 8 }}>{instrumentoSel.peso}% del área</span>}
               </div>
-              <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8 }}>
-                Evalúa {destinosPrueba.length} criterio{destinosPrueba.length !== 1 ? 's' : ''}{unidadNombre ? ` en ${unidadNombre}` : ''}
-                {calificaPorPrueba ? ' · el examen pone nota en todos a la vez' : ' · un registro del diario reparte a todos'}
-              </div>
-              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-                {/* En orden fijo: la ficha pulsada no debe saltar al principio. */}
-                {[criterio, ...hermanos].sort((a, b) => a.id.localeCompare(b.id, 'es', { numeric: true })).map(c => {
-                  const activo = c.id === criterio.id
-                  return (
-                    <button key={c.id} type="button" data-criterio-chip aria-pressed={activo}
-                      onClick={() => !activo && onElegirCriterio?.(c)}
-                      disabled={!onElegirCriterio && !activo}
-                      title={c.descripcion}
-                      style={{
-                        fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 14, cursor: activo || !onElegirCriterio ? 'default' : 'pointer',
-                        border: `1.5px solid ${activo ? instrumentoSel.color : 'var(--gris-300)'}`,
-                        background: activo ? instrumentoSel.color : 'white',
-                        color: activo ? 'white' : 'var(--gris-900)',
-                      }}>
-                      {c.id}
-                    </button>
-                  )
-                })}
-              </div>
-              <div style={{ fontSize: 13, color: 'var(--gris-900)', lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--azul-700)' }}>{criterio.id}</strong> — {criterio.descripcion}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 4, minWidth: 0 }}>
+                <span style={{ fontSize: 11.5, fontWeight: 800, color: 'var(--azul-700)', letterSpacing: '.03em', whiteSpace: 'nowrap' }}>CRITERIO {criterio.id}</span>
+                <span style={{ fontSize: 12.5, color: 'var(--gris-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, minWidth: 0 }} title={criterio.descripcion}>{criterio.descripcion}</span>
+                <button type="button" data-ver-criterio onClick={() => setMasAbierto(true)}
+                  style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0, whiteSpace: 'nowrap' }}>
+                  {hermanos.length > 0 ? `y ${hermanos.length} más` : 'ver entero'}
+                </button>
               </div>
             </div>
-          ) : (
-            <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
-                CRITERIO {criterio.id}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+              <div data-nota-actual style={{
+                width: 60, height: 60, borderRadius: 12, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                background: valorActual == null ? 'white' : cal.color, border: valorActual == null ? '1.5px dashed var(--gris-300)' : 'none',
+                color: valorActual == null ? 'var(--gris-500)' : 'white',
+              }}>
+                <span style={{ fontSize: 23, fontWeight: 800, lineHeight: 1 }}>{valorActual == null ? '—' : valorActual}</span>
+                <span style={{ fontSize: 9.5, fontWeight: 700, opacity: .9 }}>{cal.sigla}</span>
               </div>
-              <div style={{ fontSize: 13.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
-                {criterio.descripcion}
+              <div style={{ fontSize: 11.5, color: 'var(--gris-600)', lineHeight: 1.4, maxWidth: 150 }}>
+                {valorActual == null
+                  ? <>Sin calificar con <strong>{instrumentoSel?.nombre ?? 'este instrumento'}</strong>.</>
+                  : origenActual === 'diario'
+                    ? <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong> · calculada del diario ({etiquetaAgregacion(instrumentoSel?.agregacion).toLowerCase()} de {registros.length} registro{registros.length !== 1 ? 's' : ''}).</>
+                    : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
+                {valorActual != null && origenActual !== 'diario' && (
+                  <button onClick={() => calificaPorPrueba ? guardarRespuestas({}) : calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
+                    style={{ display: 'block', background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 11.5, cursor: 'pointer', textDecoration: 'underline', padding: 0, marginTop: 2 }}>
+                    borrar nota
+                  </button>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
-          {/* Instrumento(s) que evalúan este criterio */}
-          <div style={{ marginBottom: 14 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
-                Se evalúa con {instrumentos.length > 1 && `— ${instrumentos.length} instrumentos`}
-              </div>
-              <div style={{ flex: 1 }} />
-              {/* Atajo: el peso, el tipo, los trimestres o la rúbrica se
-                  arreglan sin salir de aquí. Antes había que cerrar el panel,
-                  volver al calificador y abrir ⚙ Instrumentos. */}
-              <button onClick={() => setInstrumentosAbierto(true)}
-                title="Cambiar nombre, tipo, peso o trimestres de los instrumentos de esta área"
-                style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', background: 'white', color: 'var(--gris-600)', border: '1px solid var(--gris-300)' }}>
-                ⚙ Instrumentos
-              </button>
-              {instrumentoSel && esPruebaEscrita && (
-                <button onClick={() => setPruebaAbierta(true)}
-                  title={prueba
-                    ? `Ver o editar el examen «${prueba.def.titulo}»`
-                    : 'Definir el examen: tipo, preguntas y lo que vale cada una. Después se corrige pregunta a pregunta.'}
-                  style={{
-                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
-                    background: prueba ? 'var(--azul-700)' : 'white',
-                    color: prueba ? 'white' : 'var(--gris-600)',
-                    border: prueba ? 'none' : '1px solid var(--gris-300)',
-                  }}>
-                  📝 {prueba ? 'Examen' : 'Definir examen'}
-                </button>
-              )}
-              {instrumentoSel && (
-                <button onClick={() => setRubricaAbierta(true)}
-                  title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
-                  style={{
-                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
-                    background: instrumentoSel.tiene_rubrica ? '#166534' : 'white',
-                    color: instrumentoSel.tiene_rubrica ? 'white' : 'var(--gris-600)',
-                    border: instrumentoSel.tiene_rubrica ? 'none' : '1px solid var(--gris-300)',
-                  }}>
-                  📊 {instrumentoSel.tiene_rubrica ? 'Rúbrica' : 'Crear rúbrica'}
-                </button>
-              )}
-            </div>
+          {/* 2. Varios instrumentos para la misma casilla: se elige con qué se corrige. */}
+          {instrumentos.length > 1 && (
+            <div style={{ marginBottom: 12 }}>
             {/* Agrupados por familia: «Táboa de indicadores · 20 %» y debajo lo
                 que hay dentro. Un instrumento suelto es su propio grupo sin rótulo. */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -533,13 +496,13 @@ export default function CeldaEvaluacion({
                         <button key={ins.instrumento_id} onClick={() => setInstrumentoId(ins.instrumento_id)} data-instrumento-chip={ins.nombre}
                           data-activo={activo || undefined} aria-current={activo ? 'true' : undefined}
                           style={{
-                            display: 'flex', alignItems: 'center', gap: 7, padding: '9px 14px',
-                            borderRadius: 9, cursor: 'pointer', fontSize: 13, fontWeight: 700,
+                            display: 'flex', alignItems: 'center', gap: 7, padding: '6px 11px',
+                            borderRadius: 9, cursor: 'pointer', fontSize: 12.5, fontWeight: 700,
                             background: activo ? ins.color : 'white',
                             color: activo ? 'white' : 'var(--gris-900)',
                             border: `2px solid ${ins.color}`,
                           }}>
-                          <span style={{ fontSize: 17 }}>{c.icon}</span>
+                          <span style={{ fontSize: 15 }}>{c.icon}</span>
                           <span>
                             {ins.nombre}
                             <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
@@ -553,117 +516,11 @@ export default function CeldaEvaluacion({
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* El mismo instrumento para varios criterios: copiar o vincular */}
-          {instrumentoSel && hermanosDe && !calificaPorPrueba && (
-            <CriteriosHermanos
-              instrumento={instrumentoSel}
-              criterio={criterio}
-              hermanos={hermanos}
-              alumno={alumno}
-              alumnoIds={alumnoIds ?? [alumno.id!]}
-              trimestre={trimestre}
-              unidadId={unidadId}
-              tieneNota={valorActual != null}
-              valor={valorActual}
-              onCambio={texto => { avisar({ tipo: 'ok', texto }); setRecarga(n => n + 1); onGuardado() }}
-            />
-          )}
-
-          {/* Nota actual */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-            <div style={{
-              width: 56, height: 56, borderRadius: 12, display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              background: valorActual == null ? 'var(--gris-100)' : cal.color,
-              color: valorActual == null ? 'var(--gris-500)' : 'white',
-            }}>
-              <span style={{ fontSize: 21, fontWeight: 800, lineHeight: 1 }}>
-                {valorActual == null ? '—' : valorActual}
-              </span>
-              <span style={{ fontSize: 9, fontWeight: 700, opacity: .9 }}>{cal.sigla}</span>
-            </div>
-            <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5 }}>
-              {valorActual == null
-                ? <>Sin calificar con <strong>{instrumentoSel?.nombre ?? 'este instrumento'}</strong>.</>
-                : origenActual === 'diario'
-                  ? <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong> · calculada del diario ({etiquetaAgregacion(instrumentoSel?.agregacion).toLowerCase()} de {registros.length} registro{registros.length !== 1 ? 's' : ''}).</>
-                  : <>{cal.etiqueta} con <strong>{instrumentoSel?.nombre}</strong>.</>}
-              {valorActual != null && origenActual !== 'diario' && (
-                <button onClick={() => calificaPorPrueba ? guardarRespuestas({}) : calificaPorRubrica ? limpiarRubrica() : guardarNota(null)} disabled={guardando}
-                  style={{ marginLeft: 8, background: 'none', border: 'none', color: 'var(--rojo-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
-                  borrar nota
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Nota fantasma: la anterior a un recálculo. No se pierde ni cuenta. */}
-          {fantasma && (
-            <div data-fantasma style={{
-              display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12,
-              padding: '9px 12px', borderRadius: 9, border: '1px dashed var(--gris-500)', background: 'var(--gris-50)',
-            }}>
-              <span style={{
-                minWidth: 40, height: 34, padding: '0 8px', borderRadius: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 800, fontSize: 15, color: 'white', background: calificativo(fantasma.valor).color, opacity: .45,
-              }}>{fantasma.valor}</span>
-              <div style={{ flex: '1 1 200px', fontSize: 12, color: 'var(--gris-600)', lineHeight: 1.45 }}>
-                <strong>Nota anterior: no cuenta.</strong>{' '}
-                {fantasma.motivo || 'Es la que había antes de recalcular.'}
-              </div>
-              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
-                title="Esta nota vuelve a ser la que cuenta; la actual pasa a ser la anterior"
-                onClick={async () => {
-                  await recuperarNotaAnterior(fantasma.id)
-                  avisar({ tipo: 'ok', texto: `${fantasma.valor} recuperado como nota de ${criterio.id}` })
-                  setRecarga(n => n + 1); onGuardado()
-                }}>
-                Recuperar
-              </button>
-              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
-                title="Quitar la nota anterior. La nota que cuenta no se toca."
-                onClick={async () => {
-                  if (!confirm(`¿Descartar la nota anterior (${fantasma.valor})? Esta sí se pierde.`)) return
-                  await descartarNotaAnterior(fantasma.id)
-                  setRecarga(n => n + 1); onGuardado()
-                }}>
-                Descartar
-              </button>
             </div>
           )}
 
-          {/* Diario de evaluación: varias observaciones que no se pisan. */}
-          {instrumentoSel && !calificaPorPrueba && (
-            <DiarioCelda
-              alumno={alumno}
-              instrumento={instrumentoSel}
-              criterio={criterio}
-              hermanos={hermanos}
-              trimestre={trimestre}
-              unidadId={unidadId}
-              area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
-              registros={registros}
-              guardando={guardando}
-              onCambio={texto => { avisar({ tipo: 'ok', texto }, 2500); setRecarga(n => n + 1); onGuardado() }}
-              onError={texto => avisar({ tipo: 'error', texto })}
-            />
-          )}
-
-          {/* Con la nota derivada del diario, poner otra a mano es una decisión:
-              se avisa de que el diario deja de contar hasta el próximo registro. */}
-          {calificaPorDiario && !manualAbierta && (
-            <div style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
-              <button data-diario-manual onClick={() => {
-                  if (confirm('Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?')) setManualAbierta(true)
-                }}
-                style={{ background: 'none', border: 'none', color: 'var(--azul-700)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
-                poner la nota a mano
-              </button>
-            </div>
-          )}
-
+          {/* 3. El instrumento, grande y lo primero: examen, rúbrica o diario. */}
           {/* Con examen definido se corrige pregunta a pregunta. */}
           {calificaPorPrueba && prueba && (
             <CorregirPrueba
@@ -705,7 +562,7 @@ export default function CeldaEvaluacion({
                       background: marcado[ind.nombre] != null ? 'var(--azul-100)' : 'white',
                     }}>
                       <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7 }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', flex: 1, lineHeight: 1.35 }}>
+                        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--azul-900)', flex: 1, lineHeight: 1.35 }}>
                           {ind.nombre}
                         </div>
                         <span style={{ fontSize: 10.5, color: 'var(--gris-500)', fontWeight: 700, whiteSpace: 'nowrap' }}>
@@ -727,8 +584,8 @@ export default function CeldaEvaluacion({
                                 : `${n.nombre} — ${n.valor} pts`}
                               aria-pressed={activo}
                               style={{
-                                flex: '1 1 110px', minHeight: 50, borderRadius: 9, padding: '6px 8px',
-                                fontSize: 12.5, fontWeight: 700, cursor: 'pointer', textAlign: 'left',
+                                flex: '1 1 150px', minHeight: 64, borderRadius: 10, padding: '8px 10px',
+                                fontSize: 14, fontWeight: 700, cursor: 'pointer', textAlign: 'left',
                                 border: `2px solid ${activo ? 'var(--azul-900)' : 'var(--gris-300)'}`,
                                 background: activo ? 'var(--azul-700)' : 'white',
                                 color: activo ? 'white' : 'var(--gris-900)',
@@ -741,9 +598,9 @@ export default function CeldaEvaluacion({
                               </div>
                               {descriptor && (
                                 <div style={{
-                                  fontSize: 10.5, fontWeight: 400, marginTop: 2, lineHeight: 1.3,
+                                  fontSize: 12, fontWeight: 400, marginTop: 3, lineHeight: 1.35,
                                   opacity: activo ? .9 : .65,
-                                  display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                                  display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                                 }}>
                                   {descriptor}
                                 </div>
@@ -759,6 +616,37 @@ export default function CeldaEvaluacion({
             </div>
           )}
 
+          {/* Diario de evaluación: varias observaciones que no se pisan. */}
+          {instrumentoSel && !calificaPorPrueba && !calificaPorRubrica && (
+            <DiarioCelda
+              alumno={alumno}
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanos}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
+              registros={registros}
+              guardando={guardando}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }, 2500); setRecarga(n => n + 1); onGuardado() }}
+              onError={texto => avisar({ tipo: 'error', texto })}
+              abiertoPorDefecto
+            />
+          )}
+
+          {/* Con la nota derivada del diario, poner otra a mano es una decisión:
+              se avisa de que el diario deja de contar hasta el próximo registro. */}
+          {calificaPorDiario && !manualAbierta && (
+            <div style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
+              <button data-diario-manual onClick={() => {
+                  if (confirm('Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?')) setManualAbierta(true)
+                }}
+                style={{ background: 'none', border: 'none', color: 'var(--azul-700)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                poner la nota a mano
+              </button>
+            </div>
+          )}
+
           {/* Sin rúbrica que aplicar, la nota se pone a mano. También cuando la
               rúbrica está a medias —con niveles pero sin ningún indicador—, que
               si no el criterio se quedaría sin forma de calificar. */}
@@ -768,7 +656,8 @@ export default function CeldaEvaluacion({
                 <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8, lineHeight: 1.5 }}>
                   {pruebaSoloPorUnidad
                     ? <>Los exámenes de «{instrumentoSel?.nombre}» están definidos por unidad: entra en la pestaña de la unidad para corregir pregunta a pregunta.</>
-                    : <>¿Corriges por preguntas? Pulsa <strong>📝 Definir examen</strong> y la nota saldrá sola al anotar cada una.</>}
+                    : <>¿Corriges por preguntas? Define el examen y la nota saldrá sola al anotar cada una.{' '}
+                        <button onClick={() => setPruebaAbierta(true)} className="btn-secondary" style={{ fontSize: 12, marginLeft: 6 }}>📝 Definir examen</button></>}
                 </div>
               )}
               {niveles.length > 0 && indicadores.length === 0 && (
@@ -793,6 +682,143 @@ export default function CeldaEvaluacion({
             </>
           )}
 
+          {/* Nota fantasma: la anterior a un recálculo. No se pierde ni cuenta. */}
+          {fantasma && (
+            <div data-fantasma style={{
+              display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 12,
+              padding: '9px 12px', borderRadius: 9, border: '1px dashed var(--gris-500)', background: 'var(--gris-50)',
+            }}>
+              <span style={{
+                minWidth: 40, height: 34, padding: '0 8px', borderRadius: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 800, fontSize: 15, color: 'white', background: calificativo(fantasma.valor).color, opacity: .45,
+              }}>{fantasma.valor}</span>
+              <div style={{ flex: '1 1 200px', fontSize: 12, color: 'var(--gris-600)', lineHeight: 1.45 }}>
+                <strong>Nota anterior: no cuenta.</strong>{' '}
+                {fantasma.motivo || 'Es la que había antes de recalcular.'}
+              </div>
+              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
+                title="Esta nota vuelve a ser la que cuenta; la actual pasa a ser la anterior"
+                onClick={async () => {
+                  await recuperarNotaAnterior(fantasma.id)
+                  avisar({ tipo: 'ok', texto: `${fantasma.valor} recuperado como nota de ${criterio.id}` })
+                  setRecarga(n => n + 1); onGuardado()
+                }}>
+                Recuperar
+              </button>
+              <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
+                title="Quitar la nota anterior. La nota que cuenta no se toca."
+                onClick={async () => {
+                  if (!confirm(`¿Descartar la nota anterior (${fantasma.valor})? Esta sí se pierde.`)) return
+                  await descartarNotaAnterior(fantasma.id)
+                  setRecarga(n => n + 1); onGuardado()
+                }}>
+                Descartar
+              </button>
+            </div>
+          )}
+
+
+          {msg && (
+            <div style={{
+              padding: '9px 14px', borderRadius: 8, fontSize: 13.5, fontWeight: 600, marginBottom: 10,
+              background: msg.tipo === 'ok' ? 'var(--verde-100)' : 'var(--rojo-100)',
+              color: msg.tipo === 'ok' ? 'var(--verde-500)' : 'var(--rojo-500)',
+            }}>
+              {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
+            </div>
+          )}
+
+          {/* 4. Lo demás, plegado: el criterio entero, los otros criterios, copiar o
+              vincular, observación, evidencias y los ajustes del instrumento. Está
+              todo, pero no entre el docente y la rúbrica. */}
+          <button type="button" data-mas-toggle aria-expanded={masAbierto} onClick={() => setMasAbierto(a => !a)}
+            style={{ width: '100%', textAlign: 'left', border: '1px solid var(--gris-300)', borderRadius: 9, background: masAbierto ? 'var(--gris-100)' : 'white', padding: '8px 12px', fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontWeight: 700 }}>{masAbierto ? '▾' : '▸'} Más</span>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              criterio entero{hermanos.length > 0 ? ` · ${hermanos.length} criterio${hermanos.length !== 1 ? 's' : ''} más · copiar o vincular` : ''} · observación · foto, audio o vídeo{evidencias.length ? ` (${evidencias.length})` : ''} · ajustes
+            </span>
+          </button>
+
+          {masAbierto && (
+            <div data-mas style={{ marginTop: 12 }}>
+          {/* Cabecera del panel: el criterio, o el instrumento con sus criterios */}
+          {enfoque === 'instrumento' && instrumentoSel ? (
+            <div data-enfoque-instrumento style={{ background: 'var(--gris-100)', borderLeft: `6px solid ${instrumentoSel.color}`, borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: instrumentoSel.color, letterSpacing: '.03em', marginBottom: 3 }}>
+                INSTRUMENTO · {instrumentoSel.nombre}{instrumentoSel.familia_id != null ? <span style={{ fontWeight: 600, color: 'var(--gris-600)' }}> · dentro de {instrumentoSel.familia_nombre} ({instrumentoSel.familia_peso}%)</span> : null}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8 }}>
+                Evalúa {destinosPrueba.length} criterio{destinosPrueba.length !== 1 ? 's' : ''}{unidadNombre ? ` en ${unidadNombre}` : ''}
+                {calificaPorPrueba ? ' · el examen pone nota en todos a la vez' : ' · un registro del diario reparte a todos'}
+              </div>
+              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+                {/* En orden fijo: la ficha pulsada no debe saltar al principio. */}
+                {[criterio, ...hermanos].sort((a, b) => a.id.localeCompare(b.id, 'es', { numeric: true })).map(c => {
+                  const activo = c.id === criterio.id
+                  return (
+                    <button key={c.id} type="button" data-criterio-chip aria-pressed={activo}
+                      onClick={() => !activo && onElegirCriterio?.(c)}
+                      disabled={!onElegirCriterio && !activo}
+                      title={c.descripcion}
+                      style={{
+                        fontSize: 11.5, fontWeight: 700, padding: '3px 9px', borderRadius: 14, cursor: activo || !onElegirCriterio ? 'default' : 'pointer',
+                        border: `1.5px solid ${activo ? instrumentoSel.color : 'var(--gris-300)'}`,
+                        background: activo ? instrumentoSel.color : 'white',
+                        color: activo ? 'white' : 'var(--gris-900)',
+                      }}>
+                      {c.id}
+                    </button>
+                  )
+                })}
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--gris-900)', lineHeight: 1.5 }}>
+                <strong style={{ color: 'var(--azul-700)' }}>{criterio.id}</strong> — {criterio.descripcion}
+              </div>
+            </div>
+          ) : (
+            <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
+              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--azul-700)', letterSpacing: '.03em', marginBottom: 3 }}>
+                {criterio.id} · criterio completo
+              </div>
+              <div style={{ fontSize: 13.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
+                {criterio.descripcion}
+              </div>
+            </div>
+          )}
+
+          {/* El mismo instrumento para varios criterios: copiar o vincular */}
+          {instrumentoSel && hermanosDe && !calificaPorPrueba && (
+            <CriteriosHermanos
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanos}
+              alumno={alumno}
+              alumnoIds={alumnoIds ?? [alumno.id!]}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              tieneNota={valorActual != null}
+              valor={valorActual}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }); setRecarga(n => n + 1); onGuardado() }}
+            />
+          )}
+
+          {/* Diario de evaluación: varias observaciones que no se pisan. */}
+          {instrumentoSel && !calificaPorPrueba && calificaPorRubrica && (
+            <DiarioCelda
+              alumno={alumno}
+              instrumento={instrumentoSel}
+              criterio={criterio}
+              hermanos={hermanos}
+              trimestre={trimestre}
+              unidadId={unidadId}
+              area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
+              registros={registros}
+              guardando={guardando}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }, 2500); setRecarga(n => n + 1); onGuardado() }}
+              onError={texto => avisar({ tipo: 'error', texto })}
+            />
+          )}
+
           {/* Observación + evidencia */}
           <div style={{ marginBottom: 12 }}>
             <input value={observacion} onChange={e => setObservacion(e.target.value)}
@@ -810,13 +836,42 @@ export default function CeldaEvaluacion({
             </div>
           )}
 
-          {msg && (
-            <div style={{
-              padding: '9px 14px', borderRadius: 8, fontSize: 13.5, fontWeight: 600,
-              background: msg.tipo === 'ok' ? 'var(--verde-100)' : 'var(--rojo-100)',
-              color: msg.tipo === 'ok' ? 'var(--verde-500)' : 'var(--rojo-500)',
-            }}>
-              {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', paddingTop: 10, borderTop: '1px solid var(--gris-300)' }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase', marginRight: 4 }}>Ajustes</span>
+              <button onClick={() => setInstrumentosAbierto(true)}
+                title="Cambiar nombre, tipo, peso o trimestres de los instrumentos de esta área"
+                style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', background: 'white', color: 'var(--gris-600)', border: '1px solid var(--gris-300)' }}>
+                ⚙ Instrumentos
+              </button>
+              {instrumentoSel && esPruebaEscrita && prueba && (
+                <button onClick={() => setPruebaAbierta(true)}
+                  title={prueba
+                    ? `Ver o editar el examen «${prueba.def.titulo}»`
+                    : 'Definir el examen: tipo, preguntas y lo que vale cada una. Después se corrige pregunta a pregunta.'}
+                  style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
+                    background: prueba ? 'var(--azul-700)' : 'white',
+                    color: prueba ? 'white' : 'var(--gris-600)',
+                    border: prueba ? 'none' : '1px solid var(--gris-300)',
+                  }}>
+                  📝 {prueba ? 'Examen' : 'Definir examen'}
+                </button>
+              )}
+              {instrumentoSel && (
+                <button onClick={() => setRubricaAbierta(true)}
+                  title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
+                  style={{
+                    fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
+                    background: instrumentoSel.tiene_rubrica ? '#166534' : 'white',
+                    color: instrumentoSel.tiene_rubrica ? 'white' : 'var(--gris-600)',
+                    border: instrumentoSel.tiene_rubrica ? 'none' : '1px solid var(--gris-300)',
+                  }}>
+                  📊 {instrumentoSel.tiene_rubrica ? 'Rúbrica' : 'Crear rúbrica'}
+                </button>
+              )}
+
+              </div>
             </div>
           )}
 

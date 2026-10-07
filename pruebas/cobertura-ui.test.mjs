@@ -86,7 +86,14 @@ try {
   // Una nota en un criterio de CE1 para que la media plegada tenga algo
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   const panel = p.getByRole('dialog', { name: /^Evaluar / })
+  // El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+  // vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+  const abrirMas = async () => {
+    const t = panel.locator('[data-mas-toggle]')
+    if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+  }
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   const criterioConNota = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
   await panel.locator('button.cal-8').click()
   await panel.getByText(/8 guardado en/).waitFor({ timeout: 5000 })

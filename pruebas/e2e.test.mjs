@@ -277,10 +277,14 @@ console.log('\n9b. El criterio completo se abre al insistir en la cabecera')
 console.log('\n10. Evaluar pulsando una casilla')
 await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
 await p.waitForTimeout(900)
-ok(await p.getByText('CRITERIO', { exact: false }).first().isVisible(), 'el panel muestra el criterio completo')
-ok(await p.getByText('Se evalúa con').isVisible(), 'y dice con QUÉ instrumento se evalúa')
+ok(await p.getByText('CRITERIO', { exact: false }).first().isVisible(), 'el panel muestra el criterio')
+ok(await p.locator('[data-franja-instrumento]').isVisible(), 'y arriba, grande, con QUÉ instrumento se evalúa')
 await foto('11-celda-evaluacion')
 
+// Observación, evidencias y ajustes van plegados en «Más»: lo primero es el instrumento.
+ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'las evidencias no se interponen entre el docente y la nota')
+await p.locator('[data-mas-toggle]').click()
+await p.waitForTimeout(300)
 ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'se puede adjuntar una foto como evidencia')
 ok(await p.getByRole('button', { name: /🎙 Audio/ }).isVisible(), 'y grabar audio (exposición oral, lectura)')
 ok(await p.getByRole('button', { name: /🎬 Vídeo/ }).isVisible(), 'y grabar vídeo')
@@ -311,8 +315,15 @@ console.log('\n10b. Calificar sobre la rúbrica, indicador a indicador')
 await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
 await p.waitForTimeout(900)
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
+// El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+// vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+const abrirMas = async () => {
+  const t = panel.locator('[data-mas-toggle]')
+  if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+}
 
-// El instrumento todavía no tiene rúbrica: el botón ofrece crearla
+// El instrumento todavía no tiene rúbrica: el botón ofrece crearla (en «Más → Ajustes»)
+await abrirMas()
 await panel.getByRole('button', { name: /Crear rúbrica/ }).click()
 await p.waitForTimeout(800)
 const editor = p.getByRole('dialog', { name: /^Rúbrica de / })

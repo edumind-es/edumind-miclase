@@ -188,6 +188,18 @@ edumind_miclase/
   —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
   Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
   en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
+- **En el panel de la casilla, el instrumento es lo primero y lo grande.**
+  Orden fijo de `CeldaEvaluacion`: franja del instrumento con la nota,
+  selector solo si hay varios, y el instrumento en sí (examen, rúbrica o
+  diario con los cuatro niveles ya a la vista). Todo lo demás —criterio
+  entero, otros criterios, copiar o vincular, observación, evidencias,
+  ajustes— va plegado en «Más» (`[data-mas-toggle]`), que las pruebas abren
+  con `abrirMas()` tras esperar el panel. Decisión de Luis: la docente
+  evalúa con prisa y la rúbrica no puede quedar detrás de una maraña de datos.
+- **La PWA se actualiza sola** cuando no hay nada a medias que perder
+  (`ActualizacionApp`): en los primeros 20 s tras abrir y al volver del
+  segundo plano; entre medias, aviso con «Actualizar». `registerType:
+  'prompt'` e `injectRegister: false`: el registro lo hace el componente.
 - **Plegado por competencia y cobertura** (`db/cobertura.ts`, puro): la vista
   por criterio lleva una fila CE1 · CE2 · CE3 que pliega sus criterios a una
   columna con la media simple del alumno (se recuerda por área en

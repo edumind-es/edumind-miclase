@@ -50,10 +50,23 @@ const estado = () => p.evaluate(async () => {
 })
 
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
+
+// El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+
+// vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+
+const abrirMas = async () => {
+
+  const t = panel.locator('[data-mas-toggle]')
+
+  if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+
+}
 const diario = panel.locator('[data-diario]')
 const aviso = texto => panel.getByText(texto).waitFor({ timeout: 6000 }).then(() => true, () => false)
 const registrar = async (nivel) => {
-  await diario.locator('[data-diario-nuevo]').click()
+  // El diario sale abierto cuando es el instrumento de la casilla; el botón solo existe si está plegado.
+  if (await diario.locator('[data-diario-nuevo]').count()) await diario.locator('[data-diario-nuevo]').click()
   await diario.locator(`button.nivel-${nivel}`).click()
   await diario.locator('[data-diario-guardar]').click()
 }
@@ -105,6 +118,7 @@ try {
   await p.waitForTimeout(1200)
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   await diario.waitFor({ timeout: 5000 })
   const origen = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
   let e = await estado()
@@ -164,6 +178,7 @@ try {
   console.log('\n6. Poner la nota a mano desactiva el diario hasta el próximo registro')
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   await panel.waitFor({ timeout: 8000 })
+  await abrirMas()
   await diario.waitFor({ timeout: 5000 })
   await panel.locator('[data-diario-manual]').click()
   await panel.locator('button.cal-9').waitFor({ timeout: 5000 })
