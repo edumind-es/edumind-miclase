@@ -109,6 +109,8 @@ try {
   await p.getByText(/2 alumnos creados/).waitFor({ timeout: 8000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+  // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+  await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
   await p.locator('.tab-unidad').nth(1).click()
   await p.waitForTimeout(1200)
@@ -189,6 +191,8 @@ try {
 
   console.log('\n5. Y en el calificador se ve lo corregido aquí')
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+  // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+  await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
   await p.locator('.tab-unidad').nth(1).click()
   await p.waitForTimeout(1200)

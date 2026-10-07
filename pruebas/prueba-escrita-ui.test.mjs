@@ -121,6 +121,8 @@ try {
   await p.getByText(/2 alumnos creados/).waitFor({ timeout: 8000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+  // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+  await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
 
   const inicio = await bd()

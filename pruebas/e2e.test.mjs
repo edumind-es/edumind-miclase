@@ -165,6 +165,8 @@ if (await chip.count()) {
 // ── 9 · Matriz de evaluación ────────────────────────────────────────────
 console.log('\n9. Calificador: pestañas, subpestañas y matriz')
 await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+// Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
 await p.waitForTimeout(2000)
 
 const pestanasArea = await p.locator('.tab-area').count()

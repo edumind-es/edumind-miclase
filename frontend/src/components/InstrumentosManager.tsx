@@ -156,7 +156,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
-              🎯 Instrumentos — {asignaturaNombre}
+              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos</span>
             </h2>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
           </div>

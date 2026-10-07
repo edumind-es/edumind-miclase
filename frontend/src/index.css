@@ -742,3 +742,5 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
   font-size: 9.5px; font-weight: 800; letter-spacing: .04em; color: #fff; vertical-align: 1px;
   box-shadow: 0 0 0 1px rgba(255,255,255,.35);
 }
+.instr-th-accion.secundaria { margin-top: 4px; background: transparent; font-weight: 600; opacity: .85; }
+.instr-th-accion.secundaria:hover { background: rgba(255,255,255,.16); opacity: 1; }

@@ -113,9 +113,11 @@ interface Props {
   onSesion: (col: ColumnaInstrumento) => void
   /** «Corregir»: el examen, alumno a alumno desde el primero. */
   onCorregir: (col: ColumnaInstrumento) => void
+  /** «Pegar columna»: las notas de una hoja de cálculo. */
+  onPegar: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   return (
@@ -188,6 +190,11 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       ✓ Evaluar hoy
                     </button>
                   )}
+                  <button type="button" className="instr-th-accion secundaria" data-pegar-abrir
+                    onClick={() => onPegar(col)}
+                    title="Pegar una columna de notas copiada de tu hoja de cálculo">
+                    📋 Pegar columna
+                  </button>
                 </th>
               )
             })}
