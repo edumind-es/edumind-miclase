@@ -20,8 +20,8 @@
 import { celdasDeFila } from './rubricaPrompt'
 import { leerXlsx, escribirXlsx } from './xlsxMinimo'
 import {
-  normalizarPrueba,
-  type PruebaDef, type TipoPrueba, type RepartoPrueba, type NivelPrueba,
+  normalizarPrueba, LETRAS, MAX_OPCIONES,
+  type PruebaDef, type TipoPrueba, type RepartoPrueba, type NivelPrueba, type PreguntaPrueba,
 } from '../db/prueba'
 
 export type PruebaImportada = { prueba: PruebaDef; avisos: string[] }
@@ -111,8 +111,11 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
   const cab = filas[iCab]
   const colPuntos = cab.findIndex((c, j) => j > c0 && /^(puntos?|valor|puntuaci[oó]n|m[aá]x|peso)/i.test(c))
   const colCriterio = cab.findIndex((c, j) => j > c0 && /^criterio/i.test(c))
+  // Un test con clave: «Opciones» (separadas por «;», «·» o «/») y «Correcta» (la letra).
+  const colOpciones = cab.findIndex((c, j) => j > c0 && /^opcion/i.test(c))
+  const colCorrecta = cab.findIndex((c, j) => j > c0 && /^(correcta|clave|respuesta)/i.test(c))
 
-  const preguntas: { enunciado: string; max: number; criterio_id: string | null }[] = []
+  const preguntas: Omit<PreguntaPrueba, 'id'>[] = []
   let sinPuntos = 0
   for (let i = iCab + 1; i < filas.length; i++) {
     const f = filas[i]
@@ -124,8 +127,14 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
     if (!enunciado && puntos == null && !criterio) continue
     if (/^(total|suma)\b/i.test(enunciado)) continue
     if (puntos == null || puntos <= 0) sinPuntos++
-    preguntas.push({ enunciado, max: puntos != null && puntos > 0 ? puntos : 1, criterio_id: criterio || null })
+    const opciones = colOpciones >= 0 ? (f[colOpciones] ?? '').split(/\s*[;·/]\s*/).map(limpiar).filter(Boolean) : []
+    const correcta = colCorrecta >= 0 ? letraAIndice(f[colCorrecta] ?? '') : null
+    preguntas.push({
+      enunciado, max: puntos != null && puntos > 0 ? puntos : 1, criterio_id: criterio || null,
+      ...(opciones.length ? { opciones, correcta } : {}),
+    })
   }
+  if (colOpciones >= 0 && !tipo) tipo = 'test'
   if (!preguntas.length) throw new Error('El examen no trae preguntas: no hay ninguna fila debajo de la cabecera.')
   if (sinPuntos) avisos.push(`${sinPuntos} pregunta(s) no traían puntos: se les ha puesto 1.`)
 
@@ -160,6 +169,133 @@ export function filasDeMarkdownPrueba(texto: string): string[][] {
   return filas
 }
 
+/** «B», «b)», «2» → índice de la opción; cualquier otra cosa, null. */
+export function letraAIndice(texto: string): number | null {
+  const t = limpiar(texto).replace(/[).:]+$/, '').toUpperCase()
+  const i = (LETRAS as readonly string[]).indexOf(t)
+  if (i >= 0) return i
+  return /^[1-9]$/.test(t) ? Number(t) - 1 : null
+}
+
+const ES_PREGUNTA = /^(?:\*\*)?(?:pregunta\s+)?(\d{1,3})[.)]\s*(?:\*\*)?\s*(.+?)\s*(?:\*\*)?$/i
+const ES_OPCION = /^(?:[-*]\s+)?(?:\[([ xX✓✔])\]\s*)?(?:\*\*|\*|✓|✔|→)?\s*([a-fA-F])[.)]\s*(.+?)\s*$/
+const MARCA_CORRECTA = /(\*\*|\*|✓|✔)\s*$|\s*\((?:correcta|correct|verdadera|✓)\)\s*$/i
+const ES_CLAVE = /^(?:\*\*)?(?:respuestas?|clave|soluciones?|solucionario)(?:\*\*)?\s*:?\s*(.*)$/i
+const ES_CRITERIO_PREGUNTA = /^(?:[-*]\s+)?(?:criterio|ce)\s*:?\s*([A-Za-z]{0,3}\d+(?:\.\d+)*)\s*$/i
+const ES_PUNTOS_PREGUNTA = /^(?:[-*]\s+)?puntos?\s*:?\s*(\d+(?:[.,]\d+)?)\s*$/i
+
+/**
+ * Un examen escrito como examen —no como tabla—: preguntas numeradas y, bajo
+ * cada una, sus opciones a), b), c)… La correcta se marca con un asterisco,
+ * un ✓, en negrita, con «[x]» o con «(correcta)»; o va al final en una línea
+ * «Respuestas: 1-b, 2-c, 3-a». Es lo que escribe una IA cuando se le pide un
+ * test, y lo que un docente escribe a mano sin pensar en formatos.
+ *
+ * Bajo una pregunta también valen «Criterio: CE1.2» y «Puntos: 2».
+ */
+export function pruebaDeExamenMarkdown(texto: string, tituloPorDefecto: string): PruebaImportada {
+  const avisos: string[] = []
+  let titulo = tituloPorDefecto
+  let penalizacion: number | undefined
+  let reparto: RepartoPrueba | undefined
+  const preguntas: Omit<PreguntaPrueba, 'id'>[] = []
+  let actual: Omit<PreguntaPrueba, 'id'> | null = null
+  const clave = new Map<number, number>()
+  let enClave = false
+
+  for (const bruta of texto.split('\n')) {
+    const linea = bruta.trim().replace(/`/g, '')
+    if (!linea) continue
+    if (linea.startsWith('#')) {
+      const t = linea.replace(/^#+\s*/, '').replace(/\*\*/g, '')
+      if (preguntas.length === 0 && !actual) titulo = t
+      enClave = false
+      continue
+    }
+    const ajuste = linea.replace(/^[-*]\s+/, '').replace(/\*\*/g, '').match(/^(penalizaci[oó]n|reparto)\s*:\s*(.+)$/i)
+    if (ajuste && !actual) {
+      if (/^penaliz/i.test(ajuste[1])) penalizacion = numero(ajuste[2])
+      else reparto = repartoDe(ajuste[2])
+      continue
+    }
+    const mClave = linea.match(ES_CLAVE)
+    if (mClave) {
+      enClave = true
+      for (const [, n, l] of mClave[1].matchAll(/(\d{1,3})\s*[-–:.)]?\s*([a-fA-F])\b/g)) {
+        const i = letraAIndice(l); if (i != null) clave.set(Number(n), i)
+      }
+      continue
+    }
+    if (enClave) {
+      // Las líneas siguientes de la clave: «1. b», «2 - c», o varias por línea.
+      const pares = [...linea.matchAll(/(\d{1,3})\s*[-–:.)]?\s*([a-fA-F])\b/g)]
+      if (pares.length) { for (const [, n, l] of pares) { const i = letraAIndice(l); if (i != null) clave.set(Number(n), i) } continue }
+      enClave = false
+    }
+    const mPregunta = linea.match(ES_PREGUNTA)
+    // Una línea «1. …» es pregunta salvo que parezca una opción suelta.
+    if (mPregunta && !ES_OPCION.test(linea)) {
+      actual = { enunciado: mPregunta[2].replace(/\*\*/g, '').trim(), max: 1, criterio_id: null, opciones: [], correcta: null }
+      preguntas.push(actual)
+      continue
+    }
+    if (!actual) continue
+    const mCriterio = linea.match(ES_CRITERIO_PREGUNTA)
+    if (mCriterio) { actual.criterio_id = mCriterio[1].toUpperCase(); continue }
+    const mPuntos = linea.match(ES_PUNTOS_PREGUNTA)
+    if (mPuntos) { actual.max = numero(mPuntos[1]) ?? 1; continue }
+    const mOpcion = linea.match(ES_OPCION)
+    if (mOpcion) {
+      // La casilla «[x]» puede ir antes o después de la letra.
+      const casillaDespues = mOpcion[3].match(/^\[([ xX✓✔])\]\s*/)
+      const marcada = !!(mOpcion[1] && mOpcion[1] !== ' ') || !!(casillaDespues && casillaDespues[1] !== ' ')
+        || /^(?:[-*]\s+)?(?:\*\*|\*|✓|✔|→)/.test(linea) || MARCA_CORRECTA.test(mOpcion[3])
+      const textoOpcion = mOpcion[3].replace(/^\[([ xX✓✔])\]\s*/, '').replace(MARCA_CORRECTA, '').replace(/\*\*/g, '').trim()
+      const i = letraAIndice(mOpcion[2])
+      const opciones = actual.opciones!
+      // La letra manda sobre el orden: una opción «c)» va en la tercera casilla.
+      const pos = i != null && i < MAX_OPCIONES ? i : opciones.length
+      while (opciones.length <= pos) opciones.push('')
+      opciones[pos] = textoOpcion
+      if (marcada) actual.correcta = pos
+      continue
+    }
+    // Texto suelto bajo la pregunta: continúa el enunciado.
+    if (actual.opciones!.length === 0) actual.enunciado = `${actual.enunciado} ${linea.replace(/\*\*/g, '')}`.trim()
+  }
+
+  if (!preguntas.length) throw new Error('No se encuentran preguntas numeradas («1. …») con sus opciones («a) …»).')
+  preguntas.forEach((p, i) => {
+    const deClave = clave.get(i + 1)
+    if (deClave != null && (p.opciones?.length ?? 0) > deClave) p.correcta = deClave
+    // Huecos de letras que nadie escribió («a» y «c» sin «b»).
+    p.opciones = (p.opciones ?? []).map(o => o || '—')
+  })
+  const sinOpciones = preguntas.filter(p => (p.opciones?.length ?? 0) < 2).length
+  const sinCorrecta = preguntas.filter(p => (p.opciones?.length ?? 0) >= 2 && p.correcta == null).length
+  if (sinOpciones === preguntas.length) throw new Error('Las preguntas no traen opciones: para un test hacen falta al menos dos por pregunta («a) …», «b) …»).')
+  if (sinOpciones) avisos.push(`${sinOpciones} pregunta(s) con menos de dos opciones.`)
+  if (sinCorrecta) avisos.push(`${sinCorrecta} pregunta(s) sin marcar la correcta: márcala en el editor.`)
+  const conCriterio = preguntas.filter(p => p.criterio_id).length
+  if (!reparto) reparto = conCriterio > 0 ? 'criterios' : 'unica'
+  const prueba = normalizarPrueba({
+    titulo, tipo: 'test', reparto, penalizacion,
+    preguntas: preguntas.map((p, i) => ({ id: `p${i + 1}`, ...p })),
+  })
+  return { prueba, avisos }
+}
+
+/** Hay al menos dos preguntas numeradas seguidas de opciones con letra. */
+export function pareceExamenMarkdown(texto: string): boolean {
+  let preguntas = 0, opciones = 0
+  for (const bruta of texto.split('\n')) {
+    const l = bruta.trim()
+    if (ES_PREGUNTA.test(l) && !ES_OPCION.test(l)) preguntas++
+    else if (ES_OPCION.test(l)) opciones++
+  }
+  return preguntas >= 1 && opciones >= 2 && !/^\s*\|/m.test(texto)
+}
+
 export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImportada {
   let p: any
   try { p = JSON.parse(texto) } catch {
@@ -182,7 +318,11 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
       : undefined,
     preguntas: d.preguntas.map((q: any) => typeof q === 'string'
       ? { enunciado: limpiar(q), max: 1 }
-      : { id: q?.id, enunciado: limpiar(q?.enunciado ?? q?.pregunta), max: numero(q?.max ?? q?.puntos), criterio_id: limpiar(q?.criterio_id ?? q?.criterio) }),
+      : {
+        id: q?.id, enunciado: limpiar(q?.enunciado ?? q?.pregunta), max: numero(q?.max ?? q?.puntos), criterio_id: limpiar(q?.criterio_id ?? q?.criterio),
+        opciones: Array.isArray(q?.opciones) ? q.opciones.map(limpiar) : undefined,
+        correcta: typeof q?.correcta === 'string' ? letraAIndice(q.correcta) : numero(q?.correcta),
+      }),
   } as Partial<PruebaDef>)
   return { prueba, avisos: [] }
 }
@@ -197,6 +337,7 @@ export async function importarPrueba(nombreFichero: string, datos: ArrayBuffer):
   }
   const texto = new TextDecoder().decode(datos).replace(/^﻿/, '')
   if (/^\s*[{[]/.test(texto)) return pruebaDeJson(texto, titulo)
+  if (pareceExamenMarkdown(texto)) return pruebaDeExamenMarkdown(texto, titulo)
   const filas = filasDeMarkdownPrueba(texto)
   if (!filas.some(f => f.length >= 2)) {
     throw new Error('No se reconoce el fichero. Sirven una hoja de cálculo (.xlsx), un Markdown (.md) con las preguntas en una tabla, o un JSON (.json).')
@@ -212,15 +353,40 @@ const NOMBRE_REPARTO: Record<RepartoPrueba, string> = { unica: 'nota única', cr
 /** El examen como tabla, con la misma forma que se sabe leer. */
 export function filasDePrueba(d: PruebaDef): (string | number)[][] {
   const conCriterio = d.reparto === 'criterios' || d.preguntas.some(p => p.criterio_id)
+  const conOpciones = d.tipo === 'test' && d.preguntas.some(p => p.opciones?.length)
   return [
     [d.titulo],
     ['Tipo', NOMBRE_TIPO[d.tipo]],
     ['Reparto', NOMBRE_REPARTO[d.reparto]],
     ...(d.tipo === 'test' ? [['Penalización', d.penalizacion ?? 0]] : []),
     ...(d.tipo === 'niveles' ? [['Escala', ...(d.escala ?? []).map(n => `${n.nombre} (${n.valor})`)]] : []),
-    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : [])],
-    ...d.preguntas.map((p, i) => [p.enunciado || `Pregunta ${i + 1}`, p.max, ...(conCriterio ? [p.criterio_id ?? ''] : [])]),
+    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
+    ...d.preguntas.map((p, i) => [
+      p.enunciado || `Pregunta ${i + 1}`, p.max,
+      ...(conCriterio ? [p.criterio_id ?? ''] : []),
+      ...(conOpciones ? [(p.opciones ?? []).map(o => o.replace(/[;·/]/g, ',')).join(' ; '), p.correcta != null ? LETRAS[p.correcta] : ''] : []),
+    ]),
   ]
+}
+
+/**
+ * El examen tal como lo lee el alumnado: título, preguntas y opciones. Sin la
+ * clave, salvo que se pida. Es el mismo formato que se sabe importar.
+ */
+export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean } = {}): string {
+  const lineas = [`# ${d.titulo}`, '']
+  if (opciones.conClave && d.penalizacion) lineas.push(`Penalización: ${d.penalizacion}`, '')
+  d.preguntas.forEach((p, i) => {
+    lineas.push(`${i + 1}. ${p.enunciado || `Pregunta ${i + 1}`}`)
+    if (opciones.conClave && p.criterio_id) lineas.push(`   Criterio: ${p.criterio_id}`)
+    if (opciones.conClave && p.max !== 1) lineas.push(`   Puntos: ${p.max}`)
+    ;(p.opciones ?? []).forEach((o, j) => lineas.push(`   ${LETRAS[j].toLowerCase()}) ${o}`))
+    lineas.push('')
+  })
+  if (opciones.conClave) {
+    lineas.push(`Respuestas: ${d.preguntas.map((p, i) => `${i + 1}-${p.correcta != null ? LETRAS[p.correcta].toLowerCase() : '?'}`).join(', ')}`, '')
+  }
+  return lineas.join('\n')
 }
 
 export function pruebaAXlsx(d: PruebaDef): Uint8Array<ArrayBuffer> {

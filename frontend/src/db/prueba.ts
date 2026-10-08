@@ -34,7 +34,18 @@ export interface PreguntaPrueba {
   /** Lo que vale la pregunta, en puntos del examen. */
   max: number
   criterio_id?: string | null
+  /**
+   * Solo `test`: las opciones entre las que elige el alumno, en orden (A, B,
+   * C…). Con ellas el examen se puede imprimir y corregir por cámara.
+   */
+  opciones?: string[]
+  /** Solo `test`: índice de la opción correcta en `opciones`. Sin ella no hay clave. */
+  correcta?: number | null
 }
+
+/** Letras de las opciones de un test, en el orden de `opciones`. */
+export const LETRAS = ['A', 'B', 'C', 'D', 'E', 'F'] as const
+export const MAX_OPCIONES = LETRAS.length
 
 export interface NivelPrueba { nombre: string; valor: number }
 
@@ -103,11 +114,20 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     const id = typeof p?.id === 'string' && p.id && !vistos.has(p.id) ? p.id : idLibre()
     vistos.add(id)
     const max = Number(p?.max)
+    // Las opciones solo tienen sentido en un test; en otro tipo se descartan
+    // para que un examen de puntos no arrastre una clave que nadie ve.
+    const opciones = tipo === 'test' && Array.isArray(p?.opciones)
+      ? p.opciones.slice(0, MAX_OPCIONES).map(o => String(o ?? '').trim())
+      : []
+    // `null` no es «la primera»: Number(null) da 0 y pondría correcta donde no la hay.
+    const correcta = p?.correcta == null ? NaN : Number(p.correcta)
     preguntas.push({
       id,
       enunciado: String(p?.enunciado ?? '').trim(),
       max: Number.isFinite(max) && max > 0 ? redondear2(max) : 1,
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
+      ...(opciones.length ? { opciones } : {}),
+      ...(opciones.length && Number.isInteger(correcta) && correcta >= 0 && correcta < opciones.length ? { correcta } : {}),
     })
   }
   const pen = Number(d?.penalizacion)
@@ -122,6 +142,30 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     ...(tipo === 'test' ? { penalizacion: Number.isFinite(pen) && pen > 0 ? Math.min(1, pen) : 0 } : {}),
     ...(tipo === 'niveles' ? { escala: escala.some(n => n.valor > 0) ? escala : ESCALA_POR_DEFECTO } : {}),
   }
+}
+
+/**
+ * Lo que anota una marca en un test con clave: la letra marcada contra la
+ * correcta. `null` es dejar la pregunta en blanco. Así la corrección por
+ * cámara y la de a mano guardan exactamente lo mismo (`ACIERTO`, `FALLO`,
+ * `EN_BLANCO`) y la nota sale por el mismo camino.
+ */
+export function respuestaDeMarca(p: PreguntaPrueba, marcada: number | null | undefined): number {
+  if (marcada == null) return EN_BLANCO
+  if (p.correcta == null) throw new Error(`La pregunta «${p.enunciado || p.id}» no tiene opción correcta.`)
+  return marcada === p.correcta ? ACIERTO : FALLO
+}
+
+/** Un test con opciones y correcta en todas sus preguntas: se puede imprimir y corregir por cámara. */
+export function tieneClave(def: PruebaDef): boolean {
+  return def.tipo === 'test' && def.preguntas.length > 0
+    && def.preguntas.every(p => (p.opciones?.length ?? 0) >= 2 && p.correcta != null)
+}
+
+/** Las preguntas de un test a las que les falta algo para tener clave. */
+export function preguntasSinClave(def: PruebaDef): number[] {
+  if (def.tipo !== 'test') return []
+  return def.preguntas.map((p, i) => ((p.opciones?.length ?? 0) >= 2 && p.correcta != null) ? -1 : i).filter(i => i >= 0)
 }
 
 /** Suma de lo que valen las preguntas: la escala del propio examen (10, 20, 100…). */

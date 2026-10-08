@@ -9,11 +9,13 @@
  */
 import {
   notaDePrueba, normalizarPrueba, puntosTotales, criteriosSinDestino, preguntasIguales,
-  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, type PruebaDef,
+  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, type PruebaDef,
 } from '../frontend/src/db/prueba'
 import {
   importarPrueba, pruebaDeFilas, pruebaDeJson, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
+  pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice,
 } from '../frontend/src/ia/pruebaImportar'
+import { generarPromptTest } from '../frontend/src/ia/pruebaPrompt'
 
 let fallos = 0
 const ok = (cond: boolean, msg: string, extra = '') => {
@@ -134,6 +136,76 @@ console.log('\n7. Los tres formatos dan el mismo examen')
   ok((await falla(() => pruebaDeJson('{"formato":"edumind-rubrica","niveles":[],"indicadores":[]}', 't'))).includes('rúbrica'),
      'el JSON de una rúbrica se rechaza diciendo qué es')
   ok((await falla(() => importarPrueba('x.txt', bytes('nada')))).includes('No se reconoce'), 'texto sin tabla')
+}
+
+console.log('\n8. Test con opciones y correcta: el examen escrito como examen')
+{
+  const md = `# Os ríos de Galicia
+
+1. ¿Onde nace o río Miño?
+   Criterio: CE1.2
+   a) Na serra de Meira *
+   b) Nos Ancares
+   c) No Courel
+   d) Na Terra Chá
+
+2. **¿Cal é o afluente máis longo do Miño?**
+   - a) O Avia
+   - b) **O Sil**
+   - c) O Arnoia
+   Puntos: 2
+
+3. ¿En que provincia desemboca?
+   a) Lugo
+   b) Ourense
+   c) [x] Pontevedra
+   d) A Coruña
+`
+  ok(pareceExamenMarkdown(md), 'se reconoce como examen escrito, no como tabla')
+  const { prueba: t, avisos } = pruebaDeExamenMarkdown(md, 'x')
+  ok(t.titulo === 'Os ríos de Galicia' && t.tipo === 'test' && t.preguntas.length === 3, 'título, tipo test y tres preguntas', `${t.titulo} · ${t.tipo} · ${t.preguntas.length}`)
+  ok(t.preguntas[0].opciones?.length === 4 && t.preguntas[0].correcta === 0, 'asterisco al final: la a) es la correcta', JSON.stringify(t.preguntas[0]))
+  ok(t.preguntas[0].criterio_id === 'CE1.2' && t.reparto === 'criterios', 'el criterio bajo la pregunta cuenta y el reparto pasa a ser por criterios')
+  ok(t.preguntas[1].correcta === 1 && t.preguntas[1].opciones?.[1] === 'O Sil' && t.preguntas[1].enunciado === '¿Cal é o afluente máis longo do Miño?', 'negrita en la opción: correcta, y sin asteriscos en el texto', JSON.stringify(t.preguntas[1]))
+  ok(t.preguntas[1].max === 2, '«Puntos: 2» bajo la pregunta')
+  ok(t.preguntas[2].correcta === 2 && t.preguntas[2].opciones?.[2] === 'Pontevedra', '«[x]» marca la correcta')
+  ok(avisos.length === 0, 'sin avisos', avisos.join(' | '))
+  ok(tieneClave(t) && preguntasSinClave(t).length === 0, 'el test tiene clave completa')
+
+  const conClave = `1. Uno\n a) x\n b) y\n2. Dos\n a) p\n b) q\n c) r\n\nRespuestas: 1-b, 2-c`
+  const t2 = pruebaDeExamenMarkdown(conClave, 'Clave').prueba
+  ok(t2.preguntas[0].correcta === 1 && t2.preguntas[1].correcta === 2, 'la línea «Respuestas:» del final pone las correctas')
+  const sinCorrecta = pruebaDeExamenMarkdown('1. Uno\n a) x\n b) y', 'z')
+  ok(sinCorrecta.prueba.preguntas[0].correcta == null && sinCorrecta.avisos.some(a => a.includes('sin marcar la correcta')), 'sin correcta se avisa, no se inventa')
+  ok(!tieneClave(sinCorrecta.prueba) && preguntasSinClave(sinCorrecta.prueba).length === 1, 'y el test no tiene clave')
+  ok((await falla(() => pruebaDeExamenMarkdown('1. Uno\n2. Dos', 'z'))).includes('opciones'), 'preguntas sin opciones: lo dice')
+
+  ok(respuestaDeMarca(t.preguntas[0], 0) === ACIERTO && respuestaDeMarca(t.preguntas[0], 2) === FALLO && respuestaDeMarca(t.preguntas[0], null) === EN_BLANCO,
+     'una marca se traduce a acierto, fallo o en blanco contra la correcta')
+  ok((await falla(() => respuestaDeMarca(sinCorrecta.prueba.preguntas[0], 0))).includes('correcta'), 'sin correcta no se puede corregir una marca')
+  ok(letraAIndice('b)') === 1 && letraAIndice('C') === 2 && letraAIndice('3') === 2 && letraAIndice('z') === null, 'letras y números a índice')
+
+  // Los tres formatos conservan opciones y correcta; el .md del alumnado se vuelve a leer sin la clave.
+  const canon = (d: PruebaDef) => JSON.stringify(normalizarPrueba(d))
+  const x = (await importarPrueba('e.xlsx', pruebaAXlsx(t).buffer)).prueba
+  const m = (await importarPrueba('e.md', bytes(pruebaAMarkdown(t)))).prueba
+  const j = (await importarPrueba('e.json', bytes(pruebaAJson(t)))).prueba
+  ok(canon(x) === canon(t), 'opciones y correcta por .xlsx', canon(x) === canon(t) ? '' : canon(x))
+  ok(canon(m) === canon(t), 'opciones y correcta por .md (tabla)', canon(m) === canon(t) ? '' : canon(m))
+  ok(canon(j) === canon(t), 'opciones y correcta por .json')
+  const alumnado = examenAMarkdown(t)
+  ok(!alumnado.includes('*') && !alumnado.includes('Respuestas'), 'el examen del alumnado no lleva la clave')
+  const releido = (await importarPrueba('alumnado.md', bytes(alumnado))).prueba
+  ok(releido.preguntas.every(p => p.correcta == null) && releido.preguntas[2].opciones?.[3] === 'A Coruña', 'y se vuelve a leer: opciones sí, correcta no')
+  const completo = (await importarPrueba('docente.md', bytes(examenAMarkdown(t, { conClave: true })))).prueba
+  ok(canon(completo) === canon(t), 'con clave, el examen escrito se lee igual que se exportó', canon(completo) === canon(t) ? '' : canon(completo))
+
+  // Un examen de puntos no arrastra opciones.
+  const puntos = normalizarPrueba({ ...t, tipo: 'puntos' })
+  ok(puntos.preguntas.every(p => !p.opciones && p.correcta == null), 'cambiar a puntos descarta opciones y correcta')
+
+  const prompt = generarPromptTest({ asignatura: 'Ciencias Sociais', nivel: '6º Primaria', contexto: 'Os ríos', nPreguntas: 5, nOpciones: 4, criterios: [{ id: 'CE1.2', descripcion: 'Localizar' }] })
+  ok(prompt.includes('5 preguntas') && prompt.includes('CE1.2') && prompt.includes('a) [opción]') && prompt.includes('*'), 'el prompt pide el formato que se sabe leer')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

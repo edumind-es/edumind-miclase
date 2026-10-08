@@ -210,6 +210,16 @@ edumind_miclase/
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
   reciben nota los criterios que alguna pregunta nombra y que la programación
   asigna al instrumento.
+- **Un test con clave lleva `opciones` y `correcta` por pregunta** (`PreguntaPrueba`,
+  solo `tipo: 'test'`; `normalizarPrueba` las descarta en otro tipo y nunca
+  convierte un `correcta: null` en 0). `respuestaDeMarca` traduce la letra
+  marcada a `ACIERTO`/`FALLO`/`EN_BLANCO`: la corrección por cámara guardará
+  lo mismo que la de a mano. Se importa además como examen escrito
+  (`pruebaDeExamenMarkdown`: «1. …», «a) …», correcta con `*`, negrita,
+  `[x]` o «Respuestas: 1-b»), que es lo que devuelve la IA con
+  `generarPromptTest` (`ia/pruebaPrompt.ts`) desde el editor; `examenAMarkdown`
+  exporta el examen del alumnado sin la clave. Hoja de respuestas con QR por
+  alumno y escáner en el aparato: fases 2-4, pendientes.
 - **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un

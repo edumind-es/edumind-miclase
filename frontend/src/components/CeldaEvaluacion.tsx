@@ -386,6 +386,8 @@ export default function CeldaEvaluacion({
         unidadId={unidadId}
         unidadNombre={unidadNombre}
         criterios={[criterio, ...hermanos]}
+        asignaturaNombre={asig.nombre_display}
+        nivel={`${grupo.curso}º ${grupo.etapa}`}
         onCerrar={() => { setPruebaAbierta(false); trasEditarConfig() }}
       />
     )}
