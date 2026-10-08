@@ -174,6 +174,15 @@ async function principal() {
       ['--format=iife', '--global-name=Enlace'])
     await suite('enlace directo', 'node', ['pruebas/enlace-directo.test.mjs'],
       { BUNDLE: enlace })
+
+    // El escáner de hojas: el lector como IIFE para el navegador y la hoja de
+    // muestra como CommonJS para Node (qrcode usa require por dentro).
+    const lectorHoja = join(scratch, 'lector-hoja.js')
+    await paquete('frontend/src/utils/lectorHoja.ts', lectorHoja, ['--format=iife', '--global-name=LectorHoja'])
+    const hojaDemo = join(scratch, 'hoja-demo.cjs')
+    await paquete('pruebas/lib/hojaDemo.ts', hojaDemo, ['--platform=node', '--format=cjs'])
+    await suite('escáner de hojas de respuestas', 'node', ['pruebas/hoja-escaner.test.mjs'],
+      { BUNDLE_LECTOR: lectorHoja, HOJA_DEMO: hojaDemo })
   }
 
   // ── Con backend y servidor de desarrollo ───────────────────────────
@@ -220,6 +229,9 @@ async function principal() {
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
+    const hojaDemoUi = join(scratch, 'hoja-demo-ui.cjs')
+    await paquete('pruebas/lib/hojaDemo.ts', hojaDemoUi, ['--platform=node', '--format=cjs'])
+    await suite('corregir por cámara desde la interfaz', 'node', ['pruebas/escaner-ui.test.mjs'], { ...entorno, HOJA_DEMO: hojaDemoUi })
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)

@@ -117,9 +117,11 @@ interface Props {
   onPegar: (col: ColumnaInstrumento) => void
   /** «Imprimir»: hojas de respuestas y examen de un test con clave. */
   onImprimir?: (col: ColumnaInstrumento) => void
+  /** «Corregir por cámara»: la pila de hojas de respuestas. */
+  onEscanear?: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onImprimir }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onImprimir, onEscanear }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   return (
@@ -190,6 +192,13 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       onClick={() => onSesion(col)}
                       title="Pasar por toda la clase hoy: un nivel por alumno, en el diario">
                       ✓ Evaluar hoy
+                    </button>
+                  )}
+                  {esExamen && col.ins.tiene_prueba && onEscanear && (
+                    <button type="button" className="instr-th-accion" data-escanear-abrir
+                      onClick={() => onEscanear(col)}
+                      title="Corregir las hojas de respuestas con la cámara, una tras otra">
+                      📷 Corregir por cámara
                     </button>
                   )}
                   {esExamen && col.ins.tiene_prueba && onImprimir && (
