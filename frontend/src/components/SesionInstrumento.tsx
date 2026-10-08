@@ -11,12 +11,18 @@
  * Volver a pulsar el mismo nivel lo quita; pulsar otro lo cambia: en el
  * mismo día un alumno tiene un solo registro con este instrumento, para que
  * equivocarse de botón no deje dos.
+ *
+ * Si el instrumento tiene rúbrica —niveles e indicadores—, los cuatro niveles
+ * del diario no pintan nada: la herramienta elegida es la rúbrica, y lo que
+ * se abre es `SesionRubrica`. Luis la pidió así: abrir «Evaluar hoy» en un
+ * instrumento con rúbrica y encontrarse una escala era un engaño.
  */
 import { useEffect, useMemo, useState } from 'react'
 import {
-  anadirRegistro, editarRegistro, borrarRegistro, getRegistrosDeCelda,
+  anadirRegistro, editarRegistro, borrarRegistro, getRegistrosDeCelda, getRubrica,
   type CeldaInstrumento, type DatosDeArea,
 } from '@/db/queries'
+import SesionRubrica, { type IndicadorRubrica, type NivelRubrica } from './SesionRubrica'
 import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario } from '@/db/diario'
 import { calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
@@ -46,7 +52,32 @@ function fechaDe(dia: string): string {
   return dia === diaLocal() ? new Date().toISOString() : new Date(`${dia}T12:00:00`).toISOString()
 }
 
-export default function SesionInstrumento({
+/** La rúbrica del instrumento si está completa; `null` si no la hay o está a medias. */
+function rubricaCompleta(r: { niveles_json: string; indicadores_json: string } | null): { niveles: NivelRubrica[]; indicadores: IndicadorRubrica[] } | null {
+  if (!r) return null
+  try {
+    const niveles = (JSON.parse(r.niveles_json) as NivelRubrica[]).filter(n => typeof n?.valor === 'number')
+    const inds = JSON.parse(r.indicadores_json) as IndicadorRubrica[]
+    const indicadores = Array.isArray(inds) ? inds.filter(i => i?.nombre) : []
+    return niveles.length && indicadores.length ? { niveles, indicadores } : null
+  } catch { return null }
+}
+
+export default function SesionInstrumento(props: Props) {
+  /** `undefined` mientras se lee: no se enseña el diario para cambiarlo por la rúbrica un instante después. */
+  const [rubrica, setRubrica] = useState<ReturnType<typeof rubricaCompleta> | undefined>(undefined)
+  useEffect(() => {
+    let vigente = true
+    setRubrica(undefined)
+    getRubrica(props.instrumento.instrumento_id).then(r => { if (vigente) setRubrica(rubricaCompleta(r)) })
+    return () => { vigente = false }
+  }, [props.instrumento.instrumento_id])
+  if (rubrica === undefined) return null
+  if (rubrica) return <SesionRubrica {...props} niveles={rubrica.niveles} indicadores={rubrica.indicadores} />
+  return <SesionDiario {...props} />
+}
+
+function SesionDiario({
   instrumento, criterios, alumnos, trimestre, unidadId, unidadNombre, area, onCambio, onCerrar,
 }: Props) {
   const [dia, setDia] = useState(diaLocal())

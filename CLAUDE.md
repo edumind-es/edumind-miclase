@@ -153,6 +153,27 @@ edumind_miclase/
   un solo registro por instrumento y día desde esa pantalla: cambiar de botón
   edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
   porque es una comodidad del aparato, no un dato.
+- **Con rúbrica completa, la pasada de clase es con la rúbrica.** Si el
+  instrumento tiene niveles e indicadores, `SesionInstrumento` abre
+  `SesionRubrica` en vez del diario: la rúbrica entera arriba y una fila por
+  alumno con sus niveles (uno en la fila marca todos los indicadores; «por
+  indicador» afina). Guarda `calificaciones` con `niveles_rubrica` en todos
+  los criterios del instrumento, con `sinVinculos`, como el panel de la
+  casilla; no escribe en el diario, porque una rúbrica no es una observación
+  fechada. Luis abrió «Evaluar hoy» en una rúbrica y se encontró una escala.
+- **Desde la vista por instrumento, la nota va a todos los criterios del
+  instrumento.** La casilla es «el alumno con el cuaderno» y enseña la media de
+  los treinta criterios que cubre: una nota en uno solo no movía la media y
+  parecía no guardarse (le pasó a Luis tras copiar una nota a toda la columna).
+  `CeldaEvaluacion` con `enfoque: 'instrumento'` escribe en todos
+  (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
+  (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
+  criterio. Por criterio nada cambia.
+- **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
+  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
+  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
+  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
+  antes.
 - **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
   y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
   examen de cada unidad, el billete de salida, speaking, listening. Un hijo
