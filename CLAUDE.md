@@ -226,7 +226,19 @@ edumind_miclase/
   8 mm en dos columnas de 25. Hasta 50 preguntas × 5 opciones. `informes/hojasTest.ts`
   genera las hojas (una página por alumno) y el examen del alumnado;
   `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
-  solo con clave completa). Escáner por cámara en el aparato: fases 3-4, pendientes.
+  solo con clave completa).
+- **El escáner de hojas vive en el aparato** (`utils/lectorHoja.ts`, puro salvo
+  jsQR): marcas por manchas macizas no pegadas al borde (relleno de caja
+  > 0,74, que aguanta ~15° de giro y deja fuera los patrones del QR), una por
+  esquina de la foto; homografía mm → px con las cuatro; el QR se recorta
+  enderezado; cada burbuja se mide contra el papel de su alrededor
+  (oscuridad relativa: marcada ≥ 0,4, duda entre 0,22 y 0,4, y dos oscuras =
+  duda). Si el QR no se lee se prueban las cuatro orientaciones. `EscanerHojas`
+  («📷 Corregir por cámara» en la columna del examen) congela la foto, pinta
+  lo leído, deja corregir con el dedo y guarda por `guardarExamenDeAlumno`:
+  igual que a mano. Se prueba en `hoja-escaner.test.mjs` con la hoja de la
+  app «fotografiada» girada, del revés y apaisada sobre fondo oscuro; con
+  cámara real no se ha probado todavía.
 - **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un

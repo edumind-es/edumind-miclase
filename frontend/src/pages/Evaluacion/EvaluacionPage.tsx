@@ -31,6 +31,7 @@ import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } f
 import SesionInstrumento from '@/components/SesionInstrumento'
 import PegarColumna from '@/components/PegarColumna'
 import ImprimirTest from '@/components/ImprimirTest'
+import EscanerHojas from '@/components/EscanerHojas'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
@@ -126,6 +127,7 @@ export default function EvaluacionPage() {
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
+  const [escanearEn, setEscanearEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
   const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
@@ -576,6 +578,7 @@ export default function EvaluacionPage() {
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
                   onImprimir={col => setImprimirEn(col)}
+                  onEscanear={col => setEscanearEn(col)}
                 />
               )
             ) : (
@@ -863,6 +866,20 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {escanearEn && matriz && (
+        <EscanerHojas
+          instrumento={escanearEn.ins}
+          criterios={escanearEn.criterios}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          trimestre={trimestre}
+          alumnos={alumnos}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onGuardado={() => setRefresco(r => r + 1)}
+          onCerrar={() => setEscanearEn(null)}
         />
       )}
 
