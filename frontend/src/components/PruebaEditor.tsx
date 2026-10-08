@@ -15,13 +15,16 @@ import {
   contarCorregidosDeExamen, recalcularNotasDeExamen, type PruebaGuardada,
 } from '@/db/queries'
 import {
-  pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva,
-  TIPOS_PRUEBA, ESCALA_POR_DEFECTO,
+  pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva, preguntasSinClave,
+  TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
   type PruebaDef, type PreguntaPrueba, type TipoPrueba, type RepartoPrueba,
 } from '@/db/prueba'
 import {
   importarPrueba, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
+  pruebaDeExamenMarkdown, examenAMarkdown,
 } from '@/ia/pruebaImportar'
+import { generarPromptTest } from '@/ia/pruebaPrompt'
+import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { TIPO_XLSX } from './AyudaImportarRubrica'
 
 interface Props {
@@ -32,6 +35,9 @@ interface Props {
   unidadNombre?: string
   /** Criterios que el instrumento evalúa aquí: los que se pueden asignar a las preguntas. */
   criterios: { id: string; descripcion: string }[]
+  /** Área y curso, para que el prompt de la IA no sea genérico. */
+  asignaturaNombre?: string
+  nivel?: string
   onCerrar: () => void
   capa?: string
 }
@@ -55,7 +61,7 @@ const PENALIZACIONES = [
 ]
 
 export default function PruebaEditor({
-  instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, onCerrar, capa = 'var(--z-modal-anidado)',
+  instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)',
 }: Props) {
   const [cargando, setCargando] = useState(true)
   const [def, setDef] = useState<PruebaDef>(pruebaVacia(instrumentoNombre))
@@ -71,6 +77,17 @@ export default function PruebaEditor({
   const [genN, setGenN] = useState(10)
   const [genTotal, setGenTotal] = useState(10)
   const importRef = useRef<HTMLInputElement>(null)
+  // Generar el test con IA: contexto, tamaño, y la respuesta pegada o generada aquí.
+  const [iaAbierta, setIaAbierta] = useState(false)
+  const [iaContexto, setIaContexto] = useState(unidadNombre ?? '')
+  const [iaN, setIaN] = useState(10)
+  const [iaOpciones, setIaOpciones] = useState(4)
+  const [iaRespuesta, setIaRespuesta] = useState('')
+  const [iaError, setIaError] = useState('')
+  const [promptCopiado, setPromptCopiado] = useState(false)
+  const ai = useLocalAI()
+  /** Preguntas del test con las opciones desplegadas. */
+  const [opcionesAbiertas, setOpcionesAbiertas] = useState<Set<string>>(new Set())
 
   const cerrar = () => {
     if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
@@ -131,6 +148,74 @@ export default function PruebaEditor({
 
   const setEscala = (i: number, cambios: Partial<{ nombre: string; valor: number }>) =>
     editar(d => ({ ...d, escala: (d.escala ?? []).map((n, j) => j === i ? { ...n, ...cambios } : n) }))
+
+  // ── Opciones del test ──────────────────────────────────────────────────
+
+  const setOpcion = (i: number, j: number, texto: string) => editar(d => ({
+    ...d, preguntas: d.preguntas.map((p, k) => {
+      if (k !== i) return p
+      const opciones = [...(p.opciones ?? [])]
+      while (opciones.length <= j) opciones.push('')
+      opciones[j] = texto
+      return { ...p, opciones }
+    }),
+  }))
+  const addOpcion = (i: number) => editar(d => ({
+    ...d, preguntas: d.preguntas.map((p, k) => k !== i || (p.opciones?.length ?? 0) >= MAX_OPCIONES ? p : { ...p, opciones: [...(p.opciones ?? []), ''] }),
+  }))
+  const quitarOpcion = (i: number, j: number) => editar(d => ({
+    ...d, preguntas: d.preguntas.map((p, k) => {
+      if (k !== i) return p
+      const opciones = (p.opciones ?? []).filter((_, m) => m !== j)
+      const correcta = p.correcta == null ? null : p.correcta === j ? null : p.correcta > j ? p.correcta - 1 : p.correcta
+      return { ...p, opciones, correcta }
+    }),
+  }))
+  /** Todas las preguntas del test con N opciones vacías, sin tocar las que ya las tienen. */
+  const darOpcionesATodas = (n: number) => editar(d => ({
+    ...d, preguntas: d.preguntas.map(p => (p.opciones?.length ?? 0) >= 2 ? p : { ...p, opciones: Array.from({ length: n }, (_, j) => p.opciones?.[j] ?? '') }),
+  }))
+  const alternarOpciones = (id: string) => setOpcionesAbiertas(s => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n })
+
+  // ── Generar con IA ─────────────────────────────────────────────────────
+
+  const prompt = generarPromptTest({
+    asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
+    contexto: iaContexto, nPreguntas: iaN, nOpciones: iaOpciones,
+    criterios: def.reparto === 'criterios' ? criterios : undefined,
+  })
+  const copiarPrompt = async () => {
+    await navigator.clipboard.writeText(prompt)
+    setPromptCopiado(true)
+    setTimeout(() => setPromptCopiado(false), 2000)
+  }
+  /** La respuesta de la IA —pegada o generada aquí— pasa a ser el examen en pantalla. */
+  const cargarRespuesta = (texto: string) => {
+    setIaError('')
+    try {
+      const { prueba, avisos } = pruebaDeExamenMarkdown(texto, def.titulo || instrumentoNombre)
+      setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: def.penalizacion ?? prueba.penalizacion })
+      setSucio(true)
+      setGenN(prueba.preguntas.length)
+      setGenTotal(puntosTotales(prueba))
+      setOpcionesAbiertas(new Set())
+      setMsg({ tipo: 'ok', texto: `Test cargado: ${prueba.preguntas.length} preguntas.${avisos.length ? ` Ojo: ${avisos.join(' ')}` : ''} Revísalo y pulsa «Guardar examen».` })
+    } catch (e: any) {
+      setIaError(e.message || 'No se reconoce el examen en la respuesta.')
+    }
+  }
+  const generarConIA = async () => {
+    if (!iaContexto.trim()) { setIaError('Di de qué va el examen: la unidad, el tema o el texto.'); return }
+    setIaError('')
+    setIaRespuesta('')
+    try {
+      const respuesta = await ai.generate(prompt, setIaRespuesta)
+      if (!respuesta.trim()) { setIaError('Generación detenida: no dio tiempo a escribir nada.'); return }
+      cargarRespuesta(respuesta)
+    } catch (e: any) {
+      setIaError(e.message || 'La IA local no ha podido generar el test.')
+    }
+  }
 
   // ── Guardar ────────────────────────────────────────────────────────────
 
@@ -304,6 +389,90 @@ export default function PruebaEditor({
                   {PENALIZACIONES.map(p => <option key={p.valor} value={String(p.valor)}>{p.texto}</option>)}
                 </select>
                 <span style={{ fontSize: 11.5, color: 'var(--gris-500)', marginLeft: 8 }}>En blanco ni suma ni resta.</span>
+                {/* Con opciones y correcta en todas, el test se imprime y se corrige por cámara. */}
+                {def.preguntas.length > 0 && (() => {
+                  const faltan = preguntasSinClave(def)
+                  return (
+                    <div data-estado-clave={faltan.length ? 'incompleta' : 'completa'}
+                      style={{ marginTop: 8, padding: '8px 12px', borderRadius: 8, fontSize: 12, lineHeight: 1.5,
+                        background: faltan.length ? '#fffbeb' : '#dcfce7', border: `1px solid ${faltan.length ? '#fde68a' : '#86efac'}`, color: faltan.length ? '#92400e' : '#166534' }}>
+                      {faltan.length
+                        ? <><strong>{faltan.length} de {def.preguntas.length} pregunta{def.preguntas.length !== 1 ? 's' : ''}</strong> sin opciones o sin la correcta. Con todas completas, el test se podrá imprimir y corregir por cámara.{' '}
+                            <button className="btn-secondary" style={{ fontSize: 11.5, marginLeft: 4 }} onClick={() => darOpcionesATodas(4)}>Dar 4 opciones a todas</button></>
+                        : <><strong>Test con clave completa:</strong> opciones y correcta en las {def.preguntas.length} preguntas.</>}
+                    </div>
+                  )
+                })()}
+              </div>
+            )}
+
+            {/* Generar el test con IA: la local del navegador o cualquier otra, copiando el prompt. */}
+            {def.tipo === 'test' && (
+              <div style={{ marginBottom: 14, border: '1px solid var(--azul-300)', borderRadius: 10, background: iaAbierta ? 'var(--azul-100)' : 'white' }}>
+                <button type="button" data-ia-toggle aria-expanded={iaAbierta} onClick={() => setIaAbierta(a => !a)}
+                  style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '9px 14px', fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', cursor: 'pointer' }}>
+                  {iaAbierta ? '▾' : '▸'} 🤖 Generar el test con IA
+                  <span style={{ fontWeight: 400, color: 'var(--gris-600)', marginLeft: 8 }}>desde la unidad, un tema o un texto; con la IA local o pegando la respuesta de otra</span>
+                </button>
+                {iaAbierta && (
+                  <div style={{ padding: '0 14px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 90px', gap: 10 }}>
+                      <div>
+                        <label style={etiqueta} htmlFor="ia-contexto">De qué va el examen *</label>
+                        <textarea id="ia-contexto" value={iaContexto} onChange={e => setIaContexto(e.target.value)} rows={3}
+                          style={{ width: '100%', fontSize: 13, resize: 'vertical' }}
+                          placeholder="La unidad, el tema o el texto del que salen las preguntas. Ejemplo: «Os ríos de Galicia: nacemento, afluentes e desembocadura. Texto do libro, páxinas 42-47»." />
+                      </div>
+                      <div>
+                        <label style={etiqueta} htmlFor="ia-n">Preguntas</label>
+                        <input id="ia-n" type="number" min={1} max={60} value={iaN} onChange={e => setIaN(Number(e.target.value))} style={{ width: '100%', fontSize: 13, textAlign: 'center' }} />
+                      </div>
+                      <div>
+                        <label style={etiqueta} htmlFor="ia-opciones">Opciones</label>
+                        <select id="ia-opciones" value={iaOpciones} onChange={e => setIaOpciones(Number(e.target.value))} style={{ width: '100%', fontSize: 13 }}>
+                          {[2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+                      <button className="btn-secondary" style={{ fontSize: 12.5 }} onClick={copiarPrompt} disabled={!iaContexto.trim()} data-ia-copiar>
+                        {promptCopiado ? '✅ Copiado' : '📋 Copiar prompt'}
+                      </button>
+                      <span style={{ fontSize: 12, color: 'var(--gris-500)' }}>→ pégalo en ChatGPT, Claude o Gemini y trae aquí la respuesta</span>
+                      {hasWebGPU() && (
+                        <>
+                          <div style={{ flex: 1 }} />
+                          {ai.isReady || ai.status === 'generando' ? (
+                            ai.status === 'generando'
+                              ? <button className="btn-secondary" style={{ fontSize: 12.5 }} onClick={ai.cancelar}>✋ Detener</button>
+                              : <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={generarConIA} disabled={!iaContexto.trim()}>⚡ Generar con IA local</button>
+                          ) : (
+                            <button className="btn-primary" style={{ fontSize: 12.5, background: '#166534' }} onClick={ai.cargarModelo}
+                              disabled={ai.status === 'descargando' || ai.status === 'cargando'}>
+                              {ai.status === 'descargando' && `⬇ Descargando Phi-3.5 (${ai.progress}%)`}
+                              {ai.status === 'cargando' && '⏳ Cargando modelo…'}
+                              {ai.status === 'idle' && '⬇ Descargar IA local (Phi-3.5 · ~2GB)'}
+                              {ai.status === 'error' && 'Error — reintentar'}
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      <label style={etiqueta} htmlFor="ia-respuesta">La respuesta de la IA</label>
+                      <textarea id="ia-respuesta" data-ia-respuesta value={iaRespuesta} onChange={e => setIaRespuesta(e.target.value)} rows={6}
+                        style={{ width: '100%', fontSize: 12, fontFamily: 'ui-monospace, monospace', resize: 'vertical' }}
+                        placeholder={'Pega aquí el test. Formato:\n\n1. ¿Onde nace o río Miño?\n   a) Na serra de Meira *\n   b) Nos Ancares\n   c) No Courel\n\nLa correcta lleva un asterisco, o va al final en «Respuestas: 1-a, 2-c…».'} />
+                    </div>
+                    {iaError && <div style={{ color: '#991b1b', fontSize: 12.5 }}>❌ {iaError}</div>}
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={() => cargarRespuesta(iaRespuesta)} disabled={!iaRespuesta.trim()} data-ia-cargar>
+                        📥 Cargar como examen
+                      </button>
+                      <span style={{ fontSize: 11.5, color: 'var(--gris-500)', alignSelf: 'center' }}>Sustituye las preguntas de abajo. Después, revisa y guarda.</span>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -419,7 +588,46 @@ export default function PruebaEditor({
                           style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}>×</button>
                       </td>
                     </tr>
-                  ))}
+                  )).flatMap((fila, i) => {
+                    if (def.tipo !== 'test') return [fila]
+                    const p = def.preguntas[i]
+                    const opciones = p.opciones ?? []
+                    const abierta = opcionesAbiertas.has(p.id) || opciones.length === 0
+                    const resumen = opciones.length
+                      ? `${opciones.length} opciones · correcta: ${p.correcta != null ? LETRAS[p.correcta] : '—'}`
+                      : 'sin opciones'
+                    return [fila, (
+                      <tr key={`${p.id}-opciones`} data-opciones-de={p.id} style={{ background: i % 2 === 0 ? 'white' : '#f8fafc' }}>
+                        <td />
+                        <td colSpan={def.reparto === 'criterios' ? 4 : 3} style={{ padding: '0 5px 8px' }}>
+                          <button type="button" onClick={() => alternarOpciones(p.id)} aria-expanded={abierta}
+                            style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : '#92400e', cursor: 'pointer', fontWeight: 600 }}>
+                            {abierta ? '▾' : '▸'} {resumen}
+                          </button>
+                          {abierta && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 4 }}>
+                              {opciones.map((o, j) => (
+                                <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                  <input type="radio" name={`correcta-${p.id}`} checked={p.correcta === j} onChange={() => setPregunta(i, { correcta: j })}
+                                    aria-label={`Opción ${LETRAS[j]} de la pregunta ${i + 1} es la correcta`} title="Marcar como correcta" />
+                                  <span style={{ fontSize: 12, fontWeight: 800, width: 16, color: p.correcta === j ? 'var(--verde-500)' : 'var(--gris-600)' }}>{LETRAS[j]}</span>
+                                  <input value={o} onChange={e => setOpcion(i, j, e.target.value)} aria-label={`Opción ${LETRAS[j]} de la pregunta ${i + 1}`}
+                                    placeholder={`Opción ${LETRAS[j]}`} style={{ flex: 1, fontSize: 12 }} />
+                                  <button onClick={() => quitarOpcion(i, j)} aria-label={`Quitar la opción ${LETRAS[j]} de la pregunta ${i + 1}`}
+                                    style={{ background: 'none', border: 'none', color: 'var(--gris-500)', cursor: 'pointer', fontSize: 14, lineHeight: 1 }}>×</button>
+                                </div>
+                              ))}
+                              {opciones.length < MAX_OPCIONES && (
+                                <button className="btn-secondary" style={{ fontSize: 11, alignSelf: 'flex-start' }} onClick={() => addOpcion(i)}>
+                                  + opción{opciones.length === 0 ? ' (marca la correcta con el redondel)' : ''}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    )]
+                  })}
                 </tbody>
               </table>
             </div>
@@ -451,6 +659,13 @@ export default function PruebaEditor({
                 onClick={() => descargar(`examen-${nombreFichero}.md`, pruebaAMarkdown(normalizarPrueba(def)), 'text/markdown;charset=utf-8')}>
                 ⬇ .md
               </button>
+              {def.tipo === 'test' && def.preguntas.some(p => p.opciones?.length) && (
+                <button className="btn-secondary" style={{ fontSize: 12 }}
+                  onClick={() => descargar(`examen-${nombreFichero}-alumnado.md`, examenAMarkdown(normalizarPrueba(def)), 'text/markdown;charset=utf-8')}
+                  title="El examen con sus opciones, sin la clave, para el alumnado">
+                  ⬇ Para el alumnado
+                </button>
+              )}
               <button className="btn-secondary" style={{ fontSize: 12 }} disabled={def.preguntas.length === 0}
                 onClick={() => descargar(`${nombreFichero}.eduprueba.json`, pruebaAJson(normalizarPrueba(def)), 'application/json')}
                 title="Guardar el examen en un fichero para compartirlo con otro docente">
@@ -517,6 +732,7 @@ function AyudaImportarPrueba({ onCerrar }: { onCerrar: () => void }) {
         <li>Encima de la tabla, cada uno en su fila y todos opcionales: <strong>Tipo</strong> (puntos, test o niveles), <strong>Reparto</strong> (nota única o por criterios),
           {' '}<strong>Penalización</strong> para el test (0,25 o 1/3) y <strong>Escala</strong> para los niveles («Correcta (2)», «Parcial (1)», «En blanco (0)», una por celda).</li>
         <li>Una celda suelta arriba del todo es el título del examen.</li>
+        <li>Un <strong>test con clave</strong> lleva además <strong>Opciones</strong> (separadas por «;») y <strong>Correcta</strong> (la letra). O se escribe como examen en un .md: «1. Pregunta», debajo «a) …», «b) …», y la correcta con un asterisco al final o en una línea «Respuestas: 1-b, 2-c».</li>
       </ul>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         <button className="btn-secondary" style={{ fontSize: 11.5 }}
