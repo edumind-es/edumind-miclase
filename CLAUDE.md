@@ -85,6 +85,18 @@ edumind_miclase/
   crea solo el anfitrión (quien invita); el invitado la comprueba contra él.
   Unificar (`unificarContrasena…`) reinicia los cursores sin servidor
   (`reenviarTodoSinServidor`), porque lo enviado con la clave vieja nunca se aplicó.
+- **La copia automática es un paquete de AirDrop escrito en una carpeta**
+  (`db/copia.ts`, formato puro en `db/copiaFormato.ts`, destinos en
+  `db/destinoCopia.ts`). Mismo `PaqueteSync`, misma contraseña, cursor propio
+  (`'copia'`): un fichero por tanda con nombre que ordena por fecha
+  (`nombreFicheroCopia`) y un manifiesto con sal y verificador. Restaurar
+  (`restaurarDesdeCopia`) aplica los paquetes en orden con `aplicarPaquete(…,
+  { restaurar: true })`, el único caso en que un aparato acepta sus propios
+  paquetes, y después sella el cursor de copia para no reescribir lo
+  restaurado. El temporizador (`CopiaAutomatica`) no puede pedir el permiso
+  de la carpeta —el navegador exige un clic—: si caducó, calla y la tarjeta
+  de Sincronizar lo dice. El aviso de Inicio (`AvisoCopia`, `diagnosticoCopia`)
+  cuenta el buzón como copia solo con la sincronización automática activa.
 - **Escribir un paquete no es entregarlo.** El transporte de fichero no da nada
   por «aceptado» (sin terreno común para la fusión) y `empaquetarParaOtroDispositivo`
   devuelve `deshacer()` para cuando la hoja de compartir se cancela.

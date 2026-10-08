@@ -68,7 +68,7 @@ export type EstadoSync = {
 
 export interface Transporte {
   /** Identificador estable; se guarda en `meta` para recordar la elección. */
-  readonly id: 'servidor' | 'carpeta' | 'directo'
+  readonly id: 'servidor' | 'carpeta' | 'directo' | 'copia'
   /** Cómo se le llama al docente en la pantalla de sincronización. */
   readonly nombre: string
   /** ¿Guarda los sobres fuera de este dispositivo de forma duradera? */

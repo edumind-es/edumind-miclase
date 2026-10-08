@@ -13,6 +13,7 @@ import { getEstadoConfiguracion, getSesiones, type PasoEstado } from '@/db/queri
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import PuestaEnMarcha from '@/components/PuestaEnMarcha'
 import InstalarApp from '@/components/InstalarApp'
+import AvisoCopia from '@/components/AvisoCopia'
 
 function hoyISO() { return new Date().toISOString().slice(0, 10) }
 
@@ -50,6 +51,7 @@ export default function Dashboard() {
 
   return (
     <>
+      <AvisoCopia />
       <div className="home-cabecera">
         <div>
           <h1 className="page-title" style={{ marginBottom: 2 }}>{saludo}</h1>

@@ -17,6 +17,7 @@ import ExportImport from '@/components/ExportImport'
 import EstadoConexion from '@/components/EstadoConexion'
 import ActualizacionApp from '@/components/ActualizacionApp'
 import SyncAutomatica from '@/components/SyncAutomatica'
+import CopiaAutomatica from '@/components/CopiaAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
 
 // El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
@@ -210,6 +211,7 @@ function Layout() {
       <EstadoConexion />
       <ActualizacionApp />
       <SyncAutomatica />
+      <CopiaAutomatica />
     </div>
   )
 }

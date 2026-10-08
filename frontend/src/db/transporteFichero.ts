@@ -52,13 +52,19 @@ export type PaqueteSync = {
 export const EXTENSION = '.miclasesync.json'
 export const MIME = 'application/json'
 
-/** Transporte de solo escritura: acumula lo que `empujar()` le vaya dando. */
-export function transporteFicheroEscritura(): Transporte & { sobres(): SobreEnvio[] } {
+/**
+ * Transporte de solo escritura: acumula lo que `empujar()` le vaya dando.
+ *
+ * Con `id: 'copia'` es el mismo paquete pero con su propio cursor: lo que ya
+ * está en la carpeta de copia no es lo que ya se le pasó a otro aparato por
+ * AirDrop, y al revés.
+ */
+export function transporteFicheroEscritura(id: 'carpeta' | 'copia' = 'carpeta'): Transporte & { sobres(): SobreEnvio[] } {
   const acumulado: SobreEnvio[] = []
 
   return {
-    id: 'carpeta',
-    nombre: 'Paquete para otro dispositivo',
+    id,
+    nombre: id === 'copia' ? 'Copia en carpeta' : 'Paquete para otro dispositivo',
     esBuzon: false,
 
     async estado(): Promise<EstadoSync> {
