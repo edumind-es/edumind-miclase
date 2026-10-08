@@ -93,7 +93,10 @@ edumind_miclase/
   descifrar se cuentan en `sinDescifrar` y se explican como «otra contraseña»;
   los fallos de conexión traen diagnóstico (direcciones ofrecidas, estado ICE).
 - **La sal y el verificador viven también en el dispositivo**, no solo en el
-  buzón. Si solo estuvieran en el servidor, un aparato nuevo no podría
+  buzón. Y al revés: quien estrenó la contraseña sin buzón y luego conecta su
+  cuenta la **publica** con `publicarContrasenaEnBuzon` (misma sal, mismo
+  verificador), nunca crea otra; hasta entonces ni la pantalla ni
+  `SyncAutomatica` sincronizan contra un buzón sin configurar (`iniciado`). Si solo estuvieran en el servidor, un aparato nuevo no podría
   desbloquear sin él y el enlace directo no serviría de nada.
 - **La fusión de sincronización mantiene su base.** `sync_base` guarda la
   última versión común de cada registro; sin ella el merge cae al
@@ -153,6 +156,27 @@ edumind_miclase/
   un solo registro por instrumento y día desde esa pantalla: cambiar de botón
   edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
   porque es una comodidad del aparato, no un dato.
+- **Con rúbrica completa, la pasada de clase es con la rúbrica.** Si el
+  instrumento tiene niveles e indicadores, `SesionInstrumento` abre
+  `SesionRubrica` en vez del diario: la rúbrica entera arriba y una fila por
+  alumno con sus niveles (uno en la fila marca todos los indicadores; «por
+  indicador» afina). Guarda `calificaciones` con `niveles_rubrica` en todos
+  los criterios del instrumento, con `sinVinculos`, como el panel de la
+  casilla; no escribe en el diario, porque una rúbrica no es una observación
+  fechada. Luis abrió «Evaluar hoy» en una rúbrica y se encontró una escala.
+- **Desde la vista por instrumento, la nota va a todos los criterios del
+  instrumento.** La casilla es «el alumno con el cuaderno» y enseña la media de
+  los treinta criterios que cubre: una nota en uno solo no movía la media y
+  parecía no guardarse (le pasó a Luis tras copiar una nota a toda la columna).
+  `CeldaEvaluacion` con `enfoque: 'instrumento'` escribe en todos
+  (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
+  (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
+  criterio. Por criterio nada cambia.
+- **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
+  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
+  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
+  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
+  antes.
 - **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
   y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
   examen de cada unidad, el billete de salida, speaking, listening. Un hijo
@@ -220,6 +244,31 @@ edumind_miclase/
   semitranslúcida en la matriz), sin contar —todo el cálculo lee `valor`— y
   recuperable desde el panel de la casilla. Decisión expresa de Luis: retirar
   la nota sin más, aunque fuera coherente, no es aceptable.
+- **Una casilla tiene una sola fila que cuenta** (`masReciente` en
+  `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
+  aparatos que califican la misma casilla antes de sincronizar crean dos
+  filas vivas con la misma clave y distinto id. Toda lectura de
+  `calificaciones` pasa por `sinDuplicados` o `getCalificacionUnica`,
+  `saveCalificaciones` escribe en esa misma fila y retira las otras, y
+  `reconciliarDuplicados` lo repasa tras cada sync. Antes la matriz pintaba la
+  última fila que encontraba y el panel editaba la primera: Luis ponía una
+  nota y no la veía cambiar.
+- **Nadie finge una herramienta, y se elige por donde se entra a calificar.**
+  Un instrumento sin rúbrica ni examen que no es de observación
+  (`faltaHerramienta`, `ElegirHerramienta.tsx`) la pide en los tres sitios:
+  la cabecera de la columna («Definir herramienta», `[data-herramienta-definir]`,
+  con «Evaluar hoy» como segunda opción), la pasada «Evaluar hoy»
+  (`[data-sin-herramienta]` encima de los cuatro niveles; al guardar la rúbrica
+  la misma pantalla pasa a `SesionRubrica`) y el panel de la casilla. Los
+  botones son los mismos (`BotonesHerramienta`): rúbrica, lista de control,
+  escala de estimación y, si es prueba escrita, examen; lista y escala son
+  rúbricas con otra forma (`herramientaInicial`, `RubricaEditor` con `inicio`).
+  La parrilla 0-10 queda como «nota directa». El diario solo sale abierto en
+  los instrumentos de observación (`esDeObservacion`), que aun así ofrecen
+  «Definir rúbrica» como segunda opción en la cabecera y plegado en «Evaluar
+  hoy», por si el docente la prefiere: Luis abrió «Evaluar hoy»
+  en «Exposición oral» y se encontró una escala 1-4 que nadie había elegido,
+  con la rúbrica a crear tras «Más» y un icono pequeño.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **El diario de evaluación no pisa nada.** La tabla `diario` guarda una

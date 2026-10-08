@@ -744,6 +744,15 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 }
 .instr-th-accion.secundaria { margin-top: 4px; background: transparent; font-weight: 600; opacity: .85; }
 .instr-th-accion.secundaria:hover { background: rgba(255,255,255,.16); opacity: 1; }
+/* Cabeceras plegadas: solo nombre y botón de calificar. El resto sigue en el
+   DOM (las pruebas y el lector de pantalla lo leen), pero no ocupa sitio. */
+.matriz-instrumentos.cabeceras-compactas .instr-th-detalle { display: none; }
+.matriz-instrumentos.cabeceras-compactas thead th.instr-th { min-width: 150px; padding-bottom: 8px; }
+.cabeceras-toggle {
+  display: block; margin-top: 6px; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radio-sm);
+  background: transparent; color: var(--blanco); font-size: 10.5px; font-weight: 600; padding: 3px 7px; cursor: pointer;
+}
+.cabeceras-toggle:hover, .cabeceras-toggle[aria-pressed="true"] { background: rgba(255,255,255,.18); }
 
 /* ── Competencias plegables en la matriz por criterio ─────────────────── */
 .matriz-criterios thead tr.fila-competencias th { top: 0; text-align: left; padding: 5px 10px; font-size: 11px; font-weight: 700;

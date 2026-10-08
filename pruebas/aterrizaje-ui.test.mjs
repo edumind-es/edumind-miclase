@@ -109,6 +109,9 @@ try {
   await p.waitForTimeout(1200)
 
   console.log('\n3. Pegar una columna de Excel, por orden de lista')
+  // Las cabeceras salen plegadas: «Pegar columna» está tras «detalles».
+  await p.locator('[data-cabeceras-toggle]').first().click()
+  ok(await p.locator('[data-cabeceras-toggle][aria-pressed="true"]').count() === 1, 'las cabeceras se despliegan con «detalles»')
   const col = p.locator('[data-instr-th]').first()
   const nombreInstr = await col.getAttribute('data-nombre')
   const idsCabecera = (await col.locator('.instr-th-criterios').textContent()).split(':')[1].split('·').map(s => s.trim()).filter(Boolean)

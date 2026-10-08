@@ -150,3 +150,32 @@ export function rubricaDesdePlantilla(plantilla: PlantillaRubrica, titulo: strin
     })),
   }
 }
+
+/**
+ * Herramientas de evaluación más simples que una rúbrica, con la misma forma
+ * (niveles × indicadores) para que el calificador las aplique igual:
+ *
+ * - `lista`: lista de control. Dos niveles, Sí (1) y No (0): cada ítem se
+ *   cumple o no, y la nota es la proporción de ítems cumplidos.
+ * - `escala`: escala de estimación. Los cuatro niveles de siempre y filas sin
+ *   descriptores: se gradúa cada aspecto sin redactar qué es cada grado.
+ *
+ * Salen con tres filas de nombre genérico para que el docente vea la forma y
+ * las sustituya por lo que observa de verdad.
+ */
+export type HerramientaSimple = 'lista' | 'escala'
+
+export function herramientaInicial(tipo: HerramientaSimple, titulo: string): RubricaParsed {
+  const niveles = tipo === 'lista'
+    ? [{ nombre: 'Sí', valor: 1 }, { nombre: 'No', valor: 0 }]
+    : [...NIVELES_DEFAULT]
+  const nombre = tipo === 'lista' ? 'Ítem' : 'Aspecto'
+  return {
+    titulo,
+    niveles,
+    indicadores: [1, 2, 3].map(i => ({
+      nombre: `${nombre} ${i}`,
+      descriptores: Object.fromEntries(niveles.map(n => [n.nombre, ''])),
+    })),
+  }
+}

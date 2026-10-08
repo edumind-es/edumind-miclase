@@ -29,6 +29,7 @@ import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
+import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
@@ -123,6 +124,8 @@ export default function EvaluacionPage() {
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
+  /** Columna sin herramienta cuya cabecera ha pedido definirla. */
+  const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
@@ -573,6 +576,7 @@ export default function EvaluacionPage() {
                   onSesion={col => setSesion(col)}
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
+                  onDefinir={col => setDefinirEn(col)}
                 />
               )
             ) : (
@@ -860,6 +864,17 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {definirEn && matriz && (
+        <ElegirHerramienta
+          instrumento={definirEn.ins}
+          asignaturaNombre={matriz.asig.nombre_display}
+          nivel={`${matriz.grupo.curso}º ${matriz.grupo.etapa}`}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setDefinirEn(null)}
+          onExamen={() => { const col = definirEn; setDefinirEn(null); abrirPorInstrumento(0, col) }}
         />
       )}
 

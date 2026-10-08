@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthProvider'
 import {
-  consultarEstado, iniciarSincronizacion, desbloquear, sincronizar,
+  consultarEstado, iniciarSincronizacion, desbloquear, sincronizar, publicarContrasenaEnBuzon,
   claveGuardada, olvidarClave, ultimaSincronizacion, pendientesDeEnvio, reenviarTodo,
   registrosAislados,
   type EstadoSync, type ResultadoSync,
@@ -66,10 +66,24 @@ export default function SincronizarPage() {
   // de ahora. El reloj de cada cinco minutos ya no vive aquí: está en
   // components/SyncAutomatica.tsx, montado en toda la app, porque antes
   // dejaba de correr en cuanto el docente navegaba a otra pantalla.
+  // Con el buzón sin configurar no hay contra qué sincronizar: antes se
+  // intentaba igual y el servidor rechazaba cada tanda con «configura primero».
+  const buzonListo = !!estado?.iniciado
   useEffect(() => {
-    if (!auto || !conectado || !desbloqueado) return
+    if (!auto || !conectado || !desbloqueado || !buzonListo) return
     hacerSync(true)
-  }, [auto, conectado, desbloqueado])
+  }, [auto, conectado, desbloqueado, buzonListo])
+
+  const publicar = async () => {
+    setTrabajando(true); setMsg(null)
+    try {
+      await publicarContrasenaEnBuzon(headers)
+      setMsg({ tipo: 'ok', texto: 'Contraseña publicada en el buzón. Ya puedes sincronizar; en tus otros aparatos, desbloquea con la misma contraseña.' })
+      await refrescar()
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message })
+    } finally { setTrabajando(false) }
+  }
 
   // ── Acciones ───────────────────────────────────────────────────────────
 
@@ -326,6 +340,20 @@ export default function SincronizarPage() {
                   {trabajando ? 'Trabajando…' : estado?.iniciado ? 'Desbloquear' : 'Activar sincronización'}
                 </button>
               </div>
+            </div>
+          ) : !buzonListo ? (
+            <div className="card" data-publicar-buzon style={{ marginBottom: 18 }}>
+              <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>Tu contraseña está en este aparato, pero el buzón aún no la tiene</h2>
+              <p style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.6 }}>
+                Creaste la sincronización sin buzón (para el fichero o el enlace directo). Para que el
+                servidor reparta tus sobres entre tus aparatos hay que publicar en él la sal y el
+                verificador de esa misma contraseña: ningún secreto sale de aquí, y en los demás
+                dispositivos la escribes igual que siempre. Hasta entonces, «Sincronizar ahora» no tiene
+                contra qué hacerlo.
+              </p>
+              <button className="btn-primary" onClick={publicar} disabled={trabajando}>
+                {trabajando ? 'Publicando…' : '📮 Publicar mi contraseña en el buzón'}
+              </button>
             </div>
           ) : (
             <div className="card" style={{ marginBottom: 18 }}>

@@ -221,6 +221,7 @@ async function principal() {
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)
     await suite('sync por buzón, dos dispositivos', 'node', ['pruebas/sync-dos-dispositivos.test.mjs'], entorno)
+    await suite('buzón: publicar la contraseña creada sin él', 'node', ['pruebas/buzon-publicar-ui.test.mjs'], entorno)
     await suite('sync directa, sin servidor', 'node', ['pruebas/sync-directo.test.mjs'], entorno)
     await suite('emparejamiento por pantalla', 'node', ['pruebas/emparejar-ui.test.mjs'], entorno)
     await suite('sincronizar sin silencios', 'node', ['pruebas/sync-sin-silencios.test.mjs'], entorno)
