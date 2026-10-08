@@ -155,6 +155,7 @@ try {
   // observación) dice «sin herramienta» y la deja elegir ahí mismo.
   const colCuaderno = p.locator('[data-instr-th][data-nombre="Cuaderno"]')
   ok(await colCuaderno.locator('[data-herramienta-definir]').count() === 1, 'la cabecera de Cuaderno ofrece «Definir herramienta»')
+  ok((await colCuaderno.locator('[data-herramienta-definir]').textContent()).includes('Definir herramienta'), 'como acción principal: no tiene herramienta')
   ok(await colCuaderno.locator('[data-sesion-abrir]').count() === 1, 'y «Evaluar hoy» sigue disponible como segunda opción')
   await colCuaderno.locator('[data-sesion-abrir]').click()
   const sesionSin = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })

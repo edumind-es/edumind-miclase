@@ -90,14 +90,16 @@ export default function ElegirHerramienta({ instrumento, asignaturaNombre, nivel
         </div>
         <div style={{ padding: '14px 18px 18px', fontSize: 13, color: 'var(--gris-700)', lineHeight: 1.5 }}>
           <p style={{ margin: '0 0 12px' }}>
-            Aún no tiene herramienta. Elige una y el calificador la enseñará cada vez que
-            evalúes con «{instrumento.nombre}»: en «Calificar con la rúbrica» (toda la clase de
-            una pasada) y al pulsar cualquier casilla suya.
+            {esDeObservacion(instrumento.tipo)
+              ? <>Hoy se evalúa con el diario de observación (cuatro niveles por registro). Si prefieres una rúbrica, lista o escala, elígela y el calificador la enseñará cada vez que evalúes con «{instrumento.nombre}».</>
+              : <>Aún no tiene herramienta. Elige una y el calificador la enseñará cada vez que evalúes con «{instrumento.nombre}»: en «Calificar con la rúbrica» (toda la clase de una pasada) y al pulsar cualquier casilla suya.</>}
           </p>
           <BotonesHerramienta tipo={instrumento.tipo} onRubrica={inicio => setEditor({ inicio })} onExamen={onExamen} />
-          <p style={{ margin: '12px 0 0', fontSize: 12, color: 'var(--gris-500)' }}>
-            Mientras tanto, «Evaluar hoy» anota con el diario de observación (cuatro niveles) y las casillas admiten una nota directa 0-10.
-          </p>
+          {!esDeObservacion(instrumento.tipo) && (
+            <p style={{ margin: '12px 0 0', fontSize: 12, color: 'var(--gris-500)' }}>
+              Mientras tanto, «Evaluar hoy» anota con el diario de observación (cuatro niveles) y las casillas admiten una nota directa 0-10.
+            </p>
+          )}
         </div>
       </div>
     </div>

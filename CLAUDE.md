@@ -264,7 +264,9 @@ edumind_miclase/
   escala de estimación y, si es prueba escrita, examen; lista y escala son
   rúbricas con otra forma (`herramientaInicial`, `RubricaEditor` con `inicio`).
   La parrilla 0-10 queda como «nota directa». El diario solo sale abierto en
-  los instrumentos de observación (`esDeObservacion`): Luis abrió «Evaluar hoy»
+  los instrumentos de observación (`esDeObservacion`), que aun así ofrecen
+  «Definir rúbrica» como segunda opción en la cabecera y plegado en «Evaluar
+  hoy», por si el docente la prefiere: Luis abrió «Evaluar hoy»
   en «Exposición oral» y se encontró una escala 1-4 que nadie había elegido,
   con la rúbrica a crear tras «Más» y un icono pequeño.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el

@@ -233,6 +233,15 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                         : 'Pasar por toda la clase hoy: un nivel por alumno, en el diario'}>
                       {col.ins.tiene_rubrica ? '📊 Calificar con la rúbrica' : '✓ Evaluar hoy'}
                     </button>
+                    {/* De observación, el diario es su herramienta y va primero; pero
+                        si el docente prefiere una rúbrica, la define aquí, no en una casilla. */}
+                    {!sinHerramienta && !col.ins.tiene_rubrica && (
+                      <button type="button" className="instr-th-accion secundaria" data-herramienta-definir
+                        onClick={() => onDefinir(col)}
+                        title="Evaluar este instrumento con rúbrica, lista de control o escala en vez del diario">
+                        📊 Definir rúbrica
+                      </button>
+                    )}
                   </>)}
                   <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}

@@ -203,6 +203,14 @@ function SesionDiario({
               <BotonesHerramienta tipo={instrumento.tipo} onRubrica={inicio => setEditor({ inicio })} />
             </div>
           )}
+          {!sinHerramienta && (
+            <details data-definir-rubrica style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
+              <summary style={{ cursor: 'pointer' }}>¿Prefieres evaluar «{instrumento.nombre}» con rúbrica, lista de control o escala?</summary>
+              <div style={{ marginTop: 8 }}>
+                <BotonesHerramienta tipo={instrumento.tipo} onRubrica={inicio => setEditor({ inicio })} />
+              </div>
+            </details>
+          )}
           <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '9px 12px', marginBottom: 12, fontSize: 12.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
             <strong>Cada nivel se anota en {ids.length} criterio{ids.length !== 1 ? 's' : ''}:</strong>{' '}
             {criterios.map(c => <span key={c.id} title={c.descripcion} style={{ fontWeight: 700, color: 'var(--azul-700)', marginRight: 6 }}>{c.id}</span>)}
