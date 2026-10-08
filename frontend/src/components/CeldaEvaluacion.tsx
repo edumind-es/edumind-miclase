@@ -135,6 +135,17 @@ export default function CeldaEvaluacion({
   /** Criterios que este instrumento evalúa en lo que se está viendo: este y sus hermanos. */
   const hermanos = instrumentoSel && hermanosDe ? hermanosDe(instrumentoSel.instrumento_id) : []
   const destinosPrueba = [criterio.id, ...hermanos.map(h => h.id)]
+  /**
+   * Desde la vista por instrumento, la casilla es «el alumno con el cuaderno»
+   * y enseña la media de todos los criterios que cubre. Si la nota fuera solo
+   * a uno de los treinta, la media no se movía y parecía que no se guardaba
+   * (le pasó a Luis tras copiar una nota a toda la columna). Así que por
+   * defecto la nota va a todos, como «Pegar columna» y «Evaluar hoy», y
+   * «solo este criterio» es la excepción que se pide.
+   */
+  const [soloEsteCriterio, setSoloEsteCriterio] = useState(false)
+  const notaATodos = enfoque === 'instrumento' && hermanos.length > 0 && !soloEsteCriterio
+  const destinosNota = notaATodos ? destinosPrueba : [criterio.id]
 
   // Al cambiar de alumno, reiniciar el instrumento al primero disponible
   useEffect(() => {
@@ -232,19 +243,31 @@ export default function CeldaEvaluacion({
     return () => window.removeEventListener('keydown', onKey)
   }, [onCerrar, onSiguiente, onAnterior, instrumentosAbierto, rubricaAbierta, pruebaAbierta])
 
-  const guardarNota = async (valor: number | null, niveles_rubrica?: Record<string, number> | null) => {
+  /**
+   * Guarda la nota. Con `soloEste`, en este criterio aunque el panel esté en
+   * modo «a todos» (la observación es de este criterio, no del instrumento).
+   */
+  const guardarNota = async (valor: number | null, niveles_rubrica?: Record<string, number> | null, opciones: { soloEste?: boolean } = {}) => {
     if (!instrumentoId) return
     setGuardando(true)
     try {
-      const vinculadas = await saveCalificaciones([{
-        alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: criterio.id,
+      const destinos = opciones.soloEste ? [criterio.id] : destinosNota
+      const aTodos = destinos.length > 1
+      const vinculadas = await saveCalificaciones(destinos.map(criterio_id => ({
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id,
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
-        valor, observacion: observacion.trim() || null, unidad_id: unidadId,
+        valor,
+        // La observación es de este criterio; a los demás no se les pisa la suya.
+        observacion: criterio_id === criterio.id ? observacion.trim() || null : undefined,
+        unidad_id: unidadId,
         // `undefined` significa «no lo toques»: al borrar la nota o al
         // escribir una observación no hay que perder lo marcado.
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
-      }])
+      })),
+      // A todos los criterios del instrumento el reparto ya está decidido,
+      // como al pegar una columna: los vínculos no añaden nada.
+      { sinVinculos: aTodos })
       // Misma regla que `saveCalificaciones`: otra nota a mano sobre una
       // casilla derivada del diario la vuelve manual.
       if (valor !== valorActual) setOrigenActual(null)
@@ -252,7 +275,8 @@ export default function CeldaEvaluacion({
       // Si la nota ha ido a más casillas, se dice: que un vínculo escriba en
       // otro criterio sin avisar sería justo lo que no debe pasar.
       const tambien = vinculadas > 0 ? ` y en ${vinculadas} criterio${vinculadas !== 1 ? 's' : ''} vinculado${vinculadas !== 1 ? 's' : ''}` : ''
-      avisar({ tipo: 'ok', texto: valor == null ? `Nota borrada${tambien}` : `${valor} guardado en ${criterio.id}${tambien}` }, 2000)
+      const donde = aTodos ? `los ${destinos.length} criterios de ${instrumentoSel?.nombre ?? 'este instrumento'}` : criterio.id
+      avisar({ tipo: 'ok', texto: valor == null ? `Nota borrada${aTodos ? ` en ${donde}` : ''}${tambien}` : `${valor} guardado en ${donde}${tambien}` }, 2000)
       onGuardado()
     } catch {
       avisar({ tipo: 'error', texto: 'No se pudo guardar la nota' })
@@ -448,6 +472,19 @@ export default function CeldaEvaluacion({
                   {hermanos.length > 0 ? `y ${hermanos.length} más` : 'ver entero'}
                 </button>
               </div>
+              {/* Desde la vista por instrumento se dice a dónde va la nota, y se
+                  puede cambiar: a todos es lo normal; a uno, la excepción. */}
+              {enfoque === 'instrumento' && hermanos.length > 0 && !calificaPorPrueba && (
+                <div data-alcance-nota={notaATodos ? 'instrumento' : 'criterio'} style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 5 }}>
+                  {notaATodos
+                    ? <>La nota va a los <strong>{destinosPrueba.length} criterios</strong> de {instrumentoSel?.nombre}.</>
+                    : <>La nota va <strong>solo a {criterio.id}</strong>.</>}{' '}
+                  <button type="button" data-alcance-toggle onClick={() => setSoloEsteCriterio(v => !v)}
+                    style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                    {notaATodos ? 'solo este criterio' : 'a todos los criterios'}
+                  </button>
+                </div>
+              )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
               <div data-nota-actual style={{
@@ -823,7 +860,7 @@ export default function CeldaEvaluacion({
           <div style={{ marginBottom: 12 }}>
             <input value={observacion} onChange={e => setObservacion(e.target.value)}
               placeholder="Observación para este criterio…"
-              onBlur={() => { if (valorActual != null) guardarNota(valorActual) }}
+              onBlur={() => { if (valorActual != null) guardarNota(valorActual, undefined, { soloEste: true }) }}
               style={{ width: '100%', minHeight: 42, marginBottom: 8 }} />
             <CapturaEvidencia onCapturada={guardarEvidencia} compacto deshabilitado={guardando} />
           </div>
