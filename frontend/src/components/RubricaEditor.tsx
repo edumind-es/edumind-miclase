@@ -8,7 +8,7 @@ import {
 import { importarRubrica, rubricaAXlsx, rubricaAMarkdown, rubricaAJson } from '@/ia/rubricaImportar'
 import AyudaImportarRubrica, { TIPO_XLSX } from './AyudaImportarRubrica'
 import BancoRubricas from './BancoRubricas'
-import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
+import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla, herramientaInicial, type HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 
@@ -25,6 +25,13 @@ interface Props {
    * un piso más o la rúbrica sale por debajo de quien la abrió.
    */
   capa?: string
+  /**
+   * Con qué forma arrancar si el instrumento aún no tiene rúbrica: lista de
+   * control (Sí/No) o escala de estimación (niveles sin descriptores). Lo
+   * elige el docente en el panel de la casilla; sin esto se ofrece de dónde
+   * partir, como siempre. Si ya hay rúbrica, se abre esa y esto no cuenta.
+   */
+  inicio?: HerramientaSimple
 }
 
 /**
@@ -43,7 +50,7 @@ type Tab = 'diseniar' | 'ia'
 /** Antes de editar hay que decidir de dónde parte la rúbrica. */
 type Modo = 'cargando' | 'elegir' | 'editar'
 
-export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)' }: Props) {
+export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)', inicio }: Props) {
   const [tab, setTab] = useState<Tab>('diseniar')
   const [modo, setModo] = useState<Modo>('cargando')
   const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
@@ -111,6 +118,14 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           indicadores: JSON.parse(r.indicadores_json),
         })
         setModo('editar')
+      } else if (inicio) {
+        setRubrica(herramientaInicial(inicio, instrumentoNombre))
+        setSucio(true)
+        setTab('diseniar')
+        setModo('editar')
+        setMsg({ tipo: 'ok', texto: inicio === 'lista'
+          ? 'Lista de control: cada ítem se cumple (Sí) o no (No). Escribe los ítems y guárdala.'
+          : 'Escala de estimación: gradúa cada aspecto sin descriptores. Escribe los aspectos y guárdala.' })
       } else {
         setModo('elegir')
       }

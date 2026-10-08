@@ -72,6 +72,38 @@ function vivos<T extends Sincronizable>(arr: T[]): T[] {
   return arr.filter(r => !r.deleted_at)
 }
 
+/**
+ * De varias filas con la misma clave (alumno, instrumento, criterio,
+ * trimestre), la que cuenta: la de `updated_at` más reciente y, a igualdad,
+ * la de menor id. Dos aparatos que califican la misma casilla antes de
+ * sincronizar crean dos filas, y cada una llega al otro con su propio id. Si
+ * cada lectura eligiera a su manera, el panel editaría una y la matriz
+ * pintaría la otra: la nota se guardaba y no se veía. Es la misma regla en
+ * los dos aparatos, para que al reconciliar borren la misma.
+ */
+function masReciente<T extends Sincronizable & { id?: number }>(filas: T[]): T | undefined {
+  let mejor: T | undefined
+  for (const f of filas) {
+    if (!mejor) { mejor = f; continue }
+    const a = f.updated_at ?? '', b = mejor.updated_at ?? ''
+    if (a > b || (a === b && (f.id ?? Infinity) < (mejor.id ?? Infinity))) mejor = f
+  }
+  return mejor
+}
+
+const claveCelda = (c: Pick<Calificacion, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre'>) =>
+  `${c.alumno_id}:${c.instrumento_id}:${c.criterio_id}:${c.trimestre}`
+
+/** Una calificación por casilla: de las duplicadas se queda la que cuenta. */
+function sinDuplicados(cals: Calificacion[]): Calificacion[] {
+  const porClave = new Map<string, Calificacion[]>()
+  for (const c of cals) {
+    const k = claveCelda(c)
+    porClave.set(k, [...(porClave.get(k) ?? []), c])
+  }
+  return [...porClave.values()].map(l => l.length === 1 ? l[0] : masReciente(l)!)
+}
+
 /** Campos que lleva todo registro nuevo: id propio del dispositivo + sello. */
 function nuevo<T extends object>(data: T): T & { id: number; updated_at: string; deleted_at: null } {
   return { ...data, id: nuevoId(), updated_at: sello(), deleted_at: null }
@@ -677,11 +709,11 @@ export async function asignarInstrumentoAUnidad(
 export async function getCalificacionUnica(
   alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number
 ): Promise<Calificacion | undefined> {
-  const c = await db.calificaciones
+  const filas = await db.calificaciones
     .where('[alumno_id+instrumento_id+criterio_id+trimestre]')
     .equals([alumno_id, instrumento_id, criterio_id, trimestre])
-    .first()
-  return c && !c.deleted_at ? c : undefined
+    .toArray()
+  return masReciente(vivos(filas))
 }
 
 /**
@@ -816,10 +848,19 @@ export async function saveCalificaciones(
 
   await db.transaction('rw', db.calificaciones, async () => {
     for (const item of items) {
-      const existing = await db.calificaciones
+      const filas = await db.calificaciones
         .where('[alumno_id+instrumento_id+criterio_id+trimestre]')
         .equals([item.alumno_id, item.instrumento_id, item.criterio_id, item.trimestre])
-        .first()
+        .toArray()
+      // Se escribe en la fila que leen la casilla y la matriz (`masReciente`).
+      // Sin fila viva se reutiliza una borrada, si la hay. Las otras vivas
+      // —duplicadas por sincronizar dos aparatos— se retiran aquí mismo: si
+      // no, la nota nueva quedaba en una y la matriz seguía pintando la otra.
+      const vivas = vivos(filas)
+      const existing = masReciente(vivas) ?? masReciente(filas)
+      for (const sobra of vivas) {
+        if (sobra.id != null && sobra.id !== existing?.id) await db.calificaciones.update(sobra.id, tocado({ deleted_at: now() }))
+      }
       if (existing?.id != null) {
         // Ojo: esta lista enumera los campos que se actualizan. Un campo
         // nuevo que no se añada aquí se guarda al crear y se pierde en cada
@@ -857,8 +898,8 @@ export async function getCalificacionesAlumnoAsignatura(
 ): Promise<Calificacion[]> {
   const instrIds = (await getInstrumentos(asignatura_id)).map(i => i.id!)
   if (!instrIds.length) return []
-  return vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.alumno_id === alumno_id).toArray())
+  return sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+    .filter(c => c.alumno_id === alumno_id).toArray()))
 }
 
 /**
@@ -877,8 +918,8 @@ export async function getResumenPorCriterio(asignatura_id: number): Promise<
   if (!instrIds.length) return []
   const pesoDe = new Map(instrumentos.map(i => [i.id!, i.peso]))
 
-  const cals = vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.valor != null).toArray())
+  const cals = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+    .filter(c => c.valor != null).toArray()))
 
   const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
@@ -919,7 +960,7 @@ export async function getCalificacionesPorGrupo(grupo_id: number): Promise<{
   }
 
   const calificaciones = instrIds.length
-    ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds).toArray())
+    ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds).toArray()))
     : []
 
   const alumnos = await getAlumnosByGrupo(grupo_id)
@@ -1949,27 +1990,40 @@ export async function rematerializarInstrumento(instrumento_id: number): Promise
 }
 
 /**
- * Tras un sync: vuelve a derivar todas las celdas con registros o con nota
- * derivada. Las manuales no se tocan. Si dos aparatos crearon la misma casilla
- * derivada antes de sincronizar, se conserva la de menor id (igual en ambos)
- * y las demás se marcan borradas. Devuelve cuántas celdas se han revisado.
+ * Tras un sync: si dos aparatos calificaron la misma casilla antes de
+ * sincronizar hay dos filas vivas con la misma clave. Se conserva la que
+ * cuenta (`masReciente`, la misma en los dos aparatos) y las demás se marcan
+ * borradas. Vale para las notas a mano y para las derivadas del diario.
+ * Devuelve cuántas filas ha retirado.
  */
-export async function reconciliarDiario(): Promise<number> {
-  const regs = vivos(await db.diario.toArray())
-  const derivadasVivas = vivos(await db.calificaciones.filter(c => c.origen === 'diario').toArray())
-
-  // Duplicados por creación simultánea en dos aparatos.
+export async function reconciliarDuplicados(): Promise<number> {
   const porClave = new Map<string, Calificacion[]>()
-  for (const c of derivadasVivas) {
-    const k = `${c.alumno_id}:${c.instrumento_id}:${c.criterio_id}:${c.trimestre}`
+  for (const c of vivos(await db.calificaciones.toArray())) {
+    const k = claveCelda(c)
     porClave.set(k, [...(porClave.get(k) ?? []), c])
   }
-  const t = now()
+  let retiradas = 0
   for (const lista of porClave.values()) {
     if (lista.length < 2) continue
-    lista.sort((a, b) => a.id! - b.id!)
-    for (const sobra of lista.slice(1)) await db.calificaciones.update(sobra.id!, { deleted_at: t, updated_at: t })
+    const queda = masReciente(lista)!
+    for (const sobra of lista) {
+      if (sobra.id === queda.id) continue
+      await db.calificaciones.update(sobra.id!, tocado({ deleted_at: now() }))
+      retiradas++
+    }
   }
+  return retiradas
+}
+
+/**
+ * Tras un sync: vuelve a derivar todas las celdas con registros o con nota
+ * derivada. Las manuales no se tocan. Antes retira las casillas duplicadas
+ * (`reconciliarDuplicados`). Devuelve cuántas celdas se han revisado.
+ */
+export async function reconciliarDiario(): Promise<number> {
+  await reconciliarDuplicados()
+  const regs = vivos(await db.diario.toArray())
+  const derivadasVivas = vivos(await db.calificaciones.filter(c => c.origen === 'diario').toArray())
 
   const claves = new Set<string>()
   for (const r of regs) claves.add(`${r.alumno_id}:${r.instrumento_id}:${r.trimestre}`)
@@ -2127,8 +2181,8 @@ export async function getMatrizEvaluacion(
 
   const instrIds = instrumentos.map(i => i.id!)
   const cals = instrIds.length
-    ? vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-        .filter(c => c.trimestre === trimestre).toArray())
+    ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+        .filter(c => c.trimestre === trimestre).toArray()))
     : []
   // Las notas de los hijos se funden en la de su familia, con la misma
   // función que el cálculo del área: la casilla enseña el mismo número que el

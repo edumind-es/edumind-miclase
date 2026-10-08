@@ -223,6 +223,23 @@ edumind_miclase/
   semitranslúcida en la matriz), sin contar —todo el cálculo lee `valor`— y
   recuperable desde el panel de la casilla. Decisión expresa de Luis: retirar
   la nota sin más, aunque fuera coherente, no es aceptable.
+- **Una casilla tiene una sola fila que cuenta** (`masReciente` en
+  `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
+  aparatos que califican la misma casilla antes de sincronizar crean dos
+  filas vivas con la misma clave y distinto id. Toda lectura de
+  `calificaciones` pasa por `sinDuplicados` o `getCalificacionUnica`,
+  `saveCalificaciones` escribe en esa misma fila y retira las otras, y
+  `reconciliarDuplicados` lo repasa tras cada sync. Antes la matriz pintaba la
+  última fila que encontraba y el panel editaba la primera: Luis ponía una
+  nota y no la veía cambiar.
+- **El panel de la casilla no finge una herramienta.** Sin rúbrica, examen ni
+  registros del diario, dice que al instrumento le falta la herramienta y
+  ofrece elegirla ahí mismo (`[data-sin-herramienta]`: rúbrica, lista de
+  control, escala de estimación y, si es prueba escrita, examen; las dos
+  simples son rúbricas con otra forma, `herramientaInicial`). La parrilla 0-10
+  queda debajo como «nota directa». El diario solo sale abierto en los
+  instrumentos de observación (`diarioEsHerramienta`): en un examen sin
+  definir, sus cuatro niveles abiertos parecían una escala que nadie eligió.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **El diario de evaluación no pisa nada.** La tabla `diario` guarda una

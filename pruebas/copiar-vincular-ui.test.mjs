@@ -109,6 +109,24 @@ try {
   await p.waitForTimeout(1200)
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   await panel.waitFor({ timeout: 8000 })
+  // Ningún instrumento de PROENS trae rúbrica ni examen. El panel no finge una
+  // escala: en los de observación («Táboa de indicadores») el diario es la
+  // herramienta y sale abierto; en los demás dice que falta y la deja elegir.
+  // La nota directa 0-10 sigue en los dos casos.
+  const franja = await panel.locator('[data-franja-instrumento]').textContent()
+  const esObservacion = /t[áa]boa|indicador|observaci/i.test(franja)
+  if (esObservacion) {
+    ok(await panel.locator('[data-sin-herramienta]').count() === 0, 'con un instrumento de observación no se dice que falte herramienta', franja.slice(0, 60))
+    ok(await panel.locator('[data-diario] button.nivel-1').count() === 1, 'el diario sale abierto: es su herramienta')
+  } else {
+    ok(await panel.locator('[data-sin-herramienta]').count() === 1, 'sin rúbrica ni examen, el panel dice que falta la herramienta', franja.slice(0, 60))
+    ok(await panel.locator('[data-elegir-herramienta="rubrica"]').count() === 1
+      && await panel.locator('[data-elegir-herramienta="lista"]').count() === 1
+      && await panel.locator('[data-elegir-herramienta="escala"]').count() === 1, 'y ofrece rúbrica, lista de control y escala')
+    ok(await panel.locator('[data-diario] button.nivel-1').count() === 0, 'el diario no sale abierto: no es su herramienta')
+  }
+  ok(await panel.locator('button.cal-5').count() === 1, 'la nota directa 0-10 sigue disponible')
+  await panel.waitFor({ timeout: 8000 })
   await abrirMas()
   await caja.waitFor({ timeout: 5000 })
   const origen = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
@@ -202,6 +220,47 @@ try {
   ok(n[2][origen] === 7 && copiados.every(c => n[2][c] === 5), 'la nota nueva ya no se replica', JSON.stringify(n[2]))
   ok(n[0][vinculado] === 5 && n[1][vinculado] === 5, 'y las replicadas antes se quedan como estaban')
   ok(await p.locator('.criterio-th-instr .vinculo').count() === 0, 'la marca 🔗 desaparece de la cabecera')
+
+  console.log('\n7. Casilla duplicada por sincronizar dos aparatos: se ve y se corrige la que cuenta')
+  // Otro aparato calificó la misma casilla (tercer alumno, origen) antes de
+  // sincronizar: llega otra fila viva con su propio id, más antigua. Antes la
+  // matriz pintaba la última que encontraba y el panel editaba la primera:
+  // la nota se guardaba y no se veía.
+  const dup = await p.evaluate(async ({ origen }) => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const leer = (tabla) => new Promise((res) => {
+      const tx = db.transaction(tabla, 'readonly').objectStore(tabla).getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    const alumnos = (await leer('alumnos')).sort((a, b) => a.apellidos.localeCompare(b.apellidos))
+    const tercero = alumnos[2]
+    const fila = (await leer('calificaciones')).find(c => c.alumno_id === tercero.id && c.criterio_id === origen)
+    const copia = { ...fila, id: 9_000_001, valor: 2, updated_at: '2020-01-01T00:00:00.000Z' }
+    await new Promise((res) => { const tx = db.transaction('calificaciones', 'readwrite'); tx.objectStore('calificaciones').add(copia); tx.oncomplete = res })
+    return { alumno_id: tercero.id, instrumento_id: fila.instrumento_id, trimestre: fila.trimestre }
+  }, { origen })
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
+  await p.waitForTimeout(1200)
+  await p.locator('.tab-unidad').nth(1).click()
+  await p.waitForTimeout(1200)
+  const casilla = p.locator('tbody tr').nth(2).locator(`.celda-btn[title*="· ${origen}"]`)
+  ok((await casilla.locator('span').first().textContent()) === '7', 'la matriz pinta la nota que cuenta (la más reciente), no la duplicada', await casilla.textContent())
+  await casilla.click()
+  await panel.waitFor({ timeout: 8000 })
+  ok((await panel.locator('[data-nota-actual]').textContent()).startsWith('7'), 'y el panel abre con esa misma nota')
+  await poner(4)
+  await p.waitForTimeout(600)
+  ok((await casilla.locator('span').first().textContent()) === '4', 'la nota nueva se ve en la matriz', await casilla.textContent())
+  const filas = await p.evaluate(async ({ alumno_id, instrumento_id, trimestre, origen }) => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const todas = await new Promise((res) => { const tx = db.transaction('calificaciones', 'readonly').objectStore('calificaciones').getAll(); tx.onsuccess = () => res(tx.result) })
+    return todas.filter(c => c.alumno_id === alumno_id && c.instrumento_id === instrumento_id && c.criterio_id === origen && c.trimestre === trimestre)
+      .map(c => ({ id: c.id, valor: c.valor, borrada: !!c.deleted_at }))
+  }, { ...dup, origen })
+  const vivas = filas.filter(f => !f.borrada)
+  ok(vivas.length === 1 && vivas[0].valor === 4, 'queda una sola fila viva con la nota nueva', JSON.stringify(filas))
+  ok(filas.some(f => f.id === 9_000_001 && f.borrada), 'la duplicada se marca borrada, no se elimina: así el borrado también viaja')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {

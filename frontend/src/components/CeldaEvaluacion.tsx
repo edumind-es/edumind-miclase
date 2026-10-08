@@ -25,6 +25,7 @@ import DiarioCelda from './DiarioCelda'
 import { etiquetaAgregacion } from '@/db/diario'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -110,6 +111,9 @@ export default function CeldaEvaluacion({
   // panel, salir del calificador y volver a bajar hasta la ficha del área.
   const [instrumentosAbierto, setInstrumentosAbierto] = useState(false)
   const [rubricaAbierta, setRubricaAbierta] = useState(false)
+  /** Forma con la que arranca el editor de rúbrica cuando se elige desde «sin herramienta». */
+  const [inicioRubrica, setInicioRubrica] = useState<HerramientaSimple | undefined>(undefined)
+  const abrirRubrica = (inicio?: HerramientaSimple) => { setInicioRubrica(inicio); setRubricaAbierta(true) }
   const [pruebaAbierta, setPruebaAbierta] = useState(false)
   /** El examen con el que se corrige aquí, si el instrumento es una prueba escrita y lo tiene. */
   const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
@@ -353,6 +357,15 @@ export default function CeldaEvaluacion({
   const calificaPorDiario = !calificaPorPrueba && (registros.length > 0 || origenActual === 'diario')
   // Con examen definido manda el examen: es lo que el docente ha dicho que corrige.
   const calificaPorRubrica = !calificaPorPrueba && niveles.length > 0 && indicadores.length > 0
+  /**
+   * El diario es la herramienta natural de los instrumentos de observación:
+   * ahí sus cuatro niveles salen a la vista. En un examen sin definir o un
+   * trabajo sin rúbrica, en cambio, enseñarlos abierto decía con qué se
+   * califica sin que nadie lo hubiera decidido.
+   */
+  const diarioEsHerramienta = ['observacion', 'diario', 'actitud'].includes(instrumentoSel?.tipo ?? '')
+  /** Nadie ha dicho aún con qué se califica este instrumento: se pregunta, no se supone. */
+  const sinHerramienta = !!instrumentoSel && !calificaPorPrueba && !calificaPorRubrica && !calificaPorDiario && !diarioEsHerramienta
 
   /**
    * Tras tocar instrumentos o rúbrica hay dos vistas que se quedarían viejas:
@@ -392,6 +405,7 @@ export default function CeldaEvaluacion({
 
     {rubricaAbierta && instrumentoSel && (
       <RubricaEditor
+        inicio={inicioRubrica}
         instrumentoId={instrumentoSel.instrumento_id}
         instrumentoNombre={instrumentoSel.nombre}
         asignaturaNombre={asig.nombre_display}
@@ -616,6 +630,35 @@ export default function CeldaEvaluacion({
             </div>
           )}
 
+          {/* Sin rúbrica, examen ni diario, el panel no finge una herramienta:
+              dice que falta y deja elegirla aquí mismo. La parrilla 0-10 queda
+              debajo como nota directa, sin disfrazarse de escala. */}
+          {sinHerramienta && (
+            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', fontSize: 12.5, lineHeight: 1.5 }}>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>
+                «{instrumentoSel?.nombre}» no tiene todavía herramienta de evaluación.
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                {pruebaSoloPorUnidad
+                  ? <>Sus exámenes están definidos por unidad: entra en la pestaña de la unidad para corregir pregunta a pregunta. O elige con qué se evalúa aquí:</>
+                  : esPruebaEscrita
+                    ? <>¿Corriges por preguntas? Define el examen y la nota saldrá sola al anotar cada una. O elige otra herramienta; el panel la mostrará cada vez que pulses una casilla suya:</>
+                    : <>Elige con qué se evalúa y el panel la mostrará cada vez que pulses una casilla suya:</>}
+              </div>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {esPruebaEscrita && (
+                  <button data-elegir-herramienta="examen" onClick={() => setPruebaAbierta(true)} className="btn-primary" style={{ fontSize: 12 }}
+                    title="Preguntas y lo que vale cada una; se corrige pregunta a pregunta">📝 Definir examen</button>
+                )}
+                <button data-elegir-herramienta="rubrica" onClick={() => abrirRubrica()} className={esPruebaEscrita ? 'btn-secondary' : 'btn-primary'} style={{ fontSize: 12 }}
+                  title="Indicadores con un descriptor por nivel; plantillas, banco o IA">📊 Rúbrica</button>
+                <button data-elegir-herramienta="lista" onClick={() => abrirRubrica('lista')} className="btn-secondary" style={{ fontSize: 12 }}
+                  title="Ítems que se cumplen o no (Sí / No)">☑️ Lista de control</button>
+                <button data-elegir-herramienta="escala" onClick={() => abrirRubrica('escala')} className="btn-secondary" style={{ fontSize: 12 }}
+                  title="Aspectos graduados en niveles, sin descriptores">📏 Escala de estimación</button>
+              </div>
+            </div>
+          )}
           {/* Diario de evaluación: varias observaciones que no se pisan. */}
           {instrumentoSel && !calificaPorPrueba && !calificaPorRubrica && (
             <DiarioCelda
@@ -630,7 +673,7 @@ export default function CeldaEvaluacion({
               guardando={guardando}
               onCambio={texto => { avisar({ tipo: 'ok', texto }, 2500); setRecarga(n => n + 1); onGuardado() }}
               onError={texto => avisar({ tipo: 'error', texto })}
-              abiertoPorDefecto
+              abiertoPorDefecto={diarioEsHerramienta || calificaPorDiario}
             />
           )}
 
@@ -652,7 +695,7 @@ export default function CeldaEvaluacion({
               si no el criterio se quedaría sin forma de calificar. */}
           {!calificaPorRubrica && !calificaPorPrueba && (!calificaPorDiario || manualAbierta) && (
             <>
-              {esPruebaEscrita && (
+              {esPruebaEscrita && !sinHerramienta && (
                 <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 8, lineHeight: 1.5 }}>
                   {pruebaSoloPorUnidad
                     ? <>Los exámenes de «{instrumentoSel?.nombre}» están definidos por unidad: entra en la pestaña de la unidad para corregir pregunta a pregunta.</>
@@ -665,6 +708,11 @@ export default function CeldaEvaluacion({
                   Esta rúbrica tiene niveles pero ningún indicador, así que no puede
                   calcular la nota. Añádeselos en <strong>📊 Rúbrica</strong> y se
                   calificará marcando cada uno.
+                </div>
+              )}
+              {sinHerramienta && (
+                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase', marginBottom: 6 }}>
+                  Nota directa 0-10 · mientras no haya herramienta
                 </div>
               )}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(11, 1fr)', gap: 5, marginBottom: 14 }}>
@@ -859,7 +907,7 @@ export default function CeldaEvaluacion({
                 </button>
               )}
               {instrumentoSel && (
-                <button onClick={() => setRubricaAbierta(true)}
+                <button onClick={() => abrirRubrica()}
                   title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
                   style={{
                     fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
