@@ -8,6 +8,7 @@
  * Nada se guarda aquí: pulsar una casilla abre el mismo panel de siempre, y
  * «Evaluar hoy» abre la pasada de clase del diario.
  */
+import { useState } from 'react'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import { etiquetaAgregacion, miniTendencia } from '@/db/diario'
 import type { CeldaInstrumento, MatrizEvaluacion } from '@/db/queries'
@@ -98,6 +99,18 @@ export function resumenCelda(matriz: MatrizEvaluacion, alumnoId: number, col: Co
   }
 }
 
+/**
+ * Las cabeceras salen plegadas: nombre y el botón de calificar. Tipo, peso,
+ * criterios y «Pegar columna» se ven al desplegar. Decisión de Luis: con
+ * cinco columnas y treinta criterios cada una, lo que importa —calificar—
+ * quedaba enterrado bajo texto. Se recuerda en el aparato: es comodidad,
+ * no dato.
+ */
+const CLAVE_CABECERAS = 'miclase.calificador.cabeceras'
+function cabecerasGuardadas(): boolean {
+  try { return localStorage.getItem(CLAVE_CABECERAS) === 'completas' } catch { return false }
+}
+
 function claseNota(v: number | null) {
   return v == null ? '' : `cal-${Math.round(v)}`
 }
@@ -120,9 +133,22 @@ interface Props {
 export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
+  const [detalles, setDetalles] = useState(cabecerasGuardadas)
+  const alternarDetalles = () => {
+    const v = !detalles
+    setDetalles(v)
+    try { localStorage.setItem(CLAVE_CABECERAS, v ? 'completas' : 'compactas') } catch { /* sin almacenamiento: no pasa nada */ }
+  }
+  const botonDetalles = (
+    <button type="button" className="cabeceras-toggle" data-cabeceras-toggle aria-pressed={detalles}
+      onClick={alternarDetalles}
+      title={detalles ? 'Plegar las cabeceras: solo el nombre y el botón de calificar' : 'Ver tipo, peso, criterios y «Pegar columna» de cada instrumento'}>
+      {detalles ? '▴ menos' : '▾ detalles'}
+    </button>
+  )
   return (
     <div className="matriz-wrap">
-      <table className={`matriz matriz-instrumentos${hayFamilias ? ' con-familias' : ''}`}>
+      <table className={`matriz matriz-instrumentos${hayFamilias ? ' con-familias' : ''}${detalles ? '' : ' cabeceras-compactas'}`}>
         <thead>
           {/* Fila de familias: lo que pesa en el área. Solo si alguna tiene hijos;
               si no, sería repetir el nombre de cada columna encima de sí misma. */}
@@ -133,6 +159,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
                   {alumnos.length} · {columnas.length} instrumento{columnas.length !== 1 ? 's' : ''}
                 </div>
+                {botonDetalles}
               </th>
               {grupos.map(g => (
                 <th key={g.id} scope="colgroup" colSpan={g.columnas.length} data-familia-th data-nombre={g.nombre}
@@ -151,6 +178,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 <div style={{ fontSize: 10, fontWeight: 400, opacity: .7, marginTop: 2 }}>
                   {alumnos.length} · {columnas.length} instrumento{columnas.length !== 1 ? 's' : ''}
                 </div>
+                {botonDetalles}
               </th>
             )}
             {columnas.map(col => {
@@ -168,11 +196,11 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
                     <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
                   </div>
-                  <div className="instr-th-tipo">
+                  <div className="instr-th-tipo instr-th-detalle">
                     {cfg.label}{esHijo ? ` · peso ${col.ins.peso}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
-                  <div className="instr-th-criterios">
+                  <div className="instr-th-criterios instr-th-detalle">
                     {ids.length} criterio{ids.length !== 1 ? 's' : ''}: {ids.join(' · ')}
                   </div>
                   {esExamen ? (
@@ -186,11 +214,13 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                   ) : (
                     <button type="button" className="instr-th-accion" data-sesion-abrir
                       onClick={() => onSesion(col)}
-                      title="Pasar por toda la clase hoy: un nivel por alumno, en el diario">
-                      ✓ Evaluar hoy
+                      title={col.ins.tiene_rubrica
+                        ? 'Pasar por toda la clase con la rúbrica a la vista: un nivel por alumno'
+                        : 'Pasar por toda la clase hoy: un nivel por alumno, en el diario'}>
+                      {col.ins.tiene_rubrica ? '📊 Calificar con la rúbrica' : '✓ Evaluar hoy'}
                     </button>
                   )}
-                  <button type="button" className="instr-th-accion secundaria" data-pegar-abrir
+                  <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">
                     📋 Pegar columna
