@@ -115,9 +115,11 @@ interface Props {
   onCorregir: (col: ColumnaInstrumento) => void
   /** «Pegar columna»: las notas de una hoja de cálculo. */
   onPegar: (col: ColumnaInstrumento) => void
+  /** «Imprimir»: hojas de respuestas y examen de un test con clave. */
+  onImprimir?: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onImprimir }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   return (
@@ -188,6 +190,13 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       onClick={() => onSesion(col)}
                       title="Pasar por toda la clase hoy: un nivel por alumno, en el diario">
                       ✓ Evaluar hoy
+                    </button>
+                  )}
+                  {esExamen && col.ins.tiene_prueba && onImprimir && (
+                    <button type="button" className="instr-th-accion secundaria" data-imprimir-abrir
+                      onClick={() => onImprimir(col)}
+                      title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
+                      🖨 Imprimir test
                     </button>
                   )}
                   <button type="button" className="instr-th-accion secundaria" data-pegar-abrir
