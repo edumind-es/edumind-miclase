@@ -134,6 +134,10 @@ async function principal() {
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
 
+    const hojaOmr = join(scratch, 'hoja-omr.mjs')
+    await paquete('pruebas/hoja-omr.test.ts', hojaOmr, ['--platform=node', '--format=esm'])
+    await suite('hoja de respuestas: geometría y QR', 'node', [hojaOmr])
+
     const rubricaImportar = join(scratch, 'rubrica-importar.mjs')
     await paquete('pruebas/rubrica-importar.test.ts', rubricaImportar, ['--platform=node', '--format=esm'])
     await suite('importar rúbricas (xlsx, md, json)', 'node', [rubricaImportar])

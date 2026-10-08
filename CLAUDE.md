@@ -218,8 +218,15 @@ edumind_miclase/
   (`pruebaDeExamenMarkdown`: «1. …», «a) …», correcta con `*`, negrita,
   `[x]` o «Respuestas: 1-b»), que es lo que devuelve la IA con
   `generarPromptTest` (`ia/pruebaPrompt.ts`) desde el editor; `examenAMarkdown`
-  exporta el examen del alumnado sin la clave. Hoja de respuestas con QR por
-  alumno y escáner en el aparato: fases 2-4, pendientes.
+  exporta el examen del alumnado sin la clave.
+- **La hoja de respuestas se dibuja en milímetros desde `db/hojaOMR.ts`**, y
+  esa geometría es el contrato con el escáner: cuatro marcas de 10 mm en las
+  esquinas, QR de 34 mm arriba a la derecha con `MCT1|prueba_id|alumno_id|n|k`
+  (`payloadHoja`/`leerPayloadHoja`, con versión), burbujas de 5 mm a paso de
+  8 mm en dos columnas de 25. Hasta 50 preguntas × 5 opciones. `informes/hojasTest.ts`
+  genera las hojas (una página por alumno) y el examen del alumnado;
+  `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
+  solo con clave completa). Escáner por cámara en el aparato: fases 3-4, pendientes.
 - **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un

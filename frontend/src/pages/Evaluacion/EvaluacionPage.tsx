@@ -30,6 +30,7 @@ import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import PegarColumna from '@/components/PegarColumna'
+import ImprimirTest from '@/components/ImprimirTest'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
@@ -124,6 +125,7 @@ export default function EvaluacionPage() {
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
   const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
@@ -573,6 +575,7 @@ export default function EvaluacionPage() {
                   onSesion={col => setSesion(col)}
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
+                  onImprimir={col => setImprimirEn(col)}
                 />
               )
             ) : (
@@ -860,6 +863,18 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {imprimirEn && matriz && (
+        <ImprimirTest
+          instrumento={imprimirEn.ins}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          alumnos={alumnos}
+          grupoNombre={matriz.grupo.nombre}
+          areaNombre={matriz.asig.nombre_display}
+          onCerrar={() => setImprimirEn(null)}
         />
       )}
 
