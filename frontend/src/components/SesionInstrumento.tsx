@@ -11,12 +11,21 @@
  * Volver a pulsar el mismo nivel lo quita; pulsar otro lo cambia: en el
  * mismo día un alumno tiene un solo registro con este instrumento, para que
  * equivocarse de botón no deje dos.
+ *
+ * Si el instrumento tiene rúbrica —niveles e indicadores—, los cuatro niveles
+ * del diario no pintan nada: la herramienta elegida es la rúbrica, y lo que
+ * se abre es `SesionRubrica`. Luis la pidió así: abrir «Evaluar hoy» en un
+ * instrumento con rúbrica y encontrarse una escala era un engaño.
  */
 import { useEffect, useMemo, useState } from 'react'
 import {
-  anadirRegistro, editarRegistro, borrarRegistro, getRegistrosDeCelda,
+  anadirRegistro, editarRegistro, borrarRegistro, getRegistrosDeCelda, getRubrica,
   type CeldaInstrumento, type DatosDeArea,
 } from '@/db/queries'
+import SesionRubrica, { type IndicadorRubrica, type NivelRubrica } from './SesionRubrica'
+import RubricaEditor from './RubricaEditor'
+import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
+import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario } from '@/db/diario'
 import { calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
@@ -46,9 +55,41 @@ function fechaDe(dia: string): string {
   return dia === diaLocal() ? new Date().toISOString() : new Date(`${dia}T12:00:00`).toISOString()
 }
 
-export default function SesionInstrumento({
-  instrumento, criterios, alumnos, trimestre, unidadId, unidadNombre, area, onCambio, onCerrar,
-}: Props) {
+/** La rúbrica del instrumento si está completa; `null` si no la hay o está a medias. */
+function rubricaCompleta(r: { niveles_json: string; indicadores_json: string } | null): { niveles: NivelRubrica[]; indicadores: IndicadorRubrica[] } | null {
+  if (!r) return null
+  try {
+    const niveles = (JSON.parse(r.niveles_json) as NivelRubrica[]).filter(n => typeof n?.valor === 'number')
+    const inds = JSON.parse(r.indicadores_json) as IndicadorRubrica[]
+    const indicadores = Array.isArray(inds) ? inds.filter(i => i?.nombre) : []
+    return niveles.length && indicadores.length ? { niveles, indicadores } : null
+  } catch { return null }
+}
+
+export default function SesionInstrumento(props: Props) {
+  /** `undefined` mientras se lee: no se enseña el diario para cambiarlo por la rúbrica un instante después. */
+  const [rubrica, setRubrica] = useState<ReturnType<typeof rubricaCompleta> | undefined>(undefined)
+  const [refresco, setRefresco] = useState(0)
+  useEffect(() => {
+    let vigente = true
+    setRubrica(undefined)
+    getRubrica(props.instrumento.instrumento_id).then(r => { if (vigente) setRubrica(rubricaCompleta(r)) })
+    return () => { vigente = false }
+  }, [props.instrumento.instrumento_id, refresco])
+  if (rubrica === undefined) return null
+  if (rubrica) return <SesionRubrica {...props} niveles={rubrica.niveles} indicadores={rubrica.indicadores} />
+  // Si desde el diario se define la rúbrica, se relee y esta misma pantalla
+  // pasa a ser la pasada con la rúbrica: sin cerrar ni volver a la matriz.
+  return <SesionDiario {...props} onRubricaEditada={() => { setRefresco(n => n + 1); props.onCambio() }} />
+}
+
+function SesionDiario({
+  instrumento, criterios, alumnos, trimestre, unidadId, unidadNombre, area, onCambio, onCerrar, onRubricaEditada,
+}: Props & { onRubricaEditada: () => void }) {
+  /** Editor de rúbrica abierto desde aquí, con la forma elegida. */
+  const [editor, setEditor] = useState<{ inicio?: HerramientaSimple } | null>(null)
+  /** Sin rúbrica y sin ser de observación, los cuatro niveles no son la herramienta: se dice. */
+  const sinHerramienta = !esDeObservacion(instrumento.tipo)
   const [dia, setDia] = useState(diaLocal())
   /** alumno_id → todos sus registros con este instrumento en el trimestre. */
   const [registros, setRegistros] = useState<Map<number, RegistroDiario[]>>(new Map())
@@ -72,10 +113,10 @@ export default function SesionInstrumento({
   }, [alumnos, instrumento.instrumento_id, trimestre, recarga])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !editor) onCerrar() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onCerrar])
+  }, [onCerrar, editor])
 
   /** El registro del día elegido, si el alumno ya tiene uno (el último, por si hubiera dos). */
   const registroDelDia = (alumnoId: number): RegistroDiario | undefined => {
@@ -119,7 +160,17 @@ export default function SesionInstrumento({
 
   const evaluadosHoy = alumnos.filter(a => registroDelDia(a.id!)).length
 
-  return (
+  return (<>
+    {editor && (
+      <RubricaEditor
+        inicio={editor.inicio}
+        instrumentoId={instrumento.instrumento_id}
+        instrumentoNombre={instrumento.nombre}
+        asignaturaNombre={area.asignatura}
+        nivel={`${area.curso}º ${area.etapa}`}
+        onCerrar={() => { setEditor(null); onRubricaEditada() }}
+      />
+    )}
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
       <div className="card" role="dialog" aria-modal="true" aria-label={`Evaluar hoy: ${instrumento.nombre}`}
         style={{ width: 'min(720px, 96vw)', maxHeight: '92vh', overflowY: 'auto', padding: 0 }}>
@@ -142,6 +193,16 @@ export default function SesionInstrumento({
         </div>
 
         <div style={{ padding: '12px 18px 18px' }}>
+          {sinHerramienta && (
+            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', fontSize: 12.5, lineHeight: 1.5 }}>
+              <div style={{ fontWeight: 700, marginBottom: 6 }}>«{instrumento.nombre}» no tiene todavía herramienta de evaluación.</div>
+              <div style={{ marginBottom: 8 }}>
+                Los cuatro niveles de abajo son el diario de observación. Si evalúas con rúbrica,
+                lista de control o escala, defínela aquí y esta pasada se hará con ella:
+              </div>
+              <BotonesHerramienta tipo={instrumento.tipo} onRubrica={inicio => setEditor({ inicio })} />
+            </div>
+          )}
           <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '9px 12px', marginBottom: 12, fontSize: 12.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
             <strong>Cada nivel se anota en {ids.length} criterio{ids.length !== 1 ? 's' : ''}:</strong>{' '}
             {criterios.map(c => <span key={c.id} title={c.descripcion} style={{ fontWeight: 700, color: 'var(--azul-700)', marginRight: 6 }}>{c.id}</span>)}
@@ -218,5 +279,5 @@ export default function SesionInstrumento({
         </div>
       </div>
     </div>
-  )
+  </>)
 }
