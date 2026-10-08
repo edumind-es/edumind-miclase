@@ -114,6 +114,10 @@ async function principal() {
     await paquete('pruebas/paquete-fichero.test.ts', paqueteFichero, ['--platform=node', '--format=esm'])
     await suite('paquete por fichero (AirDrop)', 'node', [paqueteFichero])
 
+    const copia = join(scratch, 'copia.mjs')
+    await paquete('pruebas/copia.test.ts', copia, ['--platform=node', '--format=esm'])
+    await suite('copia automática en carpeta', 'node', [copia])
+
     const taxonomias = join(scratch, 'taxonomias.mjs')
     await paquete('pruebas/taxonomias.test.ts', taxonomias, ['--platform=node', '--format=esm'])
     await suite('sugerencia de instrumentos', 'node', [taxonomias])
@@ -209,6 +213,7 @@ async function principal() {
     await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)
     await suite('banco de rúbricas', 'node', ['pruebas/rubrica-banco-ui.test.mjs'], entorno)
     await suite('copiar y vincular criterios', 'node', ['pruebas/copiar-vincular-ui.test.mjs'], entorno)
+    await suite('copia automática en carpeta, de punta a punta', 'node', ['pruebas/copia-ui.test.mjs'], entorno)
     await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
     await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
     await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)

@@ -772,7 +772,7 @@ export async function compararContrasenaConElOtro(enlace: Enlace): Promise<Conco
  * Reenviar de más no hace daño: lo que el otro ya tenga se descarta al fusionar.
  */
 export async function reenviarTodoSinServidor(): Promise<void> {
-  for (const id of ['directo', 'carpeta']) {
+  for (const id of ['directo', 'carpeta', 'copia']) {
     await guardarMeta(`${K_PUSH_DESDE}:${id}`, '')
     await guardarMeta(`${K_PULL_SEQ}:${id}`, 0)
     await guardarMeta(`${K_CUARENTENA}:${id}`, {})
@@ -819,7 +819,7 @@ export async function unificarContrasenaPorPaquete(password: string, paquete: Pa
  * que los que se suben al buzón. El fichero enseña lo mismo que ve el
  * servidor: tabla, id y fecha. Nada más.
  */
-export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean } = {}): Promise<{
+export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean; canal?: 'carpeta' | 'copia' } = {}): Promise<{
   paquete: PaqueteSync
   resultado: ResultadoSync
   /**
@@ -833,7 +833,7 @@ export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean }
   const clave = await claveGuardada()
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
-  const canal = transporteFicheroEscritura()
+  const canal = transporteFicheroEscritura(opciones.canal ?? 'carpeta')
   const kDesde = cursor(K_PUSH_DESDE, canal)
   const antes: string = await leerMeta(kDesde, '')
   // «Todo» es para cuando un paquete anterior se perdió por el camino.
@@ -883,11 +883,13 @@ export async function desbloquearPorPaquete(password: string, paquete: PaqueteSy
  * Solo recoge: un paquete ya escrito no admite nada de vuelta. Para responder,
  * el otro dispositivo genera el suyo.
  */
-export async function aplicarPaquete(paquete: PaqueteSync): Promise<ResultadoSync> {
+export async function aplicarPaquete(paquete: PaqueteSync, opciones: { restaurar?: boolean } = {}): Promise<ResultadoSync> {
   const clave = await claveGuardada()
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
-  if (paquete.device_id === idDispositivo()) {
+  // Restaurar una copia es el único caso en que un aparato aplica sus propios
+  // paquetes: el almacén se vació y lo que hay en la carpeta es lo suyo.
+  if (!opciones.restaurar && paquete.device_id === idDispositivo()) {
     throw new Error('Ese paquete lo generó este mismo dispositivo')
   }
 
@@ -904,6 +906,18 @@ export async function aplicarPaquete(paquete: PaqueteSync): Promise<ResultadoSyn
   await guardarMeta(K_ULTIMA, new Date().toISOString())
   return res
 }
+
+/**
+ * Tras restaurar una copia, lo restaurado ya está en la carpeta: el cursor de
+ * copia arranca en «ahora» para no volver a escribirlo todo. Lo que se cambie
+ * después lleva un sello posterior y sí saldrá.
+ */
+export async function sellarCursorDeCopia(): Promise<void> {
+  await guardarMeta(cursor(K_PUSH_DESDE, transporteFicheroEscritura('copia')), new Date().toISOString())
+}
+
+/** Metadatos sueltos (última copia, destino…), para `copia.ts`. */
+export const metaSync = { leer: leerMeta, guardar: guardarMeta }
 
 export async function ultimaSincronizacion(): Promise<string | null> {
   return leerMeta<string | null>(K_ULTIMA, null)

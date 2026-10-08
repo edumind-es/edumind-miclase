@@ -290,11 +290,14 @@ ok(paquete.formato === 'miclase-sync' && paquete.sobres.length > 0,
 ok(!!paquete.salt && !!paquete.verificador,
   'y lleva sal y verificador, para que un aparato nuevo pueda desbloquear sin servidor')
 
-// Lo mismo que se le exige al buzón del servidor: que no se lea nada en claro
-const enTexto = JSON.stringify(paquete)
-ok(!enTexto.includes('Xoán') && !enTexto.includes('Ledo'),
-  'el nombre del alumnado NO aparece en el fichero')
-ok(!enTexto.includes('5ºB'), 'ni el nombre de la clase')
+// Lo mismo que se le exige al buzón del servidor: que no se lea nada en claro.
+// Se mira lo que va en claro (cabecera y campos sueltos de cada sobre), no la
+// carga cifrada: en megabytes de base64 un «Ledo» sale por azar de vez en
+// cuando, y la prueba fallaba sin que nada estuviera mal.
+const enClaro = JSON.stringify({ ...paquete, sobres: paquete.sobres.map(({ payload, iv, ...resto }) => resto) })
+ok(!enClaro.includes('Xoán') && !enClaro.includes('Ledo'),
+  'el nombre del alumnado NO aparece en claro en el fichero')
+ok(!enClaro.includes('5ºB'), 'ni el nombre de la clase')
 ok(paquete.sobres.every((s) => s.iv && s.payload),
   'cada sobre va con su vector de inicialización y su carga cifrada')
 

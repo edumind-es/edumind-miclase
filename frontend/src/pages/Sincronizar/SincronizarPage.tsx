@@ -20,6 +20,7 @@ import { esNativo, plataforma, servidor, fijarServidor } from '@/api'
 import AlmacenamientoLocal from '@/components/AlmacenamientoLocal'
 import EmparejarDirecto from '@/components/EmparejarDirecto'
 import CompartirPaquete from '@/components/CompartirPaquete'
+import CopiaCarpeta from '@/components/CopiaCarpeta'
 
 const K_AUTO = 'miclase_sync_auto'
 
@@ -228,6 +229,10 @@ export default function SincronizarPage() {
           Muchas redes de centro aíslan los aparatos entre sí y dejan el
           emparejamiento por QR sin conexión posible. */}
       <CompartirPaquete onCambio={refrescar} desbloqueado={desbloqueado} />
+
+      {/* La copia fuera del aparato que no depende de nadie: una carpeta del
+          docente, escrita sola. Misma contraseña, mismos sobres cifrados. */}
+      <CopiaCarpeta onCambio={refrescar} desbloqueado={desbloqueado} />
 
       {/* El tercer camino, el buzón del servidor, es opcional y exige cuenta.
           Iba en una tarjeta grande que decía «Necesitas iniciar sesión»: se leía

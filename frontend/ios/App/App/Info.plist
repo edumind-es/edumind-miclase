@@ -61,6 +61,13 @@
 	<!-- Permisos de captura de evidencias. Sin estas descripciones iOS cierra
 	     la app en cuanto se pide la cámara o el micrófono. El texto es el que
 	     lee el docente en el diálogo del sistema. -->
+	<!-- La carpeta de documentos de la app (donde va «MiClase copia») se ve en
+	     Archivos y entra en la copia de iCloud del aparato. Sin estas dos claves
+	     la carpeta existe pero el docente no puede verla ni copiarla. -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Para fotografiar o grabar en vídeo las producciones del alumnado como evidencia de evaluación. Las imágenes se guardan solo en este dispositivo.</string>
 	<key>NSMicrophoneUsageDescription</key>
