@@ -67,7 +67,7 @@ function usarBarra(pathname: string) {
 }
 
 function Layout() {
-  const { modo, nombre, iniciarLogin, cerrarSesion, authConfig } = useAuth()
+  const { modo, nombre, iniciarLogin, cerrarSesion, loginDisponible } = useAuth()
   const { pathname } = useLocation()
   const barra = usarBarra(pathname)
   const [exportOpen, setExportOpen] = useState(false)
@@ -139,7 +139,7 @@ function Layout() {
               <button className="sidebar-btn" onClick={() => setExportOpen(true)} title="Exportar / Importar copia de seguridad">
                 📦 <span className="sidebar-panel-texto">Exportar / Importar</span>
               </button>
-              {authConfig?.enabled && (
+              {loginDisponible && (
                 <button className="sidebar-btn sidebar-btn--tenue" onClick={iniciarLogin} title="Conectar con EDUmind">
                   🔑 <span className="sidebar-panel-texto">Conectar EDUmind</span>
                 </button>

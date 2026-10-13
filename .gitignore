@@ -16,9 +16,12 @@ backend/data/
 # Artefactos de compilación nativa (Capacitor).
 # El proyecto Xcode y el de Gradle SÍ se versionan: llevan la configuración
 # de permisos e iconos. Lo que se ignora es lo que se regenera al compilar.
-frontend/ios/App/Pods/
+# iOS usa Swift Package Manager (sin CocoaPods): lo que Xcode resuelve va a
+# su DerivedData, no al repo; CapApp-SPM/Package.swift lo escribe `cap sync`.
 frontend/ios/App/App/public/
 frontend/ios/App/build/
+frontend/ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+frontend/ios/App/App.xcodeproj/xcuserdata/
 frontend/android/app/src/main/assets/public/
 frontend/android/.gradle/
 frontend/android/build/

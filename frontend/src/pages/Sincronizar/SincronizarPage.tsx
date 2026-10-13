@@ -24,7 +24,7 @@ import CompartirPaquete from '@/components/CompartirPaquete'
 const K_AUTO = 'miclase_sync_auto'
 
 export default function SincronizarPage() {
-  const { modo, headers, iniciarLogin, authConfig } = useAuth()
+  const { modo, headers, iniciarLogin, loginDisponible, motivoSinLogin } = useAuth()
 
   const [estado, setEstado] = useState<EstadoSync | null>(null)
   const [errorEstado, setErrorEstado] = useState<string>('')
@@ -224,13 +224,13 @@ export default function SincronizarPage() {
             tu cuenta: el contenido sigue siendo ilegible para el servidor.
             {' '}En modo local puedes seguir usando toda la app y las copias de seguridad manuales.
           </p>
-          {authConfig?.enabled ? (
+          {loginDisponible ? (
             <button className="btn-primary" onClick={iniciarLogin} style={{ padding: '10px 22px' }}>
               Conectar con EDUmind
             </button>
           ) : (
-            <p style={{ fontSize: 13, color: 'var(--ambar-500)' }}>
-              Este servidor no tiene configurado el acceso con EDUmind.
+            <p style={{ fontSize: 13, color: 'var(--ambar-500)', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+              {motivoSinLogin}
             </p>
           )}
         </div>

@@ -40,15 +40,23 @@ export default function CallbackPage() {
     }
 
     const nonce = sessionStorage.getItem('oidc_nonce')
+    // La app nativa inicia el login con otro redirect_uri que la web, y
+    // Authentik exige que el canje repita el mismo: se le dice al servidor
+    // cuál fue. Un servidor que no lo contemple lo ignora sin más.
+    const redirectUri = sessionStorage.getItem('oidc_redirect_uri')
 
     sessionStorage.removeItem('pkce_verifier')
     sessionStorage.removeItem('oidc_state')
     sessionStorage.removeItem('oidc_nonce')
+    sessionStorage.removeItem('oidc_redirect_uri')
 
     fetch(api('/api/auth/callback'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, code_verifier: verifier, nonce }),
+      body: JSON.stringify({
+        code, code_verifier: verifier, nonce,
+        ...(redirectUri ? { redirect_uri: redirectUri } : {}),
+      }),
     })
       .then(r => r.json())
       .then(data => {

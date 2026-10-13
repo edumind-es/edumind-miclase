@@ -3,6 +3,7 @@
  * Usa Web Crypto API (nativo del navegador, sin dependencias).
  * Algoritmo: PBKDF2 (100k iteraciones SHA-256) → AES-256-GCM
  */
+import { descargarFichero } from '@/utils/compartir'
 
 const ITERACIONES = 100_000
 
@@ -68,13 +69,12 @@ export async function descifrarExport(cifrado: ExportCifrado, password: string):
   return JSON.parse(new TextDecoder().decode(decrypted))
 }
 
+/**
+ * Entrega el fichero al docente: descarga en la web, hoja de compartir en la
+ * app nativa. Pasa por la puerta única de `utils/compartir.ts`.
+ */
 export function descargarBlob(contenido: string, nombreArchivo: string, tipo = 'application/json') {
-  const blob = new Blob([contenido], { type: tipo })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = nombreArchivo
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+  return descargarFichero(nombreArchivo, contenido, tipo)
 }
 
 // Generar code_verifier y code_challenge para PKCE

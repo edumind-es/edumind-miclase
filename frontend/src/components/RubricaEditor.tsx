@@ -8,6 +8,7 @@ import {
 import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
+import { descargarFichero } from '@/utils/compartir'
 
 interface Props {
   instrumentoId: number
@@ -268,12 +269,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   const exportarMD = () => {
     const md = rubricaToMarkdown(rubrica)
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = `rubrica-${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.md`
-    a.click()
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+    descargarFichero(
+      `rubrica-${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.md`,
+      md, 'text/markdown;charset=utf-8', `Rúbrica · ${instrumentoNombre}`,
+    ).catch(e => setMsg({ tipo: 'error', texto: e.message || 'No se pudo exportar la rúbrica.' }))
   }
 
   /**
@@ -296,13 +295,15 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
       niveles: rubrica.niveles,
       indicadores: rubrica.indicadores,
     }
-    const blob = new Blob([JSON.stringify(paquete, null, 2)], { type: 'application/json' })
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = `${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.edurubrica.json`
-    a.click()
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000)
-    setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
+    descargarFichero(
+      `${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.edurubrica.json`,
+      JSON.stringify(paquete, null, 2), 'application/json', `Rúbrica · ${instrumentoNombre}`,
+    )
+      .then(r => {
+        if (r === 'cancelado') return
+        setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
+      })
+      .catch(e => setMsg({ tipo: 'error', texto: e.message || 'No se pudo exportar la rúbrica.' }))
   }
 
   const importarRubrica = async (e: React.ChangeEvent<HTMLInputElement>) => {
