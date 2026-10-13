@@ -108,5 +108,48 @@ console.log('\n8. Títulos')
 ok(capitalizar('ºO CLIMA E A PAISAXE') === 'O clima e a paisaxe', 'capitaliza y quita el ordinal')
 ok(capitalizar('Xa legible') === 'Xa legible', 'respeta lo que no va en mayúsculas')
 
+console.log('\n9. El PDF real de PROENS (Ciencias Sociais 6º, 22 páginas)')
+// Lo que el gemelo no tenía: índice al principio, cabeceras de tabla en dos
+// o tres líneas que se repiten en cada página con otras columnas, trozos de
+// marca de agua dentro de líneas con texto, título y descripción centrados
+// alrededor del número de la unidad, «UD» y «Título da UD» en líneas
+// distintas, y la tabla 5.2 partida en dos subtablas (UD 1-7 y Total).
+{
+  const r = parsearProens(readFileSync(join(process.cwd(), 'pruebas/fixtures/proens_real_ccss6.txt'), 'utf8'))
+  const rud = (n: number) => r.unidades.find(u => u.numero === n)!
+  const rcrit = (n: number, codigo: string) => rud(n).criterios.find(c => c.codigo === codigo)
+  ok(r.area === 'Ciencias Sociais' && r.curso === '6' && r.centro === 'CEP Campolongo', 'cabecera', `${r.area} ${r.curso} ${r.centro}`)
+  ok(r.sesionesSemanales === 2 && r.sesionesAnuales === 70, 'sesiones', `${r.sesionesSemanales}/${r.sesionesAnuales}`)
+  ok(r.unidades.map(u => u.numero).join() === '1,2,3,4,5,6,7', 'las siete unidades en orden, sin coger el «3.1» del índice', r.unidades.map(u => u.numero).join())
+  ok(rud(1).titulo === 'O mundo que nos rodea' && rud(2).titulo === 'O clima e a paisaxe', 'títulos', `${rud(1).titulo} / ${rud(2).titulo}`)
+  ok(rud(4).titulo === 'A organización político-territorial da nosa contorna', 'título partido alrededor del número', rud(4).titulo)
+  ok(rud(6).titulo === 'A economía e o seu funcionamento', 'título cuyo número va solo en su línea', rud(6).titulo)
+  ok(rud(7).titulo === 'Descubrindo a historia', 'UD 7, con «UD» y «Título da UD» en líneas distintas', rud(7).titulo)
+  ok(r.unidades.map(u => u.peso).join() === '15,14,15,15,15,11,15', 'pesos de 3.1', r.unidades.map(u => u.peso).join())
+  ok(r.unidades.map(u => u.sesiones).join() === '10,10,8,8,8,6,20', 'sesiones', r.unidades.map(u => u.sesiones).join())
+  ok(r.unidades.map(u => u.trimestre).join() === '1,1,1,2,2,3,3', 'trimestres', r.unidades.map(u => u.trimestre).join())
+  ok(rud(1).descripcion.startsWith('Comprender a relación entre a cartografía e a realidade.'), 'descripción de UD 1 desde la primera línea, que va antes del número', rud(1).descripcion.slice(0, 60))
+  ok(rud(1).descripcion.endsWith('coa axuda de ferramentas dixitais.') && rud(2).descripcion.startsWith('Diferenciar entre clima e tempo atmosférico.'),
+    'el límite entre UD 1 y UD 2 cae en un final de frase', rud(1).descripcion.slice(-40) + ' || ' + rud(2).descripcion.slice(0, 40))
+  ok(rud(1).descripcion.split('\n').length === 6 && rud(2).descripcion.split('\n').length === 8, 'un objetivo por línea', `${rud(1).descripcion.split('\n').length}/${rud(2).descripcion.split('\n').length}`)
+  ok(!/\b(Bo|rra)\b/.test(rud(2).descripcion) && !/\s(do|ra|r)\s{2}/.test(rud(2).descripcion), 'sin trozos de marca de agua en la descripción')
+  const total = r.unidades.reduce((s, u) => s + u.criterios.length, 0)
+  ok(total === 56, 'los 56 criterios', String(total))
+  ok(rcrit(1, 'CA2.1')?.minimo === 'Identificar certas características e elementos do medio natural, social e cultural.', 'mínimo separado aunque empiece antes que el rótulo de la cabecera', rcrit(1, 'CA2.1')?.minimo)
+  ok(rcrit(1, 'CA2.1')?.descripcion.endsWith('procesos adecuados.'), 'descripción del criterio entera', rcrit(1, 'CA2.1')?.descripcion.slice(-30))
+  ok(rcrit(2, 'CA2.4')?.descripcion.endsWith('humana na contorna.') && rcrit(2, 'CA2.4')?.minimo.includes('buscar solucións'),
+    'criterio y mínimo pegados con un solo espacio se separan sin partir palabras', rcrit(2, 'CA2.4')?.minimo)
+  const reparto = (n: number) => rud(n).criterios.map(c => `${c.codigo}:${c.instrumento ?? '-'}`).join(' ')
+  ok(reparto(1) === 'CA2.1:PE CA2.2:PE CA1.1:TI CA1.2:TI CA1.3:TI CA1.4:TI CA3.1:TI', 'UD 1: 2 + 5', reparto(1))
+  ok(reparto(4) === 'CA2.1:PE CA2.2:PE CA1.1:TI CA1.2:TI CA1.3:TI CA1.4:TI CA2.4:TI CA3.3:TI CA3.4:TI', 'UD 4: 2 + 7 aunque la tabla salte de página y «TI» vaya centrado solo en su trozo', reparto(4))
+  ok(reparto(5) === 'CA3.1:PE CA3.4:PE CA1.1:TI CA1.2:TI CA1.3:TI CA1.4:TI CA4.4:TI', 'UD 5: cabecera seguida de salto de página', reparto(5))
+  ok(reparto(7) === 'CA2.1:PE CA2.2:PE CA3.1:PE CA4.2:PE CA4.3:PE CA1.1:TI CA1.2:TI CA1.3:TI CA1.4:TI CA4.1:-', 'UD 7: 5 + 4 y un «Baleiro»', reparto(7))
+  ok(rcrit(1, 'CA2.1')?.porcentaje === 80 && rcrit(1, 'CA1.1')?.porcentaje === 20, 'porcentajes')
+  ok(rud(1).contenidos.length === 7 && rud(1).contenidos[0].startsWith('Fases da investigación científica'), 'contidos', String(rud(1).contenidos.length))
+  const pe = r.instrumentos.find(i => i.abrev === 'PE'), ti = r.instrumentos.find(i => i.abrev === 'TI')
+  ok(r.instrumentos.length === 2 && pe?.peso === 80 && ti?.peso === 20, 'pesos de la 5.2 partida en subtablas', `${pe?.peso}/${ti?.peso}`)
+  ok(r.avisos.length === 0, 'sin avisos', r.avisos.join(' | '))
+}
+
 console.log(fallos ? `\n${fallos} fallo(s)` : '\nTodo correcto')
 process.exit(fallos ? 1 : 0)

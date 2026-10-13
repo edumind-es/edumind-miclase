@@ -19,8 +19,9 @@ edumind_miclase/
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
 │   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v5) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v6) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
 │   │                   por AirDrop/Quick Share) · transporteDirecto.ts + enlaceDirecto.ts
@@ -81,8 +82,37 @@ edumind_miclase/
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
+- **Antes de pasar nada por el enlace directo se comparan las contraseñas**
+  (`compararContrasenaConElOtro`, por la sal). Dos aparatos con contraseñas
+  creadas por separado no pueden abrir nada del otro, y sin la comprobación
+  «sincronizaban» sin error y después ya no mandaban nada. La contraseña la
+  crea solo el anfitrión (quien invita); el invitado la comprueba contra él.
+  Unificar (`unificarContrasena…`) reinicia los cursores sin servidor
+  (`reenviarTodoSinServidor`), porque lo enviado con la clave vieja nunca se aplicó.
+- **La copia automática es un paquete de AirDrop escrito en una carpeta**
+  (`db/copia.ts`, formato puro en `db/copiaFormato.ts`, destinos en
+  `db/destinoCopia.ts`). Mismo `PaqueteSync`, misma contraseña, cursor propio
+  (`'copia'`): un fichero por tanda con nombre que ordena por fecha
+  (`nombreFicheroCopia`) y un manifiesto con sal y verificador. Restaurar
+  (`restaurarDesdeCopia`) aplica los paquetes en orden con `aplicarPaquete(…,
+  { restaurar: true })`, el único caso en que un aparato acepta sus propios
+  paquetes, y después sella el cursor de copia para no reescribir lo
+  restaurado. El temporizador (`CopiaAutomatica`) no puede pedir el permiso
+  de la carpeta —el navegador exige un clic—: si caducó, calla y la tarjeta
+  de Sincronizar lo dice. El aviso de Inicio (`AvisoCopia`, `diagnosticoCopia`)
+  cuenta el buzón como copia solo con la sincronización automática activa.
+- **Escribir un paquete no es entregarlo.** El transporte de fichero no da nada
+  por «aceptado» (sin terreno común para la fusión) y `empaquetarParaOtroDispositivo`
+  devuelve `deshacer()` para cuando la hoja de compartir se cancela.
+- **Nada de sincronizar se queda callado.** Cada acción termina diciendo qué ha
+  pasado, también cuando no ha pasado nada; los sobres que no se pueden
+  descifrar se cuentan en `sinDescifrar` y se explican como «otra contraseña»;
+  los fallos de conexión traen diagnóstico (direcciones ofrecidas, estado ICE).
 - **La sal y el verificador viven también en el dispositivo**, no solo en el
-  buzón. Si solo estuvieran en el servidor, un aparato nuevo no podría
+  buzón. Y al revés: quien estrenó la contraseña sin buzón y luego conecta su
+  cuenta la **publica** con `publicarContrasenaEnBuzon` (misma sal, mismo
+  verificador), nunca crea otra; hasta entonces ni la pantalla ni
+  `SyncAutomatica` sincronizan contra un buzón sin configurar (`iniciado`). Si solo estuvieran en el servidor, un aparato nuevo no podría
   desbloquear sin él y el enlace directo no serviría de nada.
 - **La fusión de sincronización mantiene su base.** `sync_base` guarda la
   última versión común de cada registro; sin ella el merge cae al
@@ -113,6 +143,165 @@ edumind_miclase/
   (va centrada en su bloque y no se repite si salta de página). Normalizar
   espacios antes de parsear lo rompe todo. El fixture se regenera con
   `pruebas/lib/proens_gemelo.py`; el PDF real de Luis aún no ha pasado por él.
+- **La tabla `rubricas` guarda tres cosas.** La rúbrica de un instrumento, las
+  copias del banco del docente (`instrumento_id = INSTRUMENTO_BANCO`, que no
+  cuelgan de ningún instrumento y sobreviven al borrado de la clase) y las
+  definiciones de prueba escrita (`tipo: 'prueba'`, una por instrumento y
+  unidad, o general con `unidad_id` null). Comparten tabla para sincronizarse
+  sin tocar el esquema ni el servidor. Toda consulta de rúbricas filtra con
+  `esRubrica`: sin él, un examen se abriría como una rúbrica vacía.
+- **La réplica a criterios vinculados vive en `saveCalificaciones`**, no en las
+  pantallas: es el único sitio por el que pasan las notas (panel de celda,
+  evaluación rápida, QR). Quién va con quién lo decide `db/vinculos.ts`,
+  cerrando por transitividad entre unidades del trimestre, porque la nota se
+  guarda por alumno, instrumento, criterio y trimestre, no por unidad. Copiar
+  notas y corregir un examen escriben con `sinVinculos`: su reparto ya está
+  decidido. Nada se replica sin que el docente lo haya pedido.
+- **«Copiar nota» tiene tres alcances y ninguno se da por supuesto**: la nota
+  del alumno a sus otros criterios; la misma nota de ese alumno a toda la clase
+  (`desde_alumno_id`), que es lo que un docente entiende por «a toda la clase»;
+  y la nota que cada alumno tenga en el criterio a sus otras columnas. Antes
+  solo existían la primera y la tercera, y la tercera se llamaba «toda la
+  clase»: Luis la pulsó esperando la segunda.
+- **El Calificador tiene dos vistas de los mismos datos** (`EvaluacionPage`):
+  por criterio (la matriz LOMLOE) y por instrumento (`MatrizInstrumentos`, una
+  columna por examen, cuaderno o billete de salida con los criterios que cubre).
+  Ninguna guarda nada por su cuenta: las dos abren `CeldaEvaluacion`, con
+  `enfoque` distinto, y «Evaluar hoy» (`SesionInstrumento`) escribe solo por
+  `anadirRegistro`/`editarRegistro`/`borrarRegistro` del diario. Un alumno tiene
+  un solo registro por instrumento y día desde esa pantalla: cambiar de botón
+  edita, repetirlo borra. La vista elegida se recuerda en `localStorage`
+  porque es una comodidad del aparato, no un dato.
+- **Con rúbrica completa, la pasada de clase es con la rúbrica.** Si el
+  instrumento tiene niveles e indicadores, `SesionInstrumento` abre
+  `SesionRubrica` en vez del diario: la rúbrica entera arriba y una fila por
+  alumno con sus niveles (uno en la fila marca todos los indicadores; «por
+  indicador» afina). Guarda `calificaciones` con `niveles_rubrica` en todos
+  los criterios del instrumento, con `sinVinculos`, como el panel de la
+  casilla; no escribe en el diario, porque una rúbrica no es una observación
+  fechada. Luis abrió «Evaluar hoy» en una rúbrica y se encontró una escala.
+- **Desde la vista por instrumento, la nota va a todos los criterios del
+  instrumento.** La casilla es «el alumno con el cuaderno» y enseña la media de
+  los treinta criterios que cubre: una nota en uno solo no movía la media y
+  parecía no guardarse (le pasó a Luis tras copiar una nota a toda la columna).
+  `CeldaEvaluacion` con `enfoque: 'instrumento'` escribe en todos
+  (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
+  (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
+  criterio. Por criterio nada cambia.
+- **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
+  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
+  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
+  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
+  antes.
+- **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
+  y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
+  examen de cada unidad, el billete de salida, speaking, listening. Un hijo
+  es un `Instrumento` con `familia_id` (sin índice), tipo y color propios, un
+  **subconjunto** de los criterios de su familia en cada unidad
+  (`fijarCriteriosDeHijo` lo comprueba y falla si se sale) y un `peso`
+  relativo DENTRO de la familia (1 por defecto). La familia entra en el área
+  con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
+  (`calculo.ts`) y la usan tanto `calcularNotaArea` como la matriz: una nota
+  directa de la familia (anterior a tener hijos) cuenta como un hijo más con
+  peso 1, y un hijo sin familia viva cuenta como instrumento suelto. Las
+  notas y el diario se guardan con el id del hijo; la nota de la familia en
+  la matriz es **virtual** (`Calificacion.virtual`, sin `id`, nunca se
+  guarda). Las familias son lo único que suma el 100 % del gestor
+  (`getFamilias`); borrar una familia se lleva a sus hijos. En la matriz,
+  `porCriterio` trae a los hijos con `familia_id` y aparta a la familia en
+  cuanto un hijo evalúa el criterio: se califica con el hijo y la familia
+  resume. La misma regla aplica la evaluación rápida.
+- **El color identifica al instrumento, no a su tipo.** Ocho tonos de
+  Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
+  entre iguales (`colorDeInstrumento`), resueltos una vez en
+  `getMatrizEvaluacion` (`CeldaInstrumento.color`). Nunca es la única pista:
+  al lado va siempre la abreviatura (`abreviatura`). Los colores del tipo
+  (`TIPOS_INSTRUMENTO`) quedan para iconos y fondos del gestor.
+- **El Calificador abre por instrumento** en cuanto el área tiene alguno, salvo
+  elección guardada en `localStorage` (`miclase.calificador.vista`). La primera
+  vez por área sale la tarjeta `PresentacionCalificador` (cuatro pasos y las
+  familias con lo que hay dentro), que se recuerda en
+  `miclase.calificador.presentado`. Las pruebas que miran la matriz LOMLOE
+  pulsan antes `[data-vista="criterios"]`.
+- **Pegar una columna de Excel** (`PegarColumna` + `utils/pegarNotas.ts`,
+  puro) asigna por orden de lista si no hay nombres y por nombre si los hay
+  —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
+  Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
+  en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
+- **En el panel de la casilla, el instrumento es lo primero y lo grande.**
+  Orden fijo de `CeldaEvaluacion`: franja del instrumento con la nota,
+  selector solo si hay varios, y el instrumento en sí (examen, rúbrica o
+  diario con los cuatro niveles ya a la vista). Todo lo demás —criterio
+  entero, otros criterios, copiar o vincular, observación, evidencias,
+  ajustes— va plegado en «Más» (`[data-mas-toggle]`), que las pruebas abren
+  con `abrirMas()` tras esperar el panel. Decisión de Luis: la docente
+  evalúa con prisa y la rúbrica no puede quedar detrás de una maraña de datos.
+- **La PWA se actualiza sola** cuando no hay nada a medias que perder
+  (`ActualizacionApp`): en los primeros 20 s tras abrir y al volver del
+  segundo plano; entre medias, aviso con «Actualizar». `registerType:
+  'prompt'` e `injectRegister: false`: el registro lo hace el componente.
+- **Plegado por competencia y cobertura** (`db/cobertura.ts`, puro): la vista
+  por criterio lleva una fila CE1 · CE2 · CE3 que pliega sus criterios a una
+  columna con la media simple del alumno (se recuerda por área en
+  `miclase.calificador.plegadas`); el panel de cobertura usa la misma
+  `notaCelda` que pinta la casilla, para que nunca discrepen.
+- **En un examen, lo no anotado vale cero; en una rúbrica, no cuenta.**
+  `notaDePrueba` (`db/prueba.ts`) divide entre todos los puntos del examen;
+  `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
+  reciben nota los criterios que alguna pregunta nombra y que la programación
+  asigna al instrumento.
+- **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
+  montando las notas en la pantalla: se corrige desde el panel de la casilla y
+  desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
+  examen ya corregido ofrece `recalcularNotasDeExamen`; no se hace sin preguntar.
+- **Una nota puesta no se pierde nunca por un recálculo.** La que cambia —o la
+  que se queda sin nota— deja su valor como fantasma en
+  `Calificacion.valor_anterior`: a la vista (columna duplicada y
+  semitranslúcida en la matriz), sin contar —todo el cálculo lee `valor`— y
+  recuperable desde el panel de la casilla. Decisión expresa de Luis: retirar
+  la nota sin más, aunque fuera coherente, no es aceptable.
+- **Una casilla tiene una sola fila que cuenta** (`masReciente` en
+  `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
+  aparatos que califican la misma casilla antes de sincronizar crean dos
+  filas vivas con la misma clave y distinto id. Toda lectura de
+  `calificaciones` pasa por `sinDuplicados` o `getCalificacionUnica`,
+  `saveCalificaciones` escribe en esa misma fila y retira las otras, y
+  `reconciliarDuplicados` lo repasa tras cada sync. Antes la matriz pintaba la
+  última fila que encontraba y el panel editaba la primera: Luis ponía una
+  nota y no la veía cambiar.
+- **Nadie finge una herramienta, y se elige por donde se entra a calificar.**
+  Un instrumento sin rúbrica ni examen que no es de observación
+  (`faltaHerramienta`, `ElegirHerramienta.tsx`) la pide en los tres sitios:
+  la cabecera de la columna («Definir herramienta», `[data-herramienta-definir]`,
+  con «Evaluar hoy» como segunda opción), la pasada «Evaluar hoy»
+  (`[data-sin-herramienta]` encima de los cuatro niveles; al guardar la rúbrica
+  la misma pantalla pasa a `SesionRubrica`) y el panel de la casilla. Los
+  botones son los mismos (`BotonesHerramienta`): rúbrica, lista de control,
+  escala de estimación y, si es prueba escrita, examen; lista y escala son
+  rúbricas con otra forma (`herramientaInicial`, `RubricaEditor` con `inicio`).
+  La parrilla 0-10 queda como «nota directa». El diario solo sale abierto en
+  los instrumentos de observación (`esDeObservacion`), que aun así ofrecen
+  «Definir rúbrica» como segunda opción en la cabecera y plegado en «Evaluar
+  hoy», por si el docente la prefiere: Luis abrió «Evaluar hoy»
+  en «Exposición oral» y se encontró una escala 1-4 que nadie había elegido,
+  con la rúbrica a crear tras «Más» y un icono pequeño.
+- **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
+  banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
+- **El diario de evaluación no pisa nada.** La tabla `diario` guarda una
+  observación fechada por registro (nivel 1-4) y la nota del criterio se
+  DERIVA en `materializarDiario` (`queries.ts`), nunca en una pantalla, con la
+  regla de `Instrumento.agregacion` (`db/diario.ts`). La nota derivada se
+  escribe en `calificaciones` con `origen: 'diario'` y `sinVinculos`, para que
+  informes, matriz, fantasma y sync sigan leyendo lo de siempre. Reglas que no
+  se deben romper: (1) la materialización es determinista (orden por fecha e
+  id) y **solo escribe si cambia `valor` u `origen`** —cada aparato la repite
+  tras sincronizar (`alAplicarCambios` en `sync.ts`) y si escribiera siempre
+  habría un ping-pong sin fin—; (2) los criterios de un registro se fijan al
+  crearlo en `criterios_json`, así que cambiar la programación no vacía notas
+  derivadas; (3) una nota a mano sobre una casilla derivada la vuelve manual y
+  el siguiente registro la manda a fantasma: nada se pierde. El backend tiene
+  la tabla en la lista blanca de `routes/sync.js`; sin eso los registros van a
+  cuarentena y no viajan.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
@@ -183,5 +372,8 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes
+  `updated_at` en los registros existentes. Una tabla nueva va además en
+  `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
+  backend (`routes/sync.js`) y en las pruebas que leen la versión
+  (`migracion.test.mjs`, `e2e.test.mjs`)
 - No probar la sincronización contra la BD de producción: usar una copia

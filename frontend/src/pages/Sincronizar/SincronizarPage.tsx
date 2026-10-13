@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthProvider'
 import {
-  consultarEstado, iniciarSincronizacion, desbloquear, sincronizar,
+  consultarEstado, iniciarSincronizacion, desbloquear, sincronizar, publicarContrasenaEnBuzon,
   claveGuardada, olvidarClave, ultimaSincronizacion, pendientesDeEnvio, reenviarTodo,
   registrosAislados,
   type EstadoSync, type ResultadoSync,
@@ -20,6 +20,7 @@ import { esNativo, plataforma, servidor, fijarServidor } from '@/api'
 import AlmacenamientoLocal from '@/components/AlmacenamientoLocal'
 import EmparejarDirecto from '@/components/EmparejarDirecto'
 import CompartirPaquete from '@/components/CompartirPaquete'
+import CopiaCarpeta from '@/components/CopiaCarpeta'
 
 const K_AUTO = 'miclase_sync_auto'
 
@@ -66,10 +67,24 @@ export default function SincronizarPage() {
   // de ahora. El reloj de cada cinco minutos ya no vive aquí: está en
   // components/SyncAutomatica.tsx, montado en toda la app, porque antes
   // dejaba de correr en cuanto el docente navegaba a otra pantalla.
+  // Con el buzón sin configurar no hay contra qué sincronizar: antes se
+  // intentaba igual y el servidor rechazaba cada tanda con «configura primero».
+  const buzonListo = !!estado?.iniciado
   useEffect(() => {
-    if (!auto || !conectado || !desbloqueado) return
+    if (!auto || !conectado || !desbloqueado || !buzonListo) return
     hacerSync(true)
-  }, [auto, conectado, desbloqueado])
+  }, [auto, conectado, desbloqueado, buzonListo])
+
+  const publicar = async () => {
+    setTrabajando(true); setMsg(null)
+    try {
+      await publicarContrasenaEnBuzon(headers)
+      setMsg({ tipo: 'ok', texto: 'Contraseña publicada en el buzón. Ya puedes sincronizar; en tus otros aparatos, desbloquea con la misma contraseña.' })
+      await refrescar()
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message })
+    } finally { setTrabajando(false) }
+  }
 
   // ── Acciones ───────────────────────────────────────────────────────────
 
@@ -166,14 +181,15 @@ export default function SincronizarPage() {
           🔐 Cómo funciona
         </h2>
         <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.65, marginBottom: 10 }}>
-          Tus datos se cifran <strong>en este navegador</strong> antes de salir. El servidor guarda
-          sobres que no puede abrir: no ve nombres, ni notas, ni fotos. Solo sabe cuántos sobres hay
-          y de qué fecha son, lo justo para repartirlos entre tus dispositivos.
+          Tus datos viven en este dispositivo. Para tenerlos también en otro hay dos caminos que{' '}
+          <strong>no pasan por ningún servidor ni necesitan cuenta</strong>: el enlace directo por
+          QR (los dos aparatos en la misma wifi) y un fichero por AirDrop. En los dos, lo que viaja
+          va cifrado con tu contraseña de sincronización.
         </p>
         <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.65 }}>
-          La contraseña de sincronización <strong>no se envía nunca</strong> y no se puede recuperar.
-          Si la pierdes, el contenido del buzón es irrecuperable — también para EDUmind. Sigue
-          descargando tu <Link to="/informes" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>copia de seguridad</Link> de vez en cuando.
+          Esa contraseña <strong>no se envía nunca</strong> y no se puede recuperar: es la misma en
+          todos tus dispositivos y la creas una sola vez. Sigue descargando tu{' '}
+          <Link to="/informes" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>copia de seguridad</Link> de vez en cuando.
         </p>
       </div>
 
@@ -212,20 +228,30 @@ export default function SincronizarPage() {
           fichero cifrado que sale por AirDrop o por donde el docente quiera.
           Muchas redes de centro aíslan los aparatos entre sí y dejan el
           emparejamiento por QR sin conexión posible. */}
-      <CompartirPaquete onCambio={refrescar} />
+      <CompartirPaquete onCambio={refrescar} desbloqueado={desbloqueado} />
 
-      {/* Requisito: sesión SSO */}
+      {/* La copia fuera del aparato que no depende de nadie: una carpeta del
+          docente, escrita sola. Misma contraseña, mismos sobres cifrados. */}
+      <CopiaCarpeta onCambio={refrescar} desbloqueado={desbloqueado} />
+
+      {/* El tercer camino, el buzón del servidor, es opcional y exige cuenta.
+          Iba en una tarjeta grande que decía «Necesitas iniciar sesión»: se leía
+          como un requisito de toda la pantalla, cuando los dos caminos de arriba
+          no lo necesitan. Plegado y en su sitio, al final. */}
       {!conectado ? (
-        <div className="card" style={{ padding: 28, textAlign: 'center' }}>
-          <div style={{ fontSize: 34, marginBottom: 10 }}>🔑</div>
-          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>Necesitas iniciar sesión con EDUmind</h2>
-          <p style={{ fontSize: 13.5, color: 'var(--gris-600)', lineHeight: 1.6, marginBottom: 18, maxWidth: 520, margin: '0 auto 18px' }}>
-            La sincronización necesita saber de quién es cada buzón. Es lo único para lo que se usa
-            tu cuenta: el contenido sigue siendo ilegible para el servidor.
-            {' '}En modo local puedes seguir usando toda la app y las copias de seguridad manuales.
+        <details className="card" style={{ padding: '14px 20px', color: 'var(--gris-600)' }}>
+          <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 700, color: 'var(--gris-700)' }}>
+            Buzón en el servidor (opcional, con cuenta EDUmind)
+          </summary>
+          <p style={{ fontSize: 13, lineHeight: 1.6, margin: '10px 0 12px' }}>
+            Una tercera vía para quien quiera que los aparatos se sincronicen solos aunque no
+            estén juntos: los sobres cifrados se depositan en el servidor de EDUmind, que no puede
+            abrirlos —no ve nombres, ni notas, ni fotos— y los reparte entre tus dispositivos.
+            Hace falta una cuenta para saber de quién es cada buzón; es lo único para lo que se usa.
+            <strong> No la necesitas para el enlace directo ni para el fichero.</strong>
           </p>
           {loginDisponible ? (
-            <button className="btn-primary" onClick={iniciarLogin} style={{ padding: '10px 22px' }}>
+            <button className="btn-secondary" onClick={iniciarLogin}>
               Conectar con EDUmind
             </button>
           ) : (
@@ -233,7 +259,7 @@ export default function SincronizarPage() {
               {motivoSinLogin}
             </p>
           )}
-        </div>
+        </details>
       ) : (
         <>
           {errorEstado && (
@@ -319,6 +345,20 @@ export default function SincronizarPage() {
                   {trabajando ? 'Trabajando…' : estado?.iniciado ? 'Desbloquear' : 'Activar sincronización'}
                 </button>
               </div>
+            </div>
+          ) : !buzonListo ? (
+            <div className="card" data-publicar-buzon style={{ marginBottom: 18 }}>
+              <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>Tu contraseña está en este aparato, pero el buzón aún no la tiene</h2>
+              <p style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.6 }}>
+                Creaste la sincronización sin buzón (para el fichero o el enlace directo). Para que el
+                servidor reparta tus sobres entre tus aparatos hay que publicar en él la sal y el
+                verificador de esa misma contraseña: ningún secreto sale de aquí, y en los demás
+                dispositivos la escribes igual que siempre. Hasta entonces, «Sincronizar ahora» no tiene
+                contra qué hacerlo.
+              </p>
+              <button className="btn-primary" onClick={publicar} disabled={trabajando}>
+                {trabajando ? 'Publicando…' : '📮 Publicar mi contraseña en el buzón'}
+              </button>
             </div>
           ) : (
             <div className="card" style={{ marginBottom: 18 }}>

@@ -12,7 +12,7 @@
  */
 import { useEffect, useRef } from 'react'
 import { useAuth } from '@/auth/AuthProvider'
-import { claveGuardada, sincronizar } from '@/db/sync'
+import { consultarEstado, claveGuardada, sincronizar } from '@/db/sync'
 
 const K_AUTO = 'miclase_sync_auto'
 const CADA = 5 * 60_000
@@ -33,6 +33,9 @@ export default function SyncAutomatica() {
 
       enCurso.current = true
       try {
+        // Sin buzón configurado no hay nada contra lo que sincronizar: el
+        // servidor rechazaba cada tanda y la pantalla se llenaba de errores.
+        if (!(await consultarEstado(headers)).iniciado) return
         await sincronizar(headers)
       } catch {
         // Sin ruido: el detalle del fallo se ve en la pantalla de

@@ -43,6 +43,7 @@ const TABLAS = new Set([
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos',
+  'diario',   // diario de evaluación (esquema Dexie v6)
 ])
 
 export default async function syncRoutes(app) {

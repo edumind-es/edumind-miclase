@@ -39,8 +39,8 @@ const AuthContext = createContext<AuthState | null>(null)
 
 const TOKEN_KEY = 'miclase_session_token'
 const NOMBRE_KEY = 'miclase_nombre'
-/** Con qué redirect_uri se inició el login: el canje tiene que repetir el mismo. */
-export const K_REDIRECT_URI = 'oidc_redirect_uri'
+/** Con qué redirect_uri se pidió el código: el canje tiene que repetirlo. */
+export const REDIRECT_KEY = 'oidc_redirect_uri'
 
 /**
  * Qué redirect_uri sirve para iniciar sesión desde donde estamos.
@@ -153,7 +153,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const nonce = valorOpaco()
     sessionStorage.setItem('oidc_state', state)
     sessionStorage.setItem('oidc_nonce', nonce)
-    sessionStorage.setItem(K_REDIRECT_URI, redirect)
+    sessionStorage.setItem(REDIRECT_KEY, redirect)
 
     const params = new URLSearchParams({
       response_type:         'code',
@@ -168,8 +168,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const url = `${authConfig.authorize_url}?${params}`
 
     if (esNativo()) {
-      // Navegador del sistema dentro de la app (SFSafariViewController):
-      // comparte sesión con Safari y vuelve por el esquema propio.
+      // Navegador del sistema dentro de la app (SFSafariViewController), no la
+      // vista web embebida: la hoja de llaves de acceso se ve entera, las llaves
+      // guardadas en el dispositivo están disponibles, y vuelve por el esquema
+      // propio.
       const { Browser } = await import('@capacitor/browser')
       await Browser.open({ url })
     } else {

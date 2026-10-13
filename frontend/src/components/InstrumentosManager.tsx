@@ -9,11 +9,16 @@
 import { useEffect, useState } from 'react'
 import {
   getAsignaturaDetalle, crearInstrumento, eliminarInstrumento,
-  actualizarInstrumento, moverInstrumento,
+  actualizarInstrumento, moverInstrumento, getGrupo,
 } from '@/db/queries'
-import type { Instrumento } from '@/db/localDb'
+import { api } from '@/api'
+import { useAppStore } from '@/store/useAppStore'
+import FamiliaHijos from './FamiliaHijos'
+import type { Instrumento, Agregacion } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
+import { AGREGACIONES } from '@/db/diario'
 import RubricaEditor from './RubricaEditor'
+import PruebaEditor from './PruebaEditor'
 
 interface Props {
   asignaturaId: number
@@ -38,18 +43,40 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([])
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string; peso: number } | null>(null)
   const [rubricaDe, setRubricaDe] = useState<Instrumento | null>(null)
+  const [pruebaDe, setPruebaDe] = useState<Instrumento | null>(null)
+  /** Enunciados del currículo, para que el asistente reparta criterios por sus palabras. */
+  const [criterios, setCriterios] = useState<{ id: string; descripcion: string }[]>([])
+  const headers = useAppStore(s => s._headers)
 
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
-    setInstrumentos(det?.instrumentos || [])
+    // Solo las familias: los hijos no pesan en el área y van dentro de cada una.
+    setInstrumentos((det?.instrumentos || []).filter(i => i.familia_id == null))
   }
   useEffect(() => { cargar() }, [asignaturaId])
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !rubricaDe) onClose() }
+    let vigente = true
+    ;(async () => {
+      const asig = await getAsignaturaDetalle(asignaturaId)
+      const grupo = asig ? await getGrupo(asig.grupo_id) : undefined
+      if (!asig || !grupo) return
+      const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
+      const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
+      try {
+        const r = await fetch(api(url), { headers: headers() })
+        const all = r.ok ? await r.json() : []
+        if (vigente) setCriterios(Array.isArray(all) ? all : [])
+      } catch { if (vigente) setCriterios([]) }
+    })()
+    return () => { vigente = false }
+  }, [asignaturaId])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !rubricaDe && !pruebaDe) onClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [onClose, rubricaDe])
+  }, [onClose, rubricaDe, pruebaDe])
 
   // Guardado inmediato campo a campo
   const cambiar = async (id: number, fields: Parameters<typeof actualizarInstrumento>[1]) => {
@@ -70,7 +97,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   }
 
   const borrar = async (ins: Instrumento) => {
-    if (!confirm(`¿Eliminar «${ins.nombre}» y TODAS sus calificaciones? No se puede deshacer.`)) return
+    if (!confirm(`¿Eliminar «${ins.nombre}» y TODAS sus calificaciones? No se puede deshacer.\n\nSi tiene rúbrica, se conserva una copia en tu banco.`)) return
     await eliminarInstrumento(ins.id!)
     await cargar()
   }
@@ -109,6 +136,19 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
         />
       )}
 
+      {pruebaDe && (
+        // Desde aquí no hay unidad: se edita el examen general del instrumento.
+        // El de cada unidad se define desde el calificador, dentro de la unidad.
+        <PruebaEditor
+          instrumentoId={pruebaDe.id!}
+          instrumentoNombre={pruebaDe.nombre}
+          unidadId={null}
+          criterios={[]}
+          capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
+          onCerrar={() => setPruebaDe(null)}
+        />
+      )}
+
       <div className="modal-overlay" style={anidado ? { zIndex: 'var(--z-modal-anidado)' } : undefined}
         onClick={e => { if (e.target === e.currentTarget) onClose() }}>
         <div className="card" role="dialog" aria-modal="true" aria-label="Gestionar instrumentos de evaluación"
@@ -116,7 +156,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
-              🎯 Instrumentos — {asignaturaNombre}
+              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos</span>
             </h2>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
           </div>
@@ -124,7 +164,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               criterio puede declarar el suyo en la programación, decir «peso
               total» a secas hacía creer que mandaba siempre. */}
           <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.55 }}>
-            Los cambios se guardan al instante. Reparto por defecto:{' '}
+            Cada bloque es una <strong>familia</strong>: lo que la programación pesa en el área. Dentro de cada una va lo que haces de verdad. Reparto por defecto:{' '}
             <strong style={{ color: totalOk ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
               {total}%{totalOk ? ' ✓' : total > 100 ? ' (excede 100)' : ` (falta ${100 - total})`}
             </strong>
@@ -191,7 +231,25 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                         {t}º trim.
                       </label>
                     ))}
+                    <label data-agregacion title="Si un alumno tiene varios registros del diario con este instrumento, así se funden en su nota"
+                      style={{ fontSize: 11, color: 'var(--gris-600)', fontWeight: 600, display: 'flex', gap: 4, alignItems: 'center' }}>
+                      Varios registros:
+                      <select value={ins.agregacion ?? 'media'} onChange={e => cambiar(ins.id!, { agregacion: e.target.value as Agregacion })}
+                        style={{ fontSize: 11, padding: '2px 4px' }}>
+                        {AGREGACIONES.map(a => <option key={a.value} value={a.value} title={a.ayuda}>{a.label}</option>)}
+                      </select>
+                    </label>
                     <div style={{ flex: 1 }} />
+                    {ins.tipo === 'prueba-escrita' && (
+                      <button onClick={() => setPruebaDe(ins)}
+                        title="Examen general del instrumento: tipo, preguntas y puntos. El de cada unidad se define desde el calificador."
+                        style={{
+                          fontSize: 11, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
+                          background: 'var(--azul-700)', color: 'white', border: 'none',
+                        }}>
+                        📝 Examen
+                      </button>
+                    )}
                     <button onClick={() => setRubricaDe(ins)}
                       style={{
                         fontSize: 11, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
@@ -202,6 +260,15 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                       📊 Rúbrica
                     </button>
                   </div>
+
+                  {/* Lo que el docente hace dentro: speaking, el examen de cada unidad… */}
+                  <FamiliaHijos
+                    familia={ins}
+                    asignaturaNombre={asignaturaNombre}
+                    criterios={criterios}
+                    capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
+                    onCambio={cargar}
+                  />
                 </div>
               )
             })}

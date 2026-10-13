@@ -165,6 +165,8 @@ if (await chip.count()) {
 // ── 9 · Matriz de evaluación ────────────────────────────────────────────
 console.log('\n9. Calificador: pestañas, subpestañas y matriz')
 await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+// Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
+await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
 await p.waitForTimeout(2000)
 
 const pestanasArea = await p.locator('.tab-area').count()
@@ -275,10 +277,14 @@ console.log('\n9b. El criterio completo se abre al insistir en la cabecera')
 console.log('\n10. Evaluar pulsando una casilla')
 await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
 await p.waitForTimeout(900)
-ok(await p.getByText('CRITERIO', { exact: false }).first().isVisible(), 'el panel muestra el criterio completo')
-ok(await p.getByText('Se evalúa con').isVisible(), 'y dice con QUÉ instrumento se evalúa')
+ok(await p.getByText('CRITERIO', { exact: false }).first().isVisible(), 'el panel muestra el criterio')
+ok(await p.locator('[data-franja-instrumento]').isVisible(), 'y arriba, grande, con QUÉ instrumento se evalúa')
 await foto('11-celda-evaluacion')
 
+// Observación, evidencias y ajustes van plegados en «Más»: lo primero es el instrumento.
+ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'las evidencias no se interponen entre el docente y la nota')
+await p.locator('[data-mas-toggle]').click()
+await p.waitForTimeout(300)
 ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'se puede adjuntar una foto como evidencia')
 ok(await p.getByRole('button', { name: /🎙 Audio/ }).isVisible(), 'y grabar audio (exposición oral, lectura)')
 ok(await p.getByRole('button', { name: /🎬 Vídeo/ }).isVisible(), 'y grabar vídeo')
@@ -309,8 +315,15 @@ console.log('\n10b. Calificar sobre la rúbrica, indicador a indicador')
 await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
 await p.waitForTimeout(900)
 const panel = p.getByRole('dialog', { name: /^Evaluar / })
+// El panel pliega en «Más» lo que no es el instrumento (criterio entero, copiar o
+// vincular, observación, evidencias, ajustes). Estas pruebas lo necesitan abierto.
+const abrirMas = async () => {
+  const t = panel.locator('[data-mas-toggle]')
+  if (await t.count() && (await t.getAttribute('aria-expanded')) !== 'true') await t.click()
+}
 
-// El instrumento todavía no tiene rúbrica: el botón ofrece crearla
+// El instrumento todavía no tiene rúbrica: el botón ofrece crearla (en «Más → Ajustes»)
+await abrirMas()
 await panel.getByRole('button', { name: /Crear rúbrica/ }).click()
 await p.waitForTimeout(800)
 const editor = p.getByRole('dialog', { name: /^Rúbrica de / })
@@ -440,7 +453,9 @@ console.log('\n14. Sincronización')
 await p.getByRole('link', { name: 'Sincronizar', exact: true }).click()
 await p.waitForTimeout(1400)
 ok(await p.getByText('Cómo funciona').isVisible(), 'explica el modelo de privacidad antes que nada')
-ok(await p.getByText(/Necesitas iniciar sesión con EDUmind/).isVisible(), 'en modo local pide SSO en vez de fallar')
+ok(await p.getByText(/no pasan por ningún servidor ni necesitan cuenta/).isVisible(), 'deja claro que el QR y el fichero no necesitan cuenta')
+ok(await p.getByText(/Buzón en el servidor \(opcional/).isVisible(), 'el buzón con cuenta queda como opción plegada, no como requisito')
+ok(await p.getByRole('button', { name: 'Invitar al otro dispositivo' }).isVisible(), 'y el enlace directo está disponible sin sesión')
 await foto('18-sincronizar')
 
 // ── 15 · Copia de seguridad ─────────────────────────────────────────────
@@ -453,7 +468,8 @@ const fBackup = await descargaBackup
 const rutaBackup = process.env.SCRATCH + '/backup.json'
 await fBackup.saveAs(rutaBackup)
 const backup = JSON.parse(readFileSync(rutaBackup, 'utf8'))
-ok(backup.version === 5, 'el backup es de la versión 5, la del esquema actual')
+ok(backup.version === 6, 'el backup es de la versión 6, la del esquema actual')
+ok(Array.isArray(backup.diario), 'incluye la tabla del diario de evaluación')
 ok(Array.isArray(backup.criterio_instrumentos) && backup.criterio_instrumentos.length > 0,
    'incluye las asignaciones criterio↔instrumento', `${backup.criterio_instrumentos.length} vínculos`)
 ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y alumnado')

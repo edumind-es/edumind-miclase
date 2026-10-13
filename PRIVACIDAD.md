@@ -263,6 +263,28 @@ Código fuente: <https://github.com/edumind-es/edumind-miclase>
 Si detectas un fallo de seguridad, escríbenos antes de publicarlo para que
 podamos corregirlo.
 
+## Copia automática en una carpeta
+
+Además del buzón, del enlace directo y del fichero por AirDrop, la app puede
+escribir **una copia incremental en una carpeta del propio docente**:
+
+- En el ordenador (Chrome o Edge), una carpeta que el docente elige una vez.
+  Si está dentro de iCloud Drive, Dropbox o OneDrive, es ese servicio quien la
+  sube; la app no habla con ninguno de ellos.
+- En la app instalada (iPad, Android), la carpeta de documentos de la app,
+  visible en Archivos y dentro de la copia de seguridad del aparato.
+
+Lo que se escribe son **los mismos sobres cifrados** que viajan por el buzón o
+por AirDrop (`PaqueteSync`), con la contraseña de sincronización que nunca sale
+del aparato. Un manifiesto sin cifrar (`MiClase.copia.json`) guarda la sal y el
+verificador —los mismos que ve el servidor— para que un aparato nuevo pueda
+desbloquear con la contraseña. Quien acceda a la carpeta ve tabla, id y fecha de
+cada registro, y nada más. Restaurar aplica los paquetes en orden con la misma
+fusión de la sincronización: no borra lo que ya haya.
+
+Si la carpeta vive en un servicio de nube, el centro debe tener en cuenta que
+los datos cifrados pasan por ese proveedor. Sin la contraseña no son legibles.
+
 ## Sincronizar sin servidor
 
 Desde agosto de 2026 dos dispositivos del mismo docente pueden sincronizarse

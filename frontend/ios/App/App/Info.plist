@@ -12,6 +12,19 @@
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<!-- Esquema propio por el que el navegador del sistema devuelve el código
+	     de Authentik a la app (es.edumind.miclase://auth/callback). -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>es.edumind.miclase</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>es.edumind.miclase</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -88,6 +101,13 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
+	<!-- La carpeta de documentos de la app (donde va «MiClase copia») se ve en
+	     Archivos y entra en la copia de iCloud del aparato. Sin estas dos claves
+	     la carpeta existe pero el docente no puede verla ni copiarla. -->
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 </dict>
 </plist>

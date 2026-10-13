@@ -6,6 +6,7 @@
  * pero no se usaban. Aquí vive la única definición de «qué nota saca».
  *
  * Jerarquía:
+ *   nota de familia (criterio, trimestre) = Σ(nota_hijo · peso_hijo) / Σ(peso_hijo)
  *   nota de criterio (trimestre) = Σ(nota · peso_instrumento) / Σ(peso_instrumento)
  *   nota de área (trimestre)     = Σ(nota_criterio · peso_criterio) / Σ(peso_criterio)
  *   nota de área (final)         = Σ(nota_trimestre · peso_trimestre) / Σ(peso_trimestre)
@@ -165,6 +166,73 @@ export function pesosVinculoDeUnidades(
   return { porUnidad, porCriterio }
 }
 
+// ─── Familias e hijos ────────────────────────────────────────────────────────
+
+/** Peso de un hijo dentro de su familia: el suyo, o 1 si no tiene. */
+function pesoEnFamilia(ins: Instrumento | undefined): number {
+  return ins && ins.peso > 0 ? ins.peso : 1
+}
+
+/**
+ * Funde las notas de los hijos en la nota de su familia.
+ *
+ * Una programación oficial trae familias («Proba escrita» 80 %) y el docente
+ * cuelga de ellas lo que hace de verdad (el examen de cada unidad). Para el
+ * cálculo del área solo existe la familia: por cada alumno, criterio y
+ * trimestre, las notas de los hijos —y la nota directa de la familia, si la
+ * hay, que cuenta como un hijo más con peso 1— se funden en una sola nota
+ * **virtual** con el `instrumento_id` de la familia. Lo demás sale tal cual.
+ *
+ * Un hijo cuya familia ya no está en la lista se queda como instrumento
+ * suelto: su nota no se pierde, cuenta con su propio peso.
+ *
+ * Es la única definición de esa fusión: la usan el cálculo del área y la
+ * matriz del calificador, para que las dos enseñen el mismo número.
+ */
+export function fundirHijosEnFamilias(
+  calificaciones: Calificacion[], instrumentos: Instrumento[]
+): Calificacion[] {
+  const instrById = new Map(instrumentos.map(i => [i.id!, i]))
+  const familiaDe = (iid: number): number | null => {
+    const ins = instrById.get(iid)
+    const f = ins?.familia_id ?? null
+    return f != null && instrById.has(f) ? f : null
+  }
+  const conHijos = new Set<number>()
+  for (const ins of instrumentos) {
+    const f = ins.familia_id ?? null
+    if (f != null && instrById.has(f)) conHijos.add(f)
+  }
+  if (!conHijos.size) return calificaciones
+
+  const salida: Calificacion[] = []
+  const grupos = new Map<string, { familia: number; miembros: { c: Calificacion; peso: number }[] }>()
+  for (const c of calificaciones) {
+    const f = familiaDe(c.instrumento_id)
+    const esFamiliaConHijos = conHijos.has(c.instrumento_id)
+    if (f == null && !esFamiliaConHijos) { salida.push(c); continue }
+    const familia = f ?? c.instrumento_id
+    const k = `${c.alumno_id}:${c.criterio_id}:${familia}:${c.trimestre}`
+    const g = grupos.get(k) ?? { familia, miembros: [] }
+    g.miembros.push({ c, peso: f == null ? 1 : pesoEnFamilia(instrById.get(c.instrumento_id)) })
+    grupos.set(k, g)
+  }
+  for (const g of grupos.values()) {
+    const conValor = g.miembros.filter(m => m.c.valor != null)
+    const valor = ponderada(conValor.map(m => ({ valor: m.c.valor!, peso: m.peso })))
+    // La nota directa de la familia, si la hay, da la forma; si no, el primer hijo.
+    const base = g.miembros.find(m => m.c.instrumento_id === g.familia)?.c ?? g.miembros[0].c
+    salida.push({
+      ...base,
+      id: undefined,
+      instrumento_id: g.familia,
+      valor: valor == null ? null : Math.round(valor * 100) / 100,
+      virtual: true,
+    })
+  }
+  return salida
+}
+
 /** El peso declarado que le toca a esta nota, o null si no hay ninguno. */
 function pesoDeclarado(
   pesos: PesosVinculo, criterio_id: string, instrumento_id: number, unidad_id?: number | null
@@ -196,7 +264,10 @@ export function calcularNotaArea(
   pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO
 ): NotaArea {
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
-  const conValor = calificaciones.filter(c => c.valor != null)
+  // Los hijos se funden en su familia antes de nada: de aquí en adelante
+  // solo hay instrumentos de primer nivel, con su peso en el área.
+  const conValor = fundirHijosEnFamilias(calificaciones.filter(c => c.valor != null), instrumentos)
+    .filter(c => c.valor != null)
 
   // criterio → trimestre → aportaciones
   const porCriterio = new Map<string, Map<number, { valor: number; peso: number }[]>>()

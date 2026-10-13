@@ -2,7 +2,7 @@ import {
   calcularNotaArea, calificativo, nivelANota, notaDeRubrica, pesosAPartesIguales,
   parsearPesosTrimestres,
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
-  pesosVinculoDeUnidades,
+  pesosVinculoDeUnidades, fundirHijosEnFamilias,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -299,6 +299,60 @@ console.log('\n12. Trimestre del curso escolar según la fecha')
   ok(trimestreDeMes(4) === 3 && trimestreDeMes(6) === 3,  'de abril en adelante, 3º')
   ok(trimestreDeFecha('2026-11-04') === 1, 'una fecha de noviembre cae en el 1er trimestre')
   ok(trimestreDeFecha('2027-02-10T09:30:00.000Z') === 2, 'y una de febrero en el 2º')
+}
+
+console.log('\n14. Familias e hijos: lo que trae PROENS agrupa lo que hace el docente')
+{
+  const hijo = (id: number, familia: number, nombre: string, peso = 1) =>
+    ({ ...instr(id, nombre, peso), tipo: 'oral', familia_id: familia } as any)
+  // Proba escrita 80 % y Táboa de indicadores 20 %, como en la programación.
+  // Dentro de la táboa, la docente hace speaking y listening.
+  const instrs = [instr(1, 'Proba escrita', 80), instr(2, 'Táboa de indicadores', 20),
+                  hijo(21, 2, 'Speaking'), hijo(22, 2, 'Listening')]
+  const T1 = '{"1":100,"2":0,"3":0}'
+
+  const r = calcularNotaArea(1,
+    [cal(1, 1, 'CE1.1', 1, 5), cal(1, 21, 'CE1.1', 1, 10), cal(1, 22, 'CE1.1', 1, 6)],
+    instrs, T1)
+  // Táboa = media(10, 6) = 8 · criterio = (5·80 + 8·20) / 100 = 5.6
+  ok(r.criterios[0].trimestres[1] === 5.6, 'los hijos se funden en su familia y la familia pesa lo suyo', String(r.criterios[0].trimestres[1]))
+  ok(r.criterios[0].aportaciones.some(a => a.instrumento_id === 2 && a.valor === 8),
+    'la aportación de la familia es la nota fundida')
+  ok(!r.criterios[0].aportaciones.some(a => a.instrumento_id === 21),
+    'y los hijos no aparecen como aportaciones sueltas')
+
+  const soloHijos = calcularNotaArea(1, [cal(1, 21, 'CE1.1', 1, 10)], instrs, T1)
+  ok(soloHijos.criterios[0].trimestres[1] === 10, 'un solo hijo con nota da la nota de la familia', String(soloHijos.criterios[0].trimestres[1]))
+
+  const pesados = calcularNotaArea(1,
+    [cal(1, 21, 'CE1.1', 1, 10), cal(1, 22, 'CE1.1', 1, 6)],
+    [instr(2, 'Táboa', 100), hijo(21, 2, 'Examen final', 3), hijo(22, 2, 'Control', 1)], T1)
+  // (10·3 + 6·1) / 4 = 9
+  ok(pesados.criterios[0].trimestres[1] === 9, 'el peso de un hijo es relativo dentro de la familia', String(pesados.criterios[0].trimestres[1]))
+
+  const conDirecta = calcularNotaArea(1,
+    [cal(1, 2, 'CE1.1', 1, 4), cal(1, 21, 'CE1.1', 1, 10)],
+    [instr(2, 'Táboa', 100), hijo(21, 2, 'Speaking', 3)], T1)
+  // La nota directa de la familia (de antes de tener hijos) cuenta como un hijo con peso 1: (4·1 + 10·3) / 4 = 8.5
+  ok(conDirecta.criterios[0].trimestres[1] === 8.5, 'una nota puesta en la familia antes de tener hijos sigue contando', String(conDirecta.criterios[0].trimestres[1]))
+
+  const huerfano = calcularNotaArea(1,
+    [cal(1, 21, 'CE1.1', 1, 10), cal(1, 1, 'CE1.1', 1, 5)],
+    [instr(1, 'Proba escrita', 80), hijo(21, 99, 'Speaking', 20)], T1)
+  // Sin familia viva, el hijo cuenta como instrumento suelto con su peso: (5·80 + 10·20) / 100 = 6
+  ok(huerfano.criterios[0].trimestres[1] === 6, 'un hijo sin familia no pierde su nota: cuenta como suelto', String(huerfano.criterios[0].trimestres[1]))
+
+  const fundidas = fundirHijosEnFamilias(
+    [cal(1, 21, 'CE1.1', 1, 10), cal(1, 22, 'CE1.1', 1, 6), cal(1, 1, 'CE1.1', 1, 5)], instrs)
+  ok(fundidas.length === 2 && fundidas.some(c => c.virtual && c.instrumento_id === 2 && c.valor === 8),
+    'la fusión devuelve una nota virtual por familia y deja las demás tal cual', JSON.stringify(fundidas.map(c => [c.instrumento_id, c.valor, !!c.virtual])))
+  ok(fundidas.every(c => c.virtual ? c.id === undefined : true), 'la nota virtual no lleva id: nunca se guarda')
+
+  const otroCriterio = calcularNotaArea(1,
+    [cal(1, 21, 'CE1.1', 1, 10), cal(1, 22, 'CE2.1', 1, 6)],
+    [instr(2, 'Táboa', 100), hijo(21, 2, 'Speaking'), hijo(22, 2, 'Listening')], T1)
+  ok(otroCriterio.criterios.length === 2 && otroCriterio.criterios[0].trimestres[1] === 10 && otroCriterio.criterios[1].trimestres[1] === 6,
+    'cada hijo puntúa solo en sus criterios: no se mezclan entre criterios')
 }
 
 console.log('\n13. El redondeo no se acumula escalón a escalón')

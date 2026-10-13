@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
-import { getRubrica, guardarRubrica, eliminarRubrica } from '@/db/queries'
+import { getRubrica, guardarRubrica, eliminarRubrica, guardarEnBanco, type RubricaDeBanco } from '@/db/queries'
 import {
-  parsearRespuestaIA, generarPromptRubrica, rubricaToMarkdown,
+  parsearRespuestaIA, generarPromptRubrica,
   rubricaVacia, NIVELES_DEFAULT,
   type RubricaParsed, type RubricaIndicador, type RubricaNivel,
 } from '@/ia/rubricaPrompt'
-import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla } from '@/ia/rubricaPlantillas'
+import { importarRubrica, rubricaAXlsx, rubricaAMarkdown, rubricaAJson } from '@/ia/rubricaImportar'
+import AyudaImportarRubrica, { TIPO_XLSX } from './AyudaImportarRubrica'
+import BancoRubricas from './BancoRubricas'
+import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla, herramientaInicial, type HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { descargarFichero } from '@/utils/compartir'
@@ -23,6 +26,13 @@ interface Props {
    * un piso más o la rúbrica sale por debajo de quien la abrió.
    */
   capa?: string
+  /**
+   * Con qué forma arrancar si el instrumento aún no tiene rúbrica: lista de
+   * control (Sí/No) o escala de estimación (niveles sin descriptores). Lo
+   * elige el docente en el panel de la casilla; sin esto se ofrece de dónde
+   * partir, como siempre. Si ya hay rúbrica, se abre esa y esto no cuenta.
+   */
+  inicio?: HerramientaSimple
 }
 
 /**
@@ -41,7 +51,7 @@ type Tab = 'diseniar' | 'ia'
 /** Antes de editar hay que decidir de dónde parte la rúbrica. */
 type Modo = 'cargando' | 'elegir' | 'editar'
 
-export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)' }: Props) {
+export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)', inicio }: Props) {
   const [tab, setTab] = useState<Tab>('diseniar')
   const [modo, setModo] = useState<Modo>('cargando')
   const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
@@ -56,7 +66,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   /** Si el contenido actual salió de una IA, para que quede registrado al guardar. */
   const [vieneDeIA, setVieneDeIA] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
-  const importRubricaRef = useRef<HTMLInputElement>(null)
+  /** La explicación de cómo debe venir el fichero, plegada hasta que se pide. */
+  const [ayudaImportar, setAyudaImportar] = useState(false)
+  const [bancoAbierto, setBancoAbierto] = useState(false)
+  const [refrescoBanco, setRefrescoBanco] = useState(0)
 
   // IA
   const ai = useLocalAI()
@@ -106,6 +119,14 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           indicadores: JSON.parse(r.indicadores_json),
         })
         setModo('editar')
+      } else if (inicio) {
+        setRubrica(herramientaInicial(inicio, instrumentoNombre))
+        setSucio(true)
+        setTab('diseniar')
+        setModo('editar')
+        setMsg({ tipo: 'ok', texto: inicio === 'lista'
+          ? 'Lista de control: cada ítem se cumple (Sí) o no (No). Escribe los ítems y guárdala.'
+          : 'Escala de estimación: gradúa cada aspecto sin descriptores. Escribe los aspectos y guárdala.' })
       } else {
         setModo('elegir')
       }
@@ -267,83 +288,121 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   // ── Import / Export ────────────────────────────────────────────────────
 
-  const exportarMD = () => {
-    const md = rubricaToMarkdown(rubrica)
-    descargarFichero(
-      `rubrica-${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.md`,
-      md, 'text/markdown;charset=utf-8', `Rúbrica · ${instrumentoNombre}`,
-    ).catch(e => setMsg({ tipo: 'error', texto: e.message || 'No se pudo exportar la rúbrica.' }))
-  }
+  const nombreFichero = instrumentoNombre.replace(/\s+/g, '-').toLowerCase()
+
+  // Sale por `descargarFichero`, nunca por un `<a download>`: en la app nativa
+  // ese enlace no hace nada y el docente creería haber exportado sin que
+  // saliera nada. Devuelve el resultado para que quien llama sepa si el
+  // docente cerró la hoja de compartir sin elegir destino.
+  const descargar = (nombre: string, contenido: BlobPart, tipo: string) =>
+    descargarFichero(nombre, new Blob([contenido], { type: tipo }), tipo, `Rúbrica · ${instrumentoNombre}`)
+
+  const avisarFallo = (e: any) =>
+    setMsg({ tipo: 'error', texto: e?.message || 'No se pudo exportar la rúbrica.' })
+
+  // Los dos llevan la columna de pesos y se vuelven a importar sin perder nada
+  // salvo el contexto, que solo viaja en el formato propio.
+  const exportarMD = () =>
+    descargar(`rubrica-${nombreFichero}.md`, rubricaAMarkdown(rubrica), 'text/markdown;charset=utf-8').catch(avisarFallo)
+
+  const exportarXlsx = () =>
+    descargar(`rubrica-${nombreFichero}.xlsx`, rubricaAXlsx(rubrica), TIPO_XLSX).catch(avisarFallo)
 
   /**
    * Intercambio fiel entre docentes.
    *
-   * El Markdown es cómodo de leer y de pasar por una IA, pero pierde el valor
-   * numérico de cada nivel: al reimportarlo hay que adivinarlo. Este formato
-   * guarda la rúbrica tal cual, con su escala, para que compartirla entre
-   * compañeros no degrade nada. Es un fichero: no pasa por ningún servidor.
+   * La hoja de cálculo y el Markdown son cómodos de leer y de retocar, pero
+   * son tablas: este formato guarda la rúbrica tal cual, con su contexto, para
+   * que compartirla entre compañeros no degrade nada. Es un fichero: no pasa
+   * por ningún servidor.
    */
   const exportarRubrica = () => {
-    const paquete = {
-      formato: 'edumind-rubrica',
-      version: 1,
-      exportado: new Date().toISOString(),
-      titulo: rubrica.titulo,
-      area: asignaturaNombre,
-      nivel,
-      contexto: iaContexto || undefined,
-      niveles: rubrica.niveles,
-      indicadores: rubrica.indicadores,
-    }
-    descargarFichero(
-      `${instrumentoNombre.replace(/\s+/g, '-').toLowerCase()}.edurubrica.json`,
-      JSON.stringify(paquete, null, 2), 'application/json', `Rúbrica · ${instrumentoNombre}`,
-    )
+    descargar(`${nombreFichero}.edurubrica.json`,
+      rubricaAJson(rubrica, { area: asignaturaNombre, nivel, contexto: iaContexto }), 'application/json')
       .then(r => {
         if (r === 'cancelado') return
         setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
       })
-      .catch(e => setMsg({ tipo: 'error', texto: e.message || 'No se pudo exportar la rúbrica.' }))
+      .catch(avisarFallo)
   }
 
-  const importarRubrica = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-    try {
-      const p = JSON.parse(await file.text())
-      if (p.formato !== 'edumind-rubrica') throw new Error('El fichero no es una rúbrica de EDUmind.')
-      if (!Array.isArray(p.niveles) || !p.niveles.length) throw new Error('La rúbrica no trae niveles.')
-      if (!Array.isArray(p.indicadores) || !p.indicadores.length) throw new Error('La rúbrica no trae indicadores.')
+  /**
+   * Importar o cargar del banco sustituye lo que hay en el editor. Si eso es
+   * trabajo sin guardar, se pregunta: es la misma regla que al cerrar.
+   */
+  const puedeReemplazar = () =>
+    !sucio || confirm('Tienes cambios sin guardar en esta rúbrica. Si cargas otra encima se pierden.\n\n¿Cargarla de todos modos?')
 
-      setRubrica(r => ({
-        ...r,
-        titulo: p.titulo || r.titulo,
-        niveles: p.niveles,
-        indicadores: p.indicadores,
-      }))
-      setSucio(true)
-      if (p.contexto) setIaContexto(p.contexto)
-      const de = p.area && p.area !== asignaturaNombre ? ` (venía de ${p.area})` : ''
+  /** Elegir una rúbrica del banco la COPIA aquí: adaptarla no toca la original. */
+  const cargarDelBanco = (elegida: RubricaParsed, origen: RubricaDeBanco) => {
+    if (!puedeReemplazar()) return
+    setRubrica(elegida)
+    setSucio(true)
+    setVieneDeIA(!!origen.generada_ia)
+    if (origen.contexto) setIaContexto(origen.contexto)
+    setTab('diseniar')
+    setModo('editar')
+    setBancoAbierto(false)
+    setMsg({ tipo: 'ok', texto: `«${elegida.titulo}» copiada de tu banco. Adáptala si hace falta y pulsa «Guardar rúbrica».` })
+  }
+
+  /**
+   * Copia aparte en el banco. Las rúbricas en uso ya salen en él, pero
+   * desaparecen con su instrumento o su clase; esta no.
+   */
+  const guardarEnMiBanco = async () => {
+    if (rubrica.indicadores.length === 0) return
+    try {
+      const { yaEstaba } = await guardarEnBanco({
+        titulo: rubrica.titulo,
+        niveles_json: JSON.stringify(rubrica.niveles),
+        indicadores_json: JSON.stringify(rubrica.indicadores),
+        contexto: iaContexto || undefined,
+        generada_ia: vieneDeIA ? 1 : 0,
+        area: asignaturaNombre, nivel,
+      })
+      setRefrescoBanco(n => n + 1)
       setMsg({
         tipo: 'ok',
-        texto: `Rúbrica «${p.titulo}» importada con ${p.indicadores.length} indicadores y ${p.niveles.length} niveles${de}. Revísala y pulsa Guardar.`,
+        texto: yaEstaba
+          ? `«${rubrica.titulo}» ya estaba en tu banco, tal cual.`
+          : `«${rubrica.titulo}» guardada en tu banco. Seguirá ahí aunque borres este instrumento o la clase.`,
       })
-    } catch (err: any) {
-      setMsg({ tipo: 'error', texto: err.message || 'No se pudo leer el fichero de rúbrica.' })
+    } catch {
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar en el banco.' })
     }
   }
 
-  const importarMD = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * Un solo botón para los tres formatos (.xlsx, .md, .json): el tipo se
+   * decide mirando el contenido, no la extensión. Antes había dos botones, uno
+   * por formato, y ninguno decía qué forma debía tener el fichero.
+   *
+   * Lo importado se carga en el editor sin guardar: hay que poder revisarlo.
+   */
+  const importarFichero = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file) return
-    const texto = await file.text()
-    const parsed = parsearRespuestaIA(texto)
-    if (!parsed) { setMsg({ tipo: 'error', texto: 'No se pudo leer la rúbrica del fichero. Verifica que tiene formato de tabla markdown.' }); return }
-    setRubrica(parsed)
-    setSucio(true)
-    setMsg({ tipo: 'ok', texto: `Rúbrica importada: "${parsed.titulo}" con ${parsed.indicadores.length} indicadores.` })
     e.target.value = ''
+    if (!file || !puedeReemplazar()) return
+    try {
+      const { rubrica: leida, avisos, contexto, area } = await importarRubrica(file.name, await file.arrayBuffer())
+      setRubrica(leida)
+      setSucio(true)
+      setVieneDeIA(false)
+      if (contexto) setIaContexto(contexto)
+      setTab('diseniar')
+      setModo('editar')
+      setAyudaImportar(false)
+      const de = area && area !== asignaturaNombre ? ` (venía de ${area})` : ''
+      setMsg({
+        tipo: 'ok',
+        texto: `Rúbrica «${leida.titulo}» importada con ${leida.indicadores.length} indicadores y ${leida.niveles.length} niveles${de}. `
+          + (avisos.length ? `Ojo: ${avisos.join(' ')} ` : '')
+          + 'Revísala y pulsa «Guardar rúbrica».',
+      })
+    } catch (err: any) {
+      setMsg({ tipo: 'error', texto: `${err.message || 'No se pudo leer el fichero.'} Mira «Cómo importar» para ver la forma que debe tener.` })
+    }
   }
 
   // ── Generación con IA ──────────────────────────────────────────────────
@@ -437,12 +496,21 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           <button onClick={cerrar} aria-label="Cerrar" style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
         </div>
 
+        {/* Fuera de los modos: importar vale tanto al empezar como ya editando. */}
+        <input ref={importRef} type="file" style={{ display: 'none' }} onChange={importarFichero}
+          accept=".xlsx,.md,.markdown,.txt,.json,application/json,text/markdown,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+
         {modo === 'cargando' && (
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>
         )}
 
         {modo === 'elegir' && (
           <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
+          {msg?.tipo === 'error' && (
+            <div style={{ margin: '16px 24px 0', padding: '10px 14px', borderRadius: 8, fontSize: 13, background: '#fee2e2', color: '#991b1b' }}>
+              ❌ {msg.texto}
+            </div>
+          )}
           <PuntoDePartida
             asignaturaNombre={asignaturaNombre}
             nivel={nivel}
@@ -451,7 +519,17 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
             onIA={empezarConIA}
             onPlantilla={empezarDesdePlantilla}
             onBlanco={empezarEnBlanco}
+            onImportar={() => importRef.current?.click()}
+            ayudaImportar={ayudaImportar}
+            onAyudaImportar={() => setAyudaImportar(v => !v)}
+            onBanco={() => setBancoAbierto(v => !v)}
           />
+          {bancoAbierto && (
+            <div style={{ padding: '0 24px 8px' }}>
+              <BancoRubricas instrumentoId={instrumentoId} refresco={refrescoBanco}
+                onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
+            </div>
+          )}
           </div>
         )}
 
@@ -484,6 +562,12 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           {/* ── TAB: DISEÑAR ── */}
           {tab === 'diseniar' && (
             <>
+              {ayudaImportar && <AyudaImportarRubrica onCerrar={() => setAyudaImportar(false)} />}
+              {bancoAbierto && (
+                <BancoRubricas instrumentoId={instrumentoId} refresco={refrescoBanco}
+                  onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
+              )}
+
               {/* Título */}
               <div style={{ marginBottom: 16 }}>
                 <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--gris-700)' }}>Título de la rúbrica</label>
@@ -606,23 +690,39 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                 </span>
                 <div style={{ flex: 1 }} />
                 <button className="btn-secondary" style={{ fontSize: 12 }}
-                  onClick={() => importRubricaRef.current?.click()}
-                  title="Cargar una rúbrica compartida por otro docente (.edurubrica.json)">
-                  📥 Importar rúbrica
+                  onClick={() => setBancoAbierto(v => !v)} aria-expanded={bancoAbierto}
+                  title="Elegir una de tus rúbricas, de cualquier clase y área">
+                  📚 Mi banco
                 </button>
-                <input ref={importRubricaRef} type="file" accept=".json,.edurubrica.json"
-                  style={{ display: 'none' }} onChange={importarRubrica} />
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={guardarEnMiBanco}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Guardar una copia en tu banco, que no desaparece si borras el instrumento o la clase">
+                  ⭐ Guardar en mi banco
+                </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }}
+                  onClick={() => importRef.current?.click()}
+                  title="Cargar una rúbrica desde una hoja de cálculo (.xlsx), un Markdown (.md) o un fichero de rúbrica (.json)">
+                  📥 Importar
+                </button>
+                <button className="btn-secondary" style={{ fontSize: 12 }}
+                  onClick={() => setAyudaImportar(v => !v)} aria-expanded={ayudaImportar}
+                  title="Qué forma debe tener el fichero, con plantillas para descargar">
+                  ❓ Cómo importar
+                </button>
                 <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarRubrica}
                   disabled={rubrica.indicadores.length === 0}
                   title="Guardar la rúbrica en un fichero para compartirla con otro docente">
                   📤 Compartir rúbrica
                 </button>
-                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => importRef.current?.click()} title="Importar desde archivo .md">
-                  ⬆ Importar .md
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarXlsx}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Descargar la rúbrica como hoja de cálculo, para retocarla o imprimirla">
+                  ⬇ .xlsx
                 </button>
-                <input ref={importRef} type="file" accept=".md,.txt" style={{ display: 'none' }} onChange={importarMD} />
-                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarMD} disabled={rubrica.indicadores.length === 0}>
-                  ⬇ Exportar .md
+                <button className="btn-secondary" style={{ fontSize: 12 }} onClick={exportarMD}
+                  disabled={rubrica.indicadores.length === 0}
+                  title="Descargar la rúbrica como tabla Markdown">
+                  ⬇ .md
                 </button>
               </div>
             </>
@@ -805,7 +905,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
  * El contexto (área y nivel) se enseña aquí porque es lo que la app va a
  * meter sola en el prompt: así se ve antes de generar nada.
  */
-function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco }: {
+function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantillas, onIA, onPlantilla, onBlanco, onImportar, ayudaImportar, onAyudaImportar, onBanco }: {
   asignaturaNombre: string
   nivel: string
   plantillasAbiertas: boolean
@@ -813,6 +913,10 @@ function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantil
   onIA: () => void
   onPlantilla: (id: string) => void
   onBlanco: () => void
+  onImportar: () => void
+  ayudaImportar: boolean
+  onAyudaImportar: () => void
+  onBanco: () => void
 }) {
   return (
     <div style={{ padding: 24 }}>
@@ -835,11 +939,27 @@ function PuntoDePartida({ asignaturaNombre, nivel, plantillasAbiertas, onPlantil
           onClick={onPlantillas}
         />
         <BotonPartida
+          icono="📚" titulo="Elegir de mi banco"
+          texto="Las rúbricas que ya tienes, de cualquier clase y área. Se copia aquí y la adaptas."
+          onClick={onBanco}
+        />
+        <BotonPartida
+          icono="📥" titulo="Importar de un fichero"
+          texto="Una rúbrica que ya tienes en una hoja de cálculo (.xlsx), en Markdown (.md) o que te ha pasado otro docente (.json)."
+          onClick={onImportar}
+        />
+        <BotonPartida
           icono="✏️" titulo="Empezar en blanco"
           texto="Escribes tú los indicadores y los descriptores, uno a uno."
           onClick={onBlanco}
         />
       </div>
+
+      <button onClick={onAyudaImportar} aria-expanded={ayudaImportar}
+        style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontSize: 12.5, fontWeight: 600, cursor: 'pointer', padding: '10px 0', textDecoration: 'underline' }}>
+        ¿Cómo preparo el fichero para importarlo?
+      </button>
+      {ayudaImportar && <AyudaImportarRubrica onCerrar={onAyudaImportar} />}
 
       {plantillasAbiertas && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: 10 }}>
