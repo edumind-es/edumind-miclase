@@ -28,12 +28,18 @@ const config: CapacitorConfig = {
   appName: 'EDUmind MiClase',
   webDir,
 
-  // El contenedor sirve la app desde https://localhost, no desde el servidor.
-  // Las llamadas al API se resuelven con `src/api.ts`, que en nativo apunta
-  // al servidor absoluto configurable por el docente.
+  // El contenedor sirve la app desde su propio origen, no desde el servidor:
+  // `capacitor://localhost` en iOS y `https://localhost` en Android. Las
+  // llamadas al API se resuelven con `src/api.ts`, que en nativo apunta al
+  // servidor absoluto configurable por el docente.
+  //
+  // En iOS NO se puede fijar `iosScheme: 'https'`: WKWebView ya gestiona
+  // http/https y Capacitor lo ignora, con lo que el origen real era
+  // `capacitor://localhost` aunque aquí dijera otra cosa (y es el que
+  // espera el CORS del backend). Cambiar el esquema una vez publicada la app
+  // cambiaría el origen de IndexedDB y el docente vería su cuaderno vacío.
   server: {
     androidScheme: 'https',
-    iosScheme: 'https',
   },
 
   ios: {

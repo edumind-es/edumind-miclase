@@ -6,6 +6,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getEvidenciasAlumno, eliminarEvidencia } from '@/db/queries'
 import { duracionLegible } from './MiniaturaEvidencia'
+import { descargarFichero } from '@/utils/compartir'
 import type { Alumno, Evidencia, TipoEvidencia } from '@/db/localDb'
 
 const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
@@ -60,12 +61,14 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
     setAmpliada(null)
   }
 
+  // El blob sale por `descargarFichero`: descarga en la web y hoja de
+  // compartir en la app, donde un `<a download>` no haría nada.
   const descargar = (ev: EvConUrl) => {
-    const a = document.createElement('a')
-    a.href = ev.url
     const ext = ev.mime?.split('/')[1]?.split(';')[0] || EXTENSION[ev.tipo] || 'bin'
-    a.download = `evidencia-${alumno.apellidos}-${ev.fecha.slice(0, 10)}.${ext}`
-    a.click()
+    descargarFichero(
+      `evidencia-${alumno.apellidos}-${ev.fecha.slice(0, 10)}.${ext}`,
+      ev.blob, ev.mime || 'application/octet-stream', 'Evidencia de evaluación',
+    ).catch(() => {})
   }
 
   return (

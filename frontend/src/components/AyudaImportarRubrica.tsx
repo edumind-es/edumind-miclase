@@ -8,13 +8,12 @@
 import {
   RUBRICA_EJEMPLO, rubricaAXlsx, rubricaAMarkdown, rubricaAJson,
 } from '@/ia/rubricaImportar'
+import { descargarFichero } from '@/utils/compartir'
 
+// Por `descargarFichero`, nunca por un `<a download>`: en la app nativa ese
+// enlace no hace nada y la plantilla no saldría.
 function descargar(nombre: string, contenido: BlobPart, tipo: string) {
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(new Blob([contenido], { type: tipo }))
-  a.download = nombre
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+  descargarFichero(nombre, new Blob([contenido], { type: tipo }), tipo, nombre).catch(() => {})
 }
 
 export const TIPO_XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

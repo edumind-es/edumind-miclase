@@ -8,8 +8,13 @@
  * generador de PDF con Helvetica no puede dar.
  *
  * Todo se compone en memoria y se imprime desde un iframe oculto: no se
- * abre ninguna ventana emergente y no sale nada del dispositivo.
+ * abre ninguna ventana emergente y no sale nada del dispositivo. En la app
+ * nativa, donde no hay `window.print()`, el plugin Impresora compone el PDF y
+ * abre la hoja del sistema (ver `nativo/impresora.ts`).
  */
+import { esNativo } from '@/api'
+import { Impresora } from '@/nativo/impresora'
+import { descargarFichero } from '@/utils/compartir'
 
 // ─── Utilidades ──────────────────────────────────────────────────────────
 
@@ -287,47 +292,18 @@ export function barraNota(v: number | null | undefined): string {
 // ─── Impresión ───────────────────────────────────────────────────────────
 
 /**
- * Imprime un documento HTML desde un iframe oculto.
- * El iframe evita los bloqueadores de ventanas emergentes y garantiza que
- * el documento nunca abandona la pestaña de la app.
+ * Imprime un documento HTML.
+ *
+ * En el navegador se hace desde un iframe oculto (`ImpresoraWeb`): sin
+ * ventanas emergentes y sin que el documento salga de la pestaña. En la app
+ * nativa no existe `window.print()`: el plugin Impresora compone el PDF en A4
+ * y abre la hoja del sistema, desde donde se imprime, se guarda en Archivos o
+ * se envía. Allí las fuentes van incrustadas, porque el documento se
+ * renderiza fuera del origen de la app y `/fonts/...` no resolvería a nada.
  */
-export function imprimir(html: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const iframe = document.createElement('iframe')
-    iframe.setAttribute('aria-hidden', 'true')
-    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden'
-    document.body.appendChild(iframe)
-
-    const limpiar = () => {
-      setTimeout(() => { iframe.remove() }, 1500)
-    }
-
-    iframe.onload = () => {
-      try {
-        const win = iframe.contentWindow
-        if (!win) throw new Error('No se pudo preparar el documento')
-        // Esperar a que las tipografías estén listas para que el
-        // documento no se imprima con la fuente de reserva
-        const lanzar = () => {
-          win.focus()
-          win.print()
-          limpiar()
-          resolve()
-        }
-        const docFonts = (win.document as any).fonts
-        docFonts?.ready ? docFonts.ready.then(lanzar).catch(lanzar) : lanzar()
-      } catch (e) {
-        limpiar()
-        reject(e)
-      }
-    }
-
-    const doc = iframe.contentDocument
-    if (!doc) { iframe.remove(); reject(new Error('No se pudo preparar el documento')); return }
-    doc.open()
-    doc.write(html)
-    doc.close()
-  })
+export async function imprimir(html: string, nombre = 'documento'): Promise<void> {
+  const contenido = esNativo() ? await incrustarFuentes(html) : html
+  await Impresora.imprimirHTML({ html: contenido, nombre })
 }
 
 // ─── Fuentes incrustadas ─────────────────────────────────────────────────
@@ -380,10 +356,5 @@ export async function incrustarFuentes(html: string): Promise<string> {
 /** Descarga el informe como fichero .html autocontenido (archivo o correo). */
 export async function descargarHTML(html: string, nombre: string): Promise<void> {
   const autocontenido = await incrustarFuentes(html)
-  const blob = new Blob([autocontenido], { type: 'text/html;charset=utf-8' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = nombre
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+  await descargarFichero(nombre, autocontenido, 'text/html;charset=utf-8')
 }
