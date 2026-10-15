@@ -6,7 +6,7 @@ import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
-import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba } from './prueba'
+import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -1371,6 +1371,50 @@ export type PruebaGuardada = {
 function aPrueba(r: Rubrica): PruebaGuardada | null {
   try { return { id: r.id!, unidad_id: r.unidad_id ?? null, def: normalizarPrueba(JSON.parse(r.prueba_json || 'null')) } }
   catch { return null }
+}
+
+/**
+ * Un examen con todo lo que lo sitúa: instrumento, área, clase y unidad. Es
+ * lo que necesita la pantalla «Evaluar con QR y cámara» para abrir el
+ * corrector de una hoja cuyo QR solo trae el id del examen, y para listar
+ * los exámenes de todas las clases sin pasar por el Calificador.
+ */
+export type PruebaConContexto = {
+  prueba: PruebaGuardada
+  instrumento: Instrumento
+  asig: Asignatura
+  grupo: Grupo
+  unidad: Unidad | null
+  /** Test con opciones y correcta en todas las preguntas: se puede imprimir y corregir por cámara. */
+  conClave: boolean
+}
+
+async function contextoDePrueba(r: Rubrica): Promise<PruebaConContexto | null> {
+  const prueba = aPrueba(r)
+  if (!prueba || !prueba.def.preguntas.length) return null
+  const instrumento = await db.instrumentos.get(r.instrumento_id)
+  if (!instrumento || instrumento.deleted_at) return null
+  const asig = await db.asignaturas.get(instrumento.asignatura_id)
+  if (!asig || asig.deleted_at) return null
+  const grupo = await db.grupos.get(asig.grupo_id)
+  if (!grupo || grupo.deleted_at) return null
+  const unidad = prueba.unidad_id != null ? (await db.unidades.get(prueba.unidad_id)) ?? null : null
+  return { prueba, instrumento, asig, grupo, unidad: unidad && !unidad.deleted_at ? unidad : null, conClave: tieneClave(prueba.def) }
+}
+
+export async function getPruebaConContexto(prueba_id: number): Promise<PruebaConContexto | null> {
+  const r = await db.rubricas.get(prueba_id)
+  if (!r || r.deleted_at || r.tipo !== 'prueba') return null
+  return contextoDePrueba(r)
+}
+
+/** Todos los exámenes del docente, los más recientes primero. */
+export async function listarPruebas(): Promise<PruebaConContexto[]> {
+  const filas = vivos(await db.rubricas.toArray()).filter(r => r.tipo === 'prueba')
+    .sort((a, b) => (b.updated_at ?? '').localeCompare(a.updated_at ?? ''))
+  const salida: PruebaConContexto[] = []
+  for (const r of filas) { const c = await contextoDePrueba(r); if (c) salida.push(c) }
+  return salida
 }
 
 /** Todos los exámenes de un instrumento: el general y los de cada unidad. */

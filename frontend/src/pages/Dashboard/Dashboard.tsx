@@ -87,7 +87,7 @@ export default function Dashboard() {
           motivoInactiva="Elige las áreas de esta clase primero"
         />
         <AccionGrande
-          to="/escanear" icono="📷" titulo="Evaluar con QR"
+          to="/escanear" icono="📷" titulo="Evaluar con QR y cámara"
           pie="Apunta al código de la mesa"
           color="var(--ambar-500)" activa={estado ? estado.alumnos > 0 : false}
           motivoInactiva="Añade alumnado a esta clase primero"

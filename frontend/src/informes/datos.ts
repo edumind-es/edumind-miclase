@@ -37,7 +37,8 @@ export type DatosGrupo = {
 
 type Cabeceras = () => Record<string, string>
 
-async function criteriosDeArea(
+/** Descripciones de los criterios del área, del currículo del servidor (vacío sin conexión). */
+export async function criteriosDeArea(
   grupo: Grupo, asig: Asignatura, headers: Cabeceras
 ): Promise<Map<string, string>> {
   const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
