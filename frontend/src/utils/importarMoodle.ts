@@ -34,7 +34,11 @@ export type ColumnaMoodle = {
   maximo: number | null
   /** Sin máximo declarado, había valores por encima de 10: se toman como escala 0-100. */
   escala100: boolean
-  /** Es una pregunta suelta de un cuestionario («P. 1 /0,24»): se pliega en pantalla. */
+  /**
+   * Columna por pregunta de un cuestionario: la puntuación («P. 1 /0,24») o,
+   * en el informe de respuestas, el texto («Resposta 1», «Resposta correcta 1»).
+   * Se pliegan en pantalla: lo que se importa es la nota.
+   */
   pregunta: boolean
   /** Cuántas filas traen nota en esta columna. */
   conNota: number
@@ -80,6 +84,8 @@ const CABECERAS_DATOS = [
   'centro educativo', 'estado', 'state', 'arrancado o', 'comenzado el', 'started on',
   'completado', 'finalizado', 'completed', 'tempo levado', 'tiempo requerido', 'time taken',
 ]
+/** Columnas por pregunta: puntuación («P. 1») o respuesta («Resposta 1», «Resposta correcta 1», «Right answer 1»). */
+const PATRON_PREGUNTA = /^(p \d+|(resposta|respuesta|response|resposta correcta|respuesta correcta|right answer) \d+)$/
 /** Fila de resumen que el informe de cuestionario añade al final. */
 const PATRON_FILA_RESUMEN = /^(media xeral|media general|overall average)$/
 /** Totales y fecha de descarga: tampoco son ítems. */
@@ -142,7 +148,7 @@ export function descomponerCabecera(etiqueta: string): { actividad: string | nul
   const dos = resto.indexOf(':')
   if (dos > 0 && dos < 30) { actividad = resto.slice(0, dos).trim(); resto = resto.slice(dos + 1).trim() }
   const titulo = resto || etiqueta.trim()
-  return { actividad, titulo, formato, maximo, pregunta: /^p\.?\s*\d+$/i.test(titulo) }
+  return { actividad, titulo, formato, maximo, pregunta: PATRON_PREGUNTA.test(clave(titulo)) }
 }
 
 /**

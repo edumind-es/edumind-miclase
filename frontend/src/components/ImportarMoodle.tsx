@@ -47,7 +47,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [resumen, setResumen] = useState<Resumen | null>(null)
-  /** Las preguntas sueltas de un cuestionario («P. 1», «P. 2»…) salen plegadas: lo normal es importar solo la nota. */
+  /** Las columnas por pregunta («P. 1», «Resposta 1»…) salen plegadas: lo que se importa es la nota. */
   const [preguntasAbiertas, setPreguntasAbiertas] = useState(false)
 
   const lista = useMemo(() => alumnos.map(a => ({ id: a.id!, nombre: a.nombre, apellidos: a.apellidos })), [alumnos])
@@ -202,7 +202,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                       {lectura.columnas.some(c => c.pregunta) && (
                         <button type="button" data-importar-preguntas className="btn-secondary" style={{ fontSize: 12, alignSelf: 'flex-start' }}
                           onClick={() => setPreguntasAbiertas(v => !v)}>
-                          {preguntasAbiertas ? 'Ocultar las preguntas sueltas' : `Mostrar las ${lectura.columnas.filter(c => c.pregunta).length} preguntas sueltas del cuestionario`}
+                          {preguntasAbiertas ? 'Ocultar las columnas por pregunta' : `Mostrar las ${lectura.columnas.filter(c => c.pregunta).length} columnas por pregunta del cuestionario`}
                         </button>
                       )}
                     </div>

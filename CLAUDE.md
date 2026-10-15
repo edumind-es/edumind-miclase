@@ -232,9 +232,11 @@ edumind_miclase/
   son notas; el resto son ítems que el docente asigna columna a columna a un
   instrumento, y lo no asignado se ignora. La escala 0-100 se decide por
   columna, salvo que la cabecera declare el máximo («Cualificación/10,00»,
-  «P. 1 /0,24»: el informe de un cuestionario), que manda. Las preguntas
-  sueltas del cuestionario se reconocen (`pregunta`) y salen plegadas; la fila
-  «Media xeral» no es nadie. Guarda como «Pegar columna» y termina con un
+  «P. 1 /0,24»: el informe de un cuestionario), que manda. Luis solo usa
+  cuestionarios de Edixgal, nunca el libro completo. Las columnas por
+  pregunta —puntuación «P. 1» o texto «Resposta 1» del informe de
+  respuestas— se reconocen (`pregunta`) y salen plegadas; la fila «Media
+  xeral» no es nadie. Guarda como «Pegar columna» y termina con un
   resumen: guardadas, alumnos sin encontrar, columnas ignoradas. Fixtures:
   `edixgal_calificacions.csv` (libro de calificaciones, a mano) y
   `edixgal_cuestionario.tsv` (cabecera real de Luis, alumnos inventados:

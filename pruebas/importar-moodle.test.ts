@@ -108,7 +108,16 @@ console.log('\n7. Informe de cuestionario: máximo en la cabecera, tabuladores y
   ok(notasDeColumna(sobre20, sobre20.columnas[0])[0]?.valor === 7.5, 'un cuestionario sobre 20 se escala a 10')
 }
 
-console.log('\n8. Ficheros que no son lo esperado')
+console.log('\n8. Informe de respuestas: el texto de cada respuesta no es una nota')
+{
+  const cab = 'Apelidos\tNome\tCentro educativo\tEstado\tArrancado o\tCompletado\tTempo levado\tCualificación/10,00\tResposta 1\tResposta 2\tResposta correcta 1\tResposta correcta 2'
+  const r = leerCSVMoodle(cab + '\nAbad Ríos\tAna\tCEIP\tRematado\t-\t-\t-\t7,50\tO Miño\t3\tO Miño\t4', clase)
+  ok(r.columnas.length === 5 && r.columnas[0].titulo === 'Cualificación' && !r.columnas[0].pregunta, 'la nota queda a la vista')
+  ok(r.columnas.slice(1).every(c => c.pregunta), '«Resposta N» y «Resposta correcta N» son columnas por pregunta, plegadas')
+  ok(notasDeColumna(r, r.columnas[0])[0]?.valor === 7.5, 'y la nota se lee igual')
+}
+
+console.log('\n9. Ficheros que no son lo esperado')
 {
   const r = leerCSVMoodle('Alumno;Nota\nAbad;7', clase)
   ok(r.columnas.length === 0 && /nombre y apellidos/.test(r.avisos[0] ?? ''), 'sin columnas de nombre y apellidos se dice y no se lee nada')
