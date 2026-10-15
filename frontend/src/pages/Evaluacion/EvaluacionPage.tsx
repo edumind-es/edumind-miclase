@@ -14,7 +14,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
-  getUnidades, getMatrizEvaluacion,
+  getUnidades, getMatrizEvaluacion, actualizarInstrumento,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
@@ -62,6 +62,24 @@ function vistaGuardada(): Vista | null {
     const v = localStorage.getItem(CLAVE_VISTA)
     return v === 'instrumentos' || v === 'criterios' ? v : null
   } catch { return null }
+}
+/**
+ * Las pestañas de unidad salen por número («UD3 · T1»), con el título en el
+ * tooltip y debajo, en una línea, el de la unidad abierta. Decisión de Luis:
+ * con doce unidades, los títulos ocupaban tres filas y empujaban la matriz,
+ * que es lo que importa. Se recuerda en el aparato: es comodidad, no dato.
+ */
+const CLAVE_UNIDADES = 'miclase.calificador.unidades'
+function unidadesConNombre(): boolean {
+  try { return localStorage.getItem(CLAVE_UNIDADES) === 'nombres' } catch { return false }
+}
+/**
+ * El número de la unidad: el que lleve en el nombre («UD 3», «Unidade 3.»,
+ * «3. Terror na cociña») y, si no lleva ninguno, su posición en la programación.
+ */
+function numeroDeUnidad(nombre: string, posicion: number): number {
+  const m = nombre.match(/^\s*(?:u\.?\s*d\.?|unidade?|ud|tema|t)?\s*(\d{1,2})\b/i)
+  return m ? Number(m[1]) : posicion + 1
 }
 /** Competencias plegadas por área, en este aparato. */
 const CLAVE_PLEGADAS = 'miclase.calificador.plegadas'
@@ -123,6 +141,12 @@ export default function EvaluacionPage() {
    */
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
+  const [nombresUnidad, setNombresUnidad] = useState(unidadesConNombre)
+  const alternarNombresUnidad = () => {
+    const v = !nombresUnidad
+    setNombresUnidad(v)
+    try { localStorage.setItem(CLAVE_UNIDADES, v ? 'nombres' : 'numeros') } catch { /* sin almacenamiento: no pasa nada */ }
+  }
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
@@ -442,17 +466,31 @@ export default function EvaluacionPage() {
                 Todo el curso
                 <span className="trim">{criterios.length} criterios</span>
               </button>
-              {unidades.map(u => (
+              {unidades.map((u, i) => (
                 <button key={u.id} role="tab" aria-selected={u.id === unidadId}
                   className={`tab-unidad${u.id === unidadId ? ' activa' : ''}`}
+                  data-unidad-nombre={u.nombre}
                   onClick={() => setUnidadId(u.id!)}
-                  title={u.descripcion || u.nombre}>
-                  {u.nombre}
-                  <span className="trim">{u.trimestre ? `T${u.trimestre}` : ''} · {u.criterios.length}</span>
+                  title={nombresUnidad ? (u.descripcion || u.nombre) : `${u.nombre}${u.descripcion ? ` — ${u.descripcion}` : ''}`}>
+                  {nombresUnidad ? u.nombre : `UD${numeroDeUnidad(u.nombre, i)}`}
+                  <span className="trim">{u.trimestre ? `T${u.trimestre}` : ''}{nombresUnidad ? ` · ${u.criterios.length}` : ''}</span>
                 </button>
               ))}
+              <button type="button" className="tab-unidad-modo" data-unidades-modo aria-pressed={nombresUnidad}
+                onClick={alternarNombresUnidad}
+                title={nombresUnidad ? 'Pestañas por número: UD1, UD2… con el título al pasar por encima' : 'Pestañas con el título de cada unidad'}>
+                {nombresUnidad ? '▴ solo números' : '▾ títulos'}
+              </button>
             </div>
-          ) : (
+          ) : null}
+          {/* Con las pestañas por número, el título de la unidad abierta va aquí, en una sola línea. */}
+          {unidades.length > 0 && !nombresUnidad && unidadActual && (
+            <div className="unidad-actual" data-unidad-actual>
+              <strong>UD{numeroDeUnidad(unidadActual.nombre, unidades.indexOf(unidadActual))}</strong> · {unidadActual.nombre}
+              <span className="trim"> · {unidadActual.criterios.length} criterios</span>
+            </div>
+          )}
+          {unidades.length > 0 ? null : (
             <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
               <strong>Esta área no tiene programación todavía.</strong>{' '}
               Sin unidades puedes calificar sobre todos los criterios, pero no sabrás con qué instrumento evaluar cada uno.{' '}
@@ -577,6 +615,7 @@ export default function EvaluacionPage() {
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
+                  onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
                 />
               )
             ) : (

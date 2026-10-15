@@ -131,12 +131,26 @@ interface Props {
   onPegar: (col: ColumnaInstrumento) => void
   /** «Definir herramienta»: el instrumento no tiene rúbrica ni examen y no es de observación. */
   onDefinir: (col: ColumnaInstrumento) => void
+  /**
+   * Renombrar el instrumento desde su cabecera, sin pasar por ⚙ Instrumentos.
+   * Solo el nombre: tipo, peso y criterios siguen en el gestor, porque cambian
+   * cómo se calcula la nota y no se tocan de pasada.
+   */
+  onRenombrar: (col: ColumnaInstrumento, nombre: string) => Promise<void>
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
+  /** Columna cuyo nombre se está editando, y el texto que lleva. */
+  const [renombrando, setRenombrando] = useState<{ id: number; texto: string } | null>(null)
+  const confirmarNombre = async (col: ColumnaInstrumento) => {
+    if (!renombrando) return
+    const v = renombrando.texto.trim()
+    setRenombrando(null)
+    if (v && v !== col.ins.nombre) await onRenombrar(col, v)
+  }
   const alternarDetalles = () => {
     const v = !detalles
     setDetalles(v)
@@ -199,10 +213,24 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                   data-familia={col.ins.familia_id ?? undefined}
                   style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
                   title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
-                  <div className="instr-th-nombre">
-                    <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
-                    <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
-                  </div>
+                  {renombrando?.id === col.ins.instrumento_id ? (
+                    <input className="instr-th-renombrar" data-renombrar-campo autoFocus aria-label="Nuevo nombre del instrumento"
+                      value={renombrando.texto}
+                      onChange={e => setRenombrando({ id: col.ins.instrumento_id, texto: e.target.value })}
+                      onBlur={() => confirmarNombre(col)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
+                        if (e.key === 'Escape') setRenombrando(null)
+                      }} />
+                  ) : (
+                    <div className="instr-th-nombre">
+                      <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
+                      <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
+                      <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
+                        title="Cambiar el nombre de este instrumento (el tipo, el peso y los criterios se cambian en ⚙ Instrumentos)"
+                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
+                    </div>
+                  )}
                   <div className="instr-th-tipo instr-th-detalle">
                     {cfg.label}{esHijo ? ` · peso ${col.ins.peso}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}

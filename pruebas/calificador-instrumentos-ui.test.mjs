@@ -115,6 +115,47 @@ try {
   await p.waitForTimeout(1200)
   await foto('instrumentos-01-matriz')
 
+  console.log('\n2b. Pestañas de unidad por número y renombrar desde la cabecera')
+  // Por defecto las pestañas van por número («UD1 · T1»), con el título al
+  // pasar por encima y, debajo, el de la unidad abierta en una sola línea.
+  const pestana = p.locator('.tab-unidad').nth(1)
+  const rotulo = (await pestana.textContent()).trim()
+  const nombreUnidad = await pestana.getAttribute('data-unidad-nombre')
+  ok(/^UD\d+/.test(rotulo), 'la pestaña de unidad sale por número', rotulo)
+  ok((await pestana.getAttribute('title')).includes(nombreUnidad), 'el título de la unidad va en el tooltip')
+  ok((await p.locator('[data-unidad-actual]').textContent()).includes(nombreUnidad), 'y la unidad abierta se nombra debajo de las pestañas')
+  await p.locator('[data-unidades-modo]').click()
+  ok((await pestana.textContent()).includes(nombreUnidad), 'el conmutador vuelve a enseñar los títulos')
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.waitForTimeout(1500)
+  ok((await p.locator('.tab-unidad').nth(1).textContent()).includes(nombreUnidad), 'la elección se recuerda al recargar')
+  await p.locator('[data-unidades-modo]').click()
+  ok(/^UD\d+/.test((await p.locator('.tab-unidad').nth(1).textContent()).trim()), 'y se vuelve a los números')
+  await p.locator('.tab-unidad').nth(1).click()
+  await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
+
+  // Renombrar: el lápiz de la cabecera abre un campo en el sitio; Enter guarda.
+  const primera = p.locator('[data-instr-th]').first()
+  const nombreViejo = await primera.getAttribute('data-nombre')
+  await primera.locator('[data-renombrar-abrir]').click()
+  const campo = primera.locator('[data-renombrar-campo]')
+  await campo.waitFor({ timeout: 3000 })
+  await campo.fill(nombreViejo + ' (renombrado)')
+  await campo.press('Enter')
+  await p.locator(`[data-instr-th][data-nombre="${nombreViejo} (renombrado)"]`).waitFor({ timeout: 5000 })
+  ok(true, 'la cabecera enseña el nombre nuevo tras pulsar Enter', nombreViejo + ' (renombrado)')
+  const instrumentosDb = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    return new Promise((res) => { const tx = db.transaction('instrumentos', 'readonly').objectStore('instrumentos').getAll(); tx.onsuccess = () => res(tx.result.map(i => i.nombre)) })
+  })
+  ok(instrumentosDb.includes(nombreViejo + ' (renombrado)') && !instrumentosDb.includes(nombreViejo), 'y el instrumento se ha renombrado de verdad, no duplicado', instrumentosDb.join(', '))
+  // Escape cancela sin tocar nada.
+  await primera.locator('[data-renombrar-abrir]').click()
+  await primera.locator('[data-renombrar-campo]').fill('esto no se guarda')
+  await primera.locator('[data-renombrar-campo]').press('Escape')
+  await p.waitForTimeout(300)
+  ok(await p.locator(`[data-instr-th][data-nombre="${nombreViejo} (renombrado)"]`).count() === 1, 'Escape cancela el cambio de nombre')
+
   console.log('\n3. «Evaluar hoy» con un instrumento que no es examen')
   const colDiario = p.locator('[data-instr-th]:not([data-tipo="prueba-escrita"])').first()
   const nombreInstr = await colDiario.getAttribute('data-nombre')
