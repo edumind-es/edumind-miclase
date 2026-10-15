@@ -23,6 +23,7 @@ import {
   importarPrueba, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
 } from '@/ia/pruebaImportar'
 import { TIPO_XLSX } from './AyudaImportarRubrica'
+import { descargarFichero } from '@/utils/compartir'
 
 interface Props {
   instrumentoId: number
@@ -38,12 +39,10 @@ interface Props {
 
 type Ambito = 'unidad' | 'general'
 
+// Por `descargarFichero`, nunca por un `<a download>`: en la app nativa ese
+// enlace no hace nada y el examen exportado no saldría.
 function descargar(nombre: string, contenido: BlobPart, tipo: string) {
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(new Blob([contenido], { type: tipo }))
-  a.download = nombre
-  a.click()
-  setTimeout(() => URL.revokeObjectURL(a.href), 5000)
+  descargarFichero(nombre, new Blob([contenido], { type: tipo }), tipo, nombre).catch(() => {})
 }
 
 const PENALIZACIONES = [

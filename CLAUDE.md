@@ -32,8 +32,12 @@ edumind_miclase/
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
+│   ├── src/nativo/   ← impresora.ts: plugin Impresora (PDF/AirPrint en iOS; iframe en web)
+│   ├── src/utils/compartir.ts ← descargarFichero(): la ÚNICA salida de ficheros (web: descarga; nativo: hoja de compartir)
 │   ├── capacitor.config.ts
-│   ├── ios/          ← proyecto Xcode (permisos en App/App/Info.plist)
+│   ├── ios/          ← proyecto Xcode con Swift Package Manager (sin CocoaPods). Permisos y
+│   │                   esquema de URL en App/App/Info.plist; plugins propios en
+│   │                   App/CapApp-SPM/Sources/CapApp-SPM/ (ImpresoraPlugin, MiClaseViewController)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
 ├── curriculum/       ← currículum por CCAA
 ├── scripts/          ← parse_curriculum.py · generar_iconos.py (todos los iconos)
@@ -315,11 +319,31 @@ edumind_miclase/
   cuarentena y no viajan.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
+- **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
+  `<a download>` no hace nada dentro de WKWebView: la copia de seguridad
+  «se descargaba» en el iPad sin que saliera nada. En nativo la función abre
+  la hoja de compartir del sistema; en web descarga.
+- **Imprimir pasa por `Impresora` (`nativo/impresora.ts`).** `window.print()`
+  tampoco existe en WKWebView; el plugin Swift compone el PDF y abre la hoja
+  del sistema. En web sigue siendo el iframe oculto de siempre.
+- **El login nativo depende del servidor.** La app solo ofrece «Conectar
+  EDUmind» si `/api/auth/config` anuncia `redirect_uri_nativo`
+  (`es.edumind.miclase://auth/callback`); si no, lo explica. Ver DESPLIEGUE.md,
+  «Login desde la app nativa».
+- **`project.pbxproj` no se edita a mano** (ni con Xcode abierto ni por
+  script). Lo que haya que compilar va a `ios/App/CapApp-SPM/Sources/`, que
+  entra entero; lo que haya que añadir al target (p. ej. `PrivacyInfo.xcprivacy`)
+  lo hace el docente arrastrándolo en Xcode.
+- **`iosScheme` no se fija en `capacitor.config.ts`.** iOS no admite http/https
+  como esquema propio y Capacitor lo ignora: el origen real es
+  `capacitor://localhost`, y cambiarlo tras publicar vaciaría IndexedDB.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
 - Empaquetar nativo: `npm run nativo:sync` (y `nativo:ios` / `nativo:android`
-  para abrir Xcode o Android Studio — requieren macOS o Android Studio)
+  para abrir Xcode o Android Studio — requieren macOS o Android Studio).
+  Capacitor 8 necesita Node ≥ 22: en el servidor (Node 20) solo se compila la web.
+- Compilar iOS sin abrir Xcode: ver DESPLIEGUE.md, «Compilar en el Mac» (xcodebuild)
 - Backend solo: `npm run dev:backend` (puerto 3270)
 - Frontend solo: `npm run dev:frontend` (puerto 5173)
 - Seed DB: `npm run seed`

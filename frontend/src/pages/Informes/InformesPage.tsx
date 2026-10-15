@@ -13,6 +13,8 @@ import {
 } from '@/db/queries'
 import { useAuth } from '@/auth/AuthProvider'
 import { imprimir, descargarHTML } from '@/informes/lamina'
+import { descargarFichero } from '@/utils/compartir'
+import { esNativo } from '@/api'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { reunirDatosGrupo, evidenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
 import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea } from '@/informes/documentos'
@@ -72,13 +74,17 @@ export default function InformesPage() {
     setGenerando(clave); setMsg(null)
     try {
       const { html, nombre } = await construir()
-      if (accion === 'imprimir') await imprimir(html)
+      if (accion === 'imprimir') await imprimir(html, nombre.replace(/\.html$/, ''))
       else await descargarHTML(html, nombre)
+      // En la app nativa no hay diálogo de impresión ni carpeta de descargas:
+      // hay una hoja del sistema con imprimir, guardar en Archivos y enviar.
       setMsg({
         tipo: 'ok',
         texto: accion === 'imprimir'
-          ? 'Documento listo. En el diálogo de impresión elige «Guardar como PDF».'
-          : `Descargado ${nombre}`,
+          ? (esNativo()
+            ? 'Documento listo. Desde la hoja del sistema puedes imprimirlo, guardarlo en Archivos o enviarlo.'
+            : 'Documento listo. En el diálogo de impresión elige «Guardar como PDF».')
+          : (esNativo() ? `Preparado ${nombre}` : `Descargado ${nombre}`),
       })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'No se pudo generar el documento.' })
@@ -166,13 +172,11 @@ export default function InformesPage() {
       }
 
       const csv = filas.map(f => f.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n')
-      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
-      const a = document.createElement('a')
-      a.href = URL.createObjectURL(blob)
-      a.download = `calificaciones-${normalizar(grupo.nombre)}-${grupo.curso_escolar}.csv`
-      a.click()
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000)
-      setMsg({ tipo: 'ok', texto: `CSV exportado: ${filas.length - 1} registros.` })
+      const resultado = await descargarFichero(
+        `calificaciones-${normalizar(grupo.nombre)}-${grupo.curso_escolar}.csv`,
+        '﻿' + csv, 'text/csv;charset=utf-8;', `Calificaciones · ${grupo.nombre}`,
+      )
+      if (resultado !== 'cancelado') setMsg({ tipo: 'ok', texto: `CSV exportado: ${filas.length - 1} registros.` })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'Error al exportar.' })
     } finally { setGenerando('') }
@@ -184,13 +188,18 @@ export default function InformesPage() {
     setGenerando('backup'); setMsg(null)
     try {
       const json = await exportarDatos()
-      const blob = new Blob([json], { type: 'application/json' })
-      const a = document.createElement('a')
-      a.href = URL.createObjectURL(blob)
-      a.download = `miclase-backup-${new Date().toISOString().slice(0, 10)}.json`
-      a.click()
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000)
-      setMsg({ tipo: 'ok', texto: 'Copia de seguridad descargada. Guárdala en un lugar seguro.' })
+      const resultado = await descargarFichero(
+        `miclase-backup-${new Date().toISOString().slice(0, 10)}.json`,
+        json, 'application/json', 'Copia de seguridad de MiClase',
+      )
+      if (resultado !== 'cancelado') {
+        setMsg({
+          tipo: 'ok',
+          texto: esNativo()
+            ? 'Copia de seguridad preparada. Guárdala en Archivos o envíatela: fuera de este dispositivo.'
+            : 'Copia de seguridad descargada. Guárdala en un lugar seguro.',
+        })
+      }
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'Error al exportar.' })
     } finally { setGenerando('') }

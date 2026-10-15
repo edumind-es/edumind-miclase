@@ -81,18 +81,60 @@ const comoNumero = (v) => v.split('.').map(Number).reduce((a, n) => a * 1000 + n
 ok(agpNuestra && agpExigida && comoNumero(agpNuestra) >= comoNumero(agpExigida),
   'el plugin de Android Gradle no se ha quedado atrás', `${agpNuestra} ≥ ${agpExigida}`)
 
-// iOS: el destino mínimo lo declara el podspec de @capacitor/ios
-const podspec = leer('node_modules/@capacitor/ios/Capacitor.podspec')
-const iosExigido = Number(sacar(podspec, /deployment_target\s*=\s*'([\d.]+)'/))
-const iosPodfile = Number(sacar(leer('ios/App/Podfile'), /platform :ios, '([\d.]+)'/))
+// iOS: el destino mínimo lo declara el Package.swift de @capacitor/ios (o su
+// podspec, que sigue publicándose). El proyecto va por Swift Package Manager,
+// no por CocoaPods: en el Mac no hace falta Ruby ni `pod install`, y lo que
+// fija el mínimo de nuestro lado es el Package.swift que `cap sync` escribe en
+// CapApp-SPM.
+const paqueteCapacitor = existsSync(join(FRONT, 'node_modules/@capacitor/ios/Package.swift'))
+  ? leer('node_modules/@capacitor/ios/Package.swift') : ''
+const iosExigido = Number(
+  sacar(paqueteCapacitor, /\.iOS\(\.v(\d+)\)/)
+  ?? sacar(leer('node_modules/@capacitor/ios/Capacitor.podspec'), /deployment_target\s*=\s*'(\d+)/),
+)
+const paquete = leer('ios/App/CapApp-SPM/Package.swift')
+const iosPaquete = Number(sacar(paquete, /\.iOS\(\.v(\d+)\)/))
 const pbxproj = leer('ios/App/App.xcodeproj/project.pbxproj')
 const destinos = [...pbxproj.matchAll(/IPHONEOS_DEPLOYMENT_TARGET = ([\d.]+);/g)].map((m) => Number(m[1]))
 
-ok(iosPodfile >= iosExigido,
-  'el Podfile llega al destino mínimo del podspec de Capacitor', `${iosPodfile} ≥ ${iosExigido}`)
+ok(!existsSync(join(FRONT, 'ios/App/Podfile')),
+  'no queda Podfile: el proyecto iOS va por Swift Package Manager')
+ok(iosPaquete >= iosExigido,
+  'el Package.swift de CapApp-SPM llega al destino mínimo de Capacitor', `${iosPaquete} ≥ ${iosExigido}`)
 ok(destinos.length > 0 && destinos.every((d) => d >= iosExigido),
   'y el proyecto de Xcode también, en todas sus configuraciones',
   `${[...new Set(destinos)].join(', ')} ≥ ${iosExigido}`)
+
+console.log('\n2b. Lo que la app nativa de iOS necesita para funcionar y publicarse')
+
+// Los plugins propios viven en las fuentes del paquete, no en el target:
+// project.pbxproj no se edita a mano, y lo que haya en ese directorio se
+// compila solo. Si alguien los mueve al target, el escáner no se entera pero
+// Xcode sí; aquí se vigila que sigan donde el SceneDelegate los espera.
+const fuentesPaquete = 'ios/App/CapApp-SPM/Sources/CapApp-SPM'
+ok(existsSync(join(FRONT, fuentesPaquete, 'ImpresoraPlugin.swift'))
+  && existsSync(join(FRONT, fuentesPaquete, 'MiClaseViewController.swift')),
+  'el plugin de impresión y el controlador que lo registra están en las fuentes de CapApp-SPM')
+const sceneDelegate = leer('ios/App/App/SceneDelegate.swift')
+ok(/import CapApp_SPM/.test(sceneDelegate) && /MiClaseViewController\(\)/.test(sceneDelegate),
+  'SceneDelegate arranca con MiClaseViewController, que registra los plugins propios')
+
+const infoPlist = leer('ios/App/App/Info.plist')
+ok(/CFBundleURLSchemes[\s\S]*?<string>es\.edumind\.miclase<\/string>/.test(infoPlist),
+  'Info.plist declara el esquema es.edumind.miclase para la vuelta del login')
+ok(!/<string>armv7<\/string>/.test(infoPlist),
+  'Info.plist no exige armv7 (App Store Connect lo rechaza; debe ser arm64)')
+for (const clave of ['NSCameraUsageDescription', 'NSMicrophoneUsageDescription', 'NSPhotoLibraryUsageDescription']) {
+  ok(infoPlist.includes(`<key>${clave}</key>`), `Info.plist explica para qué se pide ${clave}`)
+}
+ok(existsSync(join(FRONT, 'ios/App/App/PrivacyInfo.xcprivacy')),
+  'el manifiesto de privacidad está en el proyecto (añadirlo al target es un paso manual en Xcode)')
+
+// iOS no admite `iosScheme: 'https'`: WKWebView ya gestiona http/https y
+// Capacitor lo ignora. Si alguien lo vuelve a poner, el origen que cree tener
+// la app y el real (capacitor://localhost) dejan de coincidir.
+ok(!/^\s*iosScheme\s*:/m.test(config),
+  'capacitor.config.ts no fija iosScheme (en iOS el origen es capacitor://localhost)')
 
 console.log('\n3. La versión de Capacitor es la misma en todos los paquetes')
 
