@@ -85,7 +85,30 @@ console.log('\n6. Sugerir instrumento por nombre')
   ok(sugerirInstrumento(r.columnas[0], [{ nombre: 'UD1' }, { nombre: 'Exame' }]) === null, 'dos candidatos parciales: ninguno, que elija el docente')
 }
 
-console.log('\n7. Ficheros que no son lo esperado')
+console.log('\n7. Informe de cuestionario: máximo en la cabecera, tabuladores y «Media xeral»')
+{
+  const tsv = readFileSync(join(process.cwd(), 'pruebas/fixtures/edixgal_cuestionario.tsv'), 'utf8')
+  const c = descomponerCabecera('Cualificación/10,00')
+  ok(c.titulo === 'Cualificación' && c.maximo === 10 && !c.pregunta, 'la nota lleva el máximo en la cabecera', JSON.stringify(c))
+  const p = descomponerCabecera('P. 1 /0,24')
+  ok(p.titulo === 'P. 1' && p.maximo === 0.24 && p.pregunta, 'cada pregunta también, y se marca como pregunta', JSON.stringify(p))
+  const r = leerCSVMoodle(tsv, clase)
+  ok(r.separador === '\t' && r.avisos.length === 0, 'tabuladores y sin avisos', r.avisos.join(' | '))
+  ok(r.columnas.length === 42 && r.columnas[0].titulo === 'Cualificación', 'la nota y las 41 preguntas; estado y tiempos no son notas', r.columnas.map(c => c.titulo).slice(0, 3).join('|'))
+  ok(r.columnas.filter(c => c.pregunta).length === 41, 'las 41 preguntas se reconocen')
+  ok(r.filas.length === 4 && !r.filas.some(f => /media xeral/i.test(f.nombre)), 'la fila «Media xeral» no es nadie y no cuenta')
+  const nota = r.columnas[0]
+  ok(!nota.escala100, 'con máximo declarado no se adivina la escala')
+  const n = (id: number) => notasDeColumna(r, nota).find(x => x.alumno.id === id)?.valor
+  ok(n(1) === 7.5 && n(2) === 9 && n(3) === undefined, 'la nota sobre 10 tal cual; «-» de quien no acabó no da nota')
+  const p1 = notasDeColumna(r, r.columnas[1])
+  ok(p1.find(x => x.alumno.id === 1)?.valor === 10, 'una pregunta acertada (0,24 de 0,24) vale 10')
+  ok(notasDeColumna(r, r.columnas[41]).find(x => x.alumno.id === 1)?.valor === 0, 'y una fallada, 0')
+  const sobre20 = leerCSVMoodle('Apelidos\tNome\tCualificación/20,00\nAbad Ríos\tAna\t15,00', clase)
+  ok(notasDeColumna(sobre20, sobre20.columnas[0])[0]?.valor === 7.5, 'un cuestionario sobre 20 se escala a 10')
+}
+
+console.log('\n8. Ficheros que no son lo esperado')
 {
   const r = leerCSVMoodle('Alumno;Nota\nAbad;7', clase)
   ok(r.columnas.length === 0 && /nombre y apellidos/.test(r.avisos[0] ?? ''), 'sin columnas de nombre y apellidos se dice y no se lee nada')

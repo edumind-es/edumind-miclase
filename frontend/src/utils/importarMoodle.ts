@@ -5,7 +5,9 @@
  * Moodle exporta una fila por alumno con nombre y apellidos en columnas
  * separadas, unas cuantas de datos (número de ID, institución, correo…) y
  * después una columna por ítem calificable —«Tarefa:Exame UD1 (Real)»—, el
- * total del curso y la fecha de descarga. Aquí solo se interpreta el texto:
+ * total del curso y la fecha de descarga. El informe de un cuestionario es
+ * parecido pero lleva el máximo en la cabecera —«Cualificación/10,00»,
+ * «P. 1 /0,24»— y columnas de estado y tiempos. Aquí solo se interpreta el texto:
  * qué columnas son notas, a qué alumno de la clase corresponde cada fila y
  * cuánto vale cada casilla. Elegir a qué instrumento va cada columna y
  * guardar es cosa de la pantalla.
@@ -28,8 +30,12 @@ export type ColumnaMoodle = {
   actividad: string | null
   /** Formato de la nota si lo trae («Real», «Porcentaxe», «Letra»…). */
   formato: string | null
-  /** Había valores por encima de 10: se toman como escala 0-100. */
+  /** Máximo que declara la cabecera («Cualificación/10,00» → 10), si lo hay. */
+  maximo: number | null
+  /** Sin máximo declarado, había valores por encima de 10: se toman como escala 0-100. */
   escala100: boolean
+  /** Es una pregunta suelta de un cuestionario («P. 1 /0,24»): se pliega en pantalla. */
+  pregunta: boolean
   /** Cuántas filas traen nota en esta columna. */
   conNota: number
   /** Ninguna celda se ha podido leer como número (letras, vacía…). */
@@ -70,7 +76,12 @@ const CABECERAS_DATOS = [
   'numero de id', 'id number', 'institucion', 'institution', 'departamento', 'department',
   'enderezo de correo', 'direccion de correo', 'correo electronico', 'email address', 'email',
   'nome de usuario', 'nombre de usuario', 'username', 'grupos', 'groups',
+  // Informe de cuestionario
+  'centro educativo', 'estado', 'state', 'arrancado o', 'comenzado el', 'started on',
+  'completado', 'finalizado', 'completed', 'tempo levado', 'tiempo requerido', 'time taken',
 ]
+/** Fila de resumen que el informe de cuestionario añade al final. */
+const PATRON_FILA_RESUMEN = /^(media xeral|media general|overall average)$/
 /** Totales y fecha de descarga: tampoco son ítems. */
 const PATRON_NO_ITEM = /^(total d[oe]l? curso|course total|ultima descarga|last downloaded)/
 
@@ -114,16 +125,24 @@ export function parsearCSV(texto: string): { filas: string[][]; separador: ',' |
   return { filas: filas.filter(f => f.some(c => c.trim() !== '')), separador }
 }
 
-/** «Tarefa:Exame UD1 (Real)» → actividad «Tarefa», título «Exame UD1», formato «Real». */
-export function descomponerCabecera(etiqueta: string): { actividad: string | null; titulo: string; formato: string | null } {
+/**
+ * «Tarefa:Exame UD1 (Real)» → actividad «Tarefa», título «Exame UD1», formato «Real».
+ * «Cualificación/10,00» → título «Cualificación», máximo 10. «P. 1 /0,24» → pregunta.
+ */
+export function descomponerCabecera(etiqueta: string): { actividad: string | null; titulo: string; formato: string | null; maximo: number | null; pregunta: boolean } {
   let resto = etiqueta.trim()
   let formato: string | null = null
   const m = resto.match(/\s*\(([^()]*)\)\s*$/)
   if (m) { formato = m[1].trim(); resto = resto.slice(0, m.index).trim() }
+  let maximo: number | null = null
+  const mx = resto.match(/\s*\/\s*(\d+(?:[.,]\d+)?)\s*$/)
+  if (mx) { maximo = leerNota(mx[1]); resto = resto.slice(0, mx.index).trim() }
+  if (maximo != null && maximo <= 0) maximo = null
   let actividad: string | null = null
   const dos = resto.indexOf(':')
   if (dos > 0 && dos < 30) { actividad = resto.slice(0, dos).trim(); resto = resto.slice(dos + 1).trim() }
-  return { actividad, titulo: resto || etiqueta.trim(), formato }
+  const titulo = resto || etiqueta.trim()
+  return { actividad, titulo, formato, maximo, pregunta: /^p\.?\s*\d+$/i.test(titulo) }
 }
 
 /**
@@ -158,13 +177,16 @@ export function leerCSVMoodle(texto: string, alumnos: Alumno[]): LecturaMoodle {
     .filter(i => i !== idxNombre && i !== idxApellidos && cabecera[i] !== ''
       && !CABECERAS_DATOS.includes(claves[i]) && !PATRON_NO_ITEM.test(claves[i]))
 
-  const cuerpo = crudas.slice(1)
+  // El informe de cuestionario cierra con una fila «Media xeral»: no es nadie.
+  const cuerpo = crudas.slice(1).filter(f => !PATRON_FILA_RESUMEN.test(clave(`${f[idxNombre] ?? ''} ${f[idxApellidos] ?? ''}`)))
   const valoresPorColumna = indicesNota.map(i => cuerpo.map(f => leerNota(f[i] ?? '')))
   const columnas: ColumnaMoodle[] = indicesNota.map((indice, k) => {
     const valores = valoresPorColumna[k]
     const numeros = valores.filter((v): v is number => v != null)
-    const escala100 = numeros.some(v => v > 10) && numeros.every(v => v <= 100)
-    return { indice, etiqueta: cabecera[indice], ...descomponerCabecera(cabecera[indice]), escala100, conNota: numeros.length, sinNumeros: numeros.length === 0 }
+    const cab = descomponerCabecera(cabecera[indice])
+    // Con máximo declarado no hay que adivinar la escala.
+    const escala100 = cab.maximo == null && numeros.some(v => v > 10) && numeros.every(v => v <= 100)
+    return { indice, etiqueta: cabecera[indice], ...cab, escala100, conNota: numeros.length, sinNumeros: numeros.length === 0 }
   })
   if (columnas.length === 0) avisos.push('El CSV no trae ninguna columna de notas.')
 
@@ -191,13 +213,15 @@ export function leerCSVMoodle(texto: string, alumnos: Alumno[]): LecturaMoodle {
 export type NotaImportada = { alumno: Alumno; valor: number }
 
 /**
- * Las notas de una columna ya en 0-10 (dividiendo entre 10 si la columna va
- * en 0-100), solo de las filas con alumno y con nota.
+ * Las notas de una columna ya en 0-10 (por el máximo de la cabecera si lo
+ * declara; si no, dividiendo entre 10 cuando la columna va en 0-100), solo
+ * de las filas con alumno y con nota.
  */
 export function notasDeColumna(lectura: LecturaMoodle, columna: ColumnaMoodle): NotaImportada[] {
   const k = lectura.columnas.indexOf(columna)
   if (k < 0) return []
-  const normalizar = (v: number) => Math.round(Math.max(0, Math.min(10, columna.escala100 ? v / 10 : v)) * 10) / 10
+  const aDiez = (v: number) => columna.maximo != null ? v * 10 / columna.maximo : columna.escala100 ? v / 10 : v
+  const normalizar = (v: number) => Math.round(Math.max(0, Math.min(10, aDiez(v))) * 10) / 10
   return lectura.filas.flatMap(f => {
     const v = f.valores[k]
     return f.alumno && v != null ? [{ alumno: f.alumno, valor: normalizar(v) }] : []

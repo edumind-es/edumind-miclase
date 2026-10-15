@@ -47,6 +47,8 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [resumen, setResumen] = useState<Resumen | null>(null)
+  /** Las preguntas sueltas de un cuestionario («P. 1», «P. 2»…) salen plegadas: lo normal es importar solo la nota. */
+  const [preguntasAbiertas, setPreguntasAbiertas] = useState(false)
 
   const lista = useMemo(() => alumnos.map(a => ({ id: a.id!, nombre: a.nombre, apellidos: a.apellidos })), [alumnos])
   const instrumentos = useMemo(() => columnas.map(c => ({ id: c.ins.instrumento_id, nombre: c.ins.nombre, col: c })), [columnas])
@@ -163,7 +165,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                       Columnas de Moodle · {asignadas.length} de {lectura.columnas.length} asignada{asignadas.length !== 1 ? 's' : ''}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {lectura.columnas.map(c => {
+                      {lectura.columnas.filter(c => !c.pregunta || preguntasAbiertas).map(c => {
                         const elegido = destino.get(c.indice)
                         const n = notasDeColumna(lectura, c).length
                         return (
@@ -178,7 +180,8 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                               <div style={{ fontSize: 11, color: c.sinNumeros ? '#92400e' : 'var(--gris-600)' }}>
                                 {c.actividad ? `${c.actividad} · ` : ''}
                                 {c.sinNumeros ? 'sin notas numéricas: no se puede importar'
-                                  : `${n} nota${n !== 1 ? 's' : ''} para alumnos de la clase${c.escala100 ? ' · escala 0-100, se divide entre 10' : ''}`}
+                                  : `${n} nota${n !== 1 ? 's' : ''} para alumnos de la clase${
+                                    c.maximo != null && c.maximo !== 10 ? ` · sobre ${c.maximo}, se pasa a 0-10` : c.escala100 ? ' · escala 0-100, se divide entre 10' : ''}`}
                               </div>
                             </div>
                             <select value={elegido ?? ''} disabled={c.sinNumeros}
@@ -196,6 +199,12 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                           </div>
                         )
                       })}
+                      {lectura.columnas.some(c => c.pregunta) && (
+                        <button type="button" data-importar-preguntas className="btn-secondary" style={{ fontSize: 12, alignSelf: 'flex-start' }}
+                          onClick={() => setPreguntasAbiertas(v => !v)}>
+                          {preguntasAbiertas ? 'Ocultar las preguntas sueltas' : `Mostrar las ${lectura.columnas.filter(c => c.pregunta).length} preguntas sueltas del cuestionario`}
+                        </button>
+                      )}
                     </div>
                   </div>
                 </>

@@ -231,10 +231,14 @@ edumind_miclase/
   (número de ID, institución, correo, total del curso, última descarga) no
   son notas; el resto son ítems que el docente asigna columna a columna a un
   instrumento, y lo no asignado se ignora. La escala 0-100 se decide por
-  columna. Guarda como «Pegar columna» y termina con un resumen: guardadas,
-  alumnos sin encontrar, columnas ignoradas. El fixture
-  `pruebas/fixtures/edixgal_calificacions.csv` está hecho a mano con las
-  cabeceras de Moodle en gallego; ningún CSV real de Luis ha pasado por él.
+  columna, salvo que la cabecera declare el máximo («Cualificación/10,00»,
+  «P. 1 /0,24»: el informe de un cuestionario), que manda. Las preguntas
+  sueltas del cuestionario se reconocen (`pregunta`) y salen plegadas; la fila
+  «Media xeral» no es nadie. Guarda como «Pegar columna» y termina con un
+  resumen: guardadas, alumnos sin encontrar, columnas ignoradas. Fixtures:
+  `edixgal_calificacions.csv` (libro de calificaciones, a mano) y
+  `edixgal_cuestionario.tsv` (cabecera real de Luis, alumnos inventados:
+  no hay CSV real por la LOPD).
 - **En el panel de la casilla, el instrumento es lo primero y lo grande.**
   Orden fijo de `CeldaEvaluacion`: franja del instrumento con la nota,
   selector solo si hay varios, y el instrumento en sí (examen, rúbrica o
