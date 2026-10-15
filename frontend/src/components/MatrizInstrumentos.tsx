@@ -137,15 +137,19 @@ interface Props {
    * cómo se calcula la nota y no se tocan de pasada.
    */
   onRenombrar: (col: ColumnaInstrumento, nombre: string) => Promise<void>
+  /** «Imprimir»: hojas de respuestas y examen de un test con clave. */
+  onImprimir?: (col: ColumnaInstrumento) => void
+  /** «Corregir por cámara»: la pila de hojas de respuestas. */
+  onEscanear?: (col: ColumnaInstrumento) => void
   /**
-   * «Todo el curso»: un resumen. Sin botones de calificar ni lápiz, y pulsar
-   * una casilla no corrige sino que explica de dónde sale la media (`onCelda`
-   * sigue siendo quien decide qué abrir).
+   * «Todo el curso»: un resumen. Sin botones de calificar, imprimir, escanear
+   * ni lápiz, y pulsar una casilla no corrige sino que explica de dónde sale
+   * la media (`onCelda` sigue siendo quien decide qué abrir).
    */
   soloLectura?: boolean
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, soloLectura = false }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, soloLectura = false }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -277,6 +281,22 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       </button>
                     )}
                   </>)}
+                  {/* Un test con clave se corrige también con la cámara: es calificar, así que va a la vista. */}
+                  {!soloLectura && esExamen && col.ins.tiene_prueba && onEscanear && (
+                    <button type="button" className="instr-th-accion" data-escanear-abrir
+                      onClick={() => onEscanear(col)}
+                      title="Corregir las hojas de respuestas con la cámara, una tras otra">
+                      📷 Corregir por cámara
+                    </button>
+                  )}
+                  {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
+                  {!soloLectura && esExamen && col.ins.tiene_prueba && onImprimir && (
+                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-imprimir-abrir
+                      onClick={() => onImprimir(col)}
+                      title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
+                      🖨 Imprimir test
+                    </button>
+                  )}
                   {!soloLectura && <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">
