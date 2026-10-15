@@ -5,7 +5,8 @@
  */
 import QRCode from 'qrcode'
 import type { Alumno, Grupo } from '@/db/localDb'
-import { urlPublica } from '@/api'
+import { esNativo, urlPublica } from '@/api'
+import { Impresora } from '@/nativo/impresora'
 
 // El QR codifica una URL: la cámara nativa del móvil/tablet abre la app
 // directamente en el panel de evaluación de ese alumno; el escáner interno
@@ -71,6 +72,17 @@ export async function imprimirHojaQR(grupo: Grupo, alumnos: Alumno[], conNombres
   <script>window.addEventListener('load', () => setTimeout(() => window.print(), 300))</script>
 </body>
 </html>`
+
+  // En la app nativa no hay ventanas nuevas ni `window.print()`: el plugin
+  // Impresora compone la hoja en A4 y abre la del sistema (imprimir, guardar
+  // en Archivos, AirDrop). El script de autoimpresión sobra ahí.
+  if (esNativo()) {
+    await Impresora.imprimirHTML({
+      html: html.replace(/<script>[\s\S]*?<\/script>/, ''),
+      nombre: `qr-mesa-${grupo.nombre}`,
+    })
+    return
+  }
 
   const w = window.open('', '_blank')
   if (!w) throw new Error('El navegador bloqueó la ventana de impresión. Permite las ventanas emergentes para esta web.')

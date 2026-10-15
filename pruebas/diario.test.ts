@@ -6,7 +6,7 @@
  */
 import {
   agregarNiveles, criteriosDe, derivarNotas, miniTendencia,
-  nivelDiarioANota, notaDeDiario, ordenarRegistros,
+  nivelDiarioANota, notaDeDiario, ordenarRegistros, notaDeRegistro, nivelDeNota,
 } from '../frontend/src/db/diario'
 
 let fallos = 0
@@ -89,6 +89,22 @@ console.log('\n7. Mini-tendencia')
 {
   ok(miniTendencia([1, 2, 3, 3, 4]) === '2·3·3·4', 'enseña los 4 últimos')
   ok(miniTendencia([3]) === '3', 'uno solo')
+}
+
+console.log('\n8. Observaciones con rúbrica: cuenta la nota, no el nivel')
+{
+  const reg = (id: number, fecha: string, valor: number, nota: number | null) =>
+    ({ id, fecha, valor, nota, criterios_json: '["CE1.1"]', deleted_at: null })
+  ok(notaDeRegistro({ valor: 3 }) === 7.5 && notaDeRegistro({ valor: 3, nota: 6.8 }) === 6.8, 'la nota del registro es la de la rúbrica si la trae')
+  ok(nivelDeNota(6.8) === 3 && nivelDeNota(2) === 1 && nivelDeNota(10) === 4 && nivelDeNota(0) === 1, 'y el nivel equivalente va de 1 a 4', `${nivelDeNota(6.8)} ${nivelDeNota(2)} ${nivelDeNota(10)} ${nivelDeNota(0)}`)
+  const media = derivarNotas([reg(1, '2026-10-03', 3, 7.5), reg(2, '2026-10-15', 3, 6.3)], 'media').get('CE1.1')
+  ok(media?.valor === 6.9 && media.n === 2, 'media de dos observaciones con rúbrica: 7,5 y 6,3 → 6,9', String(media?.valor))
+  const ultima = derivarNotas([reg(1, '2026-10-03', 3, 7.5), reg(2, '2026-10-15', 2, 5.4)], 'ultima').get('CE1.1')
+  ok(ultima?.valor === 5.4, 'con «última» manda la observación más reciente', String(ultima?.valor))
+  const mezcla = derivarNotas([reg(1, '2026-10-03', 2, null), reg(2, '2026-10-15', 3, 6.8)], 'media').get('CE1.1')
+  ok(mezcla?.valor === 5.9, 'un nivel del diario (2 → 5) y una rúbrica (6,8) hacen media sin convertir la rúbrica a nivel', String(mezcla?.valor))
+  const soloNiveles = derivarNotas([reg(1, '2026-10-03', 2, null), reg(2, '2026-10-04', 3, null), reg(3, '2026-10-05', 3, null)], 'media').get('CE1.1')
+  ok(soloNiveles?.valor === 6.7, 'los registros de nivel de siempre siguen dando lo mismo (2·3·3 → 6,7)', String(soloNiveles?.valor))
 }
 
 console.log(fallos ? `\n${fallos} fallo(s)` : '\nTodo correcto')

@@ -32,8 +32,12 @@ edumind_miclase/
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
+│   ├── src/nativo/   ← impresora.ts: plugin Impresora (PDF/AirPrint en iOS; iframe en web)
+│   ├── src/utils/compartir.ts ← descargarFichero(): la ÚNICA salida de ficheros (web: descarga; nativo: hoja de compartir)
 │   ├── capacitor.config.ts
-│   ├── ios/          ← proyecto Xcode (permisos en App/App/Info.plist)
+│   ├── ios/          ← proyecto Xcode con Swift Package Manager (sin CocoaPods). Permisos y
+│   │                   esquema de URL en App/App/Info.plist; plugins propios en
+│   │                   App/CapApp-SPM/Sources/CapApp-SPM/ (ImpresoraPlugin, MiClaseViewController)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
 ├── curriculum/       ← currículum por CCAA
 ├── scripts/          ← parse_curriculum.py · generar_iconos.py (todos los iconos)
@@ -184,19 +188,35 @@ edumind_miclase/
   (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
+- **«Todo el curso» es un resumen de solo lectura.** Sin unidad no hay dónde
+  anotar: las dos matrices enseñan las medias del trimestre y pulsar una
+  casilla abre `ExplicacionNota` («de dónde sale esta nota»: cada nota con
+  su instrumento, su porcentaje, la unidad en la que se anotó y su origen,
+  los tres trimestres y la nota de área), nunca `CeldaEvaluacion`. La matriz
+  por instrumento va con `soloLectura` (sin «Evaluar hoy», «Corregir»,
+  «Pegar» ni lápiz). El cálculo de la ficha es `calcularNotaArea`, el del
+  boletín; no suma nada por su cuenta. Las pruebas que quieran calificar
+  pulsan antes una pestaña de unidad (`.tab-unidad` a partir de la segunda).
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
-  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
-  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
-  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
-  antes.
+  botón de calificar (en un test con clave, también «Corregir por cámara»,
+  que es calificar). Tipo, peso, criterios, «Imprimir test» y «Pegar columna»
+  están tras `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`);
+  siguen en el DOM pero sin sitio, así que una prueba que pulse «Pegar
+  columna» o «Imprimir test» despliega antes.
 - **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
   y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
   examen de cada unidad, el billete de salida, speaking, listening. Un hijo
   es un `Instrumento` con `familia_id` (sin índice), tipo y color propios, un
   **subconjunto** de los criterios de su familia en cada unidad
   (`fijarCriteriosDeHijo` lo comprueba y falla si se sale) y un `peso`
-  relativo DENTRO de la familia (1 por defecto). La familia entra en el área
-  con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
+  relativo DENTRO de la familia. El cálculo normaliza por la suma, así que
+  el número guardado da igual; lo que se ENSEÑA es siempre el porcentaje
+  (`porcentajesEnFamilia`, resuelto una vez en `CeldaInstrumento.pct_familia`
+  con todos los hermanos) y el gestor lo deja escribir directo: fijar el 60 %
+  a uno reparte el 40 % entre los demás guardando su proporción
+  (`pesosAlFijarPorcentaje`) y desde entonces lo guardado son porcentajes.
+  Un hijo nuevo entra con el peso medio de sus hermanos. Luis veía «peso 1»
+  y lo leía como 1 %. La familia entra en el área con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
   (`calculo.ts`) y la usan tanto `calcularNotaArea` como la matriz: una nota
   directa de la familia (anterior a tener hijos) cuenta como un hijo más con
   peso 1, y un hijo sin familia viva cuenta como instrumento suelto. Las
@@ -266,6 +286,35 @@ edumind_miclase/
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
   reciben nota los criterios que alguna pregunta nombra y que la programación
   asigna al instrumento.
+- **Un test con clave lleva `opciones` y `correcta` por pregunta** (`PreguntaPrueba`,
+  solo `tipo: 'test'`; `normalizarPrueba` las descarta en otro tipo y nunca
+  convierte un `correcta: null` en 0). `respuestaDeMarca` traduce la letra
+  marcada a `ACIERTO`/`FALLO`/`EN_BLANCO`: la corrección por cámara guardará
+  lo mismo que la de a mano. Se importa además como examen escrito
+  (`pruebaDeExamenMarkdown`: «1. …», «a) …», correcta con `*`, negrita,
+  `[x]` o «Respuestas: 1-b»), que es lo que devuelve la IA con
+  `generarPromptTest` (`ia/pruebaPrompt.ts`) desde el editor; `examenAMarkdown`
+  exporta el examen del alumnado sin la clave.
+- **La hoja de respuestas se dibuja en milímetros desde `db/hojaOMR.ts`**, y
+  esa geometría es el contrato con el escáner: cuatro marcas de 10 mm en las
+  esquinas, QR de 34 mm arriba a la derecha con `MCT1|prueba_id|alumno_id|n|k`
+  (`payloadHoja`/`leerPayloadHoja`, con versión), burbujas de 5 mm a paso de
+  8 mm en dos columnas de 25. Hasta 50 preguntas × 5 opciones. `informes/hojasTest.ts`
+  genera las hojas (una página por alumno) y el examen del alumnado;
+  `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
+  solo con clave completa y plegado tras `[data-cabeceras-toggle]`).
+- **El escáner de hojas vive en el aparato** (`utils/lectorHoja.ts`, puro salvo
+  jsQR): marcas por manchas macizas no pegadas al borde (relleno de caja
+  > 0,74, que aguanta ~15° de giro y deja fuera los patrones del QR), una por
+  esquina de la foto; homografía mm → px con las cuatro; el QR se recorta
+  enderezado; cada burbuja se mide contra el papel de su alrededor
+  (oscuridad relativa: marcada ≥ 0,4, duda entre 0,22 y 0,4, y dos oscuras =
+  duda). Si el QR no se lee se prueban las cuatro orientaciones. `EscanerHojas`
+  («📷 Corregir por cámara» en la columna del examen) congela la foto, pinta
+  lo leído, deja corregir con el dedo y guarda por `guardarExamenDeAlumno`:
+  igual que a mano. Se prueba en `hoja-escaner.test.mjs` con la hoja de la
+  app «fotografiada» girada, del revés y apaisada sobre fondo oscuro; con
+  cámara real no se ha probado todavía.
 - **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
@@ -301,6 +350,19 @@ edumind_miclase/
   hoy», por si el docente la prefiere: Luis abrió «Evaluar hoy»
   en «Exposición oral» y se encontró una escala 1-4 que nadie había elegido,
   con la rúbrica a crear tras «Más» y un icono pequeño.
+- **Una rúbrica puede evolucionar, pero nunca por su cuenta.** Cambiar la
+  rúbrica de un alumno que ya tenía nota pregunta (`PreguntaRubrica`):
+  «corregir» sustituye, como siempre; «nueva observación» la mete en el
+  diario como registro con `nota` 0-10 y `niveles_rubrica`
+  (`evolucionarRubrica`), convirtiendo antes la nota que ya había en la
+  primera observación para que la media no la pierda. La agregación del
+  diario trabaja en notas (`notaDeRegistro`), no en niveles, y para los
+  registros de nivel de siempre da exactamente lo mismo (2,5 · 5 · 7,5 · 10),
+  así que un aparato sin actualizar no entra en ping-pong; `valor` guarda el
+  nivel equivalente (`nivelDeNota`) por si acaso. `materializarDiario` copia
+  las marcas de la última observación a la casilla y compara también eso.
+  Una pantalla crea una observación por alumno y pasada: los retoques la
+  editan. Afinar una nota puesta en esa misma pantalla no pregunta.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **El diario de evaluación no pisa nada.** La tabla `diario` guarda una
@@ -320,11 +382,31 @@ edumind_miclase/
   cuarentena y no viajan.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
+- **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
+  `<a download>` no hace nada dentro de WKWebView: la copia de seguridad
+  «se descargaba» en el iPad sin que saliera nada. En nativo la función abre
+  la hoja de compartir del sistema; en web descarga.
+- **Imprimir pasa por `Impresora` (`nativo/impresora.ts`).** `window.print()`
+  tampoco existe en WKWebView; el plugin Swift compone el PDF y abre la hoja
+  del sistema. En web sigue siendo el iframe oculto de siempre.
+- **El login nativo depende del servidor.** La app solo ofrece «Conectar
+  EDUmind» si `/api/auth/config` anuncia `redirect_uri_nativo`
+  (`es.edumind.miclase://auth/callback`); si no, lo explica. Ver DESPLIEGUE.md,
+  «Login desde la app nativa».
+- **`project.pbxproj` no se edita a mano** (ni con Xcode abierto ni por
+  script). Lo que haya que compilar va a `ios/App/CapApp-SPM/Sources/`, que
+  entra entero; lo que haya que añadir al target (p. ej. `PrivacyInfo.xcprivacy`)
+  lo hace el docente arrastrándolo en Xcode.
+- **`iosScheme` no se fija en `capacitor.config.ts`.** iOS no admite http/https
+  como esquema propio y Capacitor lo ignora: el origen real es
+  `capacitor://localhost`, y cambiarlo tras publicar vaciaría IndexedDB.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
 - Empaquetar nativo: `npm run nativo:sync` (y `nativo:ios` / `nativo:android`
-  para abrir Xcode o Android Studio — requieren macOS o Android Studio)
+  para abrir Xcode o Android Studio — requieren macOS o Android Studio).
+  Capacitor 8 necesita Node ≥ 22: en el servidor (Node 20) solo se compila la web.
+- Compilar iOS sin abrir Xcode: ver DESPLIEGUE.md, «Compilar en el Mac» (xcodebuild)
 - Backend solo: `npm run dev:backend` (puerto 3270)
 - Frontend solo: `npm run dev:frontend` (puerto 5173)
 - Seed DB: `npm run seed`

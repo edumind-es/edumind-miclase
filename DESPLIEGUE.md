@@ -161,14 +161,39 @@ python3 scripts/generar_iconos.py   # web, iOS y Android de una vez
 npm run nativo:sync                 # build + copia a los proyectos nativos
 ```
 
-Ojo con la versión de Node: **Capacitor 7 es la última que funciona con Node 20**,
-que es lo que hay en este servidor. Capacitor 8 exige Node ≥ 22; si algún día se
-actualiza Node, se puede subir.
+Ojo con la versión de Node: **Capacitor 8 exige Node ≥ 22**. En este servidor
+hay Node 20, así que el empaquetado nativo se hace en el Mac, no aquí; el
+`npm run build` de la web sigue funcionando con Node 20.
+
+### Qué hace distinto la app nativa (y por qué)
+
+Dentro de WKWebView hay tres cosas de la web que **no existen** y que fallaban
+en silencio: la descarga de ficheros (`<a download>`), `window.print()` y el
+login por redirección. La app las resuelve así:
+
+- **Ficheros** (copias de seguridad, CSV, informes HTML, rúbricas, QR,
+  evidencias): todos salen por `descargarFichero` de `utils/compartir.ts`, que
+  en nativo escribe en la caché de la app y abre la **hoja de compartir del
+  sistema** (Guardar en Archivos, AirDrop, Mail…). Cualquier `a.download`
+  nuevo vuelve a no hacer nada en el iPad: no los uses.
+- **Imprimir / PDF** (informes y hoja de QR de mesa): el plugin propio
+  `Impresora` (`src/nativo/impresora.ts` ↔
+  `ios/App/CapApp-SPM/Sources/CapApp-SPM/ImpresoraPlugin.swift`) compone el
+  HTML en A4, genera el PDF y abre la hoja del sistema, donde está AirPrint.
+- **Login con EDUmind**: ver «Login desde la app nativa», más abajo. Hasta que
+  el servidor lo admita, la app no enseña el botón y lo explica; todo lo demás
+  —modo local, enlace directo por QR, paquete por AirDrop— funciona igual.
+- **Origen**: la app se sirve desde `capacitor://localhost` (iOS no admite
+  fijar `https` como esquema propio; el CORS del backend ya lo lista). No
+  cambiarlo una vez publicada: cambiaría el origen de IndexedDB y el docente
+  vería su cuaderno vacío.
 
 ### Compilar en el Mac, paso a paso
 
-En este servidor no hay Xcode ni CocoaPods, así que el proyecto se prepara aquí
-y se compila allí. Lo que sigue está pensado para hacerse de una sentada.
+El proyecto iOS usa **Swift Package Manager**, no CocoaPods: no hace falta Ruby,
+Homebrew ni `pod install`. Xcode resuelve Capacitor y los plugins solo al abrir
+el proyecto, a partir de `ios/App/CapApp-SPM/Package.swift` (lo escribe
+`cap sync`; no se edita a mano).
 
 **1. Llevarse el código.** Se clona desde el remoto de GitHub, que conserva el
 historial completo:
@@ -179,8 +204,10 @@ git clone https://github.com/edumind-es/edumind-miclase.git
 cd edumind-miclase
 ```
 
-**2. Preparar.** Hace falta Node (18 o superior) y CocoaPods
-(`brew install cocoapods`):
+**2. Preparar.** Hace falta Xcode y Node 22 o superior. Si el Mac no tiene
+Node, vale una copia local sin permisos de administrador: descomprime el
+tarball oficial (`node-v22.x-darwin-arm64.tar.gz`) en `~/.local/node` y añade
+`export PATH="$HOME/.local/node/bin:$PATH"` a la sesión.
 
 ```bash
 cd frontend && npm install && cd ..
@@ -188,26 +215,104 @@ npm run nativo:sync          # compila la web y la mete en el proyecto iOS
 cd frontend && npx cap open ios
 ```
 
-`npx cap sync` ejecuta `pod install` automáticamente cuando encuentra
-CocoaPods; en este servidor se salta ese paso y avisa.
-
-**3. En Xcode, tres cosas y solo tres:**
+**3. En Xcode, dos cosas y solo dos:**
 
 1. Selecciona el target **App** → pestaña **Signing & Capabilities** →
    en **Team** elige tu equipo de desarrollador. Con la firma automática, Xcode
    registra el identificador `es.edumind.miclase` por ti.
 2. Arrastra `App/PrivacyInfo.xcprivacy` al target **App** en el navegador de
    proyecto (desmarca *Copy items if needed*: el fichero ya está en su sitio).
-   Comprueba que aparece en **Build Phases → Copy Bundle Resources**. Sin esto
-   App Store Connect se queja del manifiesto de privacidad al subir.
-3. Elige un iPad conectado o un simulador y pulsa **Run**.
+   Comprueba que aparece en **Build Phases → Copy Bundle Resources**. Es el
+   único fichero que no está ya en el target: `project.pbxproj` no se edita
+   fuera de Xcode (editarlo con Xcode abierto lo corrompe), y añadirlo es
+   justo lo que hace Xcode al soltarlo.
 
-**4. Publicar.** `Product → Archive` → *Distribute App*. Para TestFlight basta
-con eso; para la App Store hay que rellenar la ficha de privacidad en App Store
-Connect. Las respuestas, según lo que hace la app: **no se recogen datos**, no
-hay rastreo y no hay identificadores. Si el validador señala un «required reason
-API», el que corresponde es `NSPrivacyAccessedAPICategoryUserDefaults` con
-motivo `CA92.1`, que ya está declarado en el manifiesto.
+No hay que añadir ficheros Swift al target. Los plugins propios
+(`ImpresoraPlugin`, `MiClaseViewController`) viven en
+`ios/App/CapApp-SPM/Sources/CapApp-SPM/`, que se compila entero sin tocar el
+proyecto; `SceneDelegate.swift` los importa con `import CapApp_SPM`.
+
+**4. Probar.** Elige un iPad conectado o un simulador, pulsa **Run** y repasa
+la tabla de abajo. Desde la terminal, sin abrir Xcode:
+
+```bash
+cd frontend/ios/App
+xcodebuild -project App.xcodeproj -scheme App -sdk iphonesimulator \
+  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+```
+
+**5. Publicar.** `Product → Archive` → *Distribute App* → *App Store Connect*.
+Para TestFlight basta con eso. Para la App Store, en App Store Connect:
+
+- **Privacidad de la app**: «No se recogen datos». No hay rastreo ni
+  identificadores; la sincronización opcional sube sobres cifrados que el
+  servidor no puede leer, y en esta versión la app nativa ni siquiera ofrece
+  la cuenta de EDUmind hasta que el servidor admita el login nativo.
+- **Cifrado de exportación**: ya contestado en `Info.plist`
+  (`ITSAppUsesNonExemptEncryption = false`): la app solo usa el cifrado del
+  sistema (HTTPS y Web Crypto de WebKit), que está exento.
+- **Notas para la revisión**: la app funciona completa sin cuenta (modo
+  local), así que no hace falta credencial de prueba. Conviene sugerir el
+  recorrido: crear una clase, añadir alumnado, calificar en el Calificador,
+  y en Informes pulsar «Imprimir / PDF».
+- **Capturas**: iPad de 13" e iPhone de 6,9" como mínimo; se hacen desde el
+  simulador (⌘S).
+- Si el validador señala un «required reason API», el que corresponde es
+  `NSPrivacyAccessedAPICategoryUserDefaults` con motivo `CA92.1`, que ya está
+  declarado en el manifiesto.
+- Cada subida nueva necesita subir `CURRENT_PROJECT_VERSION` (el *Build*) en
+  el target; `MARKETING_VERSION` (1.0) es la versión que ve el público.
+
+### Login desde la app nativa
+
+**Estado (comprobado 2026-10-13):** `https://miclase.edumind.es/api/auth/config`
+ya devuelve `redirect_uri_nativo: "es.edumind.miclase://auth/callback"`, así
+que el servidor en producción admite el login desde la app. El código de
+`backend/src/routes/auth.js` de este clon todavía no lo incluye: antes de
+tocar ese fichero hay que traer los cambios del servidor. Queda por confirmar
+que el proveedor OIDC de Authentik tenga esa redirect URI en su lista; si no,
+Authentik rechaza el login con «redirect_uri no permitida».
+
+En la web, «Conectar EDUmind» redirige a Authentik y este vuelve a
+`https://miclase.edumind.es/auth/callback`. En la app eso no sirve: Capacitor
+manda las direcciones externas a Safari, y Authentik volvería a la web, donde
+no está el verificador PKCE que generó la app. El camino correcto ya está
+implementado en el frontend (`auth/AuthProvider.tsx`): abrir Authentik en el
+navegador del sistema y volver por el esquema propio de la app,
+`es.edumind.miclase://auth/callback`, declarado en `Info.plist`.
+
+Para que funcione hacen falta dos cambios **fuera del frontend** (el segundo
+ya está en el servidor de producción, no en este clon; `auth.js` es fichero
+crítico y requiere confirmación expresa):
+
+1. **Authentik**: en el proveedor OIDC de MiClase, añadir
+   `es.edumind.miclase://auth/callback` a las *Redirect URIs* permitidas.
+2. **Backend** (`backend/src/routes/auth.js`): anunciar el redirect nativo en
+   `/config` y aceptar en `/callback` el `redirect_uri` con el que se inició
+   el login, limitado a una lista cerrada:
+
+   ```js
+   const REDIRECT_URI_NATIVO = process.env.AUTHENTIK_REDIRECT_URI_NATIVO
+     || 'es.edumind.miclase://auth/callback'
+   const REDIRECTS_PERMITIDOS = new Set([REDIRECT_URI, REDIRECT_URI_NATIVO])
+
+   // en app.get('/config'):
+       redirect_uri_nativo: REDIRECT_URI_NATIVO,
+
+   // en app.post('/callback'):
+       const { code, code_verifier, nonce, redirect_uri } = req.body || {}
+       const redirectUri = redirect_uri || REDIRECT_URI
+       if (!REDIRECTS_PERMITIDOS.has(redirectUri)) {
+         return reply.status(400).send({ error: 'redirect_uri no admitido' })
+       }
+       // …y en el POST a /application/o/token/:
+           redirect_uri: redirectUri,
+   ```
+
+Hasta entonces la app nativa no muestra el botón de conectar y, en
+Sincronizar, explica que el servidor aún no admite el login desde la app. En
+cuanto `/api/auth/config` devuelva `redirect_uri_nativo`, el botón aparece
+solo, sin publicar una versión nueva en la tienda.
 
 ### Qué revisar en el iPad antes de dar por buena la compilación
 
@@ -218,7 +323,10 @@ motivo `CA92.1`, que ya está declarado en el manifiesto.
 | Cerrar la app, esperar y volver a abrirla con las notas puestas | Es la razón de ser del empaquetado: el almacenamiento debe sobrevivir |
 | Abrir la app en modo avión | Debe arrancar y dejar calificar sin red |
 | Girar el iPad y abrir el teclado en el calificador | Las áreas seguras y `contentInset` del teclado |
-| Entrar en Sincronizar | Debe aparecer el campo de servidor, que solo se muestra en la app nativa |
+| Entrar en Sincronizar | Debe aparecer el campo de servidor, que solo se muestra en la app nativa; y, mientras el servidor no admita el login nativo, el aviso en lugar del botón «Conectar con EDUmind» |
+| Informes → «Descargar copia de seguridad» | Debe abrirse la hoja de compartir del sistema (Guardar en Archivos, AirDrop…). Si no pasa nada, `utils/compartir.ts` no está detectando el contenedor nativo |
+| Informes → «Imprimir / PDF» y Mis clases → hoja de QR de mesa | Debe salir la hoja del sistema con el PDF ya compuesto. Si no, el plugin `Impresora` no está registrado en `MiClaseViewController` |
+| Compartir un paquete por AirDrop y recibirlo en el otro aparato | El fichero debe llegar como `.miclasesync.json` y poder elegirse en «Recibir un paquete» |
 
 ### Android
 

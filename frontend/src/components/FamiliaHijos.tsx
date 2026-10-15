@@ -2,9 +2,12 @@
  * Lo que el docente hace DENTRO de una familia de instrumentos.
  *
  * Va debajo de cada familia en ⚙ Instrumentos. Lista sus hijos —speaking,
- * listening, el examen de cada unidad, el billete de salida— con tipo, peso
- * relativo y los criterios que cubren en cada unidad (siempre dentro de los
- * de la familia). Ofrece añadir uno a mano o lanzar el asistente con las
+ * listening, el examen de cada unidad, el billete de salida— con tipo, su
+ * porcentaje dentro de la familia y los criterios que cubren en cada unidad
+ * (siempre dentro de los de la familia). El porcentaje se escribe directo:
+ * fijar uno reparte el resto entre los demás guardando su proporción
+ * (`pesosAlFijarPorcentaje`), y lo guardado pasa a ser ese mismo porcentaje.
+ * Luis veía «peso 1» y lo leía como 1 %. Ofrece añadir uno a mano o lanzar el asistente con las
  * plantillas del área.
  *
  * Nada de lo que hay aquí escribe notas: solo instrumentos y sus criterios.
@@ -17,6 +20,7 @@ import {
 } from '@/db/queries'
 import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrumento } from '@/ia/instrumentosConfig'
+import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
 import AsistenteFamilia from './AsistenteFamilia'
 
 interface Props {
@@ -91,7 +95,15 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
     return ids.size
   }
   const totalFamilia = new Set(cobertura.flatMap(u => u.criterios)).size
-  const sumaPesos = hijos.reduce((s, h) => s + (h.peso > 0 ? h.peso : 1), 0)
+  const porcentajes = porcentajesEnFamilia(hijos.map(h => h.peso))
+  /** Guarda los pesos que cambian tras fijar el porcentaje de un hijo (o igualarlos). */
+  const guardarPesos = async (nuevos: number[]) => {
+    await Promise.all(hijos.map((h, i) => (nuevos[i] !== h.peso ? actualizarInstrumento(h.id!, { peso: nuevos[i] }) : Promise.resolve())))
+    cambiado()
+  }
+  const fijarPorcentaje = (idx: number, pct: number) => guardarPesos(pesosAlFijarPorcentaje(hijos.map(h => h.peso), idx, pct))
+  const igualar = () => guardarPesos(porcentajesEnFamilia(hijos.map(() => 1)))
+  const yaIguales = porcentajes.every(v => Math.abs(v - 100 / hijos.length) < 1)
 
   return (
     <div data-familia-hijos style={{ marginTop: 10, paddingTop: 10, borderTop: '1px dashed var(--gris-300)' }}>
@@ -114,9 +126,15 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
         <span style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
           {hijos.length === 0
             ? <>Nada todavía: se califica directamente con «{familia.nombre}».</>
-            : <>{hijos.length} instrumento{hijos.length !== 1 ? 's' : ''} · cuentan por su peso relativo y la familia pesa su {familia.peso} % en el área.</>}
+            : <>{hijos.length} instrumento{hijos.length !== 1 ? 's' : ''} · se reparten el {familia.peso} % de la familia en el área: <span data-reparto-hijos>{porcentajes.map(v => `${v} %`).join(' · ')}</span>.</>}
         </span>
         <div style={{ flex: 1 }} />
+        {hijos.length > 1 && !yaIguales && (
+          <button data-hijos-igualar onClick={igualar} className="btn-secondary" style={{ fontSize: 11.5 }}
+            title="Que todos cuenten lo mismo dentro de la familia">
+            Igualar
+          </button>
+        )}
         {totalFamilia > 0 && (
           <button data-asistente-abrir onClick={() => setAsistente(true)} className="btn-secondary" style={{ fontSize: 11.5 }}
             title="Elegir entre lo que suele hacerse en esta área: speaking, listening, un examen por unidad, billete de salida…">
@@ -139,7 +157,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
             const color = colorDeInstrumento(h, idx)
             const n = totalCriterios(h)
             const abierto = editando === h.id
-            const pct = Math.round(((h.peso > 0 ? h.peso : 1) / sumaPesos) * 100)
+            const pct = porcentajes[idx]
             return (
               <div key={h.id} data-hijo data-nombre={h.nombre} style={{ background: 'white', border: `1px solid ${color}40`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '6px 10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -166,14 +184,15 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                   <select value={h.tipo} aria-label="Tipo" onChange={e => actualizarInstrumento(h.id!, { tipo: e.target.value }).then(cambiado)} style={{ fontSize: 11.5, padding: '4px 5px' }}>
                     {TIPOS_INSTRUMENTO.map(t => <option key={t.value} value={t.value}>{t.icon} {t.label}</option>)}
                   </select>
-                  <label title="Peso relativo dentro de la familia. Con 1 en todos, cuentan igual; un examen final con 3 cuenta el triple que un control con 1."
+                  <label title={`Cuánto cuenta dentro de «${familia.nombre}». Al cambiarlo, los demás se reparten el resto guardando su proporción.`}
                     style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gris-600)', fontWeight: 600 }}>
-                    peso
-                    <input type="number" min={1} max={99} defaultValue={h.peso > 0 ? h.peso : 1} data-peso-hijo
-                      onBlur={e => { const v = Number(e.target.value); if (v >= 1 && v !== h.peso) actualizarInstrumento(h.id!, { peso: v }).then(cambiado) }}
+                    <input type="number" min={1} max={100} key={`${h.id}-${pct}`} defaultValue={pct} data-peso-hijo
+                      aria-label={`Porcentaje de «${h.nombre}» dentro de «${familia.nombre}»`}
+                      onBlur={e => { const v = Number(e.target.value); if (Number.isFinite(v) && v >= 1 && Math.round(v) !== pct) fijarPorcentaje(idx, v) }}
                       onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
-                      style={{ width: 44, fontSize: 12, fontWeight: 700, textAlign: 'center', padding: '4px 2px' }} />
-                    <span style={{ fontWeight: 500 }}>({pct} %)</span>
+                      style={{ width: 46, fontSize: 12, fontWeight: 700, textAlign: 'center', padding: '4px 2px' }} />
+                    <span style={{ fontWeight: 600 }}>%</span>
+                    <span style={{ fontWeight: 500 }} title="De la nota del área">· {Math.round((familia.peso * pct) / 100 * 10) / 10} % del área</span>
                   </label>
                   <button data-hijo-criterios onClick={() => setEditando(abierto ? null : h.id!)} aria-expanded={abierto}
                     title="Qué criterios de la familia evalúa este instrumento, unidad por unidad"

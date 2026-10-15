@@ -12,7 +12,7 @@ import {
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
   getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
   recuperarNotaAnterior, descartarNotaAnterior, getRegistrosDeCelda,
-  type CeldaInstrumento, type PruebaGuardada,
+  type CeldaInstrumento, type PruebaGuardada, evolucionarRubrica, editarRegistro, borrarRegistro,
 } from '@/db/queries'
 import PruebaEditor from './PruebaEditor'
 import CorregirPrueba from './CorregirPrueba'
@@ -22,7 +22,8 @@ import InstrumentosManager from './InstrumentosManager'
 import RubricaEditor from './RubricaEditor'
 import CriteriosHermanos from './CriteriosHermanos'
 import DiarioCelda from './DiarioCelda'
-import { etiquetaAgregacion } from '@/db/diario'
+import PreguntaRubrica, { SelectorModoRubrica, type ModoRubrica } from './PreguntaRubrica'
+import { etiquetaAgregacion, nivelDeNota, notaDeRegistro } from '@/db/diario'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
@@ -131,6 +132,18 @@ export default function CeldaEvaluacion({
   const [manualAbierta, setManualAbierta] = useState(false)
   /** «Más»: lo que no es el instrumento, plegado al final. Abierto, se queda abierto al cambiar de alumno. */
   const [masAbierto, setMasAbierto] = useState(false)
+  /**
+   * Cambiar una rúbrica que ya tenía nota: ¿corrección u observación nueva?
+   * Se pregunta la primera vez (`PreguntaRubrica`) y vale mientras el panel
+   * siga en este alumno; `registroRubrica` es la observación creada desde
+   * aquí, que los retoques siguientes editan en vez de crear otra.
+   */
+  const [modoRubrica, setModoRubrica] = useState<ModoRubrica | null>(null)
+  const [registroRubrica, setRegistroRubrica] = useState<number | null>(null)
+  const [pendienteRubrica, setPendienteRubrica] = useState<Record<string, number> | null>(null)
+  /** La nota se ha puesto desde este mismo panel: afinarla no es «cambiar una nota ya puesta». */
+  const [tocadaAqui, setTocadaAqui] = useState(false)
+  useEffect(() => { setModoRubrica(null); setRegistroRubrica(null); setPendienteRubrica(null); setTocadaAqui(false) }, [alumno.id, instrumentoId])
   // Sube uno cada vez que se toca la configuración: obliga a releer la rúbrica
   // del instrumento, que si no se quedaba con los niveles de antes.
   const [refrescoInstr, setRefrescoInstr] = useState(0)
@@ -327,15 +340,70 @@ export default function CeldaEvaluacion({
     const siguiente = { ...marcado }
     if (siguiente[nombre] === valor) delete siguiente[nombre]
     else siguiente[nombre] = valor
+    // Una casilla que ya evoluciona (tiene observaciones) sigue evolucionando;
+    // una con nota puesta de una vez pregunta antes de tocarla.
+    const modo = modoRubrica ?? (registros.length > 0 ? 'evolucion' : null)
+    const teniaNota = valorActual != null && Object.keys(marcado).length > 0 && !tocadaAqui
+    if (teniaNota && modo === null && registroRubrica == null) { setPendienteRubrica(siguiente); return }
     setMarcado(siguiente)
-    const { nota } = notaDeRubrica(indicadores, niveles, siguiente)
-    await guardarNota(nota, siguiente)
+    if (!teniaNota && registroRubrica == null && registros.length === 0) setTocadaAqui(true)
+    await aplicarMarcas(siguiente, (teniaNota || registroRubrica != null || registros.length > 0) ? (modo ?? 'corregir') : 'corregir')
   }
 
-  /** Quitar todas las marcas y la nota que salía de ellas. */
+  /** Guarda las marcas: sustituyendo la nota (corregir) o como observación del diario (evolución). */
+  const aplicarMarcas = async (siguiente: Record<string, number>, modo: ModoRubrica) => {
+    const { nota } = notaDeRubrica(indicadores, niveles, siguiente)
+    if (modo !== 'evolucion' || !instrumentoId) { await guardarNota(nota, siguiente); return }
+    setGuardando(true)
+    try {
+      const area = { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }
+      if (nota == null) {
+        if (registroRubrica != null) { await borrarRegistro(registroRubrica); setRegistroRubrica(null) }
+      } else if (registroRubrica != null) {
+        await editarRegistro(registroRubrica, { nota, niveles_rubrica: siguiente, valor: nivelDeNota(nota) })
+      } else {
+        const r = await evolucionarRubrica({
+          alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+          criterios: destinosNota, area, nota, niveles_rubrica: siguiente,
+        })
+        setRegistroRubrica(r.id)
+      }
+      setOrigenActual('diario')
+      setRecarga(n => n + 1)
+      avisar({ tipo: 'ok', texto: nota == null ? 'Observación retirada' : `Observación con ${nota} guardada: la nota es la ${etiquetaAgregacion(instrumentoSel?.agregacion).toLowerCase()} de todas` }, 2500)
+      onGuardado()
+    } catch {
+      avisar({ tipo: 'error', texto: 'No se pudo guardar la observación' })
+    } finally { setGuardando(false) }
+  }
+
+  const elegirModoRubrica = (m: ModoRubrica) => {
+    setModoRubrica(m)
+    const siguiente = pendienteRubrica
+    setPendienteRubrica(null)
+    if (siguiente) { setMarcado(siguiente); void aplicarMarcas(siguiente, m) }
+  }
+
+  /** Quitar todas las marcas y la nota que salía de ellas (y las observaciones, si las hay). */
   const limpiarRubrica = async () => {
+    if (registros.length > 0) {
+      if (!confirm(`¿Borrar las ${registros.length} observaciones con la rúbrica? La casilla se queda sin nota.`)) return
+      setGuardando(true)
+      try { for (const r of registros) await borrarRegistro(r.id!) } finally { setGuardando(false) }
+      setRegistroRubrica(null); setOrigenActual(null); setMarcado({}); setValorActual(null)
+      setRecarga(n => n + 1); onGuardado()
+      return
+    }
     setMarcado({})
     await guardarNota(null, {})
+  }
+
+  const borrarObservacionRubrica = async (id: number) => {
+    if (!confirm('¿Borrar esta observación? La nota se recalcula con las que queden.')) return
+    setGuardando(true)
+    try { await borrarRegistro(id) } finally { setGuardando(false) }
+    if (id === registroRubrica) setRegistroRubrica(null)
+    setRecarga(n => n + 1); onGuardado()
   }
 
   /**
@@ -417,6 +485,15 @@ export default function CeldaEvaluacion({
       />
     )}
 
+    {pendienteRubrica && (
+      <PreguntaRubrica
+        notaActual={valorActual}
+        regla={etiquetaAgregacion(instrumentoSel?.agregacion)}
+        onElegir={elegirModoRubrica}
+        onCancelar={() => setPendienteRubrica(null)}
+      />
+    )}
+
     {pruebaAbierta && instrumentoSel && (
       <PruebaEditor
         instrumentoId={instrumentoSel.instrumento_id}
@@ -424,6 +501,8 @@ export default function CeldaEvaluacion({
         unidadId={unidadId}
         unidadNombre={unidadNombre}
         criterios={[criterio, ...hermanos]}
+        asignaturaNombre={asig.nombre_display}
+        nivel={`${grupo.curso}º ${grupo.etapa}`}
         onCerrar={() => { setPruebaAbierta(false); trasEditarConfig() }}
       />
     )}
@@ -558,7 +637,7 @@ export default function CeldaEvaluacion({
                           <span>
                             {ins.nombre}
                             <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
-                              {c.label}{ins.familia_id != null ? ` · peso ${ins.peso} en ${ins.familia_nombre}` : ` · ${ins.peso}%`}{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
+                              {c.label}{ins.familia_id != null ? ` · ${ins.pct_familia} % de ${ins.familia_nombre}` : ` · ${ins.peso}%`}{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
                             </span>
                           </span>
                         </button>
@@ -587,7 +666,7 @@ export default function CeldaEvaluacion({
 
           {/* La rúbrica se califica indicador a indicador. La nota no se pide:
               sale de lo marcado, ponderado por el peso de cada indicador. */}
-          {calificaPorRubrica && (!calificaPorDiario || manualAbierta) && (
+          {calificaPorRubrica && (
             <div style={{ marginBottom: 14 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 7, flexWrap: 'wrap' }}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
@@ -605,6 +684,30 @@ export default function CeldaEvaluacion({
                 )}
               </div>
 
+              {/* Las observaciones con la rúbrica, si la casilla evoluciona: la nota es su agregación. */}
+              {registros.length > 0 && (
+                <div data-historial-rubrica style={{ marginBottom: 10, padding: '8px 11px', borderRadius: 9, background: 'var(--azul-100)', fontSize: 12.5, lineHeight: 1.5 }}>
+                  <div style={{ fontWeight: 700, color: 'var(--azul-900)' }}>
+                    {registros.length} observaci{registros.length !== 1 ? 'ones' : 'ón'} · la nota es la {etiquetaAgregacion(instrumentoSel?.agregacion).toLowerCase()}
+                    {valorActual != null ? <>: <strong>{valorActual}</strong></> : null}
+                  </div>
+                  <ul style={{ listStyle: 'none', margin: '4px 0 0', padding: 0, display: 'flex', flexWrap: 'wrap', gap: '4px 12px' }}>
+                    {registros.map(r => (
+                      <li key={r.id} data-registro-rubrica style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ color: 'var(--gris-600)' }}>{r.fecha.slice(0, 10)}</span>
+                        <strong style={{ color: calificativo(notaDeRegistro(r)).color }}>{notaDeRegistro(r)}</strong>
+                        {r.id === registroRubrica && <span style={{ fontSize: 10.5, color: 'var(--gris-500)' }}>(de hoy)</span>}
+                        <button type="button" onClick={() => borrarObservacionRubrica(r.id!)} disabled={guardando} title="Borrar esta observación" aria-label={`Borrar la observación del ${r.fecha.slice(0, 10)}`}
+                          style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 14, padding: '0 2px', lineHeight: 1 }}>×</button>
+                      </li>
+                    ))}
+                  </ul>
+                  <div style={{ fontSize: 11.5, color: 'var(--gris-600)', marginTop: 3 }}>Las marcas de abajo son las de la última; cambiarlas añade o retoca la observación de hoy.</div>
+                </div>
+              )}
+              {valorActual != null && registros.length === 0 && (
+                <div style={{ marginBottom: 8 }}><SelectorModoRubrica modo={modoRubrica} onCambiar={setModoRubrica} /></div>
+              )}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {indicadores.map((ind, ii) => {
                   const pesoMostrado = ind.peso ?? Math.round((100 / indicadores.length) * 10) / 10
@@ -706,7 +809,7 @@ export default function CeldaEvaluacion({
 
           {/* Con la nota derivada del diario, poner otra a mano es una decisión:
               se avisa de que el diario deja de contar hasta el próximo registro. */}
-          {calificaPorDiario && !manualAbierta && (
+          {calificaPorDiario && !manualAbierta && !calificaPorRubrica && (
             <div style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
               <button data-diario-manual onClick={() => {
                   if (confirm('Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?')) setManualAbierta(true)

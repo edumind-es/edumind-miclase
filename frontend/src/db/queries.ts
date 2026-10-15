@@ -1,11 +1,11 @@
 import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias } from './calculo'
+import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, porcentajesEnFamilia } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
-import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada } from './diario'
+import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
 import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba } from './prueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -385,6 +385,13 @@ export async function getHijos(familia_id: number): Promise<Instrumento[]> {
  * Da de alta un hijo dentro de una familia. Hereda área y trimestres; su
  * `peso` es relativo dentro de la familia (1 = igual que los demás).
  */
+/** Peso medio (entero, mínimo 1) de unos hijos; 1 si no hay ninguno. */
+function pesoMedio(hijos: Instrumento[]): number {
+  if (hijos.length === 0) return 1
+  const suma = hijos.reduce((s, h) => s + (h.peso > 0 ? h.peso : 1), 0)
+  return Math.max(1, Math.round(suma / hijos.length))
+}
+
 export async function crearInstrumentoHijo(
   familia_id: number,
   data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
@@ -396,7 +403,9 @@ export async function crearInstrumentoHijo(
   const reg = nuevo({
     asignatura_id: familia.asignatura_id, familia_id,
     nombre: data.nombre.trim(), tipo: data.tipo,
-    peso: data.peso != null && data.peso > 0 ? data.peso : 1,
+    // Sin peso pedido, el medio de sus hermanos: así un cuarto examen entra
+    // contando como los otros tres, estén en 1 · 1 · 1 o en 40 · 30 · 30.
+    peso: data.peso != null && data.peso > 0 ? data.peso : pesoMedio(hermanos),
     trimestres: familia.trimestres, orden: hermanos.length,
     agregacion: data.agregacion ?? null, created_at: now(),
   })
@@ -1857,6 +1866,9 @@ export type RegistroNuevo = {
   unidad_id: number | null
   /** Nivel 1-4. */
   valor: number
+  /** Nota 0-10 y marcas cuando la observación es con rúbrica (ver `RegistroDiario`). */
+  nota?: number | null
+  niveles_rubrica?: Record<string, number> | null
   observacion?: string | null
   /** Criterios a los que aplica. El llamante los resuelve (`criteriosDeInstrumento`). */
   criterios: string[]
@@ -1894,9 +1906,11 @@ export async function getRegistrosDeCelda(
 export async function anadirRegistro(p: RegistroNuevo): Promise<{ id: number; notas: Record<string, number | null> }> {
   if (!Number.isInteger(p.valor) || p.valor < 1 || p.valor > 4) throw new Error('El nivel del registro va de 1 a 4')
   if (!p.criterios.length) throw new Error('Un registro del diario necesita al menos un criterio')
+  if (p.nota != null && (!Number.isFinite(p.nota) || p.nota < 0 || p.nota > 10)) throw new Error('La nota de la observación va de 0 a 10')
   const reg = nuevo({
     alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
     unidad_id: p.unidad_id ?? null, fecha: p.fecha ?? now(), valor: p.valor,
+    nota: p.nota ?? null, niveles_rubrica: p.niveles_rubrica ?? null,
     observacion: p.observacion ?? null,
     criterios_json: JSON.stringify([...new Set(p.criterios)]),
     ...p.area,
@@ -1907,7 +1921,7 @@ export async function anadirRegistro(p: RegistroNuevo): Promise<{ id: number; no
 }
 
 export async function editarRegistro(
-  id: number, cambios: Partial<Pick<RegistroDiario, 'valor' | 'observacion' | 'fecha'>>
+  id: number, cambios: Partial<Pick<RegistroDiario, 'valor' | 'nota' | 'niveles_rubrica' | 'observacion' | 'fecha'>>
 ): Promise<void> {
   const r = await db.diario.get(id)
   if (!r || r.deleted_at) return
@@ -1916,6 +1930,54 @@ export async function editarRegistro(
   }
   await db.diario.update(id, tocado(cambios))
   await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, { forzarSobreManual: true })
+}
+
+/**
+ * Una observación más con la rúbrica: la nota de la casilla pasa a ser la
+ * agregación de todas (la regla del instrumento), en vez de pisar la anterior.
+ *
+ * Si la nota de la casilla es manual (puesta con la rúbrica en el panel o en
+ * la pasada de clase, no derivada del diario), se convierte primero en una
+ * observación más, con su fecha y sus marcas: si no, «hacer media» con la
+ * nota vieja la perdería, que es justo lo contrario de lo que se pide. Da
+ * igual que la casilla tuviera ya registros de nivel: la nota manual los
+ * tapaba y ahora cuenta con ellos. Devuelve el id del registro nuevo, para
+ * que la misma pantalla lo edite en vez de crear otro a cada retoque.
+ */
+export async function evolucionarRubrica(p: {
+  alumno_id: number; instrumento_id: number; trimestre: number; unidad_id: number | null
+  criterios: string[]; area: DatosDeArea; nota: number; niveles_rubrica: Record<string, number>
+}): Promise<{ id: number; notas: Record<string, number | null>; convertida: boolean }> {
+  let convertida = false
+  {
+    const previas = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').equals(p.instrumento_id)
+      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.valor != null && c.origen !== 'diario')
+      .toArray()))
+    const previa = previas.find(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).length) ?? previas[0]
+    if (previa) {
+      await anadirRegistro({
+        alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
+        unidad_id: previa.unidad_id ?? p.unidad_id, criterios: p.criterios, area: p.area,
+        valor: nivelDeNota(previa.valor!), nota: previa.valor, niveles_rubrica: previa.niveles_rubrica ?? null,
+        fecha: previa.fecha ?? previa.updated_at,
+      })
+      convertida = true
+    }
+  }
+  const { id, notas } = await anadirRegistro({
+    alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
+    unidad_id: p.unidad_id, criterios: p.criterios, area: p.area,
+    valor: nivelDeNota(p.nota), nota: p.nota, niveles_rubrica: p.niveles_rubrica,
+  })
+  if (convertida) {
+    // La nota manual no se ha perdido: es la primera observación. El fantasma
+    // que deja la materialización («no cuenta») mentiría, así que se retira.
+    const conFantasma = vivos(await db.calificaciones.where('instrumento_id').equals(p.instrumento_id)
+      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.origen === 'diario' && c.valor_anterior != null)
+      .toArray())
+    for (const c of conFantasma) await db.calificaciones.update(c.id!, tocado({ valor_anterior: null, anterior_motivo: null }))
+  }
+  return { id, notas, convertida }
 }
 
 /** Borrado lógico del registro. Si era el último, la casilla se queda sin nota. */
@@ -1951,6 +2013,12 @@ export async function materializarDiario(
   for (const c of existentes) if (c.origen === 'diario') destinos.add(c.criterio_id)
 
   const ultimo = regs[regs.length - 1]
+  // Las marcas de la última observación con rúbrica se enseñan en la casilla
+  // (es lo que el panel y la pasada leen). Determinista: el orden es el de
+  // `ordenarRegistros`, el mismo en todos los aparatos.
+  const marcasUltimas = [...regs].reverse().find(r => r.niveles_rubrica && Object.keys(r.niveles_rubrica).length)?.niveles_rubrica ?? null
+  const mismasMarcas = (previa: Calificacion | undefined) =>
+    marcasUltimas == null || JSON.stringify(previa?.niveles_rubrica ?? null) === JSON.stringify(marcasUltimas)
   const items: CalItem[] = []
   const notas: Record<string, number | null> = {}
   for (const criterio_id of destinos) {
@@ -1961,7 +2029,7 @@ export async function materializarDiario(
 
     const esManual = !!previa && previa.origen !== 'diario' && previa.valor != null
     if (esManual && !opciones.forzarSobreManual) { notas[criterio_id] = previa.valor ?? null; continue }
-    if (previa && (previa.valor ?? null) === valor && (previa.origen ?? null) === origen) continue
+    if (previa && (previa.valor ?? null) === valor && (previa.origen ?? null) === origen && mismasMarcas(previa)) continue
 
     const area: DatosDeArea = previa
       ? { asignatura: previa.asignatura, curso: previa.curso, etapa: previa.etapa, comunidad: previa.comunidad }
@@ -1972,6 +2040,7 @@ export async function materializarDiario(
     items.push({
       ...area, alumno_id, instrumento_id, trimestre, criterio_id, valor, origen,
       unidad_id: ultimo?.unidad_id ?? previa?.unidad_id ?? null,
+      ...(marcasUltimas != null && valor != null ? { niveles_rubrica: marcasUltimas } : {}),
       ...fantasma,
     })
   }
@@ -2058,6 +2127,12 @@ export type CeldaInstrumento = {
   familia_nombre: string | null
   /** Peso de la familia en el área (el de la propia fila si es familia). */
   familia_peso: number
+  /**
+   * Porcentaje de este hijo dentro de su familia, contando a TODOS sus
+   * hermanos (también los que no evalúan lo que se mira); null si no es hijo.
+   * Resuelto aquí una vez, como el color, para que cabecera y panel digan lo mismo.
+   */
+  pct_familia: number | null
   /** Color de identidad, ya resuelto (propio o por orden). */
   color: string
 }
@@ -2141,6 +2216,13 @@ export async function getMatrizEvaluacion(
     }
   }
 
+  // Porcentaje de cada hijo dentro de su familia, con todos los hermanos.
+  const pctPorId = new Map<number, number>()
+  for (const familiaId of new Set(instrumentos.filter(i => i.familia_id != null).map(i => i.familia_id!))) {
+    const hermanos = instrumentos.filter(i => i.familia_id === familiaId)
+    porcentajesEnFamilia(hermanos.map(h => h.peso)).forEach((v, k) => pctPorId.set(hermanos[k].id!, v))
+  }
+
   const porCriterio = new Map<string, CeldaInstrumento[]>()
   const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
@@ -2168,6 +2250,7 @@ export async function getMatrizEvaluacion(
         familia_id: familia?.id ?? null,
         familia_nombre: familia?.nombre ?? null,
         familia_peso: familia ? familia.peso : ins.peso,
+        pct_familia: familia ? pctPorId.get(ins.id!) ?? null : null,
         color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
       })
     }
