@@ -10,7 +10,7 @@
  */
 import { useState } from 'react'
 import { anadirRegistro, borrarRegistro, type CeldaInstrumento, type DatosDeArea } from '@/db/queries'
-import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario } from '@/db/diario'
+import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario, notaDeRegistro } from '@/db/diario'
 import { calificativo } from '@/db/calculo'
 import type { Alumno, RegistroDiario } from '@/db/localDb'
 
@@ -102,16 +102,17 @@ export default function DiarioCelda({
       {registros.length > 0 && (
         <ul style={{ listStyle: 'none', margin: '0 0 8px', padding: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
           {registros.map(r => {
-            const c = calificativo(nivelDiarioANota(r.valor))
+            const c = calificativo(notaDeRegistro(r))
+            const conRubrica = r.nota != null
             return (
               <li key={r.id} data-registro style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5 }}>
                 <span style={{ color: 'var(--gris-500)', minWidth: 54, fontVariantNumeric: 'tabular-nums' }}>{fechaCorta(r.fecha)}</span>
-                <span title={ETIQUETAS_NIVEL[r.valor]} style={{
+                <span title={conRubrica ? `Observación con rúbrica: ${r.nota}` : ETIQUETAS_NIVEL[r.valor]} style={{
                   minWidth: 22, height: 22, borderRadius: 6, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 800, fontSize: 12, color: 'white', background: c.color,
-                }}>{r.valor}</span>
+                  fontWeight: 800, fontSize: 12, color: 'white', background: c.color, padding: '0 4px',
+                }}>{conRubrica ? r.nota : r.valor}</span>
                 <span style={{ flex: 1, color: 'var(--gris-900)', lineHeight: 1.35 }}>
-                  {r.observacion || <span style={{ color: 'var(--gris-500)' }}>{ETIQUETAS_NIVEL[r.valor]}</span>}
+                  {r.observacion || <span style={{ color: 'var(--gris-500)' }}>{conRubrica ? 'Con la rúbrica' : ETIQUETAS_NIVEL[r.valor]}</span>}
                 </span>
                 <button onClick={() => borrar(r)} disabled={bloqueado} title="Borrar este registro"
                   style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 15, padding: '0 2px', lineHeight: 1 }}>

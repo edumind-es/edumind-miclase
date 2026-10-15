@@ -319,6 +319,67 @@ try {
   await sesionR.getByRole('button', { name: 'Hecho' }).click()
   await sesionR.waitFor({ state: 'hidden', timeout: 5000 })
 
+  console.log('\n9b. Cambiar una rúbrica ya calificada pregunta: corregir o nueva observación')
+  const observaciones = () => p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const leer = (tabla) => new Promise((res) => {
+      const tx = db.transaction(tabla, 'readonly').objectStore(tabla).getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    const alumnos = (await leer('alumnos')).sort((a, b) => `${a.apellidos} ${a.nombre}`.localeCompare(`${b.apellidos} ${b.nombre}`, 'es'))
+    const a = alumnos[0]
+    return (await leer('diario')).filter(r => r.alumno_id === a.id)
+      .sort((x, y) => x.fecha < y.fecha ? -1 : 1)
+      .map(r => ({ rubrica: r.nota != null, nota: r.nota ?? r.valor * 2.5, marcas: Object.keys(r.niveles_rubrica ?? {}).length }))
+  })
+  const deRubrica = (lista) => lista.filter(o => o.rubrica)
+  const mediaDe = (lista) => Math.round((lista.reduce((s, o) => s + o.nota, 0) / lista.length) * 10) / 10
+  const notaAntes = notasR[0]
+  await colDiario.locator('[data-sesion-abrir]').click()
+  await sesionR.waitFor({ timeout: 8000 })
+  ok(await sesionR.locator('[data-selector-modo]').count() === 1, 'la pasada lleva el conmutador «al cambiar una nota ya puesta»')
+  // Otro nivel en toda la fila del primer alumno, que ya tenía nota de la pasada anterior.
+  await sesionR.locator('[data-sesion-fila]').first().locator('button[data-nivel]').nth(2).click()
+  const pregunta = p.locator('[data-pregunta-rubrica]')
+  await pregunta.waitFor({ timeout: 5000 })
+  ok((await pregunta.textContent()).includes(String(notaAntes)), 'pregunta diciendo la nota que ya tenía', String(notaAntes))
+  // El primer alumno ya tenía registros de nivel del paso 3; ninguno de rúbrica.
+  const nivelesPrevios = (await observaciones()).length
+  ok(deRubrica(await observaciones()).length === 0, 'y hasta elegir no ha escrito nada')
+  await pregunta.locator('[data-modo-rubrica="evolucion"]').click()
+  await pregunta.waitFor({ state: 'hidden', timeout: 5000 })
+  await p.waitForTimeout(900)
+  let obs = deRubrica(await observaciones())
+  ok(obs.length === 2 && obs[0].nota === notaAntes && obs[0].marcas === 3, 'la nota anterior se convierte en una observación más, con sus marcas', JSON.stringify(obs))
+  ok(obs[1].nota != null && obs[1].nota !== notaAntes, 'y la nueva es la siguiente', JSON.stringify(obs))
+  let e9 = await estado()
+  let esperada = mediaDe(await observaciones())
+  ok((await observaciones()).length === nivelesPrevios + 2, 'los registros de nivel que ya había siguen contando')
+  ok(idsCabecera.every(c => e9.notas[c]?.valor === esperada && e9.notas[c]?.origen === 'diario'), `la casilla pasa a ser la media de todas (${esperada}), derivada del diario, en todos los criterios`, JSON.stringify(e9.notas))
+  ok(await sesionR.locator('[data-selector-modo] [data-modo-rubrica="evolucion"][aria-checked="true"]').count() === 1, 'el conmutador queda en «nueva observación»')
+  // Afinar en la misma pasada retoca esa observación, no crea otra.
+  const notaHoy = obs[1].nota
+  await sesionR.locator('[data-sesion-fila]').first().locator('button[data-nivel]').nth(3).click()
+  await p.waitForTimeout(900)
+  obs = deRubrica(await observaciones())
+  ok(obs.length === 2 && obs[1].nota !== notaHoy, 'otro nivel en la misma pasada edita la observación de hoy, no crea otra', JSON.stringify(obs))
+  await foto('instrumentos-07-rubrica-evolutiva')
+  await sesionR.getByRole('button', { name: 'Hecho' }).click()
+  await sesionR.waitFor({ state: 'hidden', timeout: 5000 })
+
+  // En el panel de la casilla se ven las observaciones y la rúbrica con las marcas de la última.
+  await p.locator('[data-vista="instrumentos"]').click().catch(() => {})
+  const idxCol = await p.locator('[data-instr-th]').evaluateAll(ths => ths.findIndex(t => t.dataset.tipo !== 'prueba-escrita'))
+  await p.locator('table.matriz tbody tr').first().locator('[data-celda-instr]').nth(idxCol).click()
+  await panel.waitFor({ timeout: 8000 })
+  const historial = panel.locator('[data-historial-rubrica]')
+  await historial.waitFor({ timeout: 5000 })
+  ok(await historial.locator('[data-registro-rubrica]').count() === nivelesPrevios + 2, 'el panel de la casilla lista todas las observaciones, las de nivel y las de rúbrica')
+  ok(await panel.getByText(/Nota anterior: no cuenta/).count() === 0, 'y no enseña la nota convertida como fantasma: sí cuenta')
+  await foto('instrumentos-08-panel-evolutivo')
+  await p.keyboard.press('Escape')
+  await panel.waitFor({ state: 'hidden', timeout: 5000 })
+
   console.log('\n10. «Todo el curso» es un resumen de solo lectura que explica cada nota')
   await p.locator('.tab-unidad').nth(0).click()
   await p.locator('[data-resumen-curso]').waitFor({ timeout: 5000 })
