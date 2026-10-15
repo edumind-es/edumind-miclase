@@ -31,6 +31,8 @@ import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } f
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
+import ImprimirTest from '@/components/ImprimirTest'
+import EscanerHojas from '@/components/EscanerHojas'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
@@ -127,6 +129,8 @@ export default function EvaluacionPage() {
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
+  const [escanearEn, setEscanearEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
   const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
@@ -577,6 +581,8 @@ export default function EvaluacionPage() {
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
+                  onImprimir={col => setImprimirEn(col)}
+                  onEscanear={col => setEscanearEn(col)}
                 />
               )
             ) : (
@@ -875,6 +881,32 @@ export default function EvaluacionPage() {
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setDefinirEn(null)}
           onExamen={() => { const col = definirEn; setDefinirEn(null); abrirPorInstrumento(0, col) }}
+        />
+      )}
+
+      {escanearEn && matriz && (
+        <EscanerHojas
+          instrumento={escanearEn.ins}
+          criterios={escanearEn.criterios}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          trimestre={trimestre}
+          alumnos={alumnos}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onGuardado={() => setRefresco(r => r + 1)}
+          onCerrar={() => setEscanearEn(null)}
+        />
+      )}
+
+      {imprimirEn && matriz && (
+        <ImprimirTest
+          instrumento={imprimirEn.ins}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          alumnos={alumnos}
+          grupoNombre={matriz.grupo.nombre}
+          areaNombre={matriz.asig.nombre_display}
+          onCerrar={() => setImprimirEn(null)}
         />
       )}
 

@@ -189,10 +189,11 @@ edumind_miclase/
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
-  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
-  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
-  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
-  antes.
+  botón de calificar (en un test con clave, también «Corregir por cámara»,
+  que es calificar). Tipo, peso, criterios, «Imprimir test» y «Pegar columna»
+  están tras `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`);
+  siguen en el DOM pero sin sitio, así que una prueba que pulse «Pegar
+  columna» o «Imprimir test» despliega antes.
 - **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
   y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
   examen de cada unidad, el billete de salida, speaking, listening. Un hijo
@@ -250,6 +251,35 @@ edumind_miclase/
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
   reciben nota los criterios que alguna pregunta nombra y que la programación
   asigna al instrumento.
+- **Un test con clave lleva `opciones` y `correcta` por pregunta** (`PreguntaPrueba`,
+  solo `tipo: 'test'`; `normalizarPrueba` las descarta en otro tipo y nunca
+  convierte un `correcta: null` en 0). `respuestaDeMarca` traduce la letra
+  marcada a `ACIERTO`/`FALLO`/`EN_BLANCO`: la corrección por cámara guardará
+  lo mismo que la de a mano. Se importa además como examen escrito
+  (`pruebaDeExamenMarkdown`: «1. …», «a) …», correcta con `*`, negrita,
+  `[x]` o «Respuestas: 1-b»), que es lo que devuelve la IA con
+  `generarPromptTest` (`ia/pruebaPrompt.ts`) desde el editor; `examenAMarkdown`
+  exporta el examen del alumnado sin la clave.
+- **La hoja de respuestas se dibuja en milímetros desde `db/hojaOMR.ts`**, y
+  esa geometría es el contrato con el escáner: cuatro marcas de 10 mm en las
+  esquinas, QR de 34 mm arriba a la derecha con `MCT1|prueba_id|alumno_id|n|k`
+  (`payloadHoja`/`leerPayloadHoja`, con versión), burbujas de 5 mm a paso de
+  8 mm en dos columnas de 25. Hasta 50 preguntas × 5 opciones. `informes/hojasTest.ts`
+  genera las hojas (una página por alumno) y el examen del alumnado;
+  `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
+  solo con clave completa y plegado tras `[data-cabeceras-toggle]`).
+- **El escáner de hojas vive en el aparato** (`utils/lectorHoja.ts`, puro salvo
+  jsQR): marcas por manchas macizas no pegadas al borde (relleno de caja
+  > 0,74, que aguanta ~15° de giro y deja fuera los patrones del QR), una por
+  esquina de la foto; homografía mm → px con las cuatro; el QR se recorta
+  enderezado; cada burbuja se mide contra el papel de su alrededor
+  (oscuridad relativa: marcada ≥ 0,4, duda entre 0,22 y 0,4, y dos oscuras =
+  duda). Si el QR no se lee se prueban las cuatro orientaciones. `EscanerHojas`
+  («📷 Corregir por cámara» en la columna del examen) congela la foto, pinta
+  lo leído, deja corregir con el dedo y guarda por `guardarExamenDeAlumno`:
+  igual que a mano. Se prueba en `hoja-escaner.test.mjs` con la hoja de la
+  app «fotografiada» girada, del revés y apaisada sobre fondo oscuro; con
+  cámara real no se ha probado todavía.
 - **Un examen se guarda con `guardarExamenDeAlumno`** (`queries.ts`), nunca
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
