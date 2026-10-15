@@ -131,9 +131,13 @@ interface Props {
   onPegar: (col: ColumnaInstrumento) => void
   /** «Definir herramienta»: el instrumento no tiene rúbrica ni examen y no es de observación. */
   onDefinir: (col: ColumnaInstrumento) => void
+  /** «Imprimir»: hojas de respuestas y examen de un test con clave. */
+  onImprimir?: (col: ColumnaInstrumento) => void
+  /** «Corregir por cámara»: la pila de hojas de respuestas. */
+  onEscanear?: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onImprimir, onEscanear }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -243,6 +247,22 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       </button>
                     )}
                   </>)}
+                  {/* Un test con clave se corrige también con la cámara: es calificar, así que va a la vista. */}
+                  {esExamen && col.ins.tiene_prueba && onEscanear && (
+                    <button type="button" className="instr-th-accion" data-escanear-abrir
+                      onClick={() => onEscanear(col)}
+                      title="Corregir las hojas de respuestas con la cámara, una tras otra">
+                      📷 Corregir por cámara
+                    </button>
+                  )}
+                  {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
+                  {esExamen && col.ins.tiene_prueba && onImprimir && (
+                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-imprimir-abrir
+                      onClick={() => onImprimir(col)}
+                      title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
+                      🖨 Imprimir test
+                    </button>
+                  )}
                   <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">

@@ -144,6 +144,8 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
           instrumentoNombre={pruebaDe.nombre}
           unidadId={null}
           criterios={[]}
+          asignaturaNombre={asignaturaNombre}
+          nivel={nivel}
           capa={anidado ? 'var(--z-modal-anidado-2)' : undefined}
           onCerrar={() => setPruebaDe(null)}
         />

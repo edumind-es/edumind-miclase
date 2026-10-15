@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'react'
 import {
-  notaDePrueba, puntosDePregunta, ACIERTO, FALLO, EN_BLANCO,
+  notaDePrueba, puntosDePregunta, ACIERTO, FALLO, EN_BLANCO, LETRAS,
   type PruebaDef, type PreguntaPrueba,
 } from '@/db/prueba'
 import { calificativo } from '@/db/calculo'
@@ -151,6 +151,11 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
 
               {def.tipo === 'test' && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  {p.correcta != null && p.opciones?.[p.correcta] != null && (
+                    <span title={p.opciones[p.correcta]} style={{ fontSize: 11.5, fontWeight: 800, color: 'var(--verde-500)', marginRight: 2 }}>
+                      {LETRAS[p.correcta]}
+                    </span>
+                  )}
                   <button style={btn(resp === ACIERTO, 'var(--verde-500)')} disabled={guardando}
                     onClick={() => alternar(p.id, ACIERTO)} aria-pressed={resp === ACIERTO} aria-label={`Pregunta ${i + 1}: acierto`}>✓ Acierto</button>
                   <button style={btn(resp === FALLO, 'var(--rojo-500)')} disabled={guardando}
