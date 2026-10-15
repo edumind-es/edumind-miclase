@@ -49,7 +49,7 @@ export function leerNota(texto: string): number | null {
  * en cualquier orden: «Bruno Bello» casa con «Bello Souto, Bruno». Una sola
  * palabra no casa nunca: «García» puede ser cualquiera.
  */
-function casaNombre(texto: string, a: Alumno): boolean {
+export function casaNombre(texto: string, a: Alumno): boolean {
   const escritas = clave(texto).split(' ').filter(w => w.length > 1)
   if (escritas.length < 2) return false
   const del = new Set(clave(`${a.apellidos} ${a.nombre}`).split(' ').filter(Boolean))

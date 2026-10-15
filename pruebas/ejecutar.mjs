@@ -130,6 +130,10 @@ async function principal() {
     await paquete('pruebas/pegar-notas.test.ts', pegar, ['--platform=node', '--format=esm'])
     await suite('columna de notas pegada de Excel', 'node', [pegar])
 
+    const moodle = join(scratch, 'importar-moodle.mjs')
+    await paquete('pruebas/importar-moodle.test.ts', moodle, ['--platform=node', '--format=esm'])
+    await suite('CSV de calificaciones de Edixgal (Moodle)', 'node', [moodle])
+
     const familias = join(scratch, 'familias.mjs')
     await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
     await suite('plantillas de hijos por familia', 'node', [familias])

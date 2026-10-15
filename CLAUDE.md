@@ -244,6 +244,26 @@ edumind_miclase/
   —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
   Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
   en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
+- **Importar el CSV de Edixgal** (`ImportarMoodle` + `utils/importarMoodle.ts`,
+  puro) reutiliza el casado por nombre de `pegarNotas.ts` (`casaNombre`, en las
+  dos direcciones: Moodle trae nombre y apellidos en columnas separadas y a
+  veces un segundo nombre que la lista no tiene). Las columnas de datos
+  (número de ID, institución, correo, total del curso, última descarga) no
+  son notas; el resto son ítems que el docente asigna columna a columna a un
+  instrumento, y lo no asignado se ignora. La escala 0-100 se decide por
+  columna, salvo que la cabecera declare el máximo («Cualificación/10,00»,
+  «P. 1 /0,24»: el informe de un cuestionario), que manda. Luis solo usa
+  cuestionarios de Edixgal, nunca el libro completo. Las columnas por
+  pregunta —puntuación «P. 1» o texto «Resposta 1» del informe de
+  respuestas— se reconocen (`pregunta`) y salen plegadas; la fila «Media
+  xeral» no es nadie. **Del cuestionario se importa solo la nota ya
+  evaluada («Cualificación»), nunca pregunta a pregunta**: decisión de
+  Luis, el cuaderno es para calificar y el valor de cada respuesta ya está
+  contado en esa nota. Guarda como «Pegar columna» y termina con un
+  resumen: guardadas, alumnos sin encontrar, columnas ignoradas. Fixtures:
+  `edixgal_calificacions.csv` (libro de calificaciones, a mano) y
+  `edixgal_cuestionario.tsv` (cabecera real de Luis, alumnos inventados:
+  no hay CSV real por la LOPD).
 - **En el panel de la casilla, el instrumento es lo primero y lo grande.**
   Orden fijo de `CeldaEvaluacion`: franja del instrumento con la nota,
   selector solo si hay varios, y el instrumento en sí (examen, rúbrica o
