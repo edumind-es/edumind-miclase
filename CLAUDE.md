@@ -330,6 +330,19 @@ edumind_miclase/
   hoy», por si el docente la prefiere: Luis abrió «Evaluar hoy»
   en «Exposición oral» y se encontró una escala 1-4 que nadie había elegido,
   con la rúbrica a crear tras «Más» y un icono pequeño.
+- **Una rúbrica puede evolucionar, pero nunca por su cuenta.** Cambiar la
+  rúbrica de un alumno que ya tenía nota pregunta (`PreguntaRubrica`):
+  «corregir» sustituye, como siempre; «nueva observación» la mete en el
+  diario como registro con `nota` 0-10 y `niveles_rubrica`
+  (`evolucionarRubrica`), convirtiendo antes la nota que ya había en la
+  primera observación para que la media no la pierda. La agregación del
+  diario trabaja en notas (`notaDeRegistro`), no en niveles, y para los
+  registros de nivel de siempre da exactamente lo mismo (2,5 · 5 · 7,5 · 10),
+  así que un aparato sin actualizar no entra en ping-pong; `valor` guarda el
+  nivel equivalente (`nivelDeNota`) por si acaso. `materializarDiario` copia
+  las marcas de la última observación a la casilla y compara también eso.
+  Una pantalla crea una observación por alumno y pasada: los retoques la
+  editan. Afinar una nota puesta en esa misma pantalla no pregunta.
 - **Borrar un instrumento, un área o una clase conserva sus rúbricas en el
   banco** (`conservarRubricasEnBanco`). Solo «Eliminar rúbrica» la borra de verdad.
 - **El diario de evaluación no pisa nada.** La tabla `diario` guarda una

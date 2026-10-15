@@ -50,6 +50,21 @@ export function nivelDiarioANota(nivel: number): number {
   return nivelANota(n, NIVEL_MAXIMO)
 }
 
+/**
+ * Nota 0-10 de un registro: la de la rúbrica si la trae, si no la de su nivel.
+ * Un nivel vale exactamente lo que `nivelDiarioANota` dice (2,5 · 5 · 7,5 · 10),
+ * así que agregar notas o agregar niveles da el mismo número: los registros
+ * de siempre no cambian de nota con esta regla.
+ */
+export function notaDeRegistro(r: { valor: number; nota?: number | null }): number {
+  return r.nota != null ? r.nota : nivelDiarioANota(r.valor)
+}
+
+/** Nivel 1-4 equivalente a una nota 0-10 (el `valor` de un registro con rúbrica). */
+export function nivelDeNota(nota: number): number {
+  return Math.max(1, Math.min(NIVEL_MAXIMO, Math.round((nota / 10) * NIVEL_MAXIMO)))
+}
+
 type Ordenable = { fecha: string; id?: number }
 
 /** Copia ordenada por fecha y, a igual fecha, por id (único entre aparatos). */
@@ -90,10 +105,15 @@ export function nivelAgregadoANota(nivel: number): number {
   return nivelANota(Math.max(1, Math.min(NIVEL_MAXIMO, nivel)), NIVEL_MAXIMO)
 }
 
+/** Nota 0-10 agregada, con un decimal. */
+function redondearNota(n: number): number {
+  return Math.round(n * 10) / 10
+}
+
 /** Nota derivada de unos registros (en cualquier orden). Sin registros → null. */
-export function notaDeDiario(regs: (Ordenable & { valor: number })[], regla?: Agregacion | null): number | null {
-  const nivel = agregarNiveles(ordenarRegistros(regs).map(r => r.valor), regla)
-  return nivel == null ? null : nivelAgregadoANota(nivel)
+export function notaDeDiario(regs: (Ordenable & { valor: number; nota?: number | null })[], regla?: Agregacion | null): number | null {
+  const nota = agregarNiveles(ordenarRegistros(regs).map(notaDeRegistro), regla)
+  return nota == null ? null : redondearNota(nota)
 }
 
 /** Criterios de un registro. Un JSON corrupto no revienta: cuenta como ninguno. */
@@ -115,23 +135,26 @@ export type NotaDerivada = { valor: number; n: number; niveles: number[] }
  * aunque el llamante ya debería haberlos filtrado.
  */
 export function derivarNotas(
-  regs: Pick<RegistroDiario, 'fecha' | 'id' | 'valor' | 'criterios_json' | 'deleted_at'>[],
+  regs: Pick<RegistroDiario, 'fecha' | 'id' | 'valor' | 'nota' | 'criterios_json' | 'deleted_at'>[],
   regla: Agregacion | null | undefined,
 ): Map<string, NotaDerivada> {
-  const porCriterio = new Map<string, number[]>()
+  const porCriterio = new Map<string, { notas: number[]; niveles: number[] }>()
   for (const r of ordenarRegistros(regs)) {
     if (r.deleted_at) continue
     for (const c of criteriosDe(r)) {
-      const lista = porCriterio.get(c) ?? []
-      lista.push(r.valor)
+      const lista = porCriterio.get(c) ?? { notas: [], niveles: [] }
+      lista.notas.push(notaDeRegistro(r))
+      lista.niveles.push(r.valor)
       porCriterio.set(c, lista)
     }
   }
   const salida = new Map<string, NotaDerivada>()
-  for (const [c, niveles] of porCriterio) {
-    const nivel = agregarNiveles(niveles, regla)
-    if (nivel == null) continue
-    salida.set(c, { valor: nivelAgregadoANota(nivel), n: niveles.length, niveles })
+  for (const [c, { notas, niveles }] of porCriterio) {
+    // Se agregan notas, no niveles: una observación con rúbrica vale su nota
+    // (un 6,8), no el nivel redondeado. Para los registros de nivel da igual.
+    const nota = agregarNiveles(notas, regla)
+    if (nota == null) continue
+    salida.set(c, { valor: redondearNota(nota), n: niveles.length, niveles })
   }
   return salida
 }

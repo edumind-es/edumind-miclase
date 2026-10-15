@@ -10,17 +10,24 @@
  * panel de la casilla, y se guarda con las marcas en todos los criterios
  * que la programación asigna al instrumento, como «Pegar columna».
  *
- * No escribe en el diario: una rúbrica es una calificación del trimestre,
- * no una observación fechada. Volver a pulsar el nivel ya marcado en toda la
- * fila la deja sin nota; en un indicador, lo desmarca.
+ * La primera vez se guarda como calificación del trimestre, sin diario.
+ * Cambiar la de un alumno que ya la tenía pregunta (`PreguntaRubrica`): si
+ * es una corrección, se sustituye; si es una observación nueva, entra en el
+ * diario con su nota y sus marcas (`evolucionarRubrica`) y la casilla pasa a
+ * ser la agregación de todas. Un alumno tiene una sola observación por
+ * pasada: los retoques siguientes editan ese registro, no crean otro.
+ * Volver a pulsar el nivel ya marcado en toda la fila la deja sin nota; en
+ * un indicador, lo desmarca.
  */
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
-  getCalificacionUnica, saveCalificaciones,
+  getCalificacionUnica, saveCalificaciones, evolucionarRubrica, editarRegistro, borrarRegistro,
   type CeldaInstrumento, type DatosDeArea,
 } from '@/db/queries'
 import { calificativo, nivelANota, notaDeRubrica } from '@/db/calculo'
+import { etiquetaAgregacion, nivelDeNota } from '@/db/diario'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
+import PreguntaRubrica, { SelectorModoRubrica, type ModoRubrica } from './PreguntaRubrica'
 import type { Alumno } from '@/db/localDb'
 
 export type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -53,6 +60,14 @@ export default function SesionRubrica({
   const [ocupado, setOcupado] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [recarga, setRecarga] = useState(0)
+  /** Qué significa cambiar una nota ya puesta; null hasta que se pregunte. */
+  const [modo, setModo] = useState<ModoRubrica | null>(null)
+  /** Cambio a la espera de que el docente diga si corrige o añade. */
+  const [pendiente, setPendiente] = useState<{ al: Alumno; siguiente: Marcas } | null>(null)
+  /** alumno_id → registro del diario creado en esta pasada (una observación por pasada). */
+  const registroDe = useRef(new Map<number, number>())
+  /** Alumnos cuya nota se ha puesto en esta misma pasada: afinarla no es «cambiar una nota ya puesta». */
+  const tocados = useRef(new Set<number>())
 
   const cfg = getInstrConfig(instrumento.tipo)
   const maxNivel = useMemo(() => Math.max(...niveles.map(n => n.valor)), [niveles])
@@ -77,21 +92,51 @@ export default function SesionRubrica({
     return () => window.removeEventListener('keydown', onKey)
   }, [onCerrar])
 
-  const guardar = async (al: Alumno, siguiente: Marcas) => {
+  const guardar = async (al: Alumno, siguiente: Marcas, modoForzado?: ModoRubrica) => {
+    const previa = marcas.get(al.id!) ?? {}
+    const teniaNota = notaDeRubrica(indicadores, niveles, previa).nota != null && !tocados.current.has(al.id!)
+    const registro = registroDe.current.get(al.id!)
+    const modoAplicado = modoForzado ?? modo
+    // Cambiar una nota que ya estaba es una decisión: se pregunta una vez por pasada.
+    if (teniaNota && registro == null && modoAplicado === null) { setPendiente({ al, siguiente }); return }
+    if (!teniaNota && registro == null) tocados.current.add(al.id!)
+
     setOcupado(al.id!); setError(null)
     try {
       const { nota } = notaDeRubrica(indicadores, niveles, siguiente)
-      // Sin réplica: va a todos los criterios del instrumento, el reparto ya está decidido.
-      await saveCalificaciones(criterios.map(c => ({
-        ...area, alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, criterio_id: c.id, trimestre,
-        valor: nota, unidad_id: unidadId, niveles_rubrica: siguiente,
-      })), { sinVinculos: true })
+      if (registro != null || (teniaNota && modoAplicado === 'evolucion')) {
+        // Observación nueva en el diario; los retoques de esta pasada la editan.
+        if (nota == null) {
+          if (registro != null) { await borrarRegistro(registro); registroDe.current.delete(al.id!) }
+        } else if (registro != null) {
+          await editarRegistro(registro, { nota, niveles_rubrica: siguiente, valor: nivelDeNota(nota) })
+        } else {
+          const r = await evolucionarRubrica({
+            alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: unidadId,
+            criterios: criterios.map(c => c.id), area, nota, niveles_rubrica: siguiente,
+          })
+          registroDe.current.set(al.id!, r.id)
+        }
+      } else {
+        // Sin réplica: va a todos los criterios del instrumento, el reparto ya está decidido.
+        await saveCalificaciones(criterios.map(c => ({
+          ...area, alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, criterio_id: c.id, trimestre,
+          valor: nota, unidad_id: unidadId, niveles_rubrica: siguiente,
+        })), { sinVinculos: true })
+      }
       setMarcas(m => new Map(m).set(al.id!, siguiente))
       onCambio()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'No se pudo guardar la nota')
       setRecarga(n => n + 1)
     } finally { setOcupado(null) }
+  }
+
+  const elegirModo = (m: ModoRubrica) => {
+    setModo(m)
+    const p = pendiente
+    setPendiente(null)
+    if (p) void guardar(p.al, p.siguiente, m)
   }
 
   /** Toda la fila al mismo nivel; si ya estaba toda en ese nivel, se vacía. */
@@ -202,6 +247,10 @@ export default function SesionRubrica({
             <span style={{ color: 'var(--gris-600)' }}>— un nivel en la fila lo marca en todos los indicadores; «por indicador» afina uno a uno.</span>
           </div>
 
+          <div style={{ margin: '0 0 10px' }}>
+            <SelectorModoRubrica modo={modo} onCambiar={setModo} />
+          </div>
+
           {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12.5, marginBottom: 8 }}>{error}</div>}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -263,6 +312,14 @@ export default function SesionRubrica({
           </div>
         </div>
       </div>
+      {pendiente && (
+        <PreguntaRubrica
+          notaActual={notaDeRubrica(indicadores, niveles, marcas.get(pendiente.al.id!) ?? {}).nota}
+          regla={etiquetaAgregacion(instrumento.agregacion)}
+          onElegir={elegirModo}
+          onCancelar={() => setPendiente(null)}
+        />
+      )}
     </div>
   )
 }

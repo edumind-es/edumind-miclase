@@ -335,8 +335,17 @@ export interface RegistroDiario extends Sincronizable {
   trimestre: number
   /** ISO-8601 con hora: es lo que ordena los registros. */
   fecha: string
-  /** Nivel 1-4. */
+  /** Nivel 1-4. Si el registro trae `nota`, es su equivalente redondeado. */
   valor: number
+  /**
+   * Nota 0-10 cuando el registro es una observación con rúbrica, no un nivel
+   * del diario. Es lo que cuenta en la agregación (`notaDeRegistro`); `valor`
+   * queda para que un aparato con la app anterior derive algo parecido hasta
+   * actualizarse. Sin índice: no exige versión de esquema.
+   */
+  nota?: number | null
+  /** Nivel marcado en cada indicador de la rúbrica en esa observación. Sin índice. */
+  niveles_rubrica?: Record<string, number> | null
   observacion?: string | null
   /**
    * JSON con los criterios (string[]) a los que aplica. Se fija al crear el
