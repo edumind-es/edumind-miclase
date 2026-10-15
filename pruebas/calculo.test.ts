@@ -3,6 +3,7 @@ import {
   parsearPesosTrimestres,
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
   pesosVinculoDeUnidades, fundirHijosEnFamilias,
+  porcentajesEnFamilia, pesosAlFijarPorcentaje,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -373,6 +374,24 @@ console.log('\n13. El redondeo no se acumula escalón a escalón')
   // Área = media de los tres = 7.333…  → 7.33
   ok(r.trimestres[1] === 7.33, 'la nota de área sale del valor sin recortar', String(r.trimestres[1]))
   ok(r.criterios[0].trimestres[1] === 9.33, 'y cada criterio se enseña ya redondeado', String(r.criterios[0].trimestres[1]))
+}
+
+console.log('\n14. Porcentajes dentro de la familia')
+{
+  const j = (a: number[]) => a.join(' · ')
+  ok(j(porcentajesEnFamilia([1, 1, 1])) === '34 · 33 · 33', 'tres iguales suman 100 exactos', j(porcentajesEnFamilia([1, 1, 1])))
+  ok(j(porcentajesEnFamilia([3, 1])) === '75 · 25', 'pesos relativos se enseñan como porcentajes')
+  ok(j(porcentajesEnFamilia([0, 2])) === '33 · 67', 'un peso sin declarar vale 1, como en el cálculo', j(porcentajesEnFamilia([0, 2])))
+  ok(porcentajesEnFamilia([]).length === 0 && j(porcentajesEnFamilia([5])) === '100', 'sin hijos nada; uno solo es el 100 %')
+  // Fijar el 60 % al primero de tres iguales: los otros se reparten el 40 a partes iguales.
+  ok(j(pesosAlFijarPorcentaje([1, 1, 1], 0, 60)) === '60 · 20 · 20', 'fijar uno reparte el resto', j(pesosAlFijarPorcentaje([1, 1, 1], 0, 60)))
+  // Los demás guardan su proporción: 20 y 40 siguen siendo 1:2.
+  ok(j(pesosAlFijarPorcentaje([40, 20, 40], 0, 70)) === '70 · 10 · 20', 'y guardan la proporción que tenían', j(pesosAlFijarPorcentaje([40, 20, 40], 0, 70)))
+  ok(pesosAlFijarPorcentaje([30, 70], 1, 100)[0] >= 1 && pesosAlFijarPorcentaje([30, 70], 1, 100).reduce((a, b) => a + b) === 100, 'nadie baja de 1 y la suma sigue en 100', j(pesosAlFijarPorcentaje([30, 70], 1, 100)))
+  ok(j(pesosAlFijarPorcentaje([7], 0, 30)) === '100', 'un hijo solo siempre es el 100 %')
+  ok(j(pesosAlFijarPorcentaje([1, 1, 1], 1, 50)) === '25 · 50 · 25', 'el fijado conserva su sitio', j(pesosAlFijarPorcentaje([1, 1, 1], 1, 50)))
+  const r = pesosAlFijarPorcentaje([1, 1, 1], 1, 50)
+  ok(j(porcentajesEnFamilia(r)) === j(r), 'lo guardado se enseña tal cual: ya son porcentajes')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

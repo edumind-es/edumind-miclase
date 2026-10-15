@@ -232,7 +232,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     </div>
                   )}
                   <div className="instr-th-tipo instr-th-detalle">
-                    {cfg.label}{esHijo ? ` · peso ${col.ins.peso}` : ` · ${col.ins.peso}%`}
+                    {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   <div className="instr-th-criterios instr-th-detalle">

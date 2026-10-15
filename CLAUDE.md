@@ -195,8 +195,14 @@ edumind_miclase/
   es un `Instrumento` con `familia_id` (sin índice), tipo y color propios, un
   **subconjunto** de los criterios de su familia en cada unidad
   (`fijarCriteriosDeHijo` lo comprueba y falla si se sale) y un `peso`
-  relativo DENTRO de la familia (1 por defecto). La familia entra en el área
-  con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
+  relativo DENTRO de la familia. El cálculo normaliza por la suma, así que
+  el número guardado da igual; lo que se ENSEÑA es siempre el porcentaje
+  (`porcentajesEnFamilia`, resuelto una vez en `CeldaInstrumento.pct_familia`
+  con todos los hermanos) y el gestor lo deja escribir directo: fijar el 60 %
+  a uno reparte el 40 % entre los demás guardando su proporción
+  (`pesosAlFijarPorcentaje`) y desde entonces lo guardado son porcentajes.
+  Un hijo nuevo entra con el peso medio de sus hermanos. Luis veía «peso 1»
+  y lo leía como 1 %. La familia entra en el área con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
   (`calculo.ts`) y la usan tanto `calcularNotaArea` como la matriz: una nota
   directa de la familia (anterior a tener hijos) cuenta como un hijo más con
   peso 1, y un hijo sin familia viva cuenta como instrumento suelto. Las

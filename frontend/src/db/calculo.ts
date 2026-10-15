@@ -536,3 +536,53 @@ export function pesosAPartesIguales(n: number): number[] {
   pesos[0] = Math.round((pesos[0] + resto) * 10) / 10
   return pesos
 }
+
+/**
+ * Reparto en porcentajes enteros, con suma exacta 100, de los pesos de los
+ * hijos de una familia. Es lo que se enseña en todas partes: el docente
+ * piensa «el examen es el 60 % de la prueba escrita», no «pesa 3 frente a 2».
+ *
+ * Un peso sin declarar (0 o negativo) vale 1, como en `pesoEnFamilia`. El
+ * resto del redondeo va a las fracciones mayores, para que 1 · 1 · 1 salga
+ * 34 · 33 · 33 y no 33 · 33 · 33.
+ */
+export function porcentajesEnFamilia(pesos: number[]): number[] {
+  if (pesos.length === 0) return []
+  const limpios = pesos.map(p => (p > 0 ? p : 1))
+  const suma = limpios.reduce((a, b) => a + b, 0)
+  const exactos = limpios.map(p => (p / suma) * 100)
+  const enteros = exactos.map(Math.floor)
+  let resto = 100 - enteros.reduce((a, b) => a + b, 0)
+  const porFraccion = exactos.map((v, i) => ({ i, f: v - Math.floor(v) })).sort((a, b) => b.f - a.f || a.i - b.i)
+  for (const { i } of porFraccion) { if (resto <= 0) break; enteros[i]++; resto-- }
+  return enteros
+}
+
+/**
+ * Los pesos de todos los hijos cuando el docente fija el porcentaje de uno.
+ * El que se toca se queda con lo pedido y los demás se reparten el resto
+ * guardando la proporción que ya tenían. Devuelve pesos que son porcentajes
+ * (suman 100), para que lo guardado y lo enseñado sean el mismo número.
+ *
+ * Ninguno baja de 1: un hijo con 0 contaría como 1 en el cálculo y el
+ * reparto mentiría.
+ */
+export function pesosAlFijarPorcentaje(pesos: number[], indice: number, porcentaje: number): number[] {
+  const n = pesos.length
+  if (n === 0 || indice < 0 || indice >= n) return pesos.slice()
+  if (n === 1) return [100]
+  const fijado = Math.min(100 - (n - 1), Math.max(1, Math.round(porcentaje)))
+  const otros = pesos.filter((_, i) => i !== indice)
+  const reparto = porcentajesEnFamilia(otros).map(v => (v * (100 - fijado)) / 100)
+  // Mismo redondeo con suma exacta que arriba, pero sobre el resto.
+  const enteros = reparto.map(v => Math.max(1, Math.floor(v)))
+  let resto = (100 - fijado) - enteros.reduce((a, b) => a + b, 0)
+  const porFraccion = reparto.map((v, i) => ({ i, f: v - Math.floor(v) })).sort((a, b) => b.f - a.f || a.i - b.i)
+  for (const { i } of porFraccion) { if (resto <= 0) break; enteros[i]++; resto-- }
+  // Si al forzar el mínimo de 1 se pasó, se quita del mayor.
+  while (resto < 0) { const k = enteros.indexOf(Math.max(...enteros)); if (enteros[k] <= 1) break; enteros[k]--; resto++ }
+  const resultado: number[] = []
+  let j = 0
+  for (let i = 0; i < n; i++) resultado.push(i === indice ? fijado : enteros[j++])
+  return resultado
+}
