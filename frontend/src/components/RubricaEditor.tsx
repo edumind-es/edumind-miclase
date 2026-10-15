@@ -11,6 +11,7 @@ import BancoRubricas from './BancoRubricas'
 import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla, herramientaInicial, type HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
+import { descargarFichero } from '@/utils/compartir'
 
 interface Props {
   instrumentoId: number
@@ -289,21 +290,23 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   const nombreFichero = instrumentoNombre.replace(/\s+/g, '-').toLowerCase()
 
-  const descargar = (nombre: string, contenido: BlobPart, tipo: string) => {
-    const a = document.createElement('a')
-    a.href = URL.createObjectURL(new Blob([contenido], { type: tipo }))
-    a.download = nombre
-    a.click()
-    setTimeout(() => URL.revokeObjectURL(a.href), 5000)
-  }
+  // Sale por `descargarFichero`, nunca por un `<a download>`: en la app nativa
+  // ese enlace no hace nada y el docente creería haber exportado sin que
+  // saliera nada. Devuelve el resultado para que quien llama sepa si el
+  // docente cerró la hoja de compartir sin elegir destino.
+  const descargar = (nombre: string, contenido: BlobPart, tipo: string) =>
+    descargarFichero(nombre, new Blob([contenido], { type: tipo }), tipo, `Rúbrica · ${instrumentoNombre}`)
+
+  const avisarFallo = (e: any) =>
+    setMsg({ tipo: 'error', texto: e?.message || 'No se pudo exportar la rúbrica.' })
 
   // Los dos llevan la columna de pesos y se vuelven a importar sin perder nada
   // salvo el contexto, que solo viaja en el formato propio.
   const exportarMD = () =>
-    descargar(`rubrica-${nombreFichero}.md`, rubricaAMarkdown(rubrica), 'text/markdown;charset=utf-8')
+    descargar(`rubrica-${nombreFichero}.md`, rubricaAMarkdown(rubrica), 'text/markdown;charset=utf-8').catch(avisarFallo)
 
   const exportarXlsx = () =>
-    descargar(`rubrica-${nombreFichero}.xlsx`, rubricaAXlsx(rubrica), TIPO_XLSX)
+    descargar(`rubrica-${nombreFichero}.xlsx`, rubricaAXlsx(rubrica), TIPO_XLSX).catch(avisarFallo)
 
   /**
    * Intercambio fiel entre docentes.
@@ -316,7 +319,11 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const exportarRubrica = () => {
     descargar(`${nombreFichero}.edurubrica.json`,
       rubricaAJson(rubrica, { area: asignaturaNombre, nivel, contexto: iaContexto }), 'application/json')
-    setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
+      .then(r => {
+        if (r === 'cancelado') return
+        setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
+      })
+      .catch(avisarFallo)
   }
 
   /**

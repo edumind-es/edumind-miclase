@@ -2,10 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CAPACITOR_DEBUG</key>
+	<string>$(CAPACITOR_DEBUG)</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>es</string>
 	<key>CFBundleDisplayName</key>
-        <string>EDUmind MiClase</string>
+	<string>EDUmind MiClase</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -31,17 +33,59 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>es.edumind.miclase</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>es.edumind.miclase</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Para fotografiar o grabar en vídeo las producciones del alumnado como evidencia de evaluación, y para leer los códigos QR de mesa. Las imágenes se guardan solo en este dispositivo.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Para grabar exposiciones orales y lecturas del alumnado como evidencia de evaluación. Las grabaciones se guardan solo en este dispositivo.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Para guardar en tu carrete las evidencias que decidas exportar.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Para adjuntar como evidencia una imagen que ya tengas en el dispositivo.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+					<key>UISceneStoryboardFile</key>
+					<string>Main</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>armv7</string>
+		<string>arm64</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
@@ -58,9 +102,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<!-- Permisos de captura de evidencias. Sin estas descripciones iOS cierra
-	     la app en cuanto se pide la cámara o el micrófono. El texto es el que
-	     lee el docente en el diálogo del sistema. -->
 	<!-- La carpeta de documentos de la app (donde va «MiClase copia») se ve en
 	     Archivos y entra en la copia de iCloud del aparato. Sin estas dos claves
 	     la carpeta existe pero el docente no puede verla ni copiarla. -->
@@ -68,17 +109,5 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Para fotografiar o grabar en vídeo las producciones del alumnado como evidencia de evaluación. Las imágenes se guardan solo en este dispositivo.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Para grabar exposiciones orales y lecturas del alumnado como evidencia de evaluación. Las grabaciones se guardan solo en este dispositivo.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Para guardar en tu carrete las evidencias que decidas exportar.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Para adjuntar como evidencia una imagen que ya tengas en el dispositivo.</string>
-	<!-- El almacenamiento local es el cuaderno del docente: no debe ir a iCloud
-	     sin que lo decida, porque contiene datos del alumnado. -->
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 </dict>
 </plist>

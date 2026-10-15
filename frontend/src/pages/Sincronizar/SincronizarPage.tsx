@@ -25,7 +25,7 @@ import CopiaCarpeta from '@/components/CopiaCarpeta'
 const K_AUTO = 'miclase_sync_auto'
 
 export default function SincronizarPage() {
-  const { modo, headers, iniciarLogin, authConfig } = useAuth()
+  const { modo, headers, iniciarLogin, loginDisponible, motivoSinLogin } = useAuth()
 
   const [estado, setEstado] = useState<EstadoSync | null>(null)
   const [errorEstado, setErrorEstado] = useState<string>('')
@@ -250,13 +250,13 @@ export default function SincronizarPage() {
             Hace falta una cuenta para saber de quién es cada buzón; es lo único para lo que se usa.
             <strong> No la necesitas para el enlace directo ni para el fichero.</strong>
           </p>
-          {authConfig?.enabled ? (
+          {loginDisponible ? (
             <button className="btn-secondary" onClick={iniciarLogin}>
               Conectar con EDUmind
             </button>
           ) : (
-            <p style={{ fontSize: 13, color: 'var(--ambar-500)' }}>
-              Este servidor no tiene configurado el acceso con EDUmind.
+            <p style={{ fontSize: 13, color: 'var(--ambar-500)', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+              {motivoSinLogin}
             </p>
           )}
         </details>

@@ -14,6 +14,7 @@
  */
 import { useEffect, useRef } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
+import { esNativo } from '@/api'
 
 const CADA = 30 * 60 * 1000
 /** Hasta aquí desde el arranque, aplicar sin preguntar: aún no se ha empezado a trabajar. */
@@ -21,6 +22,15 @@ const RECIEN_ABIERTA = 20 * 1000
 const arranque = Date.now()
 
 export default function ActualizacionApp() {
+  // En la app nativa no hay service worker: el paquete web va dentro de la
+  // app y se actualiza con ella desde la tienda. Registrar uno aquí no haría
+  // nada —WKWebView no los admite fuera de dominios acotados— y el aviso de
+  // «versión nueva» no tendría sentido.
+  if (esNativo()) return null
+  return <ActualizacionWeb />
+}
+
+function ActualizacionWeb() {
   const {
     needRefresh: [lista],
     updateServiceWorker,

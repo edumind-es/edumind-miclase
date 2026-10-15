@@ -8,8 +8,15 @@
  */
 import { useEffect, useState } from 'react'
 import type { Evidencia } from '@/db/localDb'
+import { descargarFichero } from '@/utils/compartir'
 
 const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
+
+/** Nombre de fichero con la extensión que diga el tipo MIME, si la dice. */
+function nombreFichero(ev: Evidencia): string {
+  const ext = ev.mime?.split('/')[1]?.split(';')[0]
+  return `evidencia-${ev.fecha.slice(0, 10)}${ext ? `.${ext}` : ''}`
+}
 
 export function duracionLegible(ms?: number | null): string {
   if (!ms || !Number.isFinite(ms)) return ''
@@ -92,10 +99,14 @@ export default function MiniaturaEvidencia({ evidencia: ev, onBorrar, tamano = 7
             </div>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-              <a href={url} download={`evidencia-${ev.fecha.slice(0, 10)}`}
-                className="btn-secondary" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 13 }}>
+              {/* Un botón y no un <a download>: en la app nativa el enlace no hace nada */}
+              <button className="btn-secondary" style={{ padding: '8px 14px', borderRadius: 6, fontSize: 13 }}
+                onClick={() => {
+                  descargarFichero(nombreFichero(ev), ev.blob, ev.mime || 'application/octet-stream', 'Evidencia de evaluación')
+                    .catch(() => {})
+                }}>
                 ⬇ Descargar
-              </a>
+              </button>
               {onBorrar && (
                 <button className="btn-danger" onClick={() => { onBorrar(); setAbierta(false) }}>
                   🗑 Eliminar

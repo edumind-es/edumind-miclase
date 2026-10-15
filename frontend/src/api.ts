@@ -3,8 +3,9 @@
  *
  * En la web la app y el API comparten origen: nginx hace de proxy de `/api/`,
  * así que basta la ruta relativa. Dentro del contenedor nativo (Capacitor) la
- * app se sirve desde `https://localhost`, y una ruta relativa iría al propio
- * contenedor en vez de al servidor: ahí hace falta la URL absoluta.
+ * app se sirve desde `capacitor://localhost` en iOS y `https://localhost` en
+ * Android, y una ruta relativa iría al propio contenedor en vez de al
+ * servidor: ahí hace falta la URL absoluta.
  *
  * El servidor es configurable para que un centro pueda apuntar la app a su
  * propia instalación sin recompilar.
@@ -12,6 +13,15 @@
 
 const SERVIDOR_POR_DEFECTO = 'https://miclase.edumind.es'
 const K_SERVIDOR = 'miclase_servidor'
+
+/**
+ * Esquema de URL propio de la app nativa. Es el mismo que el `appId` de
+ * Capacitor y está declarado en `ios/App/App/Info.plist` (CFBundleURLTypes):
+ * cualquier `es.edumind.miclase://…` que abra el sistema llega a la app.
+ * Hoy solo lo usa la vuelta del login con EDUmind.
+ */
+export const ESQUEMA_NATIVO = 'es.edumind.miclase'
+export const REDIRECT_NATIVO = `${ESQUEMA_NATIVO}://auth/callback`
 
 /** ¿Estamos dentro del contenedor nativo de iOS o Android? */
 export function esNativo(): boolean {
@@ -41,10 +51,10 @@ export function fijarServidor(url: string): void {
  * URL pública de una ruta de la app, para poner en un QR o compartirla.
  *
  * No sirve `window.location.origin`: dentro del contenedor nativo eso es
- * `https://localhost` y el QR llevaría al teléfono a ninguna parte. Y no vale
- * dejarla fija a miclase.edumind.es, que es lo que había: un centro con su
- * propia instalación repartía a su alumnado códigos que apuntaban al servidor
- * de otro.
+ * `capacitor://localhost` y el QR llevaría al teléfono a ninguna parte. Y no
+ * vale dejarla fija a miclase.edumind.es, que es lo que había: un centro con
+ * su propia instalación repartía a su alumnado códigos que apuntaban al
+ * servidor de otro.
  */
 export function urlPublica(ruta: string): string {
   const base = esNativo()

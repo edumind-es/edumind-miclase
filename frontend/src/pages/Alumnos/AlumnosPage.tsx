@@ -8,6 +8,7 @@ import {
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
+import { descargarFichero } from '@/utils/compartir'
 import type { Alumno as DBAlumno } from '@/db/localDb'
 
 // ─── Parser de importación masiva ───────────────────────────────────────────
@@ -51,11 +52,7 @@ async function exportarCodigos(grupoId: string | null) {
   if (!grupoId) return
   const datos = await getAlumnosByGrupo(Number(grupoId))
   const csv = ['Código,Apellidos,Nombre', ...datos.map(d => `${d.codigo_cifrado || ''},"${d.apellidos}","${d.nombre}"`)]
-  const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = 'codigos-alumnado.csv'
-  a.click()
+  await descargarFichero('codigos-alumnado.csv', csv.join('\n'), 'text/csv;charset=utf-8;', 'Códigos del alumnado')
 }
 
 // ─── Componente principal ────────────────────────────────────────────────────

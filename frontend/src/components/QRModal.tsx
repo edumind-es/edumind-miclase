@@ -1,5 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
+import { descargarFichero } from '@/utils/compartir'
+
+/** El dataURL que genera la librería, como Blob, para sacarlo por la puerta de siempre. */
+function dataUrlABlob(dataUrl: string): Blob {
+  const [cabecera, datos] = dataUrl.split(',')
+  const mime = /data:([^;]+)/.exec(cabecera)?.[1] ?? 'application/octet-stream'
+  const bin = atob(datos)
+  const bytes = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+  return new Blob([bytes], { type: mime })
+}
 
 interface Props {
   url: string
@@ -22,11 +33,11 @@ export default function QRModal({ url, titulo, onClose }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
+  // En el iPad un `<a download>` no hace nada: todo fichero sale por
+  // `descargarFichero`, que ahí abre la hoja de compartir del sistema.
   const descargar = () => {
-    const a = document.createElement('a')
-    a.href = dataUrl
-    a.download = 'miclase-qr.png'
-    a.click()
+    descargarFichero('miclase-qr.png', dataUrlABlob(dataUrl), 'image/png', titulo || 'Código QR de MiClase')
+      .catch(() => {})
   }
 
   return (
