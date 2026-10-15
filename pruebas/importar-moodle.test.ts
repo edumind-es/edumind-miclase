@@ -1,0 +1,99 @@
+/**
+ * Leer el CSV del libro de calificaciones de Edixgal (Moodle). Lo que importa:
+ * que el CSV se parta bien (BOM, comillas, comas dentro de celdas), que las
+ * columnas de datos no se confundan con notas, que el casado por nombre no
+ * adivine y que la escala 0-100 no cuele como 0-10.
+ */
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { parsearCSV, descomponerCabecera, leerCSVMoodle, notasDeColumna, sugerirInstrumento } from '../frontend/src/utils/importarMoodle'
+
+let fallos = 0
+const ok = (cond: boolean, msg: string, extra = '') => {
+  console.log(`${cond ? '  ✓' : '  ✗ FALLO'} ${msg}${extra ? ' — ' + extra : ''}`)
+  if (!cond) fallos++
+}
+const clase = [
+  { id: 1, apellidos: 'Abad Ríos', nombre: 'Ana' },
+  { id: 2, apellidos: 'Bello Souto', nombre: 'Bruno' },
+  { id: 3, apellidos: 'Casal Vidal', nombre: 'Carla' },
+  { id: 4, apellidos: 'Díaz Lema', nombre: 'Darío' },
+]
+const csv = readFileSync(join(process.cwd(), 'pruebas/fixtures/edixgal_calificacions.csv'), 'utf8')
+
+console.log('\n1. Partir el CSV')
+{
+  const r = parsearCSV(csv)
+  ok(r.separador === ',', 'detecta la coma como separador')
+  ok(r.filas[0][0] === 'Nome', 'el BOM no se cuela en la primera cabecera', JSON.stringify(r.filas[0][0]))
+  ok(r.filas[0][8] === 'Tarefa:Caderno, tema 1 (Porcentaxe)', 'una coma entre comillas no parte la celda', r.filas[0][8])
+  ok(r.filas.length === 5 && r.filas[1].length === 12, 'cinco filas de doce celdas')
+  const pc = parsearCSV('a;b\r\n"x;""y""";2\r\n')
+  ok(pc.separador === ';' && pc.filas[1][0] === 'x;"y"' && pc.filas[1][1] === '2', 'punto y coma, CRLF y comillas dobladas')
+  const tab = parsearCSV('a\tb\n1\t2')
+  ok(tab.separador === '\t' && tab.filas[1][1] === '2', 'tabulador')
+}
+
+console.log('\n2. Cabeceras de ítem')
+{
+  const c = descomponerCabecera('Tarefa:Exame UD1 (Real)')
+  ok(c.actividad === 'Tarefa' && c.titulo === 'Exame UD1' && c.formato === 'Real', 'actividad, título y formato', JSON.stringify(c))
+  const s = descomponerCabecera('Exposición oral')
+  ok(s.actividad === null && s.titulo === 'Exposición oral' && s.formato === null, 'sin actividad ni formato')
+}
+
+console.log('\n3. Columnas: notas sí, datos no')
+{
+  const r = leerCSVMoodle(csv, clase)
+  ok(r.avisos.length === 0, 'sin avisos', r.avisos.join(' | '))
+  ok(r.columnas.map(c => c.titulo).join('|') === 'Exame UD1|Proba tema 2|Caderno, tema 1|Exposición oral', 'solo los ítems calificables', r.columnas.map(c => c.titulo).join('|'))
+  const [ud1, tema2, caderno, oral] = r.columnas
+  ok(!ud1.escala100 && tema2.escala100 && caderno.escala100, 'escala 0-100 por columna: el examen va en 0-10, la proba y el caderno en 0-100')
+  ok(oral.sinNumeros && oral.conNota === 0, 'una columna de letras no tiene números')
+  ok(ud1.conNota === 4 && tema2.conNota === 3, 'cuenta las casillas con nota (el guion es sin nota)')
+}
+
+console.log('\n4. Alumnos: por nombre, sin adivinar')
+{
+  const r = leerCSVMoodle(csv, clase)
+  const de = (apellidos: string) => r.filas.find(f => f.apellidos === apellidos)!
+  ok(de('Abad Ríos').alumno?.id === 1 && de('Bello Souto').alumno?.id === 2, 'nombre y apellidos en columnas separadas casan')
+  ok(de('Casal Vidal').alumno?.id === 3, 'un segundo nombre en Moodle («Carla María») no impide casar con «Carla»')
+  ok(de('Pérez Pérez').alumno === null && /Ningún alumno/.test(de('Pérez Pérez').aviso ?? ''), 'quien no está en la clase se señala')
+  ok(r.sinFila.length === 1 && r.sinFila[0].id === 4, 'y quien no está en el CSV también')
+}
+
+console.log('\n5. Notas en 0-10')
+{
+  const r = leerCSVMoodle(csv, clase)
+  const [ud1, tema2, caderno, oral] = r.columnas
+  const n = (col: typeof ud1, id: number) => notasDeColumna(r, col).find(x => x.alumno.id === id)?.valor
+  ok(n(ud1, 1) === 7.5 && n(ud1, 3) === 5, 'el examen tal cual')
+  ok(n(tema2, 1) === 8.5 && n(tema2, 3) === 4 && n(tema2, 2) === undefined, 'la proba dividida entre 10; el guion no da nota')
+  ok(n(caderno, 1) === 9 && n(caderno, 2) === 6.5, 'el porcentaje («90,00 %») también')
+  ok(notasDeColumna(r, oral).length === 0, 'las letras no dan nota')
+  ok(notasDeColumna(r, ud1).every(x => x.alumno.id !== 99) && notasDeColumna(r, ud1).length === 3, 'solo los alumnos casados reciben nota (Pepe no)')
+}
+
+console.log('\n6. Sugerir instrumento por nombre')
+{
+  const r = leerCSVMoodle(csv, clase)
+  const instrumentos = [{ nombre: 'Examen UD1' }, { nombre: 'Exame UD1' }, { nombre: 'Caderno' }, { nombre: 'Exposición oral' }]
+  ok(sugerirInstrumento(r.columnas[0], instrumentos)?.nombre === 'Exame UD1', 'coincidencia exacta')
+  ok(sugerirInstrumento(r.columnas[2], instrumentos)?.nombre === 'Caderno', 'el título contiene el nombre del instrumento')
+  ok(sugerirInstrumento(r.columnas[1], instrumentos) === null, 'sin pista, nada')
+  ok(sugerirInstrumento(r.columnas[0], [{ nombre: 'UD1' }, { nombre: 'Exame' }]) === null, 'dos candidatos parciales: ninguno, que elija el docente')
+}
+
+console.log('\n7. Ficheros que no son lo esperado')
+{
+  const r = leerCSVMoodle('Alumno;Nota\nAbad;7', clase)
+  ok(r.columnas.length === 0 && /nombre y apellidos/.test(r.avisos[0] ?? ''), 'sin columnas de nombre y apellidos se dice y no se lee nada')
+  const v = leerCSVMoodle('', clase)
+  ok(v.filas.length === 0 && v.avisos.length === 1, 'vacío')
+  const sinNotas = leerCSVMoodle('Nombre,Apellido(s),Número de ID\nAna,Abad Ríos,1', clase)
+  ok(sinNotas.columnas.length === 0 && /ninguna columna de notas/.test(sinNotas.avisos[0] ?? '') && sinNotas.filas[0].alumno?.id === 1, 'cabeceras en castellano, sin ítems: se avisa pero los alumnos se leen')
+}
+
+console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
+process.exit(fallos ? 1 : 0)

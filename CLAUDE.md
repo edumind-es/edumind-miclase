@@ -224,6 +224,17 @@ edumind_miclase/
   —dos palabras o más, nunca una—; lo que no casa se señala y no se asigna.
   Valores por encima de 10 convierten toda la columna a escala 0-100. Guarda
   en todos los criterios del instrumento con `sinVinculos`, como «Evaluar hoy».
+- **Importar el CSV de Edixgal** (`ImportarMoodle` + `utils/importarMoodle.ts`,
+  puro) reutiliza el casado por nombre de `pegarNotas.ts` (`casaNombre`, en las
+  dos direcciones: Moodle trae nombre y apellidos en columnas separadas y a
+  veces un segundo nombre que la lista no tiene). Las columnas de datos
+  (número de ID, institución, correo, total del curso, última descarga) no
+  son notas; el resto son ítems que el docente asigna columna a columna a un
+  instrumento, y lo no asignado se ignora. La escala 0-100 se decide por
+  columna. Guarda como «Pegar columna» y termina con un resumen: guardadas,
+  alumnos sin encontrar, columnas ignoradas. El fixture
+  `pruebas/fixtures/edixgal_calificacions.csv` está hecho a mano con las
+  cabeceras de Moodle en gallego; ningún CSV real de Luis ha pasado por él.
 - **En el panel de la casilla, el instrumento es lo primero y lo grande.**
   Orden fijo de `CeldaEvaluacion`: franja del instrumento con la nota,
   selector solo si hay varios, y el instrumento en sí (examen, rúbrica o

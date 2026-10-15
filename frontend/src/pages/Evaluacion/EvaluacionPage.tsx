@@ -31,6 +31,7 @@ import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } f
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
+import ImportarMoodle from '@/components/ImportarMoodle'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
@@ -127,6 +128,8 @@ export default function EvaluacionPage() {
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  /** Importador del CSV de Edixgal (Moodle) abierto. */
+  const [importarMoodle, setImportarMoodle] = useState(false)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
   const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
@@ -397,6 +400,13 @@ export default function EvaluacionPage() {
                 Por instrumento
               </button>
             </div>
+          )}
+          {asignaturaId && vista === 'instrumentos' && columnasInstr.length > 0 && alumnos.length > 0 && (
+            <button className="btn-secondary" data-importar-moodle-abrir style={{ fontSize: 13 }}
+              onClick={() => setImportarMoodle(true)}
+              title="Traer las notas del libro de calificaciones de Edixgal (CSV exportado de Moodle)">
+              📥 Importar CSV de Edixgal
+            </button>
           )}
           {asignaturaId && (
             <button className="btn-secondary" style={{ fontSize: 13 }}
@@ -888,6 +898,18 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onGuardado={() => { setPegarEn(null); setRefresco(r => r + 1) }}
           onCerrar={() => setPegarEn(null)}
+        />
+      )}
+
+      {importarMoodle && matriz && (
+        <ImportarMoodle
+          columnas={columnasInstr}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onGuardado={() => setRefresco(r => r + 1)}
+          onCerrar={() => setImportarMoodle(false)}
         />
       )}
 
