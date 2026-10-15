@@ -236,7 +236,10 @@ edumind_miclase/
   cuestionarios de Edixgal, nunca el libro completo. Las columnas por
   pregunta —puntuación «P. 1» o texto «Resposta 1» del informe de
   respuestas— se reconocen (`pregunta`) y salen plegadas; la fila «Media
-  xeral» no es nadie. Guarda como «Pegar columna» y termina con un
+  xeral» no es nadie. **Del cuestionario se importa solo la nota ya
+  evaluada («Cualificación»), nunca pregunta a pregunta**: decisión de
+  Luis, el cuaderno es para calificar y el valor de cada respuesta ya está
+  contado en esa nota. Guarda como «Pegar columna» y termina con un
   resumen: guardadas, alumnos sin encontrar, columnas ignoradas. Fixtures:
   `edixgal_calificacions.csv` (libro de calificaciones, a mano) y
   `edixgal_cuestionario.tsv` (cabecera real de Luis, alumnos inventados:
