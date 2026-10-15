@@ -185,10 +185,11 @@ edumind_miclase/
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
-  botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
-  `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el
-  DOM pero sin sitio, así que una prueba que pulse «Pegar columna» despliega
-  antes.
+  botón de calificar (en un test con clave, también «Corregir por cámara»,
+  que es calificar). Tipo, peso, criterios, «Imprimir test» y «Pegar columna»
+  están tras `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`);
+  siguen en el DOM pero sin sitio, así que una prueba que pulse «Pegar
+  columna» o «Imprimir test» despliega antes.
 - **Lo que trae PROENS son familias, no instrumentos.** «Proba escrita» 80 %
   y «Táboa de indicadores» 20 % agrupan lo que el docente hace de verdad: el
   examen de cada unidad, el billete de salida, speaking, listening. Un hijo
@@ -262,7 +263,7 @@ edumind_miclase/
   8 mm en dos columnas de 25. Hasta 50 preguntas × 5 opciones. `informes/hojasTest.ts`
   genera las hojas (una página por alumno) y el examen del alumnado;
   `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
-  solo con clave completa).
+  solo con clave completa y plegado tras `[data-cabeceras-toggle]`).
 - **El escáner de hojas vive en el aparato** (`utils/lectorHoja.ts`, puro salvo
   jsQR): marcas por manchas macizas no pegadas al borde (relleno de caja
   > 0,74, que aguanta ~15° de giro y deja fuera los patrones del QR), una por
