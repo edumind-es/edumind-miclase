@@ -303,6 +303,18 @@ edumind_miclase/
   genera las hojas (una página por alumno) y el examen del alumnado;
   `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
   solo con clave completa y plegado tras `[data-cabeceras-toggle]`).
+- **«Evaluar con QR y cámara» es una cámara para dos códigos** (`EscanearPage`):
+  el QR de mesa abre la evaluación rápida del alumno y el QR de una hoja de
+  respuestas (`leerPayloadHoja`) abre el corrector de ese examen, resolviendo
+  clase, área, unidad e instrumento desde el id del examen
+  (`resolverContextoExamen` en `ExamenesConHoja.tsx`, que reutiliza
+  `getMatrizEvaluacion` + `columnasPorInstrumento` para que los criterios sean
+  los mismos que en el Calificador). La misma pantalla lista todos los
+  exámenes del docente (`listarPruebas`) con imprimir, corregir y «Nuevo
+  examen» (clase → área → unidad → instrumento de prueba escrita → el
+  `PruebaEditor` de siempre). Luis no encontraba el corrector porque solo
+  vivía en la cabecera de la columna del examen, dentro de una unidad y con
+  el examen ya definido. También entra por URL: `/escanear?c=MCT1|…`.
 - **El escáner de hojas vive en el aparato** (`utils/lectorHoja.ts`, puro salvo
   jsQR): marcas por manchas macizas no pegadas al borde (relleno de caja
   > 0,74, que aguanta ~15° de giro y deja fuera los patrones del QR), una por

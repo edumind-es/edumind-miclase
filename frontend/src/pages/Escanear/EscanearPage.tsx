@@ -1,4 +1,13 @@
 /**
+ * «Evaluar con QR y cámara»: una cámara, dos códigos.
+ *
+ * El QR de mesa abre el panel de evaluación rápida del alumno; el QR de una
+ * hoja de respuestas (`MCT1|examen|alumno|…`, `leerPayloadHoja`) abre el
+ * corrector de ese examen, resolviendo clase, área, unidad e instrumento a
+ * partir del examen, sin elegir nada antes. Debajo, la lista de exámenes con
+ * hoja de respuestas de todas las clases (`ExamenesConHoja`), con imprimir,
+ * corregir y «Nuevo examen».
+ *
  * Escáner de QR de mesa: apunta la cámara de la tablet al código del alumno
  * y se abre su panel de evaluación rápida. Usa el detector nativo del
  * navegador cuando existe (Chrome/Android) y un decodificador en JavaScript
@@ -17,6 +26,9 @@ import type { Alumno } from '@/db/localDb'
 import { extraerCodigo } from '@/utils/qrSheet'
 import { crearLector, sePuedeEscanear, type Lector } from '@/utils/lectorQR'
 import EvaluacionRapida from '@/components/EvaluacionRapida'
+import ExamenesConHoja from '@/components/ExamenesConHoja'
+import { leerPayloadHoja } from '@/db/hojaOMR'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
 
 const tieneDetector = sePuedeEscanear()
 
@@ -28,6 +40,9 @@ export default function EscanearPage() {
   const [codigoManual, setCodigoManual] = useState('')
   const [noEncontrado, setNoEncontrado] = useState('')
   const [historial, setHistorial] = useState<Alumno[]>([])
+  /** Examen cuyo QR de hoja ha leído la cámara: la tarjeta de exámenes abre su corrector. */
+  const [hojaDe, setHojaDe] = useState<number | null>(null)
+  const { trimestre } = useClaseActiva()
 
   const [motor, setMotor] = useState<'nativo' | 'javascript' | null>(null)
 
@@ -61,6 +76,15 @@ export default function EscanearPage() {
   }
 
   const abrirPorCodigo = async (raw: string) => {
+    // El QR de una hoja de respuestas no es un alumno: es un examen que corregir.
+    const hoja = leerPayloadHoja(raw)
+    if (hoja) {
+      pararCamara()
+      setNoEncontrado('')
+      if ('vibrate' in navigator) navigator.vibrate?.(80)
+      setHojaDe(hoja.prueba_id)
+      return
+    }
     const codigo = extraerCodigo(raw)
     if (!codigo) { setNoEncontrado(raw); return }
     const a = await getAlumnoPorCodigo(codigo)
@@ -167,11 +191,12 @@ export default function EscanearPage() {
 
   return (
     <>
-      <h1 className="page-title">Evaluar con QR</h1>
-      <p style={{ color: 'var(--gris-600)', fontSize: 14, marginBottom: 20, maxWidth: 620 }}>
+      <h1 className="page-title">Evaluar con QR y cámara</h1>
+      <p style={{ color: 'var(--gris-600)', fontSize: 14, marginBottom: 20, maxWidth: 720 }}>
         Apunta la cámara al código QR de la mesa del alumno para abrir su panel de
-        evaluación al instante. Los QR se imprimen desde la ficha de cada clase y
-        llevan solo un código anónimo, nunca el nombre.
+        evaluación al instante, o al QR de una hoja de respuestas para corregir ese
+        examen. Los QR de mesa se imprimen desde la ficha de cada clase y llevan
+        solo un código anónimo, nunca el nombre.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16, maxWidth: 900 }}>
@@ -253,6 +278,10 @@ export default function EscanearPage() {
             </>
           )}
         </div>
+      </div>
+
+      <div style={{ maxWidth: 900, marginTop: 16 }}>
+        <ExamenesConHoja trimestre={trimestre} abrirCorrectorDe={hojaDe} onCorrectorCerrado={() => setHojaDe(null)} />
       </div>
     </>
   )

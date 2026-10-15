@@ -159,7 +159,7 @@ try {
   await panel.getByRole('button', { name: 'Cerrar' }).click()
 
   console.log('\n2. Entrar por el código del alumno, como tras escanear su QR')
-  await p.getByRole('link', { name: /Evaluar QR/ }).click()
+  await p.getByRole('link', { name: /QR y cámara/ }).click()
   await p.getByPlaceholder('M7KP2').fill(ini.codigos[1])
   await p.getByRole('button', { name: 'Abrir', exact: true }).click()
   ok(await aparece(p.getByText('Bello Souto, Bruno')), 'se abre la evaluación rápida del alumno')

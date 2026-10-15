@@ -184,6 +184,37 @@ try {
   const r = d1.notas[0][0]?.respuestas ?? {}
   ok(r.p1 === 1 && r.p6 === -1 && r.p7 === 0 && r.p8 === 1, 'las respuestas guardadas son acierto, fallo o en blanco, como a mano', JSON.stringify(r))
   ok(d1.notas[1].length === 0, 'Bruno sigue sin nota')
+
+  console.log('\n5. «Evaluar con QR y cámara»: el examen está a la vista y se corrige desde ahí')
+  await p.getByRole('link', { name: /QR y cámara/ }).click()
+  const tarjeta = p.locator('[data-examenes-hoja]')
+  await tarjeta.locator('[data-examen]').first().waitFor({ timeout: 8000 })
+  ok(await tarjeta.locator('[data-examen]').count() === 1 && await tarjeta.locator('[data-examen][data-con-clave]').count() === 1, 'la pantalla lista el examen, con clave')
+  ok((await tarjeta.locator('[data-examen]').first().textContent()).includes('6ºA'), 'y dice de qué clase es')
+  await tarjeta.locator('[data-examen-corregir]').click()
+  await escaner.waitFor({ timeout: 8000 })
+  await escaner.locator('[data-escaner-fichero]').setInputFiles({ name: 'hoja.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })
+  ok(await aparece(escaner.locator('[data-escaner-capturada]')), 'desde aquí la misma foto se reconoce')
+  ok((await escaner.locator('[data-escaner-alumno]').textContent()).includes('Abad Ríos, Ana'), 'y sigue siendo la de Ana')
+  await p.keyboard.press('Escape')
+  await escaner.waitFor({ state: 'hidden', timeout: 5000 })
+  await tarjeta.locator('[data-examen-nuevo]').click()
+  const dialogoNuevo = p.locator('[data-examen-nuevo-dialogo]')
+  await dialogoNuevo.waitFor({ timeout: 5000 })
+  await p.waitForTimeout(600)
+  const selects = dialogoNuevo.locator('select')
+  ok(await selects.count() === 4, 'nuevo examen pide clase, área, unidad e instrumento')
+  ok(await selects.nth(3).locator('option').count() >= 2, 'y ofrece el instrumento de prueba escrita del área', `${await selects.nth(3).locator('option').count()} opciones`)
+  await dialogoNuevo.getByRole('button', { name: 'Cancelar' }).click()
+  await dialogoNuevo.waitFor({ state: 'hidden', timeout: 5000 })
+  // El QR de una hoja, leído con la cámara del sistema, entra por la URL y abre el corrector sin elegir nada.
+  const origen = new URL(p.url()).origin
+  await p.goto(`${origen}/escanear?c=${encodeURIComponent(`MCT1|${d0.examen.id}|${ana.id}|${N}|${K}`)}`, { waitUntil: 'networkidle' })
+  ok(await aparece(escaner), 'el QR de una hoja abre directamente el corrector de su examen')
+  // El diálogo se nombra por el instrumento; el título del examen va dentro.
+  ok((await escaner.getAttribute('aria-label') ?? '').includes('Proba escrita') && (await escaner.textContent()).includes(d0.examen.def.titulo), 'del examen correcto', await escaner.getAttribute('aria-label'))
+  await p.keyboard.press('Escape')
+  await foto('escaner-02-qr-y-camara')
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('escaner-error').catch(() => {})

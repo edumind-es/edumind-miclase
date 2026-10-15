@@ -29,7 +29,7 @@ const NAV = [
     entradas: [
       { to: '/',            label: 'Inicio',      icon: '⊞' },
       { to: '/evaluacion',  label: 'Calificador', icon: '📋' },
-      { to: '/escanear',    label: 'Evaluar QR',  icon: '📷' },
+      { to: '/escanear',    label: 'QR y cámara', icon: '📷' },
       { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
       { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
       { to: '/informes',    label: 'Informes',    icon: '📄' },
