@@ -400,6 +400,9 @@ input:focus, select:focus, textarea:focus {
   line-height: 1.1;
 }
 .celda-btn:hover { border-color: var(--azul-500); }
+/* En «Todo el curso» la casilla explica, no edita. */
+.celda-btn.solo-lectura { cursor: help; }
+.celda-btn.solo-lectura:hover { border-color: var(--gris-500); border-style: dashed; }
 .celda-btn:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 1px; }
 
 /* El semáforo de la nota debe ganar al fondo neutro de la casilla.

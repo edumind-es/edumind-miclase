@@ -32,6 +32,7 @@ import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
+import ExplicacionNota from '@/components/ExplicacionNota'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
@@ -140,6 +141,13 @@ export default function EvaluacionPage() {
    * que cubre, en vez de en un criterio y sus instrumentos.
    */
   const [celda, setCelda] = useState<{ alumnoIdx: number; criterio: Criterio; instrumentoId?: number } | null>(null)
+  /**
+   * Casilla de «Todo el curso» que pide explicación. En esa pestaña no se
+   * califica: no hay unidad en la que anotar y la casilla es un resumen, así
+   * que pulsarla abre «de dónde sale esta nota» en vez del panel de edición.
+   */
+  const [explicar, setExplicar] = useState<{ alumnoIdx: number; criterio?: Criterio; col?: ColumnaInstrumento } | null>(null)
+  const resumenDelCurso = unidadId === null && unidades.length > 0
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
   const [nombresUnidad, setNombresUnidad] = useState(unidadesConNombre)
   const alternarNombresUnidad = () => {
@@ -275,7 +283,12 @@ export default function EvaluacionPage() {
 
   /** Abrir el panel de un alumno centrado en un instrumento. */
   const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
-    setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+    resumenDelCurso
+      ? setExplicar({ alumnoIdx, col })
+      : setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+  /** Abrir una casilla por criterio: el panel, o la explicación en «Todo el curso». */
+  const abrirPorCriterio = (alumnoIdx: number, criterio: Criterio) =>
+    resumenDelCurso ? setExplicar({ alumnoIdx, criterio }) : setCelda({ alumnoIdx, criterio })
 
   // Sin elección guardada, la vista por instrumento en cuanto hay con qué:
   // es la que habla el idioma del aula. La matriz LOMLOE queda a un clic.
@@ -490,6 +503,12 @@ export default function EvaluacionPage() {
               <span className="trim"> · {unidadActual.criterios.length} criterios</span>
             </div>
           )}
+          {resumenDelCurso && (
+            <div className="unidad-actual" data-resumen-curso>
+              <strong>Todo el curso</strong> · resumen de solo lectura: las medias del {trimestre}º trimestre.
+              <span className="trim"> Pulsa una casilla para ver de dónde sale; para calificar, entra en una unidad.</span>
+            </div>
+          )}
           {unidades.length > 0 ? null : (
             <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
               <strong>Esta área no tiene programación todavía.</strong>{' '}
@@ -616,6 +635,7 @@ export default function EvaluacionPage() {
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
                   onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
+                  soloLectura={resumenDelCurso}
                 />
               )
             ) : (
@@ -715,7 +735,7 @@ export default function EvaluacionPage() {
                               <td className="celda fantasma">
                                 {anterior && (
                                   <button className={`celda-btn ${claseNota(anterior.valor)}`} style={{ opacity: .4 }}
-                                    onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
+                                    onClick={() => abrirPorCriterio(idx, cr)}
                                     title={`Nota anterior de ${cr.id}: ${anterior.valor}. No cuenta.\n${anterior.motivo}\nPulsa para recuperarla o descartarla.`}>
                                     <span>{anterior.valor}</span>
                                   </button>
@@ -724,8 +744,8 @@ export default function EvaluacionPage() {
                             )}
                             <td className="celda">
                               <button
-                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
-                                onClick={() => setCelda({ alumnoIdx: idx, criterio: cr })}
+                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}${resumenDelCurso && !sinInstr ? ' solo-lectura' : ''}`}
+                                onClick={() => sinInstr ? setCelda({ alumnoIdx: idx, criterio: cr }) : abrirPorCriterio(idx, cr)}
                                 title={sinInstr
                                   ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
                                   : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${cabecerasDe(instrs).map(c => c.hijos.length ? `${c.nombre} (${c.hijos.map(h => h.nombre).join(', ')})` : c.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
@@ -763,7 +783,9 @@ export default function EvaluacionPage() {
           {/* Leyenda */}
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
-              <span>{vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
+              <span>{resumenDelCurso
+                ? 'Todo el curso es un resumen: aquí no se califica. Pulsa una casilla para ver de dónde sale la nota; para evaluar, entra en una unidad.'
+                : vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)
                 return (
@@ -891,6 +913,19 @@ export default function EvaluacionPage() {
           />
         )
       })()}
+
+      {explicar && matriz && alumnos[explicar.alumnoIdx] && (
+        <ExplicacionNota
+          alumno={alumnos[explicar.alumnoIdx]}
+          asig={matriz.asig}
+          trimestre={trimestre}
+          instrumentos={matriz.instrumentos}
+          unidades={unidades}
+          criterio={explicar.criterio}
+          instrumento={explicar.col ? { ins: explicar.col.ins, criterios: explicar.col.criterios } : undefined}
+          onCerrar={() => setExplicar(null)}
+        />
+      )}
 
       {sesion && matriz && (
         <SesionInstrumento

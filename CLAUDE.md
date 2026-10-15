@@ -184,6 +184,15 @@ edumind_miclase/
   (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
+- **«Todo el curso» es un resumen de solo lectura.** Sin unidad no hay dónde
+  anotar: las dos matrices enseñan las medias del trimestre y pulsar una
+  casilla abre `ExplicacionNota` («de dónde sale esta nota»: cada nota con
+  su instrumento, su porcentaje, la unidad en la que se anotó y su origen,
+  los tres trimestres y la nota de área), nunca `CeldaEvaluacion`. La matriz
+  por instrumento va con `soloLectura` (sin «Evaluar hoy», «Corregir»,
+  «Pegar» ni lápiz). El cálculo de la ficha es `calcularNotaArea`, el del
+  boletín; no suma nada por su cuenta. Las pruebas que quieran calificar
+  pulsan antes una pestaña de unidad (`.tab-unidad` a partir de la segunda).
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
   botón de calificar. Tipo, peso, criterios y «Pegar columna» están tras
   `[data-cabeceras-toggle]` (`miclase.calificador.cabeceras`); siguen en el

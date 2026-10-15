@@ -211,13 +211,24 @@ try {
   ok(await aparece(examen.getByText(/4 de 4 anotadas/)), 'y aun así enseña el examen ya corregido, no uno en blanco')
   await cerrarPanel()
 
-  console.log('\n5. «Todo el curso» no adivina de qué unidad es el examen')
+  console.log('\n5. «Todo el curso» no corrige: explica de dónde sale la nota del examen')
   await p.locator('.tab-unidad').first().click()
   await p.waitForTimeout(1200)
-  await abrirCelda(0, cA)
-  ok(await aparece(panel.getByText(/están definidos por unidad/)), 'avisa de que hay que entrar en la unidad')
-  ok(await examen.count() === 0, 'y deja la nota a mano')
-  await cerrarPanel()
+  {
+    // La casilla de Ana en el criterio del examen: en el resumen del curso no
+    // abre el panel (no hay unidad en la que anotar) sino la ficha de la nota.
+    const ids = await p.locator('th.criterio-th:not(.fantasma) .criterio-th-id').allTextContents()
+    const col = ids.findIndex(t => t.trim() === cA)
+    await p.locator('table.matriz tbody tr').nth(0).locator('td.celda:not(.fantasma)').nth(col).locator('button').click()
+    const ficha = p.locator('[data-explicacion-nota]')
+    ok(await aparece(ficha), 'pulsar la casilla abre «de dónde sale esta nota»')
+    ok(await panel.count() === 0 && await examen.count() === 0, 'y no el panel de corregir')
+    ok(await aparece(ficha.locator('[data-explicacion-fila]').first()), 'la ficha dice con qué instrumento y en qué unidad se puso la nota')
+    const textoFicha = await ficha.textContent()
+    ok(/anotada en/.test(textoFicha), 'nombrando la unidad', textoFicha.match(/anotada en [^·]*/)?.[0])
+    await p.keyboard.press('Escape')
+    await ficha.waitFor({ state: 'hidden', timeout: 5000 })
+  }
   await p.locator('.tab-unidad').nth(inicio.pestana).click()
   await p.waitForTimeout(1200)
 
