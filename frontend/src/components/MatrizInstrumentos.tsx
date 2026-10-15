@@ -131,16 +131,36 @@ interface Props {
   onPegar: (col: ColumnaInstrumento) => void
   /** «Definir herramienta»: el instrumento no tiene rúbrica ni examen y no es de observación. */
   onDefinir: (col: ColumnaInstrumento) => void
+  /**
+   * Renombrar el instrumento desde su cabecera, sin pasar por ⚙ Instrumentos.
+   * Solo el nombre: tipo, peso y criterios siguen en el gestor, porque cambian
+   * cómo se calcula la nota y no se tocan de pasada.
+   */
+  onRenombrar: (col: ColumnaInstrumento, nombre: string) => Promise<void>
   /** «Imprimir»: hojas de respuestas y examen de un test con clave. */
   onImprimir?: (col: ColumnaInstrumento) => void
   /** «Corregir por cámara»: la pila de hojas de respuestas. */
   onEscanear?: (col: ColumnaInstrumento) => void
+  /**
+   * «Todo el curso»: un resumen. Sin botones de calificar, imprimir, escanear
+   * ni lápiz, y pulsar una casilla no corrige sino que explica de dónde sale
+   * la media (`onCelda` sigue siendo quien decide qué abrir).
+   */
+  soloLectura?: boolean
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onImprimir, onEscanear }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, soloLectura = false }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
+  /** Columna cuyo nombre se está editando, y el texto que lleva. */
+  const [renombrando, setRenombrando] = useState<{ id: number; texto: string } | null>(null)
+  const confirmarNombre = async (col: ColumnaInstrumento) => {
+    if (!renombrando) return
+    const v = renombrando.texto.trim()
+    setRenombrando(null)
+    if (v && v !== col.ins.nombre) await onRenombrar(col, v)
+  }
   const alternarDetalles = () => {
     const v = !detalles
     setDetalles(v)
@@ -203,18 +223,32 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                   data-familia={col.ins.familia_id ?? undefined}
                   style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
                   title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
-                  <div className="instr-th-nombre">
-                    <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
-                    <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
-                  </div>
+                  {renombrando?.id === col.ins.instrumento_id ? (
+                    <input className="instr-th-renombrar" data-renombrar-campo autoFocus aria-label="Nuevo nombre del instrumento"
+                      value={renombrando.texto}
+                      onChange={e => setRenombrando({ id: col.ins.instrumento_id, texto: e.target.value })}
+                      onBlur={() => confirmarNombre(col)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
+                        if (e.key === 'Escape') setRenombrando(null)
+                      }} />
+                  ) : (
+                    <div className="instr-th-nombre">
+                      <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
+                      <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
+                      {!soloLectura && <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
+                        title="Cambiar el nombre de este instrumento (el tipo, el peso y los criterios se cambian en ⚙ Instrumentos)"
+                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>}
+                    </div>
+                  )}
                   <div className="instr-th-tipo instr-th-detalle">
-                    {cfg.label}{esHijo ? ` · peso ${col.ins.peso}` : ` · ${col.ins.peso}%`}
+                    {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   <div className="instr-th-criterios instr-th-detalle">
                     {ids.length} criterio{ids.length !== 1 ? 's' : ''}: {ids.join(' · ')}
                   </div>
-                  {esExamen ? (
+                  {soloLectura ? null : esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}
                       title={col.ins.tiene_prueba
@@ -248,7 +282,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     )}
                   </>)}
                   {/* Un test con clave se corrige también con la cámara: es calificar, así que va a la vista. */}
-                  {esExamen && col.ins.tiene_prueba && onEscanear && (
+                  {!soloLectura && esExamen && col.ins.tiene_prueba && onEscanear && (
                     <button type="button" className="instr-th-accion" data-escanear-abrir
                       onClick={() => onEscanear(col)}
                       title="Corregir las hojas de respuestas con la cámara, una tras otra">
@@ -256,18 +290,18 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     </button>
                   )}
                   {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
-                  {esExamen && col.ins.tiene_prueba && onImprimir && (
+                  {!soloLectura && esExamen && col.ins.tiene_prueba && onImprimir && (
                     <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-imprimir-abrir
                       onClick={() => onImprimir(col)}
                       title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
                       🖨 Imprimir test
                     </button>
                   )}
-                  <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
+                  {!soloLectura && <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">
                     📋 Pegar columna
-                  </button>
+                  </button>}
                 </th>
               )
             })}
@@ -285,9 +319,9 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 const parcial = r.conNota > 0 && r.conNota < r.total
                 return (
                   <td key={col.ins.instrumento_id} className="celda">
-                    <button type="button" className={`celda-btn ${claseNota(r.valor)}`} data-celda-instr
+                    <button type="button" className={`celda-btn ${claseNota(r.valor)}${soloLectura ? ' solo-lectura' : ''}`} data-celda-instr
                       onClick={() => onCelda(idx, col)}
-                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}`}>
+                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}${soloLectura ? '\nPulsa para ver de dónde sale' : ''}`}>
                       <span>{r.valor == null ? '·' : r.valor}</span>
                       {(parcial || r.diario) && (
                         <span className="celda-instr">

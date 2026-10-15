@@ -560,7 +560,7 @@ export default function CeldaEvaluacion({
                           <span>
                             {ins.nombre}
                             <span style={{ display: 'block', fontSize: 10, fontWeight: 500, opacity: .85 }}>
-                              {c.label}{ins.familia_id != null ? ` · peso ${ins.peso} en ${ins.familia_nombre}` : ` · ${ins.peso}%`}{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
+                              {c.label}{ins.familia_id != null ? ` · ${ins.pct_familia} % de ${ins.familia_nombre}` : ` · ${ins.peso}%`}{ins.tiene_prueba ? ' · con examen' : ins.tiene_rubrica ? ' · con rúbrica' : ''}
                             </span>
                           </span>
                         </button>

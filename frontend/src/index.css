@@ -344,6 +344,17 @@ input:focus, select:focus, textarea:focus {
 .tab-unidad:hover { border-color: var(--azul-300); color: var(--azul-700); }
 .tab-unidad.activa { background: var(--azul-700); border-color: var(--azul-700); color: var(--blanco); }
 .tab-unidad .trim { opacity: .7; font-weight: 500; margin-left: 4px; }
+/* Conmutador «títulos / solo números» de las pestañas de unidad, y la línea
+   con el título de la unidad abierta cuando van por número. */
+.tab-unidad-modo {
+  flex-shrink: 0; align-self: center; margin-left: auto;
+  padding: 3px 9px; border-radius: 6px; border: 1px solid transparent;
+  background: none; color: var(--gris-500); font-size: 11.5px; font-weight: 600; cursor: pointer;
+}
+.tab-unidad-modo:hover, .tab-unidad-modo[aria-pressed="true"] { border-color: var(--gris-300); color: var(--azul-700); }
+.unidad-actual { font-size: 12.5px; color: var(--gris-600); margin: -4px 0 10px; }
+.unidad-actual strong { color: var(--azul-700); }
+.unidad-actual .trim { opacity: .75; }
 
 /* ── Matriz del calificador ───────────────────────────────────────────── */
 .matriz-wrap { overflow: auto; max-height: calc(100vh - 250px); border: 1px solid var(--gris-300); border-radius: var(--radio-md); background: var(--blanco); }
@@ -389,6 +400,9 @@ input:focus, select:focus, textarea:focus {
   line-height: 1.1;
 }
 .celda-btn:hover { border-color: var(--azul-500); }
+/* En «Todo el curso» la casilla explica, no edita. */
+.celda-btn.solo-lectura { cursor: help; }
+.celda-btn.solo-lectura:hover { border-color: var(--gris-500); border-style: dashed; }
 .celda-btn:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 1px; }
 
 /* El semáforo de la nota debe ganar al fondo neutro de la casilla.
@@ -701,6 +715,16 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
   min-width: 170px; max-width: 210px; text-align: left; padding: 8px 10px 9px;
 }
 .instr-th-nombre { font-size: 13px; font-weight: 700; line-height: 1.25; }
+/* Lápiz de renombrar: discreto hasta pasar por la cabecera. */
+.instr-th-lapiz {
+  margin-left: 4px; padding: 0 3px; border: none; background: none; cursor: pointer;
+  color: inherit; font-size: 12px; opacity: .45; line-height: 1; vertical-align: middle;
+}
+.instr-th:hover .instr-th-lapiz, .instr-th-lapiz:focus-visible { opacity: 1; }
+.instr-th-renombrar {
+  width: 100%; box-sizing: border-box; font-size: 13px; font-weight: 700;
+  padding: 3px 6px; border-radius: 5px; border: 1px solid var(--blanco); color: var(--gris-900);
+}
 .instr-th-tipo { font-size: 10px; opacity: .8; font-weight: 400; margin-top: 2px; }
 .instr-th-criterios {
   font-size: 9.5px; opacity: .85; font-weight: 500; margin-top: 5px; line-height: 1.3;

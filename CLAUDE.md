@@ -188,6 +188,15 @@ edumind_miclase/
   (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
+- **«Todo el curso» es un resumen de solo lectura.** Sin unidad no hay dónde
+  anotar: las dos matrices enseñan las medias del trimestre y pulsar una
+  casilla abre `ExplicacionNota` («de dónde sale esta nota»: cada nota con
+  su instrumento, su porcentaje, la unidad en la que se anotó y su origen,
+  los tres trimestres y la nota de área), nunca `CeldaEvaluacion`. La matriz
+  por instrumento va con `soloLectura` (sin «Evaluar hoy», «Corregir»,
+  «Pegar» ni lápiz). El cálculo de la ficha es `calcularNotaArea`, el del
+  boletín; no suma nada por su cuenta. Las pruebas que quieran calificar
+  pulsan antes una pestaña de unidad (`.tab-unidad` a partir de la segunda).
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
   botón de calificar (en un test con clave, también «Corregir por cámara»,
   que es calificar). Tipo, peso, criterios, «Imprimir test» y «Pegar columna»
@@ -200,8 +209,14 @@ edumind_miclase/
   es un `Instrumento` con `familia_id` (sin índice), tipo y color propios, un
   **subconjunto** de los criterios de su familia en cada unidad
   (`fijarCriteriosDeHijo` lo comprueba y falla si se sale) y un `peso`
-  relativo DENTRO de la familia (1 por defecto). La familia entra en el área
-  con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
+  relativo DENTRO de la familia. El cálculo normaliza por la suma, así que
+  el número guardado da igual; lo que se ENSEÑA es siempre el porcentaje
+  (`porcentajesEnFamilia`, resuelto una vez en `CeldaInstrumento.pct_familia`
+  con todos los hermanos) y el gestor lo deja escribir directo: fijar el 60 %
+  a uno reparte el 40 % entre los demás guardando su proporción
+  (`pesosAlFijarPorcentaje`) y desde entonces lo guardado son porcentajes.
+  Un hijo nuevo entra con el peso medio de sus hermanos. Luis veía «peso 1»
+  y lo leía como 1 %. La familia entra en el área con su peso de siempre. La fusión vive en `fundirHijosEnFamilias`
   (`calculo.ts`) y la usan tanto `calcularNotaArea` como la matriz: una nota
   directa de la familia (anterior a tener hijos) cuenta como un hijo más con
   peso 1, y un hijo sin familia viva cuenta como instrumento suelto. Las

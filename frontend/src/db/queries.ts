@@ -1,7 +1,7 @@
 import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias } from './calculo'
+import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, porcentajesEnFamilia } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
@@ -385,6 +385,13 @@ export async function getHijos(familia_id: number): Promise<Instrumento[]> {
  * Da de alta un hijo dentro de una familia. Hereda área y trimestres; su
  * `peso` es relativo dentro de la familia (1 = igual que los demás).
  */
+/** Peso medio (entero, mínimo 1) de unos hijos; 1 si no hay ninguno. */
+function pesoMedio(hijos: Instrumento[]): number {
+  if (hijos.length === 0) return 1
+  const suma = hijos.reduce((s, h) => s + (h.peso > 0 ? h.peso : 1), 0)
+  return Math.max(1, Math.round(suma / hijos.length))
+}
+
 export async function crearInstrumentoHijo(
   familia_id: number,
   data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
@@ -396,7 +403,9 @@ export async function crearInstrumentoHijo(
   const reg = nuevo({
     asignatura_id: familia.asignatura_id, familia_id,
     nombre: data.nombre.trim(), tipo: data.tipo,
-    peso: data.peso != null && data.peso > 0 ? data.peso : 1,
+    // Sin peso pedido, el medio de sus hermanos: así un cuarto examen entra
+    // contando como los otros tres, estén en 1 · 1 · 1 o en 40 · 30 · 30.
+    peso: data.peso != null && data.peso > 0 ? data.peso : pesoMedio(hermanos),
     trimestres: familia.trimestres, orden: hermanos.length,
     agregacion: data.agregacion ?? null, created_at: now(),
   })
@@ -2058,6 +2067,12 @@ export type CeldaInstrumento = {
   familia_nombre: string | null
   /** Peso de la familia en el área (el de la propia fila si es familia). */
   familia_peso: number
+  /**
+   * Porcentaje de este hijo dentro de su familia, contando a TODOS sus
+   * hermanos (también los que no evalúan lo que se mira); null si no es hijo.
+   * Resuelto aquí una vez, como el color, para que cabecera y panel digan lo mismo.
+   */
+  pct_familia: number | null
   /** Color de identidad, ya resuelto (propio o por orden). */
   color: string
 }
@@ -2141,6 +2156,13 @@ export async function getMatrizEvaluacion(
     }
   }
 
+  // Porcentaje de cada hijo dentro de su familia, con todos los hermanos.
+  const pctPorId = new Map<number, number>()
+  for (const familiaId of new Set(instrumentos.filter(i => i.familia_id != null).map(i => i.familia_id!))) {
+    const hermanos = instrumentos.filter(i => i.familia_id === familiaId)
+    porcentajesEnFamilia(hermanos.map(h => h.peso)).forEach((v, k) => pctPorId.set(hermanos[k].id!, v))
+  }
+
   const porCriterio = new Map<string, CeldaInstrumento[]>()
   const criteriosFueraDeTrimestre = new Set<string>()
   for (const [criterio, lista] of crudo) {
@@ -2168,6 +2190,7 @@ export async function getMatrizEvaluacion(
         familia_id: familia?.id ?? null,
         familia_nombre: familia?.nombre ?? null,
         familia_peso: familia ? familia.peso : ins.peso,
+        pct_familia: familia ? pctPorId.get(ins.id!) ?? null : null,
         color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
       })
     }
