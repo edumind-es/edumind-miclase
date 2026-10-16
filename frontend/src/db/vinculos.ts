@@ -15,14 +15,14 @@ export type FilaVinculo = { unidad_id: number; criterio_id: string; vinculado?: 
 /**
  * Con qué criterios va vinculado `criterio_id`, sin contarlo a él.
  *
- * `filas` son las de UN instrumento, ya filtradas a las unidades del trimestre
- * que se está calificando.
- *
- * Se cierra por transitividad entre unidades: si en una unidad van juntos A y
- * B y en otra B y C, los tres van juntos. No es un capricho: la nota se guarda
- * por alumno, instrumento, criterio y trimestre —no por unidad—, así que B es
- * la misma casilla en las dos unidades. Replicar solo «los de esta unidad»
- * dejaría A y C distintos de B según desde dónde se calificara.
+ * `filas` son las de UN instrumento, normalmente de la unidad que se está
+ * calificando. El vínculo no sale de su unidad: desde la v7 la casilla lleva
+ * la unidad en la clave, así que A-B en una unidad y B-C en otra son dos
+ * grupos distintos, cada uno con sus casillas. Antes, con la clave sin
+ * unidad, había que cerrar por transitividad entre unidades; eso dejó de
+ * tener sentido. Si llegan filas de varias unidades (la vista «Todo el
+ * curso»), se devuelven los compañeros de `criterio_id` en cualquiera de
+ * ellas, sin encadenar.
  */
 export function criteriosVinculados(filas: FilaVinculo[], criterio_id: string): string[] {
   const grupos = new Map<number, Set<string>>()
@@ -32,19 +32,12 @@ export function criteriosVinculados(filas: FilaVinculo[], criterio_id: string): 
     if (!g) grupos.set(f.unidad_id, g = new Set())
     g.add(f.criterio_id)
   }
-  // Un grupo de uno no vincula nada: es lo que queda cuando se retira de la
-  // programación el otro criterio.
-  const validos = [...grupos.values()].filter(g => g.size >= 2)
-
-  const alcanzados = new Set([criterio_id])
-  let crecio = true
-  while (crecio) {
-    crecio = false
-    for (const g of validos) {
-      if (![...g].some(c => alcanzados.has(c))) continue
-      for (const c of g) if (!alcanzados.has(c)) { alcanzados.add(c); crecio = true }
-    }
+  const companeros = new Set<string>()
+  for (const g of grupos.values()) {
+    // Un grupo de uno no vincula nada: es lo que queda cuando se retira de la
+    // programación el otro criterio.
+    if (g.size < 2 || !g.has(criterio_id)) continue
+    for (const c of g) if (c !== criterio_id) companeros.add(c)
   }
-  alcanzados.delete(criterio_id)
-  return [...alcanzados].sort()
+  return [...companeros].sort()
 }

@@ -158,6 +158,10 @@ async function principal() {
     await paquete('pruebas/prueba-escrita.test.ts', pruebaEscrita, ['--platform=node', '--format=esm'])
     await suite('prueba escrita: nota e importación', 'node', [pruebaEscrita])
 
+    const migracionUnidades = join(scratch, 'migracion-unidades.mjs')
+    await paquete('pruebas/migracion-unidades.test.ts', migracionUnidades, ['--platform=node', '--format=esm'])
+    await suite('unidades estancas: colocar notas antiguas', 'node', [migracionUnidades])
+
     const vinculos = join(scratch, 'vinculos.mjs')
     await paquete('pruebas/vinculos.test.ts', vinculos, ['--platform=node', '--format=esm'])
     await suite('criterios vinculados', 'node', [vinculos])

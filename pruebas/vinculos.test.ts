@@ -1,9 +1,8 @@
 /**
  * Criterios vinculados: quién va con quién.
  *
- * La nota se guarda por alumno, instrumento, criterio y trimestre —no por
- * unidad—, así que el vínculo tiene que cerrarse entre unidades: si no, el
- * mismo criterio replicaría a sitios distintos según desde dónde se califique.
+ * Desde la v7 la casilla lleva la unidad en la clave: el vínculo vive y
+ * muere dentro de su unidad. Lo que se marca en una no arrastra a otra.
  */
 import { criteriosVinculados } from '../frontend/src/db/vinculos'
 
@@ -30,14 +29,16 @@ console.log('\n2. Sin vínculo')
   ok(criteriosVinculados([], 'CE1.1').length === 0, 'sin programación')
 }
 
-console.log('\n3. Entre unidades')
+console.log('\n3. Entre unidades: cada una lo suyo')
 {
   const filas = [f(1, 'A'), f(1, 'B'), f(2, 'B'), f(2, 'C'), f(3, 'X'), f(3, 'Y')]
-  ok(criteriosVinculados(filas, 'A').join() === 'B,C', 'A-B en una y B-C en otra: los tres van juntos', criteriosVinculados(filas, 'A').join())
-  ok(criteriosVinculados(filas, 'C').join() === 'A,B', 'desde cualquiera de ellos')
+  ok(criteriosVinculados(filas, 'A').join() === 'B', 'A-B en una y B-C en otra: A solo va con B (no se encadena)', criteriosVinculados(filas, 'A').join())
+  ok(criteriosVinculados(filas, 'B').join() === 'A,C', 'B va con A en una unidad y con C en la otra', criteriosVinculados(filas, 'B').join())
+  ok(criteriosVinculados(filas, 'C').join() === 'B', 'C solo con B')
   ok(criteriosVinculados(filas, 'X').join() === 'Y', 'un grupo aparte no se mezcla')
   const separadas = [f(1, 'A'), f(2, 'A'), f(2, 'B')]
   ok(criteriosVinculados(separadas, 'A').join() === 'B', 'marcado suelto en una unidad, agrupado en otra')
+  ok(criteriosVinculados(filas.filter(x => x.unidad_id === 1), 'B').join() === 'A', 'con las filas de una sola unidad, solo sus compañeros')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

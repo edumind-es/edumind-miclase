@@ -122,7 +122,7 @@ try {
   await diario.waitFor({ timeout: 5000 })
   const origen = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
   let e = await estado()
-  ok(e.version === 60, 'la base está en la versión 6 del esquema', `idb v${e.version}`)
+  ok(e.version === 70, 'la base está en la versión 7 del esquema', `idb v${e.version}`)
   ok(Object.keys(e.notas).length === 0 && e.registros.length === 0, 'sin notas ni registros todavía')
   ok(await panel.locator('button.cal-5').count() === 1, 'sin registros, la parrilla 0-10 sigue a la vista')
 

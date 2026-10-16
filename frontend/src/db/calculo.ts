@@ -186,6 +186,47 @@ function pesoEnFamilia(ins: Instrumento | undefined): number {
  * Un hijo cuya familia ya no está en la lista se queda como instrumento
  * suelto: su nota no se pierde, cuenta con su propio peso.
  *
+/**
+ * Funde en una las notas que el mismo alumno tiene en el mismo criterio con
+ * el mismo instrumento en VARIAS unidades del trimestre: la media simple.
+ *
+ * Es la casilla de «Todo el curso» desde que las unidades son estancas: cada
+ * unidad guarda su nota y el resumen del trimestre las promedia. Cada unidad
+ * cuenta igual, con su nota ya hecha —decisión de Luis—; el peso lo ponen
+ * después los instrumentos y las familias. Una sola fila se devuelve tal
+ * cual; la fusión es `virtual`, sin `id`, y no se guarda nunca.
+ *
+ * El cálculo del área (`calcularNotaArea`) pasa por aquí ANTES de ponderar:
+ * si cada fila entrara como aportación con el peso de su instrumento, un
+ * instrumento con nota en dos unidades pesaría el doble que uno con nota en
+ * una, y el 20/80 de la programación dejaría de cumplirse. Primero la media
+ * de unidades, después el peso del instrumento y el de la familia.
+ */
+export function fundirUnidades(cals: Calificacion[]): Calificacion[] {
+  const grupos = new Map<string, Calificacion[]>()
+  for (const c of cals) {
+    const k = `${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`
+    grupos.set(k, [...(grupos.get(k) ?? []), c])
+  }
+  const salida: Calificacion[] = []
+  for (const lista of grupos.values()) {
+    if (lista.length === 1) { salida.push(lista[0]); continue }
+    const conNota = lista.filter(c => c.valor != null)
+    const { id: _id, ...base } = conNota[0] ?? lista[0]
+    void _id
+    salida.push({
+      ...base,
+      valor: conNota.length ? conNota.reduce((s, c) => s + c.valor!, 0) / conNota.length : null,
+      valor_anterior: null, anterior_motivo: null, observacion: null, origen: null,
+      niveles_rubrica: null, virtual: true,
+    })
+  }
+  return salida
+}
+
+/**
+ * Funde las notas de los hijos en la de su familia.
+ *
  * Es la única definición de esa fusión: la usan el cálculo del área y la
  * matriz del calificador, para que las dos enseñen el mismo número.
  */
@@ -264,9 +305,10 @@ export function calcularNotaArea(
   pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO
 ): NotaArea {
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
-  // Los hijos se funden en su familia antes de nada: de aquí en adelante
-  // solo hay instrumentos de primer nivel, con su peso en el área.
-  const conValor = fundirHijosEnFamilias(calificaciones.filter(c => c.valor != null), instrumentos)
+  // Primero las unidades (una nota por alumno, criterio e instrumento en el
+  // trimestre) y después los hijos en su familia: de aquí en adelante solo
+  // hay instrumentos de primer nivel, con su peso en el área.
+  const conValor = fundirHijosEnFamilias(fundirUnidades(calificaciones.filter(c => c.valor != null)), instrumentos)
     .filter(c => c.valor != null)
 
   // criterio → trimestre → aportaciones

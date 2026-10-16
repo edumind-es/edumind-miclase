@@ -164,7 +164,8 @@ try {
   await p.getByRole('button', { name: 'Abrir', exact: true }).click()
   ok(await aparece(p.getByText('Bello Souto, Bruno')), 'se abre la evaluación rápida del alumno')
   const rapida = p.locator('.card').filter({ hasText: 'Bello Souto, Bruno' })
-  await rapida.locator('select').filter({ hasText: 'Todos los criterios' }).selectOption({ label: ini.unidad })
+  // Con unidades, la evaluación rápida siempre está en una (la casilla lleva la unidad en la clave).
+  await rapida.locator('select[aria-label="Unidad"]').selectOption({ label: ini.unidad })
   await p.waitForTimeout(800)
 
   console.log('\n3. El vínculo vale también aquí')

@@ -19,6 +19,7 @@ import { centroBurbuja, BURBUJA } from '@/db/hojaOMR'
 import { sePuedeEscanear } from '@/utils/lectorQR'
 import { calificativo } from '@/db/calculo'
 import type { Alumno } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   instrumento: CeldaInstrumento
@@ -205,7 +206,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     setGuardando(true); setError(null)
     try {
       const r = await guardarExamenDeAlumno({
-        alumno_id: capturada.alumno.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: unidadId,
+        alumno_id: capturada.alumno.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId),
         def, respuestas, destinos: criterios.map(c => c.id), area,
       })
       setCorregidos(l => [...l.filter(x => x.alumno.id !== capturada.alumno!.id), { alumno: capturada.alumno!, nota: r.nota }])

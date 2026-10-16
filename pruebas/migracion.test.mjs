@@ -11,7 +11,7 @@
 import { navegadorChromium } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
-import { mkdirSync, copyFileSync, writeFileSync, rmSync } from 'node:fs'
+import { mkdirSync, copyFileSync, writeFileSync, rmSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
@@ -52,8 +52,24 @@ await p.waitForFunction(() => document.getElementById('estado')?.textContent?.st
 const estado = await p.locator('#estado').innerText()
 ok(estado === 'LISTO v3', 'base de datos v3 sembrada con un curso real de Educación Física', estado)
 
-console.log('\n2. Abrir la app nueva (dispara la migración a v5)')
+console.log('\n2. Abrir la app nueva: la puerta de migración pide una copia antes de tocar nada')
 await p.goto(BASE, { waitUntil: 'networkidle' })
+await p.waitForTimeout(1500)
+ok(await p.locator('[data-puerta-migracion]').isVisible(), 'con una base anterior, la app enseña la puerta de migración en vez de abrir')
+const sinTocar = await p.evaluate(() => new Promise(res => {
+  const r = indexedDB.open('miclase_db'); r.onsuccess = () => { const v = r.result.version; r.result.close(); res(v) }
+}))
+ok(sinTocar === 30, 'mientras la puerta está abierta la base sigue en la v3: nada se ha migrado aún', `idb v${sinTocar}`)
+await p.locator('[data-migracion-password]').fill('claveprueba')
+await p.locator('[data-migracion-confirmar]').fill('claveprueba')
+const descargaCopia = p.waitForEvent('download')
+await p.locator('[data-migracion-copiar]').click()
+const fCopia = await descargaCopia
+ok(/^miclase-antes-de-unidades-\d{4}-\d{2}-\d{2}\.miclase$/.test(fCopia.suggestedFilename()), 'se descarga una copia cifrada con nombre fechado', fCopia.suggestedFilename())
+const rutaCopia = process.env.SCRATCH + '/copia-antes-de-unidades.miclase'
+await fCopia.saveAs(rutaCopia)
+const copia = JSON.parse(readFileSync(rutaCopia, 'utf8'))
+ok(typeof copia.salt === 'string' && typeof copia.iv === 'string' && typeof copia.datos === 'string', 'la copia es el mismo formato .miclase que restaura «Importar» (AES-GCM)')
 await p.waitForTimeout(2500)
 ok(errores.length === 0, 'la migración no lanza ningún error', errores.slice(0,3).join(' | '))
 
@@ -80,7 +96,7 @@ const tras = await p.evaluate(async () => {
   return r
 })
 
-ok(tras.version === 60, 'la base pasa a la versión 6 (Dexie numera internamente ×10)', `idb v${tras.version}`)
+ok(tras.version === 70, 'la base pasa a la versión 7 (Dexie numera internamente ×10)', `idb v${tras.version}`)
 ok(tras.tablas.includes('criterio_instrumentos'), 'aparece la tabla criterio_instrumentos')
 ok(tras.tablas.includes('diario'), 'aparece la tabla del diario de evaluación')
 ok(tras.tablas.includes('meta'), 'aparece la tabla meta')
@@ -102,6 +118,12 @@ console.log('\n4. Los registros antiguos quedan listos para sincronizar')
 ok(tras.grupos.every(g => !!g.updated_at), 'los grupos reciben sello de modificación')
 ok(tras.calificaciones.every(c => !!c.updated_at), 'las calificaciones reciben sello')
 ok(tras.calificaciones.every(c => c.deleted_at === null), 'y quedan marcadas como no borradas')
+
+console.log('\n4b. Unidades estancas: las notas antiguas reciben su unidad')
+ok(tras.calificaciones.every(c => c.unidad_id === 1), 'las tres notas van a la única unidad del trimestre', tras.calificaciones.map(c => c.unidad_id).join())
+const resumenMigracion = await p.evaluate(() => JSON.parse(localStorage.getItem('miclase.migracion.unidades') || 'null'))
+ok(resumenMigracion && resumenMigracion.asignadas === 3 && resumenMigracion.sinUnidad === 0, 'la migración deja su resumen para el aviso del Inicio', JSON.stringify(resumenMigracion))
+ok(await p.locator('[data-aviso-migracion]').isVisible(), 'el Inicio avisa de lo que ha cambiado y de actualizar todos los aparatos')
 ok(tras.grupos[0].updated_at === '2025-09-01T08:00:00.000Z', 'el sello respeta la fecha de creación original cuando existe', tras.grupos[0].updated_at)
 
 console.log('\n5. La app funciona con los datos migrados')

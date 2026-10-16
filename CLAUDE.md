@@ -19,7 +19,7 @@ edumind_miclase/
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
 │   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v6) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v7) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
@@ -153,10 +153,11 @@ edumind_miclase/
 - **La réplica a criterios vinculados vive en `saveCalificaciones`**, no en las
   pantallas: es el único sitio por el que pasan las notas (panel de celda,
   evaluación rápida, QR). Quién va con quién lo decide `db/vinculos.ts`,
-  cerrando por transitividad entre unidades del trimestre, porque la nota se
-  guarda por alumno, instrumento, criterio y trimestre, no por unidad. Copiar
-  notas y corregir un examen escriben con `sinVinculos`: su reparto ya está
-  decidido. Nada se replica sin que el docente lo haya pedido.
+  dentro de la unidad que se califica: desde la v7 la casilla lleva la
+  unidad en la clave y un vínculo de una unidad no arrastra a otra (antes se
+  cerraba por transitividad entre unidades, porque la clave no la llevaba).
+  Copiar notas y corregir un examen escriben con `sinVinculos`: su reparto
+  ya está decidido. Nada se replica sin que el docente lo haya pedido.
 - **«Copiar nota» tiene tres alcances y ninguno se da por supuesto**: la nota
   del alumno a sus otros criterios; la misma nota de ese alumno a toda la clase
   (`desde_alumno_id`), que es lo que un docente entiende por «a toda la clase»;
@@ -337,6 +338,32 @@ edumind_miclase/
   semitranslúcida en la matriz), sin contar —todo el cálculo lee `valor`— y
   recuperable desde el panel de la casilla. Decisión expresa de Luis: retirar
   la nota sin más, aunque fuera coherente, no es aceptable.
+- **Las unidades son estancas** (esquema v7). La casilla se identifica por
+  alumno, instrumento, criterio, trimestre **y unidad** (índice compuesto de
+  `calificaciones` y `diario`): el mismo criterio con el mismo instrumento
+  en la UD3 y la UD4 del trimestre son dos notas. Luis anotaba en una y
+  aparecía en la otra. Consecuencias que no hay que romper: (1) toda escritura
+  lleva `unidad_id` numérico (`saveCalificaciones` y `anadirRegistro` fallan
+  sin él; IndexedDB no indexa una fila con la unidad en blanco); un área sin
+  unidades califica en el cajón `SIN_UNIDAD` (0) vía `claveUnidad`. (2) «Todo
+  el curso» funde las unidades por casilla con `fundirUnidades`
+  (`calculo.ts`): media simple, cada unidad cuenta igual, y `calcularNotaArea`
+  la aplica ANTES de ponderar por instrumento y familia, porque si no un
+  instrumento con nota en dos unidades pesaría el doble y el 20/80 de la
+  programación dejaría de cumplirse. (3) Las filas sin unidad —copias
+  anteriores a la v7, paquetes de un aparato sin actualizar— reciben la suya
+  con la regla pura de `db/migracionUnidades.ts` (la que ya traen; si no, la
+  unidad del trimestre que programa ese criterio con ese instrumento; si no,
+  la única; si no, la primera; si el área no tiene unidades, `SIN_UNIDAD`),
+  en el `upgrade()`, en `importarDatos` y en `asignarUnidadesPendientes` tras
+  cada sync. (4) La migración no abre la base sin más: `PuertaMigracion`
+  (delante de `App` en `main.tsx`) detecta la versión instalada sin disparar
+  el upgrade, exporta una copia `.miclase` cifrada desde una instancia
+  `new MiClaseDB(versionInstalada)` y solo después deja abrir; el Inicio
+  enseña `AvisoMigracionUnidades` con el resumen que dejó el upgrade en
+  `localStorage`. Un aparato con la versión anterior que sincronice puede
+  retirar notas que el nuevo ya distingue: hay que actualizar todos antes
+  de volver a calificar, y así lo dicen la puerta y el aviso.
 - **Una casilla tiene una sola fila que cuenta** (`masReciente` en
   `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
   aparatos que califican la misma casilla antes de sincronizar crean dos

@@ -13,6 +13,7 @@ import { anadirRegistro, borrarRegistro, type CeldaInstrumento, type DatosDeArea
 import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario, notaDeRegistro } from '@/db/diario'
 import { calificativo } from '@/db/calculo'
 import type { Alumno, RegistroDiario } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   alumno: Alumno
@@ -54,7 +55,7 @@ export default function DiarioCelda({
     try {
       const criterios = soloEste ? [criterio.id] : [criterio.id, ...hermanos.map(h => h.id)]
       const { notas } = await anadirRegistro({
-        alumno_id: alumno.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: unidadId,
+        alumno_id: alumno.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId),
         valor: nivel, observacion: texto.trim() || null, criterios, area,
       })
       const nota = notas[criterio.id]

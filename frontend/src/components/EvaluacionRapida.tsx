@@ -25,6 +25,7 @@ import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
 import InstrumentosManager from './InstrumentosManager'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import { trimestreActual, aplicaEnTrimestre } from '@/db/calculo'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -132,7 +133,10 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     getInstrumentos(asignaturaId).then(setInstrumentos)
     getUnidades(asignaturaId).then(us => {
       setUnidades(us)
-      setUnidadId(us.some(u => u.id === cfg.unidad_id) ? cfg.unidad_id : null)
+      // La casilla lleva la unidad en la clave: con unidades hay que estar en
+      // una. Se recuerda la última; si no vale, la primera del trimestre.
+      const delTrimestre = us.filter(u => u.trimestre == null || u.trimestre === trimestre)
+      setUnidadId(us.some(u => u.id === cfg.unidad_id) ? cfg.unidad_id : (delTrimestre[0] ?? us[0])?.id ?? null)
     })
   }, [asignaturaId, refrescoInstr])
 
@@ -211,11 +215,11 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     if (!instrumentoId || !criterioId) { setValorActual(null); return }
     let vigente = true
     ;(async () => {
-      const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre)
+      const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre, claveUnidad(unidadId))
       let marcas = c?.niveles_rubrica ?? {}
       // El examen puede estar corregido aunque este criterio no tenga nota suya.
       if (prueba && Object.keys(marcas).length === 0) {
-        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, destinosPrueba)
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), destinosPrueba)
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)
@@ -241,7 +245,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         alumno_id: alumno.id!, instrumento_id: instrumentoId, criterio_id: criterioId,
         asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa,
         comunidad: asig.comunidad || grupo.comunidad, trimestre,
-        valor, observacion: observacion.trim() || null, unidad_id: unidadId,
+        valor, observacion: observacion.trim() || null, unidad_id: claveUnidad(unidadId),
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
       }])
       setValorActual(valor)
@@ -271,7 +275,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
     setGuardando(true)
     try {
       const r = await guardarExamenDeAlumno({
-        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: claveUnidad(unidadId),
         def: prueba.def, respuestas, destinos: destinosPrueba,
         area: { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad },
         observacion: { criterio_id: criterioId, texto: observacion.trim() || null },
@@ -352,8 +356,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
               {asignaturas.map(a => <option key={a.id} value={a.id}>{a.nombre_display}</option>)}
             </select>
             {unidades.length > 0 && (
-              <select value={unidadId ?? ''} onChange={e => setUnidadId(e.target.value ? Number(e.target.value) : null)}>
-                <option value="">Todos los criterios</option>
+              <select value={unidadId ?? ''} onChange={e => setUnidadId(e.target.value ? Number(e.target.value) : null)} aria-label="Unidad">
                 {unidades.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
               </select>
             )}

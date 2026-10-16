@@ -1,4 +1,10 @@
 import Dexie, { type Table } from 'dexie'
+import {
+  prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, CLAVE_RESUMEN_MIGRACION,
+} from './migracionUnidades'
+
+/** Versión actual del esquema Dexie. La copia de seguridad la lleva también. */
+export const VERSION_ESQUEMA = 7
 
 /**
  * Campos comunes de sincronización.
@@ -107,7 +113,13 @@ export interface Calificacion extends Sincronizable {
   valor?: number | null
   fecha?: string
   observacion?: string | null
-  unidad_id?: number | null   // unidad en la que se registró (trazabilidad)
+  /**
+   * Unidad en la que se anotó. Desde la v7 forma parte de la clave de la
+   * casilla: el mismo criterio con el mismo instrumento en dos unidades del
+   * trimestre son dos notas distintas. `SIN_UNIDAD` (0) solo en filas
+   * antiguas que ninguna unidad pudo acoger (`db/migracionUnidades.ts`).
+   */
+  unidad_id: number
   /**
    * 'diario' cuando `valor` se deriva de los registros del diario de
    * evaluación y no se puso a mano. El panel avisa antes de dejar editarla y
@@ -331,7 +343,8 @@ export interface RegistroDiario extends Sincronizable {
   id?: number
   alumno_id: number
   instrumento_id: number
-  unidad_id: number | null
+  /** Parte de la clave desde la v7, como en `Calificacion`. */
+  unidad_id: number
   trimestre: number
   /** ISO-8601 con hora: es lo que ordena los registros. */
   fecha: string
@@ -398,7 +411,7 @@ export interface SyncBase {
   datos: any
 }
 
-class MiClaseDB extends Dexie {
+export class MiClaseDB extends Dexie {
   grupos!: Table<Grupo>
   alumnos!: Table<Alumno>
   grupo_alumnos!: Table<GrupoAlumno>
@@ -418,9 +431,14 @@ class MiClaseDB extends Dexie {
   meta!: Table<Meta>
   sync_base!: Table<SyncBase>
 
-  constructor() {
+  /**
+   * `hasta` limita las versiones declaradas. La app usa la última; la puerta
+   * de migración (`PuertaMigracion`) abre con la instalada para hacer la
+   * copia de seguridad SIN disparar el upgrade.
+   */
+  constructor(hasta: number = VERSION_ESQUEMA) {
     super('miclase_db')
-    this.version(1).stores({
+    if (hasta >= 1) this.version(1).stores({
       grupos:           '++id',
       alumnos:          '++id, codigo_cifrado',
       grupo_alumnos:    '++id, grupo_id, alumno_id, [grupo_id+alumno_id]',
@@ -432,10 +450,10 @@ class MiClaseDB extends Dexie {
       unidades:         '++id, asignatura_id',
       unidad_criterios: '++id, unidad_id, [unidad_id+criterio_id]',
     })
-    this.version(2).stores({
+    if (hasta >= 2) this.version(2).stores({
       rubricas: '++id, instrumento_id',
     })
-    this.version(3).stores({
+    if (hasta >= 3) this.version(3).stores({
       evidencias: '++id, alumno_id, criterio_id, [alumno_id+criterio_id]',
       planos:     '++id, grupo_id',
       asientos:   '++id, grupo_id, [grupo_id+alumno_id], [grupo_id+fila+col]',
@@ -443,7 +461,7 @@ class MiClaseDB extends Dexie {
     // v4 — vínculo criterio↔instrumento + metadatos de sincronización.
     // `updated_at` se indexa en todas las tablas: es la consulta que hace
     // el sync para saber qué ha cambiado desde el último envío.
-    this.version(4).stores({
+    if (hasta >= 4) this.version(4).stores({
       grupos:                '++id, updated_at',
       alumnos:               '++id, codigo_cifrado, updated_at',
       grupo_alumnos:         '++id, grupo_id, alumno_id, [grupo_id+alumno_id], updated_at',
@@ -479,14 +497,14 @@ class MiClaseDB extends Dexie {
     // v5 — base de la fusión a tres bandas. Tabla nueva y vacía: los
     // registros van entrando a medida que se sincronizan. Mientras un
     // registro no tenga base, el merge cae al last-write-wins de siempre.
-    this.version(5).stores({
+    if (hasta >= 5) this.version(5).stores({
       sync_base: 'clave',
     })
 
     // v6 — diario de evaluación. Tabla nueva y vacía. `updated_at` va
     // indexado porque es la consulta del sync. El sello del upgrade es el
     // mismo de la v4, por si algún registro llegara sin él (idempotente).
-    this.version(6).stores({
+    if (hasta >= 6) this.version(6).stores({
       diario: '++id, alumno_id, instrumento_id, [alumno_id+instrumento_id+trimestre], updated_at',
     }).upgrade(async tx => {
       const sello = new Date().toISOString()
@@ -494,6 +512,39 @@ class MiClaseDB extends Dexie {
         if (!r.updated_at) r.updated_at = r.fecha || sello
         if (r.deleted_at === undefined) r.deleted_at = null
       })
+    })
+
+    // v7 — unidades estancas. La unidad entra en la clave de la casilla
+    // (calificaciones) y del registro (diario). Las filas sin unidad reciben
+    // una con la regla de `migracionUnidades.ts` y se vuelven a sellar para
+    // que el siguiente sync las lleve con su unidad. Antes de llegar aquí la
+    // app ha ofrecido una copia de seguridad (`PuertaMigracion`).
+    if (hasta >= 7) this.version(7).stores({
+      calificaciones: '++id, instrumento_id, alumno_id, [alumno_id+instrumento_id+criterio_id+trimestre+unidad_id], updated_at',
+      diario:         '++id, alumno_id, instrumento_id, [alumno_id+instrumento_id+trimestre+unidad_id], updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      const ctx = prepararContexto({
+        unidades: await tx.table('unidades').toArray(),
+        instrumentos: await tx.table('instrumentos').toArray(),
+        criterio_instrumentos: await tx.table('criterio_instrumentos').toArray(),
+      })
+      const resumen = resumenVacio()
+      await tx.table('calificaciones').toCollection().modify(c => {
+        if (!c.updated_at) c.updated_at = c.fecha || sello
+        if (c.deleted_at === undefined) c.deleted_at = null
+        const r = unidadParaFila({ ...c, criterios: [c.criterio_id] }, ctx)
+        if (anotar(resumen, r.motivo)) { c.unidad_id = r.unidad_id; c.updated_at = sello }
+      })
+      await tx.table('diario').toCollection().modify(d => {
+        if (!d.updated_at) d.updated_at = d.fecha || sello
+        if (d.deleted_at === undefined) d.deleted_at = null
+        const r = unidadParaFila({ ...d, criterios: criteriosDeRegistro(d) }, ctx)
+        if (anotar(resumen, r.motivo)) { d.unidad_id = r.unidad_id; d.updated_at = sello }
+      })
+      try {
+        localStorage.setItem(CLAVE_RESUMEN_MIGRACION, JSON.stringify({ ...resumen, fecha: sello }))
+      } catch { /* sin localStorage no hay aviso, pero la migración vale igual */ }
     })
   }
 }
