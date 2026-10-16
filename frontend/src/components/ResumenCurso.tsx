@@ -105,7 +105,7 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
   const thArea = (
     <th scope="col" className="criterio-th area-th grupo-fin" colSpan={CON_FINAL.length} data-area-th>
       <div className="criterio-th-id">Nota del área</div>
-      <div className="criterio-th-desc">media de los criterios, ponderada por su peso; la final, por el peso de cada trimestre</div>
+      <div className="criterio-th-desc">media de los criterios, ponderada por su peso; la final, con la regla del área</div>
       <Etiquetas columnas={CON_FINAL} />
     </th>
   )

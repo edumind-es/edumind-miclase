@@ -10,11 +10,12 @@
  *   nota de criterio (trimestre) = Σ(nota · peso_instrumento) / Σ(peso_instrumento)
  *   nota de área (trimestre)     = Σ(nota_criterio · peso_criterio) / Σ(peso_criterio)
  *   nota de área (final)         = Σ(nota_trimestre · peso_trimestre) / Σ(peso_trimestre)
+ *                                  …o la regla que el área declare (`ReglaFinal`)
  *
  * Solo cuentan los trimestres con datos: si un área aún no tiene nada en el
  * 3er trimestre, la nota final es la de lo que sí hay, no un 0 encubierto.
  */
-import type { Calificacion, Instrumento } from './localDb'
+import type { Calificacion, Instrumento, ReglaFinal } from './localDb'
 
 export type NotaCriterio = {
   criterio_id: string
@@ -106,6 +107,50 @@ export function parsearTrimestresInstrumento(json: string | undefined): number[]
 /** ¿Este instrumento se usa en este trimestre? */
 export function aplicaEnTrimestre(trimestresJson: string | undefined, trimestre: number): boolean {
   return parsearTrimestresInstrumento(trimestresJson).includes(trimestre)
+}
+
+/** Las reglas de la nota final, con el texto que ve el docente. */
+export const REGLAS_FINAL: { id: ReglaFinal; nombre: string; descripcion: string }[] = [
+  { id: 'ponderada', nombre: 'Media ponderada', descripcion: 'Media de los trimestres con nota, cada uno con su porcentaje.' },
+  { id: 'continua', nombre: 'Evaluación continua', descripcion: 'Cuenta la nota del último trimestre evaluado: ya recoge lo anterior.' },
+  { id: 'maxima', nombre: 'Nota más alta', descripcion: 'La mejor de las notas de trimestre.' },
+  { id: 'mediana', nombre: 'Mediana', descripcion: 'La nota central de los trimestres con nota; con dos, su media.' },
+]
+
+/** Lo guardado puede venir vacío o de una versión futura: sin reconocer, 'ponderada'. */
+export function normalizarReglaFinal(valor: unknown): ReglaFinal {
+  return REGLAS_FINAL.some(r => r.id === valor) ? valor as ReglaFinal : 'ponderada'
+}
+
+/**
+ * La nota final del curso a partir de las de los trimestres, con la regla
+ * del área. Es la ÚNICA definición: la usan la final de cada criterio y la
+ * del área, así que «Todo el curso», el boletín y «de dónde sale esta nota»
+ * dicen lo mismo. Un trimestre sin nota no cuenta en ninguna regla.
+ *
+ * Ojo: mediana y nota más alta no son lineales. La final del área se calcula
+ * con la regla sobre las TRES notas de área, no como media de las finales de
+ * los criterios: puede diferir una décima de lo que uno sume a mano desde
+ * los criterios. Decidido con Luis; lo explica `ExplicacionNota`.
+ */
+export function notaFinal(
+  trimestres: Record<number, number | null>, pesosTrim: Record<number, number>, regla: ReglaFinal = 'ponderada'
+): number | null {
+  const conNota = TRIMESTRES.filter(t => trimestres[t] != null)
+  if (!conNota.length) return null
+  switch (regla) {
+    case 'continua':
+      return trimestres[conNota[conNota.length - 1]]!
+    case 'maxima':
+      return Math.max(...conNota.map(t => trimestres[t]!))
+    case 'mediana': {
+      const v = conNota.map(t => trimestres[t]!).sort((a, b) => a - b)
+      const m = Math.floor(v.length / 2)
+      return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2
+    }
+    default:
+      return ponderada(conNota.map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] })))
+  }
 }
 
 export function parsearPesosTrimestres(json: string | undefined): Record<number, number> {
@@ -317,7 +362,8 @@ export function calcularNotaArea(
   instrumentos: Instrumento[],
   pesosTrimestresJson: string | undefined,
   pesosCriterio: Map<string, number> = new Map(),
-  pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO
+  pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO,
+  regla: ReglaFinal = 'ponderada'
 ): NotaArea {
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
   // Primero las unidades (una nota por alumno, criterio e instrumento en el
@@ -366,11 +412,7 @@ export function calcularNotaArea(
       for (const t of TRIMESTRES) {
         trimestres[t] = ponderada(porTrim.get(t) || [])
       }
-      const final = ponderada(
-        TRIMESTRES
-          .filter(t => trimestres[t] != null)
-          .map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] }))
-      )
+      const final = notaFinal(trimestres, pesosTrim, regla)
       return {
         criterio_id,
         trimestres,
@@ -390,11 +432,7 @@ export function calcularNotaArea(
     )
   }
 
-  const final = ponderada(
-    TRIMESTRES
-      .filter(t => trimestres[t] != null)
-      .map(t => ({ valor: trimestres[t]!, peso: pesosTrim[t] }))
-  )
+  const final = notaFinal(trimestres, pesosTrim, regla)
 
   // Redondeo, ya solo para enseñarlo
   for (const c of criterios) {

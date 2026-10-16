@@ -378,6 +378,20 @@ edumind_miclase/
   `localStorage`. Un aparato con la versión anterior que sincronice puede
   retirar notas que el nuevo ya distingue: hay que actualizar todos antes
   de volver a calificar, y así lo dicen la puerta y el aviso.
+- **La nota final del curso sale de una sola función**, `notaFinal` en
+  `calculo.ts`, con la regla que declare el área (`Asignatura.regla_final`,
+  sin índice: ponderada por `pesos_trimestres` —lo de siempre y el valor por
+  defecto—, continua = el último trimestre con nota, más alta, mediana). La
+  misma regla se aplica a la final de cada criterio y a la del área, para
+  que «Todo el curso», el boletín y «de dónde sale esta nota» coincidan.
+  Mediana y más alta no son lineales: la final del área se calcula con la
+  regla sobre sus tres notas de trimestre, no sumando las finales de los
+  criterios, y `ExplicacionNota` lo avisa. Porcentajes y regla se editan en
+  la pestaña «Nota final» del panel de áreas (`NotaFinalPanel`); antes los
+  porcentajes solo se escribían al crear el área. Decisión de Luis: lo
+  normal es la media de los tres, pero hay docentes que no lo hacen así. La
+  recuperación automática de un criterio suspenso que una unidad posterior
+  supera NO está hecha: es otra regla, por criterio y entre unidades.
 - **Una casilla tiene una sola fila que cuenta** (`masReciente` en
   `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
   aparatos que califican la misma casilla antes de sincronizar crean dos

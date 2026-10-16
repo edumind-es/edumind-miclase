@@ -21,6 +21,7 @@ import { getCalificacionesAlumnoAsignatura, type UnidadConCriterios } from '@/db
 import {
   calcularNotaArea, calificativo, fundirHijosEnFamilias, fundirUnidades, parsearPesosTrimestres,
   pesosCriterioDeUnidades, pesosVinculoDeUnidades, porcentajesEnFamilia, type NotaArea,
+  normalizarReglaFinal, REGLAS_FINAL,
 } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Calificacion, Instrumento } from '@/db/localDb'
@@ -67,7 +68,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
       if (!vigente) return
       setCals(lista)
       setNota(calcularNotaArea(asig.id!, lista, instrumentos, asig.pesos_trimestres,
-        pesosCriterioDeUnidades(unidades), pesosVinculoDeUnidades(unidades)))
+        pesosCriterioDeUnidades(unidades), pesosVinculoDeUnidades(unidades), normalizarReglaFinal(asig.regla_final)))
     })
     return () => { vigente = false }
   }, [alumno.id, asig.id, instrumentos, unidades])
@@ -83,6 +84,16 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
   const nombreUnidad = (id: number | null | undefined) => unidades.find(u => u.id === id)?.nombre ?? null
   const ordenUnidad = (id: number | null | undefined) => { const k = unidades.findIndex(u => u.id === id); return k < 0 ? 999 : k }
   const pesosT = parsearPesosTrimestres(asig.pesos_trimestres)
+  // Cómo sale la final: la regla del área, con sus palabras. Mediana y nota
+  // más alta no son lineales, así que se avisa de que la del área no es la
+  // media de las finales de los criterios.
+  const regla = normalizarReglaFinal(asig.regla_final)
+  const textoFinal = (() => {
+    const r = REGLAS_FINAL.find(x => x.id === regla)!
+    const base = `La final sale por «${r.nombre}»: ${r.descripcion} Un trimestre sin notas no cuenta como cero.`
+    return regla === 'ponderada' ? base
+      : `${base} La del área se calcula con esa regla sobre sus tres notas de trimestre, no sumando las finales de los criterios, así que puede diferir una décima de lo que salga a mano.`
+  })()
   const pesosCriterio = pesosCriterioDeUnidades(unidades)
   const familiaDe = (id: number): number | null => {
     const f = porId.get(id)?.familia_id ?? null
@@ -250,7 +261,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
             {chipsTrimestres(nc.trimestres, nc.final)}
             {trimestre == null && (
               <p data-explicacion-final style={{ fontSize: 12, color: 'var(--gris-600)', margin: '6px 0 0' }}>
-                La final es la media de los trimestres con nota, ponderada por el peso de cada uno; un trimestre sin notas no cuenta como cero.
+                {textoFinal}
               </p>
             )}
           </>
@@ -294,7 +305,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
         {chipsTrimestres(nota.trimestres, nota.final)}
         {trimestre == null && (
           <p data-explicacion-final style={{ fontSize: 12, color: 'var(--gris-600)', margin: '6px 0 0' }}>
-            La final es la media de los trimestres con nota, ponderada por el peso de cada uno; un trimestre sin notas no cuenta como cero.
+            {textoFinal}
           </p>
         )}
       </>

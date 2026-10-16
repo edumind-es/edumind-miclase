@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import ProgramacionPanel from './ProgramacionPanel'
 import RubricaEditor from './RubricaEditor'
+import NotaFinalPanel from './NotaFinalPanel'
+import type { ReglaFinal } from '@/db/localDb'
 import {
   getAsignaturas, getAsignaturaDetalle, crearAsignatura, crearAsignaturasEnLote,
   eliminarAsignatura, crearInstrumento, eliminarInstrumento, actualizarInstrumento,
@@ -51,6 +53,8 @@ interface Asignatura {
   id: number
   nombre: string
   nombre_display: string
+  pesos_trimestres?: string
+  regla_final?: ReglaFinal | null
   instrumentos?: Instrumento[]
 }
 
@@ -68,6 +72,9 @@ interface RubricaOpen {
   asignaturaNombre: string
 }
 
+/** Pestañas de cada área: programación, instrumentos y cómo sale la nota final. */
+type Pestana = 'instrumentos' | 'programacion' | 'final'
+
 function humanizarSlug(slug: string): string {
   if (NOMBRES[slug]) return NOMBRES[slug]
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
@@ -83,7 +90,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   const areaPedida = Number(params.get('area')) || null
   const seccionPedida = params.get('seccion') === 'instrumentos' ? 'instrumentos' : 'programacion'
   const [expandida, setExpandida] = useState<number | null>(areaPedida)
-  const [tabActiva, setTabActiva] = useState<Record<number, 'instrumentos' | 'programacion'>>(
+  const [tabActiva, setTabActiva] = useState<Record<number, Pestana>>(
     areaPedida ? { [areaPedida]: seccionPedida } : {})
   const [selector, setSelector] = useState(false)
   const [marcadas, setMarcadas] = useState<Set<string>>(new Set())
@@ -100,7 +107,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   const headers = useAppStore(s => s._headers)
 
   const getTab = (id: number) => tabActiva[id] || 'programacion'
-  const setTab = (id: number, tab: 'instrumentos' | 'programacion') =>
+  const setTab = (id: number, tab: Pestana) =>
     setTabActiva(t => ({ ...t, [id]: tab }))
 
   const cargar = async () => {
@@ -353,7 +360,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
             {expandida === a.id && (
               <div style={{ borderTop: '1px solid var(--gris-300)' }}>
                 <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-300)', background: 'var(--gris-100)' }}>
-                  {(['programacion', 'instrumentos'] as const).map(tab => (
+                  {(['programacion', 'instrumentos', 'final'] as const).map(tab => (
                     <button key={tab} onClick={() => setTab(a.id, tab)}
                       style={{
                         padding: '8px 16px', border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
@@ -361,7 +368,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                         background: 'transparent',
                         color: getTab(a.id) === tab ? 'var(--azul-700)' : 'var(--gris-600)',
                       }}>
-                      {tab === 'instrumentos' ? '🎯 Instrumentos' : '📋 Programación'}
+                      {tab === 'instrumentos' ? '🎯 Instrumentos' : tab === 'final' ? '🏁 Nota final' : '📋 Programación'}
                     </button>
                   ))}
                 </div>
@@ -521,6 +528,10 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                       onIrAInstrumentos={() => setTab(a.id, 'instrumentos')}
                       onCambio={cargar}
                     />
+                  )}
+
+                  {getTab(a.id) === 'final' && (
+                    <NotaFinalPanel asignatura={a} onCambio={cargar} />
                   )}
                 </div>
               </div>

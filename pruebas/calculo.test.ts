@@ -4,6 +4,7 @@ import {
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
   pesosVinculoDeUnidades, fundirHijosEnFamilias, fundirUnidades,
   porcentajesEnFamilia, pesosAlFijarPorcentaje,
+  notaFinal, normalizarReglaFinal, REGLAS_FINAL,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -381,6 +382,41 @@ console.log('\n15. Unidades estancas: la misma casilla en dos unidades del trime
   ok(sola.valor === 5 && !sola.virtual, 'una sola unidad se devuelve tal cual, editable')
   const conHueco = fundirUnidades([enUd(1, 8), { ...enUd(2, 0), valor: null }])[0]
   ok(conHueco.valor === 8, 'una unidad sin nota no baja la media: no cuenta', `${conHueco.valor}`)
+}
+
+console.log('\n16. Regla de la nota final por área')
+{
+  const pesos = { 1: 30, 2: 30, 3: 40 }
+  const tres = { 1: 6, 2: 8, 3: 5 }
+  ok(notaFinal(tres, pesos, 'ponderada') === 6.2, 'ponderada: 6·0,3 + 8·0,3 + 5·0,4 = 6,2', `${notaFinal(tres, pesos, 'ponderada')}`)
+  ok(notaFinal(tres, pesos, 'continua') === 5, 'continua: la del último trimestre evaluado')
+  ok(notaFinal(tres, pesos, 'maxima') === 8, 'más alta')
+  ok(notaFinal(tres, pesos, 'mediana') === 6, 'mediana de tres')
+  const dos = { 1: 6, 2: null, 3: 9 }
+  ok(notaFinal(dos, pesos, 'mediana') === 7.5, 'mediana con dos: su media', `${notaFinal(dos, pesos, 'mediana')}`)
+  ok(notaFinal(dos, pesos, 'continua') === 9, 'continua salta el trimestre sin nota: el último CON nota')
+  ok(Math.abs(notaFinal(dos, pesos, 'ponderada')! - (6 * 30 + 9 * 40) / 70) < 1e-9, 'ponderada reparte entre los trimestres con nota')
+  ok(notaFinal({ 1: null, 2: null, 3: null }, pesos, 'maxima') === null, 'sin ninguna nota, ninguna regla inventa un cero')
+  ok(notaFinal(tres, pesos) === 6.2, 'sin regla declarada, ponderada')
+  ok(normalizarReglaFinal(undefined) === 'ponderada' && normalizarReglaFinal('rara') === 'ponderada' && normalizarReglaFinal('mediana') === 'mediana',
+     'lo guardado se normaliza: vacío o desconocido → ponderada')
+  ok(REGLAS_FINAL.length === 4 && REGLAS_FINAL.every(r => r.nombre && r.descripcion), 'las cuatro reglas llevan nombre y explicación para el docente')
+
+  // Dentro del cálculo del área: la misma regla en el criterio y en el área.
+  const cals = [cal(1, 10, 'CE1.1', 1, 6), cal(1, 10, 'CE1.1', 2, 8), cal(1, 10, 'CE1.1', 3, 5),
+                cal(1, 10, 'CE1.2', 1, 10), cal(1, 10, 'CE1.2', 2, 2), cal(1, 10, 'CE1.2', 3, 4)]
+    .map(c => ({ ...c, unidad_id: 1 }))
+  const i = [instr(10, 'Examen', 100)]
+  const pj = '{"1":30,"2":30,"3":40}'
+  const pond = calcularNotaArea(1, cals, i, pj, new Map(), undefined, 'ponderada')
+  const med = calcularNotaArea(1, cals, i, pj, new Map(), undefined, 'mediana')
+  const cont = calcularNotaArea(1, cals, i, pj, new Map(), undefined, 'continua')
+  // Área por trimestre: 8 · 5 · 4,5; la final ponderada 30/30/40 → 5,7 (sobre las notas de área, no sobre las finales de criterio).
+  ok(pond.criterios[0].final === 6.2 && pond.final === 5.7, 'ponderada: criterio 6,2 y área 5,7', `${pond.criterios[0].final} ${pond.final}`)
+  ok(med.criterios[0].final === 6 && med.criterios[1].final === 4, 'mediana en cada criterio', `${med.criterios[0].final} ${med.criterios[1].final}`)
+  // El área con mediana: sobre sus tres notas de trimestre (8 · 5 · 4,5) → 5, no la media de las medianas (5).
+  ok(med.final === 5, 'mediana del área sobre sus notas de trimestre', `${med.final}`)
+  ok(cont.criterios[0].final === 5 && cont.criterios[1].final === 4 && cont.final === 4.5, 'continua: el tercer trimestre en todo', `${cont.final}`)
 }
 
 console.log('\n13. El redondeo no se acumula escalón a escalón')
