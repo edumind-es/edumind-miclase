@@ -386,7 +386,8 @@ try {
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
   ok(await p.locator('[data-instr-th] [data-sesion-abrir], [data-instr-th] [data-corregir-abrir], [data-instr-th] [data-renombrar-abrir]').count() === 0,
     'las cabeceras no ofrecen calificar, corregir ni renombrar')
-  const casillaResumen = p.locator('.celda-btn.solo-lectura').filter({ hasNotText: '·' }).first()
+  ok(await p.locator('[data-familia-th]').evaluateAll(ths => ths.every(t => t.getAttribute('colspan') === '3')), 'cada familia abarca los tres trimestres a la vez')
+  const casillaResumen = p.locator('[data-celda-resumen][data-instrumento]').filter({ hasNotText: '·' }).first()
   const textoCasilla = (await casillaResumen.locator('span').first().textContent()).trim()
   await casillaResumen.click()
   const ficha = p.locator('[data-explicacion-nota]')
@@ -401,8 +402,11 @@ try {
   await p.keyboard.press('Escape')
   await ficha.waitFor({ state: 'hidden', timeout: 5000 })
   // Por criterio también: la casilla explica y enseña los tres trimestres.
+  // El resumen arranca plegado por competencia: se despliega todo para llegar a un criterio.
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.celda-btn.solo-lectura').filter({ hasNotText: '·' }).first().click()
+  const plegarTodas = p.locator('[data-plegar-todas]')
+  if (/Desplegar/.test(await plegarTodas.textContent())) await plegarTodas.click()
+  await p.locator('[data-celda-resumen][data-criterio]').filter({ hasNotText: '·' }).first().click()
   await ficha.waitFor({ timeout: 5000 })
   ok(await ficha.locator('[data-explicacion-trimestres]').count() === 1, 'por criterio enseña T1 · T2 · T3 y la final')
   ok(await ficha.locator('[data-explicacion-area]').count() === 1, 'y la nota del área')

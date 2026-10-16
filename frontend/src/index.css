@@ -789,6 +789,59 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .criterio-th.plegado { cursor: pointer; background: #163a5e; }
 .celda.plegado .celda-btn { border-style: dashed; border-color: var(--gris-300); }
 
+/* ── «Todo el curso»: los tres trimestres a la vez ────────────────────── */
+/* Cada criterio (o familia) abarca varias columnas estrechas: 1T · 2T · 3T
+   (· Final). Las casillas llevan ancho fijo para que los rótulos de la
+   cabecera, repartidos en una rejilla del mismo número de huecos, caigan
+   encima de su columna. En un iPad (1024 px) con quince criterios no cabe
+   todo: por eso el resumen arranca plegado por competencia. */
+.matriz-resumen td.celda.sub { width: 44px; min-width: 44px; max-width: 44px; padding: 3px 2px; }
+.matriz-resumen td.celda.sub .celda-btn { font-size: 13px; min-height: 36px; padding: 2px 1px; }
+.matriz-resumen td.celda.sub.final .celda-btn { font-weight: 800; box-shadow: inset 0 0 0 2px rgba(0,0,0,.14); }
+.matriz-resumen td.celda.sub.final .celda-btn:not([class*="cal-"]) { box-shadow: inset 0 0 0 2px var(--gris-300); }
+.matriz-resumen td.celda.sub:last-of-type, .matriz-resumen td.celda.sub.final { border-right: 2px solid var(--gris-300); }
+.matriz-resumen thead th.criterio-th, .matriz-resumen thead th.instr-th { max-width: none; min-width: 0; padding-bottom: 0; }
+.matriz-resumen thead th.grupo-fin { border-right: 2px solid rgba(255,255,255,.25); }
+.matriz-resumen thead th.area-th { background: var(--azul-900); }
+.matriz-resumen thead th[data-area-grupo] { text-align: left; padding: 5px 10px; font-size: 11px; font-weight: 700; letter-spacing: .04em; background: var(--azul-900); }
+.matriz-resumen thead tr.fila-familias th .comp-flecha { opacity: .8; }
+.matriz-resumen thead tr.fila-familias th.con-hijos:hover { background: #163a5e; }
+.matriz-resumen thead th.instr-th.hijo { background: #2b5a8a; }
+.th-trimestres {
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  margin: 6px -8px 0; border-top: 1px solid rgba(255,255,255,.2);
+}
+.matriz-resumen thead th.instr-th .th-trimestres { margin: 6px -10px 0; }
+.th-trimestres span { font-size: 9.5px; font-weight: 700; padding: 3px 0; opacity: .85; text-align: center; white-space: nowrap; }
+.th-trimestres span.final { opacity: 1; background: rgba(255,255,255,.14); }
+.unidad-actual.resumen-curso { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.unidad-actual.resumen-curso .tab-unidad-modo { flex-shrink: 0; }
+
+/* La ficha «de dónde sale esta nota»: el desglose por el camino del cálculo. */
+.explicacion-bloque { margin-bottom: 16px; }
+.explicacion-valor-fila { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.explicacion-valor {
+  min-width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 800;
+}
+.explicacion-troncos, .explicacion-ramas, .explicacion-crudas { list-style: none; margin: 0; padding: 0; }
+.explicacion-tronco { padding: 6px 0; border-bottom: 1px solid var(--gris-300); }
+.explicacion-ramas { margin: 4px 0 0 14px; padding-left: 10px; border-left: 2px solid var(--gris-300); }
+.explicacion-rama { padding: 4px 0; }
+.explicacion-rama:not(.dentro) { border-bottom: 1px solid var(--gris-300); padding: 6px 0; }
+.explicacion-cab { display: flex; gap: 10px; align-items: baseline; font-size: 12.5px; line-height: 1.45; }
+.explicacion-cab > strong { font-size: 15px; min-width: 34px; text-align: right; }
+.explicacion-crudas { margin: 2px 0 0 44px; }
+.explicacion-fila { display: flex; gap: 8px; align-items: baseline; font-size: 12px; line-height: 1.45; padding: 2px 0; color: var(--gris-900); }
+.explicacion-fila > strong { min-width: 26px; text-align: right; font-size: 13px; }
+.explicacion-fila .suave, .explicacion-cab .suave { color: var(--gris-500); font-size: 11.5px; }
+.explicacion-chips { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; font-size: 12px; }
+.explicacion-chips span:not(.suave) { padding: 4px 9px; border-radius: 7px; background: var(--gris-100); color: var(--gris-900); }
+.explicacion-chips span.actual { background: var(--azul-100); }
+.explicacion-chips span.final { background: var(--azul-700); color: white; }
+.explicacion-chips span.final.actual { outline: 2px solid var(--azul-500); outline-offset: 1px; }
+.explicacion-chips .suave { color: var(--gris-500); padding: 0; background: none; }
+
 /* ── Panel de cobertura ───────────────────────────────────────────────── */
 .cobertura { margin-bottom: 10px; border: 1px solid var(--gris-300); border-radius: var(--radio-md); background: var(--blanco); }
 .cobertura.completa { border-color: var(--verde-500); }

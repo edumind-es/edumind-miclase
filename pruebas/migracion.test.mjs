@@ -135,6 +135,10 @@ await p.getByRole('link', { name: 'Calificador', exact: true }).click()
 await p.waitForTimeout(2500)
 const celdas = await p.locator('.celda-btn').count()
 ok(celdas > 0, 'el calificador nuevo pinta la matriz con los datos antiguos', `${celdas} casillas`)
+// «Todo el curso» arranca plegado por competencia: se despliega para ver cada criterio.
+await p.locator('[data-vista="criterios"]').click({ timeout: 5000 }).catch(() => {})
+const plegarTodas = p.locator('[data-plegar-todas]')
+if (await plegarTodas.count() && /Desplegar/.test(await plegarTodas.textContent())) { await plegarTodas.click(); await p.waitForTimeout(800) }
 const sinInstr = await p.locator('.celda-btn.sin-instrumento').count()
 ok(sinInstr > 0, 'los criterios antiguos salen «sin instrumento» hasta que se asignen (es lo esperado)', `${sinInstr}`)
 await p.screenshot({ path: process.env.SCRATCH + '/tiros/19-migracion.png' })
