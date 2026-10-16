@@ -701,6 +701,11 @@ export default function EvaluacionPage() {
                   ? 'Esta unidad no tiene criterios vinculados. Añádeselos desde la programación.'
                   : 'No hay criterios disponibles para esta área en el currículo de tu comunidad.'}
               </div>
+            ) : resumenDelCurso && !resumen ? (
+              // Mientras llega el resumen no se pinta la matriz de la unidad
+              // que se acaba de dejar: en un aparato lento salían un instante
+              // sus botones de calificar dentro de «Todo el curso».
+              <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }} data-resumen-cargando>Calculando el curso…</div>
             ) : resumen ? (
               <ResumenCurso
                 datos={resumen}
