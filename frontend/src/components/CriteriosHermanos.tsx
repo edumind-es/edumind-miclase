@@ -19,6 +19,7 @@
 import { useEffect, useState } from 'react'
 import { copiarNotasACriterios, fijarVinculoDeInstrumento, type CeldaInstrumento } from '@/db/queries'
 import type { Alumno } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   instrumento: CeldaInstrumento
@@ -86,7 +87,7 @@ export default function CriteriosHermanos({
       // es la columna que el docente quiere rellenar.
       const destinos = alcance === 'misma' ? [criterio.id, ...elegidos] : [...elegidos]
       const r = await copiarNotasACriterios({
-        instrumento_id: instrumento.instrumento_id, trimestre, origen: criterio.id, destinos,
+        instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId), origen: criterio.id, destinos,
         alumno_ids: alcance === 'alumno' ? [alumno.id!] : alumnoIds, sobrescribir,
         desde_alumno_id: alcance === 'misma' ? alumno.id! : undefined,
       })

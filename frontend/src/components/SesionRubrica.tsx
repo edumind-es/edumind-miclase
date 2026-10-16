@@ -29,6 +29,7 @@ import { etiquetaAgregacion, nivelDeNota } from '@/db/diario'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import PreguntaRubrica, { SelectorModoRubrica, type ModoRubrica } from './PreguntaRubrica'
 import type { Alumno } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 export type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 export type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
@@ -78,7 +79,7 @@ export default function SesionRubrica({
   useEffect(() => {
     if (!primerCriterio) return
     let vigente = true
-    Promise.all(alumnos.map(a => getCalificacionUnica(a.id!, instrumento.instrumento_id, primerCriterio, trimestre)))
+    Promise.all(alumnos.map(a => getCalificacionUnica(a.id!, instrumento.instrumento_id, primerCriterio, trimestre, claveUnidad(unidadId))))
       .then(cals => {
         if (!vigente) return
         setMarcas(new Map(alumnos.map((a, i) => [a.id!, cals[i]?.valor != null ? (cals[i]?.niveles_rubrica ?? {}) : {}])))
@@ -112,7 +113,7 @@ export default function SesionRubrica({
           await editarRegistro(registro, { nota, niveles_rubrica: siguiente, valor: nivelDeNota(nota) })
         } else {
           const r = await evolucionarRubrica({
-            alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: unidadId,
+            alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId),
             criterios: criterios.map(c => c.id), area, nota, niveles_rubrica: siguiente,
           })
           registroDe.current.set(al.id!, r.id)
@@ -121,7 +122,7 @@ export default function SesionRubrica({
         // Sin réplica: va a todos los criterios del instrumento, el reparto ya está decidido.
         await saveCalificaciones(criterios.map(c => ({
           ...area, alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, criterio_id: c.id, trimestre,
-          valor: nota, unidad_id: unidadId, niveles_rubrica: siguiente,
+          valor: nota, unidad_id: claveUnidad(unidadId), niveles_rubrica: siguiente,
         })), { sinVinculos: true })
       }
       setMarcas(m => new Map(m).set(al.id!, siguiente))

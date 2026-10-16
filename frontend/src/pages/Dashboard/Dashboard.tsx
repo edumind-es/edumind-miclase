@@ -14,6 +14,7 @@ import { useClaseActiva } from '@/contexto/ClaseActiva'
 import PuestaEnMarcha from '@/components/PuestaEnMarcha'
 import InstalarApp from '@/components/InstalarApp'
 import AvisoCopia from '@/components/AvisoCopia'
+import AvisoMigracionUnidades from '@/components/AvisoMigracionUnidades'
 
 function hoyISO() { return new Date().toISOString().slice(0, 10) }
 
@@ -51,6 +52,7 @@ export default function Dashboard() {
 
   return (
     <>
+      <AvisoMigracionUnidades />
       <AvisoCopia />
       <div className="home-cabecera">
         <div>

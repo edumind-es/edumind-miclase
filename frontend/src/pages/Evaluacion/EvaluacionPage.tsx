@@ -27,7 +27,7 @@ import { abreviatura } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
-import MatrizInstrumentos, { columnasPorInstrumento, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
+import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
@@ -319,6 +319,12 @@ export default function EvaluacionPage() {
     return columnas.filter(c => matriz.criteriosFueraDeTrimestre.has(c.id)).length
   }, [columnas, matriz])
 
+  /** Familias con peso que no tienen columna en esta unidad: el gestor dice 20 %
+   *  y la matriz no lo enseña, porque ningún criterio las tiene asignadas. */
+  const sinColumna = useMemo(
+    () => (matriz && unidadId ? familiasSinCriterio(matriz, columnasInstr, trimestre) : []),
+    [matriz, columnasInstr, trimestre, unidadId])
+
   /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
   const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
     if (!matriz) return null
@@ -546,6 +552,18 @@ export default function EvaluacionPage() {
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
               Asígnales uno en la programación y podrás evaluarlos.{' '}
               <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
+                Ir a la programación →
+              </Link>
+            </div>
+          )}
+
+          {vista === 'instrumentos' && sinColumna.length > 0 && (
+            <div data-familias-sin-criterio style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+              <strong>
+                {sinColumna.map(f => `«${f.nombre}» (${f.peso} %)`).join(', ')} no evalúa{sinColumna.length !== 1 ? 'n' : ''} ningún criterio en {unidadActual?.nombre ?? 'esta unidad'}
+              </strong> — sin criterios asignados no hay columna, y su peso no entra en esta unidad.
+              Asígnale{sinColumna.length !== 1 ? 's' : ''} criterios en la programación y aparecerá{sinColumna.length !== 1 ? 'n' : ''} aquí.{' '}
+              <Link to={`/grupos/${grupoId}?pestana=areas&area=${asignaturaId}&seccion=programacion`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
                 Ir a la programación →
               </Link>
             </div>

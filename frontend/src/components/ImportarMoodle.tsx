@@ -18,6 +18,7 @@ import { leerCSVMoodle, notasDeColumna, sugerirInstrumento, type LecturaMoodle }
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
 import type { ColumnaInstrumento } from './MatrizInstrumentos'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   /** Instrumentos de la vista, con los criterios que cubre cada uno. */
@@ -85,7 +86,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
         porColumna.push({ titulo: c.titulo, instrumento: col.ins.nombre, notas: notas.length })
         return notas.flatMap(n => col.criterios.map(cr => ({
           alumno_id: n.alumno.id, instrumento_id: col.ins.instrumento_id, criterio_id: cr.id,
-          ...area, trimestre, valor: n.valor, observacion: null, unidad_id: unidadId,
+          ...area, trimestre, valor: n.valor, observacion: null, unidad_id: claveUnidad(unidadId),
         })))
       })
       // Sin vínculos: el reparto a los criterios de cada instrumento ya está hecho aquí.

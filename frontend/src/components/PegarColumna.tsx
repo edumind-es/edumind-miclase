@@ -13,6 +13,7 @@ import { interpretarPegado } from '@/utils/pegarNotas'
 import { calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   instrumento: CeldaInstrumento
@@ -41,7 +42,7 @@ export default function PegarColumna({ instrumento, criterios, alumnos, trimestr
     try {
       const items = listas.flatMap(f => criterios.map(c => ({
         alumno_id: f.alumno!.id, instrumento_id: instrumento.instrumento_id, criterio_id: c.id,
-        ...area, trimestre, valor: f.valor!, observacion: null, unidad_id: unidadId,
+        ...area, trimestre, valor: f.valor!, observacion: null, unidad_id: claveUnidad(unidadId),
       })))
       // Sin vínculos: el reparto a los criterios del instrumento ya está hecho aquí.
       await saveCalificaciones(items, { sinVinculos: true })

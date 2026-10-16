@@ -29,6 +29,7 @@ import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
 import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 
@@ -211,8 +212,8 @@ export default function CeldaEvaluacion({
     let vigente = true
     ;(async () => {
       const [c, regs] = await Promise.all([
-        getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre),
-        getRegistrosDeCelda(alumno.id!, instrumentoId, trimestre, criterio.id),
+        getCalificacionUnica(alumno.id!, instrumentoId, criterio.id, trimestre, claveUnidad(unidadId)),
+        getRegistrosDeCelda(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), criterio.id),
       ])
       // Lo marcado en cada indicador la última vez. Una nota puesta antes de
       // que esto existiera no lo trae: se muestra el número y ya.
@@ -222,7 +223,7 @@ export default function CeldaEvaluacion({
       // traen las respuestas de otro de sus criterios, o parecería sin
       // corregir y anotar una pregunta borraría las demás.
       if (prueba && Object.keys(marcas).length === 0) {
-        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, hermanos.map(h => h.id))
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), hermanos.map(h => h.id))
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)
@@ -278,7 +279,7 @@ export default function CeldaEvaluacion({
         valor,
         // La observación es de este criterio; a los demás no se les pisa la suya.
         observacion: criterio_id === criterio.id ? observacion.trim() || null : undefined,
-        unidad_id: unidadId,
+        unidad_id: claveUnidad(unidadId),
         // `undefined` significa «no lo toques»: al borrar la nota o al
         // escribir una observación no hay que perder lo marcado.
         ...(niveles_rubrica !== undefined ? { niveles_rubrica } : {}),
@@ -306,7 +307,7 @@ export default function CeldaEvaluacion({
     try {
       await crearEvidencia({
         alumno_id: alumno.id!, asignatura_id: asig.id, criterio_id: criterio.id,
-        instrumento_id: instrumentoId, unidad_id: unidadId, trimestre,
+        instrumento_id: instrumentoId, unidad_id: claveUnidad(unidadId), trimestre,
         tipo: ev.tipo, mime: ev.mime, blob: ev.blob, duracion_ms: ev.duracion_ms ?? null,
         descripcion: observacion.trim() || undefined,
       })
@@ -363,7 +364,7 @@ export default function CeldaEvaluacion({
         await editarRegistro(registroRubrica, { nota, niveles_rubrica: siguiente, valor: nivelDeNota(nota) })
       } else {
         const r = await evolucionarRubrica({
-          alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+          alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: claveUnidad(unidadId),
           criterios: destinosNota, area, nota, niveles_rubrica: siguiente,
         })
         setRegistroRubrica(r.id)
@@ -422,7 +423,7 @@ export default function CeldaEvaluacion({
     setGuardando(true)
     try {
       const r = await guardarExamenDeAlumno({
-        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: unidadId,
+        alumno_id: alumno.id!, instrumento_id: instrumentoId, trimestre, unidad_id: claveUnidad(unidadId),
         def: prueba.def, respuestas, destinos: destinosPrueba,
         area: { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad },
         observacion: { criterio_id: criterio.id, texto: observacion.trim() || null },

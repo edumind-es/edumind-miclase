@@ -138,6 +138,10 @@ async function principal() {
     await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
     await suite('plantillas de hijos por familia', 'node', [familias])
 
+    const familiasSinCriterio = join(scratch, 'familias-sin-criterio.mjs')
+    await paquete('pruebas/familias-sin-criterio.test.ts', familiasSinCriterio, ['--platform=node', '--format=esm'])
+    await suite('familias sin criterio en la unidad', 'node', [familiasSinCriterio])
+
     const rubrica = join(scratch, 'rubrica.mjs')
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
@@ -153,6 +157,10 @@ async function principal() {
     const pruebaEscrita = join(scratch, 'prueba-escrita.mjs')
     await paquete('pruebas/prueba-escrita.test.ts', pruebaEscrita, ['--platform=node', '--format=esm'])
     await suite('prueba escrita: nota e importación', 'node', [pruebaEscrita])
+
+    const migracionUnidades = join(scratch, 'migracion-unidades.mjs')
+    await paquete('pruebas/migracion-unidades.test.ts', migracionUnidades, ['--platform=node', '--format=esm'])
+    await suite('unidades estancas: colocar notas antiguas', 'node', [migracionUnidades])
 
     const vinculos = join(scratch, 'vinculos.mjs')
     await paquete('pruebas/vinculos.test.ts', vinculos, ['--platform=node', '--format=esm'])

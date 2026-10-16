@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import ProgramacionPanel from './ProgramacionPanel'
 import RubricaEditor from './RubricaEditor'
 import {
@@ -75,8 +76,15 @@ function humanizarSlug(slug: string): string {
 export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onCambio }: Props) {
   const [asignaturas, setAsignaturas] = useState<Asignatura[]>([])
   const [disponibles, setDisponibles] = useState<string[]>([])
-  const [expandida, setExpandida] = useState<number | null>(null)
-  const [tabActiva, setTabActiva] = useState<Record<number, 'instrumentos' | 'programacion'>>({})
+  // `?area=<id>&seccion=programacion|instrumentos` abre esa área por la
+  // sección pedida: es como llega el calificador cuando avisa de que una
+  // familia no tiene criterios en la unidad. Solo se lee al montar.
+  const [params] = useSearchParams()
+  const areaPedida = Number(params.get('area')) || null
+  const seccionPedida = params.get('seccion') === 'instrumentos' ? 'instrumentos' : 'programacion'
+  const [expandida, setExpandida] = useState<number | null>(areaPedida)
+  const [tabActiva, setTabActiva] = useState<Record<number, 'instrumentos' | 'programacion'>>(
+    areaPedida ? { [areaPedida]: seccionPedida } : {})
   const [selector, setSelector] = useState(false)
   const [marcadas, setMarcadas] = useState<Set<string>>(new Set())
   const [nombreLibre, setNombreLibre] = useState('')

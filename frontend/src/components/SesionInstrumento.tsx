@@ -30,6 +30,7 @@ import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, 
 import { calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, RegistroDiario } from '@/db/localDb'
+import { claveUnidad } from '@/db/migracionUnidades'
 
 interface Props {
   instrumento: CeldaInstrumento
@@ -104,7 +105,7 @@ function SesionDiario({
 
   useEffect(() => {
     let vigente = true
-    Promise.all(alumnos.map(a => getRegistrosDeCelda(a.id!, instrumento.instrumento_id, trimestre)))
+    Promise.all(alumnos.map(a => getRegistrosDeCelda(a.id!, instrumento.instrumento_id, trimestre, claveUnidad(unidadId))))
       .then(listas => {
         if (!vigente) return
         setRegistros(new Map(alumnos.map((a, i) => [a.id!, listas[i]])))
@@ -136,7 +137,7 @@ function SesionDiario({
         await editarRegistro(actual.id!, { valor: nivel })
       } else {
         await anadirRegistro({
-          alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: unidadId,
+          alumno_id: al.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId),
           valor: nivel, observacion: textos[al.id!]?.trim() || null, criterios: ids, area, fecha: fechaDe(dia),
         })
       }

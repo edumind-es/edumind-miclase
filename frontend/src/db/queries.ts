@@ -1,7 +1,8 @@
-import { db, TABLAS_SINC, INSTRUMENTO_BANCO } from './localDb'
+import { db, TABLAS_SINC, INSTRUMENTO_BANCO, VERSION_ESQUEMA, type MiClaseDB } from './localDb'
+import { asignarUnidades, prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, type ResumenMigracion } from './migracionUnidades'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, porcentajesEnFamilia } from './calculo'
+import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
@@ -11,6 +12,7 @@ import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
+  GrupoAlumno, UnidadCriterio,
 } from './localDb'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
@@ -43,7 +45,8 @@ export type CalItem = {
   trimestre: number
   valor: number | null
   observacion?: string | null
-  unidad_id?: number | null
+  /** Parte de la clave de la casilla: sin ella no se guarda nada. */
+  unidad_id: number
   /**
    * Nivel marcado en cada indicador de la rúbrica. `undefined` significa «no
    * lo toques»: guardar una observación o borrar la nota no debe llevarse por
@@ -91,8 +94,8 @@ function masReciente<T extends Sincronizable & { id?: number }>(filas: T[]): T |
   return mejor
 }
 
-const claveCelda = (c: Pick<Calificacion, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre'>) =>
-  `${c.alumno_id}:${c.instrumento_id}:${c.criterio_id}:${c.trimestre}`
+const claveCelda = (c: Pick<Calificacion, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre' | 'unidad_id'>) =>
+  `${c.alumno_id}:${c.instrumento_id}:${c.criterio_id}:${c.trimestre}:${c.unidad_id}`
 
 /** Una calificación por casilla: de las duplicadas se queda la que cuenta. */
 function sinDuplicados(cals: Calificacion[]): Calificacion[] {
@@ -714,13 +717,13 @@ export async function asignarInstrumentoAUnidad(
 
 // ─── CALIFICACIONES ───────────────────────────────────────────────────────────
 
-// Nota actual de un alumno en un criterio/instrumento/trimestre concretos
+// Nota actual de un alumno en un criterio/instrumento/trimestre/unidad concretos
 export async function getCalificacionUnica(
-  alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number
+  alumno_id: number, instrumento_id: number, criterio_id: string, trimestre: number, unidad_id: number
 ): Promise<Calificacion | undefined> {
   const filas = await db.calificaciones
-    .where('[alumno_id+instrumento_id+criterio_id+trimestre]')
-    .equals([alumno_id, instrumento_id, criterio_id, trimestre])
+    .where('[alumno_id+instrumento_id+criterio_id+trimestre+unidad_id]')
+    .equals([alumno_id, instrumento_id, criterio_id, trimestre, unidad_id])
     .toArray()
   return masReciente(vivos(filas))
 }
@@ -734,7 +737,7 @@ async function filasDeInstrumentoEnTrimestre(
   instrumento_id: number, trimestre: number, unidad_id?: number | null
 ): Promise<CriterioInstrumento[]> {
   const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
-    .filter(f => !unidad_id || f.unidad_id === unidad_id)
+    .filter(f => unidad_id == null || f.unidad_id === unidad_id)
   if (!filas.length) return []
   const unidades = new Map(
     vivos(await db.unidades.where('id').anyOf([...new Set(filas.map(f => f.unidad_id))]).toArray())
@@ -745,11 +748,15 @@ async function filasDeInstrumentoEnTrimestre(
   })
 }
 
-/** Con qué criterios va vinculado este, para un instrumento y un trimestre. */
+/**
+ * Con qué criterios va vinculado este, para un instrumento en una unidad.
+ * El vínculo no sale de la unidad: desde la v7 la casilla lleva la unidad en
+ * la clave, así que lo que se replica en una no toca a las demás.
+ */
 export async function getCriteriosVinculados(
-  instrumento_id: number, criterio_id: string, trimestre: number
+  instrumento_id: number, criterio_id: string, trimestre: number, unidad_id: number
 ): Promise<string[]> {
-  return criteriosVinculados(await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre), criterio_id)
+  return criteriosVinculados(await filasDeInstrumentoEnTrimestre(instrumento_id, trimestre, unidad_id), criterio_id)
 }
 
 /**
@@ -781,6 +788,7 @@ export async function fijarVinculoDeInstrumento(
 export async function copiarNotasACriterios(p: {
   instrumento_id: number
   trimestre: number
+  unidad_id: number
   origen: string
   destinos: string[]
   alumno_ids: number[]
@@ -797,22 +805,22 @@ export async function copiarNotasACriterios(p: {
   let copiadas = 0, respetadas = 0, sinNota = 0
   const items: CalItem[] = []
   const comun = p.desde_alumno_id != null
-    ? await getCalificacionUnica(p.desde_alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    ? await getCalificacionUnica(p.desde_alumno_id, p.instrumento_id, p.origen, p.trimestre, p.unidad_id)
     : null
   if (p.desde_alumno_id != null && (!comun || comun.valor == null)) return { copiadas, respetadas, sinNota: 1 }
   for (const alumno_id of p.alumno_ids) {
-    const src = comun ?? await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre)
+    const src = comun ?? await getCalificacionUnica(alumno_id, p.instrumento_id, p.origen, p.trimestre, p.unidad_id)
     if (!src || src.valor == null) { sinNota++; continue }
     for (const destino of p.destinos) {
       // La propia casilla de partida no se copia sobre sí misma.
       if (destino === p.origen && (comun ? alumno_id === p.desde_alumno_id : true)) continue
-      const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, destino, p.trimestre)
+      const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, destino, p.trimestre, p.unidad_id)
       if (ya?.valor != null && !p.sobrescribir) { respetadas++; continue }
       items.push({
         alumno_id, instrumento_id: p.instrumento_id, criterio_id: destino,
         asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
         trimestre: p.trimestre, valor: src.valor, observacion: src.observacion ?? null,
-        unidad_id: src.unidad_id ?? null, niveles_rubrica: src.niveles_rubrica ?? null,
+        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null,
       })
       copiadas++
     }
@@ -833,17 +841,22 @@ export async function saveCalificaciones(
   items: CalItem[], opciones: { sinVinculos?: boolean } = {}
 ): Promise<number> {
   let replicadas = 0
+  // La unidad es parte de la clave: una fila sin ella no entraría en el
+  // índice y la casilla la perdería de vista. Mejor fallar aquí, a la vista.
+  for (const item of items) {
+    if (typeof item.unidad_id !== 'number') throw new Error('Una calificación necesita su unidad')
+  }
   if (!opciones.sinVinculos && items.length) {
-    const clave = (i: Pick<CalItem, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre'>) =>
-      `${i.alumno_id}:${i.instrumento_id}:${i.criterio_id}:${i.trimestre}`
+    const clave = (i: Pick<CalItem, 'alumno_id' | 'instrumento_id' | 'criterio_id' | 'trimestre' | 'unidad_id'>) =>
+      `${i.alumno_id}:${i.instrumento_id}:${i.criterio_id}:${i.trimestre}:${i.unidad_id}`
     // Lo que se pide explícitamente manda sobre lo que llegaría por réplica.
     const pedidas = new Set(items.map(clave))
     const cache = new Map<string, string[]>()
     const extra: CalItem[] = []
     for (const item of items) {
-      const k = `${item.instrumento_id}:${item.criterio_id}:${item.trimestre}`
+      const k = `${item.instrumento_id}:${item.criterio_id}:${item.trimestre}:${item.unidad_id}`
       let hermanos = cache.get(k)
-      if (!hermanos) cache.set(k, hermanos = await getCriteriosVinculados(item.instrumento_id, item.criterio_id, item.trimestre))
+      if (!hermanos) cache.set(k, hermanos = await getCriteriosVinculados(item.instrumento_id, item.criterio_id, item.trimestre, item.unidad_id))
       for (const criterio_id of hermanos) {
         const copia = { ...item, criterio_id }
         if (pedidas.has(clave(copia))) continue
@@ -858,8 +871,8 @@ export async function saveCalificaciones(
   await db.transaction('rw', db.calificaciones, async () => {
     for (const item of items) {
       const filas = await db.calificaciones
-        .where('[alumno_id+instrumento_id+criterio_id+trimestre]')
-        .equals([item.alumno_id, item.instrumento_id, item.criterio_id, item.trimestre])
+        .where('[alumno_id+instrumento_id+criterio_id+trimestre+unidad_id]')
+        .equals([item.alumno_id, item.instrumento_id, item.criterio_id, item.trimestre, item.unidad_id])
         .toArray()
       // Se escribe en la fila que leen la casilla y la matriz (`masReciente`).
       // Sin fila viva se reutiliza una borrada, si la hay. Las otras vivas
@@ -877,7 +890,6 @@ export async function saveCalificaciones(
         await db.calificaciones.update(existing.id, tocado({
           valor: item.valor,
           observacion: item.observacion ?? existing.observacion ?? null,
-          unidad_id: item.unidad_id ?? existing.unidad_id ?? null,
           niveles_rubrica: item.niveles_rubrica !== undefined
             ? item.niveles_rubrica
             : existing.niveles_rubrica ?? null,
@@ -927,8 +939,9 @@ export async function getResumenPorCriterio(asignatura_id: number): Promise<
   if (!instrIds.length) return []
   const pesoDe = new Map(instrumentos.map(i => [i.id!, i.peso]))
 
-  const cals = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.valor != null).toArray()))
+  // Como en el motor: primero la media de unidades, después el peso.
+  const cals = fundirUnidades(sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+    .filter(c => c.valor != null).toArray())))
 
   const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
@@ -1474,7 +1487,7 @@ export async function guardarExamenDeAlumno(p: {
   alumno_id: number
   instrumento_id: number
   trimestre: number
-  unidad_id: number | null
+  unidad_id: number
   def: PruebaDef
   respuestas: Record<string, number>
   /** Criterios que el instrumento evalúa en lo que se está viendo. */
@@ -1500,10 +1513,10 @@ export async function guardarExamenDeAlumno(p: {
  * corregido, y enseñarlo en blanco haría que anotar una pregunta borrase las demás.
  */
 export async function getRespuestasDeExamen(
-  alumno_id: number, instrumento_id: number, trimestre: number, criterios: string[]
+  alumno_id: number, instrumento_id: number, trimestre: number, unidad_id: number, criterios: string[]
 ): Promise<Record<string, number>> {
   for (const c of criterios) {
-    const cal = await getCalificacionUnica(alumno_id, instrumento_id, c, trimestre)
+    const cal = await getCalificacionUnica(alumno_id, instrumento_id, c, trimestre, unidad_id)
     if (cal?.niveles_rubrica && Object.keys(cal.niveles_rubrica).length) return cal.niveles_rubrica
   }
   return {}
@@ -1522,10 +1535,10 @@ async function correccionesDeExamen(instrumento_id: number, unidad_id: number | 
   const esRespuesta = (clave: string) => /^p\d+$/.test(clave) || def.preguntas.some(q => q.id === clave)
   const cals = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray())
     .filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).some(esRespuesta))
-    .filter(c => unidad_id != null ? c.unidad_id === unidad_id : c.unidad_id == null || !otras.has(c.unidad_id))
+    .filter(c => unidad_id != null ? c.unidad_id === unidad_id : !otras.has(c.unidad_id))
   const grupos = new Map<string, Calificacion[]>()
   for (const c of cals) {
-    const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id ?? ''}`
+    const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id}`
     grupos.set(k, [...(grupos.get(k) ?? []), c])
   }
   return [...grupos.values()]
@@ -1558,11 +1571,11 @@ export async function recalcularNotasDeExamen(
   for (const cals of grupos) {
     const base = cals[0]
     const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
-    const enUnidad = base.unidad_id != null ? filas.filter(f => f.unidad_id === base.unidad_id) : filas
+    const enUnidad = filas.filter(f => f.unidad_id === base.unidad_id)
     const destinos = [...new Set([...enUnidad.map(f => f.criterio_id), ...cals.map(c => c.criterio_id)])]
     const r = notaDePrueba(def, respuestas, destinos)
     const comun = {
-      alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id ?? null,
+      alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id,
       asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,
     }
     for (const c of destinos) {
@@ -1907,7 +1920,7 @@ export type RegistroNuevo = {
   alumno_id: number
   instrumento_id: number
   trimestre: number
-  unidad_id: number | null
+  unidad_id: number
   /** Nivel 1-4. */
   valor: number
   /** Nota 0-10 y marcas cuando la observación es con rúbrica (ver `RegistroDiario`). */
@@ -1935,10 +1948,10 @@ export async function criteriosDeInstrumento(
 
 /** Registros vivos de un alumno con un instrumento en un trimestre, en orden cronológico. */
 export async function getRegistrosDeCelda(
-  alumno_id: number, instrumento_id: number, trimestre: number, criterio_id?: string
+  alumno_id: number, instrumento_id: number, trimestre: number, unidad_id: number, criterio_id?: string
 ): Promise<RegistroDiario[]> {
   const regs = vivos(await db.diario
-    .where('[alumno_id+instrumento_id+trimestre]').equals([alumno_id, instrumento_id, trimestre]).toArray())
+    .where('[alumno_id+instrumento_id+trimestre+unidad_id]').equals([alumno_id, instrumento_id, trimestre, unidad_id]).toArray())
   return ordenarRegistros(criterio_id ? regs.filter(r => criteriosDe(r).includes(criterio_id)) : regs)
 }
 
@@ -1950,17 +1963,18 @@ export async function getRegistrosDeCelda(
 export async function anadirRegistro(p: RegistroNuevo): Promise<{ id: number; notas: Record<string, number | null> }> {
   if (!Number.isInteger(p.valor) || p.valor < 1 || p.valor > 4) throw new Error('El nivel del registro va de 1 a 4')
   if (!p.criterios.length) throw new Error('Un registro del diario necesita al menos un criterio')
+  if (typeof p.unidad_id !== 'number') throw new Error('Un registro del diario necesita su unidad')
   if (p.nota != null && (!Number.isFinite(p.nota) || p.nota < 0 || p.nota > 10)) throw new Error('La nota de la observación va de 0 a 10')
   const reg = nuevo({
     alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
-    unidad_id: p.unidad_id ?? null, fecha: p.fecha ?? now(), valor: p.valor,
+    unidad_id: p.unidad_id, fecha: p.fecha ?? now(), valor: p.valor,
     nota: p.nota ?? null, niveles_rubrica: p.niveles_rubrica ?? null,
     observacion: p.observacion ?? null,
     criterios_json: JSON.stringify([...new Set(p.criterios)]),
     ...p.area,
   })
   await db.diario.add(reg)
-  const notas = await materializarDiario(p.alumno_id, p.instrumento_id, p.trimestre, { forzarSobreManual: true })
+  const notas = await materializarDiario(p.alumno_id, p.instrumento_id, p.trimestre, p.unidad_id, { forzarSobreManual: true })
   return { id: reg.id, notas }
 }
 
@@ -1973,7 +1987,7 @@ export async function editarRegistro(
     throw new Error('El nivel del registro va de 1 a 4')
   }
   await db.diario.update(id, tocado(cambios))
-  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, { forzarSobreManual: true })
+  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, r.unidad_id, { forzarSobreManual: true })
 }
 
 /**
@@ -1989,19 +2003,19 @@ export async function editarRegistro(
  * que la misma pantalla lo edite en vez de crear otro a cada retoque.
  */
 export async function evolucionarRubrica(p: {
-  alumno_id: number; instrumento_id: number; trimestre: number; unidad_id: number | null
+  alumno_id: number; instrumento_id: number; trimestre: number; unidad_id: number
   criterios: string[]; area: DatosDeArea; nota: number; niveles_rubrica: Record<string, number>
 }): Promise<{ id: number; notas: Record<string, number | null>; convertida: boolean }> {
   let convertida = false
   {
     const previas = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').equals(p.instrumento_id)
-      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.valor != null && c.origen !== 'diario')
+      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.unidad_id === p.unidad_id && c.valor != null && c.origen !== 'diario')
       .toArray()))
     const previa = previas.find(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).length) ?? previas[0]
     if (previa) {
       await anadirRegistro({
         alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, trimestre: p.trimestre,
-        unidad_id: previa.unidad_id ?? p.unidad_id, criterios: p.criterios, area: p.area,
+        unidad_id: p.unidad_id, criterios: p.criterios, area: p.area,
         valor: nivelDeNota(previa.valor!), nota: previa.valor, niveles_rubrica: previa.niveles_rubrica ?? null,
         fecha: previa.fecha ?? previa.updated_at,
       })
@@ -2017,7 +2031,7 @@ export async function evolucionarRubrica(p: {
     // La nota manual no se ha perdido: es la primera observación. El fantasma
     // que deja la materialización («no cuenta») mentiría, así que se retira.
     const conFantasma = vivos(await db.calificaciones.where('instrumento_id').equals(p.instrumento_id)
-      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.origen === 'diario' && c.valor_anterior != null)
+      .filter(c => c.alumno_id === p.alumno_id && c.trimestre === p.trimestre && c.unidad_id === p.unidad_id && c.origen === 'diario' && c.valor_anterior != null)
       .toArray())
     for (const c of conFantasma) await db.calificaciones.update(c.id!, tocado({ valor_anterior: null, anterior_motivo: null }))
   }
@@ -2029,7 +2043,7 @@ export async function borrarRegistro(id: number): Promise<void> {
   const r = await db.diario.get(id)
   if (!r || r.deleted_at) return
   await db.diario.update(id, tocado({ deleted_at: now() }))
-  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, { forzarSobreManual: true })
+  await materializarDiario(r.alumno_id, r.instrumento_id, r.trimestre, r.unidad_id, { forzarSobreManual: true })
 }
 
 /**
@@ -2041,15 +2055,15 @@ export async function borrarRegistro(id: number): Promise<void> {
  * con `sinVinculos`: el reparto ya está en los registros.
  */
 export async function materializarDiario(
-  alumno_id: number, instrumento_id: number, trimestre: number,
+  alumno_id: number, instrumento_id: number, trimestre: number, unidad_id: number,
   opciones: { forzarSobreManual?: boolean } = {}
 ): Promise<Record<string, number | null>> {
-  const regs = await getRegistrosDeCelda(alumno_id, instrumento_id, trimestre)
+  const regs = await getRegistrosDeCelda(alumno_id, instrumento_id, trimestre, unidad_id)
   const instrumento = await db.instrumentos.get(instrumento_id)
   const derivadas: Map<string, NotaDerivada> = derivarNotas(regs, instrumento?.agregacion ?? 'media')
 
   const existentes = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id)
-    .filter(c => c.alumno_id === alumno_id && c.trimestre === trimestre).toArray())
+    .filter(c => c.alumno_id === alumno_id && c.trimestre === trimestre && c.unidad_id === unidad_id).toArray())
   const previaDe = new Map(existentes.map(c => [c.criterio_id, c]))
 
   // Destinos: los que derivan nota y los que la tenían derivada y ya no (se vacían).
@@ -2082,8 +2096,7 @@ export async function materializarDiario(
       ? { valor_anterior: previa!.valor, anterior_motivo: MOTIVO_SUSTITUIDA_POR_DIARIO }
       : {}
     items.push({
-      ...area, alumno_id, instrumento_id, trimestre, criterio_id, valor, origen,
-      unidad_id: ultimo?.unidad_id ?? previa?.unidad_id ?? null,
+      ...area, alumno_id, instrumento_id, trimestre, unidad_id, criterio_id, valor, origen,
       ...(marcasUltimas != null && valor != null ? { niveles_rubrica: marcasUltimas } : {}),
       ...fantasma,
     })
@@ -2095,10 +2108,10 @@ export async function materializarDiario(
 /** Vuelve a derivar todas las casillas con diario de un instrumento (cambio de regla). */
 export async function rematerializarInstrumento(instrumento_id: number): Promise<void> {
   const regs = vivos(await db.diario.where('instrumento_id').equals(instrumento_id).toArray())
-  const claves = new Set(regs.map(r => `${r.alumno_id}:${r.trimestre}`))
+  const claves = new Set(regs.map(r => `${r.alumno_id}:${r.trimestre}:${r.unidad_id}`))
   for (const k of claves) {
-    const [a, t] = k.split(':').map(Number)
-    await materializarDiario(a, instrumento_id, t, { forzarSobreManual: true })
+    const [a, t, u] = k.split(':').map(Number)
+    await materializarDiario(a, instrumento_id, t, u, { forzarSobreManual: true })
   }
 }
 
@@ -2139,18 +2152,48 @@ export async function reconciliarDiario(): Promise<number> {
   const derivadasVivas = vivos(await db.calificaciones.filter(c => c.origen === 'diario').toArray())
 
   const claves = new Set<string>()
-  for (const r of regs) claves.add(`${r.alumno_id}:${r.instrumento_id}:${r.trimestre}`)
-  for (const c of derivadasVivas) claves.add(`${c.alumno_id}:${c.instrumento_id}:${c.trimestre}`)
+  for (const r of regs) claves.add(`${r.alumno_id}:${r.instrumento_id}:${r.trimestre}:${r.unidad_id}`)
+  for (const c of derivadasVivas) claves.add(`${c.alumno_id}:${c.instrumento_id}:${c.trimestre}:${c.unidad_id}`)
   for (const k of claves) {
-    const [a, i, tr] = k.split(':').map(Number)
-    await materializarDiario(a, i, tr)
+    const [a, i, tr, u] = k.split(':').map(Number)
+    await materializarDiario(a, i, tr, u)
   }
   return claves.size
 }
 
+/**
+ * Tras un sync con un aparato que aún no lleva la unidad en la clave: sus
+ * filas llegan sin unidad y el índice compuesto no las ve. Se les asigna con
+ * la misma regla que en la migración y se vuelven a sellar para que el
+ * siguiente envío las devuelva ya colocadas. Devuelve cuántas ha tocado.
+ */
+export async function asignarUnidadesPendientes(): Promise<ResumenMigracion> {
+  const [cals, regs] = await Promise.all([
+    db.calificaciones.filter(c => c.unidad_id == null).toArray(),
+    db.diario.filter(r => r.unidad_id == null).toArray(),
+  ])
+  const resumen = resumenVacio()
+  if (!cals.length && !regs.length) return resumen
+  const ctx = prepararContexto({
+    unidades: await db.unidades.toArray(),
+    instrumentos: await db.instrumentos.toArray(),
+    criterio_instrumentos: await db.criterio_instrumentos.toArray(),
+  })
+  for (const c of cals) {
+    const r = unidadParaFila({ ...c, criterios: [c.criterio_id] }, ctx)
+    if (anotar(resumen, r.motivo)) await db.calificaciones.update(c.id!, tocado({ unidad_id: r.unidad_id }))
+  }
+  for (const d of regs) {
+    const r = unidadParaFila({ ...d, criterios: criteriosDeRegistro(d) }, ctx)
+    if (anotar(resumen, r.motivo)) await db.diario.update(d.id!, tocado({ unidad_id: r.unidad_id }))
+  }
+  return resumen
+}
+
 // Lo que llega de otro aparato puede traer registros del diario o cambiar la
 // regla de un instrumento: se vuelve a derivar aquí, no en ninguna pantalla.
-alAplicarCambios(async () => { await reconciliarDiario() })
+// Antes, lo que venga sin unidad recibe la suya.
+alAplicarCambios(async () => { await asignarUnidadesPendientes(); await reconciliarDiario() })
 
 // ─── MATRIZ DE EVALUACIÓN ─────────────────────────────────────────────────────
 
@@ -2240,12 +2283,12 @@ export async function getMatrizEvaluacion(
     ? await getMapaCriterioInstrumento(unidad_id)
     : await getMapaCriterioInstrumentoAsignatura(asignatura_id)
 
-  // Los vínculos se calculan como al guardar (todas las unidades del trimestre),
-  // no solo con la unidad que se mira: lo que se enseña es lo que va a pasar.
+  // Los vínculos se calculan como al guardar: dentro de la unidad que se
+  // mira. En «Todo el curso» se enseñan los de todas las del trimestre.
   const filasVinculo = new Map<number, CriterioInstrumento[]>()
   for (const ins of instrumentos) {
     if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
-    const filas = await filasDeInstrumentoEnTrimestre(ins.id!, trimestre)
+    const filas = await filasDeInstrumentoEnTrimestre(ins.id!, trimestre, unidad_id)
     if (filas.some(f => f.vinculado)) filasVinculo.set(ins.id!, filas)
   }
 
@@ -2307,10 +2350,13 @@ export async function getMatrizEvaluacion(
   }
 
   const instrIds = instrumentos.map(i => i.id!)
-  const cals = instrIds.length
+  // En una unidad, solo sus notas. En «Todo el curso», las de todas las
+  // unidades del trimestre, fundidas por casilla (`fundirUnidades`).
+  const crudas = instrIds.length
     ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-        .filter(c => c.trimestre === trimestre).toArray()))
+        .filter(c => c.trimestre === trimestre && (unidad_id == null || c.unidad_id === unidad_id)).toArray()))
     : []
+  const cals = unidad_id == null ? fundirUnidades(crudas) : crudas
   // Las notas de los hijos se funden en la de su familia, con la misma
   // función que el cálculo del área: la casilla enseña el mismo número que el
   // boletín. Las de los hijos siguen disponibles por su propia clave.
@@ -2327,7 +2373,7 @@ export async function getMatrizEvaluacion(
   const diario: MatrizEvaluacion['diario'] = {}
   const regs = instrIds.length
     ? ordenarRegistros(vivos(await db.diario.where('instrumento_id').anyOf(instrIds)
-        .filter(r => r.trimestre === trimestre).toArray()))
+        .filter(r => r.trimestre === trimestre && (unidad_id == null || r.unidad_id === unidad_id)).toArray()))
     : []
   for (const r of regs) {
     for (const c of criteriosDe(r)) {
@@ -2454,26 +2500,36 @@ function base64ABlob(b64: string, mime: string): Blob {
   return new Blob([bytes], { type: mime })
 }
 
-export async function exportarDatos(): Promise<string> {
+/**
+ * Copia de seguridad completa. `base` es la de la app salvo en la puerta de
+ * migración, que exporta desde la base ANTIGUA antes de dejar que se
+ * actualice: por eso la versión del fichero es la del esquema que se abre.
+ */
+export async function exportarDatos(base: MiClaseDB = db): Promise<string> {
+  // Una base antigua no tiene todas las tablas (rúbricas desde la v2,
+  // evidencias desde la v3, criterio_instrumentos desde la v4, diario desde
+  // la v6): las que no existen salen vacías en vez de reventar la copia.
+  const leer = <T,>(nombre: string): Promise<T[]> =>
+    base.tables.some(t => t.name === nombre) ? base.table(nombre).toArray() : Promise.resolve([])
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
          criterio_instrumentos, rubricas, evidencias, planos, asientos, diario] = await Promise.all([
-    db.grupos.toArray(),
-    db.alumnos.toArray(),
-    db.grupo_alumnos.toArray(),
-    db.asignaturas.toArray(),
-    db.instrumentos.toArray(),
-    db.calificaciones.toArray(),
-    db.sesiones.toArray(),
-    db.asistencia.toArray(),
-    db.unidades.toArray(),
-    db.unidad_criterios.toArray(),
-    db.criterio_instrumentos.toArray(),
-    db.rubricas.toArray(),
-    db.evidencias.toArray(),
-    db.planos.toArray(),
-    db.asientos.toArray(),
-    db.diario.toArray(),
+    leer<Grupo>('grupos'),
+    leer<Alumno>('alumnos'),
+    leer<GrupoAlumno>('grupo_alumnos'),
+    leer<Asignatura>('asignaturas'),
+    leer<Instrumento>('instrumentos'),
+    leer<Calificacion>('calificaciones'),
+    leer<Sesion>('sesiones'),
+    leer<AsistenciaRec>('asistencia'),
+    leer<Unidad>('unidades'),
+    leer<UnidadCriterio>('unidad_criterios'),
+    leer<CriterioInstrumento>('criterio_instrumentos'),
+    leer<Rubrica>('rubricas'),
+    leer<Evidencia>('evidencias'),
+    leer<Plano>('planos'),
+    leer<Asiento>('asientos'),
+    leer<RegistroDiario>('diario'),
   ])
 
   // Serializar los blobs de evidencias a base64
@@ -2483,9 +2539,8 @@ export async function exportarDatos(): Promise<string> {
   }))
 
   return JSON.stringify({
-    // La versión del backup sigue a la del esquema Dexie, que va por la v6
-    // (diario de evaluación).
-    version: 6,
+    // La versión del backup sigue a la del esquema Dexie que se ha abierto.
+    version: Math.round(base.verno),
     exported_at: now(),
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
@@ -2496,7 +2551,19 @@ export async function exportarDatos(): Promise<string> {
 
 export async function importarDatos(json: string): Promise<void> {
   const data = JSON.parse(json)
-  if (![1, 2, 3, 4, 5, 6].includes(data.version)) throw new Error('Versión de backup no compatible')
+  if (!Number.isInteger(data.version) || data.version < 1 || data.version > VERSION_ESQUEMA) {
+    throw new Error('Versión de backup no compatible')
+  }
+
+  // Las copias anteriores a la v7 (y las filas sueltas que vinieran sin
+  // unidad) reciben la suya con la misma regla que la migración: si no, no
+  // entrarían en el índice y ninguna pestaña de unidad las enseñaría.
+  const colocadas = asignarUnidades(data.calificaciones || [], data.diario || [], {
+    unidades: data.unidades || [], instrumentos: data.instrumentos || [],
+    criterio_instrumentos: data.criterio_instrumentos || [],
+  })
+  data.calificaciones = colocadas.calificaciones
+  data.diario = colocadas.diario
 
   // Reconstruir blobs fuera de la transacción (FileReader no puede vivir dentro)
   const evidencias: Evidencia[] = (data.evidencias || []).map((ev: any) => {

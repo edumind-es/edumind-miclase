@@ -26,7 +26,8 @@ suites y lo mata todo al terminar.
 | Suite | Qué comprueba | Necesita |
 |---|---|---|
 | `tipos` | `tsc` sobre todo el frontend | — |
-| `calculo.test.ts` | notas ponderadas, trimestres, escala LOMLOE | — |
+| `calculo.test.ts` | notas ponderadas, trimestres, escala LOMLOE, media de unidades estancas | — |
+| `migracion-unidades.test.ts` | qué unidad recibe una nota antigua sin ella (misma regla en migración, copia y sync) | — |
 | `fusion.test.ts` | fusión a tres bandas, campo a campo | — |
 | `transporte-directo.test.ts` | el protocolo y **el reloj** del enlace directo, con un canal de mentira | — |
 | `lectorqr.test.mjs` | decodificación de QR | — |
@@ -39,7 +40,7 @@ suites y lo mata todo al terminar.
 | `enlace-directo.test.mjs` | emparejamiento WebRTC y troceado de 3 MB | navegador |
 | `sync.test.mjs` | buzón del servidor: cuotas, fechas, rechazos | backend |
 | `e2e.test.mjs` | recorrido por la interfaz | backend + web |
-| `migracion.test.mjs` | subida de esquema Dexie v3→v5 | backend + web |
+| `migracion.test.mjs` | subida de esquema Dexie v3→v7: puerta con copia previa, unidades asignadas a las notas antiguas | backend + web |
 | `escaner-sin-detector.test.mjs` | el escáner sin `BarcodeDetector`, como en iPad | backend + web |
 | `sync-dos-dispositivos.test.mjs` | sincronización por buzón entre dos aparatos | backend + web |
 | `sync-directo.test.mjs` | sincronización **sin servidor**, con `/api/` cortado | backend + web |

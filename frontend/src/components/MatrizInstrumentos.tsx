@@ -12,6 +12,7 @@ import { useState } from 'react'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import { etiquetaAgregacion, miniTendencia } from '@/db/diario'
 import { faltaHerramienta } from './ElegirHerramienta'
+import { aplicaEnTrimestre } from '@/db/calculo'
 import type { CeldaInstrumento, MatrizEvaluacion } from '@/db/queries'
 import type { Alumno } from '@/db/localDb'
 
@@ -72,6 +73,31 @@ export function gruposPorFamilia(columnas: ColumnaInstrumento[]): GrupoFamilia[]
     if (col.ins.familia_id != null) g.sola = false
   }
   return grupos
+}
+
+/** Una familia con peso en el área que no evalúa ningún criterio aquí. */
+export type FamiliaSinCriterio = { id: number; nombre: string; peso: number }
+
+/**
+ * Familias que pesan en el área pero no tienen columna en lo que se mira:
+ * ni ellas ni ninguno de sus hijos evalúan un criterio de esta unidad en
+ * este trimestre. El porcentaje del gestor no crea columnas —la programación
+ * manda—, así que sin este aviso parece que el cambio «no ha hecho nada»:
+ * Luis puso un 20 % a «Proba escrita» y la matriz siguió igual. Las que no
+ * aplican en el trimestre no cuentan: ese caso ya tiene su propio aviso.
+ * Puro: se prueba sin pantalla.
+ */
+export function familiasSinCriterio(matriz: MatrizEvaluacion, columnas: ColumnaInstrumento[], trimestre: number): FamiliaSinCriterio[] {
+  const ids = new Set(matriz.instrumentos.map(i => i.id!))
+  const conColumna = new Set<number>()
+  for (const col of columnas) {
+    conColumna.add(col.ins.instrumento_id)
+    if (col.ins.familia_id != null) conColumna.add(col.ins.familia_id)
+  }
+  return matriz.instrumentos
+    .filter(i => (i.familia_id == null || !ids.has(i.familia_id)) && i.peso > 0)
+    .filter(i => aplicaEnTrimestre(i.trimestres, trimestre) && !conColumna.has(i.id!))
+    .map(i => ({ id: i.id!, nombre: i.nombre, peso: i.peso }))
 }
 
 export type ResumenCelda = {

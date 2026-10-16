@@ -2,7 +2,7 @@ import {
   calcularNotaArea, calificativo, nivelANota, notaDeRubrica, pesosAPartesIguales,
   parsearPesosTrimestres,
   parsearTrimestresInstrumento, aplicaEnTrimestre, trimestreDeFecha, trimestreDeMes,
-  pesosVinculoDeUnidades, fundirHijosEnFamilias,
+  pesosVinculoDeUnidades, fundirHijosEnFamilias, fundirUnidades,
   porcentajesEnFamilia, pesosAlFijarPorcentaje,
 } from '../frontend/src/db/calculo'
 
@@ -354,6 +354,33 @@ console.log('\n14. Familias e hijos: lo que trae PROENS agrupa lo que hace el do
     [instr(2, 'Táboa', 100), hijo(21, 2, 'Speaking'), hijo(22, 2, 'Listening')], T1)
   ok(otroCriterio.criterios.length === 2 && otroCriterio.criterios[0].trimestres[1] === 10 && otroCriterio.criterios[1].trimestres[1] === 6,
     'cada hijo puntúa solo en sus criterios: no se mezclan entre criterios')
+}
+
+console.log('\n15. Unidades estancas: la misma casilla en dos unidades del trimestre')
+{
+  // Criterio 2.1 con el mismo instrumento en la UD1 (8) y en la UD2 (6): el
+  // trimestre hace la media de las dos, cada unidad cuenta igual.
+  const enUd = (unidad: number, valor: number, instrumento = 10) => ({ ...cal(1, instrumento, 'CE2.1', 1, valor), unidad_id: unidad })
+  const r = calcularNotaArea(1, [enUd(1, 8), enUd(2, 6)], [instr(10, 'Tabla', 100)], '{"1":100,"2":0,"3":0}')
+  ok(r.criterios[0].trimestres[1] === 7, 'dos notas del mismo instrumento en dos unidades: media 7', `da ${r.criterios[0].trimestres[1]}`)
+  ok(r.criterios[0].aportaciones.length === 1 && r.criterios[0].aportaciones[0].valor === 7,
+     'el instrumento aporta una sola vez, con su media de unidades', JSON.stringify(r.criterios[0].aportaciones))
+
+  // Con dos instrumentos, primero la media por unidades y después el peso
+  // del instrumento: Tabla 20 % (8 y 6 → 7) y Prueba 80 % (4 en la UD2) → 4,6.
+  const mixto = calcularNotaArea(1, [enUd(1, 8), enUd(2, 6), enUd(2, 4, 11)],
+    [instr(10, 'Tabla', 20), instr(11, 'Prueba', 80)], '{"1":100,"2":0,"3":0}')
+  ok(mixto.criterios[0].trimestres[1] === 4.6, 'cada instrumento pondera con su media de unidades: el 20/80 se cumple aunque uno tenga dos notas (sin fundir daría 5)', `da ${mixto.criterios[0].trimestres[1]}`)
+
+  // La casilla de «Todo el curso» enseña ese mismo 7, como fila virtual.
+  const fundidas = fundirUnidades([enUd(1, 8), enUd(2, 6), { ...cal(2, 10, 'CE2.1', 1, 5), unidad_id: 1 }])
+  const deAna = fundidas.find(c => c.alumno_id === 1)!
+  ok(fundidas.length === 2, 'una fila por alumno, criterio e instrumento', `${fundidas.length}`)
+  ok(deAna.valor === 7 && deAna.virtual === true && deAna.id === undefined, 'la fusión es virtual: media 7, sin id', JSON.stringify({ valor: deAna.valor, virtual: deAna.virtual, id: deAna.id }))
+  const sola = fundidas.find(c => c.alumno_id === 2)!
+  ok(sola.valor === 5 && !sola.virtual, 'una sola unidad se devuelve tal cual, editable')
+  const conHueco = fundirUnidades([enUd(1, 8), { ...enUd(2, 0), valor: null }])[0]
+  ok(conHueco.valor === 8, 'una unidad sin nota no baja la media: no cuenta', `${conHueco.valor}`)
 }
 
 console.log('\n13. El redondeo no se acumula escalón a escalón')
