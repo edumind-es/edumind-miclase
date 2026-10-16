@@ -138,6 +138,10 @@ async function principal() {
     await paquete('pruebas/familias.test.ts', familias, ['--platform=node', '--format=esm'])
     await suite('plantillas de hijos por familia', 'node', [familias])
 
+    const familiasSinCriterio = join(scratch, 'familias-sin-criterio.mjs')
+    await paquete('pruebas/familias-sin-criterio.test.ts', familiasSinCriterio, ['--platform=node', '--format=esm'])
+    await suite('familias sin criterio en la unidad', 'node', [familiasSinCriterio])
+
     const rubrica = join(scratch, 'rubrica.mjs')
     await paquete('pruebas/rubrica.test.ts', rubrica, ['--platform=node', '--format=esm'])
     await suite('parseo de rúbricas', 'node', [rubrica])
