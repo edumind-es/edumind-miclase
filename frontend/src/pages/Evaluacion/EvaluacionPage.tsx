@@ -14,8 +14,8 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
-  getUnidades, getMatrizEvaluacion, actualizarInstrumento,
-  type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento,
+  getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento,
+  type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
 import { agruparPorCompetencia, calcularCobertura, mediaDe } from '@/db/cobertura'
@@ -36,6 +36,7 @@ import ImprimirTest from '@/components/ImprimirTest'
 import EscanerHojas from '@/components/EscanerHojas'
 import PresentacionCalificador from '@/components/PresentacionCalificador'
 import ExplicacionNota from '@/components/ExplicacionNota'
+import ResumenCurso, { type PeticionExplicacion } from '@/components/ResumenCurso'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 
@@ -94,12 +95,26 @@ function plegadasGuardadas(asignaturaId: number | null): Set<string> {
     return new Set(todo[String(asignaturaId)] ?? [])
   } catch { return new Set() }
 }
-function guardarPlegadas(asignaturaId: number, plegadas: Set<string>) {
+function guardarPlegadas(asignaturaId: number, plegadas: Set<string>, clave = String(asignaturaId)) {
   try {
     const todo = JSON.parse(localStorage.getItem(CLAVE_PLEGADAS) || '{}') as Record<string, string[]>
-    todo[String(asignaturaId)] = [...plegadas]
+    todo[clave] = [...plegadas]
     localStorage.setItem(CLAVE_PLEGADAS, JSON.stringify(todo))
   } catch { /* sin almacenamiento: se olvida y ya */ }
+}
+/**
+ * Las plegadas de «Todo el curso» van aparte (`<área>:curso`) y, sin
+ * elección guardada, son TODAS: el resumen arranca al nivel de la
+ * competencia, con quince criterios por cuatro columnas no cabe en un iPad,
+ * y se despliega lo que se quiere mirar. Null = aún no ha elegido.
+ */
+function plegadasCursoGuardadas(asignaturaId: number | null): Set<string> | null {
+  if (!asignaturaId) return null
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_PLEGADAS) || '{}') as Record<string, string[]>
+    const v = todo[`${asignaturaId}:curso`]
+    return v ? new Set(v) : null
+  } catch { return null }
 }
 /** Áreas cuya tarjeta de presentación ya se cerró en este aparato. */
 const CLAVE_PRESENTADO = 'miclase.calificador.presentado'
@@ -149,8 +164,10 @@ export default function EvaluacionPage() {
    * califica: no hay unidad en la que anotar y la casilla es un resumen, así
    * que pulsarla abre «de dónde sale esta nota» en vez del panel de edición.
    */
-  const [explicar, setExplicar] = useState<{ alumnoIdx: number; criterio?: Criterio; col?: ColumnaInstrumento } | null>(null)
+  const [explicar, setExplicar] = useState<PeticionExplicacion | null>(null)
   const resumenDelCurso = unidadId === null && unidades.length > 0
+  /** Los tres trimestres y la final, solo en «Todo el curso». */
+  const [resumen, setResumen] = useState<DatosResumen | null>(null)
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
   const [nombresUnidad, setNombresUnidad] = useState(unidadesConNombre)
   const alternarNombresUnidad = () => {
@@ -170,13 +187,27 @@ export default function EvaluacionPage() {
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
   const [plegadas, setPlegadas] = useState<Set<string>>(() => plegadasGuardadas(null))
   const [coberturaAbierta, setCoberturaAbierta] = useState(false)
-  useEffect(() => { setPlegadas(plegadasGuardadas(asignaturaId)) }, [asignaturaId])
+  useEffect(() => { setPlegadas(plegadasGuardadas(asignaturaId)); setPlegadasCurso(plegadasCursoGuardadas(asignaturaId)) }, [asignaturaId])
   const alternarPlegada = (numero: string) => setPlegadas(prev => {
     const s = new Set(prev)
     if (s.has(numero)) s.delete(numero); else s.add(numero)
     if (asignaturaId) guardarPlegadas(asignaturaId, s)
     return s
   })
+  /** Competencias plegadas en «Todo el curso»: aparte de las de las unidades. */
+  const [plegadasCurso, setPlegadasCurso] = useState<Set<string> | null>(() => plegadasCursoGuardadas(null))
+  const competenciasDelArea = useMemo(() => agruparPorCompetencia(criterios).map(g => g.numero), [criterios])
+  const plegadasCursoEfectivas = plegadasCurso ?? new Set(competenciasDelArea)
+  const fijarPlegadasCurso = (s: Set<string>) => {
+    setPlegadasCurso(s)
+    if (asignaturaId) guardarPlegadas(asignaturaId, s, `${asignaturaId}:curso`)
+  }
+  const alternarPlegadaCurso = (numero: string) => {
+    const s = new Set(plegadasCursoEfectivas)
+    if (s.has(numero)) s.delete(numero); else s.add(numero)
+    fijarPlegadasCurso(s)
+  }
+  const todasPlegadasCurso = competenciasDelArea.every(n => plegadasCursoEfectivas.has(n))
 
   const cambiarVista = (v: Vista) => {
     setVistaElegida(v)
@@ -259,14 +290,17 @@ export default function EvaluacionPage() {
       .catch(() => { setCriterios([]); setErrorCurriculo(true) })
   }, [asignaturaId, asignaturas, grupo])
 
-  // Matriz local
+  // Matriz local. En «Todo el curso» se cargan los tres trimestres de golpe
+  // (`getResumenCurso`) y `matriz` pasa a ser la del trimestre de la barra,
+  // para que avisos y cobertura sigan leyendo lo de siempre.
   useEffect(() => {
-    if (!asignaturaId) { setMatriz(null); return }
+    if (!asignaturaId) { setMatriz(null); setResumen(null); return }
     setCargando(true)
-    getMatrizEvaluacion(asignaturaId, unidadId, trimestre)
-      .then(m => { setMatriz(m); setCargando(false) })
-      .catch(() => setCargando(false))
-  }, [asignaturaId, unidadId, trimestre, refresco])
+    const carga = resumenDelCurso
+      ? getResumenCurso(asignaturaId).then(r => { setResumen(r); setMatriz(r ? r.porTrimestre[trimestre] ?? r.porTrimestre[1] : null) })
+      : getMatrizEvaluacion(asignaturaId, unidadId, trimestre).then(m => { setResumen(null); setMatriz(m) })
+    carga.then(() => setCargando(false)).catch(() => setCargando(false))
+  }, [asignaturaId, unidadId, trimestre, refresco, resumenDelCurso])
 
   // ── Derivados ─────────────────────────────────────────────────────────
 
@@ -290,12 +324,9 @@ export default function EvaluacionPage() {
 
   /** Abrir el panel de un alumno centrado en un instrumento. */
   const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
-    resumenDelCurso
-      ? setExplicar({ alumnoIdx, col })
-      : setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
-  /** Abrir una casilla por criterio: el panel, o la explicación en «Todo el curso». */
-  const abrirPorCriterio = (alumnoIdx: number, criterio: Criterio) =>
-    resumenDelCurso ? setExplicar({ alumnoIdx, criterio }) : setCelda({ alumnoIdx, criterio })
+    setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
+  /** Abrir una casilla por criterio. En «Todo el curso» las casillas son de `ResumenCurso` y explican. */
+  const abrirPorCriterio = (alumnoIdx: number, criterio: Criterio) => setCelda({ alumnoIdx, criterio })
 
   // Sin elección guardada, la vista por instrumento en cuanto hay con qué:
   // es la que habla el idioma del aula. La matriz LOMLOE queda a un clic.
@@ -309,15 +340,18 @@ export default function EvaluacionPage() {
   // de pestaña de trimestre.
   const sinInstrumento = useMemo(() => {
     if (!matriz) return 0
+    // En «Todo el curso» cuenta lo que no se evalúa en ningún trimestre.
+    if (resumen) return columnas.filter(c => ![1, 2, 3].some(t => resumen.porTrimestre[t]?.porCriterio.get(c.id)?.length)).length
     return columnas.filter(c =>
       !(matriz.porCriterio.get(c.id)?.length) && !matriz.criteriosFueraDeTrimestre.has(c.id)
     ).length
-  }, [columnas, matriz])
+  }, [columnas, matriz, resumen])
 
+  // En el resumen se ven los tres trimestres: no hay «fuera de trimestre».
   const fueraDeTrimestre = useMemo(() => {
-    if (!matriz) return 0
+    if (!matriz || resumen) return 0
     return columnas.filter(c => matriz.criteriosFueraDeTrimestre.has(c.id)).length
-  }, [columnas, matriz])
+  }, [columnas, matriz, resumen])
 
   /** Familias con peso que no tienen columna en esta unidad: el gestor dice 20 %
    *  y la matriz no lo enseña, porque ningún criterio las tiene asignadas. */
@@ -379,13 +413,19 @@ export default function EvaluacionPage() {
   /** Las columnas por competencia; cada grupo sabe si está plegado. */
   const competencias = useMemo(() => agruparPorCompetencia(columnas).map(g => ({ ...g, plegada: plegadas.has(g.numero) })), [columnas, plegadas])
 
-  /** Qué queda por evaluar en lo que se mira, con la misma nota que pinta la casilla. */
+  /** Qué queda por evaluar en lo que se mira, con la misma nota que pinta la casilla.
+   *  En «Todo el curso», la nota final del criterio: lo evaluable es lo de cualquier trimestre. */
   const cobertura = useMemo(() => {
     if (!matriz) return null
+    if (resumen) {
+      const evaluables = columnas.filter(c => [1, 2, 3].some(t => resumen.porTrimestre[t]?.porCriterio.get(c.id)?.length)).map(c => c.id)
+      return calcularCobertura(alumnos.map(a => a.id!), evaluables,
+        (a, c) => resumen.notas.get(a)?.criterios.find(x => x.criterio_id === c)?.final ?? null)
+    }
     const evaluables = columnas.filter(c => (matriz.porCriterio.get(c.id)?.length ?? 0) > 0).map(c => c.id)
     return calcularCobertura(alumnos.map(a => a.id!), evaluables,
       (a, c) => notaCelda(a, c, matriz.porCriterio.get(c) ?? []))
-  }, [matriz, columnas, alumnos, trimestre])
+  }, [matriz, resumen, columnas, alumnos, trimestre])
 
   /** Cabecera de una competencia plegada: una sola columna. */
   const thPlegado = (g: typeof competencias[number]) => (
@@ -524,9 +564,18 @@ export default function EvaluacionPage() {
             </div>
           )}
           {resumenDelCurso && (
-            <div className="unidad-actual" data-resumen-curso>
-              <strong>Todo el curso</strong> · resumen de solo lectura: las medias del {trimestre}º trimestre.
-              <span className="trim"> Pulsa una casilla para ver de dónde sale; para calificar, entra en una unidad.</span>
+            <div className="unidad-actual resumen-curso" data-resumen-curso>
+              <span>
+                <strong>Todo el curso</strong> · solo lectura: los tres trimestres (1T · 2T · 3T) y la nota final, {vista === 'criterios' ? 'por criterio' : 'por familia de instrumentos'}.
+                <span className="trim"> El trimestre de la barra no manda aquí. Pulsa una casilla para ver de dónde sale; para calificar, entra en una unidad.</span>
+              </span>
+              {vista === 'criterios' && competenciasDelArea.length > 0 && (
+                <button type="button" className="tab-unidad-modo" data-plegar-todas aria-pressed={todasPlegadasCurso}
+                  onClick={() => fijarPlegadasCurso(todasPlegadasCurso ? new Set() : new Set(competenciasDelArea))}
+                  title={todasPlegadasCurso ? 'Ver todos los criterios, uno a uno' : 'Una columna por competencia, con la media'}>
+                  {todasPlegadasCurso ? '▾ Desplegar todas' : '▸ Plegar todas'}
+                </button>
+              )}
             </div>
           )}
           {unidades.length > 0 ? null : (
@@ -597,7 +646,12 @@ export default function EvaluacionPage() {
                     <div><span className="cobertura-rotulo">Sin ninguna nota</span>
                       {cobertura.sinNota.map(id => (
                         <button key={id} type="button" className="cobertura-chip" title={columnas.find(c => c.id === id)?.descripcion}
-                          onClick={() => { cambiarVista('criterios'); const n = agruparPorCompetencia([{ id }])[0].numero; if (plegadas.has(n)) alternarPlegada(n) }}>
+                          onClick={() => {
+                            cambiarVista('criterios')
+                            const n = agruparPorCompetencia([{ id }])[0].numero
+                            if (resumen) { if (plegadasCursoEfectivas.has(n)) alternarPlegadaCurso(n) }
+                            else if (plegadas.has(n)) alternarPlegada(n)
+                          }}>
                           {id}
                         </button>
                       ))}
@@ -647,6 +701,16 @@ export default function EvaluacionPage() {
                   ? 'Esta unidad no tiene criterios vinculados. Añádeselos desde la programación.'
                   : 'No hay criterios disponibles para esta área en el currículo de tu comunidad.'}
               </div>
+            ) : resumen ? (
+              <ResumenCurso
+                datos={resumen}
+                criterios={columnas}
+                vista={vista}
+                plegadas={plegadasCursoEfectivas}
+                alternarPlegada={alternarPlegadaCurso}
+                onExplicar={setExplicar}
+                onSinInstrumento={cr => setCelda({ alumnoIdx: 0, criterio: cr })}
+              />
             ) : vista === 'instrumentos' ? (
               columnasInstr.length === 0 ? (
                 <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
@@ -669,7 +733,6 @@ export default function EvaluacionPage() {
                   onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
-                  soloLectura={resumenDelCurso}
                 />
               )
             ) : (
@@ -778,7 +841,7 @@ export default function EvaluacionPage() {
                             )}
                             <td className="celda">
                               <button
-                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}${resumenDelCurso && !sinInstr ? ' solo-lectura' : ''}`}
+                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
                                 onClick={() => sinInstr ? setCelda({ alumnoIdx: idx, criterio: cr }) : abrirPorCriterio(idx, cr)}
                                 title={sinInstr
                                   ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
@@ -817,8 +880,8 @@ export default function EvaluacionPage() {
           {/* Leyenda */}
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
-              <span>{resumenDelCurso
-                ? 'Todo el curso es un resumen: aquí no se califica. Pulsa una casilla para ver de dónde sale la nota; para evaluar, entra en una unidad.'
+              <span>{resumen
+                ? `Todo el curso es un resumen: aquí no se califica. Cada ${vista === 'criterios' ? 'criterio' : 'familia'} lleva sus tres trimestres${vista === 'criterios' ? ' y la final' : ''}; la nota de un trimestre es la media de las unidades y después la ponderación por instrumento y familia. Pulsa una casilla para ver de dónde sale.`
                 : vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)
@@ -948,15 +1011,15 @@ export default function EvaluacionPage() {
         )
       })()}
 
-      {explicar && matriz && alumnos[explicar.alumnoIdx] && (
+      {explicar && resumen && resumen.alumnos[explicar.alumnoIdx] && (
         <ExplicacionNota
-          alumno={alumnos[explicar.alumnoIdx]}
-          asig={matriz.asig}
-          trimestre={trimestre}
-          instrumentos={matriz.instrumentos}
-          unidades={unidades}
+          alumno={resumen.alumnos[explicar.alumnoIdx]}
+          asig={resumen.asig}
+          trimestre={explicar.trimestre}
+          instrumentos={resumen.instrumentos}
+          unidades={resumen.unidades}
           criterio={explicar.criterio}
-          instrumento={explicar.col ? { ins: explicar.col.ins, criterios: explicar.col.criterios } : undefined}
+          instrumento={explicar.instrumento}
           onCerrar={() => setExplicar(null)}
         />
       )}

@@ -166,6 +166,21 @@ export function pesosVinculoDeUnidades(
   return { porUnidad, porCriterio }
 }
 
+/**
+ * Peso de cada criterio en la programación: el mayor que le dé cualquier
+ * unidad (por defecto 1). Es el mismo cálculo que hacían por su cuenta la
+ * ficha de la nota, los informes y Seguimiento; aquí hay una sola copia.
+ */
+export function pesosCriterioDeUnidades(
+  unidades: { criterios: { criterio_id: string; peso?: number | null }[] }[]
+): Map<string, number> {
+  const pesos = new Map<string, number>()
+  for (const u of unidades) {
+    for (const c of u.criterios) pesos.set(c.criterio_id, Math.max(pesos.get(c.criterio_id) ?? 0, c.peso || 1))
+  }
+  return pesos
+}
+
 // ─── Familias e hijos ────────────────────────────────────────────────────────
 
 /** Peso de un hijo dentro de su familia: el suyo, o 1 si no tiene. */

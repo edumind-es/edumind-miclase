@@ -126,6 +126,10 @@ async function principal() {
     await paquete('pruebas/cobertura.test.ts', cobertura, ['--platform=node', '--format=esm'])
     await suite('competencias y cobertura', 'node', [cobertura])
 
+    const resumenCurso = join(scratch, 'resumen-curso.mjs')
+    await paquete('pruebas/resumen-curso.test.ts', resumenCurso, ['--platform=node', '--format=esm'])
+    await suite('«Todo el curso» por familia', 'node', [resumenCurso])
+
     const pegar = join(scratch, 'pegar-notas.mjs')
     await paquete('pruebas/pegar-notas.test.ts', pegar, ['--platform=node', '--format=esm'])
     await suite('columna de notas pegada de Excel', 'node', [pegar])
@@ -245,6 +249,7 @@ async function principal() {
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
+    await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     const hojaDemoUi = join(scratch, 'hoja-demo-ui.cjs')
     await paquete('pruebas/lib/hojaDemo.ts', hojaDemoUi, ['--platform=node', '--format=cjs'])

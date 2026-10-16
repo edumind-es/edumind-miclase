@@ -217,9 +217,11 @@ try {
   {
     // La casilla de Ana en el criterio del examen: en el resumen del curso no
     // abre el panel (no hay unidad en la que anotar) sino la ficha de la nota.
-    const ids = await p.locator('th.criterio-th:not(.fantasma) .criterio-th-id').allTextContents()
-    const col = ids.findIndex(t => t.trim() === cA)
-    await p.locator('table.matriz tbody tr').nth(0).locator('td.celda:not(.fantasma)').nth(col).locator('button').click()
+    // El resumen arranca plegado por competencia y cada criterio lleva
+    // 1T · 2T · 3T · Final: se despliega todo y se pulsa la final de Ana.
+    const plegarTodas = p.locator('[data-plegar-todas]')
+    if (/Desplegar/.test(await plegarTodas.textContent())) await plegarTodas.click()
+    await p.locator('table.matriz tbody tr').nth(0).locator(`[data-celda-resumen][data-criterio="${cA}"][data-trimestre="final"]`).click()
     const ficha = p.locator('[data-explicacion-nota]')
     ok(await aparece(ficha), 'pulsar la casilla abre «de dónde sale esta nota»')
     ok(await panel.count() === 0 && await examen.count() === 0, 'y no el panel de corregir')

@@ -167,15 +167,9 @@ interface Props {
   onImprimir?: (col: ColumnaInstrumento) => void
   /** «Corregir por cámara»: la pila de hojas de respuestas. */
   onEscanear?: (col: ColumnaInstrumento) => void
-  /**
-   * «Todo el curso»: un resumen. Sin botones de calificar, imprimir, escanear
-   * ni lápiz, y pulsar una casilla no corrige sino que explica de dónde sale
-   * la media (`onCelda` sigue siendo quien decide qué abrir).
-   */
-  soloLectura?: boolean
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, soloLectura = false }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -262,9 +256,9 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     <div className="instr-th-nombre">
                       <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
                       <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
-                      {!soloLectura && <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
+                      <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
                         title="Cambiar el nombre de este instrumento (el tipo, el peso y los criterios se cambian en ⚙ Instrumentos)"
-                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>}
+                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
                     </div>
                   )}
                   <div className="instr-th-tipo instr-th-detalle">
@@ -274,7 +268,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                   <div className="instr-th-criterios instr-th-detalle">
                     {ids.length} criterio{ids.length !== 1 ? 's' : ''}: {ids.join(' · ')}
                   </div>
-                  {soloLectura ? null : esExamen ? (
+                  {esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}
                       title={col.ins.tiene_prueba
@@ -308,7 +302,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     )}
                   </>)}
                   {/* Un test con clave se corrige también con la cámara: es calificar, así que va a la vista. */}
-                  {!soloLectura && esExamen && col.ins.tiene_prueba && onEscanear && (
+                  {esExamen && col.ins.tiene_prueba && onEscanear && (
                     <button type="button" className="instr-th-accion" data-escanear-abrir
                       onClick={() => onEscanear(col)}
                       title="Corregir las hojas de respuestas con la cámara, una tras otra">
@@ -316,18 +310,18 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     </button>
                   )}
                   {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
-                  {!soloLectura && esExamen && col.ins.tiene_prueba && onImprimir && (
+                  {esExamen && col.ins.tiene_prueba && onImprimir && (
                     <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-imprimir-abrir
                       onClick={() => onImprimir(col)}
                       title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
                       🖨 Imprimir test
                     </button>
                   )}
-                  {!soloLectura && <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
+                  <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
                     onClick={() => onPegar(col)}
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">
                     📋 Pegar columna
-                  </button>}
+                  </button>
                 </th>
               )
             })}
@@ -345,9 +339,9 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 const parcial = r.conNota > 0 && r.conNota < r.total
                 return (
                   <td key={col.ins.instrumento_id} className="celda">
-                    <button type="button" className={`celda-btn ${claseNota(r.valor)}${soloLectura ? ' solo-lectura' : ''}`} data-celda-instr
+                    <button type="button" className={`celda-btn ${claseNota(r.valor)}`} data-celda-instr
                       onClick={() => onCelda(idx, col)}
-                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}${soloLectura ? '\nPulsa para ver de dónde sale' : ''}`}>
+                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}`}>
                       <span>{r.valor == null ? '·' : r.valor}</span>
                       {(parcial || r.diario) && (
                         <span className="celda-instr">

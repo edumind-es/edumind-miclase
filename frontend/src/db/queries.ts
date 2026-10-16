@@ -2,7 +2,10 @@ import { db, TABLAS_SINC, INSTRUMENTO_BANCO, VERSION_ESQUEMA, type MiClaseDB } f
 import { asignarUnidades, prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, type ResumenMigracion } from './migracionUnidades'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
-import { aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia } from './calculo'
+import {
+  aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia,
+  calcularNotaArea, pesosCriterioDeUnidades, pesosVinculoDeUnidades, type NotaArea,
+} from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
@@ -2393,6 +2396,53 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
+  }
+}
+
+/**
+ * Todo lo que enseña la pestaña «Todo el curso»: los tres trimestres a la vez.
+ *
+ * `porTrimestre` son las tres matrices del área (la de siempre, con las
+ * notas de todas las unidades fundidas por casilla), para que la vista por
+ * familia lea las mismas notas virtuales que las pestañas de unidad. `notas`
+ * es el cálculo del boletín (`calcularNotaArea`) por alumno: la vista por
+ * criterio enseña `criterios[].trimestres` y `criterios[].final` tal cual.
+ */
+export type ResumenCurso = {
+  grupo: Grupo
+  asig: Asignatura
+  alumnos: Alumno[]
+  instrumentos: Instrumento[]
+  /** trimestre (1, 2, 3) → matriz de ese trimestre con `unidad_id` null */
+  porTrimestre: Record<number, MatrizEvaluacion>
+  /** alumno_id → notas del área, con los tres trimestres y la final */
+  notas: Map<number, NotaArea>
+  unidades: UnidadConCriterios[]
+}
+
+export async function getResumenCurso(asignatura_id: number): Promise<ResumenCurso | null> {
+  const [m1, m2, m3] = await Promise.all([1, 2, 3].map(t => getMatrizEvaluacion(asignatura_id, null, t)))
+  if (!m1 || !m2 || !m3) return null
+  const unidades = await getUnidades(asignatura_id)
+  const pesosCriterio = pesosCriterioDeUnidades(unidades)
+  const pesosVinculo = pesosVinculoDeUnidades(unidades)
+
+  // Las notas de toda el área, de todos los trimestres, repartidas por alumno.
+  const instrIds = m1.instrumentos.map(i => i.id!)
+  const todas = instrIds.length
+    ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds).toArray()))
+    : []
+  const porAlumno = new Map<number, Calificacion[]>()
+  for (const c of todas) porAlumno.set(c.alumno_id, [...(porAlumno.get(c.alumno_id) ?? []), c])
+
+  const notas = new Map<number, NotaArea>()
+  for (const al of m1.alumnos) {
+    notas.set(al.id!, calcularNotaArea(asignatura_id, porAlumno.get(al.id!) ?? [], m1.instrumentos,
+      m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo))
+  }
+  return {
+    grupo: m1.grupo, asig: m1.asig, alumnos: m1.alumnos, instrumentos: m1.instrumentos,
+    porTrimestre: { 1: m1, 2: m2, 3: m3 }, notas, unidades,
   }
 }
 

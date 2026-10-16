@@ -189,15 +189,29 @@ edumind_miclase/
   (`destinosNota`, `sinVinculos`) y ofrece «solo este criterio»
   (`[data-alcance-toggle]`) como excepción; la observación sigue siendo del
   criterio. Por criterio nada cambia.
-- **«Todo el curso» es un resumen de solo lectura.** Sin unidad no hay dónde
-  anotar: las dos matrices enseñan las medias del trimestre y pulsar una
-  casilla abre `ExplicacionNota` («de dónde sale esta nota»: cada nota con
-  su instrumento, su porcentaje, la unidad en la que se anotó y su origen,
-  los tres trimestres y la nota de área), nunca `CeldaEvaluacion`. La matriz
-  por instrumento va con `soloLectura` (sin «Evaluar hoy», «Corregir»,
-  «Pegar» ni lápiz). El cálculo de la ficha es `calcularNotaArea`, el del
-  boletín; no suma nada por su cuenta. Las pruebas que quieran calificar
-  pulsan antes una pestaña de unidad (`.tab-unidad` a partir de la segunda).
+- **«Todo el curso» es un resumen de solo lectura con los tres trimestres a
+  la vez** (`ResumenCurso.tsx`, datos de `getResumenCurso`). El selector de
+  trimestre de la barra no manda ahí —manda en las unidades—: cada criterio
+  lleva 1T · 2T · 3T · Final con `calcularNotaArea` (`criterios[].trimestres`
+  y `.final`, lo mismo que el boletín) y la vista por instrumento es por
+  FAMILIA (instrumentos de primer nivel) y trimestre, con los hijos plegados
+  dentro (`[data-familia-th]` los despliega) y la nota del área al final.
+  Decisión de Luis: en el resumen solo trimestres, nunca unidades, que ya
+  tienen su pestaña; cada unidad cuenta igual en la media del trimestre
+  (`fundirUnidades`) y después pesan instrumento y familia. Nada se calcula
+  en la pantalla: la vista por familia promedia las notas virtuales que ya
+  funde `getMatrizEvaluacion` (`db/resumenCurso.ts`, puro). Pulsar una
+  casilla (`[data-celda-resumen]`, con `data-criterio` o `data-instrumento` y
+  `data-trimestre` 1·2·3·final) abre `ExplicacionNota` con ese trimestre, o
+  la final con `trimestre: null`, nunca `CeldaEvaluacion`: la ficha desgrana
+  unidad → instrumento → familia, nombra la unidad de cada nota y lleva la
+  regla a la vista (`[data-explicacion-regla]`). Arranca plegado por
+  competencia con su propio recuerdo (`miclase.calificador.plegadas`, clave
+  `<área>:curso`; sin elección, todas) porque quince criterios por cuatro
+  columnas no caben en un iPad; `[data-plegar-todas]` alterna. Las pruebas
+  que quieran calificar pulsan antes una pestaña de unidad (`.tab-unidad` a
+  partir de la segunda); las que miren un criterio del resumen despliegan
+  antes.
 - **Las cabeceras de la matriz por instrumento salen plegadas**: nombre y
   botón de calificar (en un test con clave, también «Corregir por cámara»,
   que es calificar). Tipo, peso, criterios, «Imprimir test» y «Pegar columna»
