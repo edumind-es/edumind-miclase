@@ -4,7 +4,7 @@ import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import {
   aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia,
-  calcularNotaArea, pesosCriterioDeUnidades, pesosVinculoDeUnidades, type NotaArea,
+  calcularNotaArea, normalizarReglaFinal, pesosCriterioDeUnidades, pesosVinculoDeUnidades, type NotaArea,
 } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
@@ -2438,7 +2438,7 @@ export async function getResumenCurso(asignatura_id: number): Promise<ResumenCur
   const notas = new Map<number, NotaArea>()
   for (const al of m1.alumnos) {
     notas.set(al.id!, calcularNotaArea(asignatura_id, porAlumno.get(al.id!) ?? [], m1.instrumentos,
-      m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo))
+      m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(m1.asig.regla_final)))
   }
   return {
     grupo: m1.grupo, asig: m1.asig, alumnos: m1.alumnos, instrumentos: m1.instrumentos,

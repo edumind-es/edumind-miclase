@@ -383,6 +383,9 @@ try {
   console.log('\n10. «Todo el curso» es un resumen de solo lectura que explica cada nota')
   await p.locator('.tab-unidad').nth(0).click()
   await p.locator('[data-resumen-curso]').waitFor({ timeout: 5000 })
+  // La cabecera que cuenta es la del resumen, no la de la matriz que se deja:
+  // se espera a que el resumen termine de calcularse.
+  await p.locator('[data-resumen-cargando]').waitFor({ state: 'hidden', timeout: 8000 }).catch(() => {})
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
   ok(await p.locator('[data-instr-th] [data-sesion-abrir], [data-instr-th] [data-corregir-abrir], [data-instr-th] [data-renombrar-abrir]').count() === 0,
     'las cabeceras no ofrecen calificar, corregir ni renombrar')

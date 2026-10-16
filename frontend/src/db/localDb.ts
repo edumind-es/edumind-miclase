@@ -53,6 +53,13 @@ export interface GrupoAlumno extends Sincronizable {
   fecha_alta?: string
 }
 
+/**
+ * Cómo se obtiene la nota final del curso a partir de las de los tres
+ * trimestres. 'ponderada' es lo de siempre (media por `pesos_trimestres`);
+ * las demás las pidió Luis porque no todos los docentes la calculan así.
+ */
+export type ReglaFinal = 'ponderada' | 'continua' | 'maxima' | 'mediana'
+
 export interface Asignatura extends Sincronizable {
   id?: number
   grupo_id: number
@@ -60,6 +67,12 @@ export interface Asignatura extends Sincronizable {
   nombre_display: string
   comunidad: string
   pesos_trimestres: string
+  /**
+   * Regla de la nota final (ver `ReglaFinal`). Sin declarar vale 'ponderada'.
+   * Sin índice: no exige versión de esquema. Se aplica igual a la final de
+   * cada criterio y a la del área (`notaFinal` en `calculo.ts`).
+   */
+  regla_final?: ReglaFinal | null
   orden?: number
   created_at?: string
 }
