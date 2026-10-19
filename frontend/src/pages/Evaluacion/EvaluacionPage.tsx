@@ -618,6 +618,25 @@ export default function EvaluacionPage() {
             </div>
           )}
 
+          {vista === 'instrumentos' && !!matriz?.familiasConDatosEscondidos.length && (
+            <div data-familias-escondidas style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+              {matriz.familiasConDatosEscondidos.map(f => (
+                <div key={f.id}>
+                  <strong>«{f.nombre}» guarda a su nombre {[
+                    f.examenes ? `${f.examenes} examen${f.examenes !== 1 ? 'es' : ''}` : '',
+                    f.calificaciones ? `${f.calificaciones} nota${f.calificaciones !== 1 ? 's' : ''}` : '',
+                    f.diario ? `${f.diario} registro${f.diario !== 1 ? 's' : ''} del diario` : '',
+                  ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con instrumentos dentro, la familia solo resume.
+                </div>
+              ))}
+              Las notas siguen contando. Muévelo al instrumento que lo hizo desde{' '}
+              <button type="button" data-familias-escondidas-gestor onClick={() => setManagerAbierto(true)}
+                style={{ background: 'none', border: 0, padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', font: 'inherit' }}>
+                ⚙ Instrumentos →
+              </button>
+            </div>
+          )}
+
           {fueraDeTrimestre > 0 && (
             <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)' }}>
               <strong>{fueraDeTrimestre} criterio{fueraDeTrimestre !== 1 ? 's' : ''} no se evalúa{fueraDeTrimestre !== 1 ? 'n' : ''} en el {trimestre}º trimestre</strong> —

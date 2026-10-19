@@ -605,6 +605,136 @@ export async function convertirFamiliaEnHijo(
     })
 }
 
+/** Lo que impediría mover sin pisar nada: el hijo ya tiene su propio examen o rúbrica. */
+export type ConflictosMovimiento = {
+  /** Exámenes de la familia para los que el hijo ya tiene uno de la misma unidad (o general). */
+  examenes: number
+  /** La familia y el hijo tienen rúbrica propia las dos. */
+  rubrica: boolean
+}
+
+/** Mismo examen «para lo mismo»: la misma unidad, o los dos generales. */
+const mismaUnidadDePrueba = (a: Rubrica, b: Rubrica) => (a.unidad_id ?? null) === (b.unidad_id ?? null)
+
+/**
+ * Qué chocaría al mover lo de la familia a ESE hijo. Se consulta antes para
+ * preguntar al docente; nunca se decide por él.
+ */
+export async function conflictosAlMover(familia_id: number, hijo_id: number): Promise<ConflictosMovimiento> {
+  const [deFamilia, deHijo] = await Promise.all([
+    db.rubricas.where('instrumento_id').equals(familia_id).toArray(),
+    db.rubricas.where('instrumento_id').equals(hijo_id).toArray(),
+  ])
+  const f = vivos(deFamilia), h = vivos(deHijo)
+  return {
+    examenes: f.filter(r => r.tipo === 'prueba' && h.some(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))).length,
+    rubrica: f.some(esRubrica) && h.some(esRubrica),
+  }
+}
+
+/** Lo movido a un hijo que ya existía, y lo que se quedó en la familia por no pisar al hijo. */
+export type ResultadoMovimiento = ResultadoConversion & {
+  noMovidos: { calificaciones: number; examenes: number; rubricas: number }
+}
+
+/**
+ * Mueve lo anotado directamente en una familia a un hijo QUE YA EXISTE.
+ *
+ * `convertirFamiliaEnHijo` solo se ofrece antes del primer hijo. A Luis no le
+ * sirvió: «Examen · A nosa saúde» ya existía cuando definió el test y corrigió
+ * por cámara, y todo eso se guardó con el id de la familia «Proba escrita».
+ * La columna del hijo decía «Definir y corregir» y la familia, apartada por el
+ * hijo, no tenía columna donde enseñarlo. Esto lo pasa al hijo elegido:
+ *
+ *  - `calificaciones` y `diario`: misma fila, `instrumento_id` del hijo y
+ *    `updated_at` nuevo. Una nota de la familia cuya casilla el hijo YA tiene
+ *    con nota no se mueve: lo que el docente puso en el hijo manda, y la de la
+ *    familia se queda donde estaba (se cuenta en `noMovidos`).
+ *  - `rubricas` (exámenes y rúbrica del instrumento): igual. Si el hijo ya
+ *    tiene examen para la misma unidad, o rúbrica propia, solo se mueve con
+ *    `sustituir`, que retira la del hijo (borrado lógico); si no, la de la
+ *    familia no se mueve y se cuenta.
+ *  - `criterio_instrumentos`: el hijo recibe, unidad a unidad, los criterios
+ *    que nombran las notas y registros movidos y aún no cubría, siempre
+ *    dentro de los de la familia. Sin esto la nota llegaría al hijo pero su
+ *    columna no la enseñaría.
+ *
+ * Nunca se llama sola: siempre tras la elección expresa del docente.
+ */
+export async function moverDatosDeFamiliaAHijo(
+  familia_id: number, hijo_id: number, opciones: { sustituir?: boolean } = {}
+): Promise<ResultadoMovimiento> {
+  const [familia, hijo] = await Promise.all([db.instrumentos.get(familia_id), db.instrumentos.get(hijo_id)])
+  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
+  if (!hijo || hijo.deleted_at || hijo.familia_id !== familia_id) throw new Error('Ese instrumento no está dentro de la familia')
+  const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
+
+  return db.transaction('rw',
+    [db.instrumentos, db.calificaciones, db.diario, db.rubricas, db.criterio_instrumentos],
+    async () => {
+      const noMovidos = { calificaciones: 0, examenes: 0, rubricas: 0 }
+      /** unidad → criterios que el hijo tiene que cubrir tras el movimiento */
+      const aCubrir = new Map<number, Set<string>>()
+      const apunta = (unidad_id: number | null | undefined, criterios: string[]) => {
+        if (unidad_id == null) return
+        const s = aCubrir.get(unidad_id) ?? new Set<string>()
+        for (const c of criterios) s.add(c)
+        aCubrir.set(unidad_id, s)
+      }
+
+      // Notas: no se pisa una casilla que el hijo ya tenga con nota.
+      const delHijo = new Set(
+        (await db.calificaciones.where('instrumento_id').equals(hijo_id).toArray())
+          .filter(c => vivo(c) && c.valor != null).map(c => claveCelda({ ...c, instrumento_id: familia_id })))
+      let calificaciones = 0
+      for (const c of (await db.calificaciones.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
+        if (c.valor != null && delHijo.has(claveCelda(c))) { noMovidos.calificaciones++; continue }
+        await db.calificaciones.update(c.id!, tocado({ instrumento_id: hijo_id }))
+        calificaciones++
+        apunta(c.unidad_id, [c.criterio_id])
+      }
+
+      // Diario: entero; los criterios van fijados en cada registro.
+      const regs = (await db.diario.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)
+      for (const r of regs) {
+        await db.diario.update(r.id!, tocado({ instrumento_id: hijo_id }))
+        apunta(r.unidad_id, criteriosDe(r))
+      }
+
+      // Exámenes y rúbrica: solo se pisa lo del hijo con `sustituir`.
+      const delHijoRub = (await db.rubricas.where('instrumento_id').equals(hijo_id).toArray()).filter(vivo)
+      let rubricas = 0
+      for (const r of (await db.rubricas.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
+        const choca = r.tipo === 'prueba'
+          ? delHijoRub.filter(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))
+          : delHijoRub.filter(esRubrica)
+        if (choca.length && !opciones.sustituir) {
+          if (r.tipo === 'prueba') noMovidos.examenes++; else noMovidos.rubricas++
+          continue
+        }
+        for (const x of choca) await db.rubricas.update(x.id!, tocado({ deleted_at: sello() }))
+        await db.rubricas.update(r.id!, tocado({ instrumento_id: hijo_id }))
+        rubricas++
+      }
+
+      // El hijo cubre lo que acaba de recibir, dentro de lo que la familia cubre.
+      let criterios = 0
+      for (const [unidad_id, pedidos] of aCubrir) {
+        const deFamilia = new Set(
+          vivos(await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray())
+            .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
+        const actuales = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray())
+          .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id)
+        const faltan = [...pedidos].filter(c => deFamilia.has(c) && !actuales.includes(c))
+        if (!faltan.length) continue
+        await fijarCriteriosDeHijo(unidad_id, hijo_id, [...actuales, ...faltan])
+        criterios += faltan.length
+      }
+
+      return { hijo_id, calificaciones, diario: regs.length, rubricas, criterios, noMovidos }
+    })
+}
+
 /**
  * El nombre genérico que se le propone a la familia al convertirla: lo que
  * va antes del separador («Proba escrita - express repaso» → «Proba
@@ -2352,6 +2482,17 @@ export type CeldaInstrumento = {
   color: string
 }
 
+export type FamiliaConDatosEscondidos = {
+  id: number
+  nombre: string
+  /** Notas con valor en el trimestre que se mira. */
+  calificaciones: number
+  /** Registros del diario en el trimestre que se mira. */
+  diario: number
+  /** Exámenes definidos para la familia (general o de cualquier unidad). */
+  examenes: number
+}
+
 export type MatrizEvaluacion = {
   grupo: Grupo
   asig: Asignatura
@@ -2372,6 +2513,12 @@ export type MatrizEvaluacion = {
   evidencias: Map<string, number>
   /** `alumno:criterio:instrumento` → registros del diario (en orden cronológico) */
   diario: Record<string, { n: number; niveles: number[] }>
+  /**
+   * Familias que ya tienen hijos pero conservan notas, diario o exámenes
+   * anotados directamente con ellas: no tienen columna donde enseñarlo. El
+   * gestor lo mueve a un hijo (`moverDatosDeFamiliaAHijo`); la matriz avisa.
+   */
+  familiasConDatosEscondidos: FamiliaConDatosEscondidos[]
   /** Criterios de la unidad activa (vacío = todos los de la asignatura) */
   criteriosDeUnidad: Set<string> | null
 }
@@ -2512,6 +2659,20 @@ export async function getMatrizEvaluacion(
     }
   }
 
+  // Familias con hijos que aún guardan cosas a su nombre: nada de lo cargado
+  // arriba las pinta, así que se cuentan aquí para que la pantalla avise.
+  const familiasConDatosEscondidos: FamiliaConDatosEscondidos[] = []
+  for (const fam of instrumentos.filter(i => i.familia_id == null)) {
+    if (!instrumentos.some(i => i.familia_id === fam.id)) continue
+    const fila = {
+      id: fam.id!, nombre: fam.nombre,
+      calificaciones: cals.filter(c => c.instrumento_id === fam.id && c.valor != null).length,
+      diario: regs.filter(r => r.instrumento_id === fam.id).length,
+      examenes: delosInstrumentos.filter(r => r.tipo === 'prueba' && r.instrumento_id === fam.id).length,
+    }
+    if (fila.calificaciones + fila.diario + fila.examenes > 0) familiasConDatosEscondidos.push(fila)
+  }
+
   let criteriosDeUnidad: Set<string> | null = null
   if (unidad_id) {
     const ucs = vivos(await db.unidad_criterios.where('unidad_id').equals(unidad_id).toArray())
@@ -2521,6 +2682,7 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
+    familiasConDatosEscondidos,
   }
 }
 
