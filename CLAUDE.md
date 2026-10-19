@@ -260,6 +260,21 @@ edumind_miclase/
   convierte sin pulsar «Convertir»: «Seguir sin convertir» deja todo como
   está. La nota del área no cambia: un solo hijo con peso 1 funde igual que
   la nota directa.
+- **Con hijos ya dentro, lo que la familia guarda a su nombre se mueve, no se
+  pierde de vista.** `convertirFamiliaEnHijo` solo se ofrece antes del primer
+  hijo; a Luis no le valió porque «Examen · A nosa saúde» ya existía cuando
+  definió el test y corrigió por cámara con la familia «Proba escrita»: la
+  columna del hijo decía «Definir y corregir» y el examen no salía en ninguna.
+  `getMatrizEvaluacion` cuenta eso en `familiasConDatosEscondidos` y la vista
+  por instrumento lo avisa (`[data-familias-escondidas]`, con botón al
+  gestor); `FamiliaHijos` enseña la franja `[data-familia-escondidos]` con
+  «Mover a…» un hijo existente o uno nuevo. `moverDatosDeFamiliaAHijo`
+  cambia el `instrumento_id` en la misma fila, no pisa una casilla que el
+  hijo ya tenga con nota, solo sustituye un examen de la misma unidad o la
+  rúbrica del hijo si el docente acepta (`conflictosAlMover` se consulta
+  antes) y amplía los criterios del hijo con los que nombran las notas
+  movidas, dentro de los de la familia. Lo que no se mueve se cuenta en
+  `noMovidos` y se dice.
 - **El color identifica al instrumento, no a su tipo.** Ocho tonos de
   Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
   entre iguales (`colorDeInstrumento`), resueltos una vez en

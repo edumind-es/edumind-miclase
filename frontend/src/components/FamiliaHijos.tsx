@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 import {
   getHijos, crearInstrumentoHijo, actualizarInstrumento, eliminarInstrumento, moverInstrumento,
   criteriosDeFamiliaPorUnidad, criteriosDeHijoPorUnidad, fijarCriteriosDeHijo,
-  datosDirectosDeFamilia, hayDatosDirectos,
+  datosDirectosDeFamilia, hayDatosDirectos, conflictosAlMover, moverDatosDeFamiliaAHijo,
   type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia,
 } from '@/db/queries'
 import type { Instrumento } from '@/db/localDb'
@@ -47,15 +47,24 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   const [conversion, setConversion] = useState<{ datos: DatosDirectosDeFamilia; accion: string; seguir: () => void } | null>(null)
   const [recarga, setRecarga] = useState(0)
   const [error, setError] = useState<string | null>(null)
+  /** Lo que la familia guarda a su nombre teniendo ya hijos: sin columna hasta moverlo. */
+  const [escondidos, setEscondidos] = useState<DatosDirectosDeFamilia | null>(null)
+  const [destino, setDestino] = useState<string>('')
+  const [moviendo, setMoviendo] = useState(false)
+  const [movido, setMovido] = useState<string | null>(null)
 
   useEffect(() => {
     let vigente = true
     ;(async () => {
-      const [h, cob] = await Promise.all([getHijos(familia.id!), criteriosDeFamiliaPorUnidad(familia.id!)])
+      const [h, cob, datos] = await Promise.all([
+        getHijos(familia.id!), criteriosDeFamiliaPorUnidad(familia.id!), datosDirectosDeFamilia(familia.id!),
+      ])
       const mapas = new Map<number, Map<number, string[]>>()
       for (const x of h) mapas.set(x.id!, await criteriosDeHijoPorUnidad(x.id!))
       if (!vigente) return
       setHijos(h); setCobertura(cob); setDeHijo(mapas)
+      setEscondidos(h.length > 0 && hayDatosDirectos(datos) ? datos : null)
+      setDestino(d => d || (h[0]?.id != null ? String(h[0].id) : ''))
     })()
     return () => { vigente = false }
   }, [familia.id, recarga])
@@ -90,6 +99,43 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       setNuevo(null)
       cambiado()
     } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo crear') }
+  }
+
+  /**
+   * Mover lo que la familia guarda a su nombre a un hijo que ya existe (o a
+   * uno nuevo, con el diálogo de convertir). Si el hijo ya tiene examen para
+   * la misma unidad o rúbrica propia, se pregunta antes de pisar nada.
+   */
+  const mover = async () => {
+    if (!escondidos) return
+    if (destino === 'nuevo') {
+      setConversion({ datos: escondidos, accion: 'lo nuevo', seguir: () => {} })
+      return
+    }
+    const hijo = hijos.find(h => String(h.id) === destino)
+    if (!hijo) return
+    setMoviendo(true); setError(null); setMovido(null)
+    try {
+      const choques = await conflictosAlMover(familia.id!, hijo.id!)
+      let sustituir = false
+      if (choques.examenes || choques.rubrica) {
+        const que = [
+          choques.examenes ? `${choques.examenes} examen${choques.examenes !== 1 ? 'es' : ''} para la misma unidad` : '',
+          choques.rubrica ? 'rúbrica propia' : '',
+        ].filter(Boolean).join(' y ')
+        sustituir = confirm(`«${hijo.nombre}» ya tiene ${que}.\n\nAceptar: sustituirlo por lo de «${familia.nombre}».\nCancelar: conservar lo del hijo (lo de la familia se queda donde está).`)
+      }
+      const r = await moverDatosDeFamiliaAHijo(familia.id!, hijo.id!, { sustituir })
+      const partes = [
+        r.calificaciones ? `${r.calificaciones} nota${r.calificaciones !== 1 ? 's' : ''}` : '',
+        r.diario ? `${r.diario} registro${r.diario !== 1 ? 's' : ''} del diario` : '',
+        r.rubricas ? `${r.rubricas} examen${r.rubricas !== 1 ? 'es' : ''} o rúbrica` : '',
+      ].filter(Boolean)
+      const quedan = r.noMovidos.calificaciones + r.noMovidos.examenes + r.noMovidos.rubricas
+      setMovido(`${partes.length ? `Movido a «${hijo.nombre}»: ${partes.join(', ')}.` : 'Nada que mover.'}${quedan ? ` Se quedan en la familia ${quedan} que habrían pisado lo del hijo.` : ''}`)
+      cambiado()
+    } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo mover') }
+    finally { setMoviendo(false) }
   }
 
   const borrar = async (h: Instrumento) => {
@@ -186,6 +232,27 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       </div>
 
       {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12, marginBottom: 6 }}>{error}</div>}
+
+      {escondidos && (
+        <div data-familia-escondidos style={{ marginBottom: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ flex: '1 1 260px', lineHeight: 1.5 }}>
+            <strong>«{familia.nombre}» guarda a su nombre {[
+              escondidos.examenes ? `${escondidos.examenes} examen${escondidos.examenes !== 1 ? 'es' : ''}` : '',
+              escondidos.calificaciones ? `${escondidos.calificaciones} nota${escondidos.calificaciones !== 1 ? 's' : ''}` : '',
+              escondidos.diario ? `${escondidos.diario} registro${escondidos.diario !== 1 ? 's' : ''} del diario` : '',
+              escondidos.rubricas ? 'su rúbrica' : '',
+            ].filter(Boolean).join(', ')}</strong>, sin columna: con hijos dentro, la familia solo resume. Muévelo al instrumento que lo hizo de verdad.
+          </span>
+          <select data-mover-destino value={destino} onChange={e => setDestino(e.target.value)} style={{ fontSize: 12 }} disabled={moviendo}>
+            {hijos.map(h => <option key={h.id} value={String(h.id)}>{h.nombre}</option>)}
+            <option value="nuevo">Un instrumento nuevo…</option>
+          </select>
+          <button data-mover-aceptar className="btn-primary" style={{ fontSize: 12 }} onClick={mover} disabled={moviendo || !destino}>
+            {moviendo ? 'Moviendo…' : 'Mover'}
+          </button>
+        </div>
+      )}
+      {movido && <div data-mover-resultado style={{ fontSize: 12, color: 'var(--verde-500)', fontWeight: 600, marginBottom: 6 }}>{movido}</div>}
 
       {hijos.length > 0 && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>

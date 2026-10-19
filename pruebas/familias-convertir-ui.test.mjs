@@ -46,8 +46,19 @@ const estado = () => p.evaluate(async () => {
     instrumentos: (await leer('instrumentos')).map(i => ({ id: i.id, nombre: i.nombre, tipo: i.tipo, peso: i.peso, familia_id: i.familia_id ?? null })),
     notas: (await leer('calificaciones')).filter(c => c.valor != null).map(c => ({ id: c.id, criterio: c.criterio_id, instrumento_id: c.instrumento_id, valor: c.valor, updated_at: c.updated_at })),
     filas: (await leer('criterio_instrumentos')).map(f => ({ unidad_id: f.unidad_id, criterio_id: f.criterio_id, instrumento_id: f.instrumento_id })),
+    examenes: (await leer('rubricas')).filter(r => r.tipo === 'prueba').map(r => ({ id: r.id, instrumento_id: r.instrumento_id, unidad_id: r.unidad_id ?? null, titulo: r.titulo })),
+    alumnos: (await leer('alumnos')).map(a => a.id),
   }
 })
+/** Mete filas tal cual en IndexedDB: el caso que la interfaz ya no deja crear (datos a nombre de una familia con hijos). */
+const inyectar = (tabla, filas) => p.evaluate(async ({ tabla, filas }) => {
+  const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+  await new Promise((res, rej) => {
+    const tx = db.transaction(tabla, 'readwrite')
+    for (const f of filas) tx.objectStore(tabla).put(f)
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error)
+  })
+}, { tabla, filas })
 /** Notas del área en Seguimiento, como texto, para comparar antes y después. */
 const notasSeguimiento = async () => {
   await p.getByRole('link', { name: 'Seguimiento', exact: true }).click()
@@ -221,6 +232,66 @@ try {
   await bloque2.locator('[data-hijo-crear]').click()
   await bloque2.locator('[data-hijo][data-nombre="Recuperación"]').waitFor({ timeout: 5000 })
   ok(await p.locator('[data-convertir-familia]').count() === 0, 'sin diálogo: solo se ofrece antes del primer hijo')
+  await gestor.getByRole('button', { name: 'Cerrar' }).click()
+  await gestor.waitFor({ state: 'hidden', timeout: 5000 })
+
+  console.log('\n8. El caso de Luis: la familia con hijos guarda a su nombre un examen y una nota (de antes de tener hijos)')
+  e = await estado()
+  const notaModelo = e.notas.find(n => n.instrumento_id === express.id)
+  const filaModelo = await p.evaluate(async (id) => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    return new Promise((res) => { const q = db.transaction('calificaciones').objectStore('calificaciones').get(id); q.onsuccess = () => res(q.result) })
+  }, notaModelo.id)
+  const otroAlumno = e.alumnos.find(a => a !== filaModelo.alumno_id)
+  const ahora = new Date().toISOString()
+  await inyectar('calificaciones', [{ ...filaModelo, id: 9000001, alumno_id: otroAlumno, instrumento_id: famProba.id, valor: 5, updated_at: ahora, deleted_at: null }])
+  await inyectar('rubricas', [{
+    id: 9000002, instrumento_id: famProba.id, unidad_id: filaModelo.unidad_id, tipo: 'prueba', titulo: 'Test de la familia',
+    prueba_json: JSON.stringify({ titulo: 'Test de la familia', tipo: 'test', reparto: 'unica', preguntas: [{ id: 'p1', puntos: 1 }] }),
+    niveles_json: '[]', indicadores_json: '[]', generada_ia: 0, created_at: ahora, updated_at: ahora, deleted_at: null,
+  }])
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.waitForTimeout(1500)
+  await p.locator('[data-vista="instrumentos"]').click()
+  await p.locator('.tab-unidad').nth(1).click()
+  const aviso = p.locator('[data-familias-escondidas]')
+  await aviso.waitFor({ timeout: 8000 })
+  const textoAviso = await aviso.textContent()
+  ok(/«Proba escrita» guarda a su nombre 1 examen, 1 nota/.test(textoAviso), 'la matriz avisa de lo que la familia guarda sin columna', textoAviso.slice(0, 100))
+  await foto('convertir-04-aviso-escondidos')
+
+  console.log('\n9. Desde el aviso se abre el gestor y se mueve todo a «Prueba escrita - oficial»')
+  await aviso.locator('[data-familias-escondidas-gestor]').click()
+  await gestor.waitFor({ timeout: 5000 })
+  const bloque3 = gestor.locator(`[data-familia-hijos][data-familia-id="${famProba.id}"]`)
+  const franja = bloque3.locator('[data-familia-escondidos]')
+  await franja.waitFor({ timeout: 8000 })
+  ok(/1 examen, 1 nota/.test(await franja.textContent()), 'el gestor dice lo mismo que la matriz')
+  await franja.locator('[data-mover-destino]').selectOption(String(oficial.id))
+  await franja.locator('[data-mover-aceptar]').click()
+  await bloque3.locator('[data-mover-resultado]').waitFor({ timeout: 8000 })
+  const resultado = await bloque3.locator('[data-mover-resultado]').textContent()
+  ok(/Movido a «Prueba escrita - oficial»: 1 nota, 1 examen/.test(resultado), 'dice qué ha movido y adónde', resultado)
+  ok(await bloque3.locator('[data-familia-escondidos]').count() === 0, 'y la franja desaparece: ya no queda nada a nombre de la familia')
+  e = await estado()
+  const notaMovida = e.notas.find(n => n.id === 9000001)
+  ok(notaMovida?.instrumento_id === oficial.id && notaMovida.valor === 5, 'la nota lleva ahora el id del hijo, misma fila y mismo valor')
+  const examenMovido = e.examenes.find(x => x.id === 9000002)
+  ok(examenMovido?.instrumento_id === oficial.id && examenMovido.unidad_id === filaModelo.unidad_id, 'el examen también, con su unidad')
+  ok(e.notas.every(n => n.instrumento_id !== famProba.id) && e.examenes.every(x => x.instrumento_id !== famProba.id), 'nada queda con el id de la familia')
+  await foto('convertir-05-movido')
+  await gestor.getByRole('button', { name: 'Cerrar' }).click()
+  await gestor.waitFor({ state: 'hidden', timeout: 5000 })
+  await p.waitForTimeout(1500)
+  ok(await p.locator('[data-familias-escondidas]').count() === 0, 'la matriz ya no avisa')
+  const nombres2 = await p.locator('[data-instr-th]').evaluateAll(ths => ths.map(t => t.dataset.nombre))
+  const iOficial2 = nombres2.indexOf('Prueba escrita - oficial')
+  const filas2 = p.locator('tbody tr')
+  const textos = []
+  for (let i = 0; i < await filas2.count(); i++) textos.push((await filas2.nth(i).locator('[data-celda-instr]').nth(iOficial2).textContent()).trim())
+  ok(textos.some(t => t.startsWith('5')), 'la columna de la oficial enseña el 5 movido', textos.join(' | '))
+  const thOficial = p.locator('[data-instr-th]').nth(iOficial2)
+  ok(await thOficial.getAttribute('data-con-examen') === 'true', 'y su cabecera sabe que el examen es suyo')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
