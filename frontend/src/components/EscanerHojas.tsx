@@ -62,6 +62,8 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
   const ocupadoRef = useRef(false)
   const capturadaRef = useRef<Capturada | null>(null)
   const ficheroRef = useRef<HTMLInputElement>(null)
+  /** La hoja recién guardada sigue delante de la cámara unos segundos: no se vuelve a capturar. */
+  const recienGuardadaRef = useRef<{ alumno_id: number; hasta: number } | null>(null)
   capturadaRef.current = capturada
 
   useEffect(() => {
@@ -120,6 +122,20 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listo])
 
+  // Al volver de una hoja (guardada o repetida) la cámara tiene que seguir viva:
+  // iOS puede pausar el vídeo oculto, y el sistema puede haber cerrado el stream.
+  useEffect(() => {
+    if (capturada || !listo) return
+    const video = videoRef.current
+    const stream = streamRef.current
+    if (!video || !stream) return
+    const viva = stream.getVideoTracks().some(t => t.readyState === 'live')
+    if (!viva) { parar(); void arrancar(); return }
+    if (video.srcObject !== stream) video.srcObject = stream
+    void video.play().catch(() => { /* el bucle espera datos */ })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [capturada, listo])
+
   /** Pinta la fuente reducida en el lienzo oculto y la lee. Devuelve si había hoja de este examen. */
   const analizar = (fuente: CanvasImageSource, ancho: number, alto: number): boolean => {
     if (!def || !prueba) return false
@@ -137,6 +153,11 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     const { lectura } = r
     if (lectura.payload.prueba_id !== prueba.id) {
       setAviso(`Esta hoja es de otro examen (código ${lectura.payload.prueba_id}), no de «${def.titulo}».`)
+      return false
+    }
+    const reciente = recienGuardadaRef.current
+    if (reciente && reciente.alumno_id === lectura.payload.alumno_id && Date.now() < reciente.hasta) {
+      setAviso('Esa hoja ya está guardada: pasa a la siguiente.')
       return false
     }
     const alumno = alumnos.find(a => a.id === lectura.payload.alumno_id) ?? null
@@ -210,6 +231,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
         def, respuestas, destinos: criterios.map(c => c.id), area,
       })
       setCorregidos(l => [...l.filter(x => x.alumno.id !== capturada.alumno!.id), { alumno: capturada.alumno!, nota: r.nota }])
+      recienGuardadaRef.current = { alumno_id: capturada.alumno.id!, hasta: Date.now() + 4000 }
       setCapturada(null)
       onGuardado()
     } catch (e) {
@@ -242,8 +264,10 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
           <canvas ref={lienzoRef} style={{ display: 'none' }} />
           <input ref={ficheroRef} type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={deFichero} data-escaner-fichero />
 
-          {listo && !capturada && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 220px', gap: 14 }}>
+          {/* El <video> sigue montado mientras se revisa la hoja: desmontarlo soltaba el
+              stream y al volver la cámara quedaba negra hasta cerrar y reabrir el corrector. */}
+          {listo && (
+            <div data-escaner-camara style={{ display: capturada ? 'none' : 'grid', gridTemplateColumns: 'minmax(0, 1fr) 220px', gap: 14 }}>
               <div>
                 <div style={{ position: 'relative', background: '#000', borderRadius: 10, overflow: 'hidden', minHeight: 240 }}>
                   <video ref={videoRef} playsInline muted style={{ width: '100%', display: 'block', maxHeight: '60vh', objectFit: 'contain' }} />
