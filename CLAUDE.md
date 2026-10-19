@@ -242,6 +242,24 @@ edumind_miclase/
   `porCriterio` trae a los hijos con `familia_id` y aparta a la familia en
   cuanto un hijo evalúa el criterio: se califica con el hijo y la familia
   resume. La misma regla aplica la evaluación rápida.
+- **El primer hijo de una familia con notas propias pregunta antes de dejarla
+  sin columna.** En cuanto hay un hijo la familia solo resume, y lo que se
+  calificó directamente con ella sigue contando (fundido con peso 1) pero
+  desaparece como columna: Luis tenía «Proba escrita - express repaso»
+  calificada, creó dentro «Prueba escrita - oficial» y esperaba dos
+  columnas. `FamiliaHijos` (añadir a mano y asistente) consulta
+  `datosDirectosDeFamilia` antes del PRIMER hijo y, si hay notas, diario,
+  examen o rúbrica, abre `ConvertirFamilia`: convertir lo que ya hay en un
+  hijo con el nombre, tipo, agregación y color de la familia, y renombrar la
+  familia al genérico (`nombreGenericoDeFamilia`: lo que va antes del guion,
+  o la etiqueta del tipo). `convertirFamiliaEnHijo` (`queries.ts`) cambia el
+  `instrumento_id` de `calificaciones`, `diario` y `rubricas` en la misma
+  fila con `updated_at` nuevo (viajan en el siguiente sync, sin duplicar
+  casillas) y COPIA las filas de `criterio_instrumentos`, porque la familia
+  sigue siendo el techo de sus hijos y lo que la programación asigna. Nada se
+  convierte sin pulsar «Convertir»: «Seguir sin convertir» deja todo como
+  está. La nota del área no cambia: un solo hijo con peso 1 funde igual que
+  la nota directa.
 - **El color identifica al instrumento, no a su tipo.** Ocho tonos de
   Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
   entre iguales (`colorDeInstrumento`), resueltos una vez en

@@ -492,6 +492,131 @@ export async function fijarCriteriosDeHijo(
   }
 }
 
+// ─── Convertir lo que ya hay en una familia en su primer hijo ───────────────
+
+/** Lo que una familia tiene anotado directamente, con su propio id. */
+export type DatosDirectosDeFamilia = {
+  /** Calificaciones vivas con nota (con `valor`), puestas con la familia. */
+  calificaciones: number
+  /** Registros del diario de evaluación de la familia. */
+  diario: number
+  /** Exámenes definidos para la familia (general o por unidad). */
+  examenes: number
+  /** 1 si la familia tiene rúbrica propia. */
+  rubricas: number
+}
+
+/**
+ * Qué hay anotado directamente con una familia: notas, diario, exámenes y
+ * rúbrica. Es lo que al meter el primer hijo dejaría de tener columna
+ * —seguiría contando, fundido con peso 1— y lo que `convertirFamiliaEnHijo`
+ * mueve. Cero en todo = no hay nada que convertir.
+ */
+export async function datosDirectosDeFamilia(familia_id: number): Promise<DatosDirectosDeFamilia> {
+  const [cals, regs, rubs] = await Promise.all([
+    db.calificaciones.where('instrumento_id').equals(familia_id).toArray(),
+    db.diario.where('instrumento_id').equals(familia_id).toArray(),
+    db.rubricas.where('instrumento_id').equals(familia_id).toArray(),
+  ])
+  const vivas = vivos(rubs)
+  return {
+    calificaciones: vivos(cals).filter(c => c.valor != null).length,
+    diario: vivos(regs).length,
+    examenes: vivas.filter(r => r.tipo === 'prueba').length,
+    rubricas: vivas.filter(esRubrica).length,
+  }
+}
+
+export const hayDatosDirectos = (d: DatosDirectosDeFamilia) =>
+  d.calificaciones + d.diario + d.examenes + d.rubricas > 0
+
+/** Lo que se ha movido al hijo nuevo, para decírselo al docente. */
+export type ResultadoConversion = {
+  hijo_id: number
+  calificaciones: number
+  diario: number
+  rubricas: number
+  criterios: number
+}
+
+/**
+ * Convierte lo que una familia tenía anotado directamente en un hijo propio.
+ *
+ * Luis calificaba «Proba escrita - express repaso» (80 %) directamente con la
+ * familia. Al crear dentro «Prueba escrita - oficial» esperaba dos columnas,
+ * pero en cuanto hay un hijo la familia solo resume: el express se quedó sin
+ * columna aunque sus notas siguieran contando (fundidas con peso 1). Esto
+ * crea un hijo con el nombre, tipo, agregación y color de la familia y le
+ * pasa todo lo que apuntaba a ella:
+ *
+ *  - `calificaciones` y `diario`: cambian de `instrumento_id` en la misma
+ *    fila, con `updated_at` nuevo para que viajen en el siguiente sync. No se
+ *    duplican: la casilla del hijo es la misma casilla que tenía la familia.
+ *  - `rubricas` (la rúbrica y los exámenes, nunca el banco): igual.
+ *  - `criterio_instrumentos`: se COPIAN, no se mueven. La familia sigue
+ *    siendo lo que la programación asigna a cada criterio y el techo de sus
+ *    hijos (`fijarCriteriosDeHijo` lo exige), así que conserva sus filas y
+ *    el hijo recibe las suyas, con el mismo reparto (`peso_criterio`) y
+ *    vínculo.
+ *
+ * Opcionalmente renombra la familia (al nombre genérico de lo que trae
+ * PROENS: «Proba escrita», «Táboa de indicadores»). Nunca se llama sola:
+ * siempre tras la confirmación expresa del docente.
+ */
+export async function convertirFamiliaEnHijo(
+  familia_id: number,
+  opciones: { nombre_hijo?: string; nombre_familia?: string | null } = {}
+): Promise<ResultadoConversion> {
+  const familia = await db.instrumentos.get(familia_id)
+  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
+  if (familia.familia_id != null) throw new Error('Solo se convierte una familia, no un hijo')
+
+  const nombreHijo = (opciones.nombre_hijo ?? familia.nombre).trim() || familia.nombre
+  const nombreFamilia = opciones.nombre_familia?.trim() || null
+
+  return db.transaction('rw',
+    [db.instrumentos, db.calificaciones, db.diario, db.rubricas, db.criterio_instrumentos],
+    async () => {
+      const hijo_id = await crearInstrumentoHijo(familia_id, {
+        nombre: nombreHijo, tipo: familia.tipo, agregacion: familia.agregacion ?? null,
+      })
+      if (familia.color) await db.instrumentos.update(hijo_id, tocado({ color: familia.color }))
+
+      const alHijo = tocado({ instrumento_id: hijo_id })
+      const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
+      const calificaciones = await db.calificaciones.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
+      const diario = await db.diario.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
+      const rubricas = await db.rubricas.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
+
+      // Las filas de la programación se copian: la familia sigue siendo el
+      // techo de lo que puede evaluar cualquiera de sus hijos.
+      const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray())
+      for (const f of filas) {
+        await db.criterio_instrumentos.add(nuevo({
+          unidad_id: f.unidad_id, criterio_id: f.criterio_id, instrumento_id: hijo_id, peso: 1.0,
+          peso_criterio: f.peso_criterio ?? null, vinculado: f.vinculado ?? null,
+        }))
+      }
+
+      if (nombreFamilia && nombreFamilia !== familia.nombre) {
+        await db.instrumentos.update(familia_id, tocado({ nombre: nombreFamilia }))
+      }
+      return { hijo_id, calificaciones, diario, rubricas, criterios: filas.length }
+    })
+}
+
+/**
+ * El nombre genérico que se le propone a la familia al convertirla: lo que
+ * va antes del separador («Proba escrita - express repaso» → «Proba
+ * escrita») y, si no hay separador, la etiqueta de su tipo. Puro; el docente
+ * siempre puede escribir otro.
+ */
+export function nombreGenericoDeFamilia(familia: Pick<Instrumento, 'nombre' | 'tipo'>, etiquetaTipo: string): string {
+  const antes = familia.nombre.split(/\s+[-–—·:|]\s+|\s*[(:]/)[0].trim()
+  if (antes && antes !== familia.nombre.trim()) return antes
+  return etiquetaTipo
+}
+
 export async function getInstrumentos(asignatura_id: number): Promise<Instrumento[]> {
   const instrumentos = vivos(await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray())
   instrumentos.sort((a, b) => a.orden - b.orden || a.id! - b.id!)
