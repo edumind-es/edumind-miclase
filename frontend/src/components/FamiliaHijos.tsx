@@ -16,12 +16,14 @@ import { useEffect, useState } from 'react'
 import {
   getHijos, crearInstrumentoHijo, actualizarInstrumento, eliminarInstrumento, moverInstrumento,
   criteriosDeFamiliaPorUnidad, criteriosDeHijoPorUnidad, fijarCriteriosDeHijo,
-  type CriteriosDeFamiliaPorUnidad,
+  datosDirectosDeFamilia, hayDatosDirectos,
+  type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia,
 } from '@/db/queries'
 import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrumento } from '@/ia/instrumentosConfig'
 import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
 import AsistenteFamilia from './AsistenteFamilia'
+import ConvertirFamilia from './ConvertirFamilia'
 
 interface Props {
   familia: Instrumento
@@ -41,6 +43,8 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string } | null>(null)
   const [editando, setEditando] = useState<number | null>(null)
   const [asistente, setAsistente] = useState(false)
+  /** Pendiente de decidir si lo que ya hay en la familia se convierte en un hijo. */
+  const [conversion, setConversion] = useState<{ datos: DatosDirectosDeFamilia; accion: string; seguir: () => void } | null>(null)
   const [recarga, setRecarga] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,7 +63,24 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   const cambiado = () => { setRecarga(n => n + 1); onCambio() }
   const descripcion = (id: string) => criterios.find(c => c.id === id)?.descripcion ?? ''
 
-  const crear = async () => {
+  /**
+   * Antes del PRIMER hijo, si la familia ya tiene notas, diario, examen o
+   * rúbrica propios, se pregunta si convertirlos en un hijo (`ConvertirFamilia`).
+   * Nunca se convierte solo: el docente puede seguir sin convertir.
+   */
+  const antesDelPrimerHijo = async (accion: string, seguir: () => void) => {
+    if (hijos.length > 0) { seguir(); return }
+    const datos = await datosDirectosDeFamilia(familia.id!)
+    if (hayDatosDirectos(datos)) setConversion({ datos, accion, seguir })
+    else seguir()
+  }
+
+  const crear = () => {
+    if (!nuevo?.nombre.trim()) return
+    antesDelPrimerHijo(`«${nuevo.nombre.trim()}»`, crearDeVerdad)
+  }
+
+  const crearDeVerdad = async () => {
     if (!nuevo?.nombre.trim()) return
     setError(null)
     try {
@@ -106,7 +127,23 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   const yaIguales = porcentajes.every(v => Math.abs(v - 100 / hijos.length) < 1)
 
   return (
-    <div data-familia-hijos style={{ marginTop: 10, paddingTop: 10, borderTop: '1px dashed var(--gris-300)' }}>
+    <div data-familia-hijos data-familia-id={familia.id} style={{ marginTop: 10, paddingTop: 10, borderTop: '1px dashed var(--gris-300)' }}>
+      {conversion && (
+        <ConvertirFamilia
+          familia={familia}
+          datos={conversion.datos}
+          accion={conversion.accion}
+          capa={capa}
+          onSeguir={convertido => {
+            const { seguir } = conversion
+            setConversion(null)
+            // Convertido: el hijo nuevo ya existe; el que viene entra como segundo.
+            if (convertido) onCambio()
+            seguir()
+          }}
+          onCancelar={() => setConversion(null)}
+        />
+      )}
       {asistente && (
         <AsistenteFamilia
           familia={familia}
@@ -136,7 +173,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
           </button>
         )}
         {totalFamilia > 0 && (
-          <button data-asistente-abrir onClick={() => setAsistente(true)} className="btn-secondary" style={{ fontSize: 11.5 }}
+          <button data-asistente-abrir onClick={() => antesDelPrimerHijo('lo que hagas dentro', () => setAsistente(true))} className="btn-secondary" style={{ fontSize: 11.5 }}
             title="Elegir entre lo que suele hacerse en esta área: speaking, listening, un examen por unidad, billete de salida…">
             ✨ ¿Qué haces dentro?
           </button>
