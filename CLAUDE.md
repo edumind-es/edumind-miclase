@@ -268,7 +268,18 @@ edumind_miclase/
   `getMatrizEvaluacion` cuenta eso en `familiasConDatosEscondidos` y la vista
   por instrumento lo avisa (`[data-familias-escondidas]`, con botón al
   gestor); `FamiliaHijos` enseña la franja `[data-familia-escondidos]` con
-  «Mover a…» un hijo existente o uno nuevo. `moverDatosDeFamiliaAHijo`
+  «Mover» a un hijo existente o uno nuevo. La franja va **por bloques de
+  unidad y día de anotación** (`db/bloquesFamilia.ts`, puro:
+  `agruparEnBloques`, `enBloque`; `bloquesDirectosDeFamilia` en `queries.ts`
+  le pone el nombre de la unidad), cada uno con su destino
+  (`[data-bloque-escondido]` con `data-unidad-id` y `data-dia`), porque un
+  total no deja decidir: el examen del express de una unidad y las notas de
+  otra puestas otro día van a hijos distintos. La fecha es la de anotación
+  en ese aparato (nota: `fecha`; diario: `fecha`; examen: `created_at`) y
+  el día es el local, no el UTC. El destino sugerido es el hijo que ya cubre
+  esa unidad con alguno de los criterios del bloque. `moverDatosDeFamiliaAHijo`,
+  `conflictosAlMover` y `convertirFamiliaEnHijo` aceptan `bloque` y entonces
+  solo tocan esa unidad y ese día; sin él, todo. `moverDatosDeFamiliaAHijo`
   cambia el `instrumento_id` en la misma fila, no pisa una casilla que el
   hijo ya tenga con nota, solo sustituye un examen de la misma unidad o la
   rúbrica del hijo si el docente acepta (`conflictosAlMover` se consulta
