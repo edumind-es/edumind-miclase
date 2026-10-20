@@ -411,6 +411,9 @@ try {
   if (/Desplegar/.test(await plegarTodas.textContent())) await plegarTodas.click()
   await p.locator('[data-celda-resumen][data-criterio]').filter({ hasNotText: '·' }).first().click()
   await ficha.waitFor({ timeout: 5000 })
+  // La ficha carga las notas en segundo plano: los chips aparecen después de
+  // que sea visible. Contarlos nada más abrirla fallaba una de cada tres.
+  await ficha.locator('[data-explicacion-trimestres]').waitFor({ timeout: 5000 }).catch(() => {})
   ok(await ficha.locator('[data-explicacion-trimestres]').count() === 1, 'por criterio enseña T1 · T2 · T3 y la final')
   ok(await ficha.locator('[data-explicacion-area]').count() === 1, 'y la nota del área')
   await foto('instrumentos-06-explicacion-criterio')
