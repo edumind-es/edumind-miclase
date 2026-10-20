@@ -17,6 +17,7 @@ import {
   getHijos, crearInstrumentoHijo, actualizarInstrumento, eliminarInstrumento, moverInstrumento,
   criteriosDeFamiliaPorUnidad, criteriosDeHijoPorUnidad, fijarCriteriosDeHijo,
   datosDirectosDeFamilia, hayDatosDirectos, conflictosAlMover, moverDatosDeFamiliaAHijo, bloquesDirectosDeFamilia,
+  getFamilias, previsualizarCambioDeFamilia, cambiarFamiliaDeHijo,
   type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia, type BloqueDirectoConUnidad,
 } from '@/db/queries'
 import { describeBloque, etiquetaDia, etiquetaHora, type FiltroBloque } from '@/db/bloquesFamilia'
@@ -39,6 +40,8 @@ interface Props {
 
 export default function FamiliaHijos({ familia, asignaturaNombre, criterios, capa, onCambio }: Props) {
   const [hijos, setHijos] = useState<Instrumento[]>([])
+  /** Las otras familias del área, para cambiar un hijo de familia. */
+  const [familias, setFamilias] = useState<Instrumento[]>([])
   const [cobertura, setCobertura] = useState<CriteriosDeFamiliaPorUnidad[]>([])
   const [deHijo, setDeHijo] = useState<Map<number, Map<number, string[]>>>(new Map())
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string } | null>(null)
@@ -64,13 +67,14 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   useEffect(() => {
     let vigente = true
     ;(async () => {
-      const [h, cob, bloques] = await Promise.all([
+      const [h, cob, bloques, fams] = await Promise.all([
         getHijos(familia.id!), criteriosDeFamiliaPorUnidad(familia.id!), bloquesDirectosDeFamilia(familia.id!),
+        getFamilias(familia.asignatura_id),
       ])
       const mapas = new Map<number, Map<number, string[]>>()
       for (const x of h) mapas.set(x.id!, await criteriosDeHijoPorUnidad(x.id!))
       if (!vigente) return
-      setHijos(h); setCobertura(cob); setDeHijo(mapas)
+      setHijos(h); setCobertura(cob); setDeHijo(mapas); setFamilias(fams)
       setEscondidos(h.length > 0 ? bloques : [])
       // Destino por defecto de cada bloque: el hijo que ya cubre esa unidad
       // y alguno de sus criterios; si no, el primero. Lo elegido se respeta.
@@ -89,9 +93,37 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       })
     })()
     return () => { vigente = false }
-  }, [familia.id, recarga])
+  // `familia` (el objeto, no solo su id): el gestor recarga las familias tras
+  // cada cambio y así este bloque relee también cuando el cambio vino de OTRO
+  // bloque, como un hijo que acaba de cambiar de familia.
+  }, [familia, recarga])
 
   const cambiado = () => { setRecarga(n => n + 1); onCambio() }
+
+  /**
+   * Cambiar un hijo de familia. La familia la decide el docente por cómo
+   * trabaja, no el tipo: un examen puede ir en el 20 % diario. Se dice qué
+   * criterios tendrá que añadir la familia nueva y con qué peso entra, y
+   * nada se hace sin aceptar.
+   */
+  const cambiarFamilia = async (h: Instrumento, familia_id: number) => {
+    setError(null)
+    try {
+      const c = await previsualizarCambioDeFamilia(h.id!, familia_id)
+      const lineas = [
+        `Mover «${h.nombre}» de «${c.familia_actual.nombre}» a «${c.familia_nueva.nombre}».`,
+        '',
+        `Sus notas, diario, examen y rúbrica siguen siendo suyos: solo cambia con qué familia cuenta en el área (${c.familia_nueva.peso} %) y entra con el ${c.peso} % dentro de ella (el medio de sus nuevos hermanos; se puede ajustar después).`,
+      ]
+      if (c.anadir.length) {
+        lineas.push('', `«${c.familia_nueva.nombre}» pasará a evaluar también:`)
+        for (const u of c.anadir) lineas.push(`· ${u.unidad_nombre}: ${u.criterios.join(', ')}`)
+      }
+      if (!confirm(lineas.join('\n'))) return
+      await cambiarFamiliaDeHijo(h.id!, familia_id)
+      cambiado()
+    } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo cambiar de familia') }
+  }
   const descripcion = (id: string) => criterios.find(c => c.id === id)?.descripcion ?? ''
 
   /**
@@ -334,6 +366,14 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                   <select value={h.tipo} aria-label="Tipo" onChange={e => actualizarInstrumento(h.id!, { tipo: e.target.value }).then(cambiado)} style={{ fontSize: 11.5, padding: '4px 5px' }}>
                     {TIPOS_INSTRUMENTO.map(t => <option key={t.value} value={t.value}>{t.icon} {t.label}</option>)}
                   </select>
+                  {familias.length > 1 && (
+                    <select data-hijo-familia value={String(familia.id)} aria-label="Familia"
+                      title="En qué familia cuenta este instrumento. Lo decides tú por cómo trabajas, no el tipo: un examen puede ir en el 20 % diario."
+                      onChange={e => { const id = Number(e.target.value); if (id !== familia.id) cambiarFamilia(h, id) }}
+                      style={{ fontSize: 11.5, padding: '4px 5px', maxWidth: 170 }}>
+                      {familias.map(f => <option key={f.id} value={String(f.id)}>{f.nombre} · {f.peso} %</option>)}
+                    </select>
+                  )}
                   <label title={`Cuánto cuenta dentro de «${familia.nombre}». Al cambiarlo, los demás se reparten el resto guardando su proporción.`}
                     style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gris-600)', fontWeight: 600 }}>
                     <input type="number" min={1} max={100} key={`${h.id}-${pct}`} defaultValue={pct} data-peso-hijo
