@@ -17,6 +17,7 @@ import type {
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
   GrupoAlumno, UnidadCriterio,
 } from './localDb'
+import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
 
@@ -530,6 +531,27 @@ export async function datosDirectosDeFamilia(familia_id: number): Promise<DatosD
 export const hayDatosDirectos = (d: DatosDirectosDeFamilia) =>
   d.calificaciones + d.diario + d.examenes + d.rubricas > 0
 
+/** Un bloque con el nombre de su unidad, para enseñarlo. */
+export type BloqueDirectoConUnidad = BloqueDirecto & { unidad_nombre: string | null }
+
+/**
+ * Lo mismo que `datosDirectosDeFamilia`, pero desglosado por unidad y día de
+ * anotación (`db/bloquesFamilia.ts`), para que el gestor deje mover cada
+ * bloque al hijo que lo hizo de verdad. Vacío si no hay nada.
+ */
+export async function bloquesDirectosDeFamilia(familia_id: number): Promise<BloqueDirectoConUnidad[]> {
+  const [cals, regs, rubs] = await Promise.all([
+    db.calificaciones.where('instrumento_id').equals(familia_id).toArray(),
+    db.diario.where('instrumento_id').equals(familia_id).toArray(),
+    db.rubricas.where('instrumento_id').equals(familia_id).toArray(),
+  ])
+  const bloques = agruparEnBloques(cals, regs, rubs)
+  const ids = [...new Set(bloques.map(b => b.unidad_id).filter((u): u is number => u != null && u > 0))]
+  const unidades = ids.length ? await db.unidades.where('id').anyOf(ids).toArray() : []
+  const nombre = new Map(unidades.map(u => [u.id!, u.nombre]))
+  return bloques.map(b => ({ ...b, unidad_nombre: b.unidad_id != null ? nombre.get(b.unidad_id) ?? null : null }))
+}
+
 /** Lo que se ha movido al hijo nuevo, para decírselo al docente. */
 export type ResultadoConversion = {
   hijo_id: number
@@ -565,7 +587,7 @@ export type ResultadoConversion = {
  */
 export async function convertirFamiliaEnHijo(
   familia_id: number,
-  opciones: { nombre_hijo?: string; nombre_familia?: string | null } = {}
+  opciones: { nombre_hijo?: string; nombre_familia?: string | null; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoConversion> {
   const familia = await db.instrumentos.get(familia_id)
   if (!familia || familia.deleted_at) throw new Error('La familia no existe')
@@ -582,11 +604,17 @@ export async function convertirFamiliaEnHijo(
       })
       if (familia.color) await db.instrumentos.update(hijo_id, tocado({ color: familia.color }))
 
+      // Con `bloque` solo se lleva lo de esa unidad y ese día (el gestor, con
+      // hijos ya dentro, mueve bloque a bloque); sin él, todo.
       const alHijo = tocado({ instrumento_id: hijo_id })
       const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
-      const calificaciones = await db.calificaciones.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
-      const diario = await db.diario.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
-      const rubricas = await db.rubricas.where('instrumento_id').equals(familia_id).filter(vivo).modify(alHijo)
+      const { bloque } = opciones
+      const calificaciones = await db.calificaciones.where('instrumento_id').equals(familia_id)
+        .filter(c => vivo(c) && enBloque(bloque, c.unidad_id, diaDeNota(c))).modify(alHijo)
+      const diario = await db.diario.where('instrumento_id').equals(familia_id)
+        .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeRegistro(r))).modify(alHijo)
+      const rubricas = await db.rubricas.where('instrumento_id').equals(familia_id)
+        .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeRubrica(r))).modify(alHijo)
 
       // Las filas de la programación se copian: la familia sigue siendo el
       // techo de lo que puede evaluar cualquiera de sus hijos.
@@ -620,12 +648,12 @@ const mismaUnidadDePrueba = (a: Rubrica, b: Rubrica) => (a.unidad_id ?? null) ==
  * Qué chocaría al mover lo de la familia a ESE hijo. Se consulta antes para
  * preguntar al docente; nunca se decide por él.
  */
-export async function conflictosAlMover(familia_id: number, hijo_id: number): Promise<ConflictosMovimiento> {
+export async function conflictosAlMover(familia_id: number, hijo_id: number, bloque?: FiltroBloque): Promise<ConflictosMovimiento> {
   const [deFamilia, deHijo] = await Promise.all([
     db.rubricas.where('instrumento_id').equals(familia_id).toArray(),
     db.rubricas.where('instrumento_id').equals(hijo_id).toArray(),
   ])
-  const f = vivos(deFamilia), h = vivos(deHijo)
+  const f = vivos(deFamilia).filter(r => enBloque(bloque, r.unidad_id, diaDeRubrica(r))), h = vivos(deHijo)
   return {
     examenes: f.filter(r => r.tipo === 'prueba' && h.some(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))).length,
     rubrica: f.some(esRubrica) && h.some(esRubrica),
@@ -662,7 +690,7 @@ export type ResultadoMovimiento = ResultadoConversion & {
  * Nunca se llama sola: siempre tras la elección expresa del docente.
  */
 export async function moverDatosDeFamiliaAHijo(
-  familia_id: number, hijo_id: number, opciones: { sustituir?: boolean } = {}
+  familia_id: number, hijo_id: number, opciones: { sustituir?: boolean; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoMovimiento> {
   const [familia, hijo] = await Promise.all([db.instrumentos.get(familia_id), db.instrumentos.get(hijo_id)])
   if (!familia || familia.deleted_at) throw new Error('La familia no existe')
@@ -687,7 +715,12 @@ export async function moverDatosDeFamiliaAHijo(
         (await db.calificaciones.where('instrumento_id').equals(hijo_id).toArray())
           .filter(c => vivo(c) && c.valor != null).map(c => claveCelda({ ...c, instrumento_id: familia_id })))
       let calificaciones = 0
+      // Con `bloque` (unidad y día, `db/bloquesFamilia.ts`) se mueve solo esa
+      // parte: el gestor lo ofrece bloque a bloque para que cada uno vaya al
+      // hijo que lo hizo de verdad.
+      const { bloque } = opciones
       for (const c of (await db.calificaciones.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
+        if (!enBloque(bloque, c.unidad_id, diaDeNota(c))) continue
         if (c.valor != null && delHijo.has(claveCelda(c))) { noMovidos.calificaciones++; continue }
         await db.calificaciones.update(c.id!, tocado({ instrumento_id: hijo_id }))
         calificaciones++
@@ -695,7 +728,8 @@ export async function moverDatosDeFamiliaAHijo(
       }
 
       // Diario: entero; los criterios van fijados en cada registro.
-      const regs = (await db.diario.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)
+      const regs = (await db.diario.where('instrumento_id').equals(familia_id).toArray())
+        .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeRegistro(r)))
       for (const r of regs) {
         await db.diario.update(r.id!, tocado({ instrumento_id: hijo_id }))
         apunta(r.unidad_id, criteriosDe(r))
@@ -705,6 +739,7 @@ export async function moverDatosDeFamiliaAHijo(
       const delHijoRub = (await db.rubricas.where('instrumento_id').equals(hijo_id).toArray()).filter(vivo)
       let rubricas = 0
       for (const r of (await db.rubricas.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
+        if (!enBloque(bloque, r.unidad_id, diaDeRubrica(r))) continue
         const choca = r.tipo === 'prueba'
           ? delHijoRub.filter(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))
           : delHijoRub.filter(esRubrica)

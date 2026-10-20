@@ -16,9 +16,10 @@ import { useEffect, useState } from 'react'
 import {
   getHijos, crearInstrumentoHijo, actualizarInstrumento, eliminarInstrumento, moverInstrumento,
   criteriosDeFamiliaPorUnidad, criteriosDeHijoPorUnidad, fijarCriteriosDeHijo,
-  datosDirectosDeFamilia, hayDatosDirectos, conflictosAlMover, moverDatosDeFamiliaAHijo,
-  type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia,
+  datosDirectosDeFamilia, hayDatosDirectos, conflictosAlMover, moverDatosDeFamiliaAHijo, bloquesDirectosDeFamilia,
+  type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia, type BloqueDirectoConUnidad,
 } from '@/db/queries'
+import { describeBloque, etiquetaDia, etiquetaHora, type FiltroBloque } from '@/db/bloquesFamilia'
 import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrumento } from '@/ia/instrumentosConfig'
 import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
@@ -44,27 +45,48 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   const [editando, setEditando] = useState<number | null>(null)
   const [asistente, setAsistente] = useState(false)
   /** Pendiente de decidir si lo que ya hay en la familia se convierte en un hijo. */
-  const [conversion, setConversion] = useState<{ datos: DatosDirectosDeFamilia; accion: string; seguir: () => void } | null>(null)
+  const [conversion, setConversion] = useState<{ datos: DatosDirectosDeFamilia; accion: string; seguir: () => void; bloque?: FiltroBloque } | null>(null)
   const [recarga, setRecarga] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  /** Lo que la familia guarda a su nombre teniendo ya hijos: sin columna hasta moverlo. */
-  const [escondidos, setEscondidos] = useState<DatosDirectosDeFamilia | null>(null)
-  const [destino, setDestino] = useState<string>('')
-  const [moviendo, setMoviendo] = useState(false)
+  /**
+   * Lo que la familia guarda a su nombre teniendo ya hijos: sin columna hasta
+   * moverlo. Por bloques de unidad y día (`db/bloquesFamilia.ts`), cada uno
+   * con su destino: el examen del express y las notas de otra unidad no van
+   * al mismo hijo.
+   */
+  const [escondidos, setEscondidos] = useState<BloqueDirectoConUnidad[]>([])
+  /** Destino elegido por bloque (clave `unidad|dia`): id de hijo o 'nuevo'. */
+  const [destinos, setDestinos] = useState<Record<string, string>>({})
+  const [moviendo, setMoviendo] = useState<string | null>(null)
   const [movido, setMovido] = useState<string | null>(null)
+  const claveBloque = (b: FiltroBloque) => `${b.unidad_id ?? 'x'}|${b.dia ?? 'x'}`
 
   useEffect(() => {
     let vigente = true
     ;(async () => {
-      const [h, cob, datos] = await Promise.all([
-        getHijos(familia.id!), criteriosDeFamiliaPorUnidad(familia.id!), datosDirectosDeFamilia(familia.id!),
+      const [h, cob, bloques] = await Promise.all([
+        getHijos(familia.id!), criteriosDeFamiliaPorUnidad(familia.id!), bloquesDirectosDeFamilia(familia.id!),
       ])
       const mapas = new Map<number, Map<number, string[]>>()
       for (const x of h) mapas.set(x.id!, await criteriosDeHijoPorUnidad(x.id!))
       if (!vigente) return
       setHijos(h); setCobertura(cob); setDeHijo(mapas)
-      setEscondidos(h.length > 0 && hayDatosDirectos(datos) ? datos : null)
-      setDestino(d => d || (h[0]?.id != null ? String(h[0].id) : ''))
+      setEscondidos(h.length > 0 ? bloques : [])
+      // Destino por defecto de cada bloque: el hijo que ya cubre esa unidad
+      // y alguno de sus criterios; si no, el primero. Lo elegido se respeta.
+      setDestinos(prev => {
+        const sig = { ...prev }
+        for (const b of bloques) {
+          const k = claveBloque(b)
+          if (sig[k]) continue
+          const sugerido = b.unidad_id != null
+            ? h.find(x => (mapas.get(x.id!)?.get(b.unidad_id!) ?? []).some(c => b.criterios.includes(c)))
+            : undefined
+          const elegido = sugerido ?? h[0]
+          if (elegido?.id != null) sig[k] = String(elegido.id)
+        }
+        return sig
+      })
     })()
     return () => { vigente = false }
   }, [familia.id, recarga])
@@ -102,21 +124,24 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
   }
 
   /**
-   * Mover lo que la familia guarda a su nombre a un hijo que ya existe (o a
-   * uno nuevo, con el diálogo de convertir). Si el hijo ya tiene examen para
-   * la misma unidad o rúbrica propia, se pregunta antes de pisar nada.
+   * Mover UN bloque (unidad y día) de lo que la familia guarda a su nombre a
+   * un hijo que ya existe, o a uno nuevo con el diálogo de convertir. Si el
+   * hijo ya tiene examen para la misma unidad o rúbrica propia, se pregunta
+   * antes de pisar nada.
    */
-  const mover = async () => {
-    if (!escondidos) return
+  const mover = async (b: BloqueDirectoConUnidad) => {
+    const k = claveBloque(b)
+    const destino = destinos[k]
+    const bloque: FiltroBloque = { unidad_id: b.unidad_id, dia: b.dia }
     if (destino === 'nuevo') {
-      setConversion({ datos: escondidos, accion: 'lo nuevo', seguir: () => {} })
+      setConversion({ datos: b, accion: 'lo nuevo', seguir: () => {}, bloque })
       return
     }
     const hijo = hijos.find(h => String(h.id) === destino)
     if (!hijo) return
-    setMoviendo(true); setError(null); setMovido(null)
+    setMoviendo(k); setError(null); setMovido(null)
     try {
-      const choques = await conflictosAlMover(familia.id!, hijo.id!)
+      const choques = await conflictosAlMover(familia.id!, hijo.id!, bloque)
       let sustituir = false
       if (choques.examenes || choques.rubrica) {
         const que = [
@@ -125,7 +150,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
         ].filter(Boolean).join(' y ')
         sustituir = confirm(`«${hijo.nombre}» ya tiene ${que}.\n\nAceptar: sustituirlo por lo de «${familia.nombre}».\nCancelar: conservar lo del hijo (lo de la familia se queda donde está).`)
       }
-      const r = await moverDatosDeFamiliaAHijo(familia.id!, hijo.id!, { sustituir })
+      const r = await moverDatosDeFamiliaAHijo(familia.id!, hijo.id!, { sustituir, bloque })
       const partes = [
         r.calificaciones ? `${r.calificaciones} nota${r.calificaciones !== 1 ? 's' : ''}` : '',
         r.diario ? `${r.diario} registro${r.diario !== 1 ? 's' : ''} del diario` : '',
@@ -135,7 +160,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       setMovido(`${partes.length ? `Movido a «${hijo.nombre}»: ${partes.join(', ')}.` : 'Nada que mover.'}${quedan ? ` Se quedan en la familia ${quedan} que habrían pisado lo del hijo.` : ''}`)
       cambiado()
     } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo mover') }
-    finally { setMoviendo(false) }
+    finally { setMoviendo(null) }
   }
 
   const borrar = async (h: Instrumento) => {
@@ -180,6 +205,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
           datos={conversion.datos}
           accion={conversion.accion}
           capa={capa}
+          bloque={conversion.bloque}
           onSeguir={convertido => {
             const { seguir } = conversion
             setConversion(null)
@@ -233,23 +259,43 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
 
       {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12, marginBottom: 6 }}>{error}</div>}
 
-      {escondidos && (
-        <div data-familia-escondidos style={{ marginBottom: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ flex: '1 1 260px', lineHeight: 1.5 }}>
-            <strong>«{familia.nombre}» guarda a su nombre {[
-              escondidos.examenes ? `${escondidos.examenes} examen${escondidos.examenes !== 1 ? 'es' : ''}` : '',
-              escondidos.calificaciones ? `${escondidos.calificaciones} nota${escondidos.calificaciones !== 1 ? 's' : ''}` : '',
-              escondidos.diario ? `${escondidos.diario} registro${escondidos.diario !== 1 ? 's' : ''} del diario` : '',
-              escondidos.rubricas ? 'su rúbrica' : '',
-            ].filter(Boolean).join(', ')}</strong>, sin columna: con hijos dentro, la familia solo resume. Muévelo al instrumento que lo hizo de verdad.
-          </span>
-          <select data-mover-destino value={destino} onChange={e => setDestino(e.target.value)} style={{ fontSize: 12 }} disabled={moviendo}>
-            {hijos.map(h => <option key={h.id} value={String(h.id)}>{h.nombre}</option>)}
-            <option value="nuevo">Un instrumento nuevo…</option>
-          </select>
-          <button data-mover-aceptar className="btn-primary" style={{ fontSize: 12 }} onClick={mover} disabled={moviendo || !destino}>
-            {moviendo ? 'Moviendo…' : 'Mover'}
-          </button>
+      {escondidos.length > 0 && (
+        <div data-familia-escondidos style={{ marginBottom: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+          <div style={{ lineHeight: 1.5, marginBottom: 6 }}>
+            <strong>«{familia.nombre}» guarda a su nombre {describeBloque({
+              calificaciones: escondidos.reduce((n, b) => n + b.calificaciones, 0),
+              diario: escondidos.reduce((n, b) => n + b.diario, 0),
+              examenes: escondidos.reduce((n, b) => n + b.examenes, 0),
+              rubricas: escondidos.reduce((n, b) => n + b.rubricas, 0),
+            })}</strong>, sin columna: con hijos dentro, la familia solo resume. Cada bloque va al instrumento que lo hizo de verdad; la fecha es la de anotación en este aparato.
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {escondidos.map(b => {
+              const k = claveBloque(b)
+              return (
+                <div key={k} data-bloque-escondido data-unidad-id={b.unidad_id ?? ''} data-dia={b.dia ?? ''}
+                  style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', background: 'white', borderRadius: 6, padding: '6px 8px', border: '1px solid #fde68a' }}>
+                  <span style={{ flex: '1 1 240px', lineHeight: 1.45 }}>
+                    <strong data-bloque-unidad>{b.unidad_nombre ?? (b.unidad_id ? `Unidad ${b.unidad_id}` : 'Sin unidad')}</strong>
+                    {' · '}
+                    <span data-bloque-fecha title={b.ultima ?? ''}>{etiquetaDia(b.dia)}{b.ultima ? ` ${etiquetaHora(b.ultima)}` : ''}</span>
+                    {' — '}
+                    <span data-bloque-contenido>{describeBloque(b)}</span>
+                    {b.criterios.length > 0 && (
+                      <span style={{ color: 'var(--gris-600)' }}> · {b.criterios.join(', ')}</span>
+                    )}
+                  </span>
+                  <select data-mover-destino value={destinos[k] ?? ''} onChange={e => setDestinos(d => ({ ...d, [k]: e.target.value }))} style={{ fontSize: 12 }} disabled={moviendo != null}>
+                    {hijos.map(h => <option key={h.id} value={String(h.id)}>{h.nombre}</option>)}
+                    <option value="nuevo">Un instrumento nuevo…</option>
+                  </select>
+                  <button data-mover-aceptar className="btn-primary" style={{ fontSize: 12 }} onClick={() => mover(b)} disabled={moviendo != null || !destinos[k]}>
+                    {moviendo === k ? 'Moviendo…' : 'Mover'}
+                  </button>
+                </div>
+              )
+            })}
+          </div>
         </div>
       )}
       {movido && <div data-mover-resultado style={{ fontSize: 12, color: 'var(--verde-500)', fontWeight: 600, marginBottom: 6 }}>{movido}</div>}

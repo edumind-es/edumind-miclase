@@ -12,6 +12,7 @@
  */
 import { useState } from 'react'
 import { convertirFamiliaEnHijo, nombreGenericoDeFamilia, type DatosDirectosDeFamilia } from '@/db/queries'
+import type { FiltroBloque } from '@/db/bloquesFamilia'
 import type { Instrumento } from '@/db/localDb'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 
@@ -21,12 +22,17 @@ interface Props {
   /** Lo que el docente iba a hacer: «añadir “Oficial”» o «abrir el asistente». */
   accion: string
   capa?: string
+  /**
+   * Solo esta parte (unidad y día) de lo que la familia guarda: cuando ya
+   * hay hijos y el gestor mueve bloque a bloque a «un instrumento nuevo».
+   */
+  bloque?: FiltroBloque
   /** Convertido (o no), seguir con lo que iba a hacer. */
   onSeguir: (convertido: boolean) => void
   onCancelar: () => void
 }
 
-export default function ConvertirFamilia({ familia, datos, accion, capa, onSeguir, onCancelar }: Props) {
+export default function ConvertirFamilia({ familia, datos, accion, capa, bloque, onSeguir, onCancelar }: Props) {
   const cfg = getInstrConfig(familia.tipo)
   const propuesto = nombreGenericoDeFamilia(familia, cfg.label)
   const [nombreHijo, setNombreHijo] = useState(familia.nombre)
@@ -48,6 +54,7 @@ export default function ConvertirFamilia({ familia, datos, accion, capa, onSegui
       await convertirFamiliaEnHijo(familia.id!, {
         nombre_hijo: nombreHijo,
         nombre_familia: renombrar ? nombreFamilia : null,
+        bloque,
       })
       onSeguir(true)
     } catch (e) {
