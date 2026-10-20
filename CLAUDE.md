@@ -286,6 +286,20 @@ edumind_miclase/
   antes) y amplía los criterios del hijo con los que nombran las notas
   movidas, dentro de los de la familia. Lo que no se mueve se cuenta en
   `noMovidos` y se dice.
+- **La familia de un hijo la decide el docente, no el tipo.** Un examen
+  puede contar en el 20 % diario («Táboa de indicadores») si así trabaja
+  Luis: la prueba escrita oficial va en su familia y las de cotejo en la
+  otra. Cada fila de hijo lleva el selector `[data-hijo-familia]`;
+  `previsualizarCambioDeFamilia` dice qué criterios tendrá que añadir la
+  familia nueva y con qué peso entra, y `cambiarFamiliaDeHijo` (`queries.ts`)
+  solo cambia `familia_id`, peso (el medio de los nuevos hermanos), orden y
+  trimestres: notas, diario, examen y rúbrica siguen con el id del hijo, así
+  que nada se mueve ni se pierde, solo cambia con qué familia se funde. La
+  familia nueva AMPLÍA su `criterio_instrumentos` con los del hijo que no
+  evaluaba, porque sigue siendo el techo de sus hijos. Nada sin aceptar el
+  `confirm`. Cada `FamiliaHijos` relee cuando el gestor recarga (depende del
+  objeto `familia`, no solo de su id): si no, el bloque de destino no
+  enseñaba al recién llegado.
 - **El color identifica al instrumento, no a su tipo.** Ocho tonos de
   Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
   entre iguales (`colorDeInstrumento`), resueltos una vez en

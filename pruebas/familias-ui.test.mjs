@@ -202,6 +202,27 @@ try {
   const igualados = e.instrumentos.filter(i => i.familia_id === famProba.id).map(i => i.peso)
   ok(Math.max(...igualados) - Math.min(...igualados) <= 1 && igualados.reduce((a, b) => a + b, 0) === 100, '«Igualar» vuelve a partes iguales', igualados.join(' · '))
 
+  console.log('\n5c. Un examen cambia de familia: de la proba (80 %) a la táboa (20 %), porque así lo decide el docente')
+  e = await estado()
+  const famProba2 = e.instrumentos.find(i => i.familia_id == null && !/T[aá]boa/.test(i.nombre))
+  const examen = e.instrumentos.filter(i => i.familia_id === famProba2.id).sort((a, b) => a.id - b.id)[0]
+  const filasExamenAntes = e.filas.filter(f => f.instrumento_id === examen.id)
+  const filasTaboaAntes = e.filas.filter(f => f.instrumento_id === famTaboa.id).map(f => `${f.unidad_id}|${f.criterio_id}`)
+  const faltaban = filasExamenAntes.filter(f => !filasTaboaAntes.includes(`${f.unidad_id}|${f.criterio_id}`)).length
+  const filaExamen = proba.locator(`[data-hijo][data-nombre="${examen.nombre}"]`)
+  await filaExamen.locator('[data-hijo-familia]').selectOption(String(famTaboa.id))
+  await taboa.locator(`[data-hijo][data-nombre="${examen.nombre}"]`).waitFor({ timeout: 8000 })
+  ok(true, 'el examen aparece ahora dentro de la táboa')
+  ok(await proba.locator(`[data-hijo][data-nombre="${examen.nombre}"]`).count() === 0, 'y ya no está en la proba')
+  e = await estado()
+  const movido = e.instrumentos.find(i => i.id === examen.id)
+  ok(movido.familia_id === famTaboa.id, 'en IndexedDB cuelga de la táboa')
+  ok(e.filas.filter(f => f.instrumento_id === examen.id).length === filasExamenAntes.length, 'conserva sus criterios')
+  const filasTaboaDespues = e.filas.filter(f => f.instrumento_id === famTaboa.id).length
+  ok(filasTaboaDespues === filasTaboaAntes.length + faltaban, `la táboa amplía su programación con los ${faltaban} que no evaluaba`, `${filasTaboaAntes.length} → ${filasTaboaDespues}`)
+  ok(subconjunto(e), 'nada se sale de su familia')
+  await foto('familias-02-cambio-familia')
+
   console.log('\n6. La matriz por criterio no cambia')
   await gestor.getByRole('button', { name: 'Cerrar' }).click()
   await gestor.waitFor({ state: 'hidden', timeout: 5000 })

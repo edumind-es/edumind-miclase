@@ -633,6 +633,84 @@ export async function convertirFamiliaEnHijo(
     })
 }
 
+/** Lo que la familia de destino tendría que añadir a su programación para acoger al hijo. */
+export type CambioDeFamilia = {
+  hijo: Instrumento
+  familia_actual: Instrumento
+  familia_nueva: Instrumento
+  /** Por unidad, los criterios del hijo que la familia nueva aún no evalúa. */
+  anadir: { unidad_id: number; unidad_nombre: string; criterios: string[] }[]
+  /** Peso con el que entraría: el medio de sus nuevos hermanos. */
+  peso: number
+}
+
+/**
+ * Qué pasaría al cambiar un hijo de familia, para decirlo antes de hacerlo.
+ * Luis quiere «Examen · A nosa saúde» dentro de «Táboa de indicadores» (el
+ * 20 % diario) aunque sea una prueba escrita: la familia la decide el
+ * docente por cómo trabaja, no el tipo del instrumento.
+ */
+export async function previsualizarCambioDeFamilia(hijo_id: number, familia_id: number): Promise<CambioDeFamilia> {
+  const hijo = await db.instrumentos.get(hijo_id)
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  const [actual, nueva] = await Promise.all([db.instrumentos.get(hijo.familia_id), db.instrumentos.get(familia_id)])
+  if (!actual || actual.deleted_at) throw new Error('La familia actual no existe')
+  if (!nueva || nueva.deleted_at) throw new Error('La familia de destino no existe')
+  if (nueva.familia_id != null) throw new Error('Un hijo no puede colgar de otro hijo: elige una familia')
+  if (nueva.asignatura_id !== hijo.asignatura_id) throw new Error('La familia es de otra área')
+  if (nueva.id === actual.id) throw new Error('Ya está en esa familia')
+
+  const [delHijo, deNueva, hermanos] = await Promise.all([
+    db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray(),
+    db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray(),
+    getHijos(familia_id),
+  ])
+  const cubre = new Set(vivos(deNueva).map(f => `${f.unidad_id}|${f.criterio_id}`))
+  const porUnidad = new Map<number, string[]>()
+  for (const f of vivos(delHijo)) {
+    if (cubre.has(`${f.unidad_id}|${f.criterio_id}`)) continue
+    porUnidad.set(f.unidad_id, [...(porUnidad.get(f.unidad_id) ?? []), f.criterio_id])
+  }
+  const unidades = porUnidad.size ? await db.unidades.where('id').anyOf([...porUnidad.keys()]).toArray() : []
+  const anadir = [...porUnidad.entries()].map(([unidad_id, criterios]) => ({
+    unidad_id, unidad_nombre: unidades.find(u => u.id === unidad_id)?.nombre ?? `Unidad ${unidad_id}`,
+    criterios: criterios.sort((a, b) => a.localeCompare(b, 'es', { numeric: true })),
+  }))
+  return { hijo, familia_actual: actual, familia_nueva: nueva, anadir, peso: pesoMedio(hermanos) }
+}
+
+/**
+ * Cambia un hijo de familia conservando todo lo suyo: notas, diario, examen
+ * y rúbrica siguen con su id, así que nada se mueve ni se pierde; solo
+ * cambia en qué familia se funde y, por tanto, con qué peso entra en el área.
+ *
+ *  - La familia nueva amplía su programación con los criterios del hijo que
+ *    no evaluaba (`criterio_instrumentos`), porque la familia es el techo de
+ *    sus hijos y la matriz pinta las columnas desde ahí. Se dice antes.
+ *  - El hijo entra con el peso medio de sus nuevos hermanos y al final del
+ *    orden, como uno recién creado; los hermanos de antes no cambian: el
+ *    cálculo normaliza por la suma.
+ *  - Los trimestres pasan a ser los de la familia nueva.
+ */
+export async function cambiarFamiliaDeHijo(hijo_id: number, familia_id: number): Promise<CambioDeFamilia> {
+  const cambio = await previsualizarCambioDeFamilia(hijo_id, familia_id)
+  await db.transaction('rw', [db.instrumentos, db.criterio_instrumentos], async () => {
+    const hermanos = await getHijos(familia_id)
+    for (const u of cambio.anadir) {
+      const existentes = await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray()
+      for (const c of u.criterios) {
+        const borrada = existentes.find(f => f.unidad_id === u.unidad_id && f.criterio_id === c)
+        if (borrada) await db.criterio_instrumentos.update(borrada.id!, tocado({ deleted_at: null }))
+        else await db.criterio_instrumentos.add(nuevo({ unidad_id: u.unidad_id, criterio_id: c, instrumento_id: familia_id, peso: 1.0 }))
+      }
+    }
+    await db.instrumentos.update(hijo_id, tocado({
+      familia_id, peso: cambio.peso, orden: hermanos.length, trimestres: cambio.familia_nueva.trimestres,
+    }))
+  })
+  return cambio
+}
+
 /** Lo que impediría mover sin pisar nada: el hijo ya tiene su propio examen o rúbrica. */
 export type ConflictosMovimiento = {
   /** Exámenes de la familia para los que el hijo ya tiene uno de la misma unidad (o general). */
