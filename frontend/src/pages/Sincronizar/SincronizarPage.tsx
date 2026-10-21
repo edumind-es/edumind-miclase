@@ -379,6 +379,9 @@ export default function SincronizarPage() {
                   <strong>Último ciclo:</strong> {ultimo.enviados} enviados · {ultimo.recibidos} recibidos ·{' '}
                   {ultimo.aplicados} aplicados · {ultimo.descartados} ya estaban al día
                   {ultimo.conflictos > 0 && ` · ${ultimo.conflictos} versiones más antiguas descartadas`}
+                  {(ultimo.avisos ?? []).map((a, i) => (
+                    <div key={i} style={{ marginTop: 6, color: 'var(--azul-700)' }}>{a}</div>
+                  ))}
                   {ultimo.fusionados > 0 && (
                     <details style={{ marginTop: 8 }}>
                       <summary style={{ cursor: 'pointer', color: 'var(--azul-700)', fontWeight: 600 }}>

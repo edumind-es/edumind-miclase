@@ -102,16 +102,35 @@ export type Cabeceras = () => Record<string, string>
 
 // ─── Buzón de EDUmind ────────────────────────────────────────────────────
 
+/** Cuántas veces se vuelve a intentar una petición frenada con 429. */
+const REINTENTOS_429 = 4
+/** Espera entre intentos si el servidor no dice cuánto (`Retry-After`). */
+const ESPERA_429_MS = 15_000
+
+const dormir = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
 async function pedir(ruta: string, headers: Cabeceras, init: RequestInit = {}) {
   // El `content-type` describe el cuerpo: sin cuerpo no debe ir. Fastify 5
   // responde 400 a un `application/json` vacío, y el DELETE de vaciado no
   // lleva cuerpo. Antes se mandaba siempre y funcionaba de milagro.
   const tipo: Record<string, string> =
     init.body === undefined ? {} : { 'Content-Type': 'application/json' }
-  const res = await fetch(api(`/api/sync${ruta}`), {
-    ...init,
-    headers: { ...tipo, ...headers(), ...(init.headers || {}) },
-  })
+  let res: Response
+  for (let intento = 0; ; intento++) {
+    res = await fetch(api(`/api/sync${ruta}`), {
+      ...init,
+      headers: { ...tipo, ...headers(), ...(init.headers || {}) },
+    })
+    // 429 es nginx frenando por exceso de peticiones (120 por minuto): bajar
+    // un buzón de miles de sobres son decenas de tandas seguidas, y con otro
+    // aparato sincronizando desde la misma red se agota el margen. Antes se
+    // paraba en seco con «Error 429» y había que volver a pulsar a mano;
+    // ahora espera y sigue. La petición es la misma, así que repetirla no
+    // duplica nada.
+    if (res.status !== 429 || intento >= REINTENTOS_429) break
+    const segundos = Number(res.headers.get('Retry-After'))
+    await dormir(segundos > 0 ? segundos * 1000 : ESPERA_429_MS)
+  }
   const cuerpo = await res.json().catch(() => ({}))
   if (!res.ok) {
     const err: any = new Error(cuerpo.error || `Error ${res.status}`)
