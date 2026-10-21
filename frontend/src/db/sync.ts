@@ -96,6 +96,8 @@ export type ResultadoSync = {
   errores: string[]
   /** Sobres recibidos que no se pudieron descifrar: la señal de otra contraseña. */
   sinDescifrar?: number
+  /** Cosas que pasaron y conviene decir, sin ser un problema (p. ej. buzón reiniciado). */
+  avisos?: string[]
 }
 
 // ─── Utilidades binarias ─────────────────────────────────────────────────
@@ -542,6 +544,21 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
   const kSeq = cursor(K_PULL_SEQ, canal)
   let desde: number = await leerMeta(kSeq, 0)
   let hayMas = true
+
+  // Un buzón que va por detrás del cursor es un buzón nuevo: «Cambiar y
+  // borrar buzón» en otro aparato lo vuelve a numerar desde cero, y este
+  // seguía pidiendo lo posterior a un número que ya no existe —«0 recibidos»
+  // con miles de sobres a la vista—. Desbloquear con la contraseña nueva no
+  // lo arreglaba. Se vuelve al principio y se baja todo: fusionar lo que ya
+  // se tenía no cambia nada.
+  if (canal.esBuzon && desde > 0) {
+    const estado = await canal.estado()
+    if (desde > estado.seq) {
+      ;(res.avisos ??= []).push(`El buzón se reinició en otro aparato: se bajan de nuevo sus ${estado.seq} sobres`)
+      desde = 0
+      await guardarMeta(kSeq, 0)
+    }
+  }
 
   while (hayMas) {
     const r = await canal.traer(desde, LOTE, device_id)
