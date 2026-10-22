@@ -4,10 +4,11 @@
  *
  * El fichero es una tabla con una fila por pregunta:
  *
- *   | Pregunta | Puntos | Criterio |
+ *   | Pregunta | Puntos | Criterio | Aspecto |
  *
  * «Criterio» es opcional: si se rellena, cada criterio recibe la nota de sus
- * preguntas. Encima de la tabla pueden ir, cada uno en su fila, los ajustes
+ * preguntas. «Aspecto» también: el bloque o tema de la pregunta, para que el
+ * informe de la prueba diga qué falla. Encima de la tabla pueden ir, cada uno en su fila, los ajustes
  * del examen —todos opcionales—:
  *
  *   Tipo          puntos | test | niveles
@@ -111,6 +112,7 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
   const cab = filas[iCab]
   const colPuntos = cab.findIndex((c, j) => j > c0 && /^(puntos?|valor|puntuaci[oó]n|m[aá]x|peso)/i.test(c))
   const colCriterio = cab.findIndex((c, j) => j > c0 && /^criterio/i.test(c))
+  const colAspecto = cab.findIndex((c, j) => j > c0 && /^(aspecto|bloque|tema)/i.test(c))
   // Un test con clave: «Opciones» (separadas por «;», «·» o «/») y «Correcta» (la letra).
   const colOpciones = cab.findIndex((c, j) => j > c0 && /^opcion/i.test(c))
   const colCorrecta = cab.findIndex((c, j) => j > c0 && /^(correcta|clave|respuesta)/i.test(c))
@@ -129,8 +131,10 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
     if (puntos == null || puntos <= 0) sinPuntos++
     const opciones = colOpciones >= 0 ? (f[colOpciones] ?? '').split(/\s*[;·/]\s*/).map(limpiar).filter(Boolean) : []
     const correcta = colCorrecta >= 0 ? letraAIndice(f[colCorrecta] ?? '') : null
+    const aspecto = colAspecto >= 0 ? (f[colAspecto] ?? '') : ''
     preguntas.push({
       enunciado, max: puntos != null && puntos > 0 ? puntos : 1, criterio_id: criterio || null,
+      ...(aspecto ? { aspecto } : {}),
       ...(opciones.length ? { opciones, correcta } : {}),
     })
   }
@@ -191,7 +195,7 @@ const ES_PUNTOS_PREGUNTA = /^(?:[-*]\s+)?puntos?\s*:?\s*(\d+(?:[.,]\d+)?)\s*$/i
  * «Respuestas: 1-b, 2-c, 3-a». Es lo que escribe una IA cuando se le pide un
  * test, y lo que un docente escribe a mano sin pensar en formatos.
  *
- * Bajo una pregunta también valen «Criterio: CE1.2» y «Puntos: 2».
+ * Bajo una pregunta también valen «Criterio: CE1.2», «Puntos: 2» y «Aspecto: Ríos».
  */
 export function pruebaDeExamenMarkdown(texto: string, tituloPorDefecto: string): PruebaImportada {
   const avisos: string[] = []
@@ -242,6 +246,8 @@ export function pruebaDeExamenMarkdown(texto: string, tituloPorDefecto: string):
     if (!actual) continue
     const mCriterio = linea.match(ES_CRITERIO_PREGUNTA)
     if (mCriterio) { actual.criterio_id = mCriterio[1].toUpperCase(); continue }
+    const mAspecto = linea.match(/^\s*(?:aspecto|bloque|tema)\s*:\s*(.+?)\s*$/i)
+    if (mAspecto) { actual.aspecto = mAspecto[1]; continue }
     const mPuntos = linea.match(ES_PUNTOS_PREGUNTA)
     if (mPuntos) { actual.max = numero(mPuntos[1]) ?? 1; continue }
     const mOpcion = linea.match(ES_OPCION)
@@ -320,6 +326,7 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
       ? { enunciado: limpiar(q), max: 1 }
       : {
         id: q?.id, enunciado: limpiar(q?.enunciado ?? q?.pregunta), max: numero(q?.max ?? q?.puntos), criterio_id: limpiar(q?.criterio_id ?? q?.criterio),
+        aspecto: limpiar(q?.aspecto ?? q?.bloque),
         opciones: Array.isArray(q?.opciones) ? q.opciones.map(limpiar) : undefined,
         correcta: typeof q?.correcta === 'string' ? letraAIndice(q.correcta) : numero(q?.correcta),
       }),
@@ -353,6 +360,7 @@ const NOMBRE_REPARTO: Record<RepartoPrueba, string> = { unica: 'nota única', cr
 /** El examen como tabla, con la misma forma que se sabe leer. */
 export function filasDePrueba(d: PruebaDef): (string | number)[][] {
   const conCriterio = d.reparto === 'criterios' || d.preguntas.some(p => p.criterio_id)
+  const conAspecto = d.preguntas.some(p => p.aspecto)
   const conOpciones = d.tipo === 'test' && d.preguntas.some(p => p.opciones?.length)
   return [
     [d.titulo],
@@ -360,10 +368,11 @@ export function filasDePrueba(d: PruebaDef): (string | number)[][] {
     ['Reparto', NOMBRE_REPARTO[d.reparto]],
     ...(d.tipo === 'test' ? [['Penalización', d.penalizacion ?? 0]] : []),
     ...(d.tipo === 'niveles' ? [['Escala', ...(d.escala ?? []).map(n => `${n.nombre} (${n.valor})`)]] : []),
-    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
+    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conAspecto ? ['Aspecto'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
     ...d.preguntas.map((p, i) => [
       p.enunciado || `Pregunta ${i + 1}`, p.max,
       ...(conCriterio ? [p.criterio_id ?? ''] : []),
+      ...(conAspecto ? [p.aspecto ?? ''] : []),
       ...(conOpciones ? [(p.opciones ?? []).map(o => o.replace(/[;·/]/g, ',')).join(' ; '), p.correcta != null ? LETRAS[p.correcta] : ''] : []),
     ]),
   ]
@@ -379,6 +388,7 @@ export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean } =
   d.preguntas.forEach((p, i) => {
     lineas.push(`${i + 1}. ${p.enunciado || `Pregunta ${i + 1}`}`)
     if (opciones.conClave && p.criterio_id) lineas.push(`   Criterio: ${p.criterio_id}`)
+    if (opciones.conClave && p.aspecto) lineas.push(`   Aspecto: ${p.aspecto}`)
     if (opciones.conClave && p.max !== 1) lineas.push(`   Puntos: ${p.max}`)
     ;(p.opciones ?? []).forEach((o, j) => lineas.push(`   ${LETRAS[j].toLowerCase()}) ${o}`))
     lineas.push('')

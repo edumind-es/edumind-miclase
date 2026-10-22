@@ -35,6 +35,13 @@ export interface PreguntaPrueba {
   max: number
   criterio_id?: string | null
   /**
+   * Aspecto o bloque que trabaja la pregunta («Ríos», «Comprensión»,
+   * «Cálculo»), texto libre del docente. No cuenta para la nota: sirve al
+   * informe de la prueba para decir QUÉ falla la clase, más fino que el
+   * criterio. Opcional y sin índice: va dentro del JSON del examen.
+   */
+  aspecto?: string | null
+  /**
    * Solo `test`: las opciones entre las que elige el alumno, en orden (A, B,
    * C…). Con ellas el examen se puede imprimir y corregir por cámara.
    */
@@ -121,11 +128,13 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
       : []
     // `null` no es «la primera»: Number(null) da 0 y pondría correcta donde no la hay.
     const correcta = p?.correcta == null ? NaN : Number(p.correcta)
+    const aspecto = typeof p?.aspecto === 'string' ? p.aspecto.replace(/\s+/g, ' ').trim() : ''
     preguntas.push({
       id,
       enunciado: String(p?.enunciado ?? '').trim(),
       max: Number.isFinite(max) && max > 0 ? redondear2(max) : 1,
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
+      ...(aspecto ? { aspecto } : {}),
       ...(opciones.length ? { opciones } : {}),
       ...(opciones.length && Number.isInteger(correcta) && correcta >= 0 && correcta < opciones.length ? { correcta } : {}),
     })

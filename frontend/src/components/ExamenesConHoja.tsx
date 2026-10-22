@@ -29,6 +29,7 @@ import { getInstrConfig } from '@/ia/instrumentosConfig'
 import ImprimirTest from './ImprimirTest'
 import EscanerHojas from './EscanerHojas'
 import PruebaEditor from './PruebaEditor'
+import InformePrueba from './InformePrueba'
 import type { Alumno, Asignatura, Instrumento } from '@/db/localDb'
 
 type Cabeceras = () => Record<string, string>
@@ -81,6 +82,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
   const [aviso, setAviso] = useState<string | null>(null)
   const [imprimir, setImprimir] = useState<ContextoExamen | null>(null)
   const [corregir, setCorregir] = useState<ContextoExamen | null>(null)
+  const [informe, setInforme] = useState<ContextoExamen | null>(null)
   const [editar, setEditar] = useState<{ instrumento: Instrumento; asig: Asignatura; grupo: GrupoConCount | { nombre: string; curso: string; etapa: string }; unidad: UnidadConCriterios | null; criterios: { id: string; descripcion: string }[] } | null>(null)
   const [nuevo, setNuevo] = useState(false)
 
@@ -90,12 +92,12 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
     return () => { vigente = false }
   }, [recarga])
 
-  const abrir = async (prueba_id: number, que: 'imprimir' | 'corregir') => {
+  const abrir = async (prueba_id: number, que: 'imprimir' | 'corregir' | 'informe') => {
     setOcupado(prueba_id); setAviso(null)
     try {
       const ctx = await resolverContextoExamen(prueba_id, trimestre, headers)
       if (typeof ctx === 'string') { setAviso(ctx); return }
-      if (que === 'imprimir') setImprimir(ctx); else setCorregir(ctx)
+      if (que === 'imprimir') setImprimir(ctx); else if (que === 'informe') setInforme(ctx); else setCorregir(ctx)
     } finally { setOcupado(null) }
   }
 
@@ -162,6 +164,9 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
                   <button className="btn-secondary" data-examen-imprimir style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id || !f.conClave}
                     onClick={() => abrir(f.prueba.id, 'imprimir')}
                     title={f.conClave ? 'Imprimir la hoja de respuestas de cada alumno y el examen' : 'Completa opciones y correcta en todas las preguntas para poder imprimir'}>🖨 Imprimir hojas</button>
+                  <button className="btn-secondary" data-examen-informe style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id}
+                    onClick={() => abrir(f.prueba.id, 'informe')}
+                    title="Qué preguntas, criterios y aspectos falla la clase con este examen">📈 Informe</button>
                   <button className="btn-primary" data-examen-corregir style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id || !f.conClave}
                     onClick={() => abrir(f.prueba.id, 'corregir')}
                     title={f.conClave ? 'Corregir las hojas con la cámara, una tras otra' : 'Completa la clave del examen para corregir por cámara'}>📷 Corregir por cámara</button>
@@ -202,6 +207,19 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
           grupoNombre={imprimir.fila.grupo.nombre}
           areaNombre={imprimir.fila.asig.nombre_display}
           onCerrar={() => setImprimir(null)}
+        />
+      )}
+
+      {informe && (
+        <InformePrueba
+          instrumentoId={informe.col.ins.instrumento_id}
+          instrumentoNombre={informe.col.ins.nombre}
+          unidadId={informe.fila.prueba.unidad_id}
+          unidadNombre={informe.fila.unidad?.nombre}
+          criterios={informe.col.criterios}
+          grupoNombre={informe.fila.grupo.nombre}
+          areaNombre={informe.fila.asig.nombre_display}
+          onCerrar={() => setInforme(null)}
         />
       )}
 

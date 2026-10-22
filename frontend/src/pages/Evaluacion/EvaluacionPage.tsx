@@ -28,6 +28,7 @@ import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import PruebaEditor from '@/components/PruebaEditor'
+import InformePrueba from '@/components/InformePrueba'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
@@ -184,6 +185,7 @@ export default function EvaluacionPage() {
   const [importarMoodle, setImportarMoodle] = useState(false)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
   const [editarExamenEn, setEditarExamenEn] = useState<ColumnaInstrumento | null>(null)
+  const [informeEn, setInformeEn] = useState<ColumnaInstrumento | null>(null)
   const [escanearEn, setEscanearEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
@@ -760,6 +762,7 @@ export default function EvaluacionPage() {
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
                   onEditarExamen={col => setEditarExamenEn(col)}
+                  onInforme={col => setInformeEn(col)}
                 />
               )
             ) : (
@@ -1087,6 +1090,19 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onGuardado={() => setRefresco(r => r + 1)}
           onCerrar={() => setEscanearEn(null)}
+        />
+      )}
+
+      {informeEn && matriz && (
+        <InformePrueba
+          instrumentoId={informeEn.ins.instrumento_id}
+          instrumentoNombre={informeEn.ins.nombre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          criterios={informeEn.criterios}
+          grupoNombre={matriz.grupo.nombre}
+          areaNombre={matriz.asig.nombre_display}
+          onCerrar={() => setInformeEn(null)}
         />
       )}
 
