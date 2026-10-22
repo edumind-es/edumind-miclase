@@ -142,6 +142,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
         <PruebaEditor
           instrumentoId={pruebaDe.id!}
           instrumentoNombre={pruebaDe.nombre}
+          asignaturaId={asignaturaId}
           unidadId={null}
           criterios={[]}
           asignaturaNombre={asignaturaNombre}

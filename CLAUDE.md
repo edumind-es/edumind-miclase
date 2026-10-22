@@ -418,6 +418,20 @@ edumind_miclase/
   montando las notas en la pantalla: se corrige desde el panel de la casilla y
   desde la evaluación rápida, y las dos tienen que repartir igual. Cambiar un
   examen ya corregido ofrece `recalcularNotasDeExamen`; no se hace sin preguntar.
+- **Un examen se mueve, no se duplica, y mover no mueve notas.** `PruebaEditor`
+  lleva siempre el destino a la vista (`[data-destino-examen]`: selectores
+  «Instrumento del examen» y «Unidad del examen», con «Todas las unidades» como
+  general) y necesita `asignaturaId` para listar adónde se puede mover. Cambiar
+  el destino y guardar llama a `guardarPrueba(…, { mover: id })`, que cambia
+  `instrumento_id`/`unidad_id` en la MISMA fila con `updated_at` nuevo (viaja
+  en el sync sin duplicar) y retira el examen que hubiera en el destino solo
+  tras el `confirm`. Las correcciones ya hechas se quedan con el instrumento
+  y la unidad de origen —son notas, y cambiar la programación no las borra—;
+  el editor lo pregunta si había corregidos y lo dice al guardar. Con otro
+  destino, los criterios de las preguntas son los que ESE instrumento evalúa
+  en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
+  abre el editor directo con `[data-editar-examen]` (plegado tras
+  `[data-cabeceras-toggle]`), además de «Editar» en «Evaluar con QR y cámara».
 - **Una nota puesta no se pierde nunca por un recálculo.** La que cambia —o la
   que se queda sin nota— deja su valor como fantasma en
   `Calificacion.valor_anterior`: a la vista (columna duplicada y

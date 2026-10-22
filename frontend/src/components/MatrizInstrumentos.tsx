@@ -167,9 +167,11 @@ interface Props {
   onImprimir?: (col: ColumnaInstrumento) => void
   /** «Corregir por cámara»: la pila de hojas de respuestas. */
   onEscanear?: (col: ColumnaInstrumento) => void
+  /** «Editar examen»: el editor entero (título, preguntas, reparto, unidad e instrumento) sin pasar por una casilla. */
+  onEditarExamen?: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -307,6 +309,14 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       onClick={() => onEscanear(col)}
                       title="Corregir las hojas de respuestas con la cámara, una tras otra">
                       📷 Corregir por cámara
+                    </button>
+                  )}
+                  {/* Editar el examen entero es ocasional: plegado, con «Imprimir test». */}
+                  {esExamen && col.ins.tiene_prueba && onEditarExamen && (
+                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-editar-examen
+                      onClick={() => onEditarExamen(col)}
+                      title="Cambiar el examen: título, preguntas, reparto por criterios, o moverlo a otra unidad o instrumento">
+                      ✏️ Editar examen
                     </button>
                   )}
                   {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
