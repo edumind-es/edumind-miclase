@@ -284,7 +284,8 @@ export interface CriterioInstrumento extends Sincronizable {
  * en `instrumento_id`. Así viven en la misma tabla —se sincronizan y entran en
  * la copia de seguridad sin tocar el esquema ni el servidor— y sobreviven al
  * borrado de la clase en la que nacieron, que arrastra solo las rúbricas de
- * sus instrumentos.
+ * sus instrumentos. Los exámenes del banco de pruebas (`tipo: 'prueba'`)
+ * llevan el mismo valor, por las mismas razones.
  */
 export const INSTRUMENTO_BANCO = 0
 
