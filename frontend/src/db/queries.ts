@@ -11,6 +11,7 @@ import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
 import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
+import type { RespuestasAlumno } from './informePrueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
@@ -1945,6 +1946,27 @@ async function correccionesDeExamen(instrumento_id: number, unidad_id: number | 
     grupos.set(k, [...(grupos.get(k) ?? []), c])
   }
   return [...grupos.values()]
+}
+
+/**
+ * Las respuestas de cada alumno corregido con el examen de este ámbito, para
+ * el informe de la prueba. Un alumno sale una vez aunque tenga el examen
+ * en varios criterios: las respuestas son las mismas en todos.
+ */
+export async function respuestasDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<RespuestasAlumno[]> {
+  const grupos = await correccionesDeExamen(instrumento_id, unidad_id, def)
+  const salida: RespuestasAlumno[] = []
+  const vistos = new Set<number>()
+  for (const cals of grupos) {
+    const base = cals[0]
+    if (vistos.has(base.alumno_id)) continue
+    vistos.add(base.alumno_id)
+    const al = await db.alumnos.get(base.alumno_id)
+    if (!al || al.deleted_at) continue
+    const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)?.niveles_rubrica ?? {}
+    salida.push({ alumno_id: base.alumno_id, nombre: `${al.apellidos}, ${al.nombre}`, respuestas })
+  }
+  return salida
 }
 
 /** Cuántos alumnos tienen ya corregido el examen de este ámbito. */

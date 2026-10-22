@@ -432,6 +432,23 @@ edumind_miclase/
   en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
   abre el editor directo con `[data-editar-examen]` (plegado tras
   `[data-cabeceras-toggle]`), además de «Editar» en «Evaluar con QR y cámara».
+- **El informe de una prueba se calcula entero en el aparato y es del grupo,
+  no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
+  recibe la definición y las respuestas que ya guarda cada nota
+  (`respuestasDeExamen` en `queries.ts`, sobre `correccionesDeExamen`) y da:
+  por pregunta, aciertos, fallos y en blanco (test) o puntos medios (puntos y
+  niveles), con un índice de acierto 0-100 común; el orden por dificultad;
+  la nota media por criterio con `notaDePrueba`, la misma que puso la nota al
+  alumno; y los **ejes** del radial, que son los aspectos si alguna pregunta
+  trae `PreguntaPrueba.aspecto` (texto libre, sin índice, dentro del JSON;
+  columna «Aspecto» en el editor tras `[data-aspectos-toggle]`, y en xlsx,
+  md y json) y si no los criterios. La lectura es heurística (`redactar`):
+  reglas fijas sobre los porcentajes, cada frase comprobable en la tabla;
+  nada de IA. El gráfico es `radialSVG`, SVG puro sin librerías (barras con
+  menos de tres ejes). El documento (`informes/informePrueba.ts`, Lámina) no
+  lleva nombres de alumnos y sale por `imprimir`/`descargarHTML`. Se abre
+  desde la cabecera de la columna (`[data-informe-abrir]`, plegado) y desde
+  «Evaluar con QR y cámara» (`[data-examen-informe]`), en `InformePrueba`.
 - **Una nota puesta no se pierde nunca por un recálculo.** La que cambia —o la
   que se queda sin nota— deja su valor como fantasma en
   `Calificacion.valor_anterior`: a la vista (columna duplicada y

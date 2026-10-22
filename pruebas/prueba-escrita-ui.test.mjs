@@ -315,11 +315,28 @@ try {
   d = await bd()
   ok(d.notas[1][cA]?.valor === 6.43 && d.notas[1][cA]?.anterior == null, 'descartar quita la anterior y deja la que cuenta', JSON.stringify(d.notas[1][cA]))
 
-  console.log('\n7b. Mover el examen a otra unidad desde la cabecera de la columna')
+  console.log('\n7a. El informe de la prueba: qué falla la clase')
   {
     await cerrarPanel()
     await p.locator('[data-vista="instrumentos"]').click()
     await p.waitForTimeout(800)
+    const toggle = p.locator('[data-cabeceras-toggle]')
+    if ((await toggle.getAttribute('aria-pressed')) !== 'true') await toggle.click()
+    await p.locator('[data-informe-abrir]').first().click()
+    const informe = p.locator('[data-informe-prueba]')
+    ok(await aparece(informe), 'la cabecera abre el informe')
+    ok(await aparece(informe.locator('[data-informe-resumen]').getByText(/2 alumnos corregidos/)), 'con los dos alumnos corregidos')
+    ok(await informe.locator('[data-informe-lectura] li').count() >= 1, 'y una lectura con frases')
+    ok(await informe.locator('svg').count() === 1, 'y el gráfico radial, sin librerías')
+    const [fichero] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
+    ok(fichero.suggestedFilename() === 'informe-examen-de-la-unidad-1.html', 'se guarda como .html', fichero.suggestedFilename())
+    await foto('prueba-05-informe')
+    await informe.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    await informe.waitFor({ state: 'detached', timeout: 5000 })
+  }
+
+  console.log('\n7b. Mover el examen a otra unidad desde la cabecera de la columna')
+  {
     const toggle = p.locator('[data-cabeceras-toggle]')
     if ((await toggle.getAttribute('aria-pressed')) !== 'true') await toggle.click()
     await p.locator('[data-editar-examen]').first().click()

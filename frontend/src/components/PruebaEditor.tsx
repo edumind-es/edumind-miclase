@@ -101,6 +101,9 @@ export default function PruebaEditor({
   const ai = useLocalAI()
   /** Preguntas del test con las opciones desplegadas. */
   const [opcionesAbiertas, setOpcionesAbiertas] = useState<Set<string>>(new Set())
+  // La columna «Aspecto» (bloque o tema de cada pregunta, para el informe): a
+  // la vista si alguna pregunta lo trae; si no, tras un botón, que no estorbe.
+  const [conAspectos, setConAspectos] = useState(false)
   // El banco de pruebas: los exámenes de todas las clases, para copiar uno aquí.
   const [bancoAbierto, setBancoAbierto] = useState(false)
   const [refrescoBanco, setRefrescoBanco] = useState(0)
@@ -124,6 +127,7 @@ export default function PruebaEditor({
       const elegida = suya ?? todas.find(p => p.unidad_id == null)
       if (elegida) {
         setDef(elegida.def)
+        setConAspectos(elegida.def.preguntas.some(p => p.aspecto))
         setCargadaId(elegida.id)
         setCargadaEn({ instrumentoId, unidadId: elegida.unidad_id })
         setDestino({ instrumentoId, unidadId: elegida.unidad_id })
@@ -660,12 +664,23 @@ export default function PruebaEditor({
                 title="Deja ese número de preguntas, todas con los mismos puntos. Las que ya hay conservan su texto y su criterio.">
                 ⚖ Repartir a partes iguales
               </button>
+              <button className="btn-secondary" style={{ fontSize: 12.5 }} data-aspectos-toggle aria-pressed={conAspectos}
+                onClick={() => setConAspectos(v => !v)}
+                title="Un aspecto por pregunta («Ríos», «Cálculo»…): el informe de la prueba dirá qué aspectos falla la clase. No cuenta para la nota.">
+                🏷 Aspectos
+              </button>
               <div style={{ flex: 1 }} />
               <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--azul-900)' }}>
                 {def.preguntas.length} pregunta{def.preguntas.length !== 1 ? 's' : ''} · suman {total} puntos
               </span>
             </div>
 
+            {/* Los aspectos ya escritos se ofrecen al teclear, para repetirlos igual. */}
+            {conAspectos && (
+              <datalist id={`aspectos-${instrumentoId}`}>
+                {[...new Set(def.preguntas.map(p => p.aspecto).filter((a): a is string => !!a))].map(a => <option key={a} value={a} />)}
+              </datalist>
+            )}
             <div style={{ overflowX: 'auto', marginBottom: 10 }}>
               <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12.5 }}>
                 <thead>
@@ -674,6 +689,7 @@ export default function PruebaEditor({
                     <th style={{ padding: '7px 8px', textAlign: 'left' }}>Pregunta <span style={{ fontWeight: 400, opacity: .8 }}>(opcional: para reconocerla al corregir)</span></th>
                     <th style={{ padding: '7px 8px', textAlign: 'center', width: 84 }}>{def.tipo === 'niveles' ? 'Vale' : 'Puntos'}</th>
                     {def.reparto === 'criterios' && <th style={{ padding: '7px 8px', textAlign: 'left', width: 170 }}>Criterio</th>}
+                    {conAspectos && <th style={{ padding: '7px 8px', textAlign: 'left', width: 150 }}>Aspecto</th>}
                     <th style={{ width: 30 }} />
                   </tr>
                 </thead>
@@ -710,6 +726,13 @@ export default function PruebaEditor({
                           )}
                         </td>
                       )}
+                      {conAspectos && (
+                        <td style={{ padding: 5 }}>
+                          <input value={p.aspecto ?? ''} onChange={e => setPregunta(i, { aspecto: e.target.value || null })}
+                            aria-label={`Aspecto de la pregunta ${i + 1}`} placeholder="Ríos, cálculo…" list={`aspectos-${instrumentoId}`}
+                            style={{ width: '100%', fontSize: 12 }} />
+                        </td>
+                      )}
                       <td style={{ padding: 3, textAlign: 'center' }}>
                         <button onClick={() => removePregunta(i)} title="Eliminar pregunta" aria-label={`Eliminar la pregunta ${i + 1}`}
                           style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}>×</button>
@@ -726,7 +749,7 @@ export default function PruebaEditor({
                     return [fila, (
                       <tr key={`${p.id}-opciones`} data-opciones-de={p.id} style={{ background: i % 2 === 0 ? 'white' : '#f8fafc' }}>
                         <td />
-                        <td colSpan={def.reparto === 'criterios' ? 4 : 3} style={{ padding: '0 5px 8px' }}>
+                        <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (conAspectos ? 1 : 0)} style={{ padding: '0 5px 8px' }}>
                           <button type="button" onClick={() => alternarOpciones(p.id)} aria-expanded={abierta}
                             style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : '#92400e', cursor: 'pointer', fontWeight: 600 }}>
                             {abierta ? '▾' : '▸'} {resumen}
