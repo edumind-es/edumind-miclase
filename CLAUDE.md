@@ -150,6 +150,20 @@ edumind_miclase/
   unidad, o general con `unidad_id` null). Comparten tabla para sincronizarse
   sin tocar el esquema ni el servidor. Toda consulta de rúbricas filtra con
   `esRubrica`: sin él, un examen se abriría como una rúbrica vacía.
+- **El banco de pruebas es el banco de rúbricas con `tipo: 'prueba'`.** Un
+  examen del banco es una fila de `rubricas` con `instrumento_id =
+  INSTRUMENTO_BANCO`, `tipo: 'prueba'` y `prueba_json` (`getBancoPruebas`,
+  `guardarPruebaEnBanco`, `eliminarPruebaDelBanco`), con `area` y `nivel` de
+  origen; `esRubrica` lo aparta de todo lo de rúbricas y `listarPruebas` lo
+  ignora porque no cuelga de ningún instrumento vivo. Se elige y se guarda
+  desde `PruebaEditor` (`BancoPruebas`, `[data-banco-pruebas]`), que es
+  adonde llegan todos los caminos para definir un examen; sin examen propio y
+  con alguno en el banco, el editor abre con el banco a la vista. Elegir uno
+  es una **copia** al instrumento y unidad del editor, nunca un enlace, y las
+  preguntas con un criterio que el instrumento no evalúa quedan en «Todos».
+  Borrar un instrumento, un área o una clase deja una copia del examen en el
+  banco (`conservarRubricasEnBanco`), igual que las rúbricas; el mismo examen
+  en varios sitios sale una vez, por firma (`firmaPrueba`).
 - **La réplica a criterios vinculados vive en `saveCalificaciones`**, no en las
   pantallas: es el único sitio por el que pasan las notas (panel de celda,
   evaluación rápida, QR). Quién va con quién lo decide `db/vinculos.ts`,

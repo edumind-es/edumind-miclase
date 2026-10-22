@@ -12,7 +12,8 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   getPruebasDeInstrumento, guardarPrueba, eliminarPrueba,
-  contarCorregidosDeExamen, recalcularNotasDeExamen, type PruebaGuardada,
+  contarCorregidosDeExamen, recalcularNotasDeExamen, getBancoPruebas, guardarPruebaEnBanco,
+  type PruebaGuardada, type PruebaDeBanco,
 } from '@/db/queries'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva, preguntasSinClave,
@@ -27,6 +28,7 @@ import { generarPromptTest } from '@/ia/pruebaPrompt'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { TIPO_XLSX } from './AyudaImportarRubrica'
 import { descargarFichero } from '@/utils/compartir'
+import BancoPruebas from './BancoPruebas'
 
 interface Props {
   instrumentoId: number
@@ -87,6 +89,9 @@ export default function PruebaEditor({
   const ai = useLocalAI()
   /** Preguntas del test con las opciones desplegadas. */
   const [opcionesAbiertas, setOpcionesAbiertas] = useState<Set<string>>(new Set())
+  // El banco de pruebas: los exámenes de todas las clases, para copiar uno aquí.
+  const [bancoAbierto, setBancoAbierto] = useState(false)
+  const [refrescoBanco, setRefrescoBanco] = useState(0)
 
   const cerrar = () => {
     if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
@@ -111,8 +116,15 @@ export default function PruebaEditor({
         setAmbito(elegida.unidad_id == null ? 'general' : 'unidad')
         setGenN(elegida.def.preguntas.length)
         setGenTotal(puntosTotales(elegida.def))
+        setCargando(false)
+        return
       }
-      setCargando(false)
+      // Sin examen aquí todavía: si el banco tiene alguno, elegirlo es lo
+      // primero que se ofrece, antes que definir uno de cero.
+      getBancoPruebas()
+        .then(banco => setBancoAbierto(banco.some(b => b.enBanco || b.instrumentoIds.some(id => id !== instrumentoId))))
+        .catch(() => {})
+        .finally(() => setCargando(false))
     }).catch(() => setCargando(false))
   }, [instrumentoId, unidadId])
 
@@ -213,6 +225,54 @@ export default function PruebaEditor({
       cargarRespuesta(respuesta)
     } catch (e: any) {
       setIaError(e.message || 'La IA local no ha podido generar el test.')
+    }
+  }
+
+  // ── Banco de pruebas ───────────────────────────────────────────────────
+
+  /**
+   * Elegir un examen del banco lo COPIA aquí: adaptarlo no toca el original.
+   * Las preguntas que nombran un criterio que este instrumento no evalúa
+   * quedan en «Todos» (si el examen viene de otra área, ninguno casará).
+   */
+  const cargarDelBanco = (origen: PruebaDeBanco) => {
+    if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
+    const conocidos = new Set(criterios.map(c => c.id))
+    let sueltas = 0
+    const preguntas = origen.def.preguntas.map(p => {
+      if (!p.criterio_id || !criterios.length || conocidos.has(p.criterio_id)) return p
+      sueltas++
+      return { ...p, criterio_id: null }
+    })
+    const prueba = normalizarPrueba({ ...origen.def, preguntas })
+    setDef(prueba)
+    setSucio(true)
+    setGenN(prueba.preguntas.length)
+    setGenTotal(puntosTotales(prueba))
+    setOpcionesAbiertas(new Set())
+    setBancoAbierto(false)
+    setMsg({
+      tipo: 'ok',
+      texto: `«${prueba.titulo}» copiado de tu banco.`
+        + (sueltas ? ` ${sueltas} pregunta${sueltas !== 1 ? 's' : ''} nombraba${sueltas !== 1 ? 'n' : ''} un criterio que «${instrumentoNombre}» no evalúa aquí y queda${sueltas !== 1 ? 'n' : ''} en «Todos».` : '')
+        + ' Adáptalo si hace falta y pulsa «Guardar examen».',
+    })
+  }
+
+  /** Copia aparte en el banco. Los exámenes en uso ya salen en él, pero la copia sobrevive al borrado de la clase. */
+  const guardarEnMiBanco = async () => {
+    if (def.preguntas.length === 0) { setMsg({ tipo: 'error', texto: 'Añade al menos una pregunta.' }); return }
+    try {
+      const { yaEstaba } = await guardarPruebaEnBanco(normalizarPrueba(def), { area: asignaturaNombre, nivel })
+      setRefrescoBanco(n => n + 1)
+      setMsg({
+        tipo: 'ok',
+        texto: yaEstaba
+          ? `«${def.titulo}» ya estaba en tu banco, tal cual.`
+          : `«${def.titulo}» guardado en tu banco. Seguirá ahí aunque borres este instrumento o la clase.`,
+      })
+    } catch {
+      setMsg({ tipo: 'error', texto: 'No se pudo guardar en el banco.' })
     }
   }
 
@@ -335,6 +395,11 @@ export default function PruebaEditor({
             )}
 
             {ayuda && <AyudaImportarPrueba onCerrar={() => setAyuda(false)} />}
+
+            {bancoAbierto && (
+              <BancoPruebas instrumentoId={instrumentoId} refresco={refrescoBanco}
+                onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
+            )}
 
             <div style={{ marginBottom: 14 }}>
               <label style={etiqueta}>Título del examen</label>
@@ -641,6 +706,14 @@ export default function PruebaEditor({
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
               <button className="btn-secondary" style={{ fontSize: 12 }} onClick={addPregunta}>+ Añadir pregunta</button>
               <div style={{ flex: 1 }} />
+              <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => setBancoAbierto(v => !v)} aria-expanded={bancoAbierto}
+                title="Elegir un examen ya definido en cualquiera de tus clases: se copia aquí">
+                📚 Mi banco
+              </button>
+              <button className="btn-secondary" style={{ fontSize: 12 }} onClick={guardarEnMiBanco} disabled={def.preguntas.length === 0}
+                title="Guardar una copia en tu banco, que no desaparece si borras el instrumento o la clase">
+                ⭐ Guardar en mi banco
+              </button>
               <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => importRef.current?.click()}
                 title="Definir el examen desde una hoja de cálculo (.xlsx), un Markdown (.md) o un JSON (.json)">
                 📥 Importar
