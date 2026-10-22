@@ -1821,12 +1821,34 @@ export async function getPrueba(instrumento_id: number, unidad_id: number | null
     ?? null
 }
 
-/** Guarda el examen de un instrumento para una unidad (o el general, con null). Uno por ámbito. */
-export async function guardarPrueba(instrumento_id: number, unidad_id: number | null, def: PruebaDef): Promise<number> {
+/**
+ * Guarda el examen de un instrumento para una unidad (o el general, con null).
+ * Uno por ámbito.
+ *
+ * Con `mover`, el examen que ya existía con ese id se lleva a este
+ * instrumento y unidad en la MISMA fila (viaja en el siguiente sync sin
+ * duplicarse); el que hubiera en el destino se retira, y eso lo confirma
+ * antes quien llama. Las correcciones ya hechas no se mueven: son notas del
+ * instrumento y la unidad de origen, y mover un examen no mueve
+ * calificaciones, igual que cambiar la programación no las borra.
+ */
+export async function guardarPrueba(
+  instrumento_id: number, unidad_id: number | null, def: PruebaDef, opciones: { mover?: number } = {},
+): Promise<number> {
   const limpia = normalizarPrueba(def)
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
   const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
     .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
+  if (opciones.mover != null && existente?.id !== opciones.mover) {
+    const origen = await db.rubricas.get(opciones.mover)
+    if (origen && origen.tipo === 'prueba' && !origen.deleted_at) {
+      if (existente?.id != null && !existente.deleted_at) {
+        await db.rubricas.update(existente.id, tocado({ deleted_at: sello() }))
+      }
+      await db.rubricas.update(origen.id!, tocado({ ...campos, instrumento_id }))
+      return origen.id!
+    }
+  }
   if (existente?.id != null) {
     await db.rubricas.update(existente.id, tocado({ ...campos, deleted_at: null }))
     return existente.id
@@ -1837,6 +1859,16 @@ export async function guardarPrueba(instrumento_id: number, unidad_id: number | 
   })
   await db.rubricas.add(reg)
   return reg.id
+}
+
+/**
+ * Criterios que un instrumento evalúa según la programación: los de una
+ * unidad, o los de todas si el examen es general. Son los que el editor del
+ * examen ofrece para repartir las preguntas cuando se cambia de destino.
+ */
+export async function criteriosQueEvalua(instrumento_id: number, unidad_id: number | null): Promise<string[]> {
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+  return [...new Set(filas.filter(f => unidad_id == null || f.unidad_id === unidad_id).map(f => f.criterio_id))].sort()
 }
 
 /** Los campos de una nota que no dependen del criterio ni del alumno. */

@@ -13,8 +13,10 @@ import { useEffect, useRef, useState } from 'react'
 import {
   getPruebasDeInstrumento, guardarPrueba, eliminarPrueba,
   contarCorregidosDeExamen, recalcularNotasDeExamen, getBancoPruebas, guardarPruebaEnBanco,
+  getUnidades, getInstrumentos, criteriosQueEvalua,
   type PruebaGuardada, type PruebaDeBanco,
 } from '@/db/queries'
+import type { Instrumento, Unidad } from '@/db/localDb'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva, preguntasSinClave,
   TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
@@ -33,6 +35,8 @@ import BancoPruebas from './BancoPruebas'
 interface Props {
   instrumentoId: number
   instrumentoNombre: string
+  /** Área del instrumento: de ella salen las unidades e instrumentos a los que se puede mover el examen. */
+  asignaturaId: number
   /** Unidad desde la que se abre, o null si se abre desde el gestor de instrumentos. */
   unidadId: number | null
   unidadNombre?: string
@@ -45,7 +49,9 @@ interface Props {
   capa?: string
 }
 
-type Ambito = 'unidad' | 'general'
+/** Dónde vive el examen: instrumento y unidad (null = general del instrumento). */
+type Destino = { instrumentoId: number; unidadId: number | null }
+const mismoDestino = (a: Destino, b: Destino) => a.instrumentoId === b.instrumentoId && a.unidadId === b.unidadId
 
 // Por `descargarFichero`, nunca por un `<a download>`: en la app nativa ese
 // enlace no hace nada y el examen exportado no saldría.
@@ -62,14 +68,20 @@ const PENALIZACIONES = [
 ]
 
 export default function PruebaEditor({
-  instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)',
+  instrumentoId, instrumentoNombre, asignaturaId, unidadId, unidadNombre, criterios, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)',
 }: Props) {
   const [cargando, setCargando] = useState(true)
   const [def, setDef] = useState<PruebaDef>(pruebaVacia(instrumentoNombre))
   const [guardadas, setGuardadas] = useState<PruebaGuardada[]>([])
-  /** Fila de la que salió lo que hay en pantalla, si salió de alguna. */
+  /** Fila de la que salió lo que hay en pantalla, si salió de alguna, y dónde vive. */
   const [cargadaId, setCargadaId] = useState<number | null>(null)
-  const [ambito, setAmbito] = useState<Ambito>(unidadId != null ? 'unidad' : 'general')
+  const [cargadaEn, setCargadaEn] = useState<Destino>({ instrumentoId, unidadId })
+  // Destino del examen: desde donde se abrió, salvo que el docente lo mueva.
+  const [destino, setDestino] = useState<Destino>({ instrumentoId, unidadId })
+  const [unidades, setUnidades] = useState<Unidad[]>([])
+  const [instrumentos, setInstrumentos] = useState<Instrumento[]>([])
+  /** Criterios del destino elegido cuando no es el de apertura: se leen de la programación. */
+  const [criteriosDeDestino, setCriteriosDeDestino] = useState<{ id: string; descripcion: string }[] | null>(null)
   const [sucio, setSucio] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
@@ -113,7 +125,8 @@ export default function PruebaEditor({
       if (elegida) {
         setDef(elegida.def)
         setCargadaId(elegida.id)
-        setAmbito(elegida.unidad_id == null ? 'general' : 'unidad')
+        setCargadaEn({ instrumentoId, unidadId: elegida.unidad_id })
+        setDestino({ instrumentoId, unidadId: elegida.unidad_id })
         setGenN(elegida.def.preguntas.length)
         setGenTotal(puntosTotales(elegida.def))
         setCargando(false)
@@ -127,6 +140,32 @@ export default function PruebaEditor({
         .finally(() => setCargando(false))
     }).catch(() => setCargando(false))
   }, [instrumentoId, unidadId])
+
+  // Unidades e instrumentos de prueba escrita del área: adonde se puede mover el examen.
+  useEffect(() => {
+    getUnidades(asignaturaId).then(setUnidades).catch(() => {})
+    getInstrumentos(asignaturaId).then(l => setInstrumentos(l.filter(i => i.tipo === 'prueba-escrita'))).catch(() => {})
+  }, [asignaturaId])
+
+  // Con otro destino, los criterios que se pueden asignar a las preguntas son
+  // los que ESE instrumento evalúa en ESA unidad, no los de apertura.
+  const abiertoEn: Destino = { instrumentoId, unidadId }
+  useEffect(() => {
+    if (mismoDestino(destino, abiertoEn)) { setCriteriosDeDestino(null); return }
+    let vigente = true
+    const descripciones = new Map(criterios.map(c => [c.id, c.descripcion]))
+    criteriosQueEvalua(destino.instrumentoId, destino.unidadId)
+      .then(ids => { if (vigente) setCriteriosDeDestino(ids.map(id => ({ id, descripcion: descripciones.get(id) ?? '' }))) })
+      .catch(() => {})
+    return () => { vigente = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [destino.instrumentoId, destino.unidadId, instrumentoId, unidadId])
+  const criteriosActivos = criteriosDeDestino ?? criterios
+  const instrumentoDestino = instrumentos.find(i => i.id === destino.instrumentoId)
+  const nombreInstrumento = instrumentoDestino?.nombre ?? instrumentoNombre
+  const unidadDestinoObj = destino.unidadId != null ? unidades.find(u => u.id === destino.unidadId) : undefined
+  const nombreUnidad = unidadDestinoObj?.nombre ?? (destino.unidadId === unidadId ? unidadNombre : undefined)
+  const seMueve = cargadaId != null && !mismoDestino(destino, cargadaEn)
 
   const editar = (fn: (d: PruebaDef) => PruebaDef) => { setSucio(true); setDef(fn) }
 
@@ -193,7 +232,7 @@ export default function PruebaEditor({
   const prompt = generarPromptTest({
     asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
     contexto: iaContexto, nPreguntas: iaN, nOpciones: iaOpciones,
-    criterios: def.reparto === 'criterios' ? criterios : undefined,
+    criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
   })
   const copiarPrompt = async () => {
     await navigator.clipboard.writeText(prompt)
@@ -237,10 +276,10 @@ export default function PruebaEditor({
    */
   const cargarDelBanco = (origen: PruebaDeBanco) => {
     if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
-    const conocidos = new Set(criterios.map(c => c.id))
+    const conocidos = new Set(criteriosActivos.map(c => c.id))
     let sueltas = 0
     const preguntas = origen.def.preguntas.map(p => {
-      if (!p.criterio_id || !criterios.length || conocidos.has(p.criterio_id)) return p
+      if (!p.criterio_id || !criteriosActivos.length || conocidos.has(p.criterio_id)) return p
       sueltas++
       return { ...p, criterio_id: null }
     })
@@ -254,7 +293,7 @@ export default function PruebaEditor({
     setMsg({
       tipo: 'ok',
       texto: `«${prueba.titulo}» copiado de tu banco.`
-        + (sueltas ? ` ${sueltas} pregunta${sueltas !== 1 ? 's' : ''} nombraba${sueltas !== 1 ? 'n' : ''} un criterio que «${instrumentoNombre}» no evalúa aquí y queda${sueltas !== 1 ? 'n' : ''} en «Todos».` : '')
+        + (sueltas ? ` ${sueltas} pregunta${sueltas !== 1 ? 's' : ''} nombraba${sueltas !== 1 ? 'n' : ''} un criterio que «${nombreInstrumento}» no evalúa aquí y queda${sueltas !== 1 ? 'n' : ''} en «Todos».` : '')
         + ' Adáptalo si hace falta y pulsa «Guardar examen».',
     })
   }
@@ -278,31 +317,41 @@ export default function PruebaEditor({
 
   // ── Guardar ────────────────────────────────────────────────────────────
 
-  const unidadDestino = ambito === 'unidad' ? unidadId : null
+  const unidadDestino = destino.unidadId
+  const idInstrumentoDestino = destino.instrumentoId
 
   const guardar = async () => {
     if (def.preguntas.length === 0) { setMsg({ tipo: 'error', texto: 'Añade al menos una pregunta.' }); return }
     // Guardar sobre el examen de otro ámbito lo sustituye: se pregunta.
-    const yaHay = guardadas.find(p => p.unidad_id === unidadDestino)
+    const enDestino = idInstrumentoDestino === instrumentoId ? guardadas : await getPruebasDeInstrumento(idInstrumentoDestino)
+    const yaHay = enDestino.find(p => p.unidad_id === unidadDestino)
     if (yaHay && yaHay.id !== cargadaId && !confirm(
-      `Ya hay un examen ${unidadDestino == null ? 'general de este instrumento' : 'para esta unidad'} («${yaHay.def.titulo}»).\n\n¿Sustituirlo por este?`)) return
+      `Ya hay un examen ${unidadDestino == null ? `general de «${nombreInstrumento}»` : `de «${nombreInstrumento}» para ${nombreUnidad ? `«${nombreUnidad}»` : 'esa unidad'}`} («${yaHay.def.titulo}»).\n\n¿Sustituirlo por este?`)) return
+    // Mover un examen ya corregido: las notas se quedan donde se pusieron.
+    if (seMueve) {
+      const corregidosOrigen = await contarCorregidosDeExamen(cargadaEn.instrumentoId, cargadaEn.unidadId, def)
+      if (corregidosOrigen > 0 && !confirm(
+        `Este examen ya está corregido para ${corregidosOrigen} alumno${corregidosOrigen !== 1 ? 's' : ''} donde estaba.\n\nAl moverlo, esas notas se quedan en su instrumento y unidad de origen (no se pierden ni se mueven) y en el nuevo sitio el examen empieza sin corregir.\n\n¿Mover el examen?`)) return
+    }
     setGuardando(true)
     try {
       const limpia = normalizarPrueba(def)
-      const id = await guardarPrueba(instrumentoId, unidadDestino, limpia)
+      const id = await guardarPrueba(idInstrumentoDestino, unidadDestino, limpia, seMueve ? { mover: cargadaId! } : {})
       setDef(limpia)
       setCargadaId(id)
+      const movido = seMueve
+      setCargadaEn({ instrumentoId: idInstrumentoDestino, unidadId: unidadDestino })
       setGuardadas(await getPruebasDeInstrumento(instrumentoId))
       setSucio(false)
       // Un examen ya corregido que cambia deja notas que no salen del examen
       // nuevo. Se ofrece recalcularlas; no se hace sin preguntar, porque son
       // notas ya puestas.
-      const corregidos = await contarCorregidosDeExamen(instrumentoId, unidadDestino, limpia)
+      const corregidos = await contarCorregidosDeExamen(idInstrumentoDestino, unidadDestino, limpia)
       let recalculo = ''
       if (corregidos > 0) {
         if (confirm(`Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`)) {
           const hoy = new Date().toLocaleDateString('es-ES')
-          const r = await recalcularNotasDeExamen(instrumentoId, unidadDestino, limpia,
+          const r = await recalcularNotasDeExamen(idInstrumentoDestino, unidadDestino, limpia,
             `Nota de «${limpia.titulo}» antes de cambiar el examen el ${hoy}`)
           recalculo = ` Notas recalculadas para ${r.alumnos} alumno${r.alumnos !== 1 ? 's' : ''}.`
             + (r.fantasmas ? ` ${r.fantasmas} nota${r.fantasmas !== 1 ? 's' : ''} anterior${r.fantasmas !== 1 ? 'es quedan' : ' queda'} a la vista en el calificador, sin contar.` : '')
@@ -310,7 +359,8 @@ export default function PruebaEditor({
           recalculo = ' Las notas ya puestas se quedan como estaban.'
         }
       }
-      setMsg({ tipo: 'ok', texto: `Examen guardado.${recalculo || ' Al abrir a un alumno lo corregirás pregunta a pregunta.'}` })
+      const donde = movido ? ` Movido a «${nombreInstrumento}»${unidadDestino == null ? ' (general)' : nombreUnidad ? ` · ${nombreUnidad}` : ''}; las notas ya puestas se quedan donde estaban.` : ''
+      setMsg({ tipo: 'ok', texto: `Examen guardado.${donde}${recalculo || ' Al abrir a un alumno lo corregirás pregunta a pregunta.'}` })
     } catch {
       setMsg({ tipo: 'error', texto: 'No se pudo guardar el examen.' })
     } finally { setGuardando(false) }
@@ -353,7 +403,7 @@ export default function PruebaEditor({
 
   const nombreFichero = (def.titulo || instrumentoNombre).replace(/\s+/g, '-').toLowerCase()
   const total = puntosTotales(def)
-  const sinDestino = criterios.length ? criteriosSinDestino(def, criterios.map(c => c.id)) : []
+  const sinDestino = criteriosActivos.length ? criteriosSinDestino(def, criteriosActivos.map(c => c.id)) : []
   const etiqueta = { fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4, color: 'var(--gris-700)' } as const
 
   return (
@@ -372,7 +422,7 @@ export default function PruebaEditor({
           <div>
             <div style={{ fontSize: 12, opacity: .8, marginBottom: 2 }}>Prueba escrita</div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>
-              {instrumentoNombre}{unidadNombre ? ` · ${unidadNombre}` : ''}
+              {nombreInstrumento}{nombreUnidad ? ` · ${nombreUnidad}` : ''}
             </div>
           </div>
           <button onClick={cerrar} aria-label="Cerrar" style={{ background: 'none', border: 'none', color: 'white', fontSize: 22, cursor: 'pointer', lineHeight: 1, padding: '0 4px' }}>×</button>
@@ -386,7 +436,7 @@ export default function PruebaEditor({
         ) : (<>
           <div style={{ padding: 20, overflowY: 'auto', flex: 1, minHeight: 0 }}>
             {msg && (
-              <div style={{
+              <div data-mensaje={msg.tipo} style={{
                 marginBottom: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13,
                 background: msg.tipo === 'ok' ? '#dcfce7' : '#fee2e2', color: msg.tipo === 'ok' ? '#166534' : '#991b1b',
               }}>
@@ -407,24 +457,37 @@ export default function PruebaEditor({
                 aria-label="Título del examen" style={{ width: '100%', fontSize: 15, fontWeight: 600 }} />
             </div>
 
-            {unidadId != null && (
-              <div style={{ marginBottom: 14 }}>
-                <span style={etiqueta}>Este examen es de</span>
-                <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 13 }}>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input type="radio" name="ambito-examen" checked={ambito === 'unidad'} onChange={() => { setAmbito('unidad'); setSucio(true) }} />
-                    Esta unidad{unidadNombre ? ` («${unidadNombre}»)` : ''}
-                  </label>
-                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                    <input type="radio" name="ambito-examen" checked={ambito === 'general'} onChange={() => { setAmbito('general'); setSucio(true) }} />
-                    Todas las unidades que usan «{instrumentoNombre}»
-                  </label>
-                </div>
-                <div style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 3 }}>
-                  Si cada unidad tiene su examen, déjalo en «Esta unidad»: las demás tendrán el suyo.
-                </div>
+            {/* Dónde vive el examen. Cambiarlo y guardar lo MUEVE: misma fila,
+                otro instrumento o unidad; las notas ya puestas no se mueven. */}
+            <div style={{ marginBottom: 14 }} data-destino-examen>
+              <span style={etiqueta}>Este examen es de</span>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', fontSize: 13 }}>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: '1 1 200px', fontSize: 11.5, color: 'var(--gris-600)' }}>
+                  Instrumento
+                  <select aria-label="Instrumento del examen" value={destino.instrumentoId}
+                    onChange={e => { setDestino(d => ({ ...d, instrumentoId: Number(e.target.value) })); setSucio(true) }}
+                    style={{ fontSize: 13 }}>
+                    {!instrumentos.some(i => i.id === destino.instrumentoId) && <option value={destino.instrumentoId}>{nombreInstrumento}</option>}
+                    {instrumentos.map(i => <option key={i.id} value={i.id}>{i.nombre}</option>)}
+                  </select>
+                </label>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: '1 1 200px', fontSize: 11.5, color: 'var(--gris-600)' }}>
+                  Unidad
+                  <select aria-label="Unidad del examen" value={destino.unidadId ?? ''}
+                    onChange={e => { setDestino(d => ({ ...d, unidadId: e.target.value === '' ? null : Number(e.target.value) })); setSucio(true) }}
+                    style={{ fontSize: 13 }}>
+                    <option value="">Todas las unidades que usan «{nombreInstrumento}»</option>
+                    {unidades.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
+                    {destino.unidadId != null && !unidades.some(u => u.id === destino.unidadId) && <option value={destino.unidadId}>{nombreUnidad ?? 'Esta unidad'}</option>}
+                  </select>
+                </label>
               </div>
-            )}
+              <div style={{ fontSize: 11.5, color: seMueve ? '#92400e' : 'var(--gris-500)', marginTop: 3 }}>
+                {seMueve
+                  ? <>Al guardar, el examen se <strong>mueve</strong> ahí. Las notas ya puestas se quedan en su sitio de origen.</>
+                  : <>Si cada unidad tiene su examen, déjalo en la suya: las demás tendrán el suyo.</>}
+              </div>
+            </div>
 
             <div style={{ marginBottom: 14 }}>
               <span style={etiqueta}>Tipo de examen</span>
@@ -631,12 +694,12 @@ export default function PruebaEditor({
                       </td>
                       {def.reparto === 'criterios' && (
                         <td style={{ padding: 5 }}>
-                          {criterios.length ? (
+                          {criteriosActivos.length ? (
                             <select value={p.criterio_id ?? ''} onChange={e => setPregunta(i, { criterio_id: e.target.value || null })}
                               aria-label={`Criterio de la pregunta ${i + 1}`} style={{ width: '100%', fontSize: 12 }}>
                               <option value="">Todos</option>
-                              {criterios.map(c => <option key={c.id} value={c.id} title={c.descripcion}>{c.id}</option>)}
-                              {p.criterio_id && !criterios.some(c => c.id === p.criterio_id) && (
+                              {criteriosActivos.map(c => <option key={c.id} value={c.id} title={c.descripcion}>{c.id}</option>)}
+                              {p.criterio_id && !criteriosActivos.some(c => c.id === p.criterio_id) && (
                                 <option value={p.criterio_id}>{p.criterio_id} (no asignado)</option>
                               )}
                             </select>
@@ -698,8 +761,8 @@ export default function PruebaEditor({
 
             {sinDestino.length > 0 && (
               <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
-                <strong>{sinDestino.join(', ')}</strong> {sinDestino.length === 1 ? 'no está asignado' : 'no están asignados'} a «{instrumentoNombre}» en la
-                programación{unidadNombre ? ' de esta unidad' : ''}: sus preguntas no pondrán nota en ningún sitio. Asígnale el instrumento en 📋 Programación o cambia el criterio de esas preguntas.
+                <strong>{sinDestino.join(', ')}</strong> {sinDestino.length === 1 ? 'no está asignado' : 'no están asignados'} a «{nombreInstrumento}» en la
+                programación{nombreUnidad ? ` de «${nombreUnidad}»` : ''}: sus preguntas no pondrán nota en ningún sitio. Asígnale el instrumento en 📋 Programación o cambia el criterio de esas preguntas.
               </div>
             )}
 

@@ -62,6 +62,10 @@ const bd = () => p.evaluate(async () => {
     examenes: rubricas.filter(r => r.tipo === 'prueba').map(r => ({ titulo: r.titulo, unidad_id: r.unidad_id, def: JSON.parse(r.prueba_json) })),
     rubricas: rubricas.filter(r => r.tipo !== 'prueba').length,
     ud1: ud1.id,
+    ud1Nombre: ud1.nombre,
+    /** Otra unidad del área, para mover el examen. */
+    otraUnidad: unidades.find(u => u.id !== ud1.id)?.id ?? null,
+    otraUnidadNombre: unidades.find(u => u.id !== ud1.id)?.nombre ?? '',
   }
 })
 
@@ -150,7 +154,8 @@ try {
   await panel.getByRole('button', { name: /Definir examen/ }).click()
   await editor.waitFor({ timeout: 8000 })
   await aparece(editor.getByLabel('Título del examen'))   // el editor carga antes de pintar
-  ok(await editor.getByLabel(/Esta unidad/).isChecked(), 'desde una unidad, el examen nace para esa unidad')
+  ok(await editor.getByLabel('Unidad del examen').inputValue() === String(inicio.ud1), 'desde una unidad, el examen nace para esa unidad')
+  ok(await editor.getByLabel('Instrumento del examen').inputValue() !== '', 'y para el instrumento desde el que se abre')
   await editor.getByRole('button', { name: /Cómo importar/ }).click()
   ok(await editor.getByText(/una tabla con una fila por pregunta/).isVisible(), 'la ayuda explica la forma del fichero')
   const md = `# Examen de la unidad 1\n\n| Pregunta | Puntos | Criterio |\n|---|---|---|\n`
@@ -309,6 +314,46 @@ try {
   await p.waitForTimeout(500)
   d = await bd()
   ok(d.notas[1][cA]?.valor === 6.43 && d.notas[1][cA]?.anterior == null, 'descartar quita la anterior y deja la que cuenta', JSON.stringify(d.notas[1][cA]))
+
+  console.log('\n7b. Mover el examen a otra unidad desde la cabecera de la columna')
+  {
+    await cerrarPanel()
+    await p.locator('[data-vista="instrumentos"]').click()
+    await p.waitForTimeout(800)
+    const toggle = p.locator('[data-cabeceras-toggle]')
+    if ((await toggle.getAttribute('aria-pressed')) !== 'true') await toggle.click()
+    await p.locator('[data-editar-examen]').first().click()
+    await editor.waitFor({ timeout: 8000 })
+    await aparece(editor.getByLabel('Título del examen'))
+    ok(await aparece(editor.locator('input[value="Examen de la unidad 1"]')), 'la cabecera abre el editor del examen, sin pasar por una casilla')
+    ok(inicio.otraUnidad != null, 'hay otra unidad a la que moverlo', inicio.otraUnidadNombre)
+    await editor.getByLabel('Unidad del examen').selectOption(String(inicio.otraUnidad))
+    ok(await aparece(editor.getByText(/el examen se mueve ahí/)), 'avisa de que al guardar se mueve')
+    const antes = (await bd()).notas
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    // Está corregido en origen: pregunta (se acepta) y dice que las notas se quedan.
+    const mensaje = editor.locator('[data-mensaje]')
+    /** Espera a que el mensaje del editor diga algo concreto (el anterior sigue en pantalla hasta entonces). */
+    const mensajeDice = async (re) => {
+      for (let i = 0; i < 40; i++) { if (re.test(await mensaje.textContent().catch(() => ''))) return true; await p.waitForTimeout(250) }
+      return false
+    }
+    ok(await mensajeDice(new RegExp(`Movido a .*${inicio.otraUnidadNombre}.*las notas ya puestas se quedan donde estaban`)), 'al guardar lo dice')
+    d = await bd()
+    ok(d.examenes.length === 1 && d.examenes[0].unidad_id === inicio.otraUnidad, 'el examen pasa a la otra unidad, sin duplicarse', JSON.stringify(d.examenes.map(e => [e.titulo, e.unidad_id])))
+    ok(JSON.stringify(d.notas) === JSON.stringify(antes), 'y ninguna nota se mueve ni se pierde')
+    // Y vuelve: el resto de la suite lo espera en su unidad.
+    await editor.getByLabel('Unidad del examen').selectOption(String(inicio.ud1))
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    // El mensaje del primer movimiento sigue en pantalla: se espera al que nombra la unidad de vuelta.
+    ok(await mensajeDice(new RegExp(`Movido a .*${inicio.ud1Nombre}`)), 'se puede volver a mover')
+    d = await bd()
+    ok(d.examenes.length === 1 && d.examenes[0].unidad_id === inicio.ud1, 'de vuelta en su unidad', JSON.stringify([inicio.ud1, inicio.ud1Nombre, d.examenes.map(e => [e.titulo, e.unidad_id])]))
+    await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    await p.locator('[data-vista="criterios"]').click()
+    await p.waitForTimeout(800)
+    await abrirCelda(1, cA)
+  }
 
   console.log('\n8. Quitar el examen conserva las notas')
   await panel.getByRole('button', { name: '📝 Examen' }).click()

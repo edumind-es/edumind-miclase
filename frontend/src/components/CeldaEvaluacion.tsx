@@ -499,6 +499,7 @@ export default function CeldaEvaluacion({
       <PruebaEditor
         instrumentoId={instrumentoSel.instrumento_id}
         instrumentoNombre={instrumentoSel.nombre}
+        asignaturaId={asig.id!}
         unidadId={unidadId}
         unidadNombre={unidadNombre}
         criterios={[criterio, ...hermanos]}

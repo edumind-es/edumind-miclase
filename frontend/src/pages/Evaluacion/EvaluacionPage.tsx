@@ -27,6 +27,7 @@ import { abreviatura } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
+import PruebaEditor from '@/components/PruebaEditor'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
@@ -182,6 +183,7 @@ export default function EvaluacionPage() {
   /** Importador del CSV de Edixgal (Moodle) abierto. */
   const [importarMoodle, setImportarMoodle] = useState(false)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
+  const [editarExamenEn, setEditarExamenEn] = useState<ColumnaInstrumento | null>(null)
   const [escanearEn, setEscanearEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
@@ -757,6 +759,7 @@ export default function EvaluacionPage() {
                   onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
+                  onEditarExamen={col => setEditarExamenEn(col)}
                 />
               )
             ) : (
@@ -1084,6 +1087,21 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onGuardado={() => setRefresco(r => r + 1)}
           onCerrar={() => setEscanearEn(null)}
+        />
+      )}
+
+      {editarExamenEn && matriz && (
+        <PruebaEditor
+          instrumentoId={editarExamenEn.ins.instrumento_id}
+          instrumentoNombre={editarExamenEn.ins.nombre}
+          asignaturaId={matriz.asig.id!}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          criterios={editarExamenEn.criterios}
+          asignaturaNombre={matriz.asig.nombre_display}
+          nivel={`${matriz.grupo.curso}º ${matriz.grupo.etapa}`}
+          capa="var(--z-modal)"
+          onCerrar={() => { setEditarExamenEn(null); setRefresco(r => r + 1) }}
         />
       )}
 

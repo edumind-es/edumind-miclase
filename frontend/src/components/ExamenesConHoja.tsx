@@ -183,6 +183,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
         <PruebaEditor
           instrumentoId={editar.instrumento.id!}
           instrumentoNombre={editar.instrumento.nombre}
+          asignaturaId={editar.asig.id!}
           unidadId={editar.unidad?.id ?? null}
           unidadNombre={editar.unidad?.nombre}
           criterios={editar.criterios}
