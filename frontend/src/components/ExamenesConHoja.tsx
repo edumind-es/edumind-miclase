@@ -176,8 +176,11 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {/* Con la unidad del examen desde el principio, igual que «Nuevo
+                      examen»: antes se abría sin unidad —la matriz de toda el área— y
+                      se le ponía la unidad después, y a Luis ese botón no le abría nada. */}
                   <button className="btn-secondary" data-examen-editar style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id}
-                    onClick={() => abrirEditor(f.instrumento, f.asig, f.grupo, null).then(() => setEditar(e => e && ({ ...e, unidad: f.unidad as UnidadConCriterios | null })))}
+                    onClick={() => abrirEditor(f.instrumento, f.asig, f.grupo, f.unidad as UnidadConCriterios | null)}
                     title="Ver o cambiar el examen">✏️ Editar</button>
                   <button className="btn-secondary" data-examen-imprimir style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id || !f.conClave}
                     onClick={() => abrir(f.prueba.id, 'imprimir')}
