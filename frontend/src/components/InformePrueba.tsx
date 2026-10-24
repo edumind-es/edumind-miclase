@@ -53,7 +53,10 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
   const aImprimir = async () => {
     if (!def || !informe) return
     setOcupado(true)
-    try { await imprimir(documentoInformePrueba(informe, def, ctx), nombreFichero.replace(/\.html$/, '')); setMsg('Informe enviado a imprimir.') }
+    try {
+      const hecho = await imprimir(documentoInformePrueba(informe, def, ctx), nombreFichero.replace(/\.html$/, ''))
+      setMsg(hecho ? 'Informe enviado a imprimir.' : 'No se ha imprimido nada: la vista previa se cerró sin imprimir ni compartir.')
+    }
     catch { setMsg('No se pudo imprimir.') }
     finally { setOcupado(false) }
   }

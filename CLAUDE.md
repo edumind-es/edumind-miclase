@@ -584,6 +584,16 @@ edumind_miclase/
 - **Imprimir pasa por `Impresora` (`nativo/impresora.ts`).** `window.print()`
   tampoco existe en WKWebView; el plugin Swift compone el PDF y abre la hoja
   del sistema. En web sigue siendo el iframe oculto de siempre.
+  **Salvo en Safari y en el iPad** (`nativo/webkit.ts`, `esWebKit`): ahí el
+  iframe oculto no imprime nada —y en la app instalada en la pantalla de
+  inicio no existe la hoja de impresión—, así que `ImpresoraWeb` enseña el
+  documento en una vista previa (`[data-vista-impresion]`) con «Imprimir»
+  (desde el iframe visible y dentro de la pulsación, que es lo que Safari
+  exige) y «Compartir» (`compartirFichero`: la hoja del sistema trae Imprimir,
+  Guardar en Archivos y AirDrop; es el único camino en la app instalada).
+  `imprimir()` devuelve si el docente pulsó una de las dos; cerrar la vista
+  no es haber impreso y las pantallas lo dicen. Luis pulsaba «Imprimir hojas»
+  en el iPad, la app decía «enviado a imprimir» y no salía nada.
 - **El login nativo depende del servidor.** La app solo ofrece «Conectar
   EDUmind» si `/api/auth/config` anuncia `redirect_uri_nativo`
   (`es.edumind.miclase://auth/callback`); si no, lo explica. Ver DESPLIEGUE.md,

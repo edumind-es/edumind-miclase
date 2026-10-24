@@ -1,5 +1,5 @@
 /**
- * Planilla de corrección desde la interfaz.
+ * Planilla de corrección desde la interfaz, y la impresión en Safari / iPad.
  *
  * Luis corrige en papel con una planilla por pregunta —clave y cómo se
  * reparten los puntos— y quería volcarla a la app. Aquí se comprueba el
@@ -26,7 +26,10 @@ const ok = (cond, msg, extra = '') => {
 }
 
 const navegador = await chromium.launch()
-const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }, permissions: ['clipboard-read', 'clipboard-write'] })
+// Con el agente de usuario de Safari en el iPad: imprimir desde un iframe oculto
+// no abre nada ahí, y la app tiene que enseñar la vista previa (paso 5).
+const UA_IPAD = 'Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
+const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }, permissions: ['clipboard-read', 'clipboard-write'], userAgent: UA_IPAD })
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
@@ -148,6 +151,28 @@ try {
   ok((await examen.locator('[data-pregunta="1"] [data-pregunta-clave]').textContent()).includes('1-d · 2-e'), 'la pregunta 1 enseña su clave')
   ok((await examen.locator('[data-pregunta="2"] [data-pregunta-correccion]').textContent()).includes('0,25 cada elemento'), 'y la 2 cómo se puntúa')
   await foto('planilla-02-corregir')
+
+  console.log('\n5. En Safari y en el iPad, imprimir enseña el documento con «Imprimir» y «Compartir»')
+  await p.goto(BASE + '/escanear', { waitUntil: 'networkidle' })
+  await p.waitForTimeout(800)
+  await p.locator('[data-examen="Exame UD1 · O mundo que nos rodea"] [data-examen-informe]').click()
+  const informe = p.locator('[data-informe-prueba]')
+  await informe.waitFor({ timeout: 8000 })
+  await informe.locator('[data-informe-imprimir]').click()
+  const vista = p.locator('[data-vista-impresion]')
+  ok(await aparece(vista), 'sale la vista previa en vez de un «enviado a imprimir» que no imprime nada')
+  const marco = vista.locator('iframe')
+  ok(await marco.count() === 1 && (await marco.contentFrame().locator('body').textContent()).includes('Exame UD1'), 'con el documento a la vista')
+  await foto('planilla-03-vista-previa')
+  // Sin hoja de compartir en este navegador, «Compartir» descarga el .html.
+  const [fichero] = await Promise.all([p.waitForEvent('download'), vista.locator('[data-vista-compartir]').click()])
+  ok(fichero.suggestedFilename().endsWith('.html'), 'Compartir entrega el documento como fichero', fichero.suggestedFilename())
+  await vista.locator('[data-vista-cerrar]').click()
+  ok(await aparece(informe.getByText('Informe enviado a imprimir.')), 'y al cerrar tras compartir se da por enviado')
+  await informe.locator('[data-informe-imprimir]').click()
+  await vista.waitFor({ timeout: 5000 })
+  await p.keyboard.press('Escape')
+  ok(await aparece(informe.getByText(/No se ha imprimido nada/)), 'cerrar sin más no se vende como impreso')
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('planilla-error').catch(() => {})

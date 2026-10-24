@@ -13,6 +13,7 @@
  * abre la hoja del sistema (ver `nativo/impresora.ts`).
  */
 import { esNativo } from '@/api'
+import { esWebKit } from '@/nativo/webkit'
 import { Impresora } from '@/nativo/impresora'
 import { descargarFichero } from '@/utils/compartir'
 
@@ -301,9 +302,12 @@ export function barraNota(v: number | null | undefined): string {
  * se envía. Allí las fuentes van incrustadas, porque el documento se
  * renderiza fuera del origen de la app y `/fonts/...` no resolvería a nada.
  */
-export async function imprimir(html: string, nombre = 'documento'): Promise<void> {
-  const contenido = esNativo() ? await incrustarFuentes(html) : html
-  await Impresora.imprimirHTML({ html: contenido, nombre })
+export async function imprimir(html: string, nombre = 'documento'): Promise<boolean> {
+  // Con fuentes dentro cuando el documento puede salir de la pestaña: en
+  // nativo siempre; en Safari y el iPad porque «Compartir» entrega el fichero.
+  const contenido = esNativo() || esWebKit() ? await incrustarFuentes(html) : html
+  const { completado } = await Impresora.imprimirHTML({ html: contenido, nombre })
+  return completado
 }
 
 // ─── Fuentes incrustadas ─────────────────────────────────────────────────

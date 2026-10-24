@@ -64,8 +64,11 @@ export default function ImprimirTest({ instrumento, unidadId, unidadNombre, alum
         // Margen 0: el blanco alrededor ya lo pone la hoja. Corrección M: aguanta una esquina doblada.
         qr.set(a.id!, await QRCode.toDataURL(texto, { errorCorrectionLevel: 'M', margin: 0, width: 400, color: { dark: '#000000', light: '#ffffff' } }))
       }
-      await imprimir(documentoHojasRespuestas(def, alumnos.map(a => ({ id: a.id!, nombre: a.nombre, apellidos: a.apellidos })), qr, ctx))
-      setMsg({ tipo: 'ok', texto: `${alumnos.length} hoja${alumnos.length !== 1 ? 's' : ''} enviada${alumnos.length !== 1 ? 's' : ''} a imprimir.` })
+      const hecho = await imprimir(documentoHojasRespuestas(def, alumnos.map(a => ({ id: a.id!, nombre: a.nombre, apellidos: a.apellidos })), qr, ctx), 'hojas-de-respuestas')
+      // Solo se da por enviado lo que salió por la hoja del sistema: antes se decía siempre y en el iPad no salía nada.
+      setMsg(hecho
+        ? { tipo: 'ok', texto: `${alumnos.length} hoja${alumnos.length !== 1 ? 's' : ''} enviada${alumnos.length !== 1 ? 's' : ''} a imprimir.` }
+        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir» ni «Compartir».' })
     } catch (e) {
       setMsg({ tipo: 'error', texto: e instanceof Error ? e.message : 'No se pudieron preparar las hojas.' })
     } finally { setOcupado(null) }
@@ -75,8 +78,10 @@ export default function ImprimirTest({ instrumento, unidadId, unidadNombre, alum
     if (!def) return
     setOcupado('examen'); setMsg(null)
     try {
-      await imprimir(documentoExamen(def, ctx))
-      setMsg({ tipo: 'ok', texto: 'Examen enviado a imprimir.' })
+      const hecho = await imprimir(documentoExamen(def, ctx), 'examen')
+      setMsg(hecho
+        ? { tipo: 'ok', texto: 'Examen enviado a imprimir.' }
+        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir» ni «Compartir».' })
     } catch (e) {
       setMsg({ tipo: 'error', texto: e instanceof Error ? e.message : 'No se pudo preparar el examen.' })
     } finally { setOcupado(null) }
