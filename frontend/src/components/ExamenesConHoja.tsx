@@ -67,6 +67,9 @@ export async function resolverContextoExamen(prueba_id: number, trimestre: numbe
   return { fila, alumnos, col, area }
 }
 
+/** El mensaje de un error cualquiera, para enseñarlo tal cual. */
+const mensajeDe = (e: unknown) => (e instanceof Error ? e.message : String(e)) || 'error desconocido'
+
 interface Props {
   trimestre: number
   /** Examen que la cámara ha reconocido en una hoja: se abre su corrector al llegar. */
@@ -88,7 +91,10 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
 
   useEffect(() => {
     let vigente = true
-    listarPruebas().then(l => { if (vigente) setLista(l) })
+    listarPruebas()
+      .then(l => { if (vigente) setLista(l) })
+      // Un examen que no se puede leer no deja la lista en «Cargando…» para siempre.
+      .catch(e => { if (vigente) { setLista([]); setAviso(`No se ha podido leer la lista de exámenes: ${mensajeDe(e)}`) } })
     return () => { vigente = false }
   }, [recarga])
 
@@ -98,6 +104,9 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
       const ctx = await resolverContextoExamen(prueba_id, trimestre, headers)
       if (typeof ctx === 'string') { setAviso(ctx); return }
       if (que === 'imprimir') setImprimir(ctx); else if (que === 'informe') setInforme(ctx); else setCorregir(ctx)
+    } catch (e) {
+      // Antes un fallo aquí no abría nada y no decía nada: el botón parecía roto.
+      setAviso(`No se ha podido abrir el examen: ${mensajeDe(e)}`)
     } finally { setOcupado(null) }
   }
 
@@ -112,12 +121,21 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
 
   /** Abrir el editor de un examen de la lista (o de un instrumento recién elegido). */
   const abrirEditor = async (instrumento: Instrumento, asig: Asignatura, grupo: { id?: number; nombre: string; curso: string; etapa: string; comunidad: string }, unidad: UnidadConCriterios | null) => {
-    const matriz = await getMatrizEvaluacion(asig.id!, unidad?.id ?? null, trimestre)
-    const descripciones = matriz ? await criteriosDeArea(matriz.grupo, asig, headers) : new Map<string, string>()
-    const criterios = matriz ? [...matriz.porCriterio.keys()].map(id => ({ id, descripcion: descripciones.get(id) ?? '' })) : []
-    const col = matriz ? columnasPorInstrumento(matriz, criterios).find(c => c.ins.instrumento_id === instrumento.id) : undefined
+    setAviso(null)
+    // Los criterios de las preguntas salen de la programación; si no se
+    // pueden leer, el editor se abre igual (sin ellos) y se dice.
+    let criteriosCol: { id: string; descripcion: string }[] = []
+    try {
+      const matriz = await getMatrizEvaluacion(asig.id!, unidad?.id ?? null, trimestre)
+      const descripciones = matriz ? await criteriosDeArea(matriz.grupo, asig, headers) : new Map<string, string>()
+      const criterios = matriz ? [...matriz.porCriterio.keys()].map(id => ({ id, descripcion: descripciones.get(id) ?? '' })) : []
+      const col = matriz ? columnasPorInstrumento(matriz, criterios).find(c => c.ins.instrumento_id === instrumento.id) : undefined
+      criteriosCol = col?.criterios ?? []
+    } catch (e) {
+      setAviso(`No se han podido leer los criterios de «${instrumento.nombre}»: ${mensajeDe(e)}. El editor se abre sin ellos.`)
+    }
     setNuevo(false)
-    setEditar({ instrumento, asig, grupo, unidad, criterios: col?.criterios ?? [] })
+    setEditar({ instrumento, asig, grupo, unidad, criterios: criteriosCol })
   }
 
   return (

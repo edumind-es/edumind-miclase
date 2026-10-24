@@ -44,3 +44,47 @@ ${ejemploOpciones.split('\n').map(l => `   ${l}`).join('\n')}
 2. [Enunciado de la pregunta 2]${conCriterios ? '\n   Criterio: [id del criterio]' : ''}
 ${letras.map((l, i) => `   ${l}) [opción${i === 0 ? ' correcta' : ''}]${i === 0 ? ' *' : ''}`).join('\n')}`
 }
+
+/**
+ * Prompt para que una IA convierta el examen que el docente ya tiene —sus
+ * preguntas, o la planilla de corrección que ya escribió— en la tabla que
+ * `pruebaDeFilas` sabe leer: una fila por pregunta con la clave, cómo se
+ * reparten los puntos, lo que vale y el criterio. La IA no inventa el examen:
+ * ordena lo que el docente le da. Lo que falte (puntos, criterios) lo propone.
+ */
+export function generarPromptPlanilla(params: {
+  asignatura: string
+  nivel: string
+  /** El examen tal cual, o la planilla que ya tenga: texto pegado. */
+  examen: string
+  /** Cuánto suma el examen, para repartir los puntos si no vienen. */
+  puntosTotales?: number
+  /** Criterios que evalúa el instrumento, para que cada pregunta nombre el suyo. */
+  criterios?: { id: string; descripcion: string }[]
+}): string {
+  const total = params.puntosTotales && params.puntosTotales > 0 ? params.puntosTotales : 10
+  const conCriterios = (params.criterios?.length ?? 0) > 0
+  return `Eres docente experto en ${params.asignatura} en España (LOMLOE), con alumnado de ${params.nivel}. Te paso un examen ya hecho (o su planilla de corrección). Conviértelo en una PLANILLA DE CORRECCIÓN: una fila por pregunta con la respuesta correcta y cómo se reparten sus puntos.
+
+**El examen**:
+${params.examen.trim()}
+${conCriterios ? `
+**Criterios de evaluación del instrumento** (en «Criterio» escribe el id del que evalúa cada pregunta, o déjalo vacío si evalúa todos):
+${params.criterios!.map(c => `- ${c.id}: ${c.descripcion}`).join('\n')}
+` : ''}
+Reglas:
+- No inventes preguntas ni cambies su orden: una fila por pregunta del examen, con sus apartados (a, b, c…) dentro de la misma fila.
+- «Pregunta»: el enunciado resumido en pocas palabras, para reconocerla al corregir.
+- «Clave»: la respuesta correcta, breve. Si la pregunta tiene apartados, sepáralos con « · » («a) Ecuador · b) Greenwich»).
+- «Corrección»: cómo se reparten los puntos (completo, parcial, incorrecto), en una frase comprobable («0,25 cada acierto», «completa 0,5 · sin la relación con la realidad 0,25»). Es lo que mira el docente al corregir.
+- «Puntos»: lo que vale la pregunta. Si el examen ya trae puntos, respétalos; si no, reparte ${total} puntos entre las preguntas con sentido (coma decimal, p. ej. 0,5).
+- «Aspecto»: el bloque o tema de la pregunta en una o dos palabras (opcional).
+- Responde ÚNICAMENTE con el título y la tabla, sin texto antes ni después:
+
+# [Título del examen]
+
+| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |
+|---|---|---|---|---|---|
+| 1. [enunciado resumido] | 1 | ${conCriterios ? '[id]' : ''} | [tema] | [respuesta correcta] | [cómo se puntúa] |
+| 2. [enunciado resumido] | 0,5 | ${conCriterios ? '[id]' : ''} | [tema] | [respuesta correcta] | [cómo se puntúa] |`
+}

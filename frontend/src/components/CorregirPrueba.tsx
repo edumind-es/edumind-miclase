@@ -126,6 +126,18 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
                     {p.criterio_id || 'todos'}
                   </span>
                 )}
+                {/* La planilla de corrección, delante mientras se corrige: la
+                    respuesta esperada y cómo se reparten los puntos. */}
+                {p.clave && (
+                  <div data-pregunta-clave style={{ fontSize: 11.5, color: '#166534', marginTop: 2 }}>
+                    <span aria-hidden="true">🔑 </span>{p.clave}
+                  </div>
+                )}
+                {p.correccion && (
+                  <div data-pregunta-correccion style={{ fontSize: 11.5, color: 'var(--gris-600)', marginTop: 2 }}>
+                    {p.correccion}
+                  </div>
+                )}
               </div>
 
               {def.tipo === 'puntos' && (

@@ -24,9 +24,9 @@ import {
 } from '@/db/prueba'
 import {
   importarPrueba, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
-  pruebaDeExamenMarkdown, examenAMarkdown,
+  pruebaDeTexto, examenAMarkdown,
 } from '@/ia/pruebaImportar'
-import { generarPromptTest } from '@/ia/pruebaPrompt'
+import { generarPromptTest, generarPromptPlanilla } from '@/ia/pruebaPrompt'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { TIPO_XLSX } from './AyudaImportarRubrica'
 import { descargarFichero } from '@/utils/compartir'
@@ -104,6 +104,10 @@ export default function PruebaEditor({
   // La columna «Aspecto» (bloque o tema de cada pregunta, para el informe): a
   // la vista si alguna pregunta lo trae; si no, tras un botón, que no estorbe.
   const [conAspectos, setConAspectos] = useState(false)
+  // Las columnas «Clave» y «Corrección» (la planilla de corrección): a la vista
+  // si alguna pregunta las trae; si no, tras un botón.
+  const [conPlanilla, setConPlanilla] = useState(false)
+  const tienePlanilla = (d: PruebaDef) => d.preguntas.some(p => p.clave || p.correccion)
   // El banco de pruebas: los exámenes de todas las clases, para copiar uno aquí.
   const [bancoAbierto, setBancoAbierto] = useState(false)
   const [refrescoBanco, setRefrescoBanco] = useState(0)
@@ -128,6 +132,7 @@ export default function PruebaEditor({
       if (elegida) {
         setDef(elegida.def)
         setConAspectos(elegida.def.preguntas.some(p => p.aspecto))
+        setConPlanilla(tienePlanilla(elegida.def))
         setCargadaId(elegida.id)
         setCargadaEn({ instrumentoId, unidadId: elegida.unidad_id })
         setDestino({ instrumentoId, unidadId: elegida.unidad_id })
@@ -142,7 +147,11 @@ export default function PruebaEditor({
         .then(banco => setBancoAbierto(banco.some(b => b.enBanco || b.instrumentoIds.some(id => id !== instrumentoId))))
         .catch(() => {})
         .finally(() => setCargando(false))
-    }).catch(() => setCargando(false))
+    }).catch((e: unknown) => {
+      // Antes se callaba: el editor abría vacío sin decir que el examen guardado no se había podido leer.
+      setCargando(false)
+      setMsg({ tipo: 'error', texto: `No se ha podido leer el examen guardado: ${e instanceof Error ? e.message : String(e)}. Lo que guardes ahora lo sustituirá.` })
+    })
   }, [instrumentoId, unidadId])
 
   // Unidades e instrumentos de prueba escrita del área: adonde se puede mover el examen.
@@ -233,11 +242,20 @@ export default function PruebaEditor({
 
   // ── Generar con IA ─────────────────────────────────────────────────────
 
-  const prompt = generarPromptTest({
-    asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
-    contexto: iaContexto, nPreguntas: iaN, nOpciones: iaOpciones,
-    criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
-  })
+  // Un test se GENERA desde un tema; un examen de puntos o niveles ya existe
+  // (el docente lo tiene en papel) y lo que se pide es su planilla de corrección.
+  const esTest = def.tipo === 'test'
+  const prompt = esTest
+    ? generarPromptTest({
+      asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
+      contexto: iaContexto, nPreguntas: iaN, nOpciones: iaOpciones,
+      criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
+    })
+    : generarPromptPlanilla({
+      asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
+      examen: iaContexto, puntosTotales: genTotal,
+      criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
+    })
   const copiarPrompt = async () => {
     await navigator.clipboard.writeText(prompt)
     setPromptCopiado(true)
@@ -247,13 +265,16 @@ export default function PruebaEditor({
   const cargarRespuesta = (texto: string) => {
     setIaError('')
     try {
-      const { prueba, avisos } = pruebaDeExamenMarkdown(texto, def.titulo || instrumentoNombre)
-      setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: def.penalizacion ?? prueba.penalizacion })
+      // La respuesta puede venir como test escrito, como tabla o como JSON: se lee lo que sea.
+      const { prueba, avisos } = pruebaDeTexto(texto, def.titulo || instrumentoNombre)
+      setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: prueba.tipo === 'test' ? def.penalizacion ?? prueba.penalizacion : undefined })
       setSucio(true)
       setGenN(prueba.preguntas.length)
       setGenTotal(puntosTotales(prueba))
       setOpcionesAbiertas(new Set())
-      setMsg({ tipo: 'ok', texto: `Test cargado: ${prueba.preguntas.length} preguntas.${avisos.length ? ` Ojo: ${avisos.join(' ')}` : ''} Revísalo y pulsa «Guardar examen».` })
+      if (tienePlanilla(prueba)) setConPlanilla(true)
+      if (prueba.preguntas.some(p => p.aspecto)) setConAspectos(true)
+      setMsg({ tipo: 'ok', texto: `${prueba.tipo === 'test' ? 'Test' : 'Examen'} cargado: ${prueba.preguntas.length} preguntas, ${puntosTotales(prueba)} puntos.${avisos.length ? ` Ojo: ${avisos.join(' ')}` : ''} Revísalo y pulsa «Guardar examen».` })
     } catch (e: any) {
       setIaError(e.message || 'No se reconoce el examen en la respuesta.')
     }
@@ -289,6 +310,7 @@ export default function PruebaEditor({
     })
     const prueba = normalizarPrueba({ ...origen.def, preguntas })
     setDef(prueba)
+    if (tienePlanilla(prueba)) setConPlanilla(true)
     setSucio(true)
     setGenN(prueba.preguntas.length)
     setGenTotal(puntosTotales(prueba))
@@ -391,6 +413,7 @@ export default function PruebaEditor({
     try {
       const { prueba, avisos } = await importarPrueba(file.name, await file.arrayBuffer())
       setDef(prueba)
+      if (tienePlanilla(prueba)) setConPlanilla(true)
       setSucio(true)
       setAyuda(false)
       setGenN(prueba.preguntas.length)
@@ -537,33 +560,42 @@ export default function PruebaEditor({
               </div>
             )}
 
-            {/* Generar el test con IA: la local del navegador o cualquier otra, copiando el prompt. */}
-            {def.tipo === 'test' && (
-              <div style={{ marginBottom: 14, border: '1px solid var(--azul-300)', borderRadius: 10, background: iaAbierta ? 'var(--azul-100)' : 'white' }}>
+            {/* Con IA: en un test, generarlo desde un tema; en un examen de puntos o
+                niveles, volcar el que el docente ya tiene (o su planilla) como
+                planilla de corrección: clave y reparto de puntos por pregunta. La
+                IA local del navegador o cualquier otra, copiando el prompt. */}
+            {(
+              <div data-ia-bloque={esTest ? 'test' : 'planilla'} style={{ marginBottom: 14, border: '1px solid var(--azul-300)', borderRadius: 10, background: iaAbierta ? 'var(--azul-100)' : 'white' }}>
                 <button type="button" data-ia-toggle aria-expanded={iaAbierta} onClick={() => setIaAbierta(a => !a)}
                   style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: '9px 14px', fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', cursor: 'pointer' }}>
-                  {iaAbierta ? '▾' : '▸'} 🤖 Generar el test con IA
-                  <span style={{ fontWeight: 400, color: 'var(--gris-600)', marginLeft: 8 }}>desde la unidad, un tema o un texto; con la IA local o pegando la respuesta de otra</span>
+                  {iaAbierta ? '▾' : '▸'} {esTest ? '🤖 Generar el test con IA' : '🤖 Volcar mi examen como planilla de corrección con IA'}
+                  <span style={{ fontWeight: 400, color: 'var(--gris-600)', marginLeft: 8 }}>
+                    {esTest
+                      ? 'desde la unidad, un tema o un texto; con la IA local o pegando la respuesta de otra'
+                      : 'pega el examen que ya tienes y vuelve con la clave y el reparto de puntos de cada pregunta'}
+                  </span>
                 </button>
                 {iaAbierta && (
                   <div style={{ padding: '0 14px 14px', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 90px 90px', gap: 10 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: esTest ? '1fr 90px 90px' : '1fr', gap: 10 }}>
                       <div>
-                        <label style={etiqueta} htmlFor="ia-contexto">De qué va el examen *</label>
-                        <textarea id="ia-contexto" value={iaContexto} onChange={e => setIaContexto(e.target.value)} rows={3}
+                        <label style={etiqueta} htmlFor="ia-contexto">{esTest ? 'De qué va el examen *' : 'Tu examen, tal cual *'}</label>
+                        <textarea id="ia-contexto" value={iaContexto} onChange={e => setIaContexto(e.target.value)} rows={esTest ? 3 : 7}
                           style={{ width: '100%', fontSize: 13, resize: 'vertical' }}
-                          placeholder="La unidad, el tema o el texto del que salen las preguntas. Ejemplo: «Os ríos de Galicia: nacemento, afluentes e desembocadura. Texto do libro, páxinas 42-47»." />
+                          placeholder={esTest
+                            ? 'La unidad, el tema o el texto del que salen las preguntas. Ejemplo: «Os ríos de Galicia: nacemento, afluentes e desembocadura. Texto do libro, páxinas 42-47».'
+                            : 'Pega aquí las preguntas del examen que ya has hecho, con sus puntos si los tienen; o la planilla de corrección que ya hayas escrito. La IA no inventa nada: ordena lo tuyo en una fila por pregunta con la respuesta correcta y cómo se reparten los puntos.'} />
                       </div>
-                      <div>
+                      {esTest && <div>
                         <label style={etiqueta} htmlFor="ia-n">Preguntas</label>
                         <input id="ia-n" type="number" min={1} max={60} value={iaN} onChange={e => setIaN(Number(e.target.value))} style={{ width: '100%', fontSize: 13, textAlign: 'center' }} />
-                      </div>
-                      <div>
+                      </div>}
+                      {esTest && <div>
                         <label style={etiqueta} htmlFor="ia-opciones">Opciones</label>
                         <select id="ia-opciones" value={iaOpciones} onChange={e => setIaOpciones(Number(e.target.value))} style={{ width: '100%', fontSize: 13 }}>
                           {[2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
                         </select>
-                      </div>
+                      </div>}
                     </div>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
                       <button className="btn-secondary" style={{ fontSize: 12.5 }} onClick={copiarPrompt} disabled={!iaContexto.trim()} data-ia-copiar>
@@ -593,14 +625,16 @@ export default function PruebaEditor({
                       <label style={etiqueta} htmlFor="ia-respuesta">La respuesta de la IA</label>
                       <textarea id="ia-respuesta" data-ia-respuesta value={iaRespuesta} onChange={e => setIaRespuesta(e.target.value)} rows={6}
                         style={{ width: '100%', fontSize: 12, fontFamily: 'ui-monospace, monospace', resize: 'vertical' }}
-                        placeholder={'Pega aquí el test. Formato:\n\n1. ¿Onde nace o río Miño?\n   a) Na serra de Meira *\n   b) Nos Ancares\n   c) No Courel\n\nLa correcta lleva un asterisco, o va al final en «Respuestas: 1-a, 2-c…».'} />
+                        placeholder={esTest
+                          ? 'Pega aquí el test. Formato:\n\n1. ¿Onde nace o río Miño?\n   a) Na serra de Meira *\n   b) Nos Ancares\n   c) No Courel\n\nLa correcta lleva un asterisco, o va al final en «Respuestas: 1-a, 2-c…».'
+                          : 'Pega aquí la tabla que devuelve la IA. Formato:\n\n| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |\n|---|---|---|---|---|---|\n| 1. Relaciona cada termo | 1 | CE1.1 | Mapas | 1-d · 2-e · 3-a | 0,2 cada acerto |'} />
                     </div>
                     {iaError && <div style={{ color: '#991b1b', fontSize: 12.5 }}>❌ {iaError}</div>}
                     <div style={{ display: 'flex', gap: 8 }}>
                       <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={() => cargarRespuesta(iaRespuesta)} disabled={!iaRespuesta.trim()} data-ia-cargar>
                         📥 Cargar como examen
                       </button>
-                      <span style={{ fontSize: 11.5, color: 'var(--gris-500)', alignSelf: 'center' }}>Sustituye las preguntas de abajo. Después, revisa y guarda.</span>
+                      <span style={{ fontSize: 11.5, color: 'var(--gris-500)', alignSelf: 'center' }}>Sustituye las preguntas de abajo. Después, revisa y guarda.{esTest ? '' : ' Al corregir, cada pregunta enseña su clave y su reparto.'}</span>
                     </div>
                   </div>
                 )}
@@ -669,6 +703,11 @@ export default function PruebaEditor({
                 title="Un aspecto por pregunta («Ríos», «Cálculo»…): el informe de la prueba dirá qué aspectos falla la clase. No cuenta para la nota.">
                 🏷 Aspectos
               </button>
+              <button className="btn-secondary" style={{ fontSize: 12.5 }} data-planilla-toggle aria-pressed={conPlanilla}
+                onClick={() => setConPlanilla(v => !v)}
+                title="La planilla de corrección: la respuesta correcta de cada pregunta y cómo se reparten sus puntos. Se enseña al corregir; no cuenta para la nota.">
+                🔑 Clave y corrección
+              </button>
               <div style={{ flex: 1 }} />
               <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--azul-900)' }}>
                 {def.preguntas.length} pregunta{def.preguntas.length !== 1 ? 's' : ''} · suman {total} puntos
@@ -690,6 +729,8 @@ export default function PruebaEditor({
                     <th style={{ padding: '7px 8px', textAlign: 'center', width: 84 }}>{def.tipo === 'niveles' ? 'Vale' : 'Puntos'}</th>
                     {def.reparto === 'criterios' && <th style={{ padding: '7px 8px', textAlign: 'left', width: 170 }}>Criterio</th>}
                     {conAspectos && <th style={{ padding: '7px 8px', textAlign: 'left', width: 150 }}>Aspecto</th>}
+                    {conPlanilla && <th style={{ padding: '7px 8px', textAlign: 'left', minWidth: 160 }}>Clave <span style={{ fontWeight: 400, opacity: .8 }}>(respuesta correcta)</span></th>}
+                    {conPlanilla && <th style={{ padding: '7px 8px', textAlign: 'left', minWidth: 160 }}>Corrección <span style={{ fontWeight: 400, opacity: .8 }}>(cómo se puntúa)</span></th>}
                     <th style={{ width: 30 }} />
                   </tr>
                 </thead>
@@ -733,6 +774,20 @@ export default function PruebaEditor({
                             style={{ width: '100%', fontSize: 12 }} />
                         </td>
                       )}
+                      {conPlanilla && (
+                        <td style={{ padding: 5 }}>
+                          <textarea value={p.clave ?? ''} onChange={e => setPregunta(i, { clave: e.target.value || null })} rows={2}
+                            aria-label={`Clave de la pregunta ${i + 1}`} placeholder="1-d · 2-e · 3-a"
+                            style={{ width: '100%', fontSize: 12, resize: 'vertical', lineHeight: 1.35 }} />
+                        </td>
+                      )}
+                      {conPlanilla && (
+                        <td style={{ padding: 5 }}>
+                          <textarea value={p.correccion ?? ''} onChange={e => setPregunta(i, { correccion: e.target.value || null })} rows={2}
+                            aria-label={`Corrección de la pregunta ${i + 1}`} placeholder="0,25 cada acierto · parcial 0,1"
+                            style={{ width: '100%', fontSize: 12, resize: 'vertical', lineHeight: 1.35 }} />
+                        </td>
+                      )}
                       <td style={{ padding: 3, textAlign: 'center' }}>
                         <button onClick={() => removePregunta(i)} title="Eliminar pregunta" aria-label={`Eliminar la pregunta ${i + 1}`}
                           style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}>×</button>
@@ -749,7 +804,7 @@ export default function PruebaEditor({
                     return [fila, (
                       <tr key={`${p.id}-opciones`} data-opciones-de={p.id} style={{ background: i % 2 === 0 ? 'white' : '#f8fafc' }}>
                         <td />
-                        <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (conAspectos ? 1 : 0)} style={{ padding: '0 5px 8px' }}>
+                        <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (conAspectos ? 1 : 0) + (conPlanilla ? 2 : 0)} style={{ padding: '0 5px 8px' }}>
                           <button type="button" onClick={() => alternarOpciones(p.id)} aria-expanded={abierta}
                             style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : '#92400e', cursor: 'pointer', fontWeight: 600 }}>
                             {abierta ? '▾' : '▸'} {resumen}

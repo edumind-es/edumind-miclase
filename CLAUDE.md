@@ -373,6 +373,31 @@ edumind_miclase/
   `notaDeRubrica` promedia solo lo observado. En el reparto por criterios solo
   reciben nota los criterios que alguna pregunta nombra y que la programación
   asigna al instrumento.
+- **La planilla de corrección va dentro del examen, pregunta a pregunta.**
+  `PreguntaPrueba.clave` (la respuesta esperada: «1-d · 2-e · 3-a») y
+  `PreguntaPrueba.correccion` (cómo se reparten los puntos: «completo 0,25 ·
+  parcial 0,1») son texto libre dentro de `prueba_json`, sin índice ni cambio
+  de esquema, y no cuentan para la nota: el docente la pone mirándolas.
+  `CorregirPrueba` las enseña bajo cada pregunta (`[data-pregunta-clave]`,
+  `[data-pregunta-correccion]`); el editor las edita en dos columnas tras
+  `[data-planilla-toggle]`, abiertas solas si el examen las trae. Entran por
+  las tres vías de importar (columnas «Clave» y «Corrección» en tabla, «Clave:»
+  y «Corrección:» bajo la pregunta en el examen escrito, y en JSON) y por el
+  bloque de IA del editor, que en un examen de puntos o niveles no genera nada:
+  `generarPromptPlanilla` pide a la IA ordenar el examen que el docente ya
+  tiene como tabla, y `pruebaDeTexto` lee lo pegado sea tabla, examen o JSON.
+  La planilla real de Luis no trae columna «Pregunta» —solo «N.º», «Clave»,
+  «Puntuación e indicadores» y «Máx.»—: `pruebaDeFilas` acepta «N.º» como
+  cabecera, no confunde «Puntuación e indicadores» con los puntos ni «Criterios
+  de corrección» con el criterio, y una letra sola en «Clave» sigue siendo la
+  correcta de un test.
+- **Nada de examen falla en silencio.** `ExamenesConHoja` recoge cualquier
+  error al listar, abrir el editor o el corrector y lo pone en
+  `[data-examenes-aviso]`; `PruebaEditor` dice si no pudo leer el examen
+  guardado; y `BarreraErrores` (en `main.tsx`, por fuera de todo) enseña el
+  error con «Recargar» y «Copiar» en vez de dejar la pantalla en blanco. Luis
+  creó exámenes en el iPad y «no se abría el diálogo» sin ninguna pista; no se
+  pudo reproducir en Chromium, así que lo primero fue que el fallo se vea.
 - **Un test con clave lleva `opciones` y `correcta` por pregunta** (`PreguntaPrueba`,
   solo `tipo: 'test'`; `normalizarPrueba` las descarta en otro tipo y nunca
   convierte un `correcta: null` en 0). `respuestaDeMarca` traduce la letra

@@ -13,9 +13,9 @@ import {
 } from '../frontend/src/db/prueba'
 import {
   importarPrueba, pruebaDeFilas, pruebaDeJson, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
-  pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice,
+  pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice, pruebaDeTexto,
 } from '../frontend/src/ia/pruebaImportar'
-import { generarPromptTest } from '../frontend/src/ia/pruebaPrompt'
+import { generarPromptTest, generarPromptPlanilla } from '../frontend/src/ia/pruebaPrompt'
 
 let fallos = 0
 const ok = (cond: boolean, msg: string, extra = '') => {
@@ -206,6 +206,69 @@ console.log('\n8. Test con opciones y correcta: el examen escrito como examen')
 
   const prompt = generarPromptTest({ asignatura: 'Ciencias Sociais', nivel: '6º Primaria', contexto: 'Os ríos', nPreguntas: 5, nOpciones: 4, criterios: [{ id: 'CE1.2', descripcion: 'Localizar' }] })
   ok(prompt.includes('5 preguntas') && prompt.includes('CE1.2') && prompt.includes('a) [opción]') && prompt.includes('*'), 'el prompt pide el formato que se sabe leer')
+}
+
+
+console.log('\n9. Planilla de corrección: clave y reparto de puntos por pregunta')
+{
+  // La planilla real de Luis (Ciencias Sociais, UD1) no trae columna «Pregunta»:
+  // N.º, clave, «Puntuación e indicadores» y «Máx. Puntos», y una fila de total.
+  const planilla = `# PLANILLA DE CORRECCIÓN · Ciencias Sociais · UD1
+
+| N.º | Clave | Puntuación e indicadores | Máx. Puntos |
+|---|---|---|---|
+| 1 | 1-d · 2-e · 3-a · 4-c · 5-b | 0,2 cada acerto. | 1 |
+| 2 | 1) a · 2) c · 3) b · 4) a · 5) b | 0,2 cada acerto. | 1 |
+| 3 | a) globo: esfera · b) paralelos; latitude · c) orientarnos · d) meridianos; lonxitude | Cada apartado: completo 0,25 · parcial 0,1 · incorrecto 0. | 1 |
+| 6 | a) A 40° N 80° O · b) Ecuador e Greenwich · c) F, G, H | a) 0,2 cada punto · b) 0,2 cada liña · c) 0,2 cada punto. | 2 |
+| Total da proba (/10) | | | |
+`
+  const { prueba: pl, avisos } = pruebaDeTexto(planilla, 'x')
+  ok(pl.titulo === 'PLANILLA DE CORRECCIÓN · Ciencias Sociais · UD1', 'el título sale de la cabecera', pl.titulo)
+  ok(pl.preguntas.length === 4, 'una pregunta por fila, sin la de total', String(pl.preguntas.length))
+  ok(pl.tipo === 'puntos' && puntosTotales(pl) === 5, 'puntos por pregunta: «Máx.» son los puntos, no «Puntuación e indicadores»', `${pl.tipo} · ${puntosTotales(pl)}`)
+  ok(pl.preguntas[0].clave === '1-d · 2-e · 3-a · 4-c · 5-b', 'la clave es la respuesta esperada', pl.preguntas[0].clave)
+  ok(pl.preguntas[0].correccion === '0,2 cada acerto.', 'y la corrección, cómo se reparten los puntos', pl.preguntas[0].correccion)
+  ok(pl.preguntas[3].max === 2 && pl.preguntas[3].correccion?.startsWith('a) 0,2'), 'la pregunta 6 vale 2 con su reparto', `${pl.preguntas[3].max}`)
+  ok(pl.preguntas.every(p => p.enunciado === '' && p.correcta == null && !p.opciones), 'sin enunciado ni opciones: la clave en texto no es la letra de un test')
+  ok(avisos.length === 0, 'sin avisos', avisos.join(' '))
+
+  // La tabla que devuelve la IA con el prompt de planilla: con «Pregunta» y las dos columnas.
+  const tablaIA = `# Exame UD1
+
+| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |
+|---|---|---|---|---|---|
+| 1. Relaciona cada termo | 1 | CE1.1 | Mapas | 1-d · 2-e · 3-a | 0,2 cada acerto |
+| 2. Elementos dun mapa | 1 | CE1.2 | Mapas | Título · rosa dos ventos · lenda · escala | 0,25 cada elemento |
+`
+  const ia = pruebaDeTexto(tablaIA, 'x').prueba
+  ok(ia.reparto === 'criterios' && ia.preguntas[1].criterio_id === 'CE1.2' && ia.preguntas[1].aspecto === 'Mapas', 'con criterio y aspecto, como siempre')
+  ok(ia.preguntas[1].clave === 'Título · rosa dos ventos · lenda · escala' && ia.preguntas[1].correccion === '0,25 cada elemento', 'y la planilla de cada pregunta')
+
+  // Ida y vuelta por los tres formatos, con la planilla dentro.
+  const canon = (d: PruebaDef) => JSON.stringify(normalizarPrueba(d))
+  const x = (await importarPrueba('p.xlsx', pruebaAXlsx(ia).buffer as ArrayBuffer)).prueba
+  const m = (await importarPrueba('p.md', bytes(pruebaAMarkdown(ia)))).prueba
+  const j = (await importarPrueba('p.json', bytes(pruebaAJson(ia)))).prueba
+  ok(canon(x) === canon(ia), 'clave y corrección por .xlsx', canon(x) === canon(ia) ? '' : canon(x))
+  ok(canon(m) === canon(ia), 'clave y corrección por .md (tabla)', canon(m) === canon(ia) ? '' : canon(m))
+  ok(canon(j) === canon(ia), 'clave y corrección por .json')
+
+  // En un test con clave, «Clave: …» bajo la pregunta no se confunde con el solucionario «1-b, 2-c».
+  const test = normalizarPrueba({ titulo: 'T', tipo: 'test', reparto: 'unica', preguntas: [
+    { id: 'p1', enunciado: 'Capital de Galicia', max: 1, opciones: ['Vigo', 'Santiago'], correcta: 1, clave: 'Santiago, sede da Xunta', correccion: 'Só a letra' },
+    { id: 'p2', enunciado: 'Río máis longo', max: 1, opciones: ['Miño', 'Sil'], correcta: 0 },
+  ] })
+  const escrito = examenAMarkdown(test, { conClave: true })
+  ok(escrito.includes('Clave: Santiago, sede da Xunta') && escrito.includes('Corrección: Só a letra') && escrito.includes('Respuestas: 1-b, 2-a'), 'el examen escrito lleva la planilla y el solucionario')
+  const releido = pruebaDeExamenMarkdown(escrito, 'x').prueba
+  ok(canon(releido) === canon(test), 'y se vuelve a leer igual: la correcta sigue siendo la del solucionario', canon(releido) === canon(test) ? '' : canon(releido))
+  // Y «Clave» con una letra en la tabla sigue siendo la correcta del test, como antes.
+  const viejo = pruebaDeFilas([['Tipo', 'test'], ['Pregunta', 'Puntos', 'Opciones', 'Clave'], ['¿Capital?', 1, 'Vigo ; Santiago', 'B']], 'x').prueba
+  ok(viejo.preguntas[0].correcta === 1 && !viejo.preguntas[0].clave, 'una letra en «Clave» es la correcta, no la planilla')
+
+  const prompt = generarPromptPlanilla({ asignatura: 'Ciencias Sociais', nivel: '6º Primaria', examen: '1. Relaciona…\n2. Elementos…', puntosTotales: 10, criterios: [{ id: 'CE1.1', descripcion: 'Mapas' }] })
+  ok(prompt.includes('1. Relaciona…') && prompt.includes('CE1.1') && prompt.includes('| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |') && prompt.includes('No inventes preguntas'), 'el prompt lleva el examen del docente y pide la tabla que se sabe leer')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

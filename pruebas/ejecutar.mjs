@@ -261,6 +261,7 @@ async function principal() {
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
+    await suite('planilla de corrección desde la interfaz', 'node', ['pruebas/planilla-ui.test.mjs'], entorno)
     const hojaDemoUi = join(scratch, 'hoja-demo-ui.cjs')
     await paquete('pruebas/lib/hojaDemo.ts', hojaDemoUi, ['--platform=node', '--format=cjs'])
     await suite('corregir por cámara desde la interfaz', 'node', ['pruebas/escaner-ui.test.mjs'], { ...entorno, HOJA_DEMO: hojaDemoUi })

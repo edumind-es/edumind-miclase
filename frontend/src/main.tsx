@@ -5,6 +5,7 @@ import App from './App'
 import './index.css'
 
 import PuertaMigracion from './components/PuertaMigracion'
+import BarreraErrores from './components/BarreraErrores'
 import { asegurarContador } from './db/ids'
 import { maxIdLocal } from './db/queries'
 
@@ -21,10 +22,12 @@ const recolocarIds = () => { maxIdLocal().then(asegurarContador).catch(() => {})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <PuertaMigracion alAbrir={recolocarIds}>
-        <App />
-      </PuertaMigracion>
-    </BrowserRouter>
+    <BarreraErrores>
+      <BrowserRouter>
+        <PuertaMigracion alAbrir={recolocarIds}>
+          <App />
+        </PuertaMigracion>
+      </BrowserRouter>
+    </BarreraErrores>
   </StrictMode>
 )

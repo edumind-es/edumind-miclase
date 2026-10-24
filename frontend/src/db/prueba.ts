@@ -42,6 +42,15 @@ export interface PreguntaPrueba {
    */
   aspecto?: string | null
   /**
+   * La planilla de corrección de la pregunta, para tenerla delante al
+   * corregir: `clave` es la respuesta correcta («1-d · 2-e · 3-a», «meridiano
+   * de Greenwich») y `correccion` cómo se reparten los puntos («completo 0,25 ·
+   * parcial 0,1 · incorrecto 0»). Texto libre, sin índice, dentro del JSON
+   * del examen; no cuentan para la nota: la nota la pone el docente mirándolas.
+   */
+  clave?: string | null
+  correccion?: string | null
+  /**
    * Solo `test`: las opciones entre las que elige el alumno, en orden (A, B,
    * C…). Con ellas el examen se puede imprimir y corregir por cámara.
    */
@@ -129,12 +138,16 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     // `null` no es «la primera»: Number(null) da 0 y pondría correcta donde no la hay.
     const correcta = p?.correcta == null ? NaN : Number(p.correcta)
     const aspecto = typeof p?.aspecto === 'string' ? p.aspecto.replace(/\s+/g, ' ').trim() : ''
+    const clave = typeof p?.clave === 'string' ? p.clave.replace(/\s+/g, ' ').trim() : ''
+    const correccion = typeof p?.correccion === 'string' ? p.correccion.replace(/\s+/g, ' ').trim() : ''
     preguntas.push({
       id,
       enunciado: String(p?.enunciado ?? '').trim(),
       max: Number.isFinite(max) && max > 0 ? redondear2(max) : 1,
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
       ...(aspecto ? { aspecto } : {}),
+      ...(clave ? { clave } : {}),
+      ...(correccion ? { correccion } : {}),
       ...(opciones.length ? { opciones } : {}),
       ...(opciones.length && Number.isInteger(correcta) && correcta >= 0 && correcta < opciones.length ? { correcta } : {}),
     })
