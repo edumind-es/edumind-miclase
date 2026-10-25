@@ -68,7 +68,7 @@ export default function ImprimirTest({ instrumento, unidadId, unidadNombre, alum
       // Solo se da por enviado lo que salió por la hoja del sistema: antes se decía siempre y en el iPad no salía nada.
       setMsg(hecho
         ? { tipo: 'ok', texto: `${alumnos.length} hoja${alumnos.length !== 1 ? 's' : ''} enviada${alumnos.length !== 1 ? 's' : ''} a imprimir.` }
-        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir» ni «Compartir».' })
+        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir», «Compartir» ni «Abrir».' })
     } catch (e) {
       setMsg({ tipo: 'error', texto: e instanceof Error ? e.message : 'No se pudieron preparar las hojas.' })
     } finally { setOcupado(null) }
@@ -81,7 +81,7 @@ export default function ImprimirTest({ instrumento, unidadId, unidadNombre, alum
       const hecho = await imprimir(documentoExamen(def, ctx), 'examen')
       setMsg(hecho
         ? { tipo: 'ok', texto: 'Examen enviado a imprimir.' }
-        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir» ni «Compartir».' })
+        : { tipo: 'error', texto: 'No se ha imprimido nada: la vista previa se cerró sin pulsar «Imprimir», «Compartir» ni «Abrir».' })
     } catch (e) {
       setMsg({ tipo: 'error', texto: e instanceof Error ? e.message : 'No se pudo preparar el examen.' })
     } finally { setOcupado(null) }

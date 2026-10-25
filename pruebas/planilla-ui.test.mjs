@@ -167,6 +167,11 @@ try {
   // Sin hoja de compartir en este navegador, «Compartir» descarga el .html.
   const [fichero] = await Promise.all([p.waitForEvent('download'), vista.locator('[data-vista-compartir]').click()])
   ok(fichero.suggestedFilename().endsWith('.html'), 'Compartir entrega el documento como fichero', fichero.suggestedFilename())
+  ok(await aparece(vista.locator('[data-vista-estado]').getByText(/se ha descargado/)), 'y la barra dice qué ha pasado, no se queda callada')
+  ok(await vista.locator('[data-vista-abrir]').isVisible(), 'con «Abrir en una pestaña» como tercer camino')
+  // La barra respeta la zona segura del iPad: la capa deja sitio arriba para la barra de estado.
+  ok((await vista.evaluate((el) => getComputedStyle(el).paddingTop)) !== undefined
+     && (await vista.evaluate((el) => el.style.paddingTop)).includes('safe-area-inset-top'), 'y deja sitio a la barra de estado del iPad')
   await vista.locator('[data-vista-cerrar]').click()
   ok(await aparece(informe.getByText('Informe enviado a imprimir.')), 'y al cerrar tras compartir se da por enviado')
   await informe.locator('[data-informe-imprimir]').click()

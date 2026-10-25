@@ -589,11 +589,19 @@ edumind_miclase/
   inicio no existe la hoja de impresión—, así que `ImpresoraWeb` enseña el
   documento en una vista previa (`[data-vista-impresion]`) con «Imprimir»
   (desde el iframe visible y dentro de la pulsación, que es lo que Safari
-  exige) y «Compartir» (`compartirFichero`: la hoja del sistema trae Imprimir,
-  Guardar en Archivos y AirDrop; es el único camino en la app instalada).
-  `imprimir()` devuelve si el docente pulsó una de las dos; cerrar la vista
-  no es haber impreso y las pantallas lo dicen. Luis pulsaba «Imprimir hojas»
-  en el iPad, la app decía «enviado a imprimir» y no salía nada.
+  exige), «Compartir» (`compartirFichero`: la hoja del sistema, con Guardar
+  en Archivos y AirDrop; **no** imprime un `.html`) y «Abrir en Safari»
+  (`[data-vista-abrir]`: `window.open` de un blob dentro de la pulsación; en
+  la app instalada una URL fuera de la app sale a Safari, cuyo botón de
+  compartir sí tiene Imprimir y Guardar en Archivos). En la app instalada
+  «Imprimir» no se ofrece, porque no abre nada. La barra lleva su línea de
+  estado (`[data-vista-estado]`) y la capa deja la zona segura arriba
+  (`env(safe-area-inset-top)`): la app corre bajo la barra de estado
+  (`viewport-fit=cover`) y con iPadOS 26 la hora y la batería caían encima de
+  los botones. `imprimir()` devuelve si el docente pulsó una de las tres;
+  cerrar la vista no es haber impreso y las pantallas lo dicen. Luis pulsaba
+  «Imprimir hojas» en el iPad, la app decía «enviado a imprimir» y no salía
+  nada.
 - **El login nativo depende del servidor.** La app solo ofrece «Conectar
   EDUmind» si `/api/auth/config` anuncia `redirect_uri_nativo`
   (`es.edumind.miclase://auth/callback`); si no, lo explica. Ver DESPLIEGUE.md,
