@@ -34,7 +34,7 @@ export default function GruposPage() {
 }
 
 function ListaGrupos() {
-  const { grupos, cargarGrupos, cargando } = useAppStore()
+  const { grupos, cargarGrupos, cargando, error } = useAppStore()
   useEffect(() => { cargarGrupos() }, [cargarGrupos])
 
   return (
@@ -47,7 +47,13 @@ function ListaGrupos() {
       </div>
 
       {cargando && <p>Cargando…</p>}
-      {grupos.length === 0 && !cargando && (
+      {error && !cargando && (
+        <div className="card" role="alert" data-error-clases
+          style={{ borderLeft: '4px solid var(--rojo-500)', color: 'var(--rojo-600, #b91c1c)', marginBottom: 16 }}>
+          {error}
+        </div>
+      )}
+      {grupos.length === 0 && !cargando && !error && (
         <div className="card" style={{ textAlign: 'center', padding: 48 }}>
           <p style={{ color: 'var(--gris-600)' }}>No tienes clases todavía.</p>
         </div>
