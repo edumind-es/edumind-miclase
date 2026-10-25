@@ -253,6 +253,23 @@ export async function configLocal(): Promise<{ salt: string | null; verificador:
 }
 
 /**
+ * ¿Este aparato usa otra contraseña que el buzón?
+ *
+ * Quien estrena la contraseña por un paquete o por el enlace directo se
+ * queda con la sal que trae ese paquete; si después conecta una cuenta cuyo
+ * buzón ya tenía otra, nadie lo decía: la pantalla enseñaba «desbloqueado»,
+ * cada ciclo bajaba los sobres y ninguno se podía descifrar. Luis se encontró
+ * un Mac con las notas del iPad (por AirDrop) y sin la clase (del buzón).
+ * La sal es pública: compararla basta y no desvela nada.
+ */
+export async function contrasenaDistintaDelBuzon(estado: EstadoSync): Promise<boolean> {
+  if (!estado.iniciado || !estado.salt) return false
+  if (!(await claveGuardada())) return false
+  const { salt } = await configLocal()
+  return !!salt && salt !== estado.salt
+}
+
+/**
  * Publicar en el buzón la contraseña que este dispositivo ya tiene.
  *
  * Quien estrenó la sincronización sin buzón (para AirDrop o el enlace directo)
@@ -963,6 +980,19 @@ export async function reenviarTodo(): Promise<void> {
   // También los registros aislados: si el docente pide reenviar todo, quiere
   // que se reintenten hasta los que fallaron.
   await guardarMeta(K_CUARENTENA, {})
+}
+
+/**
+ * Olvida el cursor de descarga del buzón para volver a bajarlo entero.
+ *
+ * Es el espejo de `reenviarTodo`: hace falta cuando lo que el buzón ya
+ * entregó a este aparato se perdió aquí —una clase que estaba el día 23 y
+ * hoy no se ve— y el buzón, con razón, dice «0 recibidos» porque el cursor
+ * está al final. No toca la base de fusión: lo que ya se tenga igual se
+ * descarta al fusionar, y lo que falte entra como la primera vez.
+ */
+export async function volverABajarTodo(): Promise<void> {
+  await guardarMeta(K_PULL_SEQ, 0)
 }
 
 /**

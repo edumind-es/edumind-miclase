@@ -84,7 +84,13 @@ export function ClaseActivaProvider({ children }: { children: React.ReactNode })
   // Se relee al cambiar de pantalla. Es una lectura local de IndexedDB, y
   // ahorra tener que avisar desde cada sitio donde se crea o borra una clase:
   // al volver de la configuración, la barra ya enseña lo que se acaba de tocar.
-  useEffect(() => { recargarGrupos().catch(() => setCargando(false)) }, [recargarGrupos, pathname])
+  useEffect(() => {
+    recargarGrupos().catch(e => {
+      // Callarlo dejaba la barra sin clase y ninguna pista de por qué.
+      console.error('No se pudieron cargar las clases', e)
+      setCargando(false)
+    })
+  }, [recargarGrupos, pathname])
 
   useEffect(() => { if (grupoId != null) localStorage.setItem(K_GRUPO, String(grupoId)) }, [grupoId])
 

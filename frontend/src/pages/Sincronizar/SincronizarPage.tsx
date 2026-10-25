@@ -11,8 +11,8 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/auth/AuthProvider'
 import {
   consultarEstado, iniciarSincronizacion, desbloquear, sincronizar, publicarContrasenaEnBuzon,
-  claveGuardada, olvidarClave, ultimaSincronizacion, pendientesDeEnvio, reenviarTodo,
-  registrosAislados,
+  claveGuardada, olvidarClave, ultimaSincronizacion, pendientesDeEnvio, reenviarTodo, volverABajarTodo,
+  registrosAislados, contrasenaDistintaDelBuzon,
   type EstadoSync, type ResultadoSync,
 } from '@/db/sync'
 import { idDispositivo } from '@/db/ids'
@@ -41,6 +41,8 @@ export default function SincronizarPage() {
   // siempre una evidencia que no cabe en un sobre. Antes desaparecían sin más.
   const [aislados, setAislados] = useState<Array<{ clave: string; motivo: string }>>([])
   const [auto, setAuto] = useState(() => localStorage.getItem(K_AUTO) === '1')
+  // La sal de este aparato no es la del buzón: nada de lo que baje se abrirá.
+  const [otraContrasena, setOtraContrasena] = useState(false)
 
   const conectado = modo === 'authentik'
 
@@ -51,7 +53,9 @@ export default function SincronizarPage() {
     setAislados(await registrosAislados())
     if (!conectado) { setEstado(null); return }
     try {
-      setEstado(await consultarEstado(headers))
+      const est = await consultarEstado(headers)
+      setEstado(est)
+      setOtraContrasena(await contrasenaDistintaDelBuzon(est))
       setErrorEstado('')
     } catch (e: any) {
       setEstado(null)
@@ -120,6 +124,23 @@ export default function SincronizarPage() {
     } finally { setTrabajando(false) }
   }
 
+  // Desbloquear otra vez contra el buzón, con SU contraseña. Sustituye la sal
+  // y la clave locales y vuelve a bajar todo: lo que bajó hasta ahora con la
+  // llave equivocada se descartó, y el cursor ya lo daba por visto.
+  const desbloquearDeNuevo = async () => {
+    setTrabajando(true); setMsg(null)
+    try {
+      await desbloquear(password, headers)
+      await volverABajarTodo()
+      setPassword('')
+      setMsg({ tipo: 'ok', texto: 'Contraseña del buzón adoptada en este dispositivo. Se vuelve a bajar todo el buzón.' })
+      await refrescar()
+      await hacerSync(true)
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message })
+    } finally { setTrabajando(false) }
+  }
+
   const hacerSync = async (silencioso = false) => {
     setTrabajando(true)
     if (!silencioso) setMsg(null)
@@ -130,6 +151,7 @@ export default function SincronizarPage() {
         setMsg({
           tipo: r.errores.length ? 'info' : 'ok',
           texto: `Enviados ${r.enviados} · recibidos ${r.aplicados}` +
+                 ((r.sinDescifrar ?? 0) > 0 ? ` · ${r.sinDescifrar} sin descifrar (otra contraseña)` : '') +
                  (r.errores.length ? ` · ${r.errores.length} con problemas` : ''),
         })
       }
@@ -149,6 +171,12 @@ export default function SincronizarPage() {
   const reenviar = async () => {
     if (!confirm('¿Volver a enviar TODOS tus datos al buzón?\n\nÚtil si sospechas que algo no llegó. Puede tardar.')) return
     await reenviarTodo()
+    await hacerSync()
+  }
+
+  const volverABajar = async () => {
+    if (!confirm('¿Volver a bajar TODO el buzón a este dispositivo?\n\nÚtil si aquí falta algo que el buzón ya tiene (una clase, alumnado…). Lo que ya tengas igual se descarta; nada se borra. Puede tardar.')) return
+    await volverABajarTodo()
     await hacerSync()
   }
 
@@ -316,6 +344,39 @@ export default function SincronizarPage() {
             </div>
           )}
 
+          {/* Este aparato tiene contraseña, pero no la del buzón */}
+          {desbloqueado && buzonListo && otraContrasena && (
+            <div className="card" role="alert" data-contrasena-distinta
+              style={{ marginBottom: 18, borderLeft: '4px solid var(--rojo-500)' }}>
+              <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>
+                Este dispositivo usa otra contraseña que el buzón
+              </h2>
+              <p style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.6 }}>
+                La contraseña de aquí se creó aparte (por un paquete o por el enlace directo) y no
+                abre los sobres del buzón: cada ciclo los baja y los descarta sin aplicar nada, por
+                eso falta lo que otros aparatos enviaron por el buzón. Escribe la contraseña con la que
+                se activó el buzón: este dispositivo la adopta y vuelve a bajar todo. Nada de lo que ya
+                tienes aquí se borra.
+              </p>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') desbloquearDeNuevo() }}
+                  placeholder="Contraseña del buzón"
+                  aria-label="Contraseña del buzón"
+                  autoComplete="current-password"
+                  style={{ flex: '1 1 240px', minWidth: 200 }} />
+                <button className="btn-primary" disabled={trabajando || !password} onClick={desbloquearDeNuevo}>
+                  {trabajando ? 'Trabajando…' : 'Desbloquear con la del buzón'}
+                </button>
+              </div>
+              <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '10px 0 0', lineHeight: 1.5 }}>
+                Lo que este aparato subió con la otra contraseña sigue en el buzón sin que nadie lo
+                pueda abrir. Si tus otros aparatos no lo tienen, pásaselo por fichero o por enlace
+                directo.
+              </p>
+            </div>
+          )}
+
           {/* Configurar / desbloquear / sincronizar */}
           {!desbloqueado ? (
             <div className="card" style={{ marginBottom: 18 }}>
@@ -438,6 +499,10 @@ export default function SincronizarPage() {
                       titulo="Reenviar todo"
                       texto="Vuelve a subir todos tus datos al buzón, por si algo no llegó."
                       boton="Reenviar" onClick={reenviar} disabled={trabajando} />
+                    <Fila
+                      titulo="Volver a bajar todo"
+                      texto="Vuelve a bajar todo el buzón a este dispositivo, por si aquí falta algo que el buzón ya tiene."
+                      boton="Bajar todo" onClick={volverABajar} disabled={trabajando} />
                     <Fila
                       titulo="Bloquear este dispositivo"
                       texto="Olvida la clave aquí. Tus datos locales no se tocan."

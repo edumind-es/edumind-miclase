@@ -70,8 +70,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       const data = await getGrupos()
       set({ grupos: data as unknown as Grupo[], cargando: false })
-    } catch {
-      set({ error: 'Error cargando grupos', cargando: false })
+    } catch (e) {
+      // Una lista vacía por un error no es «no tienes clases»: se dice cuál.
+      console.error('No se pudieron cargar las clases', e)
+      set({ error: `No se pudieron cargar las clases: ${e instanceof Error ? e.message : String(e)}`, cargando: false })
     }
   },
 
