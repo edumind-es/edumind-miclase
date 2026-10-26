@@ -158,8 +158,11 @@ try {
   ok(await editor.getByLabel('Instrumento del examen').inputValue() !== '', 'y para el instrumento desde el que se abre')
   await editor.getByRole('button', { name: /Cómo importar/ }).click()
   ok(await editor.getByText(/una tabla con una fila por pregunta/).isVisible(), 'la ayuda explica la forma del fichero')
-  const md = `# Examen de la unidad 1\n\n| Pregunta | Puntos | Criterio |\n|---|---|---|\n`
-    + `| Uno | 2 | ${cA} |\n| Dos | 3 | ${cA} |\n| Tres | 3 | ${cB} |\n| Cuatro | 2 | |\n| Cinco | 1 | CE9.9 |\n`
+  // «Uno» reparte 0,5 por acierto (escalones), «Dos» trae su rúbrica por
+  // pregunta (niveles con texto), el resto nada: la casilla de teclear.
+  const md = `# Examen de la unidad 1\n\n| Pregunta | Puntos | Criterio | Corrección | Nivel 1 | Nivel 2 | Nivel 3 |\n|---|---|---|---|---|---|---|\n`
+    + `| Uno | 2 | ${cA} | 0,5 por cada acierto | | | |\n| Dos | 3 | ${cA} | | 3 pt · Todo bien | 1,5 pt · A medias | 0 pt · Nada |\n`
+    + `| Tres | 3 | ${cB} | | | | |\n| Cuatro | 2 | | | | | |\n| Cinco | 1 | CE9.9 | | | | |\n`
   await editor.locator('input[data-uso="examen"]').setInputFiles({ name: 'examen.md', mimeType: 'text/markdown', buffer: Buffer.from(md) })
   ok(await aparece(editor.getByText(/«Examen de la unidad 1» importado: 5 preguntas, 11 puntos/)), 'importa 5 preguntas y 11 puntos')
   ok(await editor.getByLabel('Tipo de examen').count() === 0 && await editor.getByRole('radio', { name: /Puntos por pregunta/ }).isChecked(), 'tipo: puntos por pregunta')
@@ -181,12 +184,15 @@ try {
   ok(await examen.locator('[data-pregunta]').count() === 4, 'el panel enseña las 4 preguntas en lugar del 0–10')
   ok(await panel.locator('button.cal-8').count() === 0, 'sin los botones de nota a mano')
   const casilla = n => examen.locator(`[data-pregunta="${n}"] input`)
-  await casilla(1).fill('2')
-  await casilla(1).press('Tab')
+  const niveles = n => examen.locator(`[data-pregunta="${n}"] [data-pregunta-niveles] button`)
+  ok(await niveles(1).count() === 5 && await niveles(3).count() === 0, '«0,5 por cada acierto» da cinco escalones; sin reparto, ninguno', `${await niveles(1).count()} · ${await niveles(3).count()}`)
+  ok(await niveles(2).count() === 3 && await niveles(2).nth(1).textContent() === '1,5A medias', 'la rúbrica de la pregunta sale como botones con su texto', await niveles(2).nth(1).textContent())
+  await examen.locator('[data-pregunta="1"] [data-nivel="2"]').click()
   await aparece(panel.getByText(/^✅ Examen: /))
-  await casilla(2).fill('1,5')
-  await casilla(2).press('Enter')
+  await examen.locator('[data-pregunta="2"]').getByRole('button', { name: /1,5 puntos · A medias/ }).click()
   await p.waitForTimeout(500)
+  ok(await examen.locator('[data-pregunta="2"] [data-nivel="1,5"]').getAttribute('aria-pressed') === 'true', 'el nivel pulsado queda marcado')
+  ok(await casilla(2).inputValue() === '1,5', 'y la casilla enseña sus puntos')
   await examen.locator('[data-pregunta="3"]').getByRole('button', { name: /todos los puntos/ }).click()
   await p.waitForTimeout(500)
   await examen.locator('[data-pregunta="4"]').getByRole('button', { name: /cero puntos/ }).click()

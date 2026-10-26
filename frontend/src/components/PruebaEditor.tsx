@@ -456,7 +456,7 @@ export default function PruebaEditor({
         </div>
 
         <input ref={importRef} type="file" style={{ display: 'none' }} onChange={importar}
-          data-uso="examen" accept=".xlsx,.md,.markdown,.txt,.json" />
+          data-uso="examen" accept=".xlsx,.csv,.md,.markdown,.txt,.json" />
 
         {cargando ? (
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>
@@ -627,7 +627,7 @@ export default function PruebaEditor({
                         style={{ width: '100%', fontSize: 12, fontFamily: 'ui-monospace, monospace', resize: 'vertical' }}
                         placeholder={esTest
                           ? 'Pega aquí el test. Formato:\n\n1. ¿Onde nace o río Miño?\n   a) Na serra de Meira *\n   b) Nos Ancares\n   c) No Courel\n\nLa correcta lleva un asterisco, o va al final en «Respuestas: 1-a, 2-c…».'
-                          : 'Pega aquí la tabla que devuelve la IA. Formato:\n\n| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |\n|---|---|---|---|---|---|\n| 1. Relaciona cada termo | 1 | CE1.1 | Mapas | 1-d · 2-e · 3-a | 0,2 cada acerto |'} />
+                          : 'Pega aquí la tabla que devuelve la IA. Formato:\n\n| Ítem | Pregunta | Criterio | Tipo | Máximo | Clave | Puntuación | Nivel 1 | … | Notas |\n|---|---|---|---|---|---|---|---|---|---|\n| 1 | Relaciona cada termo | CE1.1 | Respuesta cerrada | 1 | 1-d · 2-e · 3-a | 0,2 cada acerto | | | |\n\nTambién vale la tabla corta: | Pregunta | Puntos | Criterio | Clave | Corrección |'} />
                     </div>
                     {iaError && <div style={{ color: '#991b1b', fontSize: 12.5 }}>❌ {iaError}</div>}
                     <div style={{ display: 'flex', gap: 8 }}>
@@ -856,7 +856,7 @@ export default function PruebaEditor({
                 ⭐ Guardar en mi banco
               </button>
               <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => importRef.current?.click()}
-                title="Definir el examen desde una hoja de cálculo (.xlsx), un Markdown (.md) o un JSON (.json)">
+                title="Definir el examen desde una hoja de cálculo (.xlsx o .csv), un Markdown (.md) o un JSON (.json)">
                 📥 Importar
               </button>
               <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => setAyuda(v => !v)} aria-expanded={ayuda}
@@ -924,7 +924,7 @@ function AyudaImportarPrueba({ onCerrar }: { onCerrar: () => void }) {
           style={{ background: 'none', border: 'none', fontSize: 16, cursor: 'pointer', color: 'var(--gris-600)', lineHeight: 1 }}>×</button>
       </div>
       <p style={{ fontSize: 12.5, color: 'var(--gris-700)', lineHeight: 1.55, marginBottom: 10 }}>
-        El examen es <strong>una tabla con una fila por pregunta</strong>, en una hoja de cálculo (.xlsx) o en Markdown (.md).
+        El examen es <strong>una tabla con una fila por pregunta</strong>, en una hoja de cálculo (.xlsx o .csv) o en Markdown (.md).
         Se lee en este dispositivo y no se sube a ningún sitio.
       </p>
       <div style={{ overflowX: 'auto', marginBottom: 10 }}>
@@ -945,6 +945,7 @@ function AyudaImportarPrueba({ onCerrar }: { onCerrar: () => void }) {
         <li>Encima de la tabla, cada uno en su fila y todos opcionales: <strong>Tipo</strong> (puntos, test o niveles), <strong>Reparto</strong> (nota única o por criterios),
           {' '}<strong>Penalización</strong> para el test (0,25 o 1/3) y <strong>Escala</strong> para los niveles («Correcta (2)», «Parcial (1)», «En blanco (0)», una por celda).</li>
         <li>Una celda suelta arriba del todo es el título del examen.</li>
+        <li>La <strong>planilla con rúbrica por pregunta</strong> (la que devuelve la IA con el prompt de corrección) también se lee tal cual: <strong>Ítem</strong>, <strong>Columna</strong>, <strong>Criterio</strong>, <strong>Máximo</strong>, <strong>Clave</strong>, <strong>Puntuación</strong>, <strong>Nivel 1…6</strong> («0,75 pt · cómo se reconoce») y <strong>Notas</strong>. Al corregir, cada nivel es un botón. En un .xlsx se busca la hoja que tenga la planilla, aunque no sea la primera.</li>
         <li>Un <strong>test con clave</strong> lleva además <strong>Opciones</strong> (separadas por «;») y <strong>Correcta</strong> (la letra). O se escribe como examen en un .md: «1. Pregunta», debajo «a) …», «b) …», y la correcta con un asterisco al final o en una línea «Respuestas: 1-b, 2-c».</li>
       </ul>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

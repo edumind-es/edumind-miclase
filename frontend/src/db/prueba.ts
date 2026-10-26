@@ -51,6 +51,17 @@ export interface PreguntaPrueba {
   clave?: string | null
   correccion?: string | null
   /**
+   * Solo `puntos`: los niveles de corrección de la pregunta, de más a menos
+   * puntos («1 pt · las tres partes bien situadas», «0,75 pt · tres de los
+   * cuatro elementos»). El corrector los enseña como botones: pulsar uno pone
+   * esos puntos. Texto libre dentro del JSON del examen; una pregunta de
+   * respuesta cerrada no los trae y el corrector deduce los escalones del
+   * reparto (`escalonesDePregunta`).
+   */
+  niveles?: NivelCorreccion[]
+  /** Notas de corrección: qué se admite y qué no («admítese "sangue" en C»). */
+  notas?: string | null
+  /**
    * Solo `test`: las opciones entre las que elige el alumno, en orden (A, B,
    * C…). Con ellas el examen se puede imprimir y corregir por cámara.
    */
@@ -64,6 +75,8 @@ export const LETRAS = ['A', 'B', 'C', 'D', 'E', 'F'] as const
 export const MAX_OPCIONES = LETRAS.length
 
 export interface NivelPrueba { nombre: string; valor: number }
+/** Un nivel de corrección de una pregunta de puntos: lo que vale y cómo se reconoce. */
+export interface NivelCorreccion { puntos: number; texto: string }
 
 export interface PruebaDef {
   titulo: string
@@ -140,14 +153,27 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     const aspecto = typeof p?.aspecto === 'string' ? p.aspecto.replace(/\s+/g, ' ').trim() : ''
     const clave = typeof p?.clave === 'string' ? p.clave.replace(/\s+/g, ' ').trim() : ''
     const correccion = typeof p?.correccion === 'string' ? p.correccion.replace(/\s+/g, ' ').trim() : ''
+    const notas = typeof p?.notas === 'string' ? p.notas.replace(/\s+/g, ' ').trim() : ''
+    const maxLimpio = Number.isFinite(max) && max > 0 ? redondear2(max) : 1
+    // Los niveles solo tienen sentido con puntos; se ordenan de más a menos y
+    // ninguno puede valer más que la pregunta.
+    const niveles: NivelCorreccion[] = tipo === 'puntos' && Array.isArray(p?.niveles)
+      ? p.niveles
+        .map((n: any) => ({ puntos: Number(n?.puntos), texto: String(n?.texto ?? '').replace(/\s+/g, ' ').trim() }))
+        .filter((n: NivelCorreccion) => Number.isFinite(n.puntos) && n.puntos >= 0 && n.puntos <= maxLimpio)
+        .map((n: NivelCorreccion) => ({ ...n, puntos: redondear2(n.puntos) }))
+        .sort((a: NivelCorreccion, b: NivelCorreccion) => b.puntos - a.puntos)
+      : []
     preguntas.push({
       id,
       enunciado: String(p?.enunciado ?? '').trim(),
-      max: Number.isFinite(max) && max > 0 ? redondear2(max) : 1,
+      max: maxLimpio,
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
       ...(aspecto ? { aspecto } : {}),
       ...(clave ? { clave } : {}),
       ...(correccion ? { correccion } : {}),
+      ...(niveles.length ? { niveles } : {}),
+      ...(notas ? { notas } : {}),
       ...(opciones.length ? { opciones } : {}),
       ...(opciones.length && Number.isInteger(correcta) && correcta >= 0 && correcta < opciones.length ? { correcta } : {}),
     })
@@ -179,6 +205,34 @@ export function respuestaDeMarca(p: PreguntaPrueba, marcada: number | null | und
 }
 
 /** Un test con opciones y correcta en todas sus preguntas: se puede imprimir y corregir por cámara. */
+/**
+ * Los puntos que se pueden poner de un toque en una pregunta de puntos, de
+ * más a menos. Con niveles de corrección son los suyos; sin ellos se deducen
+ * del reparto («0,25 por cada acerto», «0,1 por acerto»): el escalón es la
+ * cifra más pequeña del texto que divide el máximo en partes iguales, hasta
+ * diez. Si no hay forma de saberlo, nada: queda la casilla de teclear.
+ */
+export function escalonesDePregunta(p: PreguntaPrueba): number[] {
+  if (p.niveles?.length) {
+    return [...new Set(p.niveles.map(n => n.puntos))].sort((a, b) => b - a)
+  }
+  const cifras = ((p.correccion ?? '').match(/\d+(?:[.,]\d+)?/g) ?? []).map(c => Number(c.replace(',', '.')))
+  // Apartados con valor propio («a) 0,3 · b) 0,3 · c) 0,4»): si suman el
+  // máximo, se puede poner cualquier combinación de ellos.
+  const partes = cifras.filter(n => n > 0 && n < p.max)
+  if (partes.length >= 2 && partes.length <= 6 && Math.abs(partes.reduce((a, b) => a + b, 0) - p.max) < 0.001) {
+    let sumas = new Set<number>([0])
+    for (const parte of partes) sumas = new Set([...sumas, ...[...sumas].map(x => redondear2(x + parte))])
+    return [...sumas].sort((a, b) => b - a)
+  }
+  const paso = cifras
+    .filter(n => n > 0 && n < p.max && Math.abs(Math.round(p.max / n) - p.max / n) < 0.001 && Math.round(p.max / n) <= 10)
+    .sort((a, b) => a - b)[0]
+  if (!paso) return []
+  const n = Math.round(p.max / paso)
+  return Array.from({ length: n + 1 }, (_, i) => redondear2(p.max - i * paso))
+}
+
 export function tieneClave(def: PruebaDef): boolean {
   return def.tipo === 'test' && def.preguntas.length > 0
     && def.preguntas.every(p => (p.opciones?.length ?? 0) >= 2 && p.correcta != null)

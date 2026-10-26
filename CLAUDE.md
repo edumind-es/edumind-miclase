@@ -391,6 +391,22 @@ edumind_miclase/
   cabecera, no confunde «Puntuación e indicadores» con los puntos ni «Criterios
   de corrección» con el criterio, y una letra sola en «Clave» sigue siendo la
   correcta de un test.
+- **La planilla con rúbrica por pregunta es la forma oficial de corregir una
+  prueba escrita** (`CORRECCION_PRUEBAS.md`). `PreguntaPrueba.niveles`
+  (puntos y texto, de más a menos) y `.notas` van dentro de `prueba_json`,
+  sin índice ni esquema. `pruebaDeFilas` lee el fichero de Luis tal cual:
+  «Ítem» como número, «Columna» como nombre (quitando «CA2.1 · » y «(/1)»),
+  «Máximo» como puntos y entonces «Puntuación» es el reparto (no los
+  puntos), «Resposta correcta / clave» en gallego, «Nivel 1…6» con
+  `nivelCorreccionDe` («0,75 pt · texto»; «Non procede» no es un nivel) y
+  «Notas de corrección» aparte. Entra por `.csv` (`filasDeCsv`) y por
+  `.xlsx` probando hoja a hoja (`leerXlsxHojas`): la planilla va detrás de
+  la plantilla de iDoceo con el alumnado. El corrector enseña los niveles
+  como botones (`[data-pregunta-niveles]`) y, sin niveles, los escalones de
+  `escalonesDePregunta` (puro: la cifra más pequeña del reparto que divide
+  el máximo hasta en diez, o las combinaciones de apartados que suman el
+  máximo); nada de eso cambia la nota, que sigue en `notaDePrueba`.
+  `generarPromptPlanilla` pide exactamente esa tabla.
 - **Nada de examen falla en silencio.** `ExamenesConHoja` recoge cualquier
   error al listar, abrir el editor o el corrector y lo pone en
   `[data-examenes-aviso]`; `PruebaEditor` dice si no pudo leer el examen

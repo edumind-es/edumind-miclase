@@ -97,7 +97,7 @@ try {
   await editor.locator('#ia-contexto').fill('1. Relaciona cada termo coa súa definición (1 punto)\n2. Elementos dun mapa (1 punto)')
   await editor.locator('[data-ia-copiar]').click()
   const prompt = await p.evaluate(() => navigator.clipboard.readText()).catch(() => '')
-  ok(prompt.includes('PLANILLA DE CORRECCIÓN') && prompt.includes('Relaciona cada termo') && prompt.includes('| Clave | Corrección |'), 'el prompt lleva el examen del docente y pide la tabla con clave y corrección')
+  ok(prompt.includes('PLANILLA DE CORRECCIÓN') && prompt.includes('Relaciona cada termo') && prompt.includes('| Clave | Puntuación | Nivel 1 |'), 'el prompt lleva el examen del docente y pide la planilla con clave, puntuación y niveles')
 
   console.log('\n3. La tabla que devuelve la IA se carga con clave y corrección')
   const criterios = await p.evaluate(async () => {

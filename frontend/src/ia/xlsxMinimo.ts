@@ -105,6 +105,15 @@ const atributo = (attrs: string, nombre: string): string | undefined =>
  * demás una columna —el mismo fallo que ya tuvo el lector de Markdown—.
  */
 export async function leerXlsx(datos: ArrayBuffer): Promise<string[][]> {
+  return (await leerXlsxHojas(datos))[0]
+}
+
+/**
+ * Todas las hojas de un `.xlsx`, en su orden, cada una como tabla de textos.
+ * Una planilla de corrección puede venir en la segunda hoja, detrás de la
+ * plantilla del cuaderno de notas: quien importa prueba hoja a hoja.
+ */
+export async function leerXlsxHojas(datos: ArrayBuffer): Promise<string[][][]> {
   const entradas = entradasDelZip(datos)
   const hojas = entradas
     .filter(e => /^xl\/worksheets\/[^/]+\.xml$/.test(e.nombre))
@@ -119,7 +128,12 @@ export async function leerXlsx(datos: ArrayBuffer): Promise<string[][]> {
     for (const m of xml.matchAll(/<si\b[^>]*?(?:\/>|>([\s\S]*?)<\/si>)/g)) cadenas.push(textoDe(m[1] ?? ''))
   }
 
-  const xml = await contenido(datos, hojas[0])
+  const resultado: string[][][] = []
+  for (const hoja of hojas) resultado.push(filasDeHoja(await contenido(datos, hoja), cadenas))
+  return resultado
+}
+
+function filasDeHoja(xml: string, cadenas: string[]): string[][] {
   const filas: string[][] = []
   let siguienteFila = 0
   for (const mf of xml.matchAll(/<row\b([^>]*?)(?:\/>|>([\s\S]*?)<\/row>)/g)) {

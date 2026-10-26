@@ -12,7 +12,15 @@
  * de corrección: la respuesta correcta y cómo se reparten los puntos, para
  * tenerlas delante al corregir. Una planilla de verdad no suele traer columna
  * «Pregunta», solo «N.º», «Clave», «Puntuación e indicadores» y «Máx.»: también
- * se lee. Encima de la tabla pueden ir, cada uno en su fila, los ajustes
+ * se lee. Y la planilla con rúbrica por pregunta, que es la forma oficial de
+ * corregir una prueba escrita (ver CORRECCION_PRUEBAS.md): «Ítem», «Columna»
+ * (el nombre de la pregunta tal como va en el cuaderno, «CA2.1 · P1 Célula
+ * animal (/1)»), «Criterio», «Tipo», «Máximo», «Resposta correcta / clave»,
+ * «Puntuación» (el reparto), «Nivel 1»… «Nivel 6» (cada uno «0,75 pt · cómo
+ * se reconoce») y «Notas de corrección». Las cabeceras valen en castellano y
+ * en gallego. Puede ser .xlsx (se prueba hoja a hoja: la de la clave suele ir
+ * detrás de la plantilla del cuaderno) o .csv.
+ * Encima de la tabla pueden ir, cada uno en su fila, los ajustes
  * del examen —todos opcionales—:
  *
  *   Tipo          puntos | test | niveles
@@ -23,10 +31,10 @@
  * Puro. Los fallos se lanzan como `Error` con un mensaje para el docente.
  */
 import { celdasDeFila } from './rubricaPrompt'
-import { leerXlsx, escribirXlsx } from './xlsxMinimo'
+import { leerXlsxHojas, escribirXlsx } from './xlsxMinimo'
 import {
   normalizarPrueba, LETRAS, MAX_OPCIONES,
-  type PruebaDef, type TipoPrueba, type RepartoPrueba, type NivelPrueba, type PreguntaPrueba,
+  type PruebaDef, type TipoPrueba, type RepartoPrueba, type NivelPrueba, type PreguntaPrueba, type NivelCorreccion,
 } from '../db/prueba'
 
 export type PruebaImportada = { prueba: PruebaDef; avisos: string[] }
@@ -62,13 +70,37 @@ function nivelDe(celda: string): NivelPrueba | null {
   return m ? { nombre: m[1].trim(), valor: Number(m[2].replace(',', '.')) } : null
 }
 
+/**
+ * Una celda de nivel de corrección: «0,75 pt · Tres dos catro elementos»,
+ * «1 punto: todo bien». Sin cifra delante («Non procede») no es un nivel.
+ */
+export function nivelCorreccionDe(celda: string): NivelCorreccion | null {
+  const m = limpiar(celda).match(/^(\d+(?:[.,]\d+)?)\s*(?:pts?\.?|puntos?|punto)?\s*(?:[·:\-–—]\s*)?(.*)$/i)
+  if (!m) return null
+  return { puntos: Number(m[1].replace(',', '.')), texto: m[2].trim() }
+}
+
+/**
+ * El nombre de la pregunta tal como va en la columna del cuaderno: «CA2.1 ·
+ * P1 Célula animal (/1)» → «P1 Célula animal». El criterio y el máximo ya
+ * tienen su columna.
+ */
+export function nombreDeColumna(celda: string): string {
+  return limpiar(celda)
+    .replace(/^[A-Za-z]{1,4}\d+(?:\.\d+)*\s*[·\-–—:]\s*/, '')
+    .replace(/\s*\(\s*\/\s*\d+(?:[.,]\d+)?\s*\)\s*$/, '')
+    .trim()
+}
+
 const ES_AJUSTE = /^(tipo|reparto|penalizaci[oó]n|escala)\b/i
 const ES_SEPARADOR = /^:?-{2,}:?$/
 /** Cabecera de la columna del número de pregunta: «N.º», «Nº», «Núm.», «#». */
-const ES_NUMERO_CAB = /^(n\.?\s*[ºo°]\.?|n[uú]m(ero)?\.?|#)$/i
+const ES_NUMERO_CAB = /^(n\.?\s*[ºo°]\.?|n[uú]m(ero)?\.?|#|[ií]tem)$/i
 const ES_PUNTOS_CAB = /^(puntos?|valor|puntuaci[oó]n|m[aá]x|peso)/i
 /** «Puntuación e indicadores», «Corrección», «Cómo se puntúa»: la planilla, no los puntos. */
 const ES_CORRECCION_CAB = /indicador|correcci[oó]n|c[oó]mo se (punt|corrig|valor)/i
+/** «Notas de corrección»: lo que se admite y lo que no; no es el reparto. */
+const ES_NOTAS_CAB = /^notas?\b/i
 const ES_TOTAL = /^(total|suma)\b/i
 
 /** Una tabla (de hoja de cálculo o de Markdown) → definición de examen. */
@@ -85,7 +117,10 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
     if (j >= 0) { iCab = i; c0 = j; colNum = n }
     else if (n >= 0 && filas[i].some((c, k) => k !== n && ES_PUNTOS_CAB.test(c))) { iCab = i; c0 = n; colNum = n }
   }
+  // Sin columna «Pregunta», el nombre de la pregunta puede venir en «Columna»
+  // (el del cuaderno de notas, con criterio y máximo dentro, que se quitan).
   const colEnunciado = c0 !== colNum ? c0 : -1
+  const colColumna = colEnunciado < 0 ? filas[iCab]?.findIndex(c => /^columna/i.test(c)) ?? -1 : -1
   if (iCab < 0) {
     if (filas.some(f => f.some(c => /^indicador/i.test(c)))) {
       throw new Error('Este fichero parece una rúbrica (tiene una columna «Indicador»), no un examen. Impórtalo desde 📊 Rúbrica.')
@@ -128,8 +163,14 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
   const otra = (j: number) => j !== c0 && j !== colNum
   // Primero la planilla: «Puntuación e indicadores» empieza por «puntuación»
   // y «Criterios de corrección» por «criterio», y no son ni lo uno ni lo otro.
-  const colCorreccion = cab.findIndex((c, j) => otra(j) && ES_CORRECCION_CAB.test(c))
-  const colPuntos = cab.findIndex((c, j) => otra(j) && j !== colCorreccion && ES_PUNTOS_CAB.test(c))
+  const colNotas = cab.findIndex((c, j) => otra(j) && ES_NOTAS_CAB.test(c))
+  let colCorreccion = cab.findIndex((c, j) => otra(j) && j !== colNotas && ES_CORRECCION_CAB.test(c))
+  // Los puntos: «Máximo» manda si está; si no, la primera columna de puntos.
+  const colMax = cab.findIndex((c, j) => otra(j) && j !== colCorreccion && /^m[aá]x/i.test(c))
+  const colPuntos = colMax >= 0 ? colMax : cab.findIndex((c, j) => otra(j) && j !== colCorreccion && j !== colNotas && ES_PUNTOS_CAB.test(c))
+  // Con «Máximo» aparte, «Puntuación» es el reparto («0,25 por cada acerto»), no los puntos.
+  if (colCorreccion < 0) colCorreccion = cab.findIndex((c, j) => otra(j) && j !== colPuntos && j !== colNotas && /^puntuaci[oó]n/i.test(c))
+  const colsNivel = cab.map((c, j) => (otra(j) && /^nivel\s*\d*$/i.test(c) ? j : -1)).filter(j => j >= 0)
   const colCriterio = cab.findIndex((c, j) => otra(j) && j !== colCorreccion && /^criterio/i.test(c))
   const colAspecto = cab.findIndex((c, j) => otra(j) && /^(aspecto|bloque|tema)/i.test(c))
   // Un test con clave: «Opciones» (separadas por «;», «·» o «/») y «Correcta» (la letra).
@@ -137,21 +178,23 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
   const colCorrecta = cab.findIndex((c, j) => otra(j) && /^correcta/i.test(c))
   // «Clave», «Respuesta» o «Solución»: una letra es la correcta de un test;
   // cualquier otro texto es la clave de la planilla (la respuesta esperada).
-  const colClave = cab.findIndex((c, j) => otra(j) && j !== colCorrecta && j !== colCorreccion && /^(clave|respuesta|soluci[oó]n)/i.test(c))
+  const colClave = cab.findIndex((c, j) => otra(j) && j !== colCorrecta && j !== colCorreccion && j !== colNotas && /^(clave|respuesta|resposta|soluci[oó]n)|\bclave\b/i.test(c))
 
   const preguntas: Omit<PreguntaPrueba, 'id'>[] = []
   let sinPuntos = 0
   for (let i = iCab + 1; i < filas.length; i++) {
     const f = filas[i]
-    const enunciado = colEnunciado >= 0 ? (f[colEnunciado] ?? '') : ''
+    const enunciado = colEnunciado >= 0 ? (f[colEnunciado] ?? '') : colColumna >= 0 ? nombreDeColumna(f[colColumna] ?? '') : ''
     const num = colNum >= 0 ? (f[colNum] ?? '') : enunciado
     const puntos = colPuntos >= 0 ? numero(f[colPuntos]) : undefined
     const criterio = colCriterio >= 0 ? (f[colCriterio] ?? '') : ''
     const textoClave = colClave >= 0 ? (f[colClave] ?? '') : ''
     const correccion = colCorreccion >= 0 ? (f[colCorreccion] ?? '') : ''
+    const notas = colNotas >= 0 ? (f[colNotas] ?? '') : ''
+    const niveles = colsNivel.map(j => nivelCorreccionDe(f[j] ?? '')).filter((n): n is NivelCorreccion => !!n)
     if (ES_SEPARADOR.test(enunciado) || ES_SEPARADOR.test(num)) continue
     // Fila vacía del todo, o una de totales al pie de la hoja: no es una pregunta.
-    if (!enunciado && puntos == null && !criterio && !textoClave && !correccion) continue
+    if (!enunciado && puntos == null && !criterio && !textoClave && !correccion && !notas && !niveles.length) continue
     if (ES_TOTAL.test(enunciado) || ES_TOTAL.test(num)) continue
     if (puntos == null || puntos <= 0) sinPuntos++
     const opciones = colOpciones >= 0 ? (f[colOpciones] ?? '').split(/\s*[;·/]\s*/).map(limpiar).filter(Boolean) : []
@@ -164,6 +207,8 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
       ...(aspecto ? { aspecto } : {}),
       ...(clave ? { clave } : {}),
       ...(correccion ? { correccion } : {}),
+      ...(niveles.length ? { niveles } : {}),
+      ...(notas ? { notas } : {}),
       ...(opciones.length ? { opciones, correcta } : {}),
     })
   }
@@ -283,6 +328,10 @@ export function pruebaDeExamenMarkdown(texto: string, tituloPorDefecto: string):
     if (mAspecto) { actual.aspecto = mAspecto[1]; continue }
     const mCorreccion = linea.match(/^\s*(?:correcci[oó]n|indicadores|puntuaci[oó]n)\s*:\s*(.+?)\s*$/i)
     if (mCorreccion) { actual.correccion = mCorreccion[1].replace(/\*\*/g, ''); continue }
+    const mNotas = linea.match(/^\s*notas?\s*:\s*(.+?)\s*$/i)
+    if (mNotas) { actual.notas = mNotas[1].replace(/\*\*/g, ''); continue }
+    const mNivel = linea.match(/^\s*nivel(?:\s*\d+)?\s*:\s*(.+?)\s*$/i)
+    if (mNivel) { const n = nivelCorreccionDe(mNivel[1].replace(/\*\*/g, '')); if (n) (actual.niveles ??= []).push(n); continue }
     const mPuntos = linea.match(ES_PUNTOS_PREGUNTA)
     if (mPuntos) { actual.max = numero(mPuntos[1]) ?? 1; continue }
     const mOpcion = linea.match(ES_OPCION)
@@ -363,7 +412,11 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
         id: q?.id, enunciado: limpiar(q?.enunciado ?? q?.pregunta), max: numero(q?.max ?? q?.puntos), criterio_id: limpiar(q?.criterio_id ?? q?.criterio),
         aspecto: limpiar(q?.aspecto ?? q?.bloque),
         clave: limpiar(q?.clave ?? q?.solucion),
-        correccion: limpiar(q?.correccion ?? q?.indicadores),
+        correccion: limpiar(q?.correccion ?? q?.indicadores ?? q?.puntuacion),
+        notas: limpiar(q?.notas),
+        niveles: Array.isArray(q?.niveles)
+          ? q.niveles.map((n: any) => typeof n === 'string' ? nivelCorreccionDe(n) : { puntos: numero(n?.puntos), texto: limpiar(n?.texto) }).filter(Boolean)
+          : undefined,
         opciones: Array.isArray(q?.opciones) ? q.opciones.map(limpiar) : undefined,
         correcta: typeof q?.correcta === 'string' ? letraAIndice(q.correcta) : numero(q?.correcta),
       }),
@@ -375,7 +428,16 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
 export async function importarPrueba(nombreFichero: string, datos: ArrayBuffer): Promise<PruebaImportada> {
   const titulo = nombreFichero.replace(/\.[^.]+$/, '').replace(/\.eduprueba$/, '').replace(/[-_]+/g, ' ').trim() || 'Prueba escrita'
   const cabeza = new Uint8Array(datos.slice(0, 8))
-  if (cabeza[0] === 0x50 && cabeza[1] === 0x4b) return pruebaDeFilas(await leerXlsx(datos), titulo)
+  if (cabeza[0] === 0x50 && cabeza[1] === 0x4b) {
+    // Hoja a hoja: la planilla puede ir detrás de la plantilla del cuaderno
+    // (alumnos en la primera, «Clave e rúbricas» en la segunda). Si ninguna
+    // sirve, el error es el de la primera.
+    let primerError: unknown
+    for (const filas of await leerXlsxHojas(datos)) {
+      try { return pruebaDeFilas(filas, titulo) } catch (e) { primerError ??= e }
+    }
+    throw primerError
+  }
   if (cabeza[0] === 0xd0 && cabeza[1] === 0xcf) {
     throw new Error('Es un Excel antiguo (.xls). Ábrelo y usa «Guardar como» → Libro de Excel (.xlsx).')
   }
@@ -391,11 +453,56 @@ export function pruebaDeTexto(bruto: string, titulo: string): PruebaImportada {
   const texto = bruto.replace(/^\ufeff/, '')
   if (/^\s*[{[]/.test(texto)) return pruebaDeJson(texto, titulo)
   if (pareceExamenMarkdown(texto)) return pruebaDeExamenMarkdown(texto, titulo)
+  if (pareceCsv(texto)) return pruebaDeFilas(filasDeCsv(texto), titulo)
   const filas = filasDeMarkdownPrueba(texto)
   if (!filas.some(f => f.length >= 2)) {
     throw new Error('No se reconoce el examen. Sirven una hoja de cálculo (.xlsx), un Markdown (.md) con las preguntas en una tabla, o un JSON (.json).')
   }
   return pruebaDeFilas(filas, titulo)
+}
+
+/** Varias líneas con el mismo separador («,» o «;») fuera de comillas, y ninguna tabla Markdown. */
+export function pareceCsv(texto: string): boolean {
+  if (/^\s*\|/m.test(texto)) return false
+  const lineas = texto.split('\n').filter(l => l.trim()).slice(0, 3)
+  if (lineas.length < 2) return false
+  const sep = separadorCsv(lineas[0])
+  return !!sep && lineas.every(l => celdasCsv(l, sep).length >= 2)
+}
+
+function separadorCsv(linea: string): ',' | ';' | null {
+  const fuera = linea.replace(/"(?:[^"]|"")*"/g, '')
+  const comas = (fuera.match(/,/g) ?? []).length
+  const puntos = (fuera.match(/;/g) ?? []).length
+  if (!comas && !puntos) return null
+  return puntos > comas ? ';' : ','
+}
+
+/** CSV → filas. Comillas dobles para las celdas con separador o salto de línea; «""» es una comilla. */
+export function filasDeCsv(texto: string): string[][] {
+  const t = texto.replace(/^\ufeff/, '')
+  return parsearCsv(t, separadorCsv(t.split('\n').find(l => l.trim()) ?? '') ?? ',')
+}
+
+function parsearCsv(t: string, sep: ',' | ';'): string[][] {
+  const filas: string[][] = []
+  let fila: string[] = [], celda = '', entreComillas = false
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i]
+    if (entreComillas) {
+      if (ch === '"') { if (t[i + 1] === '"') { celda += '"'; i++ } else entreComillas = false }
+      else celda += ch
+    } else if (ch === '"') entreComillas = true
+    else if (ch === sep) { fila.push(celda); celda = '' }
+    else if (ch === '\n') { fila.push(celda); filas.push(fila); fila = []; celda = '' }
+    else if (ch !== '\r') celda += ch
+  }
+  if (celda || fila.length) { fila.push(celda); filas.push(fila) }
+  return filas.filter(f => f.some(c => c.trim()))
+}
+
+function celdasCsv(linea: string, sep: ',' | ';'): string[] {
+  return parsearCsv(linea, sep)[0] ?? []
 }
 
 // ── Exportar y plantillas ────────────────────────────────────────────────
@@ -408,6 +515,9 @@ export function filasDePrueba(d: PruebaDef): (string | number)[][] {
   const conCriterio = d.reparto === 'criterios' || d.preguntas.some(p => p.criterio_id)
   const conAspecto = d.preguntas.some(p => p.aspecto)
   const conPlanilla = d.preguntas.some(p => p.clave || p.correccion)
+  const nNiveles = Math.max(0, ...d.preguntas.map(p => p.niveles?.length ?? 0))
+  const conNotas = d.preguntas.some(p => p.notas)
+  const nivelTexto = (n: NivelCorreccion) => `${String(n.puntos).replace('.', ',')} pt · ${n.texto}`
   const conOpciones = d.tipo === 'test' && d.preguntas.some(p => p.opciones?.length)
   return [
     [d.titulo],
@@ -415,12 +525,15 @@ export function filasDePrueba(d: PruebaDef): (string | number)[][] {
     ['Reparto', NOMBRE_REPARTO[d.reparto]],
     ...(d.tipo === 'test' ? [['Penalización', d.penalizacion ?? 0]] : []),
     ...(d.tipo === 'niveles' ? [['Escala', ...(d.escala ?? []).map(n => `${n.nombre} (${n.valor})`)]] : []),
-    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conAspecto ? ['Aspecto'] : []), ...(conPlanilla ? ['Clave', 'Corrección'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
+    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conAspecto ? ['Aspecto'] : []), ...(conPlanilla ? ['Clave', 'Corrección'] : []),
+      ...Array.from({ length: nNiveles }, (_, i) => `Nivel ${i + 1}`), ...(conNotas ? ['Notas'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
     ...d.preguntas.map((p, i) => [
       p.enunciado || `Pregunta ${i + 1}`, p.max,
       ...(conCriterio ? [p.criterio_id ?? ''] : []),
       ...(conAspecto ? [p.aspecto ?? ''] : []),
       ...(conPlanilla ? [p.clave ?? '', p.correccion ?? ''] : []),
+      ...Array.from({ length: nNiveles }, (_, i) => (p.niveles?.[i] ? nivelTexto(p.niveles[i]) : '')),
+      ...(conNotas ? [p.notas ?? ''] : []),
       ...(conOpciones ? [(p.opciones ?? []).map(o => o.replace(/[;·/]/g, ',')).join(' ; '), p.correcta != null ? LETRAS[p.correcta] : ''] : []),
     ]),
   ]
@@ -440,6 +553,8 @@ export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean } =
     if (opciones.conClave && p.max !== 1) lineas.push(`   Puntos: ${p.max}`)
     if (opciones.conClave && p.clave) lineas.push(`   Clave: ${p.clave}`)
     if (opciones.conClave && p.correccion) lineas.push(`   Corrección: ${p.correccion}`)
+    if (opciones.conClave) (p.niveles ?? []).forEach(n => lineas.push(`   Nivel: ${String(n.puntos).replace('.', ',')} pt · ${n.texto}`))
+    if (opciones.conClave && p.notas) lineas.push(`   Notas: ${p.notas}`)
     ;(p.opciones ?? []).forEach((o, j) => lineas.push(`   ${LETRAS[j].toLowerCase()}) ${o}`))
     lineas.push('')
   })

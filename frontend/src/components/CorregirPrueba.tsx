@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'react'
 import {
-  notaDePrueba, puntosDePregunta, ACIERTO, FALLO, EN_BLANCO, LETRAS,
+  notaDePrueba, puntosDePregunta, escalonesDePregunta, ACIERTO, FALLO, EN_BLANCO, LETRAS,
   type PruebaDef, type PreguntaPrueba,
 } from '@/db/prueba'
 import { calificativo } from '@/db/calculo'
@@ -138,6 +138,11 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
                     {p.correccion}
                   </div>
                 )}
+                {p.notas && (
+                  <div data-pregunta-notas style={{ fontSize: 11, color: 'var(--gris-500)', marginTop: 2, fontStyle: 'italic' }}>
+                    {p.notas}
+                  </div>
+                )}
               </div>
 
               {def.tipo === 'puntos' && (
@@ -160,6 +165,37 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
                     onClick={() => alternar(p.id, 0)} title="Cero puntos" aria-label={`Pregunta ${i + 1}: cero puntos`}>0</button>
                 </div>
               )}
+              {/* Los niveles de corrección de la pregunta, de un toque: con
+                  rúbrica propia, cada nivel con su texto; sin ella, los
+                  escalones que deja el reparto («0,25 por cada acerto»). */}
+              {def.tipo === 'puntos' && (() => {
+                const escalones = escalonesDePregunta(p)
+                if (!escalones.length) return null
+                const conTexto = !!p.niveles?.length
+                return (
+                  <div data-pregunta-niveles style={{ flexBasis: '100%', display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 2 }}>
+                    {escalones.map(puntos => {
+                      const nivel = p.niveles?.find(n => n.puntos === puntos)
+                      const marcado = anotada && resp === puntos
+                      return (
+                        <button key={puntos} type="button" disabled={guardando}
+                          data-nivel={formato(puntos)} aria-pressed={marcado}
+                          title={nivel?.texto || `${formato(puntos)} puntos`}
+                          aria-label={`Pregunta ${i + 1}: ${formato(puntos)} puntos${nivel?.texto ? ` · ${nivel.texto}` : ''}`}
+                          onClick={() => alternar(p.id, puntos)}
+                          style={{
+                            ...btn(marcado, puntos === p.max ? 'var(--verde-500)' : puntos === 0 ? 'var(--rojo-500)' : 'var(--azul-500)'),
+                            flex: conTexto ? '1 1 150px' : '0 0 auto', textAlign: 'left', lineHeight: 1.3,
+                            padding: conTexto ? '5px 8px' : undefined, whiteSpace: 'normal',
+                          }}>
+                          <strong>{formato(puntos)}</strong>
+                          {nivel?.texto && <span style={{ fontWeight: 400, fontSize: 11, marginLeft: 5 }}>{nivel.texto}</span>}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )
+              })()}
 
               {def.tipo === 'test' && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>

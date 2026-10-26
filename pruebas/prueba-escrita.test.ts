@@ -9,11 +9,13 @@
  */
 import {
   notaDePrueba, normalizarPrueba, puntosTotales, criteriosSinDestino, preguntasIguales,
-  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, type PruebaDef,
+  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, type PruebaDef,
 } from '../frontend/src/db/prueba'
+import { readFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
 import {
   importarPrueba, pruebaDeFilas, pruebaDeJson, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
-  pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice, pruebaDeTexto,
+  pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice, pruebaDeTexto, pareceCsv,
 } from '../frontend/src/ia/pruebaImportar'
 import { generarPromptTest, generarPromptPlanilla } from '../frontend/src/ia/pruebaPrompt'
 
@@ -268,7 +270,62 @@ console.log('\n9. Planilla de corrección: clave y reparto de puntos por pregunt
   ok(viejo.preguntas[0].correcta === 1 && !viejo.preguntas[0].clave, 'una letra en «Clave» es la correcta, no la planilla')
 
   const prompt = generarPromptPlanilla({ asignatura: 'Ciencias Sociais', nivel: '6º Primaria', examen: '1. Relaciona…\n2. Elementos…', puntosTotales: 10, criterios: [{ id: 'CE1.1', descripcion: 'Mapas' }] })
-  ok(prompt.includes('1. Relaciona…') && prompt.includes('CE1.1') && prompt.includes('| Pregunta | Puntos | Criterio | Aspecto | Clave | Corrección |') && prompt.includes('No inventes preguntas'), 'el prompt lleva el examen del docente y pide la tabla que se sabe leer')
+  ok(prompt.includes('1. Relaciona…') && prompt.includes('CE1.1') && prompt.includes('| Ítem | Pregunta | Criterio | Tipo | Máximo | Clave | Puntuación | Nivel 1 |') && prompt.includes('Nivel 6 | Notas |') && prompt.includes('No inventes preguntas'), 'el prompt lleva el examen del docente y pide la tabla que se sabe leer')
+}
+
+console.log('\n10. La planilla con rúbrica por pregunta (CORRECCION_PRUEBAS.md)')
+{
+  // El fichero real de Luis para la UD1 de Ciencias da Natureza: cabeceras en
+  // gallego, «Ítem» en vez de «N.º», «Columna» con el nombre del cuaderno,
+  // «Máximo» aparte de «Puntuación» (el reparto), seis niveles y notas.
+  const csv = readFileSync(join(process.cwd(), 'pruebas/fixtures/planilla_clave_rubricas.csv'), 'utf8')
+  ok(pareceCsv(csv), 'el CSV se reconoce como CSV')
+  const { prueba: p, avisos } = pruebaDeTexto(csv, 'CN UD1')
+  ok(p.tipo === 'puntos' && p.reparto === 'criterios' && avisos.length === 0, 'es un examen de puntos repartido por criterios, sin avisos', avisos.join(' / '))
+  ok(p.preguntas.length === 11, 'once filas, once preguntas', String(p.preguntas.length))
+  const [p1, p2, p3, p4, p51, p52, , , , , p10] = p.preguntas
+  ok(p1.enunciado === 'P1 Célula animal' && p51.enunciado === 'P5.1 V/F a-d', 'el nombre sale de «Columna», sin el criterio ni el máximo', `${p1.enunciado} · ${p51.enunciado}`)
+  ok(p1.max === 1 && p51.max === 0.4 && p52.max === 0.6, 'el máximo sale de «Máximo»', `${p51.max} · ${p52.max}`)
+  ok(p1.criterio_id === 'CA2.1' && p52.criterio_id === 'CA2.2', 'cada pregunta lleva su criterio')
+  ok((p2.clave ?? '').startsWith('A: epitelial'), 'la clave se lee aunque la cabecera diga «Resposta correcta / clave»', p2.clave ?? '')
+  ok(p2.correccion === '0,25 por cada acerto.', 'la corrección es la «Puntuación» (el reparto), no las notas', p2.correccion ?? '')
+  ok((p2.notas ?? '').startsWith('Admítese «sangue»'), 'las «Notas de corrección» van aparte', p2.notas ?? '')
+  ok(p1.niveles?.length === 5 && p1.niveles[0].puntos === 1 && p1.niveles[1].puntos === 0.75 && p1.niveles[4].puntos === 0
+    && p1.niveles[1].texto.startsWith('Tres dos catro elementos'), 'los seis «Nivel» dan los niveles de corrección, con puntos y texto', JSON.stringify(p1.niveles))
+  ok(!p2.niveles, '«Non procede» no es un nivel: una pregunta cerrada no los trae')
+  ok(p3.niveles?.length === 6 && p3.niveles[1].puntos === 0.8, 'una pregunta con cinco escalones de 0,2 trae seis niveles')
+  ok(JSON.stringify(escalonesDePregunta(p1)) === '[1,0.75,0.5,0.25,0]', 'con niveles, los escalones son los suyos')
+  ok(JSON.stringify(escalonesDePregunta(p2)) === '[1,0.75,0.5,0.25,0]', 'sin niveles, «0,25 por cada acerto» da cinco escalones')
+  ok(JSON.stringify(escalonesDePregunta(p51)) === '[0.4,0.3,0.2,0.1,0]', '«0,1 por acerto» sobre 0,4 da cinco escalones')
+  ok(JSON.stringify(escalonesDePregunta(p4)) === '[1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0]', 'la cifra más pequeña del reparto manda cuando divide el máximo')
+  ok(JSON.stringify(escalonesDePregunta(p10)) === '[1,0.7,0.6,0.4,0.3,0]', 'apartados con valor propio (0,3 · 0,3 · 0,4): cualquier combinación', JSON.stringify(escalonesDePregunta(p10)))
+  ok(escalonesDePregunta({ id: 'x', enunciado: '', max: 1, criterio_id: null, correccion: 'según se vea' }).length === 0, 'sin cifras no hay escalones: queda la casilla')
+
+  // El mismo examen en el .xlsx de tres hojas: la planilla va en la segunda,
+  // detrás de la plantilla del cuaderno con el alumnado.
+  const b = readFileSync(resolve('pruebas/fixtures/planilla_clave_rubricas.xlsx'))
+  const x = await importarPrueba('CN_UD1_planilla.xlsx', b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength) as ArrayBuffer)
+  ok(x.prueba.preguntas.length === 11 && x.prueba.preguntas[0].niveles?.length === 5 && x.prueba.preguntas[1].clave === p2.clave,
+    'del .xlsx se lee la hoja «Clave e rúbricas», no la primera', String(x.prueba.preguntas.length))
+  ok((await falla(() => importarPrueba('vacio.xlsx', b.buffer.slice(0, 4) as ArrayBuffer))).length > 0, 'un zip roto da un error, no una pantalla en blanco')
+
+  // Niveles y notas sobreviven a los tres formatos de exportación.
+  const porXlsx = await importarPrueba('x.xlsx', pruebaAXlsx(p).buffer as ArrayBuffer)
+  const porMd = pruebaDeTexto(pruebaAMarkdown(p), 't')
+  const porJson = pruebaDeJson(pruebaAJson(p), 't')
+  for (const [nombre, r] of [['xlsx', porXlsx], ['md', porMd], ['json', porJson]] as const) {
+    const q1 = r.prueba.preguntas[0], q2 = r.prueba.preguntas[1]
+    ok(JSON.stringify(q1.niveles) === JSON.stringify(p1.niveles) && q2.notas === p2.notas && q2.correccion === p2.correccion && q1.max === 1 && q2.criterio_id === 'CA2.1',
+      `niveles, notas y corrección vuelven iguales por ${nombre}`, JSON.stringify(q1.niveles)?.slice(0, 80))
+  }
+  // Y en el examen escrito como examen, con la clave.
+  const md = examenAMarkdown(p, { conClave: true })
+  ok(md.includes('   Nivel: 0,75 pt · Tres dos catro elementos') && md.includes('   Notas: Admítese'), 'el examen con clave lista los niveles y las notas bajo la pregunta')
+  // Un nivel que vale más que la pregunta no entra; un examen que no es de puntos no lleva niveles.
+  const n = normalizarPrueba({ tipo: 'puntos', preguntas: [{ id: 'a', enunciado: '', max: 1, niveles: [{ puntos: 2, texto: 'de más' }, { puntos: 0.5, texto: 'medio' }, { puntos: 1, texto: 'todo' }] }] })
+  ok(JSON.stringify(n.preguntas[0].niveles?.map(v => v.puntos)) === '[1,0.5]', 'normalizar quita el nivel que se pasa y ordena de más a menos')
+  const t = normalizarPrueba({ tipo: 'test', preguntas: [{ id: 'a', enunciado: '', max: 1, opciones: ['a', 'b'], niveles: [{ puntos: 1, texto: 'x' }] }] })
+  ok(!t.preguntas[0].niveles, 'un test no arrastra niveles')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
