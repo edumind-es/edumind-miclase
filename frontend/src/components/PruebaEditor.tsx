@@ -18,7 +18,7 @@ import {
 } from '@/db/queries'
 import type { Instrumento, Unidad } from '@/db/localDb'
 import {
-  pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, idDePreguntaNueva, preguntasSinClave,
+  pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, reasignarCriterio, idDePreguntaNueva, preguntasSinClave,
   TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
   type PruebaDef, type PreguntaPrueba, type TipoPrueba, type RepartoPrueba,
 } from '@/db/prueba'
@@ -837,10 +837,39 @@ export default function PruebaEditor({
               </table>
             </div>
 
+            {/* El fichero trae criterios que el instrumento no evalúa en esta
+                unidad (el examen pregunta por CA2.2 y PROENS solo le da CA2.1):
+                sus preguntas no pondrían nota en ningún sitio. Se elige, por
+                criterio y de una vez, adónde van: a uno de los que el
+                instrumento sí evalúa o a todos. La otra salida es arreglar la
+                programación, que es la que manda. */}
             {sinDestino.length > 0 && (
-              <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
-                <strong>{sinDestino.join(', ')}</strong> {sinDestino.length === 1 ? 'no está asignado' : 'no están asignados'} a «{nombreInstrumento}» en la
-                programación{nombreUnidad ? ` de «${nombreUnidad}»` : ''}: sus preguntas no pondrán nota en ningún sitio. Asígnale el instrumento en 📋 Programación o cambia el criterio de esas preguntas.
+              <div data-reasignar-criterios style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
+                <div style={{ marginBottom: 6 }}>
+                  <strong>{sinDestino.join(', ')}</strong> {sinDestino.length === 1 ? 'no está asignado' : 'no están asignados'} a «{nombreInstrumento}» en la
+                  programación{nombreUnidad ? ` de «${nombreUnidad}»` : ''}: sus preguntas no pondrán nota en ningún sitio. Elige a cuál de los criterios del instrumento van, o asígnale el criterio al instrumento en 📋 Programación.
+                </div>
+                {sinDestino.map(c => {
+                  const suyas = def.preguntas.filter(p => p.criterio_id === c)
+                  const puntos = suyas.reduce((t, p) => t + p.max, 0)
+                  return (
+                    <div key={c} data-reasignar-criterio={c} style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginTop: 4 }}>
+                      <strong style={{ minWidth: 60 }}>{c}</strong>
+                      <span style={{ color: '#78350f' }}>{suyas.length} pregunta{suyas.length === 1 ? '' : 's'} · {String(Math.round(puntos * 100) / 100).replace('.', ',')} pt</span>
+                      <span aria-hidden="true">→</span>
+                      <select value="" aria-label={`Adónde van las preguntas de ${c}`} style={{ fontSize: 12 }}
+                        onChange={e => {
+                          const v = e.target.value
+                          if (v === '') return
+                          editar(d => reasignarCriterio(d, c, v === '*' ? null : v))
+                        }}>
+                        <option value="">Elegir criterio…</option>
+                        <option value="*">Todos los del examen</option>
+                        {criteriosActivos.map(o => <option key={o.id} value={o.id} title={o.descripcion}>{o.id} · {o.descripcion.slice(0, 60)}{o.descripcion.length > 60 ? '…' : ''}</option>)}
+                      </select>
+                    </div>
+                  )
+                })}
               </div>
             )}
 

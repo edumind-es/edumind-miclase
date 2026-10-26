@@ -169,6 +169,12 @@ try {
   ok(await editor.getByRole('radio', { name: /Se reparte por criterios/ }).isChecked(), 'con criterios en el fichero, el reparto es por criterios')
   ok(await aparece(editor.getByText(/CE9\.9 no está asignado/)), 'avisa del criterio que la programación no da a este instrumento')
   await foto('prueba-01-editor')
+  // El aviso ofrece, por criterio, elegir adónde van sus preguntas entre los que el instrumento sí evalúa.
+  const reasignar = editor.locator('[data-reasignar-criterio="CE9.9"] select')
+  ok(await reasignar.locator('option').count() >= 2 + 3 && (await reasignar.locator('option').allTextContents()).some(t => t.startsWith(cA + ' ·')) && await editor.locator('[data-reasignar-criterio="CE9.9"]').textContent().then(t => t.includes('1 pregunta · 1 pt')), 'el aviso lista los criterios del instrumento y cuenta las preguntas', await reasignar.locator('option').allTextContents().then(a => a.join(' | ')))
+  await reasignar.selectOption(cA)
+  ok(await editor.locator('[data-reasignar-criterios]').count() === 0, 'al elegir, el aviso desaparece')
+  ok(await editor.getByLabel('Criterio de la pregunta 5').inputValue() === cA, `y la pregunta 5 pasa a ${cA}`)
   await editor.getByRole('button', { name: 'Eliminar la pregunta 5' }).click()
   ok(await aparece(editor.getByText(/4 preguntas · suman 10 puntos/)), 'al quitar la pregunta, el examen suma 10')
   await editor.getByRole('button', { name: /Guardar examen/ }).click()

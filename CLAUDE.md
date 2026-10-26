@@ -406,7 +406,14 @@ edumind_miclase/
   `escalonesDePregunta` (puro: la cifra más pequeña del reparto que divide
   el máximo hasta en diez, o las combinaciones de apartados que suman el
   máximo); nada de eso cambia la nota, que sigue en `notaDePrueba`.
-  `generarPromptPlanilla` pide exactamente esa tabla.
+  `generarPromptPlanilla` pide exactamente esa tabla. **Sin criterios en el
+  fichero, la nota va a todos los del instrumento** (reparto único); con un
+  criterio que el instrumento no evalúa en la unidad, el editor lo señala
+  en `[data-reasignar-criterios]` y el docente elige, por criterio y de una
+  vez, adónde van sus preguntas (`reasignarCriterio`, puro): a uno de los
+  que sí evalúa o a todos. Decisión de Luis: la prueba asocia su resultado
+  a los criterios del instrumento salvo que el fichero diga otra cosa, y si
+  no coinciden se elige del listado, no se pierde la nota en silencio.
 - **Nada de examen falla en silencio.** `ExamenesConHoja` recoge cualquier
   error al listar, abrir el editor o el corrector y lo pone en
   `[data-examenes-aviso]`; `PruebaEditor` dice si no pudo leer el examen

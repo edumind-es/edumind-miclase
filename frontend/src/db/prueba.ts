@@ -337,6 +337,16 @@ export function notaDePrueba(
   return { nota, obtenido: redondear2(obtenido), maximo: redondear2(maximo), anotadas, total: def.preguntas.length, porCriterio }
 }
 
+/**
+ * Cambia de criterio todas las preguntas que nombran `de`: a otro criterio
+ * (`a`) o a «todos» (`null`, cuentan para todos los del examen). Es lo que
+ * hace el docente cuando el fichero trae un criterio que el instrumento no
+ * evalúa en esa unidad: elige, del listado de los que sí evalúa, adónde va.
+ */
+export function reasignarCriterio(def: PruebaDef, de: string, a: string | null): PruebaDef {
+  return { ...def, preguntas: def.preguntas.map(p => p.criterio_id === de ? { ...p, criterio_id: a } : p) }
+}
+
 /** Criterios nombrados en las preguntas que el instrumento no evalúa: no recibirán nota. */
 export function criteriosSinDestino(def: PruebaDef, criteriosDestino: string[]): string[] {
   if (def.reparto !== 'criterios') return []

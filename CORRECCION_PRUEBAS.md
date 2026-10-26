@@ -56,10 +56,14 @@ delante).
 - Desde «Evaluar con QR y cámara» → «Nuevo examen» → clase, área, unidad e
   instrumento de prueba escrita → «Importar»; o desde la cabecera de la
   columna del examen en el Calificador → «Editar examen» → «Importar».
-- El editor enseña las preguntas con su clave, su reparto y sus niveles. Las
-  preguntas cuyo criterio no evalúa el instrumento en esa unidad quedan en
-  «Todos» y el editor lo avisa: es el momento de arreglar la programación
-  (punto 1).
+- El editor enseña las preguntas con su clave, su reparto y sus niveles.
+- **Criterios.** Si el fichero no trae criterios, la nota del examen va a
+  todos los criterios que la programación asigna al instrumento en esa
+  unidad. Si los trae y alguno no está entre los del instrumento, el editor
+  lo señala y ofrece, por criterio, elegir adónde van sus preguntas de una
+  vez: a uno de los criterios que el instrumento sí evalúa (el listado sale
+  de PROENS) o a «todos los del examen». La alternativa es añadir el
+  criterio al instrumento en la programación (punto 1), que es la que manda.
 - Guardar. El examen queda en la columna del instrumento y en el banco.
 
 ## 4. Corregir

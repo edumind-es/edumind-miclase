@@ -9,7 +9,7 @@
  */
 import {
   notaDePrueba, normalizarPrueba, puntosTotales, criteriosSinDestino, preguntasIguales,
-  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, type PruebaDef,
+  idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, reasignarCriterio, type PruebaDef,
 } from '../frontend/src/db/prueba'
 import { readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -326,6 +326,16 @@ console.log('\n10. La planilla con rúbrica por pregunta (CORRECCION_PRUEBAS.md)
   ok(JSON.stringify(n.preguntas[0].niveles?.map(v => v.puntos)) === '[1,0.5]', 'normalizar quita el nivel que se pasa y ordena de más a menos')
   const t = normalizarPrueba({ tipo: 'test', preguntas: [{ id: 'a', enunciado: '', max: 1, opciones: ['a', 'b'], niveles: [{ puntos: 1, texto: 'x' }] }] })
   ok(!t.preguntas[0].niveles, 'un test no arrastra niveles')
+
+  // El instrumento solo evalúa CA2.1 en la UD1 (lo que trae PROENS): CA2.2 y
+  // CA2.3 no pondrían nota. El docente elige adónde van, por criterio.
+  ok(JSON.stringify(criteriosSinDestino(p, ['CA2.1'])) === '["CA2.2","CA2.3"]', 'se señalan los criterios del fichero que el instrumento no evalúa')
+  const r1 = reasignarCriterio(p, 'CA2.2', 'CA2.1')
+  ok(r1.preguntas.filter(q => q.criterio_id === 'CA2.1').length === 9 && !r1.preguntas.some(q => q.criterio_id === 'CA2.2'), 'reasignar CA2.2 a CA2.1 mueve sus tres preguntas de una vez')
+  const r2 = reasignarCriterio(r1, 'CA2.3', null)
+  ok(r2.preguntas.filter(q => q.criterio_id === null).length === 2 && criteriosSinDestino(r2, ['CA2.1']).length === 0, 'reasignar a «todos» deja las preguntas sin criterio y ya no hay aviso')
+  ok(notaDePrueba(r2, Object.fromEntries(r2.preguntas.map(q => [q.id, q.max])), ['CA2.1']).porCriterio['CA2.1'] === 10, 'y el examen completo da 10 en CA2.1')
+  ok(p.preguntas.filter(q => q.criterio_id === 'CA2.2').length === 3, 'el examen original no se toca')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
