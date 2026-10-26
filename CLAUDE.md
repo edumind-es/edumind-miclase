@@ -480,6 +480,27 @@ edumind_miclase/
   en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
   abre el editor directo con `[data-editar-examen]` (plegado tras
   `[data-cabeceras-toggle]`), además de «Editar» en «Evaluar con QR y cámara».
+- **Un examen puede contar en varias unidades, y la lista vive en el examen.**
+  `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
+  esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras
+  unidades cuenta el examen de una unidad: Luis hace en la UD2 un examen
+  que recoge también lo de la UD1. Se marca en el editor («También cuenta
+  en», `[data-unidades-vinculadas]`, solo en un examen de unidad; el general
+  no vincula nada y `guardarPrueba` quita siempre la unidad propia).
+  `getPrueba` resuelve el examen de una unidad en este orden: el suyo, el
+  de otra que la vincula, el general; la matriz lo dice en la cabecera
+  («examen de «UD2»», `CeldaInstrumento.prueba_de_unidad`). Vincular no
+  pone notas: las pone `guardarExamenDeAlumno`, que tras escribir en la
+  unidad desde la que se corrige escribe la MISMA corrección en las demás
+  del examen, cada una con los criterios que el instrumento evalúa allí
+  (`criteriosQueEvalua`), con `sinVinculos` y en el mismo trimestre —la
+  casilla lleva el trimestre de la barra, no el de la unidad; replicar con
+  el de la unidad dejó la otra unidad en blanco—; devuelve `tambien` y las
+  pantallas lo dicen. Se corrige desde cualquiera de las unidades. Una
+  unidad con examen propio manda el suyo y el vínculo ajeno no le entra.
+  `correccionesDeExamen` cuenta las correcciones de todas las unidades del
+  examen (y una unidad cubierta por vínculo no cae al general), así el
+  recálculo y el informe ven la misma corrección una vez por alumno.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

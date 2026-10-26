@@ -87,6 +87,14 @@ export interface PruebaDef {
   penalizacion?: number
   /** Solo `niveles`: la escala con la que se valora cada pregunta. */
   escala?: NivelPrueba[]
+  /**
+   * Otras unidades en las que este examen también cuenta: un examen de la
+   * UD2 que recoge lo de la UD1 pone la misma nota en las dos, cada una con
+   * los criterios que el instrumento evalúa allí. Solo en un examen de una
+   * unidad (nunca en el general) y nunca incluye la suya. Va dentro del JSON,
+   * sin índice ni cambio de esquema; una versión anterior lo ignora.
+   */
+  unidades_vinculadas?: number[]
 }
 
 /** Respuesta en un test. En blanco no suma ni resta. */
@@ -179,6 +187,8 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     })
   }
   const pen = Number(d?.penalizacion)
+  const vinculadas = [...new Set((Array.isArray(d?.unidades_vinculadas) ? d!.unidades_vinculadas! : [])
+    .map(u => Number(u)).filter(u => Number.isInteger(u) && u > 0))]
   const escala = (Array.isArray(d?.escala) ? d!.escala! : [])
     .filter(n => n && String(n.nombre ?? '').trim() && Number.isFinite(Number(n.valor)))
     .map(n => ({ nombre: String(n.nombre).trim(), valor: Number(n.valor) }))
@@ -189,7 +199,17 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     preguntas,
     ...(tipo === 'test' ? { penalizacion: Number.isFinite(pen) && pen > 0 ? Math.min(1, pen) : 0 } : {}),
     ...(tipo === 'niveles' ? { escala: escala.some(n => n.valor > 0) ? escala : ESCALA_POR_DEFECTO } : {}),
+    ...(vinculadas.length ? { unidades_vinculadas: vinculadas } : {}),
   }
+}
+
+/**
+ * Unidades en las que corrige un examen: la suya y las vinculadas. El general
+ * (sin unidad) no vincula nada: ya vale para todas por separado.
+ */
+export function unidadesDelExamen(unidad_id: number | null, def: PruebaDef): number[] {
+  if (unidad_id == null) return []
+  return [unidad_id, ...(def.unidades_vinculadas ?? []).filter(u => u !== unidad_id)]
 }
 
 /**

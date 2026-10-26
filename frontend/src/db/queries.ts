@@ -1,5 +1,5 @@
 import { db, TABLAS_SINC, INSTRUMENTO_BANCO, VERSION_ESQUEMA, type MiClaseDB } from './localDb'
-import { asignarUnidades, prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, type ResumenMigracion } from './migracionUnidades'
+import { SIN_UNIDAD, asignarUnidades, prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, type ResumenMigracion } from './migracionUnidades'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import {
@@ -10,7 +10,7 @@ import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
-import { normalizarPrueba, notaDePrueba, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
+import { normalizarPrueba, notaDePrueba, unidadesDelExamen, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -1811,13 +1811,15 @@ export async function getPruebasDeInstrumento(instrumento_id: number): Promise<P
 }
 
 /**
- * El examen con el que se corrige en una unidad: el suyo si lo tiene y, si no,
- * el general del instrumento. Sin unidad («Todo el curso»), solo el general:
- * no se puede adivinar de cuál de los exámenes por unidad se trata.
+ * El examen con el que se corrige en una unidad: el suyo si lo tiene; si no,
+ * el de otra unidad que lo haya vinculado a esta (`unidades_vinculadas`); y
+ * si no, el general del instrumento. Sin unidad («Todo el curso»), solo el
+ * general: no se puede adivinar de cuál de los exámenes por unidad se trata.
  */
 export async function getPrueba(instrumento_id: number, unidad_id: number | null): Promise<PruebaGuardada | null> {
   const todas = await getPruebasDeInstrumento(instrumento_id)
   return (unidad_id != null ? todas.find(p => p.unidad_id === unidad_id) : undefined)
+    ?? (unidad_id != null ? todas.find(p => p.unidad_id != null && unidadesDelExamen(p.unidad_id, p.def).includes(unidad_id)) : undefined)
     ?? todas.find(p => p.unidad_id == null)
     ?? null
 }
@@ -1837,6 +1839,9 @@ export async function guardarPrueba(
   instrumento_id: number, unidad_id: number | null, def: PruebaDef, opciones: { mover?: number } = {},
 ): Promise<number> {
   const limpia = normalizarPrueba(def)
+  // Un examen no se vincula a su propia unidad, y el general no vincula nada.
+  const vinculadas = unidad_id == null ? [] : (limpia.unidades_vinculadas ?? []).filter(u => u !== unidad_id)
+  if (vinculadas.length) limpia.unidades_vinculadas = vinculadas; else delete limpia.unidades_vinculadas
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
   const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
     .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
@@ -1899,7 +1904,7 @@ export async function guardarExamenDeAlumno(p: {
   area: DatosDeArea
   /** La observación es de un criterio concreto; en los demás no se toca. */
   observacion?: { criterio_id: string; texto: string | null }
-}): Promise<ResultadoPrueba & { criterios: string[] }> {
+}): Promise<ResultadoPrueba & { criterios: string[]; tambien: UnidadTambienCorregida[] }> {
   const r = notaDePrueba(p.def, p.respuestas, p.destinos)
   const criterios = p.destinos.filter(c => c in r.porCriterio)
   await saveCalificaciones(criterios.map(c => ({
@@ -1907,8 +1912,31 @@ export async function guardarExamenDeAlumno(p: {
     trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
     ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
   })), { sinVinculos: true })
-  return { ...r, criterios }
+  // El mismo examen cuenta también en las unidades que tenga vinculadas (y
+  // desde una vinculada, en la suya): misma corrección, con los criterios que
+  // el instrumento evalúa en cada una, y en el MISMO trimestre: la casilla
+  // lleva el trimestre de la barra, no el de la unidad. La observación se
+  // queda donde se escribió.
+  const tambien: UnidadTambienCorregida[] = []
+  const examen = p.unidad_id !== SIN_UNIDAD ? await getPrueba(p.instrumento_id, p.unidad_id) : null
+  for (const u of examen ? unidadesDelExamen(examen.unidad_id, examen.def) : []) {
+    if (u === p.unidad_id) continue
+    const unidad = await db.unidades.get(u)
+    if (!unidad || unidad.deleted_at) continue
+    const destinos = await criteriosQueEvalua(p.instrumento_id, u)
+    const ru = notaDePrueba(p.def, p.respuestas, destinos)
+    const cu = destinos.filter(c => c in ru.porCriterio)
+    await saveCalificaciones(cu.map(c => ({
+      alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
+      trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
+    })), { sinVinculos: true })
+    tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu })
+  }
+  return { ...r, criterios, tambien }
 }
+
+/** Una unidad vinculada en la que el examen también puso nota, y en qué criterios. */
+export type UnidadTambienCorregida = { unidad_id: number; nombre: string; criterios: string[] }
 
 /**
  * Las respuestas de examen ya guardadas para un alumno, vengan del criterio
@@ -1934,12 +1962,18 @@ export async function getRespuestasDeExamen(
  * examen general son las de las unidades que no tienen examen propio.
  */
 async function correccionesDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef) {
-  const otras = new Set((await getPruebasDeInstrumento(instrumento_id))
-    .map(p => p.unidad_id).filter((u): u is number => u != null))
+  const porUnidad = (await getPruebasDeInstrumento(instrumento_id)).filter(p => p.unidad_id != null)
+  // Unidades con examen propio: ni caen al general ni las cubre un vínculo ajeno.
+  const propias = new Set(porUnidad.map(p => p.unidad_id!))
+  // Las cubiertas por el examen de otra unidad que las vincula.
+  const cubiertas = new Set(porUnidad.flatMap(p => unidadesDelExamen(p.unidad_id, p.def)))
+  const deEste = new Set(unidad_id != null
+    ? unidadesDelExamen(unidad_id, def).filter(u => u === unidad_id || !propias.has(u))
+    : [])
   const esRespuesta = (clave: string) => /^p\d+$/.test(clave) || def.preguntas.some(q => q.id === clave)
   const cals = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray())
     .filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).some(esRespuesta))
-    .filter(c => unidad_id != null ? c.unidad_id === unidad_id : !otras.has(c.unidad_id))
+    .filter(c => unidad_id != null ? deEste.has(c.unidad_id) : !cubiertas.has(c.unidad_id))
   const grupos = new Map<string, Calificacion[]>()
   for (const c of cals) {
     const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id}`
@@ -2753,8 +2787,10 @@ export type CeldaInstrumento = {
   tipo: string
   peso: number
   tiene_rubrica: boolean
-  /** Tiene una prueba escrita definida (la de la unidad que se mira o la general). */
+  /** Tiene una prueba escrita definida (la de la unidad que se mira, la de otra que la vincula, o la general). */
   tiene_prueba: boolean
+  /** Si el examen es de otra unidad que vincula a esta, el nombre de esa unidad. */
+  prueba_de_unidad?: string | null
   /** Criterios con los que este va vinculado para este instrumento (vacío = ninguno). */
   vinculados: string[]
   /** Regla con la que el diario funde varios registros (ver `db/diario.ts`). */
@@ -2841,10 +2877,23 @@ export async function getMatrizEvaluacion(
   // Qué instrumentos tienen rúbrica (para pintar el icono en la celda)
   const delosInstrumentos = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
   const conRubrica = new Set(delosInstrumentos.filter(esRubrica).map(r => r.instrumento_id))
-  // Con examen definido para lo que se está viendo: el de la unidad o el general.
+  // Con examen definido para lo que se está viendo: el de la unidad, el de
+  // otra unidad que la vincula, o el general.
   const conPrueba = new Set(delosInstrumentos
     .filter(r => r.tipo === 'prueba' && (r.unidad_id == null || r.unidad_id === unidad_id))
     .map(r => r.instrumento_id))
+  const pruebaVinculada = new Map<number, string>()
+  if (unidad_id) {
+    for (const r of delosInstrumentos) {
+      if (r.tipo !== 'prueba' || r.unidad_id == null || r.unidad_id === unidad_id || pruebaVinculada.has(r.instrumento_id)) continue
+      if (delosInstrumentos.some(x => x.tipo === 'prueba' && x.instrumento_id === r.instrumento_id && x.unidad_id === unidad_id)) continue
+      const p = aPrueba(r)
+      if (!p || !unidadesDelExamen(p.unidad_id, p.def).includes(unidad_id)) continue
+      const origen = await db.unidades.get(r.unidad_id)
+      pruebaVinculada.set(r.instrumento_id, origen?.nombre ?? 'otra unidad')
+      conPrueba.add(r.instrumento_id)
+    }
+  }
 
   const crudo = unidad_id
     ? await getMapaCriterioInstrumento(unidad_id)
@@ -2899,6 +2948,7 @@ export async function getMatrizEvaluacion(
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
         tiene_prueba: conPrueba.has(ins.id!),
+        prueba_de_unidad: pruebaVinculada.get(ins.id!) ?? null,
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
         agregacion: ins.agregacion ?? 'media',
         familia_id: familia?.id ?? null,

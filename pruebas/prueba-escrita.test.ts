@@ -8,7 +8,7 @@
  * igual en los tres formatos.
  */
 import {
-  notaDePrueba, normalizarPrueba, puntosTotales, criteriosSinDestino, preguntasIguales,
+  notaDePrueba, normalizarPrueba, puntosTotales, unidadesDelExamen, criteriosSinDestino, preguntasIguales,
   idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, reasignarCriterio, type PruebaDef,
 } from '../frontend/src/db/prueba'
 import { readFileSync } from 'node:fs'
@@ -336,6 +336,19 @@ console.log('\n10. La planilla con rúbrica por pregunta (CORRECCION_PRUEBAS.md)
   ok(r2.preguntas.filter(q => q.criterio_id === null).length === 2 && criteriosSinDestino(r2, ['CA2.1']).length === 0, 'reasignar a «todos» deja las preguntas sin criterio y ya no hay aviso')
   ok(notaDePrueba(r2, Object.fromEntries(r2.preguntas.map(q => [q.id, q.max])), ['CA2.1']).porCriterio['CA2.1'] === 10, 'y el examen completo da 10 en CA2.1')
   ok(p.preguntas.filter(q => q.criterio_id === 'CA2.2').length === 3, 'el examen original no se toca')
+}
+
+console.log('\n11. Un examen que también cuenta en otras unidades')
+{
+  // Las unidades vinculadas van dentro del JSON: se conservan limpias (enteros
+  // positivos, sin repetir) y desaparecen si no hay ninguna.
+  const d = normalizarPrueba({ titulo: 'UD2', tipo: 'puntos', reparto: 'unica', preguntas: [{ id: 'p1', enunciado: '', max: 1 }],
+    unidades_vinculadas: [7, 7, '9' as any, 0, -1, 2.5, 'x' as any] })
+  ok(JSON.stringify(d.unidades_vinculadas) === '[7,9]', 'normalizar conserva solo ids de unidad válidos, sin repetir', JSON.stringify(d.unidades_vinculadas))
+  ok(!('unidades_vinculadas' in normalizarPrueba({ titulo: 'T', tipo: 'puntos', reparto: 'unica', preguntas: [], unidades_vinculadas: [] })), 'sin vínculos no deja la clave')
+  ok(JSON.stringify(unidadesDelExamen(2, d)) === '[2,7,9]', 'el examen de la UD2 corrige en la suya y en las vinculadas')
+  ok(JSON.stringify(unidadesDelExamen(7, d)) === '[7,9]', 'y nunca repite la suya si viniera en la lista')
+  ok(unidadesDelExamen(null, d).length === 0, 'el examen general no vincula nada: ya vale para todas por separado')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

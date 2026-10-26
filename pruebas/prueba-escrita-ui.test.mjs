@@ -49,23 +49,33 @@ const bd = () => p.evaluate(async () => {
   // para ver el reparto y, además, un criterio que el examen no nombra.
   const criteriosDe = (u) => cis.filter(c => c.unidad_id === u.id && c.instrumento_id === prueba?.id).map(c => c.criterio_id).sort()
   const ud1 = [...unidades].sort((a, b) => criteriosDe(b).length - criteriosDe(a).length)[0]
+  // Otra unidad del mismo trimestre en la que la prueba escrita también evalúa
+  // algo: para mover el examen y para que cuente en las dos.
+  const otra = unidades.find(u => u.id !== ud1.id && u.trimestre === ud1.trimestre && criteriosDe(u).some(c => criteriosDe(ud1).slice(0, 2).includes(c)))
+    ?? unidades.find(u => u.id !== ud1.id)
+  const notasEn = (u) => alumnos.map(a => Object.fromEntries(cals
+    .filter(c => c.alumno_id === a.id && c.instrumento_id === prueba?.id && c.unidad_id === u?.id)
+    .map(c => [c.criterio_id, { valor: c.valor, anterior: c.valor_anterior ?? null, respuestas: Object.keys(c.niveles_rubrica || {}).length }])))
   return {
     instrumento: prueba?.nombre,
     /** Posición de esa unidad entre las pestañas (la 0 es «Todo el curso»). */
     pestana: unidades.indexOf(ud1) + 1,
     /** Criterios que la prueba escrita evalúa en ella. */
     criterios: criteriosDe(ud1),
-    /** Por alumno: criterio → { valor, nº de respuestas guardadas }. */
-    notas: alumnos.map(a => Object.fromEntries(cals
-      .filter(c => c.alumno_id === a.id && c.instrumento_id === prueba?.id)
-      .map(c => [c.criterio_id, { valor: c.valor, anterior: c.valor_anterior ?? null, respuestas: Object.keys(c.niveles_rubrica || {}).length }]))),
+    /** Por alumno: criterio → { valor, nº de respuestas guardadas }, en la unidad del examen. */
+    notas: notasEn(ud1),
+    /** Lo mismo en la otra unidad. */
+    notasOtra: notasEn(otra),
     examenes: rubricas.filter(r => r.tipo === 'prueba').map(r => ({ titulo: r.titulo, unidad_id: r.unidad_id, def: JSON.parse(r.prueba_json) })),
     rubricas: rubricas.filter(r => r.tipo !== 'prueba').length,
     ud1: ud1.id,
     ud1Nombre: ud1.nombre,
-    /** Otra unidad del área, para mover el examen. */
-    otraUnidad: unidades.find(u => u.id !== ud1.id)?.id ?? null,
-    otraUnidadNombre: unidades.find(u => u.id !== ud1.id)?.nombre ?? '',
+    /** Otra unidad del área, para mover el examen y para vincularlo. */
+    otraUnidad: otra?.id ?? null,
+    otraUnidadNombre: otra?.nombre ?? '',
+    otraPestana: unidades.indexOf(otra) + 1,
+    /** Criterios que la prueba escrita evalúa en la otra unidad. */
+    otrosCriterios: criteriosDe(otra),
   }
 })
 
@@ -381,6 +391,64 @@ try {
     await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
     await p.locator('[data-vista="criterios"]').click()
     await p.waitForTimeout(800)
+    await abrirCelda(1, cA)
+  }
+
+  console.log('\n7c. El mismo examen cuenta también en otra unidad')
+  {
+    // Ana, desde la unidad del examen: se vincula la otra unidad en el editor.
+    await cerrarPanel()
+    await abrirCelda(0, cA)
+    await panel.getByRole('button', { name: '📝 Examen' }).click()
+    await editor.waitFor({ timeout: 8000 })
+    await aparece(editor.getByLabel('Título del examen'))
+    const vinculo = editor.locator(`[data-unidades-vinculadas] input[data-unidad-id="${inicio.otraUnidad}"]`)
+    ok(await aparece(vinculo), 'el editor ofrece «También cuenta en» con las demás unidades')
+    // Con reparto por criterios, en la otra unidad reciben nota los criterios
+    // que alguna pregunta nombra Y que la prueba evalúa allí.
+    const esperados = inicio.otrosCriterios.filter(c => [cA, cB].includes(c))
+    ok(esperados.length >= 1, 'la prueba escrita evalúa en la otra unidad algún criterio del examen', `${inicio.otraUnidadNombre}: ${inicio.otrosCriterios.join(', ')}`)
+    await vinculo.check()
+    ok(await aparece(editor.getByText(/la misma nota se pone en esas unidades/)), 'y explica lo que pasará al corregir')
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    await aparece(editor.getByText(/Notas recalculadas|Examen guardado/))
+    d = await bd()
+    ok(d.examenes.length === 1 && JSON.stringify(d.examenes[0].def.unidades_vinculadas) === JSON.stringify([inicio.otraUnidad]),
+      'el vínculo se guarda dentro del examen, sin crear otro', JSON.stringify(d.examenes.map(e => [e.unidad_id, e.def.unidades_vinculadas])))
+    ok(Object.keys(d.notasOtra[0]).length === 0, 'vincular no pone notas por sí solo: las pone corregir')
+    await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    await examen.waitFor({ timeout: 6000 })
+    // Corregir una pregunta de Ana: la nota va a las dos unidades.
+    await examen.locator('[data-pregunta="4"]').getByRole('button', { name: /fallo/ }).click()
+    ok(await aparece(panel.getByText(new RegExp(`también en ${inicio.otraUnidadNombre}`))), 'al corregir dice que la nota va también a la otra unidad')
+    await p.waitForTimeout(500)
+    d = await bd()
+    ok(Object.keys(d.notasOtra[0]).sort().join(',') === esperados.join(','),
+      'Ana recibe nota en la otra unidad, en los criterios del examen que la prueba evalúa allí', JSON.stringify(d.notasOtra[0]))
+    ok(Object.values(d.notasOtra[0]).every(n => n.respuestas === 4), 'con las mismas respuestas guardadas')
+    ok(d.notas[0][cA] != null && Object.keys(d.notasOtra[1]).length === 0, 'la de la unidad del examen sigue, y Bruno no se toca')
+    await foto('prueba-06-vinculado')
+    await cerrarPanel()
+    // Desde la otra unidad: la columna sabe que el examen es de la primera y abre corregido.
+    await p.locator('.tab-unidad').nth(inicio.otraPestana).click()
+    await p.waitForTimeout(1200)
+    await p.locator('[data-vista="instrumentos"]').click()
+    await p.waitForTimeout(800)
+    const th = p.locator('[data-instr-th][data-con-examen]').filter({ hasText: /Proba escrita/ }).first()
+    ok(await aparece(th) && new RegExp(`examen de «${inicio.ud1Nombre}»`).test(await th.textContent()), 'en la otra unidad la columna dice de qué unidad es el examen', (await th.textContent().catch(() => '')).slice(0, 120))
+    await p.locator('[data-vista="criterios"]').click()
+    await p.waitForTimeout(800)
+    await abrirCelda(0, esperados[0])
+    ok(await aparece(examen.getByText(/4 de 4 anotadas/)), 'y desde allí el examen de Ana sale corregido')
+    await examen.locator('[data-pregunta="4"]').getByRole('button', { name: /en blanco/ }).click()
+    await p.waitForTimeout(600)
+    d = await bd()
+    // cA de Ana: aciertos en 1 y 2 (2 + 3) y la común en blanco, de 7 → 7,14
+    ok(d.notas[0][cA]?.valor === 7.14 && Object.values(d.notasOtra[0]).every(n => n.respuestas === 4),
+      `corregir desde la otra unidad cambia también la nota en la del examen (${cA} de Ana pasa a 7,14)`, JSON.stringify(d.notas[0][cA]))
+    await cerrarPanel()
+    await p.locator('.tab-unidad').nth(inicio.pestana).click()
+    await p.waitForTimeout(1200)
     await abrirCelda(1, cA)
   }
 

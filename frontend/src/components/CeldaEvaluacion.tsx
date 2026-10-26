@@ -431,11 +431,12 @@ export default function CeldaEvaluacion({
       const criterios = r.criterios
       const mia = r.porCriterio[criterio.id] ?? null
       setValorActual(criterio.id in r.porCriterio ? mia : valorActual)
+      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nombre).join(', ')}` : ''
       avisar({
         tipo: 'ok',
         texto: r.nota == null
-          ? 'Examen sin anotar: nota borrada'
-          : `Examen: ${r.nota}${criterios.length > 1 ? ` · nota puesta en ${criterios.join(', ')}` : ` guardado en ${criterio.id}`}`,
+          ? `Examen sin anotar: nota borrada${tambien}`
+          : `Examen: ${r.nota}${criterios.length > 1 ? ` · nota puesta en ${criterios.join(', ')}` : ` guardado en ${criterio.id}`}${tambien}`,
       }, 2500)
       onGuardado()
     } catch {

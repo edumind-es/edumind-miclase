@@ -267,7 +267,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                   )}
                   <div className="instr-th-tipo instr-th-detalle">
                     {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
-                    {col.ins.tiene_prueba ? ' · examen' : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
+                    {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   <div className="instr-th-criterios instr-th-detalle">
                     {ids.length} criterio{ids.length !== 1 ? 's' : ''}: {ids.join(' · ')}

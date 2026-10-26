@@ -514,6 +514,39 @@ export default function PruebaEditor({
                   ? <>Al guardar, el examen se <strong>mueve</strong> ahí. Las notas ya puestas se quedan en su sitio de origen.</>
                   : <>Si cada unidad tiene su examen, déjalo en la suya: las demás tendrán el suyo.</>}
               </div>
+
+              {/* El mismo examen puede contar en otras unidades: al corregirlo,
+                  la nota va también a ellas, con los criterios que el
+                  instrumento evalúa en cada una. Solo en un examen de unidad. */}
+              {destino.unidadId != null && unidades.some(u => u.id !== destino.unidadId) && (
+                <div style={{ marginTop: 10 }} data-unidades-vinculadas>
+                  <span style={{ ...etiqueta, fontSize: 11.5 }}>También cuenta en</span>
+                  <div style={{ display: 'flex', gap: '6px 14px', flexWrap: 'wrap', fontSize: 13 }}>
+                    {unidades.filter(u => u.id !== destino.unidadId).map(u => {
+                      const marcada = (def.unidades_vinculadas ?? []).includes(u.id!)
+                      const conExamenPropio = destino.instrumentoId === instrumentoId && guardadas.some(g => g.unidad_id === u.id)
+                      return (
+                        <label key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', opacity: conExamenPropio && !marcada ? 0.6 : 1 }}
+                          title={conExamenPropio ? 'Esta unidad ya tiene su propio examen: manda el suyo' : undefined}>
+                          <input type="checkbox" data-unidad-id={u.id} checked={marcada}
+                            onChange={e => editar(d => ({
+                              ...d,
+                              unidades_vinculadas: e.target.checked
+                                ? [...(d.unidades_vinculadas ?? []), u.id!]
+                                : (d.unidades_vinculadas ?? []).filter(x => x !== u.id),
+                            }))} />
+                          {u.nombre}{conExamenPropio ? ' (tiene examen propio)' : ''}
+                        </label>
+                      )
+                    })}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 3 }}>
+                    {(def.unidades_vinculadas ?? []).some(u => u !== destino.unidadId)
+                      ? <>Al corregir a un alumno, la misma nota se pone en esas unidades, en los criterios que «{nombreInstrumento}» evalúa en cada una. Se corrige desde cualquiera de ellas.</>
+                      : <>Marca otra unidad si este examen recoge también lo suyo: la nota se pondrá en las dos a la vez.</>}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div style={{ marginBottom: 14 }}>

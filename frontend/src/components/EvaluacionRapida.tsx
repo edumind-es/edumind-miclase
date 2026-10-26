@@ -281,11 +281,12 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         observacion: { criterio_id: criterioId, texto: observacion.trim() || null },
       })
       if (criterioId in r.porCriterio) setValorActual(r.porCriterio[criterioId])
+      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nombre).join(', ')}` : ''
       setMsg({
         tipo: 'ok',
         texto: r.nota == null
-          ? 'Examen sin anotar: nota borrada'
-          : `Examen: ${r.nota}${r.criterios.length > 1 ? ` · nota puesta en ${r.criterios.join(', ')}` : ` guardado en ${criterioId}`}`,
+          ? `Examen sin anotar: nota borrada${tambien}`
+          : `Examen: ${r.nota}${r.criterios.length > 1 ? ` · nota puesta en ${r.criterios.join(', ')}` : ` guardado en ${criterioId}`}${tambien}`,
       })
     } catch {
       setMsg({ tipo: 'error', texto: 'No se pudo guardar el examen' })
