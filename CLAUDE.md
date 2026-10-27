@@ -346,9 +346,10 @@ edumind_miclase/
   sobre `criterio_instrumentos`, solo en esa unidad): en un hijo pasan por
   `fijarCriteriosDeHijo` y, si la familia no lo evaluaba, se le asigna antes;
   quitar de una familia lo quita también de sus hijos. Las notas se conservan.
-  El texto de la cabecera sigue siendo «N criterios: a · b» (la «×» va por
-  CSS y el selector fuera del bloque) porque hay pruebas que lo leen. Luis
-  quería asociar un criterio en la columna de la prueba escrita y no podía.
+  Quien necesite la lista de criterios de una columna la lee de
+  `data-criterios` en el `<th>` (ids separados por espacio), nunca del texto
+  de la cabecera, que ahora lleva botones. Luis quería asociar un criterio en
+  la columna de la prueba escrita y no podía.
 - **Borrar un instrumento es de toda el área, y el gestor lo dice con cifras.**
   `usoDeInstrumento` cuenta, con los hijos, en cuántas unidades lo asigna la
   programación y cuántas notas y registros guarda; el gestor lo enseña junto a

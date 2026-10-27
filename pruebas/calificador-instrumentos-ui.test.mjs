@@ -159,7 +159,7 @@ try {
   console.log('\n3. «Evaluar hoy» con un instrumento que no es examen')
   const colDiario = p.locator('[data-instr-th]:not([data-tipo="prueba-escrita"])').first()
   const nombreInstr = await colDiario.getAttribute('data-nombre')
-  const idsCabecera = (await colDiario.locator('.instr-th-criterios').textContent()).split(':')[1].split('·').map(s => s.trim()).filter(Boolean)
+  const idsCabecera = (await colDiario.getAttribute('data-criterios')).split(' ').filter(Boolean)
   ok(idsCabecera.length >= 1, `«${nombreInstr}» cubre ${idsCabecera.length} criterio(s)`, idsCabecera.join(', '))
   // De observación: el diario es su herramienta y «Evaluar hoy» va primero,
   // pero la cabecera ofrece definir una rúbrica por si el docente la prefiere.

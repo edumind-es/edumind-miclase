@@ -257,7 +257,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
               return (
                 <th key={col.ins.instrumento_id} scope="col" className="instr-th"
                   data-instr-th data-nombre={col.ins.nombre} data-tipo={col.ins.tipo} data-con-examen={col.ins.tiene_prueba || undefined}
-                  data-familia={col.ins.familia_id ?? undefined}
+                  data-familia={col.ins.familia_id ?? undefined} data-criterios={ids.join(' ')}
                   style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
                   title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
                   {renombrando?.id === col.ins.instrumento_id ? (
@@ -282,23 +282,21 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
-                  {/* El texto sigue siendo «N criterios: CE1.1 · CE1.2» (la «×» va en
-                      CSS, fuera del texto): hay pruebas y tooltips que lo leen. */}
+                  {/* Los criterios que cubre; quien necesite la lista la lee de `data-criterios`
+                      en el <th>, no de este texto. Dentro de una unidad cada uno se puede
+                      quitar y se puede asociar otro aquí mismo, sin pasar por 📋 Programación:
+                      Luis quería hacerlo desde la columna de la prueba y no podía. */}
                   <div className={`instr-th-criterios instr-th-detalle${onQuitarCriterio ? ' editable' : ''}`}>
                     {ids.length} criterio{ids.length !== 1 ? 's' : ''}:{' '}
-                    {onQuitarCriterio ? ids.map((id, k) => (
+                    {onQuitarCriterio ? ids.map(id => (
                       <span key={id} className="instr-th-criterio" data-criterio-chip={id}>
-                        {k > 0 ? ' · ' : ''}{id}
+                        {id}
                         <button type="button" data-criterio-quitar aria-label={`Que «${col.ins.nombre}» deje de evaluar ${id} en esta unidad`}
                           title={`Quitar ${id} de «${col.ins.nombre}» en esta unidad (las notas se conservan)`}
-                          onClick={() => onQuitarCriterio(col, id)} />
+                          onClick={() => onQuitarCriterio(col, id)}>×</button>
                       </span>
                     )) : ids.join(' · ')}
-                  </div>
-                  {/* Asociar un criterio aquí mismo, sin pasar por 📋 Programación:
-                      Luis quería hacerlo desde la columna de la prueba y no podía. */}
-                  {onAsignarCriterio && criteriosUnidad && criteriosUnidad.some(c => !ids.includes(c.id)) && (
-                    <div className="instr-th-detalle">
+                    {onAsignarCriterio && criteriosUnidad && criteriosUnidad.some(c => !ids.includes(c.id)) && (
                       <select className="instr-th-criterio-anadir" data-criterio-anadir value="" aria-label={`Asociar un criterio a «${col.ins.nombre}» en esta unidad`}
                         title="Que este instrumento evalúe también otro criterio de la unidad"
                         onChange={e => { const v = e.target.value; e.target.value = ''; if (v) onAsignarCriterio(col, v) }}>
@@ -307,8 +305,8 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                           <option key={c.id} value={c.id}>{c.id} — {c.descripcion.slice(0, 70)}</option>
                         ))}
                       </select>
-                    </div>
-                  )}
+                    )}
+                  </div>
                   {esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}

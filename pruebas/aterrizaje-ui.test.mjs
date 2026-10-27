@@ -114,7 +114,7 @@ try {
   ok(await p.locator('[data-cabeceras-toggle][aria-pressed="true"]').count() === 1, 'las cabeceras se despliegan con «detalles»')
   const col = p.locator('[data-instr-th]').first()
   const nombreInstr = await col.getAttribute('data-nombre')
-  const idsCabecera = (await col.locator('.instr-th-criterios').textContent()).split(':')[1].split('·').map(s => s.trim()).filter(Boolean)
+  const idsCabecera = (await col.getAttribute('data-criterios')).split(' ').filter(Boolean)
   await col.locator('[data-pegar-abrir]').click()
   const dialogo = p.getByRole('dialog', { name: /^Pegar notas en / })
   await dialogo.waitFor({ timeout: 5000 })

@@ -179,7 +179,7 @@ try {
   d = await bd()
   ok(d.criteriosProba.includes('CE3.1'), 'la prueba evalúa también CE3.1 en la unidad, en la programación', d.criteriosProba.join(', '))
   ok((await p.locator('[data-columna-aviso]').textContent()).includes('CE3.1'), 'y la pantalla lo dice')
-  ok(/criterios: .*CE2\.1 · CE2\.2 · CE3\.1/.test(await columna(inicio.proba).locator('.instr-th-criterios').textContent()), 'el texto de la cabecera sigue siendo «N criterios: a · b»')
+  ok((await columna(inicio.proba).getAttribute('data-criterios')) === 'CE2.1 CE2.2 CE3.1', 'y la cabecera publica sus criterios en data-criterios')
   await desplegarCabeceras()
   await columna(inicio.proba).locator('[data-criterio-chip="CE3.1"] [data-criterio-quitar]').click()
   await columna(inicio.proba).locator('[data-criterio-chip="CE3.1"]').waitFor({ state: 'hidden', timeout: 8000 })
