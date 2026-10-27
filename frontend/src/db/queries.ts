@@ -1096,6 +1096,50 @@ export async function moverColumna(
   return r
 }
 
+// ─── CRITERIOS DE UNA COLUMNA, desde la propia cabecera ─────────────────────
+
+/**
+ * Asocia un criterio a un instrumento en UNA unidad desde la cabecera de su
+ * columna, sin pasar por 📋 Programación. Escribe lo mismo que la
+ * programación (`criterio_instrumentos`): en una familia o instrumento
+ * suelto, la fila de siempre; en un hijo, pasa por `fijarCriteriosDeHijo` y,
+ * si la familia no evaluaba ese criterio en la unidad, se le asigna antes,
+ * porque el hijo no puede salirse de ella. Luis quería asociar un criterio
+ * en la propia columna de la prueba escrita y no había forma.
+ */
+export async function asignarCriterioAColumna(instrumento_id: number, unidad_id: number, criterio_id: string): Promise<void> {
+  const ins = await db.instrumentos.get(instrumento_id)
+  if (!ins || ins.deleted_at) throw new Error('El instrumento no existe')
+  if (ins.familia_id != null) {
+    await asignarInstrumentoACriterio(unidad_id, criterio_id, ins.familia_id)
+    const actuales = await criteriosDeHijo(unidad_id, instrumento_id)
+    await fijarCriteriosDeHijo(unidad_id, instrumento_id, [...new Set([...actuales, criterio_id])])
+  } else {
+    await asignarInstrumentoACriterio(unidad_id, criterio_id, instrumento_id)
+  }
+}
+
+/**
+ * Retira un criterio de un instrumento en UNA unidad desde la cabecera. Las
+ * notas puestas se conservan, como siempre que cambia la programación. En
+ * una familia se retira también de sus hijos en esa unidad (no pueden
+ * evaluar lo que ella no evalúa).
+ */
+export async function quitarCriterioDeColumna(instrumento_id: number, unidad_id: number, criterio_id: string): Promise<void> {
+  const ins = await db.instrumentos.get(instrumento_id)
+  if (!ins || ins.deleted_at) throw new Error('El instrumento no existe')
+  if (ins.familia_id != null) {
+    const actuales = await criteriosDeHijo(unidad_id, instrumento_id)
+    await fijarCriteriosDeHijo(unidad_id, instrumento_id, actuales.filter(c => c !== criterio_id))
+    return
+  }
+  for (const h of await getHijos(instrumento_id)) {
+    const actuales = await criteriosDeHijo(unidad_id, h.id!)
+    if (actuales.includes(criterio_id)) await fijarCriteriosDeHijo(unidad_id, h.id!, actuales.filter(c => c !== criterio_id))
+  }
+  await quitarInstrumentoDeCriterio(unidad_id, criterio_id, instrumento_id)
+}
+
 // ─── DÓNDE SE USA UN INSTRUMENTO ─────────────────────────────────────────────
 
 export type UsoEnUnidad = {

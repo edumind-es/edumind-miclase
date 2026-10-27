@@ -15,7 +15,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento,
-  contarColumna, vaciarColumna, deshacerVaciado, type Vaciado,
+  contarColumna, vaciarColumna, deshacerVaciado, asignarCriterioAColumna, quitarCriterioDeColumna, type Vaciado,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
@@ -817,6 +817,22 @@ export default function EvaluacionPage() {
                   onEditarExamen={col => setEditarExamenEn(col)}
                   onInforme={col => setInformeEn(col)}
                   onVaciar={unidadId ? vaciarColumnaActual : undefined}
+                  criteriosUnidad={unidadId ? columnas : undefined}
+                  onAsignarCriterio={unidadId ? async (col, cr) => {
+                    try {
+                      await asignarCriterioAColumna(col.ins.instrumento_id, unidadId, cr)
+                      setColumnaAviso({ texto: `«${col.ins.nombre}» evalúa también ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».` })
+                    } catch (e) { setColumnaAviso({ texto: e instanceof Error ? e.message : 'No se pudo asociar el criterio' }) }
+                    setRefresco(r => r + 1)
+                  } : undefined}
+                  onQuitarCriterio={unidadId ? async (col, cr) => {
+                    if (!confirm(`«${col.ins.nombre}» dejará de evaluar ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».\n\nLas notas ya puestas se conservan (quedan sin columna hasta volver a asociarlo). Las demás unidades no cambian.`)) return
+                    try {
+                      await quitarCriterioDeColumna(col.ins.instrumento_id, unidadId, cr)
+                      setColumnaAviso({ texto: `«${col.ins.nombre}» ya no evalúa ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}». Las notas se conservan.` })
+                    } catch (e) { setColumnaAviso({ texto: e instanceof Error ? e.message : 'No se pudo quitar el criterio' }) }
+                    setRefresco(r => r + 1)
+                  } : undefined}
                   onMover={unidadId ? col => setMoverEn(col) : undefined}
                 />
               )

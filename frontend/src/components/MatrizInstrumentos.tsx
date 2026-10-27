@@ -175,9 +175,18 @@ interface Props {
   onVaciar?: (col: ColumnaInstrumento) => void
   /** «Mover a otro instrumento»: las notas de esta unidad y trimestre, a otra columna. Solo dentro de una unidad. */
   onMover?: (col: ColumnaInstrumento) => void
+  /**
+   * Criterios de la unidad que se mira: los que se pueden asociar a una
+   * columna desde su cabecera. Sin ellos (o fuera de una unidad) no se ofrece.
+   */
+  criteriosUnidad?: Criterio[]
+  /** «+ criterio»: asociar un criterio de la unidad a este instrumento, aquí mismo. */
+  onAsignarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
+  /** «×» en un criterio de la cabecera: el instrumento deja de evaluarlo en esta unidad (las notas se conservan). */
+  onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -273,9 +282,33 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
-                  <div className="instr-th-criterios instr-th-detalle">
-                    {ids.length} criterio{ids.length !== 1 ? 's' : ''}: {ids.join(' · ')}
+                  {/* El texto sigue siendo «N criterios: CE1.1 · CE1.2» (la «×» va en
+                      CSS, fuera del texto): hay pruebas y tooltips que lo leen. */}
+                  <div className={`instr-th-criterios instr-th-detalle${onQuitarCriterio ? ' editable' : ''}`}>
+                    {ids.length} criterio{ids.length !== 1 ? 's' : ''}:{' '}
+                    {onQuitarCriterio ? ids.map((id, k) => (
+                      <span key={id} className="instr-th-criterio" data-criterio-chip={id}>
+                        {k > 0 ? ' · ' : ''}{id}
+                        <button type="button" data-criterio-quitar aria-label={`Que «${col.ins.nombre}» deje de evaluar ${id} en esta unidad`}
+                          title={`Quitar ${id} de «${col.ins.nombre}» en esta unidad (las notas se conservan)`}
+                          onClick={() => onQuitarCriterio(col, id)} />
+                      </span>
+                    )) : ids.join(' · ')}
                   </div>
+                  {/* Asociar un criterio aquí mismo, sin pasar por 📋 Programación:
+                      Luis quería hacerlo desde la columna de la prueba y no podía. */}
+                  {onAsignarCriterio && criteriosUnidad && criteriosUnidad.some(c => !ids.includes(c.id)) && (
+                    <div className="instr-th-detalle">
+                      <select className="instr-th-criterio-anadir" data-criterio-anadir value="" aria-label={`Asociar un criterio a «${col.ins.nombre}» en esta unidad`}
+                        title="Que este instrumento evalúe también otro criterio de la unidad"
+                        onChange={e => { const v = e.target.value; e.target.value = ''; if (v) onAsignarCriterio(col, v) }}>
+                        <option value="">+ criterio</option>
+                        {criteriosUnidad.filter(c => !ids.includes(c.id)).map(c => (
+                          <option key={c.id} value={c.id}>{c.id} — {c.descripcion.slice(0, 70)}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   {esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}

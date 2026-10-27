@@ -770,6 +770,13 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .instr-th-accion.secundaria:hover { background: rgba(255,255,255,.16); opacity: 1; }
 /* Cabeceras plegadas: solo nombre y botón de calificar. El resto sigue en el
    DOM (las pruebas y el lector de pantalla lo leen), pero no ocupa sitio. */
+.instr-th-criterio { display: inline-flex; align-items: center; gap: 2px; margin: 1px 4px 1px 0; padding: 0 2px 0 5px; border-radius: 9px; background: rgba(255,255,255,.14); }
+.instr-th-criterios.editable { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.instr-th-criterio button { background: none; border: 0; color: inherit; cursor: pointer; font-size: 12px; line-height: 1; padding: 0 3px; opacity: .7; }
+.instr-th-criterio button::after { content: '×'; }
+.instr-th-criterio button:hover { opacity: 1; }
+.instr-th-criterio-anadir { font-size: 10.5px; max-width: 110px; margin-top: 3px; padding: 1px 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: inherit; cursor: pointer; }
+.instr-th-criterio-anadir option { color: var(--gris-900); }
 .matriz-instrumentos.cabeceras-compactas .instr-th-detalle { display: none; }
 .matriz-instrumentos.cabeceras-compactas thead th.instr-th { min-width: 150px; padding-bottom: 8px; }
 .cabeceras-toggle {

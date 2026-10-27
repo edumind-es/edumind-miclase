@@ -337,6 +337,18 @@ edumind_miclase/
   recorta `criterios_json` al destino y se vuelve a derivar en los dos lados.
   El examen y la rúbrica del origen no se mueven. Luis puso una prueba del
   20 % en la columna de la familia del 80 % y no podía ni quitarla ni moverla.
+- **Un criterio se asocia a la columna desde su propia cabecera.** Con las
+  cabeceras desplegadas, la lista de criterios lleva una «×» por criterio
+  (`[data-criterio-chip]` + `[data-criterio-quitar]`, con `confirm`) y un
+  selector «+ criterio» (`[data-criterio-anadir]`) con los de la unidad que
+  aún no evalúa. Escriben lo mismo que 📋 Programación
+  (`asignarCriterioAColumna` / `quitarCriterioDeColumna` en `queries.ts`,
+  sobre `criterio_instrumentos`, solo en esa unidad): en un hijo pasan por
+  `fijarCriteriosDeHijo` y, si la familia no lo evaluaba, se le asigna antes;
+  quitar de una familia lo quita también de sus hijos. Las notas se conservan.
+  El texto de la cabecera sigue siendo «N criterios: a · b» (la «×» va por
+  CSS y el selector fuera del bloque) porque hay pruebas que lo leen. Luis
+  quería asociar un criterio en la columna de la prueba escrita y no podía.
 - **Borrar un instrumento es de toda el área, y el gestor lo dice con cifras.**
   `usoDeInstrumento` cuenta, con los hijos, en cuántas unidades lo asigna la
   programación y cuántas notas y registros guarda; el gestor lo enseña junto a
