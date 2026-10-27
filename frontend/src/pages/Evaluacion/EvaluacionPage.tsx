@@ -15,6 +15,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento,
+  contarColumna, vaciarColumna, deshacerVaciado, type Vaciado,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
@@ -33,6 +34,7 @@ import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type C
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
+import MoverColumna from '@/components/MoverColumna'
 import ImportarMoodle from '@/components/ImportarMoodle'
 import ImprimirTest from '@/components/ImprimirTest'
 import EscanerHojas from '@/components/EscanerHojas'
@@ -181,6 +183,14 @@ export default function EvaluacionPage() {
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
+  /** Columna cuyas notas de esta unidad se van a llevar a otro instrumento. */
+  const [moverEn, setMoverEn] = useState<ColumnaInstrumento | null>(null)
+  /**
+   * Resultado de vaciar o mover una columna, para decirlo y, en el vaciado,
+   * poder deshacerlo mientras la pantalla siga abierta. Las notas vaciadas
+   * quedan además como fantasma, recuperables casilla a casilla.
+   */
+  const [columnaAviso, setColumnaAviso] = useState<{ texto: string; vaciado?: Vaciado } | null>(null)
   /** Importador del CSV de Edixgal (Moodle) abierto. */
   const [importarMoodle, setImportarMoodle] = useState(false)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
@@ -325,6 +335,36 @@ export default function EvaluacionPage() {
   const columnasInstr = useMemo(
     () => (matriz ? columnasPorInstrumento(matriz, columnas) : []),
     [matriz, columnas])
+
+  /**
+   * Vaciar una columna en la unidad y trimestre que se miran. Se cuenta antes
+   * y el `confirm` dice unidad, instrumento y cifras; nada se hace sin él.
+   */
+  const vaciarColumnaActual = async (col: ColumnaInstrumento) => {
+    if (!unidadId || !unidadActual) return
+    const n = await contarColumna(col.ins.instrumento_id, unidadId, trimestre)
+    if (n.calificaciones + n.diario === 0) {
+      setColumnaAviso({ texto: `«${col.ins.nombre}» no tiene nada en «${unidadActual.nombre}» (${trimestre}º trimestre).` })
+      return
+    }
+    const partes = [
+      `${n.calificaciones} nota${n.calificaciones !== 1 ? 's' : ''}`,
+      n.con_respuestas ? `${n.con_respuestas} con respuestas de examen` : '',
+      n.diario ? `${n.diario} registro${n.diario !== 1 ? 's' : ''} del diario` : '',
+    ].filter(Boolean).join(', ')
+    if (!confirm(`Vaciar «${col.ins.nombre}» solo en «${unidadActual.nombre}» (${trimestre}º trimestre):\n· ${partes}, de ${n.alumnos} alumno${n.alumnos !== 1 ? 's' : ''}.\n\nLas notas no se borran: quedan como nota anterior (fantasma), sin contar, y se recuperan desde la casilla o con «Deshacer». Las demás unidades y el instrumento no cambian.`)) return
+    const v = await vaciarColumna(col.ins.instrumento_id, unidadId, trimestre)
+    setColumnaAviso({ texto: `Vaciada «${col.ins.nombre}» en «${unidadActual.nombre}»: ${partes}. Siguen como nota anterior en cada casilla.`, vaciado: v })
+    setRefresco(r => r + 1)
+  }
+  const deshacerVaciadoActual = async () => {
+    if (!columnaAviso?.vaciado) return
+    await deshacerVaciado(columnaAviso.vaciado)
+    setColumnaAviso({ texto: 'Vaciado deshecho: las notas vuelven a contar.' })
+    setRefresco(r => r + 1)
+  }
+  // Cambiar de unidad o de área deja el aviso sin sentido.
+  useEffect(() => { setColumnaAviso(null) }, [asignaturaId, unidadId, trimestre])
 
   /** Abrir el panel de un alumno centrado en un instrumento. */
   const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
@@ -622,6 +662,19 @@ export default function EvaluacionPage() {
             </div>
           )}
 
+          {columnaAviso && (
+            <div data-columna-aviso role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ flex: 1 }}>{columnaAviso.texto}</span>
+              {columnaAviso.vaciado && (
+                <button type="button" data-vaciado-deshacer className="btn-secondary" style={{ fontSize: 12 }} onClick={deshacerVaciadoActual}>
+                  ↩ Deshacer
+                </button>
+              )}
+              <button type="button" aria-label="Cerrar aviso" onClick={() => setColumnaAviso(null)}
+                style={{ background: 'none', border: 0, cursor: 'pointer', color: 'inherit', fontSize: 14 }}>✕</button>
+            </div>
+          )}
+
           {vista === 'instrumentos' && !!matriz?.familiasConDatosEscondidos.length && (
             <div data-familias-escondidas style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               {matriz.familiasConDatosEscondidos.map(f => (
@@ -763,6 +816,8 @@ export default function EvaluacionPage() {
                   onEscanear={col => setEscanearEn(col)}
                   onEditarExamen={col => setEditarExamenEn(col)}
                   onInforme={col => setInformeEn(col)}
+                  onVaciar={unidadId ? vaciarColumnaActual : undefined}
+                  onMover={unidadId ? col => setMoverEn(col) : undefined}
                 />
               )
             ) : (
@@ -1146,6 +1201,24 @@ export default function EvaluacionPage() {
         />
       )}
 
+      {moverEn && matriz && unidadId && unidadActual && (
+        <MoverColumna
+          origen={moverEn}
+          instrumentos={matriz.instrumentos}
+          columnas={columnasInstr}
+          unidadId={unidadId}
+          unidadNombre={unidadActual.nombre}
+          trimestre={trimestre}
+          onMovido={(r, destino) => {
+            const quedan = r.noMovidos.sinCriterio + r.noMovidos.ocupadas + r.noMovidos.diario
+            setColumnaAviso({ texto: `Movidas a «${destino.nombre}» ${r.calificaciones} nota${r.calificaciones !== 1 ? 's' : ''}${r.diario ? ` y ${r.diario} registro${r.diario !== 1 ? 's' : ''} del diario` : ''} de «${unidadActual.nombre}».${quedan ? ` Se quedan en «${moverEn.ins.nombre}» ${quedan} que no encajan${r.criteriosSinDestino.length ? ` (${r.criteriosSinDestino.join(', ')}: el destino no los evalúa aquí)` : ''}.` : ''}` })
+            setMoverEn(null)
+            setRefresco(x => x + 1)
+          }}
+          onCerrar={() => setMoverEn(null)}
+        />
+      )}
+
       {importarMoodle && matriz && (
         <ImportarMoodle
           columnas={columnasInstr}
@@ -1163,6 +1236,7 @@ export default function EvaluacionPage() {
           asignaturaId={asigActual.id!}
           asignaturaNombre={asigActual.nombre_display}
           nivel={`${grupo?.curso}º ${grupo?.etapa}`}
+          unidadActual={unidadActual ? { id: unidadActual.id!, nombre: unidadActual.nombre } : null}
           onClose={() => { setManagerAbierto(false); setRefresco(r => r + 1) }}
         />
       )}

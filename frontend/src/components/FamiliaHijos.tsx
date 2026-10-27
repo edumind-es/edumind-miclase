@@ -17,8 +17,8 @@ import {
   getHijos, crearInstrumentoHijo, actualizarInstrumento, eliminarInstrumento, moverInstrumento,
   criteriosDeFamiliaPorUnidad, criteriosDeHijoPorUnidad, fijarCriteriosDeHijo,
   datosDirectosDeFamilia, hayDatosDirectos, conflictosAlMover, moverDatosDeFamiliaAHijo, bloquesDirectosDeFamilia,
-  getFamilias, previsualizarCambioDeFamilia, cambiarFamiliaDeHijo,
-  type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia, type BloqueDirectoConUnidad,
+  getFamilias, previsualizarCambioDeFamilia, cambiarFamiliaDeHijo, usoDeInstrumento,
+  type UsoDeInstrumento, type CriteriosDeFamiliaPorUnidad, type DatosDirectosDeFamilia, type BloqueDirectoConUnidad,
 } from '@/db/queries'
 import { describeBloque, etiquetaDia, etiquetaHora, type FiltroBloque } from '@/db/bloquesFamilia'
 import type { Instrumento } from '@/db/localDb'
@@ -26,6 +26,7 @@ import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrume
 import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
 import AsistenteFamilia from './AsistenteFamilia'
 import ConvertirFamilia from './ConvertirFamilia'
+import { describeUso } from './InstrumentosManager'
 
 interface Props {
   familia: Instrumento
@@ -40,6 +41,8 @@ interface Props {
 
 export default function FamiliaHijos({ familia, asignaturaNombre, criterios, capa, onCambio }: Props) {
   const [hijos, setHijos] = useState<Instrumento[]>([])
+  /** Dónde se usa cada hijo y cuánto guarda: lo que «×» tocaría. */
+  const [usos, setUsos] = useState<Record<number, UsoDeInstrumento>>({})
   /** Las otras familias del área, para cambiar un hijo de familia. */
   const [familias, setFamilias] = useState<Instrumento[]>([])
   const [cobertura, setCobertura] = useState<CriteriosDeFamiliaPorUnidad[]>([])
@@ -73,8 +76,9 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       ])
       const mapas = new Map<number, Map<number, string[]>>()
       for (const x of h) mapas.set(x.id!, await criteriosDeHijoPorUnidad(x.id!))
+      const usosDe = Object.fromEntries(await Promise.all(h.map(async x => [x.id!, await usoDeInstrumento(x.id!)] as const)))
       if (!vigente) return
-      setHijos(h); setCobertura(cob); setDeHijo(mapas); setFamilias(fams)
+      setHijos(h); setCobertura(cob); setDeHijo(mapas); setFamilias(fams); setUsos(usosDe)
       setEscondidos(h.length > 0 ? bloques : [])
       // Destino por defecto de cada bloque: el hijo que ya cubre esa unidad
       // y alguno de sus criterios; si no, el primero. Lo elegido se respeta.
@@ -195,8 +199,21 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
     finally { setMoviendo(null) }
   }
 
+  /**
+   * Borrar un hijo es de TODA el área: el confirm lo dice con cifras. Para
+   * quitarlo de una sola unidad basta con desmarcar sus criterios en ella
+   * («criterios»), que es programación y no borra nada.
+   */
   const borrar = async (h: Instrumento) => {
-    if (!confirm(`¿Eliminar «${h.nombre}» de «${familia.nombre}» y TODAS sus notas y registros? No se puede deshacer.`)) return
+    const u = usos[h.id!] ?? await usoDeInstrumento(h.id!)
+    if (!confirm([
+      `Eliminar «${h.nombre}» (dentro de «${familia.nombre}») del área entera.`,
+      '',
+      `Se retira de TODAS las unidades (${describeUso(u)}). Las notas quedan guardadas en este aparato, pero sin columna: no se ven ni cuentan. No se puede deshacer desde la app.`,
+      'Si tiene rúbrica o examen, se conserva una copia en tu banco.',
+      '',
+      'Si solo sobra en una unidad, cancela y desmárcale los criterios de esa unidad en «criterios»: deja de evaluarla y lo demás no cambia.',
+    ].join('\n'))) return
     await eliminarInstrumento(h.id!)
     cambiado()
   }
@@ -389,7 +406,13 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                     style={{ fontSize: 11, fontWeight: 600, padding: '4px 9px', borderRadius: 6, cursor: 'pointer', background: n === 0 ? '#fffbeb' : 'white', color: n === 0 ? '#92400e' : 'var(--gris-600)', border: `1px solid ${n === 0 ? '#fde68a' : 'var(--gris-300)'}` }}>
                     {n} de {totalFamilia} criterios {abierto ? '▴' : '▾'}
                   </button>
-                  <button onClick={() => borrar(h)} title="Eliminar" aria-label="Eliminar"
+                  {usos[h.id!] && (
+                    <span data-uso-hijo style={{ fontSize: 10.5, color: 'var(--gris-500)' }}
+                      title={usos[h.id!].unidades.filter(u => u.criterios > 0).map(u => `${u.nombre}: ${u.calificaciones} notas`).join('\n') || 'Sin unidad'}>
+                      {describeUso(usos[h.id!])}
+                    </span>
+                  )}
+                  <button onClick={() => borrar(h)} title="Eliminar de toda el área" aria-label="Eliminar"
                     style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 15, padding: '0 2px', lineHeight: 1 }}>×</button>
                 </div>
 

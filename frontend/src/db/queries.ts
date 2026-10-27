@@ -861,6 +861,320 @@ export function nombreGenericoDeFamilia(familia: Pick<Instrumento, 'nombre' | 't
   return etiquetaTipo
 }
 
+// ─── UNA COLUMNA EN UNA UNIDAD: vaciar o mover ───────────────────────────────
+
+/** Lo que una columna (un instrumento) guarda en UNA unidad y UN trimestre. */
+export type ContenidoColumna = {
+  /** Casillas con nota (una por alumno y criterio). */
+  calificaciones: number
+  /** De ellas, las que llevan respuestas de examen o marcas de rúbrica. */
+  con_respuestas: number
+  /** Registros del diario. */
+  diario: number
+  /** Alumnos distintos con algo anotado. */
+  alumnos: number
+  /** Criterios distintos con nota. */
+  criterios: string[]
+}
+
+/**
+ * Las filas vivas de una columna en una unidad y un trimestre: la casilla se
+ * identifica por alumno, instrumento, criterio, trimestre y unidad, así que
+ * esto es exactamente lo que la vista por instrumento pinta en esa columna.
+ * Devuelve TODAS las filas vivas, duplicadas incluidas, para que vaciar y
+ * mover no dejen una fila escondida que reaparecería tras un sync.
+ */
+async function filasDeColumna(instrumento_id: number, unidad_id: number, trimestre: number) {
+  const [cals, regs] = await Promise.all([
+    db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray(),
+    db.diario.where('instrumento_id').equals(instrumento_id).toArray(),
+  ])
+  return {
+    cals: vivos(cals).filter(c => c.unidad_id === unidad_id && c.trimestre === trimestre),
+    regs: vivos(regs).filter(r => r.unidad_id === unidad_id && r.trimestre === trimestre),
+  }
+}
+
+/** Cuenta lo que hay en la columna, para que el `confirm` diga cifras exactas. */
+export async function contarColumna(instrumento_id: number, unidad_id: number, trimestre: number): Promise<ContenidoColumna> {
+  const { cals, regs } = await filasDeColumna(instrumento_id, unidad_id, trimestre)
+  const conNota = sinDuplicados(cals).filter(c => c.valor != null)
+  const alumnos = new Set<number>([...conNota.map(c => c.alumno_id), ...regs.map(r => r.alumno_id)])
+  return {
+    calificaciones: conNota.length,
+    con_respuestas: conNota.filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).length).length,
+    diario: regs.length,
+    alumnos: alumnos.size,
+    criterios: [...new Set(conNota.map(c => c.criterio_id))].sort(),
+  }
+}
+
+export const MOTIVO_COLUMNA_VACIADA = 'Columna vaciada por el docente'
+
+/**
+ * Lo que `vaciarColumna` ha cambiado, tal como estaba antes: es lo que
+ * `deshacerVaciado` restaura. Vive en la memoria de la pantalla, no en la
+ * base; cerrar la pantalla lo pierde, pero la nota sigue como fantasma.
+ */
+export type Vaciado = {
+  instrumento_id: number
+  unidad_id: number
+  trimestre: number
+  calificaciones: {
+    id: number
+    valor: number | null
+    niveles_rubrica: Record<string, number> | null
+    origen: 'diario' | null
+    valor_anterior: number | null
+    anterior_motivo: string | null
+  }[]
+  diario: number[]
+}
+
+/**
+ * Vacía una columna en UNA unidad y UN trimestre: las notas de ese
+ * instrumento en esa unidad, con sus respuestas de examen, y sus registros
+ * del diario. No toca las demás unidades ni el instrumento en sí.
+ *
+ * Las notas no se borran: cada casilla se queda viva, sin nota, con la que
+ * tenía como fantasma (`valor_anterior`, ver `recuperarNotaAnterior`), que
+ * es lo que el proyecto hace siempre que una nota deja de contar. Así se ve
+ * en la vista por criterio (columna semitranslúcida) y se recupera casilla a
+ * casilla desde el panel. Las respuestas del examen (`niveles_rubrica`) se
+ * quitan, porque con ellas el corrector seguiría dando al alumno por
+ * corregido; y `origen` pasa a null para que el diario no vuelva a derivar
+ * nada. Los registros del diario llevan borrado lógico (`deleted_at`):
+ * viajan en el sync y los revive `deshacerVaciado`.
+ *
+ * Luis puso toda una prueba del 20 % en la columna de la familia del 80 % y
+ * no tenía forma de quitarla. Nunca se llama sola: siempre tras el `confirm`.
+ */
+export async function vaciarColumna(instrumento_id: number, unidad_id: number, trimestre: number): Promise<Vaciado> {
+  const { cals, regs } = await filasDeColumna(instrumento_id, unidad_id, trimestre)
+  const vaciado: Vaciado = { instrumento_id, unidad_id, trimestre, calificaciones: [], diario: [] }
+  await db.transaction('rw', [db.calificaciones, db.diario], async () => {
+    for (const c of cals) {
+      const sinNada = c.valor == null && !(c.niveles_rubrica && Object.keys(c.niveles_rubrica).length) && c.origen !== 'diario'
+      if (sinNada) continue
+      vaciado.calificaciones.push({
+        id: c.id!, valor: c.valor ?? null, niveles_rubrica: c.niveles_rubrica ?? null, origen: c.origen ?? null,
+        valor_anterior: c.valor_anterior ?? null, anterior_motivo: c.anterior_motivo ?? null,
+      })
+      await db.calificaciones.update(c.id!, tocado({
+        valor: null,
+        niveles_rubrica: null,
+        origen: null,
+        // Sin nota que guardar, el fantasma que hubiera se queda.
+        ...(c.valor != null ? { valor_anterior: c.valor, anterior_motivo: MOTIVO_COLUMNA_VACIADA } : {}),
+      }))
+    }
+    for (const r of regs) {
+      vaciado.diario.push(r.id!)
+      await db.diario.update(r.id!, tocado({ deleted_at: sello() }))
+    }
+  })
+  return vaciado
+}
+
+/** Deja la columna como estaba antes de `vaciarColumna`. */
+export async function deshacerVaciado(v: Vaciado): Promise<void> {
+  await db.transaction('rw', [db.calificaciones, db.diario], async () => {
+    for (const c of v.calificaciones) {
+      await db.calificaciones.update(c.id, tocado({
+        valor: c.valor, niveles_rubrica: c.niveles_rubrica, origen: c.origen,
+        valor_anterior: c.valor_anterior, anterior_motivo: c.anterior_motivo, deleted_at: null,
+      }))
+    }
+    for (const id of v.diario) await db.diario.update(id, tocado({ deleted_at: null }))
+  })
+}
+
+/** Lo que `moverColumna` haría o ha hecho. */
+export type ResultadoMoverColumna = {
+  /** Casillas que cambian de instrumento. */
+  calificaciones: number
+  /** Registros del diario que cambian de instrumento. */
+  diario: number
+  /** Lo que se queda en la columna de origen, y por qué. */
+  noMovidos: {
+    /** Notas de un criterio que el destino no evalúa en esta unidad. */
+    sinCriterio: number
+    /** Notas cuya casilla el destino ya tiene con nota. */
+    ocupadas: number
+    /** Registros del diario sin ningún criterio que el destino evalúe. */
+    diario: number
+  }
+  /** Criterios de las notas de origen que el destino no evalúa en esta unidad. */
+  criteriosSinDestino: string[]
+  /** Criterios que el destino evalúa en esta unidad. */
+  criteriosDestino: string[]
+}
+
+/**
+ * Mueve lo que una columna tiene en UNA unidad y UN trimestre a otro
+ * instrumento del área. Con `simular` solo cuenta: es lo que la pantalla
+ * enseña antes de pedir confirmación.
+ *
+ *  - `calificaciones`: cambian de `instrumento_id` en la MISMA fila con
+ *    `updated_at` nuevo (viajan en el sync sin duplicar casillas), como hace
+ *    `moverDatosDeFamiliaAHijo`. Solo a criterios que el destino evalúa en
+ *    esa unidad según la programación: una nota de un criterio que el
+ *    destino no evalúa se queda, y se dice. Una casilla que el destino ya
+ *    tiene con nota no se pisa. Las respuestas del examen van con la nota.
+ *    Si el destino tenía la casilla viva pero vacía, esa fila se retira para
+ *    no dejar dos vivas con la misma clave.
+ *  - `diario`: igual, recortando `criterios_json` a los criterios que el
+ *    destino evalúa; un registro sin ninguno se queda. Después se vuelve a
+ *    derivar la nota en los dos instrumentos (`materializarDiario`).
+ *  - El examen y la rúbrica definidos con el origen NO se mueven: son la
+ *    herramienta del instrumento, no notas de esta unidad.
+ *
+ * Nunca se llama sola: siempre tras el `confirm`.
+ */
+export async function moverColumna(
+  origen_id: number, destino_id: number, unidad_id: number, trimestre: number,
+  opciones: { simular?: boolean } = {}
+): Promise<ResultadoMoverColumna> {
+  if (origen_id === destino_id) throw new Error('El destino es la misma columna')
+  const [origen, destino] = await Promise.all([db.instrumentos.get(origen_id), db.instrumentos.get(destino_id)])
+  if (!origen || origen.deleted_at) throw new Error('El instrumento de origen no existe')
+  if (!destino || destino.deleted_at) throw new Error('El instrumento de destino no existe')
+  if (origen.asignatura_id !== destino.asignatura_id) throw new Error('Los dos instrumentos tienen que ser del mismo área')
+  if (!aplicaEnTrimestre(destino.trimestres, trimestre)) throw new Error(`«${destino.nombre}» no se usa en el ${trimestre}º trimestre`)
+
+  const criteriosDestino = [...new Set(
+    vivos(await db.criterio_instrumentos.where('instrumento_id').equals(destino_id).toArray())
+      .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))].sort()
+  if (!criteriosDestino.length) throw new Error(`«${destino.nombre}» no evalúa ningún criterio en esta unidad: asígnaselo antes en la programación`)
+  const evalua = new Set(criteriosDestino)
+
+  const { cals, regs } = await filasDeColumna(origen_id, unidad_id, trimestre)
+  const enDestino = (await db.calificaciones.where('instrumento_id').equals(destino_id).toArray())
+    .filter(c => !c.deleted_at && c.unidad_id === unidad_id && c.trimestre === trimestre)
+  const ocupada = new Set(enDestino.filter(c => c.valor != null).map(c => `${c.alumno_id}:${c.criterio_id}`))
+  const vaciasEnDestino = enDestino.filter(c => c.valor == null)
+
+  const r: ResultadoMoverColumna = {
+    calificaciones: 0, diario: 0,
+    noMovidos: { sinCriterio: 0, ocupadas: 0, diario: 0 },
+    criteriosSinDestino: [], criteriosDestino,
+  }
+  const sinDestino = new Set<string>()
+  const aMover: Calificacion[] = []
+  for (const c of cals) {
+    const tiene = c.valor != null || (c.niveles_rubrica && Object.keys(c.niveles_rubrica).length)
+    if (!tiene) continue
+    if (!evalua.has(c.criterio_id)) { r.noMovidos.sinCriterio++; sinDestino.add(c.criterio_id); continue }
+    if (ocupada.has(`${c.alumno_id}:${c.criterio_id}`)) { r.noMovidos.ocupadas++; continue }
+    aMover.push(c)
+  }
+  r.calificaciones = aMover.length
+  r.criteriosSinDestino = [...sinDestino].sort()
+  const regsAMover = regs.map(reg => ({ reg, criterios: criteriosDe(reg).filter(c => evalua.has(c)) })).filter(x => x.criterios.length)
+  r.diario = regsAMover.length
+  r.noMovidos.diario = regs.length - regsAMover.length
+  if (opciones.simular) return r
+
+  await db.transaction('rw', [db.calificaciones, db.diario], async () => {
+    for (const c of aMover) {
+      for (const v of vaciasEnDestino) {
+        if (v.alumno_id === c.alumno_id && v.criterio_id === c.criterio_id) await db.calificaciones.update(v.id!, tocado({ deleted_at: sello() }))
+      }
+      await db.calificaciones.update(c.id!, tocado({ instrumento_id: destino_id }))
+    }
+    for (const { reg, criterios } of regsAMover) {
+      await db.diario.update(reg.id!, tocado({ instrumento_id: destino_id, criterios_json: JSON.stringify(criterios) }))
+    }
+  })
+  // Las notas derivadas del diario se vuelven a calcular en los dos lados:
+  // fuera de la transacción, porque `materializarDiario` abre la suya.
+  const alumnos = new Set(regs.map(x => x.alumno_id))
+  for (const alumno_id of alumnos) {
+    await materializarDiario(alumno_id, origen_id, trimestre, unidad_id)
+    await materializarDiario(alumno_id, destino_id, trimestre, unidad_id)
+  }
+  return r
+}
+
+// ─── DÓNDE SE USA UN INSTRUMENTO ─────────────────────────────────────────────
+
+export type UsoEnUnidad = {
+  unidad_id: number
+  nombre: string
+  trimestre: number | null
+  /** Criterios que la programación le asigna en esa unidad (0 = solo guarda notas antiguas). */
+  criterios: number
+  calificaciones: number
+  diario: number
+}
+
+/** En cuántas unidades se usa un instrumento y cuánto guarda, con sus hijos. */
+export type UsoDeInstrumento = {
+  unidades: UsoEnUnidad[]
+  calificaciones: number
+  diario: number
+  /** Hijos vivos que caerían con él (solo familias). */
+  hijos: number
+}
+
+/**
+ * Dónde se usa un instrumento y cuánto guarda: lo que el gestor enseña junto
+ * a cada uno y lo que el `confirm` de borrar dice en cifras. Cuenta la
+ * programación (`criterio_instrumentos`), las notas con valor y el diario,
+ * unidad a unidad, y suma lo de sus hijos: borrar una familia se los lleva.
+ * Luis veía «×» sin saber si borraba de una unidad o de todas.
+ */
+export async function usoDeInstrumento(instrumento_id: number): Promise<UsoDeInstrumento> {
+  const hijos = await getHijos(instrumento_id)
+  const ids = [instrumento_id, ...hijos.map(h => h.id!)]
+  const [filas, cals, regs] = await Promise.all([
+    db.criterio_instrumentos.where('instrumento_id').anyOf(ids).toArray(),
+    db.calificaciones.where('instrumento_id').anyOf(ids).toArray(),
+    db.diario.where('instrumento_id').anyOf(ids).toArray(),
+  ])
+  const conNota = sinDuplicados(vivos(cals)).filter(c => c.valor != null)
+  const vivosRegs = vivos(regs)
+  const porUnidad = new Map<number, UsoEnUnidad>()
+  const de = (unidad_id: number) => {
+    let u = porUnidad.get(unidad_id)
+    if (!u) { u = { unidad_id, nombre: '', trimestre: null, criterios: 0, calificaciones: 0, diario: 0 }; porUnidad.set(unidad_id, u) }
+    return u
+  }
+  // Criterios: los distintos por unidad, sin contar dos veces familia e hijo.
+  const criteriosPorUnidad = new Map<number, Set<string>>()
+  for (const f of vivos(filas)) {
+    const s = criteriosPorUnidad.get(f.unidad_id) ?? new Set<string>()
+    s.add(f.criterio_id); criteriosPorUnidad.set(f.unidad_id, s)
+  }
+  for (const [unidad_id, s] of criteriosPorUnidad) de(unidad_id).criterios = s.size
+  for (const c of conNota) de(c.unidad_id).calificaciones++
+  for (const r of vivosRegs) de(r.unidad_id).diario++
+  const unidades = porUnidad.size ? vivos(await db.unidades.where('id').anyOf([...porUnidad.keys()]).toArray()) : []
+  for (const u of unidades) { const x = porUnidad.get(u.id!)!; x.nombre = u.nombre; x.trimestre = u.trimestre ?? null }
+  const lista = [...porUnidad.values()]
+    .map(u => ({ ...u, nombre: u.nombre || (u.unidad_id === SIN_UNIDAD ? 'Sin unidad' : `Unidad ${u.unidad_id}`) }))
+    .sort((a, b) => (unidades.find(u => u.id === a.unidad_id)?.orden ?? 999) - (unidades.find(u => u.id === b.unidad_id)?.orden ?? 999))
+  return { unidades: lista, calificaciones: conNota.length, diario: vivosRegs.length, hijos: hijos.length }
+}
+
+/**
+ * Retira un instrumento de la programación de UNA unidad: sus filas de
+ * `criterio_instrumentos` en esa unidad (y las de sus hijos, que no pueden
+ * evaluar lo que la familia no evalúa). El instrumento sigue existiendo y
+ * las notas puestas se conservan, como siempre que cambia la programación.
+ * Es la alternativa a borrar el instrumento cuando solo sobra en una unidad.
+ * Devuelve cuántas filas ha retirado.
+ */
+export async function retirarInstrumentoDeUnidad(instrumento_id: number, unidad_id: number): Promise<number> {
+  const hijos = await getHijos(instrumento_id)
+  const ids = [instrumento_id, ...hijos.map(h => h.id!)]
+  const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').anyOf(ids).toArray()).filter(f => f.unidad_id === unidad_id)
+  await db.transaction('rw', db.criterio_instrumentos, async () => {
+    for (const f of filas) await db.criterio_instrumentos.update(f.id!, tocado({ deleted_at: sello() }))
+  })
+  return filas.length
+}
+
 export async function getInstrumentos(asignatura_id: number): Promise<Instrumento[]> {
   const instrumentos = vivos(await db.instrumentos.where('asignatura_id').equals(asignatura_id).toArray())
   instrumentos.sort((a, b) => a.orden - b.orden || a.id! - b.id!)

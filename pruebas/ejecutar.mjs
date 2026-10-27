@@ -254,6 +254,7 @@ async function principal() {
     await suite('copia automática en carpeta, de punta a punta', 'node', ['pruebas/copia-ui.test.mjs'], entorno)
     await suite('diario de evaluación desde la interfaz', 'node', ['pruebas/diario-ui.test.mjs'], entorno)
     await suite('calificador por instrumento', 'node', ['pruebas/calificador-instrumentos-ui.test.mjs'], entorno)
+    await suite('vaciar o mover una columna en una unidad', 'node', ['pruebas/columna-unidad-ui.test.mjs'], entorno)
     await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('convertir lo que ya hay en una familia en su primer hijo', 'node', ['pruebas/familias-convertir-ui.test.mjs'], entorno)

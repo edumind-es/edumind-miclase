@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import {
   getAsignaturaDetalle, crearInstrumento, eliminarInstrumento,
   actualizarInstrumento, moverInstrumento, getGrupo,
+  usoDeInstrumento, retirarInstrumentoDeUnidad, type UsoDeInstrumento,
 } from '@/db/queries'
 import { api } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
@@ -30,6 +31,18 @@ interface Props {
    * pantalla. Sin esto empata en capa con quien lo abrió y queda por debajo.
    */
   anidado?: boolean
+  /** Unidad abierta en el calificador: la que se propone al retirar un instrumento de una sola unidad. */
+  unidadActual?: { id: number; nombre: string } | null
+}
+
+/** «3 unidades · 24 notas · 5 registros del diario», para la fila y el confirm. */
+export function describeUso(u: UsoDeInstrumento): string {
+  const enUso = u.unidades.filter(x => x.criterios > 0).length
+  return [
+    `${enUso} unidad${enUso !== 1 ? 'es' : ''}`,
+    `${u.calificaciones} nota${u.calificaciones !== 1 ? 's' : ''}`,
+    u.diario ? `${u.diario} registro${u.diario !== 1 ? 's' : ''} del diario` : '',
+  ].filter(Boolean).join(' · ')
 }
 
 function parseTrimestres(json: string | undefined): number[] {
@@ -39,11 +52,16 @@ function parseTrimestres(json: string | undefined): number[] {
   } catch { return [1, 2, 3] }
 }
 
-export default function InstrumentosManager({ asignaturaId, asignaturaNombre, nivel, onClose, anidado = false }: Props) {
+export default function InstrumentosManager({ asignaturaId, asignaturaNombre, nivel, onClose, anidado = false, unidadActual = null }: Props) {
   const [instrumentos, setInstrumentos] = useState<Instrumento[]>([])
   const [nuevo, setNuevo] = useState<{ nombre: string; tipo: string; peso: number } | null>(null)
   const [rubricaDe, setRubricaDe] = useState<Instrumento | null>(null)
   const [pruebaDe, setPruebaDe] = useState<Instrumento | null>(null)
+  /** Dónde se usa cada familia (con sus hijos) y cuánto guarda: lo que el «×» va a tocar. */
+  const [usos, setUsos] = useState<Record<number, UsoDeInstrumento>>({})
+  /** Familia a la que se está eligiendo de qué unidad retirar. */
+  const [retirando, setRetirando] = useState<{ id: number; unidad: string } | null>(null)
+  const [avisoUso, setAvisoUso] = useState<string | null>(null)
   /** Enunciados del currículo, para que el asistente reparta criterios por sus palabras. */
   const [criterios, setCriterios] = useState<{ id: string; descripcion: string }[]>([])
   const headers = useAppStore(s => s._headers)
@@ -51,7 +69,10 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
     // Solo las familias: los hijos no pesan en el área y van dentro de cada una.
-    setInstrumentos((det?.instrumentos || []).filter(i => i.familia_id == null))
+    const familias = (det?.instrumentos || []).filter(i => i.familia_id == null)
+    setInstrumentos(familias)
+    const pares = await Promise.all(familias.map(async f => [f.id!, await usoDeInstrumento(f.id!)] as const))
+    setUsos(Object.fromEntries(pares))
   }
   useEffect(() => { cargar() }, [asignaturaId])
 
@@ -96,9 +117,39 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
     await cargar()
   }
 
+  /**
+   * Borrar un instrumento es de TODA el área, no de una unidad, y el confirm
+   * lo dice con cifras: Luis pulsaba «×» sin saber si quitaba de una unidad
+   * o de todas, ni cuántas notas se iban. Para quitarlo solo de una unidad
+   * está «Retirar de una unidad», que toca la programación y no el instrumento.
+   */
   const borrar = async (ins: Instrumento) => {
-    if (!confirm(`¿Eliminar «${ins.nombre}» y TODAS sus calificaciones? No se puede deshacer.\n\nSi tiene rúbrica o examen, se conserva una copia en tu banco.`)) return
+    const u = usos[ins.id!] ?? await usoDeInstrumento(ins.id!)
+    const lineas = [
+      `Eliminar «${ins.nombre}» del área entera.`,
+      '',
+      `Se retira de TODAS las unidades de ${asignaturaNombre} (${describeUso(u)}${u.hijos ? `; se lleva también ${u.hijos} instrumento${u.hijos !== 1 ? 's' : ''} de dentro` : ''}).`,
+      'Las notas quedan guardadas en este aparato, pero sin columna: no se ven ni cuentan. No se puede deshacer desde la app.',
+      'Si tiene rúbrica o examen, se conserva una copia en tu banco.',
+      '',
+      'Si solo sobra en una unidad, cancela y usa «Retirar de una unidad»: la programación de esa unidad deja de usarlo y lo demás no cambia.',
+    ]
+    if (!confirm(lineas.join('\n'))) return
     await eliminarInstrumento(ins.id!)
+    await cargar()
+  }
+
+  /** Retirar la familia (y sus hijos) de la programación de UNA unidad. Las notas se conservan. */
+  const retirarDeUnidad = async (ins: Instrumento) => {
+    if (!retirando || retirando.id !== ins.id) return
+    const u = usos[ins.id!]
+    const unidad = u?.unidades.find(x => String(x.unidad_id) === retirando.unidad)
+    if (!unidad) return
+    const notas = unidad.calificaciones + unidad.diario
+    if (!confirm(`Retirar «${ins.nombre}» solo de «${unidad.nombre}».\n\nDeja de evaluar sus ${unidad.criterios} criterio${unidad.criterios !== 1 ? 's' : ''} en esa unidad; en las demás sigue igual.${notas ? ` Las ${unidad.calificaciones} nota${unidad.calificaciones !== 1 ? 's' : ''}${unidad.diario ? ` y ${unidad.diario} registro${unidad.diario !== 1 ? 's' : ''} del diario` : ''} de esa unidad se conservan, sin columna hasta que vuelvas a asignarlo.` : ''}`)) return
+    const n = await retirarInstrumentoDeUnidad(ins.id!, unidad.unidad_id)
+    setRetirando(null)
+    setAvisoUso(`«${ins.nombre}» ya no se usa en «${unidad.nombre}» (${n} criterio${n !== 1 ? 's' : ''} retirado${n !== 1 ? 's' : ''}). Las notas de esa unidad siguen guardadas.`)
     await cargar()
   }
 
@@ -178,6 +229,10 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
             </div>
           </div>
 
+          {avisoUso && (
+            <div data-uso-aviso role="status" style={{ fontSize: 12.5, color: 'var(--verde-500)', fontWeight: 600, marginBottom: 10 }}>{avisoUso}</div>
+          )}
+
           {instrumentos.length === 0 && !nuevo && (
             <p style={{ color: 'var(--gris-600)', fontSize: 13, marginBottom: 12 }}>
               Sin instrumentos todavía. Crea el primero para poder calificar.
@@ -189,7 +244,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               const cfg = getInstrConfig(ins.tipo)
               const trims = parseTrimestres(ins.trimestres)
               return (
-                <div key={ins.id} style={{
+                <div key={ins.id} data-familia-bloque data-nombre={ins.nombre} style={{
                   border: `1px solid ${cfg.color}30`, background: cfg.bg,
                   borderRadius: 10, padding: '10px 12px',
                 }}>
@@ -224,6 +279,37 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                       ×
                     </button>
                   </div>
+
+                  {/* Dónde se usa y cuánto guarda: lo que «×» tocaría. */}
+                  {usos[ins.id!] && (
+                    <div data-uso-instrumento style={{ fontSize: 11.5, color: 'var(--gris-600)', marginTop: 6, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span title={usos[ins.id!].unidades.filter(u => u.criterios > 0).map(u => `${u.nombre}: ${u.criterios} criterios, ${u.calificaciones} notas`).join('\n') || 'No está en la programación de ninguna unidad'}>
+                        Se usa en {describeUso(usos[ins.id!])}
+                      </span>
+                      {usos[ins.id!].unidades.some(u => u.criterios > 0) && retirando?.id !== ins.id && (
+                        <button type="button" data-retirar-unidad onClick={() => {
+                          const lista = usos[ins.id!].unidades.filter(u => u.criterios > 0)
+                          const propuesta = lista.find(u => u.unidad_id === unidadActual?.id) ?? lista[0]
+                          setRetirando({ id: ins.id!, unidad: String(propuesta.unidad_id) })
+                        }}
+                          title="Quitarlo de la programación de una sola unidad, sin borrar el instrumento ni sus notas"
+                          style={{ background: 'none', border: 0, padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', font: 'inherit' }}>
+                          Retirar de una unidad…
+                        </button>
+                      )}
+                      {retirando?.id === ins.id && (
+                        <span data-retirar-unidad-form style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                          <select data-retirar-unidad-select value={retirando?.unidad} onChange={e => setRetirando({ id: ins.id!, unidad: e.target.value })} style={{ fontSize: 11.5 }}>
+                            {usos[ins.id!].unidades.filter(u => u.criterios > 0).map(u => (
+                              <option key={u.unidad_id} value={String(u.unidad_id)}>{u.nombre}{u.trimestre ? ` (T${u.trimestre})` : ''} · {u.calificaciones} notas</option>
+                            ))}
+                          </select>
+                          <button type="button" data-retirar-unidad-aceptar className="btn-secondary" style={{ fontSize: 11.5 }} onClick={() => retirarDeUnidad(ins)}>Retirar</button>
+                          <button type="button" className="btn-secondary" style={{ fontSize: 11.5 }} onClick={() => setRetirando(null)}>Cancelar</button>
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Fila 2: trimestres en los que aplica + rúbrica */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8, flexWrap: 'wrap' }}>

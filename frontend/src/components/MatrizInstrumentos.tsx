@@ -171,9 +171,13 @@ interface Props {
   onEditarExamen?: (col: ColumnaInstrumento) => void
   /** «Informe»: qué preguntas y aspectos falla la clase con este examen. */
   onInforme?: (col: ColumnaInstrumento) => void
+  /** «Vaciar columna»: quitar las notas de esta unidad y trimestre (quedan como fantasma). Solo dentro de una unidad. */
+  onVaciar?: (col: ColumnaInstrumento) => void
+  /** «Mover a otro instrumento»: las notas de esta unidad y trimestre, a otra columna. Solo dentro de una unidad. */
+  onMover?: (col: ColumnaInstrumento) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -341,6 +345,23 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                     title="Pegar una columna de notas copiada de tu hoja de cálculo">
                     📋 Pegar columna
                   </button>
+                  {/* Lo que hay en esta columna, en ESTA unidad y trimestre, se puede
+                      vaciar (queda como fantasma) o llevar a otro instrumento. Luis puso
+                      una prueba del 20 % en la columna del 80 % y no podía deshacerlo. */}
+                  {onMover && (
+                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-mover-columna
+                      onClick={() => onMover(col)}
+                      title="Llevar las notas de esta columna, solo en esta unidad y trimestre, a otro instrumento">
+                      ⇄ Mover a otro instrumento
+                    </button>
+                  )}
+                  {onVaciar && (
+                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-vaciar-columna
+                      onClick={() => onVaciar(col)}
+                      title="Quitar las notas de esta columna, solo en esta unidad y trimestre; quedan como nota anterior, recuperables">
+                      🧹 Vaciar columna
+                    </button>
+                  )}
                 </th>
               )
             })}

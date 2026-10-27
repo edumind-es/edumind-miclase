@@ -314,6 +314,40 @@ edumind_miclase/
   `confirm`. Cada `FamiliaHijos` relee cuando el gestor recarga (depende del
   objeto `familia`, no solo de su id): si no, el bloque de destino no
   enseñaba al recién llegado.
+- **Una columna se vacía o se mueve por unidad y trimestre, nunca entera.**
+  En la cabecera de la vista por instrumento (plegado tras
+  `[data-cabeceras-toggle]`, solo dentro de una unidad) van «Vaciar columna»
+  (`[data-vaciar-columna]`) y «Mover a otro instrumento»
+  (`[data-mover-columna]`, diálogo `MoverColumna` con vista previa). Las dos
+  actúan SOLO sobre la unidad y el trimestre que se miran —la casilla lleva
+  alumno, instrumento, criterio, trimestre y unidad— y pasan por
+  `queries.ts`: `contarColumna` (para que el `confirm` diga cifras),
+  `vaciarColumna`, `deshacerVaciado` y `moverColumna` (con `simular` para la
+  vista previa). Vaciar no borra la nota: la casilla sigue viva, sin `valor`,
+  con la nota como fantasma (`valor_anterior`, `MOTIVO_COLUMNA_VACIADA`),
+  sin respuestas de examen (`niveles_rubrica`, porque con ellas el corrector
+  seguiría dando al alumno por corregido) y con `origen` null; los registros
+  del diario llevan `deleted_at`. «Deshacer» (`[data-vaciado-deshacer]`)
+  restaura todo mientras la pantalla siga abierta; después queda el fantasma
+  casilla a casilla. Mover cambia `instrumento_id` en la MISMA fila con
+  `updated_at` nuevo, como `moverDatosDeFamiliaAHijo`, y solo a criterios
+  que el destino evalúa en esa unidad según `criterio_instrumentos`; lo que
+  no encaja (criterio sin destino, casilla del destino ya con nota, registro
+  sin criterio común) se queda y se cuenta en `noMovidos`. El diario movido
+  recorta `criterios_json` al destino y se vuelve a derivar en los dos lados.
+  El examen y la rúbrica del origen no se mueven. Luis puso una prueba del
+  20 % en la columna de la familia del 80 % y no podía ni quitarla ni moverla.
+- **Borrar un instrumento es de toda el área, y el gestor lo dice con cifras.**
+  `usoDeInstrumento` cuenta, con los hijos, en cuántas unidades lo asigna la
+  programación y cuántas notas y registros guarda; el gestor lo enseña junto a
+  cada familia (`[data-uso-instrumento]`) y cada hijo (`[data-uso-hijo]`), y
+  el `confirm` de «×» dice «se retira de TODAS las unidades (N unidades · M
+  notas)» y que las notas quedan guardadas pero sin columna. Para quitarlo de
+  una sola unidad está «Retirar de una unidad» (`[data-retirar-unidad]`,
+  `retirarInstrumentoDeUnidad`): retira sus filas de `criterio_instrumentos`
+  en esa unidad (y las de sus hijos) sin tocar el instrumento ni las notas;
+  en un hijo basta con desmarcar sus criterios en esa unidad. Luis veía «×» y
+  no sabía si borraba de una unidad o de todas.
 - **El color identifica al instrumento, no a su tipo.** Ocho tonos de
   Okabe-Ito (`PALETA_INSTRUMENTOS`), propio (`Instrumento.color`) o por orden
   entre iguales (`colorDeInstrumento`), resueltos una vez en
