@@ -22,9 +22,9 @@ automáticas en `pruebas/`.
 No es una política que prometemos cumplir: es la arquitectura. La aplicación
 guarda todo el cuaderno en el almacenamiento del propio navegador o de la app
 instalada. El servidor no tiene ninguna tabla donde quepan un nombre, una nota
-o una fotografía en claro, ni existe ningún endpoint que los reciba. El
-único documento que el servidor llega a recibir es el PDF de la programación
-didáctica, que no es del alumnado y no se guarda (punto 3.3).
+o una fotografía en claro, ni existe ningún endpoint que los reciba. Ni
+siquiera la programación didáctica en PDF sale del dispositivo: se lee en él
+(punto 3.3).
 
 Esto tiene una contrapartida que conviene decir en voz alta: **si el docente
 pierde el dispositivo y no tiene copia de seguridad ni sincronización activada,
@@ -55,8 +55,7 @@ circunstancia.**
 
 En **modo local** (sin iniciar sesión) la aplicación no envía ningún dato del
 alumnado: funciona entera contra el almacenamiento del dispositivo y solo
-descarga el currículo, que es información pública. La única excepción es que
-el docente importe una programación en PDF (punto 3.3).
+descarga el currículo, que es información pública.
 
 Si el docente decide iniciar sesión con su cuenta EDUmind, el servidor guarda:
 
@@ -110,20 +109,24 @@ y solo se usan si el docente pulsa expresamente el botón de descargarlo.
 - **Buzón de sincronización**: sobres cifrados, solo si el docente activa la
   sincronización. Ver el punto 4.
 
-### 3.3 La programación en PDF: de paso, sin guardarse
+### 3.3 La programación en PDF: se lee en el dispositivo
 
-Para importar una programación de PROENS, el navegador envía el PDF a
-`/api/programacion/texto`. El servidor lo pasa por `pdftotext` para obtener el
-texto con sus columnas, lo devuelve y **borra el fichero en el mismo momento**.
-No lo interpreta ni lo guarda; la lectura de unidades y criterios ocurre en el
-navegador. Se admiten PDF de hasta 15 MB y el servidor web limita el número de
+Para importar una programación de PROENS, la aplicación abre el PDF **en el
+propio dispositivo** con pdf.js (biblioteca libre de Mozilla, servida por la
+propia aplicación) y lee de él unidades, criterios e instrumentos. El PDF no
+se envía a ningún sitio.
+
+Queda una reserva por si un PDF no se pudiera leer así: el servidor de
+EDUmind (`/api/programacion/texto`) lo pasa por `pdftotext`, devuelve el texto
+y **borra el fichero en el mismo momento**, sin guardarlo. **Solo se usa si el
+docente lo acepta** en un aviso que dice que el PDF saldrá del dispositivo.
+Se admiten PDF de hasta 15 MB y el servidor web limita el número de
 peticiones.
 
 Una programación es un documento del centro, no del alumnado, pero puede
 llevar el nombre del docente y, si incluye adaptaciones, alguna referencia a
-alumnado concreto. **Conviene importar la programación sin anexos de
-adaptaciones ni iniciales de alumnos.** Quien no quiera usar esta vía puede
-crear las unidades a mano.
+alumnado concreto. Por eso la reserva pregunta antes, y conviene no enviarla
+si lleva anexos de adaptaciones o iniciales de alumnos.
 
 ### 3.4 Proveedores de la infraestructura
 
@@ -135,9 +138,9 @@ La instalación oficial (miclase.edumind.es) usa dos proveedores:
 | **Cloudflare, Inc.** | Red de distribución y protección delante del servidor; termina la conexión TLS | El tráfico en tránsito: direcciones IP, rutas pedidas, cabeceras y cuerpos de las peticiones |
 
 Los sobres de sincronización viajan ya cifrados en el dispositivo (punto 4.1),
-así que Cloudflare tampoco puede leer su contenido. El PDF de la programación
-(punto 3.3) sí pasa por Cloudflare tal cual, como cualquier fichero enviado a
-una web.
+así que Cloudflare tampoco puede leer su contenido. Solo si el docente acepta
+la reserva del punto 3.3, el PDF de la programación pasaría por Cloudflare tal
+cual, como cualquier fichero enviado a una web.
 
 El servidor web guarda los registros de acceso ordinarios para la seguridad
 del servicio: dirección IP **anonimizada**, fecha, ruta pedida y navegador. No

@@ -23,6 +23,7 @@
     "dexie": "^4.4.6",
     "dexie-react-hooks": "^4.4.0",
     "jsqr": "^1.4.0",
+    "pdfjs-dist": "4.10.38",
     "qrcode": "^1.5.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

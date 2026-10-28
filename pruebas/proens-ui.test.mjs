@@ -29,6 +29,9 @@ const ctx = await navegador.newContext({ viewport: { width: 1400, height: 950 } 
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
+// El PDF se lee en el aparato: ninguna petición debe llevarlo al servidor.
+const alServidor = []
+p.on('request', r => { if (r.url().includes('/api/programacion/')) alServidor.push(r.url()) })
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 try {
@@ -62,6 +65,7 @@ try {
   await p.locator('input[type="file"][accept*="pdf"]').setInputFiles(PDF)
   await p.getByRole('button', { name: /Importar 7 unidades/ }).waitFor({ timeout: 20000 })
   ok(true, 'el PDF se lee y la vista previa cuenta 7 unidades')
+  ok(alServidor.length === 0, 'y se lee en el aparato: el PDF no va al servidor', alServidor.join(' '))
   ok(await p.getByText(/Ciencias Sociais/).first().isVisible(), 'muestra el área del PDF')
   ok(!(await p.getByText(/Comprueba que es el documento correcto/).isVisible().catch(() => false)),
     'no confunde «Ciencias Sociais» con otra área')

@@ -182,6 +182,10 @@ async function principal() {
     await paquete('pruebas/proens.test.ts', proens, ['--platform=node', '--format=esm'])
     await suite('lectura de programaciones PROENS', 'node', [proens])
 
+    const proensNavegador = join(scratch, 'proens-navegador.mjs')
+    await paquete('pruebas/proens-navegador.test.ts', proensNavegador, ['--platform=node', '--format=esm'])
+    await suite('PROENS leído en el aparato (pdf.js)', 'node', [proensNavegador])
+
     const bloques = join(scratch, 'bloques-familia.mjs')
     await paquete('pruebas/bloques-familia.test.ts', bloques, ['--platform=node', '--format=esm'])
     await suite('bloques de lo que una familia guarda a su nombre', 'node', [bloques])

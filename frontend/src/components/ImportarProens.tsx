@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { api } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 import { parsearProens, type ProgramacionProens } from '@/programacion/proens'
+import { textoDePdf } from '@/programacion/pdfNavegador'
 import {
   aplicarProgramacionImportada, getFamilias, getHijos, criteriosDeFamiliaPorUnidad,
   type ResultadoImportacion, type CriteriosDeFamiliaPorUnidad,
@@ -93,36 +94,61 @@ export default function ImportarProens({
 
   // ── Paso 1: leer el fichero ────────────────────────────────────────────
 
+  /**
+   * Reserva: el servidor pasa el PDF por `pdftotext` y lo borra. Solo se usa
+   * si la lectura en el aparato no ha dado ninguna unidad, y nunca sin que el
+   * docente lo acepte, porque es la única vez que el PDF sale del dispositivo.
+   */
+  const textoDelServidor = async (f: File): Promise<string> => {
+    // El PDF va en base64 dentro de un JSON. Mandar el File tal cual
+    // como cuerpo fallaba en Safari y en el iPad con «Load failed» antes
+    // de salir del dispositivo; un JSON es el mismo camino que usa el
+    // resto del API y funciona en la web y en la app nativa.
+    const pdf = await aBase64(f)
+    let r: Response
+    try {
+      r = await fetch(api('/api/programacion/texto'), {
+        method: 'POST',
+        headers: { ...headers(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pdf }),
+      })
+    } catch {
+      throw new Error('No se ha podido enviar el PDF al servidor. Comprueba la conexión y vuelve a intentarlo.')
+    }
+    const datos = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(datos.error || `El servidor ha respondido ${r.status}`)
+    return datos.texto
+  }
+
   const leerFichero = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
     e.target.value = ''
     if (!f) return
     setLeyendo(true); setError(''); setProg(null)
     try {
-      let texto: string
+      let p: ProgramacionProens
       if (/\.txt$/i.test(f.name)) {
-        texto = await f.text()
+        p = parsearProens(await f.text())
       } else {
-        // El PDF va en base64 dentro de un JSON. Mandar el File tal cual
-        // como cuerpo fallaba en Safari y en el iPad con «Load failed» antes
-        // de salir del dispositivo; un JSON es el mismo camino que usa el
-        // resto del API y funciona en la web y en la app nativa.
-        const pdf = await aBase64(f)
-        let r: Response
+        // Primero en el aparato: el PDF no sale de aquí.
+        let motivo = ''
         try {
-          r = await fetch(api('/api/programacion/texto'), {
-            method: 'POST',
-            headers: { ...headers(), 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pdf }),
-          })
-        } catch {
-          throw new Error('No se ha podido enviar el PDF al servidor. Comprueba la conexión y vuelve a intentarlo.')
+          p = parsearProens(await textoDePdf(await f.arrayBuffer()))
+          if (p.unidades.length === 0) motivo = p.avisos[0] || 'no se ha encontrado ninguna unidad'
+        } catch (err: any) {
+          p = parsearProens('')
+          motivo = err?.message || 'el PDF no se ha podido abrir'
         }
-        const datos = await r.json().catch(() => ({}))
-        if (!r.ok) throw new Error(datos.error || `El servidor ha respondido ${r.status}`)
-        texto = datos.texto
+        if (motivo) {
+          const enviar = confirm(
+            `No se ha podido leer la programación en este aparato (${motivo}).\n\n`
+            + 'Se puede probar en el servidor de EDUmind: el PDF viaja hasta él, se convierte a texto '
+            + 'y se borra en el momento, sin guardarse. Si la programación lleva anexos con datos de '
+            + 'alumnado, mejor no enviarla.\n\n¿Enviar el PDF al servidor para leerlo?')
+          if (!enviar) throw new Error(`No se ha podido leer la programación en este aparato (${motivo}). No se ha enviado a ningún sitio.`)
+          p = parsearProens(await textoDelServidor(f))
+        }
       }
-      const p = parsearProens(texto)
       if (p.unidades.length === 0) {
         throw new Error(p.avisos[0] || 'No se ha encontrado ninguna unidad en el documento.')
       }
@@ -291,7 +317,7 @@ export default function ImportarProens({
               {leyendo ? 'Leyendo…' : '📄 Elegir PDF de PROENS'}
             </button>
             <input ref={fileRef} type="file" accept=".pdf,application/pdf,.txt" style={{ display: 'none' }} onChange={leerFichero} />
-            <span style={{ fontSize: 11.5, color: 'var(--gris-500)' }}>El PDF se convierte a texto en el servidor y no se guarda.</span>
+            <span style={{ fontSize: 11.5, color: 'var(--gris-500)' }}>El PDF se lee en este aparato: no se envía a ningún sitio.</span>
           </div>
           {error && <div style={{ marginTop: 10 }}>{aviso(error, 'rojo')}</div>}
         </>
