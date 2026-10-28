@@ -124,5 +124,13 @@ console.log('\n7. Ficheros que no son una rúbrica')
   ok((await falla(() => rubricaDeFilas([['Indicador', 'Excelente (4)']], 't'))).includes('indicadores'), 'cabecera sin filas')
 }
 
+console.log('\n8. La marca de IA viaja con el fichero (AI Act, art. 50.2)')
+{
+  const conMarca = rubricaDeJson(rubricaAJson(RUBRICA_EJEMPLO, { generada_ia: true }), 't')
+  ok(conMarca.generada_ia === true, 'una rúbrica de la IA exportada vuelve marcada')
+  const sinMarca = rubricaAJson(RUBRICA_EJEMPLO)
+  ok(!('generada_ia' in JSON.parse(sinMarca)) && !rubricaDeJson(sinMarca, 't').generada_ia, 'y una hecha a mano no lleva la marca')
+}
+
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
 process.exit(fallos === 0 ? 0 : 1)

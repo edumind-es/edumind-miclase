@@ -22,7 +22,15 @@ unidad. Todo se lee en el aparato; nada sale de él.
 El prompt lo genera la app (editor del examen → bloque de IA → «Copiar
 prompt»): lleva ya el área, el curso y los criterios del instrumento. Se pega
 en Claude, ChatGPT o Gemini junto con el examen, y devuelve una tabla con una
-fila por pregunta:
+fila por pregunta.
+
+> **A la IA solo va el examen.** Nunca se adjuntan listas de clase, hojas de
+> notas ni el `.xlsx` de iDoceo con el alumnado: todo lo que se pega o se sube
+> a una IA externa sale del dispositivo y lo recibe ese tercero. Si la
+> planilla vive en el mismo `.xlsx` que la hoja del alumnado, se copia la
+> planilla a un fichero aparte antes de pedir nada.
+
+
 
 | Ítem | Pregunta | Criterio | Tipo | Máximo | Clave | Puntuación | Nivel 1 … Nivel 6 | Notas |
 |---|---|---|---|---|---|---|---|---|

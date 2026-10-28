@@ -25,6 +25,8 @@ export type RubricaImportada = {
   /** Solo lo trae el formato propio (.edurubrica.json). */
   contexto?: string
   area?: string
+  /** El fichero declara que la rúbrica salió de una IA (AI Act, art. 50.2). */
+  generada_ia?: boolean
 }
 
 type NivelCrudo = { nombre: string; valor?: number }
@@ -224,6 +226,7 @@ export function rubricaDeJson(texto: string, tituloPorDefecto: string): RubricaI
   const resultado = componer(limpiar(r.titulo) || tituloPorDefecto, niveles, indicadores)
   if (typeof r.contexto === 'string' && r.contexto.trim()) resultado.contexto = r.contexto
   if (typeof r.area === 'string' && r.area.trim()) resultado.area = r.area
+  if (r.generada_ia === true) resultado.generada_ia = true
   return resultado
 }
 
@@ -285,7 +288,7 @@ export function rubricaAMarkdown(r: RubricaParsed): string {
 }
 
 /** Lo que se guarda al «compartir»: la rúbrica tal cual, sin adivinar nada al volver. */
-export function rubricaAJson(r: RubricaParsed, extra: { area?: string; nivel?: string; contexto?: string } = {}): string {
+export function rubricaAJson(r: RubricaParsed, extra: { area?: string; nivel?: string; contexto?: string; generada_ia?: boolean } = {}): string {
   return JSON.stringify({
     formato: 'edumind-rubrica',
     version: 1,
@@ -294,6 +297,10 @@ export function rubricaAJson(r: RubricaParsed, extra: { area?: string; nivel?: s
     area: extra.area,
     nivel: extra.nivel,
     contexto: extra.contexto || undefined,
+    // Marca legible por máquina de que el contenido salió de una IA (AI Act,
+    // art. 50.2). Viaja con el fichero para que el compañero que lo reciba
+    // lo sepa también.
+    generada_ia: extra.generada_ia || undefined,
     niveles: r.niveles,
     indicadores: r.indicadores,
   }, null, 2)

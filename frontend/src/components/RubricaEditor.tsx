@@ -12,6 +12,7 @@ import { PLANTILLAS_RUBRICA, rubricaDesdePlantilla, herramientaInicial, type Her
 import { pesosAPartesIguales, nivelANota, calificativo } from '@/db/calculo'
 import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { descargarFichero } from '@/utils/compartir'
+import { AvisoContextoIA, AvisoBorradorIA } from './AvisoIA'
 
 interface Props {
   instrumentoId: number
@@ -118,6 +119,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           niveles: JSON.parse(r.niveles_json),
           indicadores: JSON.parse(r.indicadores_json),
         })
+        // Sin esto, volver a guardar una rúbrica de la IA le quitaba la marca.
+        setVieneDeIA(!!r.generada_ia)
         setModo('editar')
       } else if (inicio) {
         setRubrica(herramientaInicial(inicio, instrumentoNombre))
@@ -318,7 +321,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
    */
   const exportarRubrica = () => {
     descargar(`${nombreFichero}.edurubrica.json`,
-      rubricaAJson(rubrica, { area: asignaturaNombre, nivel, contexto: iaContexto }), 'application/json')
+      rubricaAJson(rubrica, { area: asignaturaNombre, nivel, contexto: iaContexto, generada_ia: vieneDeIA }), 'application/json')
       .then(r => {
         if (r === 'cancelado') return
         setMsg({ tipo: 'ok', texto: 'Rúbrica exportada. Puedes pasársela a quien quieras: es un fichero, no sube a ningún sitio.' })
@@ -385,10 +388,10 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
     e.target.value = ''
     if (!file || !puedeReemplazar()) return
     try {
-      const { rubrica: leida, avisos, contexto, area } = await importarRubrica(file.name, await file.arrayBuffer())
+      const { rubrica: leida, avisos, contexto, area, generada_ia } = await importarRubrica(file.name, await file.arrayBuffer())
       setRubrica(leida)
       setSucio(true)
-      setVieneDeIA(false)
+      setVieneDeIA(!!generada_ia)
       if (contexto) setIaContexto(contexto)
       setTab('diseniar')
       setModo('editar')
@@ -562,6 +565,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           {/* ── TAB: DISEÑAR ── */}
           {tab === 'diseniar' && (
             <>
+              {vieneDeIA && <div style={{ marginBottom: 14 }}><AvisoBorradorIA que="rúbrica" /></div>}
               {ayudaImportar && <AyudaImportarRubrica onCerrar={() => setAyudaImportar(false)} />}
               {bancoAbierto && (
                 <BancoRubricas instrumentoId={instrumentoId} refresco={refrescoBanco}
@@ -743,6 +747,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                     style={{ width: '100%', fontSize: 13, resize: 'vertical' }}
                     placeholder="Describe lo que quieres evaluar. Ejemplo: 'SA 3 — Juegos populares y tradicionales gallegos. El alumno diseña y presenta un juego de su comunidad, argumentando sus reglas...'"
                   />
+                  <AvisoContextoIA />
                 </div>
                 <div>
                   <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>N.º indicadores</label>

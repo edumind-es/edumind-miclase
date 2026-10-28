@@ -666,6 +666,17 @@ edumind_miclase/
   el siguiente registro la manda a fantasma: nada se pierde. El backend tiene
   la tabla en la lista blanca de `routes/sync.js`; sin eso los registros van a
   cuarentena y no viajan.
+- **Lo que sale de la IA queda marcado, y lo que se le da no lleva alumnado.**
+  `Rubrica.generada_ia` y `PruebaDef.generada_ia` (dentro de `prueba_json`,
+  sin esquema) se conservan al abrir, guardar, copiar al banco y exportar
+  (`rubricaAJson`, `pruebaAJson`) y se leen al importar: es la marca legible
+  por máquina del AI Act (art. 50.2). Retocar el borrador no la quita.
+  Mientras está, el editor enseña `AvisoBorradorIA` (`[data-borrador-ia]`), y
+  todo campo de contexto que va al prompt lleva `AvisoContextoIA`
+  (`[data-aviso-contexto-ia]`). Abrir una rúbrica guardada ponía la marca a
+  cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
+  el endpoint de programación y los proveedores: si cambia alguno, se
+  actualiza allí con fecha.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un

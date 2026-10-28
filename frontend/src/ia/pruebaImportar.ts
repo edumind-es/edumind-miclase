@@ -403,6 +403,7 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
     tipo: tipoDe(String(d.tipo ?? '')) ?? 'puntos',
     reparto: repartoDe(String(d.reparto ?? '')) ?? (d.preguntas.some((q: any) => q?.criterio_id || q?.criterio) ? 'criterios' : 'unica'),
     penalizacion: numero(d.penalizacion),
+    generada_ia: d.generada_ia === true,
     escala: Array.isArray(d.escala)
       ? d.escala.map((n: any) => typeof n === 'string' ? nivelDe(limpiar(n)) : { nombre: limpiar(n?.nombre), valor: numero(n?.valor) })
       : undefined,

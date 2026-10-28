@@ -117,5 +117,4 @@ reutilice. Ver [LICENSE](LICENSE) y [NOTICE](NOTICE).
 EDUmind® es marca registrada. El código es libre; la marca y los logotipos no
 se ceden con él — ver [TRADEMARKS.md](TRADEMARKS.md).
 
-Por **Luis Vilela Acuña** — maestro de Educación Física
-(Pontevedra).
+Por **Luis Vilela Acuña**.

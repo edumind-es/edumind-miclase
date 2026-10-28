@@ -11,7 +11,7 @@ ciertos. Todo lo que se afirma aquí es comprobable en el código fuente
 (AGPL-3.0-or-later / EUPL-1.2) y buena parte está cubierto por pruebas
 automáticas en `pruebas/`.
 
-Última revisión: 19 de agosto de 2026 · versión RTM.
+Última revisión: 28 de octubre de 2026.
 
 ---
 
@@ -22,7 +22,9 @@ automáticas en `pruebas/`.
 No es una política que prometemos cumplir: es la arquitectura. La aplicación
 guarda todo el cuaderno en el almacenamiento del propio navegador o de la app
 instalada. El servidor no tiene ninguna tabla donde quepan un nombre, una nota
-o una fotografía en claro, ni existe ningún endpoint que los reciba.
+o una fotografía en claro, ni existe ningún endpoint que los reciba. El
+único documento que el servidor llega a recibir es el PDF de la programación
+didáctica, que no es del alumnado y no se guarda (punto 3.3).
 
 Esto tiene una contrapartida que conviene decir en voz alta: **si el docente
 pierde el dispositivo y no tiene copia de seguridad ni sincronización activada,
@@ -51,9 +53,10 @@ circunstancia.**
 
 ### 2.2 Datos del docente — mínimos
 
-En **modo local** (sin iniciar sesión) la aplicación no envía absolutamente
-ningún dato personal: funciona entera contra el almacenamiento del dispositivo
-y solo descarga el currículo, que es información pública.
+En **modo local** (sin iniciar sesión) la aplicación no envía ningún dato del
+alumnado: funciona entera contra el almacenamiento del dispositivo y solo
+descarga el currículo, que es información pública. La única excepción es que
+el docente importe una programación en PDF (punto 3.3).
 
 Si el docente decide iniciar sesión con su cuenta EDUmind, el servidor guarda:
 
@@ -68,13 +71,22 @@ Se usa para una única cosa: saber de quién es cada buzón de sincronización.
 - No hay analítica, telemetría ni estadísticas de uso.
 - No hay cookies de seguimiento. No hay cookies en absoluto.
 - No hay identificadores publicitarios ni fingerprinting.
-- No hay servicios de terceros incrustados (ni fuentes, ni mapas, ni chats).
-- No se registra la actividad del docente en el servidor.
+- No hay servicios de terceros incrustados en la página (ni fuentes, ni
+  mapas, ni chats). Las tipografías van dentro de la propia aplicación.
+- La aplicación no registra la actividad del docente. El servidor web guarda
+  los registros de acceso habituales (punto 3.4).
 
-La cabecera `Content-Security-Policy` del servidor incluye
-`default-src 'self'` y `connect-src 'self'`: **es el propio navegador el que
-impide que la aplicación conecte con ningún tercero**, aunque alguien
-introdujera código que lo intentase.
+La cabecera `Content-Security-Policy` de la instalación oficial es:
+
+```
+default-src 'self'; connect-src 'self' https://huggingface.co
+https://*.huggingface.co https://*.hf.co https://raw.githubusercontent.com; …
+```
+
+Es el propio navegador el que impide que la aplicación conecte con cualquier
+otro sitio, aunque alguien introdujera código que lo intentase. Los cuatro
+orígenes abiertos son los de la descarga del modelo de IA opcional (punto 5),
+y solo se usan si el docente pulsa expresamente el botón de descargarlo.
 
 ---
 
@@ -97,6 +109,42 @@ introdujera código que lo intentase.
 - **Tabla de docentes**: lo descrito en el punto 2.2.
 - **Buzón de sincronización**: sobres cifrados, solo si el docente activa la
   sincronización. Ver el punto 4.
+
+### 3.3 La programación en PDF: de paso, sin guardarse
+
+Para importar una programación de PROENS, el navegador envía el PDF a
+`/api/programacion/texto`. El servidor lo pasa por `pdftotext` para obtener el
+texto con sus columnas, lo devuelve y **borra el fichero en el mismo momento**.
+No lo interpreta ni lo guarda; la lectura de unidades y criterios ocurre en el
+navegador. Se admiten PDF de hasta 15 MB y el servidor web limita el número de
+peticiones.
+
+Una programación es un documento del centro, no del alumnado, pero puede
+llevar el nombre del docente y, si incluye adaptaciones, alguna referencia a
+alumnado concreto. **Conviene importar la programación sin anexos de
+adaptaciones ni iniciales de alumnos.** Quien no quiera usar esta vía puede
+crear las unidades a mano.
+
+### 3.4 Proveedores de la infraestructura
+
+La instalación oficial (miclase.edumind.es) usa dos proveedores:
+
+| Proveedor | Qué hace | Qué ve |
+|---|---|---|
+| **Hetzner Online GmbH** (centro de datos en la UE) | Aloja el servidor | Todo lo que guarda el servidor (puntos 3.2 y 4.2) |
+| **Cloudflare, Inc.** | Red de distribución y protección delante del servidor; termina la conexión TLS | El tráfico en tránsito: direcciones IP, rutas pedidas, cabeceras y cuerpos de las peticiones |
+
+Los sobres de sincronización viajan ya cifrados en el dispositivo (punto 4.1),
+así que Cloudflare tampoco puede leer su contenido. El PDF de la programación
+(punto 3.3) sí pasa por Cloudflare tal cual, como cualquier fichero enviado a
+una web.
+
+El servidor web guarda los registros de acceso ordinarios para la seguridad
+del servicio: dirección IP **anonimizada**, fecha, ruta pedida y navegador. No
+llevan datos del alumnado.
+
+Un centro que instale su propio servidor (punto 6) no depende de ninguno de
+los dos.
 
 ---
 
@@ -154,9 +202,10 @@ alguno aparece.**
 
 ---
 
-## 5. La única conexión con un tercero, y es opcional
+## 5. La IA opcional, y su única conexión con un tercero
 
-La aplicación incluye un asistente **opcional** para redactar rúbricas con un
+La aplicación incluye un asistente **opcional** para redactar rúbricas y
+exámenes con un
 modelo de lenguaje que se ejecuta **dentro del navegador**. Si el docente pulsa
 expresamente el botón de cargarlo, se descarga un modelo desde una red de
 distribución pública. Conviene ser preciso sobre qué implica:
@@ -164,27 +213,60 @@ distribución pública. Conviene ser preciso sobre qué implica:
 - Es **descarga**, no envío: no se transmite ningún dato del aula.
 - El modelo se ejecuta en el dispositivo; ninguna consulta viaja a un servidor
   de inferencia.
-- Ese tercero puede registrar la dirección IP de la descarga, como cualquier
+- El modelo (Phi-3.5-mini, de Microsoft) se descarga de Hugging Face
+  (huggingface.co) y una pieza auxiliar de raw.githubusercontent.com. Esos
+  terceros pueden registrar la dirección IP de la descarga, como cualquier
   descarga de un fichero.
-- **En la instalación oficial esta descarga está bloqueada** por la política de
-  seguridad de contenido del servidor (`connect-src 'self'`).
+- Desde el 24 de agosto de 2026, **la instalación oficial permite esta
+  descarga** (punto 2.3). Un centro que no la quiera puede cerrar esos orígenes
+  en su propio servidor; la aplicación sigue funcionando y la IA se queda sin
+  cargar.
+- Lo que se le pide al modelo lleva área, nivel, criterios y el contexto que
+  escriba el docente; **nunca datos del alumnado**. La aplicación avisa de que
+  no se escriban nombres en el contexto.
+- Lo que genera es un **borrador**: el docente lo revisa y lo guarda. La IA no
+  califica ni decide nada sobre el alumnado; las notas se calculan con reglas
+  fijas de ponderación. Las rúbricas y exámenes generados quedan marcados como
+  tales (`generada_ia`), también al exportarlos.
 
 Existe además la alternativa «copiar el prompt», que no conecta con nada: el
-docente pega el texto en la herramienta de IA que ya use, bajo su criterio.
+docente pega el texto en la herramienta de IA que ya use, bajo su criterio. En
+ese caso **nunca debe adjuntar ficheros con alumnado** (listas, hojas de notas
+o la plantilla de iDoceo): todo lo que se pega en una IA externa sale del
+dispositivo y lo recibe ese tercero.
 
 ---
 
 ## 6. Quién es responsable de qué
 
-- **El docente y su centro** son quienes deciden qué datos introducen y para
-  qué: son los responsables del tratamiento en el sentido del RGPD.
+- **El responsable del tratamiento** es quien decide para qué se usan los
+  datos, y depende del tipo de centro:
+  - En un **centro público**, la normativa autonómica suele atribuir esa
+    responsabilidad a la administración educativa (en Galicia, a la
+    Consellería, según el anteproyecto de Lei de educación dixital), que es
+    también quien autoriza las herramientas digitales con las que se tratan
+    datos del alumnado. **El uso en un centro público debe contar con esa
+    autorización.**
+  - En un **centro privado o concertado**, el responsable es el titular del
+    centro.
+  - El docente decide qué datos introduce y es quien los custodia en su
+    dispositivo, dentro de las instrucciones de su centro.
 - **EDUmind** proporciona la herramienta. En modo local no recibe ningún dato
   personal del alumnado, por lo que no actúa como encargado del tratamiento de
   esos datos.
 - Si el docente activa la sincronización, EDUmind aloja sobres cifrados cuyo
-  contenido no puede leer ni descifrar. Cada centro debería valorar con su
-  delegado de protección de datos cómo encaja ese alojamiento en su registro de
-  actividades; la aplicación se puede usar indefinidamente sin activarlo.
+  contenido no puede leer ni descifrar. Aun cifrados, pueden seguir siendo
+  datos personales, así que lo prudente es considerar a EDUmind **encargado
+  del tratamiento** de esos sobres, con el contrato del art. 28 del RGPD que
+  corresponda. Cada centro debería valorarlo con su delegado de protección de
+  datos. La aplicación se puede usar indefinidamente sin activarlo: el enlace
+  directo entre dispositivos, el fichero por AirDrop y la copia en una carpeta
+  no pasan por el servidor.
+- El **indicador de NEAE** y las **evidencias en foto, audio o vídeo** son los
+  datos más delicados del cuaderno: el primero puede revelar información de
+  salud o discapacidad, y las segundas son imagen y voz de menores. Antes de
+  usarlos conviene una evaluación de riesgos con el delegado de protección de
+  datos, y ambos son prescindibles: la aplicación funciona sin ellos.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

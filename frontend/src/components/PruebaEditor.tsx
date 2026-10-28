@@ -31,6 +31,7 @@ import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { TIPO_XLSX } from './AyudaImportarRubrica'
 import { descargarFichero } from '@/utils/compartir'
 import BancoPruebas from './BancoPruebas'
+import { AvisoContextoIA, AvisoBorradorIA } from './AvisoIA'
 
 interface Props {
   instrumentoId: number
@@ -267,7 +268,7 @@ export default function PruebaEditor({
     try {
       // La respuesta puede venir como test escrito, como tabla o como JSON: se lee lo que sea.
       const { prueba, avisos } = pruebaDeTexto(texto, def.titulo || instrumentoNombre)
-      setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: prueba.tipo === 'test' ? def.penalizacion ?? prueba.penalizacion : undefined })
+      setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: prueba.tipo === 'test' ? def.penalizacion ?? prueba.penalizacion : undefined, generada_ia: true })
       setSucio(true)
       setGenN(prueba.preguntas.length)
       setGenTotal(puntosTotales(prueba))
@@ -478,6 +479,8 @@ export default function PruebaEditor({
                 onElegir={cargarDelBanco} onCerrar={() => setBancoAbierto(false)} />
             )}
 
+            {def.generada_ia && <div style={{ marginBottom: 14 }}><AvisoBorradorIA que="examen" /></div>}
+
             <div style={{ marginBottom: 14 }}>
               <label style={etiqueta}>Título del examen</label>
               <input value={def.titulo} onChange={e => editar(d => ({ ...d, titulo: e.target.value }))}
@@ -618,6 +621,7 @@ export default function PruebaEditor({
                           placeholder={esTest
                             ? 'La unidad, el tema o el texto del que salen las preguntas. Ejemplo: «Os ríos de Galicia: nacemento, afluentes e desembocadura. Texto do libro, páxinas 42-47».'
                             : 'Pega aquí las preguntas del examen que ya has hecho, con sus puntos si los tienen; o la planilla de corrección que ya hayas escrito. La IA no inventa nada: ordena lo tuyo en una fila por pregunta con la respuesta correcta y cómo se reparten los puntos.'} />
+                        <AvisoContextoIA />
                       </div>
                       {esTest && <div>
                         <label style={etiqueta} htmlFor="ia-n">Preguntas</label>

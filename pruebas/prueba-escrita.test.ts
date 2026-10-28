@@ -351,5 +351,14 @@ console.log('\n11. Un examen que también cuenta en otras unidades')
   ok(unidadesDelExamen(null, d).length === 0, 'el examen general no vincula nada: ya vale para todas por separado')
 }
 
+console.log('\nLa marca de IA de un examen (AI Act, art. 50.2)')
+{
+  const marcado = normalizarPrueba({ ...PRUEBA_EJEMPLO, generada_ia: true })
+  ok(marcado.generada_ia === true, 'normalizar conserva la marca')
+  ok(pruebaDeJson(pruebaAJson(marcado), 't').prueba.generada_ia === true, 'y viaja en el JSON exportado')
+  ok(!('generada_ia' in normalizarPrueba(PRUEBA_EJEMPLO)), 'un examen hecho a mano no la lleva')
+  ok(!('generada_ia' in normalizarPrueba({ ...PRUEBA_EJEMPLO, generada_ia: 'si' as any })), 'solo vale true, no cualquier cosa')
+}
+
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
 process.exit(fallos === 0 ? 0 : 1)

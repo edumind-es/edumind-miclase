@@ -95,6 +95,12 @@ export interface PruebaDef {
    * sin índice ni cambio de esquema; una versión anterior lo ignora.
    */
   unidades_vinculadas?: number[]
+  /**
+   * El examen salió de una IA (generado o volcado por ella), aunque el docente
+   * lo haya retocado después. Marca legible por máquina del AI Act (art. 50.2):
+   * viaja en el JSON exportado y en el banco. Dentro del JSON, sin esquema.
+   */
+  generada_ia?: boolean
 }
 
 /** Respuesta en un test. En blanco no suma ni resta. */
@@ -200,6 +206,7 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     ...(tipo === 'test' ? { penalizacion: Number.isFinite(pen) && pen > 0 ? Math.min(1, pen) : 0 } : {}),
     ...(tipo === 'niveles' ? { escala: escala.some(n => n.valor > 0) ? escala : ESCALA_POR_DEFECTO } : {}),
     ...(vinculadas.length ? { unidades_vinculadas: vinculadas } : {}),
+    ...(d?.generada_ia === true ? { generada_ia: true } : {}),
   }
 }
 
