@@ -193,7 +193,9 @@ try {
   ok(await columna(inicio.proba).locator('[data-vaciar-columna]').isVisible() && await columna(inicio.proba).locator('[data-mover-columna]').isVisible(),
     'la cabecera desplegada ofrece «Vaciar columna» y «Mover a otro instrumento»')
   await columna(inicio.proba).locator('[data-vaciar-columna]').click()
-  await p.locator('[data-columna-aviso]').waitFor({ timeout: 8000 })
+  // El aviso del paso anterior (quitar un criterio) sigue en pantalla: hay
+  // que esperar al del vaciado, o se lee el confirm de antes.
+  await p.locator('[data-columna-aviso]', { hasText: 'Vaciada' }).waitFor({ timeout: 8000 })
   const confirmVaciar = ultimoDialogo()
   ok(confirmVaciar.includes(inicio.ud.nombre) && confirmVaciar.includes(inicio.proba) && confirmVaciar.includes(`${esperadas} notas`),
     'el confirm nombra la unidad, el instrumento y cuántas notas', confirmVaciar.split('\n')[0])

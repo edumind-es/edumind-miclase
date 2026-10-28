@@ -60,7 +60,9 @@ try {
   await p.getByRole('button', { name: 'Crear', exact: true }).click()
   const editor = p.getByRole('dialog', { name: /Rúbrica de Juegos populares/ })
   await editor.waitFor({ timeout: 8000 })
-  ok(await editor.getByRole('button', { name: /Importar de un fichero/ }).isVisible(),
+  // El punto de partida sale cuando el editor ha leído que no hay rúbrica:
+  // mirar al instante fallaba en una máquina cargada.
+  ok(await editor.getByRole('button', { name: /Importar de un fichero/ }).waitFor({ timeout: 8000 }).then(() => true, () => false),
     'una rúbrica vacía ofrece importar de un fichero')
 
   console.log('\n2. La ayuda explica el formato')
