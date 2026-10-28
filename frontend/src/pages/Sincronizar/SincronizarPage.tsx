@@ -25,7 +25,7 @@ import CopiaCarpeta from '@/components/CopiaCarpeta'
 const K_AUTO = 'miclase_sync_auto'
 
 export default function SincronizarPage() {
-  const { modo, headers, iniciarLogin, loginDisponible, motivoSinLogin } = useAuth()
+  const { modo, headers, iniciarLogin, loginDisponible, motivoSinLogin, buzonAbierto } = useAuth()
 
   const [estado, setEstado] = useState<EstadoSync | null>(null)
   const [errorEstado, setErrorEstado] = useState<string>('')
@@ -266,7 +266,13 @@ export default function SincronizarPage() {
           Iba en una tarjeta grande que decía «Necesitas iniciar sesión»: se leía
           como un requisito de toda la pantalla, cuando los dos caminos de arriba
           no lo necesitan. Plegado y en su sitio, al final. */}
-      {!conectado ? (
+      {!buzonAbierto ? (
+        <div className="card" data-buzon-cerrado style={{ padding: '14px 20px', color: 'var(--gris-600)', fontSize: 13, lineHeight: 1.6 }}>
+          <strong style={{ color: 'var(--gris-700)' }}>Este servidor no tiene buzón.</strong>{' '}
+          MiClase funciona entera en este aparato y no necesita cuenta. Para tener tus datos en otro
+          dispositivo, usa el enlace directo, el fichero o la copia en carpeta de arriba.
+        </div>
+      ) : !conectado ? (
         <details className="card" style={{ padding: '14px 20px', color: 'var(--gris-600)' }}>
           <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 700, color: 'var(--gris-700)' }}>
             Buzón en el servidor (opcional, con cuenta EDUmind)

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { generarPKCE, valorOpaco } from './crypto'
 import { api, esNativo, REDIRECT_NATIVO } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
+import { buzonCerrado, consultarBuzon } from '@/db/buzon'
 
 interface AuthConfig {
   enabled: boolean
@@ -28,6 +29,8 @@ interface AuthState {
   authConfig: AuthConfig | null
   /** Si se puede ofrecer «Conectar EDUmind» aquí y ahora. */
   loginDisponible: boolean
+  /** El servidor ofrece buzón. Sin él la cuenta no sirve para nada aquí. */
+  buzonAbierto: boolean
   /** Por qué no, para decírselo al docente en vez de esconder el botón sin más. */
   motivoSinLogin: string | null
   iniciarLogin: () => Promise<void>
@@ -66,14 +69,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null)
   const [nombre, setNombre] = useState<string | null>(null)
   const [authConfig, setAuthConfig] = useState<AuthConfig | null>(null)
+  const [buzonAbierto, setBuzonAbierto] = useState(() => !buzonCerrado())
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Cargar config de Authentik desde el backend
-    fetch(api('/api/auth/config'))
-      .then(r => r.json())
-      .then((cfg: AuthConfig) => {
+    // Cargar config de Authentik desde el backend, y si hay buzón: sin buzón
+    // no se restaura la sesión, así que todo lo que pide `modo === 'authentik'`
+    // (sincronización automática, tarjetas del buzón) se queda quieto.
+    Promise.all([
+      fetch(api('/api/auth/config')).then(r => r.json()),
+      consultarBuzon(),
+    ])
+      .then(([cfg, abierto]: [AuthConfig, boolean | null]) => {
         setAuthConfig(cfg)
+        const hayBuzon = abierto ?? !buzonCerrado()
+        setBuzonAbierto(hayBuzon)
+        if (!hayBuzon) { setModo('local'); return }
 
         // Recuperar sesión guardada
         const savedToken = sessionStorage.getItem(TOKEN_KEY)
@@ -129,10 +140,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => { vivo = false; oyente?.remove() }
   }, [])
 
-  const redirect = redirectParaAqui(authConfig)
+  const redirect = buzonAbierto ? redirectParaAqui(authConfig) : null
   const loginDisponible = redirect !== null
   const motivoSinLogin = loginDisponible
     ? null
+    : !buzonAbierto
+      ? 'Este servidor no ofrece buzón de sincronización, así que no hace falta cuenta: MiClase ' +
+        'funciona entera en este aparato. Para tener tus datos en otro, usa el enlace directo por QR, ' +
+        'el fichero por AirDrop o la copia en una carpeta.'
     : !authConfig?.enabled
       ? 'Este servidor no tiene configurado el acceso con EDUmind.'
       : 'Este servidor todavía no admite iniciar sesión desde la app instalada. ' +
@@ -205,7 +220,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider value={{
-      modo, token, nombre, authConfig, loginDisponible, motivoSinLogin, iniciarLogin, cerrarSesion, headers,
+      modo, token, nombre, authConfig, loginDisponible, buzonAbierto, motivoSinLogin, iniciarLogin, cerrarSesion, headers,
     }}>
       {/* Exponemos guardarSesion para el callback */}
       <GuardarSesionContext.Provider value={guardarSesion}>

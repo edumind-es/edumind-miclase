@@ -79,6 +79,19 @@ edumind_miclase/
   inactividad en vez de silencio ya rompió la sincronización una vez. Y al
   terminar se manda `adios` y se espera el del otro: colgar a secas corta al
   que aún está escribiendo.
+- **El buzón se puede cerrar por configuración, y está abierto por defecto.**
+  `MICLASE_BUZON=cerrado` (`backend/src/config.js`, `BUZON_ABIERTO`) hace que
+  `/api/sync/disponible` (público) diga `{abierto:false}` y que todo lo demás
+  de `/api/sync` responda 410 `BUZON_CERRADO`, salvo `DELETE /` con sesión
+  (supresión). La app lo pregunta en `AuthProvider` (`db/buzon.ts`): sin
+  buzón no ofrece la cuenta ni restaura la sesión, así que todo lo que pide
+  `modo === 'authentik'` se queda quieto, y Sincronizar enseña
+  `[data-buzon-cerrado]`. La respuesta se recuerda en
+  `miclase.buzon.cerrado` para que `diagnostico()` de la copia no cuente el
+  buzón. Un servidor sin la ruta (404) cuenta como abierto. No se toca
+  `routes/auth.js`. Decisión de Luis (oct 2026): el buzón es un añadido, la
+  app es local; se cierra en producción cuando sus aparatos tengan la copia
+  en carpeta y el enlace directo (DESPLIEGUE.md, «Cerrar el buzón»).
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.

@@ -138,6 +138,27 @@ Qué hace, y por qué así:
 `frontend/dist` es un enlace simbólico a la versión publicada. nginx lo
 resuelve en cada petición, así que el cambio no necesita recargar nginx.
 
+## Cerrar el buzón de sincronización
+
+El buzón es opcional y está **abierto por defecto**. Para cerrarlo en una
+instalación, sin borrar nada:
+
+1. Comprobar antes que los aparatos que lo usaban tienen otro camino
+   funcionando: copia automática en carpeta y enlace directo o fichero. El
+   buzón puede estar haciendo de copia de seguridad sin que nadie lo sepa (la
+   sincronización automática sube cada cinco minutos).
+2. Si se quiere borrar lo guardado, vaciarlo **antes** desde Sincronizar →
+   Opciones avanzadas (o después, con `DELETE /api/sync/` y sesión: es lo único
+   que el buzón cerrado sigue admitiendo).
+3. Añadir `MICLASE_BUZON=cerrado` a `/etc/edumind-miclase-api.env` y reiniciar:
+   `sudo systemctl restart edumind-miclase-api`.
+4. Comprobar: `curl https://miclase.edumind.es/api/sync/disponible` →
+   `{"abierto":false}`.
+
+Con el buzón cerrado la app no ofrece la cuenta EDUmind (solo servía para el
+buzón), no restaura sesiones y Sincronizar dice que el servidor no tiene buzón.
+Reabrirlo es quitar la línea y reiniciar.
+
 ## Empaquetado nativo (iPad y Android)
 
 La app web sigue siendo el producto principal. El contenedor nativo existe por

@@ -245,6 +245,18 @@ async function principal() {
 
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
+
+    // Un segundo backend, sobre su propia copia, con el buzón cerrado.
+    const bdCerrado = join(scratch, 'prueba-cerrado.db')
+    cpSync(BD_PRODUCCION, bdCerrado)
+    const puertoCerrado = await puertoLibre()
+    const apiCerrado = `http://127.0.0.1:${puertoCerrado}`
+    const cerrado = arrancar('backend con el buzón cerrado', 'node', ['backend/src/index.js'], {
+      env: { PORT: String(puertoCerrado), DB_PATH: bdCerrado, NODE_ENV: 'development', JWT_SECRET: SECRETO, MICLASE_BUZON: 'cerrado' },
+    })
+    await esperarA(`${apiCerrado}/api/health`, { proceso: cerrado })
+    await suite('buzón cerrado por configuración', 'node', ['pruebas/buzon-cerrado.test.mjs'],
+      { ...entorno, API_CERRADO: apiCerrado, JWT_SECRET: SECRETO })
     await suite('texto de un PDF de PROENS', 'node', ['pruebas/proens-api.test.mjs'], entorno)
     await suite('importar PROENS desde la interfaz', 'node', ['pruebas/proens-ui.test.mjs'], entorno)
     await suite('importar rúbrica desde la interfaz', 'node', ['pruebas/rubrica-importar-ui.test.mjs'], entorno)

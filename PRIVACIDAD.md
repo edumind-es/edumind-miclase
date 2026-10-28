@@ -151,7 +151,9 @@ los dos.
 ## 4. La sincronización entre dispositivos
 
 Es **opcional** y está desactivada por defecto. La aplicación completa funciona
-sin ella.
+sin ella. Quien aloja el servidor puede además **cerrar el buzón** por completo
+(`MICLASE_BUZON=cerrado`): entonces la aplicación no ofrece ni buzón ni cuenta,
+y el servidor solo admite vaciar lo que ya hubiera.
 
 ### 4.1 Cómo se cifra
 
