@@ -19,6 +19,7 @@ import {
   leerPaquete, metaSync, sellarCursorDeCopia, ultimaSincronizacion, type ResultadoSync,
 } from './sync'
 import type { DestinoCopia } from './destinoCopia'
+import { buzonCerrado } from './buzon'
 import {
   FICHERO_MANIFIESTO, diagnosticoCopia, leerManifiesto, nombreFicheroCopia, nuevoManifiesto,
   ordenarFicherosCopia, type Diagnostico, type Manifiesto,
@@ -158,6 +159,8 @@ export async function diagnostico(): Promise<Diagnostico> {
   }
   let autoSync = false
   try { autoSync = localStorage.getItem(K_AUTO_SYNC) === '1' } catch { /* sin almacenamiento */ }
+  // Con el buzón cerrado, la sincronización automática ya no deja copia en ningún sitio.
+  if (buzonCerrado()) autoSync = false
   return diagnosticoCopia({
     ultimaCopia: await ultimaCopia(),
     ultimaSync: await ultimaSincronizacion(),

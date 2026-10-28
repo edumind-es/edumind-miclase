@@ -12,6 +12,7 @@
  * `updated_at`. El servidor rechaza escrituras más antiguas que la que ya
  * tiene, de modo que dos dispositivos que empujan a la vez convergen.
  */
+import { BUZON_ABIERTO } from '../config.js'
 
 const LIMITE_LOTE = 500                    // registros por petición
 
@@ -48,6 +49,25 @@ const TABLAS = new Set([
 
 export default async function syncRoutes(app) {
   const db = app.db
+
+  /**
+   * ¿Ofrece este servidor el buzón? Público y sin sesión: la app lo pregunta
+   * al arrancar para no enseñar ni cuenta ni buzón donde no los hay.
+   */
+  app.get('/disponible', async () => ({ abierto: BUZON_ABIERTO }))
+
+  // Con el buzón cerrado solo queda vaciarlo: el docente tiene que poder
+  // borrar lo que dejó aquí (derecho de supresión) aunque ya no se use.
+  if (!BUZON_ABIERTO) {
+    app.addHook('onRequest', async (req, reply) => {
+      const ruta = req.routeOptions?.url ?? ''
+      if (ruta.endsWith('/disponible') || (req.method === 'DELETE' && /\/sync\/?$/.test(ruta))) return
+      return reply.status(410).send({
+        error: 'Este servidor ya no ofrece buzón de sincronización. Usa el enlace directo, el fichero o la copia en carpeta.',
+        codigo: 'BUZON_CERRADO',
+      })
+    })
+  }
 
   /** Docente autenticado de verdad, o null. */
   async function docenteSSO(req, reply) {

@@ -29,6 +29,16 @@ export const BACKEND_ROOT = resolve(__dirname, '..')
 
 export const DB_PATH = process.env.DB_PATH || resolve(BACKEND_ROOT, 'data/miclase.db')
 
+/**
+ * El buzón de sincronización es un añadido opcional: MiClase funciona entera
+ * en el aparato y tiene tres caminos sin servidor (enlace directo, fichero,
+ * copia en carpeta). `MICLASE_BUZON=cerrado` lo cierra en esta instalación
+ * sin borrar nada: la app deja de ofrecerlo y `/api/sync` solo admite
+ * vaciarlo. Abierto por defecto, para que actualizar el servidor no lo
+ * cierre por sorpresa; cerrarlo es una decisión expresa de quien lo aloja.
+ */
+export const BUZON_ABIERTO = (process.env.MICLASE_BUZON || '').trim().toLowerCase() !== 'cerrado'
+
 // Valor que estuvo como fallback en el repositorio hasta 2026-08-24.
 // Se rechaza de forma explícita: la longitud por sí sola no basta.
 const SECRETO_PUBLICADO = 'cambiar_en_produccion_min32chars!!'

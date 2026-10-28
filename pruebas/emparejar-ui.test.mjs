@@ -111,7 +111,8 @@ ok(enB.grupos.includes('6ºA'), 'la clase está en la tablet', enB.grupos.join('
 ok(enB.alumnos.includes('Xoán Lema'), 'y el alumnado también', enB.alumnos.join(', '))
 
 console.log('\n6. Nada de esto ha tocado el buzón')
-const deSync = llamadasAlApi.filter((u) => u.startsWith('/api/sync'))
+// `/api/sync/disponible` solo pregunta si hay buzón: es público y no lleva datos.
+const deSync = llamadasAlApi.filter((u) => u.startsWith('/api/sync') && !u.startsWith('/api/sync/disponible'))
 ok(deSync.length === 0, 'la tablet no ha llamado al buzón ni una vez', deSync.join(', ') || 'ninguna')
 
 await navegador.close()

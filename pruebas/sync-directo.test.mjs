@@ -335,12 +335,14 @@ const ids = await A.evaluate(async () => (await window.localDb.db.alumnos.toArra
 ok(new Set(ids).size === ids.length, 'no hay dos registros con el mismo id', ids.join(', '))
 
 console.log('\n10. El servidor no ha pintado nada en la sincronizacion')
-const deSync = apiTocadaPorB.filter((u) => u.startsWith('/api/sync'))
+// `/api/sync/disponible` solo pregunta si hay buzón: es público y no lleva datos.
+const deSync = apiTocadaPorB.filter((u) => u.startsWith('/api/sync') && !u.startsWith('/api/sync/disponible'))
 ok(deSync.length === 0, 'la tablet no ha llamado al buzon ni una sola vez',
   deSync.join(', ') || 'ninguna llamada')
-// Lo unico que toca el servidor es el arranque de la app (sesion), y en un
-// dispositivo sin conexion tampoco impide usarla: aqui se aborto y siguio.
-ok(apiTocadaPorB.every((u) => u.startsWith('/api/auth')),
+// Lo unico que toca el servidor es el arranque de la app (sesion y si hay
+// buzon), y en un dispositivo sin conexion tampoco impide usarla: aqui se
+// aborto y siguio.
+ok(apiTocadaPorB.every((u) => u.startsWith('/api/auth') || u.startsWith('/api/sync/disponible')),
   'lo unico que intento fue la sesion al arrancar, y aun asi funciono todo',
   [...new Set(apiTocadaPorB)].join(', ') || 'nada')
 
