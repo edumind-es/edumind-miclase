@@ -17,7 +17,7 @@ edumind_miclase/
 │   ├── src/plugins/auth.js  ← auth dual local + Authentik OIDC
 │   ├── src/routes/auth.js
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
-│   └── src/routes/programacion.js ← PDF de PROENS → texto con columnas (pdftotext); no lo guarda ni lo interpreta
+│   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
 │   ├── src/db/       ← localDb.ts (esquema Dexie v7) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
@@ -29,6 +29,7 @@ edumind_miclase/
 │   ├── src/contexto/ ← ClaseActiva.tsx (clase, área y trimestre en curso)
 │   ├── src/programacion/ ← proens.ts: lector de programaciones de PROENS (Xunta) → unidades,
 │   │                   criterios con mínimo e instrumento. Puro; se prueba con pruebas/fixtures/
+│   │                   pdfTexto.ts (puro) + pdfNavegador.ts: el PDF → texto con columnas en el aparato (pdf.js)
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
@@ -136,8 +137,19 @@ edumind_miclase/
   impresos) entran por `useParametrosClase`, que fija el contexto y limpia la
   URL. El trimestre no se persiste entre sesiones a propósito: heredar el de
   diciembre en enero metería las notas nuevas en el trimestre equivocado.
+- **El PDF de PROENS se lee en el aparato.** `pdfNavegador.ts` abre el PDF
+  con pdf.js (build `legacy`, worker servido por la app, cargado a demanda) y
+  `pdfTexto.ts` (puro) coloca cada trozo en su línea y su columna imitando
+  `pdftotext -layout`: descarta el texto girado (la marca de agua),
+  cuenta columnas desde el margen del documento y usa un ancho de carácter
+  reducido (`FACTOR_PASO`). `proens-navegador.test.ts` exige el mismo
+  resultado de `parsearProens` que con pdftotext en los dos PDF de
+  `fixtures/`, campo a campo. El servidor (`routes/programacion.js`) queda
+  como reserva y `ImportarProens` solo lo usa si la lectura en el aparato no
+  da ninguna unidad **y** el docente acepta el `confirm` que dice que el PDF
+  sale del dispositivo; `proens-ui.test.mjs` comprueba que no hay petición.
 - **El lector de PROENS trabaja por columnas, no por líneas.** El texto llega
-  de `pdftotext -layout` y las posiciones de las cabeceras («Mínimos de
+  de `pdftotext -layout` (o de `pdfTexto.ts`, que lo imita) y las posiciones de las cabeceras («Mínimos de
   consecución», «IA», «%») son lo que separa el criterio de su mínimo y lo
   que permite saber qué criterios cubre una celda combinada de instrumento
   (va centrada en su bloque y no se repite si salta de página). Normalizar

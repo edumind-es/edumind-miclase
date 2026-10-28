@@ -88,6 +88,12 @@ export default defineConfig({
         manualChunks: (id) => {
           if (id.includes('@mlc-ai/web-llm')) return 'web-llm'
         },
+        // El worker de pdf.js llega como `.mjs`. nginx no conoce esa extensión
+        // (lo serviría como binario y el navegador rechaza el worker) y la PWA
+        // no la precachea, así que importar PROENS sin red fallaría. Con `.js`
+        // vale en los dos sitios, y en el contenedor nativo también.
+        assetFileNames: (info) =>
+          info.names?.some(n => n.endsWith('.mjs')) ? 'assets/[name]-[hash].js' : 'assets/[name]-[hash][extname]',
       },
     },
     chunkSizeWarningLimit: 3000,
