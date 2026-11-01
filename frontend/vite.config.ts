@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
+import { defineConfig, searchForWorkspaceRoot } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
+import { realpathSync } from 'fs'
 
 export default defineConfig({
   plugins: [
@@ -100,6 +101,14 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    fs: {
+      // En las worktrees de `.claude/worktrees/` `node_modules` es un enlace al
+      // del checkout principal, fuera de la raíz. Vite no sirve nada de ahí con
+      // `?url` (devuelve el fichero en crudo) y el worker de pdf.js llegaba sin
+      // URL: «Invalid workerSrc type». Se permite la ruta real; en el checkout
+      // principal ya está dentro de la raíz y no cambia nada.
+      allow: [searchForWorkspaceRoot(process.cwd()), realpathSync(resolve(__dirname, 'node_modules'))],
+    },
     proxy: {
       // VITE_API_TARGET permite apuntar a un backend de pruebas sin tocar
       // el de producción (ver pruebas/README.md)
