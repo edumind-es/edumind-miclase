@@ -22,6 +22,33 @@ Reglas de importación:
 - El nombre legible de cada área sale de `meta.asignatura_nombre` y el conversor lo
   vuelca en `frontend/src/components/nombresAreas.ts` (generado).
 
+## Estado (1 de noviembre de 2026)
+
+| Comunidad | Primaria | ESO | Descriptores (P / ESO) |
+|---|---|---|---|
+| Asturias | 10 áreas, 60 JSON | 26 áreas (+ Mat. A/B), 98 JSON | 95 % / 88 % |
+| Extremadura | 7 áreas, 38 JSON | 25 áreas (+ Mat. A/B), 62 JSON | 93 % / 84 % (90 % en materias del RD) |
+| Murcia | 13 áreas, 74 JSON | 34 áreas (+ Mat. A/B), 123 JSON | 99 % / 97 % |
+
+Sin hacer todavía, en este orden propuesto:
+1. **Ceuta y Melilla**: limpia en el inventario (7 áreas en Primaria, 22 en ESO; 8
+   ficheros de ESO vacíos que se descartan; Infantil no, la app no tiene esa etapa).
+2. **Andalucía**: la matriz no sirve tal cual (EF 1.º de Primaria trae 3 criterios; los
+   saberes son solo códigos como «EFI.1.A.1»; en ESO casi todas las áreas mezclan
+   cursos). Hay que sacarla de la Orden: en la carpeta están ya el texto
+   (`BOJA23-104-…pdf.txt`, `Decreto101-2023EducacionPrimaria.pdf.txt`) y unos JSON
+   intermedios (`_and_pri*.json`, `_and_sec.json`).
+3. **Cantabria** (ESO sin ningún saber, 11 [REVISAR]), **Catalunya** y **Baleares**
+   (en catalán; Baleares ESO con 17 de 35 ficheros sin criterios).
+4. **La Rioja** y **Navarra** ESO: la mayoría de áreas sin nombre («Materia (L10689)»,
+   «Materia 05») y cursos «Configuración N». Primaria de las dos sí está bien.
+5. **Etapas que faltan en las 7 de antes** (Aragón, Canarias y CyL ESO; CLM Primaria;
+   Valencia ESO): sin decidir si se añaden.
+
+Para cada comunidad: añadir sus decretos a `DECRETOS` si están en la carpeta, vista
+previa, revisar avisos y pendientes, `--apply`, añadirla a `COMUNIDADES` de
+`GruposPage.tsx`, `node pruebas/conexiones.test.mjs` y seed en una copia.
+
 Prueba de no regresión: Valencia EF 1.º leída con el mismo lector da criterios,
 competencias específicas, bloques y saberes idénticos al repositorio. Solo difiere
 el texto de los descriptores, que en el origen nuevo viene limpio y en el repo está
