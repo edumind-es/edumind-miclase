@@ -517,6 +517,10 @@ input:focus, select:focus, textarea:focus {
   flex-wrap: wrap;
   /* Los 7px de la franja de mundos van fijos por encima de todo */
   padding: 14px 28px 12px;
+  /* En la web instalada del iPad la app corre bajo la barra de estado
+     (`black-translucent`): con iPadOS 26 esa franja lleva una niebla que no
+     deja tocar lo que hay debajo, así que los controles bajan lo que mida. */
+  padding-top: calc(14px + env(safe-area-inset-top));
   margin: -28px -28px 20px;
   background: rgba(255,255,255,0.94);
   backdrop-filter: blur(8px);
@@ -559,6 +563,7 @@ input:focus, select:focus, textarea:focus {
 @media (max-width: 860px) {
   .barra-clase {
     padding: 10px 16px;
+    padding-top: calc(10px + env(safe-area-inset-top));
     margin: -16px -16px 16px;
   }
   .barra-clase-ajustes span { display: none; }
