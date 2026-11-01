@@ -117,3 +117,43 @@ Pendiente:
   Clásica, Unión Europea, Introducción a la Filosofía, Emprendimiento Social y
   Sostenibilidad, Digitalización Básica) ni algunas CE que Extremadura reescribió
   (EF CE5, Biología CE6-CE7, Plástica…).
+
+## Murcia (`Murcia`)
+
+Las matrices traen descriptores en «Enlaces»: 99 % conectado en Primaria y 97 % en
+ESO. Decretos: `PRIMARIA/2022-5907.pdf` y `SECUNDARIA/2022-6346.pdf` (BORM). El decreto
+solo se consulta para los ficheros con varias tandas o «Toda la etapa»: si el fichero
+ya dice su curso, manda el fichero (Murcia repite criterios literales en varios cursos
+y el decreto casaría con el primero).
+
+### Primaria — importada
+13 áreas, 74 JSON, incluidas Lengua de Signos Española, Profundización Educativa y
+Refuerzo de la Competencia en Comunicación Lingüística.
+
+Hecho al importar:
+- Educación Física: el fichero «Primer ciclo» trae dos tandas (primer y segundo
+  ciclo); repartidas por el decreto.
+
+Pendiente:
+- **Educación Física 1.º-4.º sin saberes**: una sola lista para las dos tandas.
+- **Sin curso en el decreto**, en todos los cursos: Valores Cívicos y Éticos, Lengua de
+  Signos Española y Refuerzo de la Competencia en Comunicación Lingüística.
+
+### Secundaria — importada
+36 áreas (con Matemáticas A y B), 123 JSON.
+
+Hecho al importar:
+- Educación Física «Tercer curso» trae también 4.º («Curso cuarto»), y Matemáticas
+  «Tercer curso» trae también 4.º A y 4.º B: repartidas por el decreto. Matemáticas A
+  y B van a 4.º porque solo existen ahí (RD 217/2022, art. 9).
+
+Pendiente:
+- **Criterios que el decreto trae y la matriz no**: Educación Física 4.º CE2.1-2.3,
+  CE4.1, CE4.3, CE5.1, CE5.2; Matemáticas A CE2.1, CE3.3; **Matemáticas B trece**
+  (CE2.1, CE3.3, CE5.1, CE5.2, CE6.1, CE7.1, CE7.2, CE8.1, CE8.2, CE9.1, CE9.2,
+  CE10.1, CE10.2: solo trae 10).
+- **Sin saberes**: Educación Física 3.º-4.º, Matemáticas 3.º, 4.º A y 4.º B.
+- **Sin curso en el decreto**, en los cuatro cursos: Artes Escénicas y Danza,
+  Comunicación Audiovisual, Cultura Clásica, Digitalización, Digitalización Creativa,
+  Economía y Emprendimiento, Valores Cívicos y Éticos, Emprendimiento Personal y Social,
+  Expresión Artística, FOPP, Latín, Tecnología y los seis Proyectos de Investigación.

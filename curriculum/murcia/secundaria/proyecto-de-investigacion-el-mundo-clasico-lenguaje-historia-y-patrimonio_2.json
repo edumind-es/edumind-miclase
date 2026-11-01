@@ -1,0 +1,532 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "secundaria",
+    "asignatura": "proyecto-de-investigacion-el-mundo-clasico-lenguaje-historia-y-patrimonio",
+    "asignatura_nombre": "Proyecto de Investigación - El Mundo Clásico- Lenguaje, Historia y Patrimonio",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Murcia · Secundaria · Proyecto de Investigación - El Mundo Clásico- Lenguaje, Historia y Patrimonio · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Producir textos o discursos de tipología expositiva y relativa extensión en los que se combinen con adecuación a las temáticas y la terminología estudiadas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Conocer las raíces griegas y latinas y su adaptación a la lengua propia.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer y valorar las vías de transmisión de la cultura clásica.",
+      "descriptores_ids": [
+        "CCL3",
+        "CCL4",
+        "CP1",
+        "CP2",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE1",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer y valorar el quehacer cotidiano de las mujeres y hombres de las sociedades griega y latina.",
+      "descriptores_ids": [
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Valorar la importancia del diálogo y la participación cívica como fundamentos del progreso de la sociedad occidental.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CE1",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar trabajos de investigación de manera progresivamente autónoma en diferentes soportes sobre aspectos del legado de la civilización grecolatina en los ámbitos lingüístico, artístico, personal, religioso y sociopolítico localizando, seleccionando, contrastando y reelaborando información procedente de diferentes fuentes, calibrando su fiabilidad y pertinencia y respetando los principios de rigor y propiedad intelectual.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Adquirir la disciplina intelectual más adecuada para realizar un trabajo de forma metódica, utilizando procedimientos y recursos coherentes con el fin perseguido, fomentando el sentido de la autonomía y la responsabilidad individual y colectiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Resolver problemas y tomar decisiones, incorporando el rigor y la satisfacción por el trabajo bien hecho, y la voluntad de corregirlo y perfeccionarlo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Integrar y aplicar en la realidad personal los conocimientos adquiridos, mostrando iniciativa, interés y motivación por el tema.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar las tecnologías de la información y de la comunicación como herramienta de aprendizaje y de intercambio, valorando su uso para trabajar de forma autónoma, como instrumento de colaboración y de desarrollo de proyectos de trabajo cooperativo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Expresar y comunicar experiencias, oralmente y por escrito, apreciando la necesidad de una utilización cuidadosa del lenguaje, de un vocabulario preciso y de un registro adecuado, interpretando y ajustando el discurso a las diversas situaciones comunicativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "CE1",
+      "descripcion": "Participar activamente tanto en la realización y exposición oral del trabajo como en la confección de un pequeño resumen que valore la exposición de los compañeros y compañeras.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "CE1",
+      "descripcion": "Adecuar el trabajo final a los objetivos y planteamientos marcados, así como a los plazos y fases previstos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.9",
+      "objetivo_id": "CE1",
+      "descripcion": "Estructurar de forma correcta el trabajo escrito: justificación y descripción del proyecto propuesto, explicación de los resultados y elaboración de conclusiones.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.10",
+      "objetivo_id": "CE1",
+      "descripcion": "Sintetizar y analizar las dificultades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.11",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar críticamente el trabajo y la aportación personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.12",
+      "objetivo_id": "CE1",
+      "descripcion": "Manejar con adecuación, rigor y pluralidad fuentes y recursos, así como usar las tecnologías de la información y de la comunicación en el desarrollo del proyecto, en la realización escrita y en la presentación oral.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.13",
+      "objetivo_id": "CE1",
+      "descripcion": "Esgrimir riqueza y variedad de procedimientos en la recopilación de información y en su tipología, así como perseguir la adecuación a los fines propuestos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.14",
+      "objetivo_id": "CE1",
+      "descripcion": "Demostrar capacidad creativa y emprendedora, así como para, en caso de necesidad, modificar y aplicar caminos y recursos alternativos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.15",
+      "objetivo_id": "CE1",
+      "descripcion": "Favorecer la iniciativa personal, el espíritu emprendedor, la autonomía y la confianza en sí mismo; tener en alta consideración los hábitos de disciplina, esfuerzo y trabajo individual y en grupo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.16",
+      "objetivo_id": "CE1",
+      "descripcion": "Perseguir la corrección en las expresiones oral y escrita.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.17",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar de manera adecuada y variada los recursos gráficos o audiovisuales y cuidar la presentación de los materiales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Deducir el significado etimológico de un término de uso común aplicando, de manera guiada, estrategias de reconocimiento de étimos y formantes grecolatinos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Atender a los cambios fonéticos, morfológicos o semánticos que hayan tenido lugar en el paso del griego y el latín al español.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Explicar, de manera guiada, la relación del griego y el latín con las lenguas modernas, analizando los elementos lingüísticos comunes en origen y utilizando estrategias y conocimientos de las lenguas y lenguajes que conforman el repertorio del alumnado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar prejuicios y estereotipos lingüísticos adoptando una actitud de respeto y valoración de la diversidad como riqueza cultural, lingüística, dialectal y humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Inferir el significado de términos de nueva aparición o procedentes de léxico especializado.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y explicar el legado material e inmaterial de la civilización grecolatina como fuente de inspiración, analizando producciones culturales y artísticas posteriores.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Investigar, de manera guiada, el patrimonio histórico, arqueológico, artístico y cultural heredado de la Grecia y Roma, actuando de forma adecuada, empática y respetuosa e interesándose por los procesos de preservación y por aquellas actitudes cívicas que aseguran su sostenibilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Explorar el legado grecolatino en el entorno del alumnado a partir de criterios dados, aplicando los conocimientos adquiridos y reflexionando sobre las implicaciones de sus distintos usos, dando ejemplos de la pervivencia de la Antigüedad clásica en su vida cotidiana y presentando los resultados a través de diferentes soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Explicar, a partir de criterios dados, los procesos históricos y políticos, las instituciones, los modos de vida y las costumbres de las sociedades helena y latina.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Reflexionar sobre la evolución de la situación de la mujer partiendo de la cultura grecolatina y llegando a la actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Estudiar la pervivencia de las premisas de la tradición médica grecorromana en la praxis actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Comparar los hábitos higiénicos y dietéticos antiguos y modernos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Valorar las adaptaciones y cambios experimentados a la luz de la evolución de los pueblos y los derechos humanos, favoreciendo el desarrollo de una cultura compartida y una ciudadanía comprometida con la memoria colectiva y los valores democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Debatir acerca de la importancia, evolución, asimilación o cuestionamiento de diferentes aspectos del legado grecorromano en nuestra sociedad, utilizando estrategias retóricas y oratorias de manera guiada, mediando entre posturas cuando sea necesario, seleccionando y contrastando información y experiencias veraces y mostrando interés, respeto y empatía por otras opiniones y argumentaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Valorar los modelos democráticos de organización de la sociedad y los precedentes clásicos. Reconocer la relación existente en la antigüedad y en las épocas modernas entre la configuración social y las estructuras políticas y administrativas.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Saberes"
+    },
+    {
+      "id": "B2",
+      "titulo": "A. Planificación del proyecto de Investigación"
+    },
+    {
+      "id": "B3",
+      "titulo": "B. Desarrollo del Proyecto de Investigación"
+    },
+    {
+      "id": "B4",
+      "titulo": "C. Presentación del proyecto de Investigación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El proyecto a realizar, cuya idiosincrasia ya ha sido descrita, se sustentará sobre los siguientes bloques de saberes básicos:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": " Planteamiento inicial de un trabajo monográfico, evaluando los conocimientos previos sobre el mundo clásico y los intereses del alumnado.  Conocimiento de los procedimientos propios de la tarea de investigación.  Elección, selección y concreción de un tema sobre el lenguaje, la historia y el patrimonio del mundo clásico.  Reconocimiento y utilización de fuentes veraces de información sobre el mundo clásico (textos clásicos, artículos científicos y de divulgación, blogs y páginas digitales fiables, etc.).  Tipos de fuentes documentales. Las fuentes bibliográficas y digitales. El plagio. Derechos y licencias.  Normas de citación de citas bibliográficas y de utilización de recursos digitales y de otro tipo (copyright, licencias Creative Commons, normas de inclusión de imágenes)  Plan del trabajo, plazos y cronograma. Detección de necesidades.  La transferencia de resultados: foros, redes sociales, publicaciones digitales y plataformas educativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " Proceso de documentación a través de fuentes fiables y rigurosas, bibliográficas y digitales. Selección y organización de la información.  La presencia del legado clásico en el arte, el cine, la publicidad o los medios de comunicación como fuente de información alternativa. Los museos y lugares arqueológicos.  Herramientas colaborativas para la elaboración de proyectos. Organización y gestión de equipos y asignación de roles.  Uso de las nuevas tecnologías en la búsqueda de información, así como en la elaboración de trabajos de investigación.  Revisión del plan inicial, corrección de errores y plan final para la transformación de la información en un trabajo, escrito u oral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": " Presentación del trabajo, en forma de ensayo o a través de una presentación oral.  Técnicas de redacción de una memoria o un ensayo. La organización de la información seleccionada y su exposición. La argumentación.  Técnicas para la exposición oral. La claridad. El tiempo de la exposición. La comunicación verbal y no verbal. Uso de nuevas tecnologías.  La transferencia del trabajo a través de la utilización de foros, redes sociales, páginas digitales, revistas de divulgación o plataformas educativas.",
+      "criterios_ids": []
+    }
+  ]
+}

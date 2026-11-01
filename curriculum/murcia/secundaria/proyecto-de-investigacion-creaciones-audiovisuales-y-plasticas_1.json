@@ -1,0 +1,410 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "secundaria",
+    "asignatura": "proyecto-de-investigacion-creaciones-audiovisuales-y-plasticas",
+    "asignatura_nombre": "Proyecto de Investigación – Creaciones Audiovisuales y Plásticas",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Murcia · Secundaria · Proyecto de Investigación – Creaciones Audiovisuales y Plásticas · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender el proceso de indagación audiovisual y plástica como una selección apropiada de un tema o centro de interés, y como una reflexión dinámica y constante sobre el logro de avances y conocimientos respecto de los objetivos propuestos.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Utilizar las tecnologías de la información y la comunicación para la toma de datos, el análisis y tratamiento de la información y la exposición de los resultados del estudio.",
+      "descriptores_ids": [
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Exponer oralmente y de forma escrita los elementos del proceso y resultados de investigación, como herramienta en la indagación, adquisición y expresión de los aprendizajes en los procesos de comprensión de la información, de exploración plástica y audiovisual, y de redacción del trabajo de investigación.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Adquirir la iniciativa y espíritu emprendedor a la hora de transformar las ideas en actos, presente en la resolución de problemas y toma de decisiones de forma autónoma, en la planificación y distribución de las tareas de un proyecto audiovisual o plástico, así como en la evaluación del resultado del proceso de investigación.",
+      "descriptores_ids": [
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analizar con criterio propio las diferentes manifestaciones culturales y artísticas, estableciendo relaciones entre ellas y con su propia identidad cultural, incorporando además la perspectiva de género.",
+      "descriptores_ids": [
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Detectar, apreciar y producir conocimientos que presenten valores audiovisuales y plásticos relevantes, partiendo del patrimonio artístico y cultural local, regional, nacional o internacional, o bien de la propia creación del alumnado, evidenciando rigor metodológico y coherencia entre intenciones comunicativas y resultados obtenidos.",
+      "descriptores_ids": [
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Plantear, elegir y seleccionar un tema de interés.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Concretar correctamente los objetivos y su viabilidad con los medios disponibles.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Tratar y organizar la información adecuadamente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar con criterio y rigor las fuentes de información bibliográficas, cibernéticas, artísticas o audiovisuales de campo u otras.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar eficazmente las tecnologías de la información en el proceso de elaboración.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar de forma eficiente, rigurosa y comunicativa las TIC en su aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Utilizar adecuadamente las herramientas y tecnologías apropiadas para la exposición y defensa.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Presentar la memoria con corrección formal, lenguaje adecuado y con claridad en la exposición de sus contenidos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Exponer lo sustancial de la investigación, haciendo hincapié en los aspectos más importantes.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Realizar la exposición en un lenguaje sencillo pero riguroso.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Saber ajustarse al tiempo establecido para el desarrollo del trabajo y la exposición de sus resultados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Planificar la realización de las tareas propias de la labor de investigación.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Plantear hipótesis y considerar las variables.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Revisar el plan inicial y modificarlo, si es necesario.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar manifestaciones plásticas y audiovisuales relevantes, observando el contexto sociocultural, su estructura básica, contenido, elementos constituyentes, aspectos comunicativos, expresivos y simbólicos, así como su valor artístico global.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Producir trabajos monográficos plásticos y/o audiovisuales que incorporen nuevos conocimientos, partiendo del Patrimonio artístico y cultural local, regional, nacional o internacional, o bien de la propia creación del alumnado, evidenciando rigor metodológico y coherencia entre intenciones comunicativas y resultados obtenidos.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Planificación"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Elaboración"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Exposición"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": " Elección del tema y concreción de los objetivos. Los conocimientos previos y objetivos realistas. El proyecto plástico y/o audiovisual personal.  La bibliografía, las fuentes cibernéticas. Otras fuentes. La obra de arte como fuente de conocimiento. El plagio. Derechos y licencias artísticas.  Plazos. Cronograma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": " Plan de trabajo.  Proceso de documentación artística y/o audiovisual.  Selección de la información.  Organización de la información.  Planteamiento de hipótesis.  Transformación de la investigación en información escrita y/o artística.  Proceso de investigación artística personal. Experimentación continua, reflexión y actuación subsiguiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " La memoria escrita como ordenación formal del proceso y de sus resultados.  La presentación y defensa del trabajo.  Selección de la información más relevante.  Formas de exposición y defensa.  El tiempo de la exposición.  La comunicación verbal.  La comunicación no verbal.  Elementos auxiliares de la exposición: presentaciones, pósteres científicos, modelos plásticos y productos audiovisuales entre otros.  La transferencia de resultados: foros, redes sociales, revistas cibernéticas, páginas personales.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -24,6 +24,7 @@ const COMUNIDADES = [
   { value: 'Valencia',  label: 'Comunitat Valenciana' },
   { value: 'Asturias',  label: 'Principado de Asturias' },
   { value: 'Extremadura', label: 'Extremadura' },
+  { value: 'Murcia',    label: 'Región de Murcia' },
 ]
 
 export default function GruposPage() {

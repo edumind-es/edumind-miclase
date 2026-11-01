@@ -1,0 +1,468 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "primaria",
+    "asignatura": "ciencias-sociales",
+    "asignatura_nombre": "Ciencias Sociales",
+    "ciclo_origen": "Tercer ciclo",
+    "fuente": "Murcia · Primaria · Ciencias Sociales · Tercer ciclo.xlsx",
+    "generado": "2026-11-01",
+    "curso": "6º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia La competencia matemática y compe (competencia STEM por sus siglas en inglés los métodos científicos, el pensamiento y re métodos de la ingeniería para transformar el e sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolv La competencia en ciencia conlleva la co social, utilizando un conjunto de conocimiento experimentación, con el fin de plantear pr pruebas para poder interpretar y transformar e La competencia en tecnología e ingeniería y metodologías propios de las ciencias para las necesidades o deseos de las personas sostenibilidad."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. Competenci La competencia digital implica el uso segu de las tecnologías digitales para el aprendiza sociedad, así como la interacción con estas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia em La competencia emprendedora implica d sobre oportunidades e ideas, utilizando los generar resultados de valor para otras person mirada para detectar necesidades y oportunid evaluar el entorno, y crear y replantear idea pensamiento estratégico y la reflexión ética, creativos y de innovación; y despertar la disp incertidumbre. Asimismo, implica tomar d conocimiento y colaborar de manera ágil co habilidades de comunicación y de negociació mediante la planificación y gestión de proy económico-financiero."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresió modo en que las ideas, las opiniones, los se comunican de forma creativa en distintas cu manifestaciones artísticas y culturales. Implica el desarrollo y la expresión de las ideas prop papel que se desempeña en la sociedad."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. ANE Áreas de Edu Conocimiento del Medio Los retos del siglo XXI demandan que herramientas para que el alumnado pueda éxito. El área de Conocimiento del Medio N ámbito con el objetivo de que niños y niñas l respetuosas con el mundo en el que viven y p éticos y sostenibles fundados en valores dem En una sociedad cada vez más diversa formas de sentir, de pensar y de actuar."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Utilizar dispositivos y recursos digitales de forma segura, responsable y eficiente, para buscar información, comunicarse y trabajar de manera individual, en equipo y en red, y para reelaborar y crear contenido digital de acuerdo con las necesidades digitales del contexto educativo.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Plantear y dar respuesta a cuestiones científicas sencillas, utilizando diferentes técnicas, instrumentos y modelos propios del pensamiento científico, para interpretar y explicar hechos y fenómenos que ocurren en el medio natural, social y cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conocer y tomar conciencia del propio cuerpo, así como de las emociones y sentimientos propios y ajenos, aplicando el conocimiento científico, para desarrollar hábitos saludables y para conseguir el bienestar físico, emocional y social.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar las características de los diferentes elementos o sistemas del medio natural, social y cultural, analizando su organización y propiedades y estableciendo relaciones entre los mismos, para reconocer el valor del patrimonio cultural y natural, conservarlo, mejorarlo y emprender acciones para su uso responsable.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Identificar las causas y consecuencias de la intervención humana en el entorno, desde los puntos de vista social, económico, cultural, tecnológico y ambiental, para mejorar la capacidad de afrontar problemas, buscar soluciones y actuar de manera individual y cooperativa en su resolución y para poner en práctica estilos de vida sostenibles y consecuentes con el respeto, el cuidado y la protección de las personas y del planeta.",
+      "descriptores_ids": [
+        "CCL5",
+        "STEM2",
+        "STEM5",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Observar, comprender e interpretar continuidades y cambios del medio social y cultural, analizando relaciones de causalidad, simultaneidad y sucesión, para explicar y valorar las relaciones entre diferentes elementos y acontecimientos.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CE2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Reconocer y valorar la diversidad y la igualdad de género, mostrando empatía y respeto por otras culturas y reflexionando sobre cuestiones éticas, para contribuir al bienestar individual y colectivo de una sociedad en continua transformación y al logro de los valores de integración europea.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Participar en el entorno y la vida social de forma eficaz y constructiva desde el respeto a los valores democráticos, los derechos humanos y de la infancia y los principios y valores de la Constitución española y la Unión Europea, valorando la función del Estado y sus instituciones en el mantenimiento de la paz y la seguridad integral ciudadana, para generar interacciones respetuosas y equitativas y promover la resolución pacífica y dialogada de los conflictos.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar recursos digitales de acuerdo con las necesidades del contexto educativo de forma segura y eficiente, buscando información, comunicándose y trabajando de forma individual, en equipo y en red, reelaborando y creando contenidos digitales sencillos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Formular preguntas y realizar predicciones razonadas sobre el medio natural, social o cultural mostrando y manteniendo la curiosidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar, seleccionar y contrastar la información, de diferentes fuentes seguras y fiables, usando los criterios de fiabilidad de fuentes, adquiriendo léxico científico básico, y utilizándola en investigaciones relacionadas con el medio natural, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Promover actitudes que fomenten el bienestar emocional y social, gestionando las emociones propias y respetando las de los demás, fomentando relaciones afectivas saludables y reflexionando ante los usos de la tecnología y la gestión del tiempo libre.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar y analizar las características, organización y propiedades de los elementos del medio natural, social y cultural a través de la indagación utilizando las herramientas y procesos adecuados.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Establecer conexiones sencillas entre diferentes elementos del medio natural, social y cultural mostrando comprensión de las relaciones que se establecen.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar, proteger y mostrar actitudes de conservación y mejora del patrimonio natural y cultural a través de propuestas y acciones que reflejen compromisos y conductas en favor de la sostenibilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Promover estilos de vida sostenible y consecuentes con el respeto, los cuidados, la corresponsabilidad y la protección de las personas y del planeta, a partir del análisis de la intervención humana en el entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Participar con actitud emprendedora en la búsqueda, contraste y evaluación de propuestas para afrontar problemas ecosociales, buscar soluciones y actuar para su resolución, a partir del análisis de las causas y consecuencias de la intervención humana en el entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar relaciones de causalidad, simultaneidad y sucesión entre diferentes elementos del medio social y cultural desde la Edad Media hasta la actualidad, situando cronológicamente los hechos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Conocer personas, grupos sociales relevantes y formas de vida de las sociedades desde la Edad Media hasta la actualidad, incorporando la perspectiva de género, situándolas cronológicamente e identificando rasgos significativos sociales en distintas épocas de la historia.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Analizar los procesos geográficos, históricos y culturales que han conformado la sociedad actual, valorando la diversidad etnocultural o afectivo-sexual y la cohesión social y mostrando empatía y respeto por otras culturas y la igualdad de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Promover actitudes de igualdad de género y conductas no sexistas, analizando y contrastando diferentes modelos en nuestra sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Resolver de forma pacífica y dialogada los conflictos, promoviendo una interacción respetuosa y equitativa a partir del lenguaje inclusivo y no violento, explicando y ejercitando las principales normas, derechos, deberes y libertades que forman parte de la Constitución española, y de la Unión Europea, y conociendo la función que el Estado y sus instituciones desempeñan en el mantenimiento de la paz, la seguridad integral ciudadana y el reconocimiento de las víctimas de violencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Explicar el funcionamiento general de los órganos de gobierno del Municipio, de las Comunidades Autónomas, del Estado español y de la Unión Europea, valorando sus funciones y la gestión de los servicios públicos para la ciudadanía.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Cultura científica"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Tecnología y digitalización"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Sociedades y territorios"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": " Clasificación básica de rocas y minerales. Usos y explotación sostenible de los recursos geológicos.  Procesos geológicos básicos de formación y modelado del relieve.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "1. Digitalización del entorno personal de aprendizaje.  Estrategias de búsquedas de información seguras y eficientes en Internet (valoración, discriminación, selección, organización y propiedad intelectual).  Estrategias de recogida, almacenamiento y representación de datos para facilitar su comprensión y análisis.  Reglas básicas de seguridad y privacidad para navegar por Internet y para proteger el entorno digital personal de aprendizaje.  Recursos y plataformas digitales restringidas y seguras para comunicarse con otras personas. Etiqueta digital, reglas básicas de cortesía y respeto y estrategias para resolver problemas en la comunicación digital.  Estrategias para fomentar el bienestar digital físico y mental. Reconocimiento de los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales (tiempo excesivo de uso, ciberacoso, dependencia tecnológica, acceso a contenidos inadecuados, etc.) y estrategias de actuación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " El futuro de la Tierra y del universo y el Sistema solar. Los fenómenos físicos relacionados con la Tierra y el universo y su repercusión en la vida diaria y en el entorno. La exploración espacial y la observación del cielo; la contaminación lumínica.  El clima y el planeta. Introducción a la dinámica atmosférica y a las grandes áreas climáticas del mundo. Los tipos de climas de España y sus zonas de influencia. Los principales ecosistemas y sus paisajes.  El entorno natural. La diversidad geográfica de España y de Europa (relieve e hidrografía). Representación gráfica, visual y cartográfica a través de medios y recursos analógicos y digitales usando las Tecnologías de la Información Geográfica (TIG).  La litosfera: características y tipos de rocas.  Densidad de población. Migraciones y diversidad cultural. Las principales variables demográficas y su representación gráfica. Los comportamientos de la población y su evolución. Los movimientos migratorios y la apreciación de la diversidad cultural. Contraste entre zonas urbanas y despoblación rural.  Ciudadanía activa. Fundamentos y principios para la organización política y gestión del territorio en España. Participación social y ciudadana.  Igualdad de género y conductas no sexistas. Crítica de los estereotipos y roles en los distintos ámbitos: académico, profesional, social y cultural. Acciones para la igualdad efectiva entre mujeres y hombres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": " Las fuentes históricas: clasificación y utilización de las distintas fuentes (orales, escritas, patrimoniales). Temas de relevancia en la historia (Edad Media, Edad Moderna y Edad Contemporánea), el papel representado por los sujetos históricos (individuales y colectivos), acontecimientos y procesos.  El papel de la mujer en la historia y los principales movimientos en defensa de sus derechos. Situación actual y retos de futuro en la igualdad de género.  La memoria democrática. Análisis multicausal del proceso de construcción de la democracia en España. La Constitución de 1978. Fórmulas para la participación de la ciudadanía en la vida pública.  Las expresiones artísticas y culturales medievales, modernas y contemporáneas y su contextualización histórica desde una perspectiva de género. La función del arte y la cultura en el mundo medieval, moderno y contemporáneo.  El patrimonio natural y cultural como bien y recurso; su uso, cuidado y conservación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": " Historia y cultura de las minorías étnicas presentes en nuestro país, particularmente las propias del pueblo gitano. Reconocimiento de la diversidad cultural y lingüística de España.  Los principios y valores de los derechos humanos y de la infancia y la Constitución española, derechos y deberes de la ciudadanía. La contribución del Estado y sus instituciones a la paz, la seguridad integral y la cooperación internacional para el desarrollo.  La cultura de paz y no violencia. El pensamiento crítico como herramienta para el análisis de los conflictos de intereses. El reconocimiento de las víctimas de la violencia.  La organización política. Principales entidades políticas y administrativas del entorno local, autonómico y nacional en España. Sistemas de representación y de participación política.  El planisferio: físico y político.  España y Europa. Las principales instituciones de España y de la Unión Europea, de sus valores y de sus funciones. Los ámbitos de acción de las instituciones europeas y su repercusión en el entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": " El cambio climático de lo local a lo global: causas y consecuencias. Medidas de mitigación y adaptación.  Responsabilidad ecosocial. Ecodependencia, interdependencia e interrelación entre personas, sociedades y medio natural.  Las actividades económicas y los sectores de producción de la Comunidad Autónoma de la Región de Murcia y de España. El desarrollo sostenible. La actividad humana sobre el espacio y la explotación de los recursos. La actividad económica y la distribución de la riqueza: desigualdad social y regional en el mundo y en España. Los Objetivos de Desarrollo Sostenible.  Agenda Urbana. El desarrollo urbano sostenible. La ciudad como espacio de convivencia.  El dinero. Economía verde. La influencia de los mercados (de bienes, financiero y laboral) en la vida de la ciudadanía. Los agentes económicos y los derechos laborales desde una perspectiva de género. El valor social de los impuestos. Responsabilidad social y ambiental de las empresas. Publicidad, consumo responsable (necesidades y deseos) y derechos del consumidor.  Estilos de vida sostenible: los límites del planeta y el agotamiento de recursos. La huella ecológica.",
+      "criterios_ids": []
+    }
+  ]
+}

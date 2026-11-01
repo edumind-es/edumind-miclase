@@ -1,0 +1,427 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "secundaria",
+    "asignatura": "lengua-de-signos-espanola",
+    "asignatura_nombre": "Lengua de Signos Española",
+    "ciclo_origen": "Segundo curso",
+    "fuente": "Murcia · Secundaria · Lengua de Signos Española · Segundo curso.xlsx",
+    "generado": "2026-11-01",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender e interpretar el sentido general y los detalles más relevantes de discursos expresados de forma clara y en la lengua de signos estándar, buscando fuentes fiables y haciendo uso de estrategias como la inferencia de significados, para responder a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA5",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Producir discursos originales, de extensión media, sencillos y con una organización clara, usando estrategias tales como la planificación, la compensación o la autorreparación, para expresar de forma creativa, adecuada y coherente mensajes relevantes y responder a propósitos comunicativos concretos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interactuar con otras personas con creciente autonomía, usando estrategias de cooperación y empleando recursos analógicos y digitales, para responder a propósitos comunicativos concretos en intercambios respetuosos con las normas de cortesía.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Mediar en situaciones cotidianas entre distintas lenguas, usando estrategias y conocimientos sencillos orientados a explicar conceptos o simplificar mensajes, para transmitir información de manera eficaz, clara y responsable.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Ampliar y usar los repertorios lingüísticos personales en la lengua de signos, reflexionando de forma crítica sobre su funcionamiento y tomando conciencia de las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA5",
+        "CD2"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística, cultural y artística a partir de la lengua de signos, identificando y compartiendo las semejanzas y las diferencias entre lenguas y culturas, para actuar de forma empática y respetuosa en situaciones interculturales.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Interpretar y analizar el sentido global y la información específica y explícita de discursos signados sobre temas frecuentes y cotidianos, de relevancia personal y próximos a su experiencia, propios de los ámbitos de las relaciones interpersonales, del aprendizaje, de los medios de comunicación y de la ficción expresados de forma clara y en la lengua de signos a través de diversos soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar, organizar y aplicar de forma guiada las estrategias y conocimientos en situaciones comunicativas cotidianas para comprender el sentido general, la información esencial y los detalles más relevantes de los discursos; interpretar elementos no verbales; y buscar y seleccionar información.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar de forma signada discursos adecuados a la situación comunicativa sobre asuntos cotidianos y frecuentes, de relevancia para el alumnado, con claridad, coherencia, cohesión y adecuación a la situación comunicativa propuesta, con el fin de describir, narrar e informar sobre temas concretos, en diferentes soportes, utilizando de forma guiada recursos verbales y no verbales, así como estrategias de planificación y control de la producción.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar, organizar y aplicar de forma guiada conocimientos y estrategias para planificar, producir y revisar discursos comprensibles, coherentes y adecuados a las intenciones comunicativas, las características contextuales y la tipología textual, usando con ayuda los recursos físicos o digitales más adecuados en función de la tarea y las necesidades de cada momento, teniendo en cuenta la persona a quien va dirigido el discurso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Planificar y participar en situaciones interactivas sobre temas cotidianos, de relevancia personal y próximos a su experiencia, a través de diversos soportes, apoyándose en recursos tales como la repetición, el ritmo pausado, la expresión corporal, roles, uso del espacio y clasificadores, y mostrando empatía y respeto por la cortesía lingüística y la etiqueta digital, así como por las diferentes necesidades, ideas, inquietudes, iniciativas y motivaciones de los interlocutores.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Seleccionar, organizar y utilizar, de forma guiada y en entornos próximos, estrategias adecuadas para iniciar, mantener y terminar la comunicación, tomar y ceder la palabra, solicitar y formular aclaraciones y explicaciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Inferir y explicar discursos, conceptos y comunicaciones en situaciones en las que atender a la diversidad, mostrando respeto y empatía por las y los interlocutores y por la lengua empleada, e interés por participar en la solución de problemas de intercomprensión y de entendimiento en su entorno próximo, apoyándose en diversos recursos y soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Aplicar, de forma guiada, estrategias que ayuden a crear puentes y faciliten la comprensión y producción de información y la comunicación, adecuadas a las intenciones comunicativas, usando recursos y apoyos físicos o digitales en función de las necesidades de cada momento.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar las habilidades y conocimientos aprendidos, necesarios en la interacción signada.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar y diferenciar los conocimientos y estrategias de mejora de su capacidad de comunicar y de aprender la lengua de signos con apoyo de otros participantes y de soportes analógicos y digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar y registrar, siguiendo modelos, los progresos y dificultades de aprendizaje de la lengua de signos, seleccionando de forma guiada las estrategias más eficaces para superar esas dificultades y progresar en su aprendizaje, realizando actividades de autoevaluación y coevaluación, como las propuestas en el Portfolio Europeo de las Lenguas (PEL) o en un diario de aprendizaje, haciendo esos progresos y dificultades explícitos y compartiéndolos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Actuar de forma empática y respetuosa en situaciones interculturales construyendo vínculos entre la lengua de signos y la cultura sorda, y rechazando cualquier tipo de discriminación, prejuicio y estereotipo en contextos comunicativos cotidianos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Aceptar y adecuarse a la diversidad lingüística, cultural y artística propia de la comunidad sorda como fuente de enriquecimiento personal, mostrando interés por compartir elementos culturales y lingüísticos que fomenten la sostenibilidad y la democracia.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Aplicar, de forma guiada, estrategias para explicar y apreciar la diversidad lingüística, cultural y artística, atendiendo a valores ecosociales y democráticos y respetando los principios de justicia, equidad e igualdad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Comunicación"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Conocimiento de la lengua"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Plurilingüismo"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Interculturalidad"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": " Dar y pedir información. Pedir y proporcionar información. Exponer: recursos para el desarrollo o conclusión. Clasificación. Narrar: recursos para mantener el hilo de la narración; y proceso prototípico.  Expresar opiniones, actitudes y conocimientos. Solicitar y proporcionar una opinión, valoraciones. Preguntar y expresar que se acuerda o se ha olvidado algo, posturas y posicionamientos: expresar aprobación/desaprobación. Formular una hipótesis y expresar probabilidad.  Expresar gustos, deseos y sentimientos. Preguntar y expresarse sobre gustos e intereses. Expresar y preguntar sobre preferencias y aversiones (rechazo). Preguntar por el estado de ánimo. Expresar estados de ánimo negativos (enfado, indignación, alivio, resignación, tristeza, aflicción, aburrimiento, hartazgo, miedo, ansiedad, preocupación, vergüenza y empatía). Expresar sorpresa y extrañeza (expresar admiración, orgullo y afecto). Expresar estados de ánimo positivos (alegría, satisfacción, placer y diversión). Expresar sensaciones físicas.  Influir en el interlocutor. Tranquilizar, consolar, animar, aconsejar, advertir, dar órdenes e instrucciones y responder a ellas; y pedir ayuda y responder a las peticiones.  Relacionarse socialmente. Saludar y responder al saludo, formular buenos deseos y responder, despedirse, proporcionar un brindis, felicitar, disculparse y responder a una disculpa, y agradecer y responder al agradecimiento.  Estructuración, construcción e interpretación del discurso. Conectar elementos, organizar la información. Introducir palabras de otros. Concluir el relato.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Saberes gramaticales:  El pronombre. Los relativos e interrogativos. Los pronombres personales: el uso de la pronominalización en el espacio.  Los cuantificadores. Posición de los cuantificadores. Cuantificadores propios: universales, no universales, negativos y gradativos. Estructuras cuantificadas.  El adjetivo. Grados y clases de adjetivos.  El adverbio. Focalizadores y relativos. Modales.  El sintagma verbal. El núcleo del sintagma verbal.  El sintagma nominal.  Oraciones compuestas por coordinación. Copulativas, afirmativas y negativas.  Oraciones compuestas por subordinación. Oraciones subordinadas internas. Subordinación interna no argumental y subordinación interna argumental. Saberes léxicos:  Información y medios de comunicación. Televisión.  Individuo: dimensión perceptiva y anímica. Sentimientos y estados de ánimo, modales y comportamiento.  Relaciones personales. Celebraciones y actos familiares, sociales y religiosos.  Servicios. Servicios de interpretación y sociales.  Compras, tiendas y establecimientos. Lugares, personas y actividades, ropa, calzado y complementos.  Gobierno, política y sociedad. Sociedad y conducta social, política y gobierno, ley y justicia.  Geografía y naturaleza. Paisajes y accidentes geográficos, clima y tiempo atmosférico, fauna y flora.  Ocio. Tiempo libre, entretenimiento, deportes, juegos, espectáculos y exposiciones.  Viajes, alojamientos y transporte. Objetos y documentos relacionados con viajes, tipos de viajes, la playa, la montaña, alojamiento y sistemas de transportes.  Vivienda. Características de la vivienda: condiciones especiales para personas sordas, objetos (construcción). domésticos, acciones relacionadas con la vivienda  Economía e industria. Publicidad y mercadotecnia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " Estrategias y técnicas para responder eficazmente a una necesidad comunicativa básica y concreta de forma comprensible, a pesar de las limitaciones derivadas del nivel de competencia en la lengua de signos y en las demás lenguas del repertorio lingüístico propio.  Estrategias básicas para identificar, organizar, retener, recuperar y utilizar creativamente unidades lingüísticas (léxico, morfosintaxis, patrones propios de la lengua de signos, etc.) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.  Estrategias y herramientas básicas de autoevaluación y coevaluación, analógicas y digitales, individuales y cooperativas.  Léxico y expresiones de uso común para comprender enunciados sobre la comunicación, la lengua, el aprendizaje y las herramientas de comunicación y aprendizaje (metalenguaje).  Comparación básica entre lenguas a partir de elementos de la lengua de signos y otras lenguas: origen y parentescos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": " Reconocer en uno mismo y en otros la presencia de filtros y condicionantes culturales a la hora de interpretar, analizar, describir o valorar los comportamientos socioculturales, referentes culturales de la comunidad sorda: prácticas de la vida cotidiana, relaciones y contacto entre personas, etc.  Tomar conciencia de los tópicos, tabúes, estereotipos y prejuicios más difundidos sobre la comunidad sorda, en relación con las relaciones entre personas, valores sociales, económicos, etc.  Reconocer en uno mismo y en otros eventuales síntomas, de estrés cultural ante las situaciones de choque lingüístico y cultural durante el proceso de aproximación y contacto con la cultura sorda.  Reflexionar sobre los sentimientos y reacciones que se experimentan cuando uno mismo u otros se enfrentan a las situaciones de contacto con miembros de la comunidad sorda, en las que no resultan válidos los propios esquemas de conocimiento, parámetros de interpretación, patrones y normas de comportamiento, valores, creencias, etc.  Esforzarse por interpretar hechos y productos culturales (hechos históricos, comportamientos colectivos, manifestaciones de las artes plásticas, películas, etc.) de la comunidad sorda, activando el conocimiento declarativo en relación con las obras, autores y hechos relevantes relacionados con la comunidad sorda.  Tomar conciencia de las peculiaridades de la cultura sorda relativas a las convenciones evidentes: temas de conversación, formas de saludo, distancia física, formalidades en la mesa, etc.  Reconocer, durante las vivencias interculturales, los vacíos o lagunas (contexto cultural y sociocultural, conocimientos compartidos entre signantes sordos, normas y convecciones que rigen la comunicación entre personas signantes: proxémica, cronémica, tabúes y temas de conversación, etc.) que impiden compartir el fondo común que sirve de base a la comunicación entre signantes.  Actualizar de forma consciente, durante la observación o participación en las situaciones de interacción social (encuentros, reuniones, celebraciones, etc.), los conocimientos factuales (relaciones entre padres, madres, tutores legales e hijos, las tradiciones, etc.) y destrezas de contacto (formas y momentos de hacer halagos, formas de llamarse entre compañeros, manifestaciones de afecto y cortesía, etc.) relativos a relaciones interpersonales en los diferentes ámbitos (familia, comunidad vecinal, académica, profesional, etc.).  Flexibilizar los sistemas de percepción que se emplean al acercarse a la cultura sorda y a otras culturas.  Explicar a los alumnos datos factuales concretos (principales instituciones, fiestas y celebraciones, etc.) que resulten para ellos opacos durante los eventos comunicativos que requieran acciones como las siguientes: la comprensión o interpretación de obras de arte, programas, personajes relevantes de la vida pública, etc.",
+      "criterios_ids": []
+    }
+  ]
+}
