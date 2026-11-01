@@ -19,6 +19,7 @@ Uso:
 """
 import json
 import re
+import subprocess
 import sys
 import unicodedata
 from datetime import date
@@ -62,6 +63,103 @@ CORRECCIONES = {
     # «hábitos saludables» es 5.3; la matriz de Asturias pone 5.2 a los dos.
     ('ASTURIAS', 'biologia-y-geologia', 'CE5.2', 'Proponer y adoptar hábitos saludables'): 'CE5.3',
 }
+
+# Decretos para repartir por curso las matrices que traen varias tandas de
+# criterios con los mismos códigos (una por curso o grupo de cursos) sin decir
+# de cuál es cada una. Ruta relativa a ORIGEN.
+DECRETOS = {
+    ('EXTREMADURA', 'primaria'):   'EXTREMADURA/PRIMARIA/22040159C.pdf',
+    ('EXTREMADURA', 'secundaria'): 'EXTREMADURA/SECUNDARIA/22040165C.pdf',
+}
+
+# Encabezado de curso en el texto del decreto: «Primero y segundo de ESO»,
+# «Tercero y cuarto de ESO», «Segundo curso», «Cuarto de ESO»…
+# Matemáticas de 4.º lo lleva delante: «Matemáticas B. Cuarto Curso ESO».
+_CURSO = r'(?:primer[oa]?|segund[oa]|tercer[oa]?|cuart[oa]|[1-6]\.?\s*º)'
+_ENCABEZADO_CURSO = re.compile(
+    r'^\s*(?:matemáticas\s+([ab])\.\s+)?'
+    r'(' + _CURSO + r'(?:\s+(?:y|a|o)\s+' + _CURSO + r')?'
+    r'(?:\s+(?:curso|ciclo))?(?:\s+(?:de\s+eso|eso|de\s+la\s+eso))?)\s*$', re.IGNORECASE)
+
+
+class Decreto:
+    """Texto de un decreto (pdftotext -layout) para localizar criterios."""
+
+    def __init__(self, pdf: Path):
+        texto = subprocess.run(['pdftotext', '-layout', str(pdf), '-'],
+                               capture_output=True, text=True, check=True).stdout
+        self.lineas = texto.splitlines()
+        # Texto corrido sin espacios ni guiones de corte, con la línea de cada carácter
+        self.plano, self.linea_de, self.inicio = [], [], []
+        for i, l in enumerate(self.lineas):
+            self.inicio.append(len(self.plano))
+            for ch in re.sub(r'[\s\-]+', '', l.lower()):
+                self.plano.append(ch)
+                self.linea_de.append(i)
+        self.plano = ''.join(self.plano)
+
+    def encabezado_antes(self, descripcion: str, desde: int = 0, codigo: str = ''):
+        """(etiqueta, variante, posición) del primer encabezado de curso encima
+        del criterio cuyo texto empieza como `descripcion`, desde `desde`.
+        La variante es la letra de Matemáticas A/B, o None."""
+        # El texto del criterio pegado a su «Criterio X.Y.» (o «Criterio. X.Y.»):
+        # suelto puede aparecer antes, citado en la introducción de la materia.
+        texto = re.escape(re.sub(r'[\s\-]+', '', descripcion.lower())[:60])
+        num = re.escape(codigo.replace('CE', '')) if codigo else r'\d+\.\d+'
+        m = re.compile(r'criterio\.?' + num + r'\.?' + texto).search(self.plano, desde)
+        pos = m.start() if m else -1
+        if pos < 0:
+            return None, None, -1
+        linea = self.linea_de[pos]
+        for j in range(linea, max(linea - 12, -1), -1):
+            m = _ENCABEZADO_CURSO.match(self.lineas[j])
+            if m:
+                return m.group(2), m.group(1), pos
+        return None, None, pos
+
+
+    def codigos_en_tramo(self, desde: int, hasta: int) -> set:
+        """Códigos «Criterio X.Y» del decreto entre dos posiciones del texto
+        corrido, cortando en el siguiente apartado (saberes, competencias,
+        otro bloque de criterios)."""
+        # Corta también en el siguiente encabezado de curso o ciclo
+        primera = self.linea_de[min(desde, len(self.linea_de) - 1)] + 2
+        for j in range(primera, len(self.lineas)):
+            if self.inicio[j] >= hasta:
+                break
+            if _ENCABEZADO_CURSO.match(self.lineas[j]):
+                hasta = self.inicio[j]
+                break
+        tramo = self.plano[desde:hasta]
+        fin = min([i for i in (tramo.find('saberesbásicos'), tramo.find('competenciasespecíficas'),
+                               tramo.find('criteriosdeevaluación')) if i > 0] or [len(tramo)])
+        return {f'CE{a}.{b}' for a, b in re.findall(r'criterio\.?(\d+)\.(\d+)', tramo[:fin])}
+
+
+def repartir_tandas(datos: dict, decreto: 'Decreto', etapa: str):
+    """Parte los criterios en tandas (cada vez que vuelve el primer código) y da
+    a cada una los cursos del encabezado que el decreto le pone encima.
+    Devuelve [(etiqueta, variante, cursos, criterios, faltan)] o None si alguna
+    tanda no se localiza; `faltan` son los códigos que el decreto trae en el
+    tramo de esa tanda y la matriz no."""
+    crit = datos['criterios']
+    cortes = [i for i, c in enumerate(crit) if c['id'] == crit[0]['id']] + [len(crit)]
+    tandas, desde = [], 0
+    for a, b in zip(cortes, cortes[1:]):
+        etiqueta, variante, pos = decreto.encabezado_antes(crit[a]['descripcion'], desde, crit[a]['id'])
+        cursos = cursos_de_ciclo(etiqueta, etapa) if etiqueta else None
+        if not cursos:
+            return None
+        tandas.append([etiqueta, variante, cursos, crit[a:b], pos])
+        desde = pos + 1
+    # Lo que el decreto trae en el tramo de cada tanda y la matriz no
+    for i, t in enumerate(tandas):
+        hasta = tandas[i + 1][4] if i + 1 < len(tandas) else t[4] + 40000
+        en_decreto = decreto.codigos_en_tramo(max(t[4] - 30, 0), hasta)
+        t[4] = sorted(en_decreto - {c['id'] for c in t[3]},
+                      key=lambda x: [int(n) for n in re.findall(r'\d+', x)])
+    return [tuple(t) for t in tandas]
+
 
 ORDINALES = {
     'primer': 1, 'primero': 1, '1r': 1, '1er': 1, 'inicial': 1,
@@ -204,6 +302,14 @@ def main():
         if not datos['criterios']:
             pendientes.append((p.name, 'sin criterios (Tipo 3) en origen'))
             continue
+        # Ninguna materia LOMLOE pasa de una docena de competencias específicas:
+        # «CE112 Pautas.» o «CE999 A.1.2.1.» son saberes colados al extraer.
+        basura = [o for o in datos['objetivos']
+                  if re.fullmatch(r'CE(\d+)', o['id']) and int(o['id'][2:]) > 20]
+        if basura:
+            datos['objetivos'] = [o for o in datos['objetivos'] if o not in basura]
+            avisos.append(f'{area} ({ciclo}): descartadas competencias específicas que no lo son: '
+                          + '; '.join(f"{o['id']} «{o['descripcion'][:30]}»" for o in basura))
         for c in datos['criterios']:
             for (carp, asig_c, cod, inicio), nuevo in CORRECCIONES.items():
                 if (carp == carpeta and asig_c == slug(area) and c['id'] == cod
@@ -211,6 +317,51 @@ def main():
                     c['id'] = nuevo
                     avisos.append(f'{area} ({ciclo}): {cod} «{inicio}…» corregido a {nuevo} (errata del origen)')
         candidatos.append((slug(area), area, ciclo, cursos, p, datos))
+
+    # «Toda la etapa» suele ser la unión de los ciclos: solo se usa si el área
+    # no trae ficheros por ciclo o curso.
+    con_ciclos = {c[0] for c in candidatos if c[2].lower() != 'toda la etapa'}
+    quedan = []
+    for c in candidatos:
+        if c[2].lower() == 'toda la etapa' and c[0] in con_ciclos:
+            pendientes.append((c[4].name, 'descartado: «Toda la etapa» repite los ficheros por ciclo/curso'))
+        else:
+            quedan.append(c)
+    candidatos = quedan
+
+    # Con decreto, los cursos los dice el encabezado que el decreto pone encima
+    # de cada tanda de criterios, no el nombre del fichero.
+    if (carpeta, etapa) in DECRETOS:
+        decreto = Decreto(ORIGEN / DECRETOS[(carpeta, etapa)])
+        repartidos = []
+        for asig, area, ciclo, cursos, p, datos in candidatos:
+            ids = [c['id'] for c in datos['criterios']]
+            varias = ids.count(ids[0]) > 1
+            tandas = repartir_tandas(datos, decreto, etapa)
+            if not tandas:
+                if varias:
+                    pendientes.append((p.name, 'varias tandas de criterios con los mismos códigos '
+                                       'y el decreto no dice de qué curso es cada una'))
+                else:
+                    avisos.append(f'{area}: no localizado en el decreto; cursos según el fichero («{ciclo}»)')
+                    repartidos.append((asig, area, ciclo, cursos, p, datos))
+                continue
+            for etiqueta, variante, cursos_t, crit, faltan in tandas:
+                d = dict(datos, criterios=crit)
+                a, n = asig, area
+                if variante:
+                    a, n = f'{asig}-{variante.lower()}', f'{area} {variante}'
+                if varias:
+                    # Los saberes de la matriz son una sola lista sin curso
+                    d['bloques'], d['saberes'] = [], []
+                if faltan:
+                    avisos.append(f'{n} ({etiqueta}): el decreto trae {", ".join(faltan)} '
+                                  'y la matriz no: faltan en origen')
+                repartidos.append((a, n, etiqueta, cursos_t, p, d))
+            if varias:
+                avisos.append(f'{area}: {len(tandas)} tandas repartidas por el decreto '
+                              f'({"; ".join(t[0] for t in tandas)}); saberes sin curso, no se importan')
+        candidatos = repartidos
 
     # Matemáticas A y B de 4.º son materias distintas: el ciclo lo dice
     # («Cuarto curso matem ticas b»), así que van con su propio slug.
@@ -220,9 +371,6 @@ def main():
             letra = (m.group(1) or m.group(2)).upper()
             candidatos[i] = (f'{asig}-{letra.lower()}', f'{area} {letra}', ciclo, cursos, p, datos)
 
-    # «Toda la etapa» suele ser la unión de los ciclos: solo se usa si el área
-    # no trae ficheros por ciclo o curso.
-    con_ciclos = {c[0] for c in candidatos if c[2].lower() != 'toda la etapa'}
     # Si dos ficheros cubren el mismo curso:
     # - sin ningún código de criterio en común, son trozos del mismo decreto
     #   (Asturias parte Biología de 1.º y 3.º en dos tablas) y se funden;
@@ -231,9 +379,6 @@ def main():
     candidatos.sort(key=lambda c: (len(c[3]), c[4].name))
     salida = {}
     for asig, area, ciclo, cursos, p, datos in candidatos:
-        if ciclo.lower() == 'toda la etapa' and asig in con_ciclos:
-            pendientes.append((p.name, 'descartado: «Toda la etapa» repite los ficheros por ciclo/curso'))
-            continue
         for curso in cursos:
             clave = (asig, curso)
             if clave not in salida:
@@ -255,6 +400,7 @@ def main():
 
     out_dir = OUT_ROOT / dir_slug / etapa
     escritos = existentes = 0
+    sin_saberes = {}
     resumen = {}
     for (asig, curso), (area, p, ciclo, datos) in sorted(salida.items()):
         doc = dict(datos)
@@ -274,7 +420,7 @@ def main():
             avisos.append(f'{area} {curso}: códigos de criterio repetidos {", ".join(repes)}; '
                           'al cargar solo queda uno: revisar')
         if not datos['saberes']:
-            avisos.append(f'{area} {curso}: sin saberes básicos en origen (se importan los criterios)')
+            sin_saberes.setdefault(area, []).append(curso)
         destino = out_dir / f"{asig}_{curso.replace('º', '')}.json"
         if destino.exists():
             existentes += 1
@@ -295,6 +441,8 @@ def main():
               f"{r['ce']}CE {r['cr']}cr {r['sb']}sb (sumados por curso)")
     print(f"JSON {'escritos' if aplicar else 'a escribir'}: {escritos}"
           + (f" · ya existían y no se tocan: {existentes}" if existentes else ''))
+    for area, cursos in sin_saberes.items():
+        avisos.append(f'{area} {" ".join(cursos)}: sin saberes básicos (se importan los criterios)')
     if avisos:
         print(f"Avisos ({len(avisos)}):")
         for a in avisos:

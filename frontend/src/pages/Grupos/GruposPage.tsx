@@ -23,6 +23,7 @@ const COMUNIDADES = [
   { value: 'CLM',       label: 'Castilla-La Mancha' },
   { value: 'Valencia',  label: 'Comunitat Valenciana' },
   { value: 'Asturias',  label: 'Principado de Asturias' },
+  { value: 'Extremadura', label: 'Extremadura' },
 ]
 
 export default function GruposPage() {

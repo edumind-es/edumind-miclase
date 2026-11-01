@@ -1,0 +1,566 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "introduccion-a-la-filosofia",
+    "asignatura_nombre": "Introducción a la Filosofía",
+    "ciclo_origen": "Cuarto de ESO",
+    "fuente": "Extremadura · Secundaria · Introducción a la Filosofía · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar problemas y formular preguntas fundamentales a partir de la reflexión y el diálogo sobre temas, documentos o experiencias de relevancia filosófica, reconociendo a la filosofía como un ejercicio apropiado para gestionar estados de incertidumbre y expresar y tratar cuestiones esenciales y existenciales.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Diseñar, elaborar y exponer trabajos básicos de investigación filosófica, buscando, organizando e interpretando críticamente la información pertinente y ejercitando de forma autónoma, rigurosa y dialogante el juicio propio.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Emplear y analizar argumentos racionales, y ejercitarse en las pautas del diálogo filosófico, distinguiendo y evitando falacias, sesgos, prejuicios, bulos y actitudes dogmáticas, como procedimientos para investigar y afrontar cuestiones, controversias y conflictos con una actitud racional y respetuosa con la pluralidad.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Diseñar, realizar y exponer trabajos básicos de investigación en torno a la cuestión de la naturaleza humana y la propia identidad, reflexionando sobre la realidad y la sociedad de la que se forma parte, como condición para desarrollar la autoestima y mostrar una actitud respetuosa y solidaria con los demás.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Generar y exponer una reflexión propia acerca de la validez de las propias ideas y creencias, a partir del análisis epistemológico de los procesos de producción y comunicación del conocimiento, aplicando dicha reflexión a la categorización y uso crítico de la información, la consideración interdisciplinaria del saber y la investigación ética en torno a los usos y límites de la tecnología.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Reconocer y analizar cuestiones éticas fundamentales y de actualidad, a través de la investigación, el debate crítico y la aplicación de conceptos y planteamientos propios de la ética filosófica, considerando su relevancia para el esclarecimiento de los valores comunes que rigen la existencia personal y las relaciones con los demás y con el entorno.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Reconocer y examinar cuestiones políticas fundamentales y de actualidad, a través de la investigación, el debate crítico y la aplicación de conceptos y planteamientos propios de la filosofía política, considerando su relevancia para el análisis y esclarecimiento de los valores que rigen la convivencia y el ejercicio de la ciudadanía democrática.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Identificar y apreciar la dimensión estética y emocional de las acciones, creaciones y experiencias humanas, tanto en el arte como en otros ámbitos de la cultura y la vida, reconociendo su influencia sobre nosotros, y analizando su naturaleza y significado, especialmente en el contexto de la cultura audiovisual contemporánea.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer la relevancia, la dimensión antropológica y los orígenes históricos de las cuestiones e ideas filosóficas, mediante su identificación en el mundo de la vida cotidiana y en diversos documentos, contextos y culturas, considerando el papel de las filósofas y otros colectivos tradicionalmente marginados en la expresión e investigación de las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Distinguir y relacionar el saber filosófico con respecto a otras formas de saber, explicando sus características singulares y analizando críticamente su papel, vigencia y sentido para gestionar la propia incertidumbre, tratar problemas de carácter esencial y existencial, y afrontar los retos del siglo XXI.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Diseñar y realizar trabajos y actividades propias a la investigación, tanto individual como grupal, sobre temas y problemas con relevancia filosófica, mediante el uso, análisis, organización e interpretación información extraída de distintas fuentes y dada en diferentes soportes, especialmente en entornos digitales, y la elaboración rigurosa de hipótesis propias al respecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Exponer de modo público el resultado de trabajos y actividades de investigación, demostrando el dominio de la disertación, del diálogo y de la argumentación filosófica y adoptando una actitud deliberativa y autocrítica en relación con las propias ideas y opiniones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar, valorar y construir argumentos racionales de diverso tipo, distinguiendo falacias, sesgos, afirmaciones dogmáticas, bulos y estrategias de desinformación, en contextos tanto académicos como informales, y especialmente en el ámbito de los medios y redes digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Inquirir sobre cuestiones filosóficas, intercambiando ideas y opiniones, y resolviendo conflictos y controversias al respecto, demostrando una actitud empática, tolerante y constructiva, a través del uso del diálogo en orden a las pautas procedimentales, lógicas, éticas y retóricas que le corresponden,",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar y exponer problemas e ideas relativos a la comprensión de la naturaleza, estructura, origen y sentido de la realidad, mediante el análisis de conceptos y problemas ontológicos y metafísicos básicos, y considerando críticamente diversas teorías filosóficas y científicas al respecto.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Elaborar una investigación interdisciplinar acerca de las diversas concepciones antropológicas del ser humano, así como sobre las dimensiones de la personalidad y la psique humana, a través del análisis e interpretación de fuentes diversas y la reflexión en torno al problema de la identidad humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconocer y explicar la dimensión social de la naturaleza humana, a través de la investigación, el diálogo y la realización de actividades cooperativas en las que se traten cuestiones referidas a la socialización humana, la comunicación, las relaciones interpersonales y la conducta grupal, reflexionando acerca de actitudes y valores como la autoestima, el respeto, la equidad o la solidaridad.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Reflexionar sobre la validez de las propias ideas y creencias a partir de la articulación expresa de un discurso propio acerca de las condiciones, límites y propiedades relativas al conocimiento, los distintos modos de saber y la relación entre ellos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Investigar y explicar las principales características y problemas filosóficos relacionados con el conocimiento científico, a través del análisis de ejemplos cercanos a la experiencia del alumnado, y el diálogo acerca de los límites y consecuencias del desarrollo tecnológico.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer y analizar críticamente los procesos de producción y organización de la información, identificando y aplicando criterios con los que detectar fenómenos relativos a la manipulación informativa y la posverdad en entornos cotidianos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Identificar y caracterizar la dimensión normativa y moral de los problemas prácticos, así como las principales tesis y cuestiones fundamentales de la ética filosófica, aplicando dicho conocimiento al esclarecimiento y justificación expresa del propio proyecto vital.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Plantear, analizar y exponer cuestiones éticas fundamentales y de actualidad, relacionadas con los derechos humanos y de la infancia, la igualdad de género, la diversidad cultural y personal, la libertad de expresión, las conductas de violencia y acoso o el maltrato animal, así como sobre los valores, retos y desafíos del siglo XXI, mediante el uso pertinente de conceptos, tesis y procedimientos propios de la ética, desarrollando un juicio propio al respecto y adoptando una actitud constructiva y dialogante con respecto a la pluralidad de ideas y opiniones.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Identificar, caracterizar y explicar la dimensión política de la naturaleza y la vida humana, así como las principales tesis y cuestiones fundamentales de la filosofía política, aplicando dicho conocimiento al análisis y comparación de distintos sistemas políticos y a la reflexión y el diálogo constructivo en torno a los principios, la legitimidad y los problemas de las democracias actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Plantear, analizar y exponer cuestiones políticas fundamentales y de actualidad relacionadas con los valores y principios democráticos, el problema de la desigualdad y la pobreza, las cuestiones ecosociales y el cambio climático, así como con las distintas formas de discriminación y violencia, mediante el uso pertinente de conceptos, tesis y procedimientos de la filosofía política, adoptando una actitud constructiva y dialogante con respecto a la pluralidad de ideas y opiniones, y valorando la participación ciudadana y la importancia de los movimientos sociales y políticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Identificar y analizar el carácter singular de la experiencia y las emociones estéticas a través de la investigación, fundada en fuentes fiables y en la propia experiencia, de la naturaleza del arte y su relación con la belleza, el juicio del gusto y la diversidad cultural humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Investigar, a través del análisis de ejemplos y casos prácticos, el poder de influencia de la dimensión estética en otros campos de la cultura, la experiencia y las acciones humanas, como son el del consumo, el diseño y la publicidad, la política, las relaciones sociales y, especialmente, en el ámbito de la cultura audiovisual contemporánea, reflexionando y dialogando acerca de los problemas éticos que se derivan de este poder de influencia.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. La actividad filosófica"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. La reflexión en torno a la vida humana"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Conocimiento, acción y creación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Las grandes preguntas filosóficas. Las ramas del saber filosófico. La filosofía como actividad y actitud común.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Los orígenes de la filosofía occidental. El pensamiento en la tradición oriental y en otras tradiciones culturales. La obra de las filósofas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Relaciones de semejanza y diferencia entre la filosofía y otras formas de responder a los interrogantes y desafíos humanos: el arte, la religión, la ciencia. La originalidad del saber filosófico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "La utilidad y sentido de la filosofía hoy. La importancia de filosofar en torno a los retos del siglo XXI.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "La composición y la crítica de argumentos. La detección de falacias y sesgos cognitivos. A.2. La práctica filosófica: el pensamiento crítico y el diálogo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "La identificación de dogmas y prejuicios. La demagogia y la propaganda. Los bulos y la manipulación de la información. El uso crítico, ético y responsable de las herramientas digitales, las redes sociales y los medios de comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "El diálogo filosófico como forma de conocimiento y de deliberación democrática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "El trabajo de investigación y la disertación filosófica. Otros modos de investigación y expresión filosófica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Naturaleza y sentido de la realidad. Apariencias y realidades. La realidad virtual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Organizar el mundo. Unidad y pluralidad. Categorías y modos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "El lugar del ser humano. Necesidad y libertad. El problema mente-cuerpo y los desafíos de la inteligencia artificial. El debate sobre el transhumanismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La génesis humana: el debate entre naturaleza y cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Cuerpo y mente. El cuerpo y la sensibilidad. Sexo y género. B.2. La B.2.3. Los sentimientos y las emociones. La inteligencia emocional. personalidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Los deseos y la voluntad. El comportamiento moral. humana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "La inteligencia. El problema de su comprensión y medida. La teoría de las inteligencias múltiples. El papel de la memoria, la creatividad y el lenguaje. El enigma de la consciencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "El ser humano como ser social. Educación y grupos de pertenencia. La diversidad social, familiar, etnocultural y afectivosexual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La percepción y comunicación interpersonal. La amistad y el.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Cooperación y agresión. Las conductas de odio. La prevención del acoso, el ciberacoso y las situaciones de violencia en las redes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Formación, estructura y funcionamiento en los grupos. Las relaciones de poder. La resolución pacífica de conflictos y la toma democrática de decisiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Otras formas de saber: el saber cotidiano, la expresión la verdad. artística, las creencias religiosas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Ser y deber ser. Normas, valores y sistemas morales. La diferencia entre moralidad, legalidad y normas cívicas. La objeción de conciencia. El propio proyecto vital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La diversidad de valores y el debate en torno al relativismo. La posibilidad de una ética universal de mínimos. Diversas propuestas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Cuestiones éticas fundamentales y de actualidad: la igualdad entre hombres y mujeres y la prevención de la violencia de género; el reconocimiento de la diversidad cultural y personal; el uso responsable de los medios y redes de comunicación; el desarrollo sostenible y la ciudadanía mundial; el debate en torno a los derechos animales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Naturaleza y necesidad de la política. Los distintos sistemas políticos. C.3. La convivencia política y el problema de la justicia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La justicia y la legitimidad del poder. Las teorías políticas y la reflexión crítica en torno a la democracia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Los problemas políticos de nuestro tiempo: la desigualdad y la pobreza; la guerra y otras formas de violencia; la igualdad de género y la discriminación de las minorías; las cuestiones ecosociales y el cambio climático.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "La sociedad civil y la opinión pública. El ejercicio participativo de la ciudadanía democrática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Movimientos sociales y políticos. El voluntariado. Utopías y distopías.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "La naturaleza, significado y valor de la experiencia y la C.4. La emoción estética. El arte, la belleza y el gusto. creación y la.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "La dimensión estética y el papel de las imágenes en la cultura estética. y la sociedad contemporánea. Ética, política y estética. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II), nos permiten dar respuesta al cómo enseñar y evaluar, que retomamos a continuación en relación a esta materia. Las situaciones de aprendizaje constituyen una sección esencial de aquellas acciones educativas que están orientadas desde un enfoque competencial. Los contextos de enseñanza que se despliegan en el aula han de resultar efectivos para la movilización de los intereses académicos y para el progresivo desarrollo de conocimientos y capacidades personales y ciudadanas del alumnado. Las intenciones educativas que han sido planificadas han de quedar configuradas en las diferentes actuaciones para el aprendizaje, guardar la necesaria coherencia para la adquisición de las competencias de la materia y el logro de los objetivos de la etapa, y mantenerse en consonancia con las características particulares de los saberes y los perfiles cognitivos y motivacionales del alumnado. Las situaciones de aprendizaje, acordes con el Diseño Universal para el Aprendizaje (DUA), conforman escenarios que conjugan formatos y soportes diversos y sugestivos para las tareas, sobre los que representar conocimientos que puedan alcanzar sentido en otros dominios. Así mismo, han de ofrecer al alumnado la posibilidad de participar en la elección de recursos, acciones y actividades que favorezcan su implicación a partir de conocimientos previos, de manera que se produzcan aprendizajes significativos y, de esta manera, se impulse la motivación, el interés y las interacciones afectivas adecuadas. Introducción a la Filosofía se oferta como materia optativa en la etapa superior de la Educación Secundaria Obligatoria. En concordancia con su carácter propedéutico, los aspectos metodológicos de la disciplina se han de concentrar no tanto en la exposición programática de temas y cuestiones sino, más bien, en la aportación de aquellos contenidos imprescindibles y básicos desde los que generar en el alumnado una diversidad de interrogantes filosóficos que inviten a la búsqueda, a la evaluación crítica de las diversas respuestas que se le han dado y a la construcción de sus propios posicionamientos personales. Que sea el propio alumnado el que elija, fundamente y construya sus propias consideraciones filosóficas es, además, la clave para que se dé una praxis consecuente con dichos posicionamientos y una reflexión que pueda orientar realmente su vida personal, social y profesional. En este sentido, el trabajo de aula habrá de considerar la naturaleza propiamente dialógica, participativa e interdisciplinar de la reflexión filosófica, desde una perspectiva creativa y comprometida con problemas de relevancia para el alumnado, de manera que se procuren, más allá de la formación académica, las condiciones y aprendizajes para el desarrollo de la propia personalidad y el ejercicio autónomo de la ciudadanía. La materia, desde su repertorio de saberes básicos, competencias específicas y conexiones competenciales con otras áreas, presenta las condiciones idóneas para establecer situaciones de aprendizaje desde las que complementar y profundizar en los conceptos, procedimientos y actitudes de materias como Educación en Valores Cívicos y Éticos o Formación y Orientación Personal y Profesional, entre otras, abordando desde planteamientos antropológicos, éticos y políticos los retos más relevantes vinculados a los desafíos del siglo XXI (el desarrollo sostenible, el consumo responsable, la asunción crítica y ética de la cultura global digital, el rechazo a toda discriminación y violencia, el aprecio de la diversidad personal y cultural y de la igualdad y cohesión social), utilizándolos como ejes vertebradores de las actividades de aprendizaje. Por otra parte, la interdisciplinariedad constituye un elemento fundamental para considerar estas y otras cuestiones como lugar donde confluyen aspectos filosóficos vinculados al ámbito lingüístico y al de las ciencias naturales, humanas y sociales, así como a las tecnologías y a las artes. A su vez, la reflexión filosófica permite integrar conocimientos y ejercitar competencias de la propia materia trasladándolos a aquellos contextos individuales, cotidianos, académicos, culturales y sociales en las que se ejercen regularmente. En las situaciones de aprendizaje se configuran de forma práctica las diferentes competencias que propician la creciente autonomía intelectual y la adecuada madurez emocional del alumnado. Para ello se precisa introducir progresivamente al alumnado, de forma individual o mediante agrupamientos para el aprendizaje compartido, en el uso de procedimientos que ayuden a la formulación de preguntas filosóficas, originadas desde las experiencias personales del entorno familiar y grupal, y provenientes, en ocasiones, de incertidumbres surgidas en contextos globales que trascienden el contexto escolar y abarcan situaciones cotidianas diversas. Estos interrogantes se encuadran en el marco didáctico de la filosofía y del pensamiento crítico, y se pueden tratar de múltiples maneras: mediante el diálogo filosófico, en el que, además, se promueva la expresión oral y la simulación de experimentos filosóficos; a través de la lectura y análisis de fragmentos filosóficos u otros tipos de textos escritos o visuales susceptibles de interpretación filosófica; con la elaboración de párrafos y de producciones breves que permitan la progresiva confección de textos argumentales escritos en forma de disertaciones, o mediante el análisis y la producción de documentos y realizaciones presentados en otros lenguaje, tal como los digitales, el propio a las recreaciones dramáticas o el que corresponda en cualquier otro soporte plástico o estético que resulte relevante. Igualmente, se hace preciso el fomento de las prácticas de argumentación formal e informal para la detección de falacias, de distorsiones cognitivas y de ciertas cargas emocionales inmersas en el lenguaje al uso, que se presentan en las interacciones comunicativas cotidianas, en las redes sociales, en las noticias, en las discusiones públicas de todo ámbito o en el entorno, entre otros, de la publicidad. El trabajo colaborativo constituye sin duda una propuesta necesaria para la interacción grupal, en la que los aspectos cognitivos y socioemocionales pueden confluir en el aprendizaje competencial. La investigación grupal sobre temáticas filosóficas variadas para su posterior presentación en diferentes formatos, disertaciones y debates, recabando la posible información y colaboración de asociaciones o agentes sociales, y con apertura a juegos participativos o dinámicas grupales, constituye un aliciente especial en el que los alumnos y las alumnas asumen el papel protagonista que les proporciona una experiencia diferenciada y motivadora en sus prácticas de aprendizaje. También la confección progresiva de glosarios filosóficos y proyectos expositivos, elaborados desde planteamientos grupales cooperativos amplían las posibilidades conceptuales y las interacciones colaborativas y afectivas, dotando al alumnado de herramientas útiles para un aprendizaje filosófico que, además, les pueden resultar útiles para afrontar estudios superiores. Para contribuir directamente a este enfoque metodológico resulta del todo idóneo la utilización de técnicas didácticas de probada eficacia como el Visual Thinking, el aprendizaje basado en proyectos (ABP), el aprendizaje basado en juegos (GBL), las estrategias de gamificación, el aprendizaje experiencial o escape room educativo, las pautas didácticas que comprende la Filosofía para Niños, o la práctica y el aprendizaje de la filosofía a través de la participación activa en los medios de comunicación. Se debe entender, en cualquier caso, que en los procesos de aprendizaje se ha de hacer uso, de modo crítico, responsable y ético, de las TIC. El papel del docente resulta determinante en todas las situaciones de aprendizaje. Ha de actuar como mediador imprescindible, orientando y conduciendo los procesos de aprendizaje para que el alumnado gane en autonomía y motivación a través de las situaciones propuestas. Se precisa así de un andamiaje fundado en cierta actitud o estilo docente que, lejos de adoctrinar o limitarse a referir información, se preste, desde una posición lo más aséptica posible, a estimular y reconducir el proceso por el que el alumnado desarrolla sus propios juicios y su autonomía personal y académica. Además, ha de elevar las preguntas o reflexiones que se plantea el alumnado al nivel crítico adecuado, contribuyendo a su interpretación en forma de desafíos individuales y universales y proporcionando en todo momento la retroalimentación necesaria para el adecuado desarrollo de las actuaciones y actividades. La evaluación constituye un elemento esencial en el diseño de las situaciones de aprendizaje. Los diversos procedimientos y la variedad de instrumentos para implementarla han de ajustarse a la variabilidad de situaciones y peculiaridades del alumnado, así como favorecer su participación crítica y responsable, teniendo en cuenta las peculiaridades de la materia, su grado de abstracción, la naturaleza de sus contenidos o el modo dialógico que caracteriza a la tarea filosófica. Dado que las actividades serán diversificadas, deberían serlo también los instrumentos con los que se pretenda llevar a cabo la evaluación de los aprendizajes. En cualquier caso, los tipos (heteroevaluación, coevaluación o autoevaluación) y los instrumentos de evaluación propuestos no solo han de aplicarse a la estimación del desarrollo y adquisición de los aprendizajes competenciales por parte del alumnado, sino también a la valoración de la propia eficacia competencial de la situación de aprendizaje y su implementación en el espacio educativo, con objeto de ajustar su diseño y aplicación. Así, además de las herramientas propias a la evaluación del alumnado (rúbricas, listas de comprobación, memorias, escalas de observación sistemática, entrevistas, presentaciones, revisión de trabajos, ejercicios, portfolios, etc.), conviene especificar aquellas otras que puedan utilizarse para la evaluación del propio proceso y situaciones de aprendizaje, incluyendo el desempeño de la función docente.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -745,8 +745,10 @@ edumind_miclase/
   matrices llega roto). Las carpetas que empiezan por `_` no son
   comunidades. `pruebas/conexiones.test.mjs` exige a cada comunidad y etapa
   de `curriculum/` un 85 % de competencias específicas con descriptor (90 %
-  con algo en Valencia Primaria): una comunidad nueva sin «Enlaces» falla
-  ahí. `/api/curriculum/criterios` añade a cada criterio `descriptores`,
+  con algo en Valencia Primaria), en total o contando solo las materias que
+  el RD tiene (las optativas propias sin «Enlaces» no pueden casar con el
+  estatal: Extremadura ESO da 84 % y 90 %; decisión de Luis, nov 2026): una
+  comunidad nueva sin «Enlaces» falla ahí. `/api/curriculum/criterios` añade a cada criterio `descriptores`,
   `competencias_clave` y `conexion_origen` (campos nuevos: nadie más los
   necesita), y `/api/curriculum/descriptores` da el catálogo de la etapa. Es
   dato público del servidor: no hay esquema Dexie nuevo. Tras cambiar el

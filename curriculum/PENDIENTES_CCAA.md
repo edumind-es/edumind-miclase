@@ -56,3 +56,64 @@ Pendiente (huecos de la fuente; hay que sacarlos del decreto asturiano):
 - **Matemáticas 1.º, 2.º y 3.º sin saberes.** El «Toda la etapa» trae 270 saberes de
   todos los cursos mezclados, sin marca de curso: no se reparten a ojo.
 - **Educación Física 3.º y 4.º sin saberes.** El «Toda la etapa» solo repite los de 1.º-2.º.
+
+### Descriptores (`pruebas/conexiones.test.mjs`)
+Primaria 95 % conectada, ESO 88 % (mínimo 85 %). Sin «Enlaces» en origen y sin
+competencia específica estatal con la que casar: Lengua Asturiana y Literatura
+(las dos etapas), Proyecto de Emprendimiento Social o Empresarial y Taller de
+Economía Aplicada (optativas propias), y Filosofía y Educación en Valores Cívicos y
+Éticos de ESO. Lengua Castellana de ESO tampoco trae «Enlaces» y la cubre la
+reserva estatal.
+
+## Extremadura (`Extremadura`)
+
+Las matrices no traen descriptores en «Enlaces» y el decreto tampoco vincula cada
+competencia específica con ellos: la conexión sale toda de la reserva estatal.
+
+Los cursos se comprueban contra el decreto (Decreto 110/2022 de ESO,
+`SECUNDARIA/22040165C.pdf`, y el de Primaria, `PRIMARIA/22040159C.pdf`): cada tanda de
+criterios se busca pegada a su «Criterio X.Y.» y toma el encabezado de curso que el
+decreto le pone encima. Así, materias que el fichero daba como «Toda la etapa» quedan
+en su curso real (Digitalización, Economía y Emprendimiento, Expresión Artística, FOPP e
+Introducción a la Filosofía en 4.º; Valores Cívicos y Emprendimiento Social en 2.º;
+Cultura Clásica en 3.º; Unión Europea en 3.º o 4.º).
+
+### Primaria — importada
+7 áreas, 38 JSON. Valores Cívicos en 5.º y 6.º.
+
+Hecho al importar:
+- Educación Artística: el fichero «Primer ciclo» trae dos tandas (primer y segundo
+  ciclo); repartidas por el decreto.
+- Descartadas competencias específicas que no lo son (saberes colados al extraer):
+  CE1978 en Conocimiento del Medio; CE999 y CE9999 en Matemáticas.
+
+Pendiente:
+- **Educación Artística 1.º-4.º sin saberes**: la matriz da una sola lista para las
+  dos tandas, sin curso.
+
+### Secundaria — importada
+25 áreas (27 con Matemáticas A y B), 62 JSON.
+
+Hecho al importar:
+- Nueve áreas traían en un solo fichero varias tandas de criterios con los mismos
+  códigos (una por grupo de cursos). Repartidas por el decreto: Biología y Geología
+  (1.º y 3.º | 4.º), Educación Física, Geografía e Historia, Lengua Castellana, Lengua
+  Extranjera y Segunda Lengua (1.º-2.º | 3.º-4.º), Física y Química (2.º-3.º | 4.º),
+  Música (1.º-2.º | 4.º) y Matemáticas (1.º-3.º | 4.º A | 4.º B).
+- Descartada la competencia específica CE112 «Pautas.» de Educación Física.
+
+Pendiente:
+- **Sin saberes las nueve áreas repartidas.** La matriz da una sola lista sin curso y
+  la madre los etiqueta mal (pone «Segundo ciclo» a saberes que el decreto da en 1.º-2.º).
+  En el decreto están en tablas a dos columnas con el curso en el código
+  (A.1.**2**.1 = 1.º-2.º, A.1.**4**.1 = 3.º-4.º): se pueden sacar de ahí.
+- **Criterios que el decreto trae y la matriz no**: Biología 4.º CE3.6; Lengua
+  Castellana 3.º-4.º CE3.3; Matemáticas A CE2.1 y CE3.4; Matemáticas B CE2.1, CE3.4,
+  CE5.1, CE5.2, CE7.2, CE8.1, CE8.2 y CE10.1.
+- **Sin curso en el decreto**, se quedan en los cuatro cursos del fichero: Latín
+  (solo la introducción dice «al finalizar cuarto de ESO») y los dos Ámbitos.
+- **Descriptores**: 84 % conectado, por debajo del 85 % de `conexiones.test.mjs`.
+  Contando solo materias del RD, 90 %. No conectan las optativas propias (Cultura
+  Clásica, Unión Europea, Introducción a la Filosofía, Emprendimiento Social y
+  Sostenibilidad, Digitalización Básica) ni algunas CE que Extremadura reescribió
+  (EF CE5, Biología CE6-CE7, Plástica…).

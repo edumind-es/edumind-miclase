@@ -1,0 +1,421 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "union-europea",
+    "asignatura_nombre": "Unión Europea",
+    "ciclo_origen": "Tercero o cuarto de ESO",
+    "fuente": "Extremadura · Secundaria · Unión Europea · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender y valorar el proceso de integración europea y el papel de las leyes e instituciones de la Unión Europea en el funcionamiento de los Estados que la componen, así como en la construcción de la propia identidad como ciudadanos europeos en un contexto de diversidad cultural.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Analizar críticamente y argumentar con talante constructivo, tolerancia y respeto, sobre los retos que afectan a la Unión Europea, desde una perspectiva cívica e intercultural, aterrizando en sus implicaciones en el ámbito académico, familiar, social y cultural.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Contribuir a la cohesión social y al sentimiento inclusivo de pertenencia a la Unión Europea, asumiendo los valores comunes de la ciudadanía europea, con una actitud positiva hacia la movilidad y la interacción con personas de otros países.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer y valorar la diversidad cultural y la idiosincrasia propia de cada Estado, para establecer vínculos entre su huella histórica y cultural y los retos y problemas actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar la diversidad existente en el contexto europeo y asimilar que conceptos como unión, cohesión y diversidad son compatibles.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Demostrar la capacidad para interactuar con información sobre el contexto europeo, evidenciando competencia a la hora de seleccionar y discriminar dicha información para proyectos y acciones encaminados a la comprensión y divulgación de la Unión.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Presentar y exponer, con claridad y coherencia, las ideas que promuevan activamente la educación para la ciudadanía y que busquen el desarrollo de competencias interculturales, cívicas y sociales relacionadas con los valores de la UE.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la importancia de un uso responsable de la información obtenida a través de Internet y las redes sociales, analizando su fiabilidad, validez e implicaciones éticas a la hora de su utilización responsable en debates y exposiciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Proponer ideas y soluciones originales, viables y sostenibles que puedan responder a necesidades detectadas en distintos ámbitos y retos que afectan a la UE, conociendo y seleccionando aquellas estrategias de comunicación que se adecuen al contexto y a los objetivos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Reflexionar individualmente sobre la presencia e importancia de los valores, así como reconocer y poner en común las posibilidades y acciones que como ciudadanos puedan sumar para lograr una mayor cohesión social.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer y considerar la importancia de los valores comunes a la hora de afrontar los retos actuales y futuros de la UE, sobre los que determinar líneas e itinerarios conjuntos para poder afrontarlos",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar las tensiones y problemas de la Unión y analizarlos, desde la perspectiva del cumplimiento de los valores fundacionales, de una forma argumentada desde las diversas visiones, con el fin de generar debates y trabajar la resolución dialógica de conflictos.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Contexto de la Unión Europea. Ciudadanía"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Derechos y deberes: nuestro lugar en el seno de la Unión"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Recursos para ejercer una ciudadanía activa"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El entorno europeo. De los orígenes de la UE a la situación geopolítica y humana actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Concepto de ciudadanía de la Unión Europea. La.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Las políticas de la UE y el impacto de las mismas en la vida de los ciudadanos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Las políticas de cohesión y los fondos europeos: reparto por regiones, efectos y logros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La Delegación de Extremadura en Bruselas y sus funciones. Los centros de información y documentación europea en Extremadura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Los fondos europeos en Extremadura. Tipos, uso UE. y logros de los mismos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Extremadura en la UE a través de los datos de Eurostat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Compromisos de la Unión Europea: la.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Papel de la UE como motor de desarrollo e innovación. Los programas científicos-tecnológicos en el campo de la investigación, innovación y desarrollo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Recursos y oportunidades para estudiantes y jóvenes. C.1. Recursos y.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Los programas europeos (eTwinning, Erasmus+, herramientas que ofrece la Escuelas Embajadoras del Parlamento Europeo, UE a la ciudadanía y a la Programas Transfronterizos). juventud.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Redes y portales europeos. Conocimiento y uso de los mismos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Recursos existentes a la hora de planificar un itinerario formativo o laboral en el contexto europeo. Reconocimiento e identificación de los mismos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Recursos en red. Acceso y uso. la Unión Europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La movilidad en la UE como oportunidad formativa y laboral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "La cultura europea y su patrimonio cultural. Características culturales de los Estados miembros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Personalidades célebres en las distintas C.3. Manifestaciones modalidades artísticas y socioculturales. culturales en la UE.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Formas y estilos de vida de la población en los distintos países.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "La era de la desinformación. Estereotipos asociados a la población de los Estados miembros. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II), nos permiten dar respuesta al cómo enseñar y evaluar, que retomamos a continuación en relación a la materia de Unión Europea. El punto de partida para generar una situación de aprendizaje eficaz requiere de un conjunto de actividades o tareas que contribuyan a la adquisición y desarrollo de las competencias específicas de esta materia a lo largo del curso académico. Para ello, se procederá a crear un contexto donde se den múltiples interacciones. El profesorado debe planificar tales situaciones teniendo muy presentes las bases del aprendizaje dialógico como son la inteligencia cultural, la creación de sentido, la dimensión instrumental y el diálogo igualitario. En su planificación y desarrollo, las situaciones de aprendizaje deben favorecer la presencia, participación y progreso de todo el alumnado a través del Diseño Universal para el Aprendizaje (DUA), garantizando la inclusión. Estos principios, relacionados con las diferentes formas de implicación, de representación de la información y acción y expresión del aprendizaje, se vertebran en los elementos que aquí se enuncian. Durante la acción didáctica, se aplicarán principios pedagógicos centrados en la participación de todo el alumnado, favoreciendo el uso de metodologías activas en combinación con la ayuda del docente mediante la práctica guiada, la instrucción directa y el apoyo graduado para atender a las diferencias individuales. Por ejemplo, una misma situación de aprendizaje puede combinar una parte expositiva con dinámicas de trabajo individual, trabajo en grupos cooperativos y debates, priorizando en todo momento que el alumnado sea protagonista de su aprendizaje, marcando sus objetivos, tomando decisiones, permitiéndole la elección de recursos y actividades o entrenando procesos cognitivos y emocionales de diferente complejidad y reflexionando sobre su propia acción como aprendiz. Los recursos y materiales didácticos que se utilicen permitirán diferentes formas de representar la información, combinando actividades digitales con analógicas. En los trabajos grupales se fomentará un clima de confianza. Es muy importante la asignación de la función que haya que desempeñar, los planteamientos para multiplicar en número y tipo las interacciones con los compañeros y las compañeras, así como con el profesorado, pues esto permitirá diversos niveles de aprendizaje acordes a la diversidad del aula. Así, las interacciones favorecerán el aprendizaje entre iguales e incluso niveles superiores de aprendizaje social en el alumnado ayudante. Por ello es importante que el profesorado planifique correctamente las interacciones en el aula, pues son la base de la cohesión grupal, los aprendizajes individuales, la consecución de las diversas competencias (lingüística, digital, emprendedora, etc.), el fomento del pensamiento crítico y creativo o la resolución de problemas, a la par que contribuyen al desarrollo socioemocional y la motivación. Se podrán sumar, cuando sea posible, agentes externos que doten a la materia de interacciones de aprendizaje nuevas y de calidad. Una gran parte de los saberes básicos han sido tratados anteriormente por las alumnas y los alumnos en otras materias a lo largo de la Educación Secundaria Obligatoria. Por ello debemos procurar un tratamiento más detallado e interdisciplinar de estos saberes, con la pretensión de convertir la información en conocimiento. El profesorado debe animar al alumnado a utilizar sus habilidades y destrezas de pensamiento, planificando actividades que favorezcan un pensamiento eficaz y profundo y, en consecuencia, la comprensión e interiorización de la información para utilizarla en diferentes contextos, sean o no educativos. Sin duda, la utilización de diferentes medios de acción y expresión, tanto en actividades de aprendizaje como de evaluación, ayudará a garantizar la personalización del aprendizaje. El desarrollo de los saberes se contextualiza en el marco de la UE. Dentro de estos saberes cobran especial relevancia aquellos relacionados con los retos del siglo XXI fomentados por la propia UE, tales como el respeto del medioambiente, el consumo responsable, la vida saludable, el compromiso ante la inequidad y la exclusión, la resolución pacífica de conflictos, la aceptación y el manejo incertidumbre, la valoración de la diversidad personal y cultural, el compromiso ciudadano (local y global), el conocimiento como el motor del desarrollo y la cultura digital (crítica, ética y responsable). La inteligencia cultural en esta materia es importante. Si únicamente tenemos presente los saberes básicos y no son complementados por el entorno y lo local, se desaprovechan muchos recursos. La comprensión y adquisición de las competencias específicas pasa porque el alumnado perciba y entienda los cambios experimentados en los pueblos, en las empresas y en los ciudadanos y ciudadanas extremeños y extremeñas a raíz de la adhesión de España en la UE. Por ello, es de suma importancia interactuar con agentes externos a lo largo del curso escolar. Además, esta materia está íntimamente ligada a los proyectos de internacionalización. Determinadas competencias específicas se alcanzarán de forma mucho más destacada si los centros participan en proyectos o redes con otros centros escolares, pues es de la interacción con personas de contextos y países diferentes de donde el alumnado va a obtener experiencias que multipliquen los conocimientos y la adquisición de los valores europeos. De este modo, el alumnado percibirá mayor sentido y dimensión instrumental de la materia, pues le posibilitará ir de lo local al ámbito europeo. Por otro lado, para conseguir aprendizajes significativos se tratarán problemas concretos y reales que conecten con los intereses y experiencias del alumnado y, así, desarrollar su pensamiento analógico (planteamiento de los problemas a partir del conocimiento previo adquirido, buscando analogías que ayuden a construir el nuevo conocimiento) y el pensamiento crítico. En estas situaciones, la comunicación, colaboración o la resolución dialogada deben estar siempre presentes. Esta materia permite plantearse la realización de determinadas actividades extraescolares y complementarias, como pueden ser las visitas a instituciones, intercambios entre centros dentro de España, la creación de redes de centros para intercambio de información, los viajes a las sedes de las instituciones europeas, los concursos acerca del conocimiento de los alumnos sobre la UE, las simulaciones de sesiones parlamentarias y otras posibilidades, como la impartición en una lengua extranjera que, dentro de las previstas en el sistema educativo, funcione como lengua oficial en la UE o la participación en proyectos destinados a conocer las semejanzas y diferencias entre los países miembros, para permitir que el alumnado ponga en valor un aprendizaje contextualizado. El uso de las tecnologías de la educación ayudará al docente a ampliar las opciones de aprendizaje, minimizando barreras, ofreciendo una atención personalizada y sirviendo de elemento compensador de desigualdades en relación con las distintas capacidades del alumnado. Por último, para la selección de instrumentos de evaluación se optará por diferentes procedimientos o herramientas que permitan formas variadas de acción, expresión y comunicación por parte del alumnado, focalizados en habilidades, capacidades y posibilidades diversas del alumnado que contribuyan al desarrollo competencial. Este proceso de implicación puede abarcar desde la autoevaluación a la coevaluación y la evaluación compartida. El uso de rúbricas de evaluación ayudará en el planteamiento y organización de estas actividades prácticas, a la vez que servirá para obtener retroalimentación con la que modificar o alterar las situaciones planteadas en caso de no alcanzar lo que se pretende.",
+      "criterios_ids": []
+    }
+  ]
+}
