@@ -27,7 +27,7 @@ function etiquetaTrimestre(t: number) {
   return t === 1 ? '1er trimestre' : t === 2 ? '2º trimestre' : '3er trimestre'
 }
 
-function subtituloGrupo(d: DatosGrupo) {
+export function subtituloGrupo(d: DatosGrupo) {
   const etapa = d.grupo.etapa === 'primaria' ? 'Educación Primaria' : 'Educación Secundaria'
   return `${d.grupo.nombre} · ${d.grupo.curso}º de ${etapa} · Curso ${d.grupo.curso_escolar}`
 }
