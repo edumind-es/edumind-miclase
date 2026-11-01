@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { comprimirImagen, revisarTamano, LIMITE_EVIDENCIA, type AvisoEvidencia } from '@/db/queries'
 import type { TipoEvidencia } from '@/db/localDb'
+import { verEvidencias } from '@/db/datosSensibles'
 
 export type EvidenciaCapturada = {
   tipo: TipoEvidencia
@@ -161,6 +162,9 @@ export default function CapturaEvidencia({ onCapturada, compacto, deshabilitado 
     setGrabando(false)
     setTranscurrido(0)
   }
+
+  // Con las evidencias apagadas en este aparato no se ofrece capturar
+  if (!verEvidencias()) return null
 
   const alto = compacto ? 42 : 46
   const btn: React.CSSProperties = {

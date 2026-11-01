@@ -91,8 +91,8 @@ edumind_miclase/
   `miclase.buzon.cerrado` para que `diagnostico()` de la copia no cuente el
   buzón. Un servidor sin la ruta (404) cuenta como abierto. No se toca
   `routes/auth.js`. Decisión de Luis (oct 2026): el buzón es un añadido, la
-  app es local; se cierra en producción cuando sus aparatos tengan la copia
-  en carpeta y el enlace directo (DESPLIEGUE.md, «Cerrar el buzón»).
+  app es local. **Cerrado en producción desde el 1/11/2026**, vaciado antes
+  sobre una copia (DESPLIEGUE.md, «Cerrar el buzón»).
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
@@ -702,6 +702,22 @@ edumind_miclase/
   cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
   el endpoint de programación y los proveedores: si cambia alguno, se
   actualiza allí con fecha.
+- **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
+  nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
+  docente los enciende en Alumnado (`AjustesDatosSensibles`,
+  `[data-datos-sensibles-toggle]`, `[data-sensible="neae"|"evidencias"]`,
+  con `confirm`). La primera resolución (`resolverDatosSensibles`, en `Layout`
+  de `App.tsx`) los deja encendidos si el aparato ya tenía alumnado con NEAE
+  o evidencias, para que actualizar no esconda nada; desde ahí manda la
+  elección, guardada en `miclase.sensibles` (preferencia del aparato, no se
+  sincroniza). Apagar solo esconde: el sello (`verNeae()` en cada pantalla y
+  en `informes/documentos.ts`), la casilla de la ficha, la galería, la
+  captura (`CapturaEvidencia` devuelve null con `verEvidencias()` falso) y
+  las evidencias de los informes. Guardar una ficha con NEAE escondido
+  conserva el indicador. Las pruebas que capturen evidencias las encienden
+  antes (`e2e.test.mjs` escribe `miclase.sensibles` y lanza
+  `miclase:sensibles`). Motivo: art. 9 RGPD y arts. 17.4 y 31.5 del
+  anteproyecto de Lei de educación dixital.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un

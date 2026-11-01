@@ -8,6 +8,7 @@ import { urlPublica } from '@/api'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import PlanoClase from '@/components/PlanoClase'
+import { verNeae } from '@/db/datosSensibles'
 
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
@@ -440,7 +441,7 @@ function ListaAlumnado({ grupo, modoAnon, onToggleAnon }: {
             ) : (
               <div style={{ fontWeight: 600 }}>{a.apellidos}, {a.nombre}</div>
             )}
-            {a.neae ? <span style={{ fontSize: 11, color: 'var(--ambar-500)', fontWeight: 600 }}>NEAE</span> : null}
+            {a.neae && verNeae() ? <span style={{ fontSize: 11, color: 'var(--ambar-500)', fontWeight: 600 }}>NEAE</span> : null}
           </div>
         ))}
       </div>

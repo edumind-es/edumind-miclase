@@ -275,6 +275,7 @@ async function principal() {
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('convertir lo que ya hay en una familia en su primer hijo', 'node', ['pruebas/familias-convertir-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
+    await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)

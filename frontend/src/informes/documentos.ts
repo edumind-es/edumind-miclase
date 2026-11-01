@@ -13,6 +13,7 @@ import {
   type DatosGrupo, type EvidenciaInforme,
 } from './datos'
 import type { Alumno } from '@/db/localDb'
+import { verNeae } from '@/db/datosSensibles'
 
 const TRIM = [1, 2, 3]
 
@@ -195,7 +196,7 @@ export function informeIndividual(
       ['Clase', datos.grupo.nombre],
       ['Curso escolar', datos.grupo.curso_escolar],
       ['Áreas', String(conDatos.length)],
-      ...(alumno.neae ? [['Medidas', 'NEAE'] as [string, string]] : []),
+      ...(alumno.neae && verNeae() ? [['Medidas', 'NEAE'] as [string, string]] : []),
     ])}
     ${bloqueAsistencia}
 
@@ -325,7 +326,7 @@ export function actaArea(datos: DatosGrupo, asignaturaId: number, trimestre: num
   const filas = datos.alumnos.map(al => {
     const n = notasDeAlumno(datos, al.id!).find(x => x.area.asig.id === asignaturaId)!.nota
     return `<tr>
-      <td>${esc(al.apellidos)}, ${esc(al.nombre)}${al.neae ? ' <span class="sello" style="color:var(--lm-social-deep)">NEAE</span>' : ''}</td>
+      <td>${esc(al.apellidos)}, ${esc(al.nombre)}${al.neae && verNeae() ? ' <span class="sello" style="color:var(--lm-social-deep)">NEAE</span>' : ''}</td>
       ${trimestre
         ? celdaNota(n.trimestres[trimestre], true)
         : TRIM.map(t => celdaNota(n.trimestres[t])).join('') + celdaNota(n.final, true)}

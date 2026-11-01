@@ -18,6 +18,7 @@ import { esNativo } from '@/api'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { reunirDatosGrupo, evidenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
 import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea } from '@/informes/documentos'
+import { useDatosSensibles } from '@/db/datosSensibles'
 
 
 function normalizar(s: string) {
@@ -34,6 +35,9 @@ export default function InformesPage() {
   const [trimestre, setTrimestre] = useState<string>('')      // '' = curso completo
   const [conCriterios, setConCriterios] = useState(true)
   const [conEvidencias, setConEvidencias] = useState(true)
+  const sensibles = useDatosSensibles()
+  // Apagados en este aparato, ni evidencias ni sello NEAE salen en ningún documento
+  const evidenciasEnInforme = conEvidencias && sensibles.evidencias
   const [generando, setGenerando] = useState('')
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const importRef = useRef<HTMLInputElement>(null)
@@ -62,7 +66,7 @@ export default function InformesPage() {
   const opciones = { trimestre: trim, incluirCriterios: conCriterios }
 
   const conEvidenciasDe = async (alumnoId: number): Promise<EvidenciaInforme[]> =>
-    conEvidencias ? evidenciasDeAlumno(alumnoId) : []
+    evidenciasEnInforme ? evidenciasDeAlumno(alumnoId) : []
 
   // ── Generadores ──────────────────────────────────────────────────────
 
@@ -106,7 +110,7 @@ export default function InformesPage() {
     if (!datos) throw new Error('Sin datos')
     if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
     const mapa = new Map<number, EvidenciaInforme[]>()
-    if (conEvidencias) {
+    if (evidenciasEnInforme) {
       for (const al of alumnos) mapa.set(al.id!, await evidenciasDeAlumno(al.id!, 6))
     }
     return {
@@ -263,10 +267,10 @@ export default function InformesPage() {
             <input type="checkbox" checked={conCriterios} onChange={e => setConCriterios(e.target.checked)} />
             Detalle por criterio
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
+          {sensibles.evidencias && <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
             <input type="checkbox" checked={conEvidencias} onChange={e => setConEvidencias(e.target.checked)} />
             Incluir evidencias
-          </label>
+          </label>}
         </div>
       </div>
 

@@ -19,6 +19,7 @@ import ActualizacionApp from '@/components/ActualizacionApp'
 import SyncAutomatica from '@/components/SyncAutomatica'
 import CopiaAutomatica from '@/components/CopiaAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
+import { useDatosSensibles } from '@/db/datosSensibles'
 
 // El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
 // cada día con lo que se toca una vez por trimestre. Separarlo en dos bloques
@@ -73,6 +74,9 @@ function Layout() {
   const barra = usarBarra(pathname)
   const [exportOpen, setExportOpen] = useState(false)
   const [plegado, setPlegado] = useState(() => localStorage.getItem(K_PLEGADO) === '1')
+  // Resuelve al arrancar si NEAE y evidencias van encendidos en este aparato,
+  // y repinta todas las pantallas cuando el docente lo cambia en Alumnado
+  useDatosSensibles()
 
   useEffect(() => {
     localStorage.setItem(K_PLEGADO, plegado ? '1' : '0')

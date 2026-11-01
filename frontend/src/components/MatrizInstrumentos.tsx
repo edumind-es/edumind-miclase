@@ -15,6 +15,7 @@ import { faltaHerramienta } from './ElegirHerramienta'
 import { aplicaEnTrimestre } from '@/db/calculo'
 import type { CeldaInstrumento, MatrizEvaluacion } from '@/db/queries'
 import type { Alumno } from '@/db/localDb'
+import { verNeae } from '@/db/datosSensibles'
 
 export type Criterio = { id: string; descripcion: string }
 
@@ -403,7 +404,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
             <tr key={al.id}>
               <td className="col-alumno">
                 {al.apellidos}, {al.nombre}
-                {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
               </td>
               {columnas.map(col => {
                 const r = resumenCelda(matriz, al.id!, col, trimestre)

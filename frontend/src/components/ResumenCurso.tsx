@@ -19,6 +19,7 @@ import { agruparPorCompetencia, mediaDe } from '@/db/cobertura'
 import { familiasDelCurso, mediaEnCriterios, criteriosDelCurso, TRIMESTRES_CURSO, type Criterio, type FamiliaCurso } from '@/db/resumenCurso'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
+import { verNeae } from '@/db/datosSensibles'
 
 /** Lo que pide una casilla al pulsarla: qué nota y de qué trimestre (null = la final). */
 export type PeticionExplicacion = {
@@ -97,7 +98,7 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
   const alumnoTd = (al: Alumno) => (
     <td className="col-alumno">
       {nombre(al)}
-      {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+      {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
     </td>
   )
 
