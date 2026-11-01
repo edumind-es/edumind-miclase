@@ -55,6 +55,14 @@ REPARAR = {
     'Cl Sica': 'Clásica',
 }
 
+# Erratas del origen comprobadas contra la norma. Clave: (carpeta, slug de área,
+# código repetido, comienzo del texto) → código correcto. Solo lo verificado.
+CORRECCIONES = {
+    # RD 217/2022, Biología y Geología 1.º-3.º: «hábitos sostenibles» es 5.2 y
+    # «hábitos saludables» es 5.3; la matriz de Asturias pone 5.2 a los dos.
+    ('ASTURIAS', 'biologia-y-geologia', 'CE5.2', 'Proponer y adoptar hábitos saludables'): 'CE5.3',
+}
+
 ORDINALES = {
     'primer': 1, 'primero': 1, '1r': 1, '1er': 1, 'inicial': 1,
     'segundo': 2, 'segon': 2, '2n': 2, '2o': 2,
@@ -113,6 +121,25 @@ def cursos_de_ciclo(ciclo: str, etapa: str):
     return cursos
 
 
+def fundir(a: dict, b: dict) -> dict:
+    """Une dos trozos de la misma área y curso. Cada lista se une por id, sin
+    repetir; ante un id repetido manda el primero. Los criterios salen en el
+    orden de su competencia específica."""
+    out = dict(a)
+    for k in ('competencias', 'descriptores', 'objetivos', 'criterios', 'bloques', 'saberes'):
+        previos = {x['id']: x for x in a[k]}
+        out[k] = list(a[k]) + [x for x in b[k] if x['id'] not in previos]
+        if k in ('criterios', 'saberes', 'bloques'):
+            distintos = [x['id'] for x in b[k] if x['id'] in previos and previos[x['id']] != x]
+            if distintos:
+                out.setdefault('_choques', []).append(f"{k} {', '.join(distintos)}")
+
+    def orden(c):
+        return [int(n) for n in re.findall(r'\d+', c['id'])]
+    out['criterios'].sort(key=orden)
+    return out
+
+
 def etapa_de(ruta: Path) -> str:
     up = str(ruta).upper()
     if 'INFANTIL' in up:
@@ -120,6 +147,27 @@ def etapa_de(ruta: Path) -> str:
     if 'SECUNDARIA' in up or '/ESO/' in up:
         return 'secundaria'
     return 'primaria'
+
+
+NOMBRES_TS = Path(__file__).parent.parent / "frontend/src/components/nombresAreas.ts"
+
+
+def escribir_nombres_areas():
+    """Regenera el mapa slug → nombre de área que usa el frontend, con el
+    `asignatura_nombre` de todos los JSON que lo traen (los de este conversor)."""
+    nombres = {}
+    for f in sorted(OUT_ROOT.glob('*/*/*.json')):
+        meta = json.loads(f.read_text(encoding='utf-8')).get('meta', {})
+        if meta.get('asignatura_nombre'):
+            nombres.setdefault(meta['asignatura'], meta['asignatura_nombre'])
+    filas = ''.join(f"  {json.dumps(k)}: {json.dumps(v, ensure_ascii=False)},\n"
+                    for k, v in sorted(nombres.items()))
+    NOMBRES_TS.write_text(
+        "// Generado por scripts/parse_curriculum_ccaa.py: no editar a mano.\n"
+        "// Nombre legible de cada área de las comunidades incorporadas desde\n"
+        "// CURRICULOS_NUEVOS. El mapa manual de AsignaturasPanel manda sobre este.\n"
+        "export const NOMBRES_AREAS: Record<string, string> = {\n" + filas + "}\n",
+        encoding='utf-8')
 
 
 def main():
@@ -137,6 +185,7 @@ def main():
     )
 
     pendientes = []
+    avisos = []       # importado, pero con algo que conviene saber
     candidatos = []   # (asignatura, nombre, cursos, ruta, datos)
     for p in ficheros:
         partes = [x.strip() for x in p.stem.split(' · ')]
@@ -155,6 +204,12 @@ def main():
         if not datos['criterios']:
             pendientes.append((p.name, 'sin criterios (Tipo 3) en origen'))
             continue
+        for c in datos['criterios']:
+            for (carp, asig_c, cod, inicio), nuevo in CORRECCIONES.items():
+                if (carp == carpeta and asig_c == slug(area) and c['id'] == cod
+                        and c['descripcion'].startswith(inicio)):
+                    c['id'] = nuevo
+                    avisos.append(f'{area} ({ciclo}): {cod} «{inicio}…» corregido a {nuevo} (errata del origen)')
         candidatos.append((slug(area), area, ciclo, cursos, p, datos))
 
     # Matemáticas A y B de 4.º son materias distintas: el ciclo lo dice
@@ -168,8 +223,11 @@ def main():
     # «Toda la etapa» suele ser la unión de los ciclos: solo se usa si el área
     # no trae ficheros por ciclo o curso.
     con_ciclos = {c[0] for c in candidatos if c[2].lower() != 'toda la etapa'}
-    # Si dos ficheros cubren el mismo curso, manda el más específico (el que
-    # cubre menos cursos): «Primer curso» antes que «Primer y tercer curso».
+    # Si dos ficheros cubren el mismo curso:
+    # - sin ningún código de criterio en común, son trozos del mismo decreto
+    #   (Asturias parte Biología de 1.º y 3.º en dos tablas) y se funden;
+    # - si comparten alguno, manda el más específico (el que cubre menos
+    #   cursos): «Primer curso» antes que «Primer y tercer curso».
     candidatos.sort(key=lambda c: (len(c[3]), c[4].name))
     salida = {}
     for asig, area, ciclo, cursos, p, datos in candidatos:
@@ -178,13 +236,22 @@ def main():
             continue
         for curso in cursos:
             clave = (asig, curso)
-            if clave in salida:
-                otro = salida[clave][1]
-                igual = salida[clave][3]['criterios'] == datos['criterios']
-                pendientes.append((p.name, f'{curso}: ya cubierto por {otro.name}'
+            if clave not in salida:
+                salida[clave] = (area, p, ciclo, datos)
+                continue
+            area0, p0, ciclo0, datos0 = salida[clave]
+            ids0 = {c['id'] for c in datos0['criterios']}
+            comunes = ids0 & {c['id'] for c in datos['criterios']}
+            if comunes:
+                igual = datos0['criterios'] == datos['criterios']
+                pendientes.append((p.name, f'{curso}: ya cubierto por {p0.name}'
                                    + (' (mismos criterios)' if igual else ' (criterios DISTINTOS: revisar)')))
                 continue
-            salida[clave] = (area, p, ciclo, datos)
+            junto = fundir(datos0, datos)
+            choques = junto.pop('_choques', [])
+            salida[clave] = (area0, p0, f'{ciclo0} + {ciclo}', junto)
+            avisos.append(f'{area} {curso}: fundidos «{ciclo0}» y «{ciclo}» (criterios complementarios)'
+                          + (f'; ids repetidos con otro texto, manda el primero: {"; ".join(choques)}' if choques else ''))
 
     out_dir = OUT_ROOT / dir_slug / etapa
     escritos = existentes = 0
@@ -201,6 +268,13 @@ def main():
             'generado': str(date.today()),
             'curso': curso,
         }
+        repes = sorted({c['id'] for c in datos['criterios']
+                        if sum(1 for x in datos['criterios'] if x['id'] == c['id']) > 1})
+        if repes:
+            avisos.append(f'{area} {curso}: códigos de criterio repetidos {", ".join(repes)}; '
+                          'al cargar solo queda uno: revisar')
+        if not datos['saberes']:
+            avisos.append(f'{area} {curso}: sin saberes básicos en origen (se importan los criterios)')
         destino = out_dir / f"{asig}_{curso.replace('º', '')}.json"
         if destino.exists():
             existentes += 1
@@ -221,10 +295,16 @@ def main():
               f"{r['ce']}CE {r['cr']}cr {r['sb']}sb (sumados por curso)")
     print(f"JSON {'escritos' if aplicar else 'a escribir'}: {escritos}"
           + (f" · ya existían y no se tocan: {existentes}" if existentes else ''))
+    if avisos:
+        print(f"Avisos ({len(avisos)}):")
+        for a in avisos:
+            print(f"  · {a}")
     if pendientes:
         print(f"Pendientes ({len(pendientes)}):")
         for nombre, motivo in pendientes:
             print(f"  - {nombre}: {motivo}")
+    if aplicar:
+        escribir_nombres_areas()
     if not aplicar:
         print('(vista previa: añade --apply para escribir)')
 

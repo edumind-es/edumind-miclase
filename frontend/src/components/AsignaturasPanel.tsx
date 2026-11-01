@@ -11,6 +11,7 @@ import {
 import { useAppStore } from '@/store/useAppStore'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
+import { NOMBRES_AREAS } from './nombresAreas'
 
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
@@ -39,12 +40,6 @@ const NOMBRES: Record<string, string> = {
   'latin':                            'Latín',
   'religion':                         'Religión',
   'valores-civicos':                  'Valores Cívicos y Éticos',
-  // Áreas de las comunidades incorporadas desde CURRICULOS_NUEVOS
-  'educacion-artistica':              'Educación Artística',
-  'educacion-en-valores-civicos-y-eticos': 'Educación en Valores Cívicos y Éticos',
-  'lengua-castellana-y-literatura':   'Lengua Castellana y Literatura',
-  'cultura-asturiana':                'Cultura Asturiana',
-  'lengua-asturiana-y-literatura':    'Lengua Asturiana y Literatura',
 }
 
 interface Instrumento {
@@ -83,6 +78,7 @@ type Pestana = 'instrumentos' | 'programacion' | 'final'
 
 function humanizarSlug(slug: string): string {
   if (NOMBRES[slug]) return NOMBRES[slug]
+  if (NOMBRES_AREAS[slug]) return NOMBRES_AREAS[slug]
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
