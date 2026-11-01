@@ -6,6 +6,8 @@ import {
   actualizarAlumno, eliminarAlumno,
 } from '@/db/queries'
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
+import AjustesDatosSensibles from '@/components/AjustesDatosSensibles'
+import { useDatosSensibles } from '@/db/datosSensibles'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { descargarFichero } from '@/utils/compartir'
@@ -64,6 +66,7 @@ export default function AlumnosPage() {
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
   const [alumnoGaleria, setAlumnoGaleria] = useState<DBAlumno | null>(null)
+  const sensibles = useDatosSensibles()
   // Hasta ahora una errata en un nombre era permanente: las funciones de
   // edición y borrado existían en db/queries.ts sin que nada las llamara.
   const [alumnoEditar, setAlumnoEditar] = useState<DBAlumno | null>(null)
@@ -151,7 +154,7 @@ export default function AlumnosPage() {
             <div style={{ fontWeight: 600, fontSize: 14 }}>{a.apellidos}</div>
             <div style={{ fontSize: 14, color: 'var(--gris-600)' }}>{a.nombre}</div>
             <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-              {a.neae ? <span className="badge" style={{ background: 'var(--ambar-100)', color: 'var(--ambar-500)', fontSize: 11 }}>NEAE</span> : null}
+              {a.neae && sensibles.neae ? <span className="badge" style={{ background: 'var(--ambar-100)', color: 'var(--ambar-500)', fontSize: 11 }}>NEAE</span> : null}
               {(a as any).codigo_cifrado && (
                 <span className="badge" style={{ background: 'var(--azul-100)', color: 'var(--azul-700)', fontSize: 11, fontFamily: 'monospace' }}>
                   {(a as any).codigo_cifrado}
@@ -164,13 +167,13 @@ export default function AlumnosPage() {
                 aria-label={`Editar ${a.nombre} ${a.apellidos}`}>
                 ✏️
               </button>
-              <button
+              {sensibles.evidencias && <button
                 onClick={() => setAlumnoGaleria(a as unknown as DBAlumno)}
                 title="Ver evidencias del alumno"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, padding: '0 2px' }}
                 aria-label={`Evidencias de ${a.nombre} ${a.apellidos}`}>
                 📸
-              </button>
+              </button>}
             </div>
           </div>
         ))}
@@ -179,6 +182,8 @@ export default function AlumnosPage() {
       {alumnoGaleria && (
         <EvidenciasGaleria alumno={alumnoGaleria} onClose={() => setAlumnoGaleria(null)} />
       )}
+
+      <AjustesDatosSensibles />
 
       {alumnoEditar && grupoId && (
         <EditarAlumno
@@ -197,6 +202,7 @@ export default function AlumnosPage() {
 function FormNuevoAlumno({ grupoIdInicial, onGuardar, onCancelar }: any) {
   const [form, setForm] = useState({ nombre: '', apellidos: '', neae: false, observaciones: '' })
   const s = (k: string, v: any) => setForm(f => ({ ...f, [k]: v }))
+  const sensibles = useDatosSensibles()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -213,10 +219,10 @@ function FormNuevoAlumno({ grupoIdInicial, onGuardar, onCancelar }: any) {
           <input value={form.apellidos} onChange={e => s('apellidos', e.target.value)} placeholder="Apellidos *" required />
         </div>
         <input value={form.observaciones} onChange={e => s('observaciones', e.target.value)} placeholder="Observaciones (opcional)" />
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
+        {sensibles.neae && <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
           <input type="checkbox" checked={form.neae} onChange={e => s('neae', e.target.checked)} />
           Alumno con NEAE
-        </label>
+        </label>}
         <div style={{ display: 'flex', gap: 10, marginTop: 4 }}>
           <button type="submit" className="btn-primary">Guardar</button>
           <button type="button" className="btn-secondary" onClick={onCancelar}>Cancelar</button>
@@ -393,6 +399,7 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   onCerrar: () => void
   onGuardado: () => void
 }) {
+  const sensibles = useDatosSensibles()
   const [form, setForm] = useState({
     nombre: alumno.nombre,
     apellidos: alumno.apellidos,
@@ -448,11 +455,12 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
           onChange={e => setForm({ ...form, nombre: e.target.value })}
           style={{ width: '100%', marginBottom: 12 }} />
 
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, marginBottom: 12 }}>
+        {/* Apagado, el indicador no se ofrece pero se conserva tal cual al guardar */}
+        {sensibles.neae && <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, marginBottom: 12 }}>
           <input type="checkbox" checked={form.neae}
             onChange={e => setForm({ ...form, neae: e.target.checked })} />
           Necesidades específicas de apoyo educativo (NEAE)
-        </label>
+        </label>}
 
         <label htmlFor="ed-obs" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
         <textarea id="ed-obs" value={form.observaciones} rows={3}

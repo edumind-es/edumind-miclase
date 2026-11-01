@@ -26,6 +26,7 @@ import InstrumentosManager from './InstrumentosManager'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import { trimestreActual, aplicaEnTrimestre } from '@/db/calculo'
 import { claveUnidad } from '@/db/migracionUnidades'
+import { verNeae, verEvidencias } from '@/db/datosSensibles'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -327,11 +328,11 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         <div>
           <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--azul-900)' }}>
             {alumno.apellidos}, {alumno.nombre}
-            {alumno.neae ? <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+            {alumno.neae && verNeae() ? <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
           </div>
           <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
             {grupo ? `${grupo.nombre} · ${grupo.curso_escolar}` : 'Sin clase activa'}
-            {nEvidencias > 0 && ` · ${nEvidencias} evidencia${nEvidencias !== 1 ? 's' : ''}`}
+            {nEvidencias > 0 && verEvidencias() && ` · ${nEvidencias} evidencia${nEvidencias !== 1 ? 's' : ''}`}
           </div>
         </div>
         <button onClick={onCerrar} className="modal-close" aria-label="Cerrar panel">✕</button>
@@ -402,7 +403,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           ) : (
             <div style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 12 }}>
               No hay criterios disponibles (¿sin conexión con el servidor de currículo?).
-              Puedes guardar evidencias igualmente.
+              {verEvidencias() && ' Puedes guardar evidencias igualmente.'}
             </div>
           )}
 

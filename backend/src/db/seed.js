@@ -8,7 +8,7 @@ import { mkdirSync, readFileSync, readdirSync, statSync } from 'fs'
 import { dirname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 import Database from 'better-sqlite3'
-import { createRequire } from 'module'
+import { conexionDeObjetivo, objetivoDeCriterio } from './conexiones.js'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 const ROOT = resolve(__dirname, '../../..')
@@ -43,6 +43,17 @@ const inserts = {
     INSERT OR REPLACE INTO c_bloques (id, asignatura, curso, etapa, comunidad, titulo)
     VALUES (@id, @asignatura, @curso, @etapa, @comunidad, @titulo)
   `),
+  objetivo: db.prepare(`
+    INSERT OR REPLACE INTO c_objetivos (id, asignatura, curso, etapa, comunidad, descripcion, conexion_origen)
+    VALUES (@id, @asignatura, @curso, @etapa, @comunidad, @descripcion, @conexion_origen)
+  `),
+  borrarConexiones: db.prepare(`
+    DELETE FROM c_conexiones WHERE asignatura = @asignatura AND curso = @curso AND etapa = @etapa AND comunidad = @comunidad
+  `),
+  conexion: db.prepare(`
+    INSERT OR IGNORE INTO c_conexiones (objetivo_id, tipo, codigo, asignatura, curso, etapa, comunidad)
+    VALUES (@objetivo_id, @tipo, @codigo, @asignatura, @curso, @etapa, @comunidad)
+  `),
   saber: db.prepare(`
     INSERT OR REPLACE INTO c_saberes (id, bloque_id, asignatura, curso, etapa, comunidad, descripcion)
     VALUES (@id, @bloque_id, @asignatura, @curso, @etapa, @comunidad, @descripcion)
@@ -52,6 +63,23 @@ const inserts = {
     VALUES (@saber_id, @criterio_id, @asignatura, @curso, @etapa, @comunidad)
   `),
 }
+
+// Currículo estatal: texto de los descriptores (Anexo I, igual en todas las
+// comunidades) y conexión de reserva por competencia específica. Lo genera
+// scripts/extraer_estatal.py. Las carpetas que empiezan por «_» no son
+// comunidades.
+const ESTATAL = {}
+for (const etapa of ['primaria', 'secundaria']) {
+  const datos = loadJsonFile(join(CURRICULUM_PATH, '_estatal', `${etapa}.json`))
+  if (datos) {
+    ESTATAL[etapa] = {
+      ...datos,
+      validos: new Set(datos.descriptores.map(d => d.id)),
+      estatales: datos.competencias_especificas,
+    }
+  }
+}
+const origenes = {}
 
 function loadJsonFile(filePath) {
   try {
@@ -66,6 +94,7 @@ function processFile(filePath) {
   if (!data) return 0
 
   const { meta, competencias, descriptores, criterios, bloques, saberes } = data
+  const objetivos = data.objetivos ?? []
   const ctx = {
     asignatura: meta.asignatura,
     curso: meta.curso,
@@ -73,15 +102,35 @@ function processFile(filePath) {
     comunidad: meta.comunidad,
   }
 
+  const estatal = ESTATAL[ctx.etapa]
+  // Sin currículo estatal de la etapa, valen los descriptores del propio JSON
+  const contexto = estatal ?? {
+    validos: new Set(descriptores.map(d => d.id)),
+    estatales: [],
+  }
+
   const seedFile = db.transaction(() => {
-    for (const c of competencias) {
+    for (const c of [...competencias, ...(estatal?.competencias ?? [])]) {
       inserts.competencia.run({ ...c, comunidad: ctx.comunidad, etapa: ctx.etapa })
     }
-    for (const d of descriptores) {
+    // El texto estatal va después y manda: el de algunas matrices llega roto
+    for (const d of [...descriptores, ...(estatal?.descriptores ?? [])]) {
       inserts.descriptor.run({ ...d, comunidad: ctx.comunidad, etapa: ctx.etapa })
     }
+    inserts.borrarConexiones.run(ctx)
+    for (const o of objetivos) {
+      const con = conexionDeObjetivo(o, contexto)
+      origenes[con.origen] = (origenes[con.origen] ?? 0) + 1
+      inserts.objetivo.run({ id: o.id, descripcion: o.descripcion, conexion_origen: con.origen, ...ctx })
+      for (const codigo of con.descriptores) {
+        inserts.conexion.run({ objetivo_id: o.id, tipo: 'descriptor', codigo, ...ctx })
+      }
+      for (const codigo of con.competencias) {
+        inserts.conexion.run({ objetivo_id: o.id, tipo: 'competencia', codigo, ...ctx })
+      }
+    }
     for (const cr of criterios) {
-      inserts.criterio.run({ ...cr, ...ctx })
+      inserts.criterio.run({ ...cr, objetivo_id: objetivoDeCriterio(cr), ...ctx })
     }
     for (const b of bloques) {
       inserts.bloque.run({ ...b, ...ctx })
@@ -106,6 +155,7 @@ function walkDir(dir) {
   let total = 0
   for (const entry of readdirSync(dir)) {
     const fullPath = join(dir, entry)
+    if (entry.startsWith('_')) continue
     if (statSync(fullPath).isDirectory()) {
       total += walkDir(fullPath)
     } else if (entry.endsWith('.json')) {
@@ -128,6 +178,10 @@ const stats = {
   criterios: db.prepare('SELECT COUNT(*) as n FROM c_criterios').get().n,
   saberes: db.prepare('SELECT COUNT(*) as n FROM c_saberes').get().n,
   bloques: db.prepare('SELECT COUNT(*) as n FROM c_bloques').get().n,
+  descriptores: db.prepare('SELECT COUNT(*) as n FROM c_descriptores').get().n,
+  conexiones: db.prepare("SELECT COUNT(*) as n FROM c_conexiones WHERE tipo = 'descriptor'").get().n,
 }
 console.log(`DB: ${stats.criterios} criterios, ${stats.saberes} saberes, ${stats.bloques} bloques`)
+console.log(`Competencias clave: ${stats.descriptores} descriptores, ${stats.conexiones} conexiones con descriptor`)
+console.log(`Origen de la conexión por competencia específica: ${JSON.stringify(origenes)}`)
 db.close()

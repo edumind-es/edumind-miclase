@@ -11,7 +11,7 @@ ciertos. Todo lo que se afirma aquí es comprobable en el código fuente
 (AGPL-3.0-or-later / EUPL-1.2) y buena parte está cubierto por pruebas
 automáticas en `pruebas/`.
 
-Última revisión: 28 de octubre de 2026.
+Última revisión: 1 de noviembre de 2026.
 
 ---
 
@@ -271,7 +271,12 @@ dispositivo y lo recibe ese tercero.
   datos más delicados del cuaderno: el primero puede revelar información de
   salud o discapacidad, y las segundas son imagen y voz de menores. Antes de
   usarlos conviene una evaluación de riesgos con el delegado de protección de
-  datos, y ambos son prescindibles: la aplicación funciona sin ellos.
+  datos, y ambos son prescindibles: la aplicación funciona sin ellos. Por eso
+  **vienen apagados** en un aparato nuevo: no se ofrece marcar NEAE ni
+  capturar evidencias hasta que el docente los enciende en Alumnado → «Datos
+  sensibles», con un aviso. Un aparato que ya los tenía en uso al actualizar
+  los conserva encendidos. Apagarlos no borra nada: dejan de ofrecerse y de
+  mostrarse, también en los informes.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

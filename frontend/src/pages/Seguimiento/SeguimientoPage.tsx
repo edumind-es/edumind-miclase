@@ -15,6 +15,7 @@ import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { calcularNotaArea, calificativo, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
+import { verNeae } from '@/db/datosSensibles'
 
 type FilaAlumno = {
   alumno: Alumno
@@ -239,7 +240,7 @@ export default function SeguimientoPage() {
                       <tr key={f.alumno.id} style={{ background: i % 2 ? 'var(--gris-100)' : 'white' }}>
                         <td style={{ padding: '9px 14px', fontWeight: 500 }}>
                           {f.alumno.apellidos}, {f.alumno.nombre}
-                          {f.alumno.neae ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                          {f.alumno.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                         </td>
                         {[1, 2, 3].map(t => (
                           <td key={t} style={{ padding: '9px 10px', textAlign: 'right', color: 'var(--gris-600)' }}>

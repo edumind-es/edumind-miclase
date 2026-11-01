@@ -147,9 +147,15 @@ instalación, sin borrar nada:
    funcionando: copia automática en carpeta y enlace directo o fichero. El
    buzón puede estar haciendo de copia de seguridad sin que nadie lo sepa (la
    sincronización automática sube cada cinco minutos).
-2. Si se quiere borrar lo guardado, vaciarlo **antes** desde Sincronizar →
-   Opciones avanzadas (o después, con `DELETE /api/sync/` y sesión: es lo único
-   que el buzón cerrado sigue admitiendo).
+2. Si se quiere borrar lo guardado, vaciarlo **antes**. La app no tiene un
+   botón de «solo vaciar» («Cambiar y borrar buzón» cambia además la
+   contraseña), así que se hace en el servidor sobre una copia de seguridad:
+   `sqlite3 backend/data/miclase.db ".backup backend/data/miclase.db.antes-cerrar-buzon"`
+   y después, en una transacción, `DELETE FROM sync_registros` y
+   `UPDATE sync_estado SET seq=0, salt=NULL, verificador=NULL` (lo mismo que
+   hace `DELETE /api/sync/`, que el buzón cerrado sigue admitiendo con
+   sesión). La copia guarda los sobres cifrados: se borra cuando ya no haga
+   falta. Así se cerró el de producción el 1/11/2026.
 3. Añadir `MICLASE_BUZON=cerrado` a `/etc/edumind-miclase-api.env` y reiniciar:
    `sudo systemctl restart edumind-miclase-api`.
 4. Comprobar: `curl https://miclase.edumind.es/api/sync/disponible` →

@@ -16,8 +16,10 @@ import { imprimir, descargarHTML } from '@/informes/lamina'
 import { descargarFichero } from '@/utils/compartir'
 import { esNativo } from '@/api'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
-import { reunirDatosGrupo, evidenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
-import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea } from '@/informes/documentos'
+import { reunirDatosGrupo, evidenciasDeAlumno, competenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
+import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea, subtituloGrupo } from '@/informes/documentos'
+import { documentoCompetenciasAlumnos, documentoCompetenciasGrupo } from '@/informes/competenciasClave'
+import { useDatosSensibles } from '@/db/datosSensibles'
 
 
 function normalizar(s: string) {
@@ -31,9 +33,14 @@ export default function InformesPage() {
   const [datos, setDatos] = useState<DatosGrupo | null>(null)
   const [alumnoSelId, setAlumnoSelId] = useState('')
   const [areaSelId, setAreaSelId] = useState('')
+  // Competencias clave: 'grupo' (resumen), 'todos' (una lámina por alumno) o el id de un alumno
+  const [competenciasSel, setCompetenciasSel] = useState('grupo')
   const [trimestre, setTrimestre] = useState<string>('')      // '' = curso completo
   const [conCriterios, setConCriterios] = useState(true)
   const [conEvidencias, setConEvidencias] = useState(true)
+  const sensibles = useDatosSensibles()
+  // Apagados en este aparato, ni evidencias ni sello NEAE salen en ningún documento
+  const evidenciasEnInforme = conEvidencias && sensibles.evidencias
   const [generando, setGenerando] = useState('')
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const importRef = useRef<HTMLInputElement>(null)
@@ -62,7 +69,7 @@ export default function InformesPage() {
   const opciones = { trimestre: trim, incluirCriterios: conCriterios }
 
   const conEvidenciasDe = async (alumnoId: number): Promise<EvidenciaInforme[]> =>
-    conEvidencias ? evidenciasDeAlumno(alumnoId) : []
+    evidenciasEnInforme ? evidenciasDeAlumno(alumnoId) : []
 
   // ── Generadores ──────────────────────────────────────────────────────
 
@@ -106,7 +113,7 @@ export default function InformesPage() {
     if (!datos) throw new Error('Sin datos')
     if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
     const mapa = new Map<number, EvidenciaInforme[]>()
-    if (conEvidencias) {
+    if (evidenciasEnInforme) {
       for (const al of alumnos) mapa.set(al.id!, await evidenciasDeAlumno(al.id!, 6))
     }
     return {
@@ -132,6 +139,31 @@ export default function InformesPage() {
       html: actaArea(datos, Number(areaSelId), trim),
       nombre: `acta-${normalizar(area?.asig.nombre_display || 'area')}-${normalizar(datos.grupo.nombre)}.html`,
     }
+  }
+
+  const docCompetencias = async () => {
+    if (!datos) throw new Error('Sin datos')
+    if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
+    if (!datos.descriptores.length) {
+      throw new Error('No se pudieron leer los descriptores operativos del servidor: el informe de competencias clave necesita conexión.')
+    }
+    const elegidos = competenciasSel === 'grupo' || competenciasSel === 'todos'
+      ? alumnos
+      : alumnos.filter(a => String(a.id) === competenciasSel)
+    if (!elegidos.length) throw new Error('Selecciona un alumno.')
+    const filas = elegidos.map(a => ({ nombre: a.nombre, apellidos: a.apellidos, perfil: competenciasDeAlumno(datos, a.id!) }))
+    const contexto = {
+      titulo: subtituloGrupo(datos), etapa: datos.grupo.etapa,
+      catalogo: datos.descriptores, periodo: trim,
+    }
+    const sufijo = `${normalizar(datos.grupo.nombre)}-${datos.grupo.curso_escolar}`
+    if (competenciasSel === 'grupo') {
+      return { html: documentoCompetenciasGrupo(filas, contexto), nombre: `competencias-clave-grupo-${sufijo}.html` }
+    }
+    const nombre = elegidos.length === 1
+      ? `competencias-clave-${normalizar(elegidos[0].apellidos)}-${normalizar(elegidos[0].nombre)}-${datos.grupo.curso_escolar}.html`
+      : `competencias-clave-${sufijo}.html`
+    return { html: documentoCompetenciasAlumnos(filas, contexto), nombre }
   }
 
   // ── CSV ──────────────────────────────────────────────────────────────
@@ -263,10 +295,10 @@ export default function InformesPage() {
             <input type="checkbox" checked={conCriterios} onChange={e => setConCriterios(e.target.checked)} />
             Detalle por criterio
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
+          {sensibles.evidencias && <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
             <input type="checkbox" checked={conEvidencias} onChange={e => setConEvidencias(e.target.checked)} />
             Incluir evidencias
-          </label>
+          </label>}
         </div>
       </div>
 
@@ -329,6 +361,22 @@ export default function InformesPage() {
           deshabilitado={!areaSelId || alumnos.length === 0}
           onImprimir={() => generar('acta', docActa, 'imprimir')}
           onDescargar={() => generar('acta', docActa, 'descargar')}
+        />
+
+        <Documento
+          icono="🧭" titulo="Competencias clave"
+          texto="Nivel de desarrollo por competencia clave y por descriptor operativo del Perfil de salida, con las áreas y criterios de los que sale cada uno."
+          extra={
+            <select data-competencias-alcance value={competenciasSel} onChange={e => setCompetenciasSel(e.target.value)} style={{ width: '100%', marginBottom: 10 }}>
+              <option value="grupo">Resumen del grupo</option>
+              <option value="todos">Una lámina por alumno</option>
+              {alumnos.map(a => <option key={a.id} value={a.id}>{a.apellidos}, {a.nombre}</option>)}
+            </select>
+          }
+          ocupado={generando === 'cc'}
+          deshabilitado={alumnos.length === 0}
+          onImprimir={() => generar('cc', docCompetencias, 'imprimir')}
+          onDescargar={() => generar('cc', docCompetencias, 'descargar')}
         />
       </div>
 

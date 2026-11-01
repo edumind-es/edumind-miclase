@@ -31,6 +31,7 @@ import { calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, RegistroDiario } from '@/db/localDb'
 import { claveUnidad } from '@/db/migracionUnidades'
+import { verNeae } from '@/db/datosSensibles'
 
 interface Props {
   instrumento: CeldaInstrumento
@@ -235,7 +236,7 @@ function SesionDiario({
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--gris-900)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {al.apellidos}, {al.nombre}
-                      {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                      {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                     </div>
                     <div data-sesion-nota style={{ fontSize: 11, color: 'var(--gris-600)' }}>
                       {todos.length === 0

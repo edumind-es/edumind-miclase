@@ -285,7 +285,15 @@ await foto('11-celda-evaluacion')
 ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'las evidencias no se interponen entre el docente y la nota')
 await p.locator('[data-mas-toggle]').click()
 await p.waitForTimeout(300)
-ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'se puede adjuntar una foto como evidencia')
+// Un aparato nuevo trae las evidencias apagadas (datos sensibles): no se ofrecen
+ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'en un aparato nuevo las evidencias vienen apagadas')
+await p.evaluate(() => {
+  const d = { neae: false, evidencias: true }
+  localStorage.setItem('miclase.sensibles', JSON.stringify(d))
+  window.dispatchEvent(new CustomEvent('miclase:sensibles', { detail: d }))
+})
+await p.waitForTimeout(300)
+ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'encendidas, se puede adjuntar una foto como evidencia')
 ok(await p.getByRole('button', { name: /🎙 Audio/ }).isVisible(), 'y grabar audio (exposición oral, lectura)')
 ok(await p.getByRole('button', { name: /🎬 Vídeo/ }).isVisible(), 'y grabar vídeo')
 

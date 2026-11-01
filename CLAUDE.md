@@ -17,10 +17,12 @@ edumind_miclase/
 │   ├── src/plugins/auth.js  ← auth dual local + Authentik OIDC
 │   ├── src/routes/auth.js
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
+│   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
 │   ├── src/db/       ← localDb.ts (esquema Dexie v7) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
@@ -40,8 +42,8 @@ edumind_miclase/
 │   │                   esquema de URL en App/App/Info.plist; plugins propios en
 │   │                   App/CapApp-SPM/Sources/CapApp-SPM/ (ImpresoraPlugin, MiClaseViewController)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
-├── curriculum/       ← currículum por CCAA
-├── scripts/          ← parse_curriculum.py · generar_iconos.py (todos los iconos)
+├── curriculum/       ← currículum por CCAA; _estatal/ = descriptores y conexiones de los RD
+├── scripts/          ← parse_curriculum.py · extraer_estatal.py · generar_iconos.py (todos los iconos)
 ├── PRIVACIDAD.md     ← qué datos se tratan y qué ve el servidor
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos
 
@@ -91,8 +93,8 @@ edumind_miclase/
   `miclase.buzon.cerrado` para que `diagnostico()` de la copia no cuente el
   buzón. Un servidor sin la ruta (404) cuenta como abierto. No se toca
   `routes/auth.js`. Decisión de Luis (oct 2026): el buzón es un añadido, la
-  app es local; se cierra en producción cuando sus aparatos tengan la copia
-  en carpeta y el enlace directo (DESPLIEGUE.md, «Cerrar el buzón»).
+  app es local. **Cerrado en producción desde el 1/11/2026**, vaciado antes
+  sobre una copia (DESPLIEGUE.md, «Cerrar el buzón»).
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
@@ -702,6 +704,72 @@ edumind_miclase/
   cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
   el endpoint de programación y los proveedores: si cambia alguno, se
   actualiza allí con fecha.
+- **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
+  nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
+  docente los enciende en Alumnado (`AjustesDatosSensibles`,
+  `[data-datos-sensibles-toggle]`, `[data-sensible="neae"|"evidencias"]`,
+  con `confirm`). La primera resolución (`resolverDatosSensibles`, en `Layout`
+  de `App.tsx`) los deja encendidos si el aparato ya tenía alumnado con NEAE
+  o evidencias, para que actualizar no esconda nada; desde ahí manda la
+  elección, guardada en `miclase.sensibles` (preferencia del aparato, no se
+  sincroniza). Apagar solo esconde: el sello (`verNeae()` en cada pantalla y
+  en `informes/documentos.ts`), la casilla de la ficha, la galería, la
+  captura (`CapturaEvidencia` devuelve null con `verEvidencias()` falso) y
+  las evidencias de los informes. Guardar una ficha con NEAE escondido
+  conserva el indicador. Las pruebas que capturen evidencias las encienden
+  antes (`e2e.test.mjs` escribe `miclase.sensibles` y lanza
+  `miclase:sensibles`). Motivo: art. 9 RGPD y arts. 17.4 y 31.5 del
+  anteproyecto de Lei de educación dixital.
+- **Las competencias clave salen de la competencia específica de cada
+  criterio**, y cada conexión dice de dónde sale. Formato del currículo, que
+  cualquier comunidad nueva tiene que cumplir para tenerlas sin tocar nada:
+  el JSON de `curriculum/<ccaa>/<etapa>/<materia>_<curso>.json` (lo que
+  escribe `parse_curriculum.py` desde la matriz de iDoceo) lleva
+  `objetivos[]` (las competencias específicas: Tipo 2, `id` y `descripcion`)
+  con `descriptores_ids` = la columna «Enlaces» tal cual («CCL1, STEM2…»), y
+  `criterios[].objetivo_id` (Tipo 3, «Enlaces»). Nada más: el texto de los
+  descriptores y la reserva salen de `curriculum/_estatal/{primaria,
+  secundaria}.json` (`scripts/extraer_estatal.py`, desde las matrices de los
+  RD 157/2022 y 217/2022: los 34 descriptores del Anexo I y la conexión
+  estatal de cada competencia específica por materia). `seed.js` pasa cada
+  competencia específica por `conexionDeObjetivo` (`backend/src/db/conexiones.js`,
+  puro) y guarda `c_objetivos` (con `conexion_origen`) y `c_conexiones`
+  (`tipo` 'descriptor' o 'competencia'). El origen es `comunidad` (la matriz
+  trae descriptores), `competencia` (solo nombra CCL, CP…: Valencia en
+  Primaria), `estatal` (no trae nada y se toma la del RD para la competencia
+  específica del mismo texto: mismo número con parecido ≥ 0,5, o cualquiera
+  con ≥ 0,75; Madrid en Primaria) o `ninguna`. Los códigos se normalizan
+  (`leerCodigo`: espacios, minúsculas, `CMCCTE` = STEM). Un criterio sin
+  `objetivo_id` lo toma de su código (CE2.3 → CE2). El texto del descriptor
+  es siempre el estatal (el Anexo I es enseñanza mínima; el de algunas
+  matrices llega roto). Las carpetas que empiezan por `_` no son
+  comunidades. `pruebas/conexiones.test.mjs` exige a cada comunidad y etapa
+  de `curriculum/` un 85 % de competencias específicas con descriptor (90 %
+  con algo en Valencia Primaria): una comunidad nueva sin «Enlaces» falla
+  ahí. `/api/curriculum/criterios` añade a cada criterio `descriptores`,
+  `competencias_clave` y `conexion_origen` (campos nuevos: nadie más los
+  necesita), y `/api/curriculum/descriptores` da el catálogo de la etapa. Es
+  dato público del servidor: no hay esquema Dexie nuevo. Tras cambiar el
+  currículo o el schema, `npm run seed` en producción.
+- **El nivel por descriptor y por competencia clave se calcula en
+  `db/competenciasClave.ts`** (puro, `pruebas/competencias-clave.test.ts`),
+  sobre las notas de criterio de `calcularNotaArea`, sin volver a ponderar
+  instrumentos. Reglas decididas por Luis (nov 2026): un descriptor es, en
+  cada área, la media de los criterios que conectan con él ponderada por el
+  peso de la programación, y después la media simple de las áreas (cada área
+  cuenta igual); una competencia clave es la media simple de sus
+  descriptores con datos, más UNA entrada con lo conectado solo a la
+  competencia (`directa`); lo que no tiene datos no cuenta como cero. La
+  final usa la final de cada criterio, con la regla del área. Escala
+  `NIVELES_DESARROLLO`: 1 Inicial (< 5) · 2 En desarrollo (5–6,9) ·
+  3 Adquirido (7–8,9) · 4 Consolidado (≥ 9). La conexión estatal cuenta
+  igual y se marca (†) en el informe. El informe
+  (`informes/competenciasClave.ts`, Lámina; tarjeta «Competencias clave» de
+  Informes, `[data-competencias-alcance]`: resumen del grupo, una lámina por
+  alumno o un alumno) lleva el rastro de cada descriptor (área, nota del área
+  y criterios) y lista los criterios con nota que no conectan. El «perfil
+  por competencia específica» de `perfilCompetencial` sigue igual en el
+  informe de evaluación.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
