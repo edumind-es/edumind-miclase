@@ -162,6 +162,11 @@ async function principal() {
     await paquete('pruebas/prueba-escrita.test.ts', pruebaEscrita, ['--platform=node', '--format=esm'])
     await suite('prueba escrita: nota e importación', 'node', [pruebaEscrita])
 
+    const competencias = join(scratch, 'competencias-clave.mjs')
+    await paquete('pruebas/competencias-clave.test.ts', competencias, ['--platform=node', '--format=esm'])
+    await suite('competencias clave: niveles e informe', 'node', [competencias])
+    await suite('conexión con los descriptores operativos', 'node', ['pruebas/conexiones.test.mjs'])
+
     const informePrueba = join(scratch, 'informe-prueba.mjs')
     await paquete('pruebas/informe-prueba.test.ts', informePrueba, ['--platform=node', '--format=esm'])
     await suite('informe de una prueba corregida', 'node', [informePrueba])
@@ -224,6 +229,16 @@ async function principal() {
     const bd = join(scratch, 'prueba.db')
     if (resolve(bd) === BD_PRODUCCION) throw new Error('jamás contra la BD de producción')
     cpSync(BD_PRODUCCION, bd)
+    // La copia se vuelve a sembrar con el currículo del árbol de trabajo: si
+    // no, las pruebas verían el de producción, anterior a los cambios. Va
+    // siempre, también con --solo: las suites del currículo dependen de ella.
+    {
+      const inicio = Date.now()
+      const { bien, salida } = await correr('node', ['backend/src/db/seed.js'], { DB_PATH: bd })
+      const seg = ((Date.now() - inicio) / 1000).toFixed(1)
+      console.log(gris('  carga del currículo (seed)… ') + (bien ? verde(`✓ ${seg}s`) : rojo(`✗ ${seg}s`)))
+      if (!bien) resultados.push({ nombre: 'carga del currículo (seed)', bien, salida, seg })
+    }
 
     const puertoApi = await puertoLibre()
     const api = `http://127.0.0.1:${puertoApi}`
@@ -249,6 +264,7 @@ async function principal() {
 
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
+    await suite('competencias clave en el currículo del servidor', 'node', ['pruebas/competencias-clave-api.test.mjs'], entorno)
 
     // Un segundo backend, sobre su propia copia, con el buzón cerrado.
     const bdCerrado = join(scratch, 'prueba-cerrado.db')
