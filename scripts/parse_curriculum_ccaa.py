@@ -302,10 +302,14 @@ def main():
         if not datos['criterios']:
             pendientes.append((p.name, 'sin criterios (Tipo 3) en origen'))
             continue
-        # Ninguna materia LOMLOE pasa de una docena de competencias específicas:
-        # «CE112 Pautas.» o «CE999 A.1.2.1.» son saberes colados al extraer.
+        # «CE112 Pautas.» o «CE999 A.1.2.1.» son saberes colados al extraer: un
+        # número de tres cifras, que ni un ámbito alcanza (los de Murcia llegan
+        # a CE29), y ningún criterio que cuelgue de ella.
+        usadas = {c.get('objetivo_id') for c in datos['criterios']} | \
+                 {c['id'].split('.')[0] for c in datos['criterios']}
         basura = [o for o in datos['objetivos']
-                  if re.fullmatch(r'CE(\d+)', o['id']) and int(o['id'][2:]) > 20]
+                  if re.fullmatch(r'CE(\d+)', o['id']) and int(o['id'][2:]) >= 100
+                  and o['id'] not in usadas]
         if basura:
             datos['objetivos'] = [o for o in datos['objetivos'] if o not in basura]
             avisos.append(f'{area} ({ciclo}): descartadas competencias específicas que no lo son: '
