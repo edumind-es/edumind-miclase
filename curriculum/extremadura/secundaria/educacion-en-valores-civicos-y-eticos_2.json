@@ -1,0 +1,612 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "educacion-en-valores-civicos-y-eticos",
+    "asignatura_nombre": "Educación en Valores Cívicos y Éticos",
+    "ciclo_origen": "Segundo de ESO",
+    "fuente": "Extremadura · Secundaria · Educación en Valores Cívicos y Éticos · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Indagar sobre la identidad humana y las cuestiones éticas relativas al propio proyecto vital, analizando críticamente información fiable, de manera que se promueva el autoconocimiento y la elaboración razonada de planteamientos y juicios morales.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Actuar e interactuar de acuerdo con normas y valores cívicos y éticos a partir del reconocimiento fundado de su importancia para regular la vida comunitaria y su aplicación efectiva y justificada en distintos contextos, para promover una convivencia pacífica, respetuosa, democrática y comprometida con el bien común.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Identificar y analizar problemas ecosociales de relevancia, entendiendo la naturaleza interconectada y ecodependiente de las actividades humanas, para promover hábitos y actitudes éticamente comprometidos con el logro de formas de vida sostenibles tanto en un contexto local como global.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Desarrollar y expresar una adecuada estima de sí mismo y del entorno, reconociendo y valorando los sentimientos y emociones propios y ajenos, para el logro de una actitud empática y cuidadosa con respecto a los demás y a la naturaleza.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Construir y expresar un concepto ajustado de sí mismo reconociendo los múltiples aspectos de su naturaleza y personalidad, así como de la dimensión cívica y moral de esta, a partir de la investigación y el diálogo en torno a diversas concepciones sobre la naturaleza humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar, gestionar y comunicar ideas, emociones, afectos, razones y deseos con comprensión y empatía hacia los de los demás, demostrando autoestima y compartiendo una comprensión cuidadosa y respetuosa de lo que deben ser las relaciones con otras personas y con el entorno, incluyendo el ámbito afectivo y afectivosexual.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Desarrollar y demostrar responsabilidad y autonomía moral a través de la práctica de la deliberación racional, el uso de conceptos éticos y el diálogo respetuoso con los demás en torno a distintos valores y modos de vida, así como a problemas relacionados con el ejercicio de los derechos individuales, el conflicto entre legitimidad y legalidad y la objeción de conciencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Aplicar el pensamiento crítico y filosófico al análisis de problemas morales relacionados con el uso responsable, seguro y ético de las redes y medios de comunicación, el problema de la desinformación, los límites de la libertad de expresión, las conductas adictivas, la prevención del abuso, el acoso y el ciberacoso.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Promover y demostrar una convivencia pacífica, respetuosa, democrática y comprometida con el bien común a partir de la investigación sobre la naturaleza social y política del ser humano y el uso y comprensión crítica de los conceptos de sociedad, política, ley, poder, soberanía, justicia, Estado, gobierno, constitución, democracia, memoria democrática, dignidad y derechos humanos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Fomentar el ejercicio de la ciudadanía activa y democrática a través del conocimiento del movimiento asociativo y la participación respetuosa, dialogante y constructiva en actividades de grupo que impliquen tomar decisiones colectivas, planificar acciones coordinadas y resolver problemas aplicando procedimientos y principios cívicos, éticos y democráticos explícitos orientados a la resolución racional y dialogada de los conflictos y el rechazo de la violencia.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a generar un compromiso activo con el bien común a través del análisis y la toma razonada y dialogante de posición en torno a cuestiones éticas de actualidad como la lucha contra la desigualdad y la pobreza, el derecho al trabajo, la salud, la educación y la justicia, así como sobre los fines, desafíos y límites éticos de la investigación científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Tomar conciencia de la lucha por una efectiva igualdad de género y del problema de la violencia y explotación sobre las mujeres a través del análisis de las diversas olas y corrientes del feminismo y de las medidas de prevención de la desigualdad, la violencia y la discriminación por razón de género u orientación sexual, mostrando igualmente conocimiento de los derechos LGTBIQ+ y reconociendo la necesidad de respetarlos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir activamente al bienestar social adoptando una posición propia, explícita, informada y éticamente fundamentada sobre el valor y pertinencia de los derechos humanos, la inclusión y el respeto por la diversidad etnocultural, la consideración de los bienes públicos globales y la percepción del valor social de los impuestos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a la consecución de un mundo más justo y pacífico a través del análisis y reconocimiento de la historia democrática de nuestro país y de las funciones del Estado de derecho y sus instituciones, los organismos internacionales, las asociaciones civiles y ONG, los cuerpos y fuerzas de seguridad del Estado, en su empeño por lograr la paz y la seguridad integral, atender a las víctimas de la violencia y promover la solidaridad y cooperación entre las personas y los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Describir las relaciones históricas de interconexión, interdependencia y ecodependencia entre nuestras vidas y el entorno a través del análisis de las causas y consecuencias de los más graves problemas ecosociales que nos afectan.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar distintos planteamientos científicos, políticos y éticos con los que afrontar la emergencia climática y la crisis medioambiental a través de la exposición y el debate argumental en torno a los mismos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Promover estilos de vida éticamente comprometidos con el logro de un desarrollo sostenible, contribuyendo por sí mismo y en su entorno, al consumo responsable, al comercio justo, al cuidado del patrimonio natural, al respeto por la diversidad etnocultural, y al cuidado y protección de los animales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer y comprometerse con valores, prácticas y actitudes que promuevan la movilidad segura, saludable y sostenible, la gestión sostenible de los recursos, la prevención y gestión de los residuos, la alimentación y soberanía alimentaria y la atención a la sostenibilidad del medio rural en Extremadura.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Desarrollar una gestión equilibrada de las emociones, de estima y cuidado de sí mismo y de los otros, identificando, analizando y expresando de manera asertiva las propias emociones, sentimientos y pensamientos, y reconociendo y valorando los de los demás, en distintos contextos y en torno a actividades creativas y de reflexión individual o dialogada sobre cuestiones éticas, cívicas y de relevancia ecosocial.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Reflexionar sobre el lugar y el significado de las emociones y sentimientos, describiendo las diferencias entre unos y otros, investigando las experiencias, valores, creencias e ideas que están en su génesis, y analizando su importancia en la explicación de las acciones y creaciones humanas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Apreciar que la inteligencia humana es inseparable de sus dimensiones sentimental y emotiva, ejemplificando situaciones en las que se muestre la riqueza de la diversidad personal y su plasmación en diversas producciones estéticas y culturales.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Autoconocimiento y autonomía moral"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Sociedad, justicia y democracia"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Sostenibilidad y ética ambiental"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La investigación ética y la resolución de problemas morales complejos: el pensamiento crítico y filosófico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La naturaleza humana y la identidad personal. Dignidad, libertad y moralidad como rasgos distintivos. e A.1.3. La educación de las emociones y los sentimientos. La inteligencia emocional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "La empatía con los demás. La igualdad y el respeto mutuo en las relaciones afectivas. La educación afectivo-sexual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Deseos y razones: la voluntad y el juicio moral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Autonomía, responsabilidad y autoestima personal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "La reflexión en torno a lo valioso y los valores: universalismo y pluralismo moral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Normas, virtudes y sentimientos morales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "La ética como guía de nuestras acciones. Éticas de la felicidad, éticas del deber y éticas de la virtud.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "El conflicto entre legitimidad y legalidad. La objeción de conciencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Los derechos individuales y el debate en torno a la libertad de expresión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "El problema de la desinformación. El uso seguro, crítico y ético de las redes y los medios de comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "La protección de datos y el derecho a la intimidad. El ciberacoso y las situaciones de violencia en las redes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Las conductas adictivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Las virtudes del diálogo y las normas de argumentación: su aplicación a la resolución pacífica de conflictos. La empatía con los demás.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La naturaleza y origen de la sociedad: competencia y cooperación, egoísmo y altruismo. B.1. Vida social y ciudadanía democrática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Las estructuras sociales y los grupos de pertenencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La organización política y su legitimidad: ley, poder, soberanía y justicia. Formas de Estado y tipos de gobierno. El Estado de derecho y los valores constitucionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "La democracia: principios, procedimientos e instituciones. La memoria democrática. Consecuencias de una dictadura y diferentes manifestaciones de la memoria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La guerra, el terrorismo y otras formas de violencia política.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Las distintas generaciones de derechos humanos. Su constitución histórica y su relevancia ética. Los derechos de la infancia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Asociacionismo y voluntariado. La ciudadanía y la participación democrática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Los códigos deontológicos. Las éticas aplicadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "La desigualdad económica y la pobreza como formas de violencia estructural. La feminización de la pobreza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Globalización económica y bienes públicos globales. El comercio justo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "El derecho al trabajo, la salud, la educación y la justicia. El valor social de los impuestos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "La inclusión social y el respeto por la diversidad y las identidades etnoculturales. Inmigración e interculturalismo. Prejuicios y estereotipos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "La igualdad de género y las diversas olas y corrientes del feminismo. La prevención de la explotación y la violencia contra niñas y mujeres. La corresponsabilidad en las tareas domésticas y de cuidados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "El respeto por la diversidad y las identidades de género. Los derechos LGTBIQ+.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Fines y límites éticos de la investigación científica: la bioética, el desafío de la inteligencia artificial y las propuestas transhumanistas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Acciones individuales y colectivas en favor de la paz. La contribución del Estado y los organismos internacionales a la paz, la seguridad integral y la cooperación. La atención a las víctimas de la violencia. Las fuerzas armadas y la defensa al servicio de la paz.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "El derecho internacional y la ciudadanía global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.19",
+      "bloque_id": "B2",
+      "descripcion": "El papel de las ONG y las ONGD.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.20",
+      "bloque_id": "B2",
+      "descripcion": "Los movimientos ciudadanos contra la guerra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.21",
+      "bloque_id": "B2",
+      "descripcion": "El respeto a las personas con discapacidad. Convención de los derechos de las personas con discapacidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Consideración crítica de las diversas cosmovisiones sobre la relación humana con la naturaleza: la interdependencia,.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Los límites del planeta y el agotamiento de los recursos. La huella ecológica de las acciones humanas. El problema de la emergencia climática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Diversos planteamientos éticos, científicos y políticos en torno a los problemas ecosociales. La ética ambiental. La ética de los cuidados y el ecofeminismo. Los Objetivos de Desarrollo Sostenible (ODS). El decrecimiento. La economía circular.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La perspectiva biocéntrica y el compromiso activo con la protección de los animales. Los derechos animales y de la naturaleza. El maltrato animal y su prevención.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Estilos de vida sostenible. La gestión sostenible y justa de los recursos: suelo, aire, agua, energía y residuos. La prevención de los residuos. Las energías verdes y renovables.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La movilidad segura, saludable y sostenible. El consumo responsable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "La alimentación y la soberanía alimentaria. Comunidades resilientes y en transición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Despoblamiento y sostenibilidad del medio rural en Extremadura. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II) nos permiten dar respuesta al cómo enseñar y evaluar, que retomamos a continuación para contextualizarlos en la materia. Las situaciones de aprendizaje representan un marco idóneo para la acción educativa y la sistematización de los procesos de enseñanza-aprendizaje en torno a las competencias específicas de la materia y al logro de los objetivos de etapa y del Perfil de salida del alumnado. Como tales, requieren de la consideración del entorno en el que se desarrolla la actividad de aprendizaje, de la naturaleza particular de los saberes que se abordan y del formato y soportes en el que se representan, de las actitudes y destrezas que se proponen, tanto como de las interacciones, intereses y motivaciones que dinamizan y dan sentido al proceso educativo. Las situaciones de aprendizaje relativas a la materia de Educación en Valores Cívicos y Éticos han de contemplar los principios fundamentales del Diseño Universal para el Aprendizaje (DUA), singularmente la introducción de estrategias diversas de reconocimiento y representación de los saberes establecidos en la materia, priorizando en ellas las habilidades de observación y análisis crítico y reflexivo, asumiendo también la diversidad de ritmos de aprendizaje, experiencias, capacidades y motivaciones del alumnado, así como la posibilidad de que este participe en la elección de recursos, acciones y actividades que favorezcan su implicación en el proceso a partir de sus conocimientos previos. Así mismo, las situaciones de aprendizaje han de comprender distintas estrategias de motivación, específicamente aquellas dirigidas a dilucidar los fundamentos de los aprendizajes comprendidos en las situaciones diseñadas. Se han de consignar también diversas opciones de despliegue y generalización de lo aprendido en diferentes contextos, posibilitando el desarrollo simultáneo de distintas competencias. En esta materia, las situaciones de aprendizaje buscan integrar los aspectos teóricos, prácticos y emocionales reflejados en las competencias específicas y que recorren los tres bloques de saberes básicos: «Autoconocimiento y autonomía moral» (A), «Sociedad, justicia y democracia» (B) y «Ética ambiental y desarrollo sostenible» (C). De este modo, se promoverán actuaciones, tanto en el aula como fuera de ella, en las que, a través de la reflexión crítica y ética, individual y comunitaria, se facilite un mejor conocimiento de la identidad humana y de su naturaleza social e interrelacionada con el entorno, a la vez que se fomentan, mediante la puesta en práctica de los conocimientos adquiridos y construidos críticamente sobre el ser humano, la sociedad y la naturaleza, la formación de una personalidad madura y responsable, la convivencia, la asunción de las normas y valores democráticos, y una actitud empática y de cuidado ante el mundo que nos rodea. Los conceptos, destrezas, actitudes y valores éticos, cívicos y políticos referenciados en la materia de Educación en Valores Cívicos y Éticos constituyen el requisito básico exigible a todos los sujetos que conviven en una democracia digna de ese nombre. Aunque pudieran parecer intangibles y abstractos inicialmente, estos saberes poseen una clara dimensión práctica, pues se refieren a las acciones humanas cotidianas y a los asuntos que conciernen a la vida social y personal, aspectos que han de determinar el diseño de las situaciones de aprendizaje y que resultan ineludibles para deliberar sobre las opciones de vida individuales y para justificar un proyecto universalizable de justicia pública y de interés común. De otro lado, hay que considerar que la formulación de juicios con que orientar la acción común sobre la base de los significados compartidos implica, en esta fase de la evolución de cada adolescente, determinadas relaciones con el grupo, que hay que aprovechar y canalizar para dinamizar el proceso de aprendizaje. Estas interacciones deben situar al alumnado en un espacio de deliberación y trabajo que simule con la mayor fidelidad posible el espacio público en el que hay que desenvolverse como ciudadano de pleno derecho. En consonancia con lo expuesto, las situaciones de aprendizaje deben promover la transformación de los espacios y momentos de aprendizaje en un laboratorio de ideas abierto a la reflexión, a la crítica y a la convivencia, para sentir, comparar, discutir, enunciar juicios éticos y evaluar los valores en juego, permitiendo con ello un acercamiento activo a los retos más destacados del siglo XXI y favoreciendo distintas formas de implicación y participación del alumnado. En el horizonte de las situaciones de aprendizaje de la materia ha de prevalecer el empeño por encauzar los trazos de una ética discursiva, basada en la legitimidad racional propia de la democracia y en la consideración de los grandes retos y desafíos que la apremian, sin olvidar la dimensión afectiva que supone el ejercicio de la ciudadanía y la relación con uno mismo y con el entorno. En este sentido, las situaciones de aprendizaje han de articular actuaciones y productos que impliquen el desarrollo de las competencias emocionales del alumnado, específicamente aquellas que se despliegan en la deliberación compartida sobre problemas éticos fundamentales y de actualidad, por medio de actuaciones que fomenten la creatividad, el diálogo, la ayuda mutua, la reflexión y el juicio autónomo, a la par que el reconocimiento, evaluación, gestión y comprensión de las emociones propias y ajenas. El ejercicio de la ciudadanía se define por la participación en los asuntos comunes, en primer lugar, mediante la palabra. Por tanto, el uso adecuado de la expresión oral y escrita constituye una herramienta básica de inmersión en el ejercicio de la ciudadanía democrática, además de un elemento clave para el propio aprendizaje y la transformación de la información en conocimiento. La expresión oral y escrita es, así, fundamental para estructurar e interiorizar procedimientos expresivos y condiciones afectivas apropiadas, por lo que su práctica, su transposición a palabra pensada y su conjugación con la lectura comprensiva de textos, constituyen una dimensión esencial de las prácticas y actuaciones que han de articular las situaciones de aprendizaje, en las que cabría incluir, entre otras, actividades como la creación e interpretación de textos, la disertación oral y las dinámicas basadas en el diálogo argumentativo y el debate de ideas. Sin embargo, y pese a su centralidad, el lenguaje verbal no debe ser la única forma de representación y realización de las distintas actuaciones y productos que compongan las situaciones de aprendizaje. La utilización de otros lenguajes, singularmente el visual y audiovisual, sin excluir ningún otro que sirva a los propósitos educativos (el plástico, el musical, etc.), debe constituir una práctica habitual en el diseño de aquellas. En esta materia, el ejercicio del diálogo intersubjetivo o socrático, con todo lo que ello supone (el uso regulado de la palabra hablada y escrita, la capacidad de dar y pedir razones, la aptitud para analizar el discurso del otro, la escucha activa, la habilidad para argumentar y para reconsiderar las propias posturas), representa un recurso fundamental en el diseño de las situaciones de aprendizaje. A través de él se construyen nuevos conocimientos, se conforma el pensamiento mismo y se predispone al alumnado hacia la movilización de experiencias, actitudes, destrezas y valores indispensables para la convivencia democrática. De otro lado, las actuaciones y productos que estructuran la situación de aprendizaje en esta materia, y que tienen como escenario habitual el del debate y el análisis en torno a dilemas morales y problemas éticos, pueden estar sustentados en una gran diversidad de lenguajes y formatos (académico, teatral, mediático, gamificado), y metodologías didácticas (como, por ejemplo, las técnicas de Filosofía para Niños). La interdisciplinariedad y el desarrollo de múltiples competencias y dimensiones integradas del aprendizaje es uno de los rasgos fundamentales del diseño de las situaciones de aprendizaje. La materia de Educación en Valores Cívicos y Éticos constituye, en relación con estos aspectos, un ámbito que, dada la centralidad y transversalidad de sus saberes, se presta de manera excepcional al desarrollo de proyectos de ámbito interdisciplinar y la aplicación de metodologías didácticas como el aprendizaje basado en proyectos (ABP), el aprendizaje cooperativo o el aprendizajeservicio, entre otras. Así, por ejemplo, el aprendizaje basado en proyectos podría exponer al alumnado a conflictos de diferente índole en los que, a partir de una situaciónproblema, el alumnado trabajara cooperativamente para resolverla de manera creativa, emprendedora y transformadora, utilizando recursos e información de distintos ámbitos y generando una reflexión global en torno a las cuestiones a tratar que quepa compartir con otros y generalizar a contextos diversos, tanto en el ámbito local como global. En este sentido, el diseño de situaciones de aprendizaje de naturaleza interdisciplinar y con proyección social actuarían como resortes destinados a conectar al alumnado con su comunidad y a la toma de conciencia de los retos y desafíos del siglo XXI. En todas las situaciones de aprendizaje planteadas, adquiere especial valor la función del docente, que actúa como mediador imprescindible, orientando y conduciendo los procesos de aprendizaje para que el alumnado gane en autonomía a través de las situaciones propuestas. En la materia de Educación en Valores Cívicos y Éticos, dicha función se define, ante todo, por la labor mediadora y motivadora del propio proceso de toma de conciencia, reflexión y compromiso con relación a determinados valores. Se precisa, por ello, de un andamiaje fundado en cierta actitud o estilo docente que, lejos de adoctrinar o limitarse a referir información, se preste, desde una posición lo más aséptica posible, a estimular y reconducir el proceso por el que el alumnado desarrolla sus propios juicios y su autonomía moral y personal, proporcionando al mismo tiempo la retroalimentación que se precisa para la generalización y la puesta en práctica vivencial de los distintos aprendizajes, entendiendo que debe favorecer la autonomía de cada estudiante ofreciendo la práctica guiada y ayuda que cada uno necesite. La evaluación, sus diversos tipos y la requerida variedad de instrumentos a través de los cuales se aplica, constituyen un elemento esencial en el diseño de las situaciones de aprendizaje. Esta materia representa un ámbito competencial idóneo para la integración de actuaciones que favorezcan una evaluación, no solo adaptada a las diferencias personales del alumnado, sino abierta a la participación crítica y responsable del propio alumnado. Dicha evaluación ha de tener también en cuenta el grado de abstracción y el estilo dialógico y cooperativo que caracteriza a la materia. En cualquier caso, los tipos (heteroevaluación, coevaluación o autoevaluación) y los instrumentos de evaluación propuestos no solo habrán de aplicarse a la estimación del desarrollo y adquisición de los aprendizajes competenciales por parte del alumnado, sino también a la valoración de la propia situación de aprendizaje y su desarrollo en el espacio educativo, con objeto de ajustar su diseño y aplicación. Así, además de las herramientas propias de la evaluación del alumnado (rúbricas, listas de comprobación, memorias, escalas de observación sistemática, entrevistas, presentaciones, revisión de trabajos, ejercicios, porfolios y otras), conviene especificar aquellas otras que puedan utilizarse para la evaluación del propio proceso y situación de aprendizaje, incluyendo el desempeño de la función docente (encuestas anónimas, puestas en común, observación por pares y otras).",
+      "criterios_ids": []
+    }
+  ]
+}

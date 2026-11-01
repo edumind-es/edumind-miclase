@@ -1,0 +1,620 @@
+{
+  "meta": {
+    "comunidad": "Asturias",
+    "etapa": "primaria",
+    "asignatura": "cultura-asturiana",
+    "asignatura_nombre": "Cultura Asturiana",
+    "ciclo_origen": "Tercer ciclo",
+    "fuente": "Asturias · Primaria · Cultura Asturiana · Tercer ciclo.xlsx",
+    "generado": "2026-11-01",
+    "curso": "5º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia La competencia matemática y compe (competencia STEM por sus siglas en inglés los métodos científicos, el pensamiento y re métodos de la ingeniería para transformar el e sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolv La competencia en ciencia conlleva la co social, utilizando un conjunto de conocimiento experimentación, con el fin de plantear pr pruebas para poder interpretar y transformar e La competencia en tecnología e ingeniería y metodologías propios de las ciencias para las necesidades o deseos de las personas sostenibilidad."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. Competenci La competencia digital implica el uso segu de las tecnologías digitales para el aprendiza sociedad, así como la interacción con estas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia em La competencia emprendedora implica d sobre oportunidades e ideas, utilizando los generar resultados de valor para otras person mirada para detectar necesidades y oportunid evaluar el entorno, y crear y replantear idea pensamiento estratégico y la reflexión ética, creativos y de innovación; y despertar la disp incertidumbre. Asimismo, implica tomar d conocimiento y colaborar de manera ágil co habilidades de comunicación y de negociació mediante la planificación y gestión de proy económico-financiero."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresió modo en que las ideas, las opiniones, los se comunican de forma creativa en distintas cu manifestaciones artísticas y culturales. Implica el desarrollo y la expresión de las ideas prop papel que se desempeña en la sociedad."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. ANE Áreas de Edu Conocimiento del Medio Los retos del siglo XXI demandan que herramientas para que el alumnado pueda éxito. El área de Conocimiento del Medio N ámbito con el objetivo de que niños y niñas l respetuosas con el mundo en el que viven y p éticos y sostenibles fundados en valores dem En una sociedad cada vez más diversa formas de sentir, de pensar y de actuar."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar y valorar rasgos, formas de vida y manifestaciones tradicionales que conjuntamente han conformado la cultura asturiana a través de los tiempos, leyendo, investigando y recreando con ayuda de fuentes y materiales orales, escritos y multimodales para integrarlos como saberes propios del alumnado y respetarlos como elementos que, a su vez, forman parte de la cultura humana universal.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "STEM3",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Inferir y reflexionar sobre los diferentes elementos que integran el ecosistema asturiano y su relación entre ellos, expresando opiniones respetuosas con el medio ambiente, deduciendo y apreciando hábitos de vida saludable, de cuidado con el medio natural en el que viven y de empatía con los animales más próximos, para comprometerse con un desarrollo sostenible del planeta y respetuoso con todas las personas y resto de seres vivos que lo conforman.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "STEM3",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Reconocer aspectos históricos, sociales y del patrimonio cultural de Asturias de forma oral, escrita y multimodal, usando diversas fuentes documentales y apoyándose en los medios digitales disponibles para conocer nuestro pasado y presente, así como valorar la convivencia cultural en Asturias en la actualidad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE1",
+        "CE3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Buscar y seleccionar información de diferentes fuentes, para agrupar, redactar y exponer información acerca de las manifestaciones de la cultura tradicional asturiana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Leer, reconocer y dramatizar textos, canciones infantiles, cuentos populares, trabalenguas y rimas en juegos de la tradición oral y escrita, de la literatura y de la cultura asturiana, valorando la importancia del vocabulario específico como hecho enriquecedor y evitando roles y estereotipos de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer y explicar en su contexto social, aspectos básicos de la cultura tradicional asturiana (la familia y las celebraciones y los ritos de paso, los distintos tipos de vivienda y construcciones tradicionales y el traje tradicional).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Establecer conexiones entre los oficios tradicionales y sus herramientas con la economía tradicional asturiana (la ferrería, la artesanía de la madera, la carpintería de ribera, la apicultura, los telares, la cerámica…) ofreciendo referentes femeninos y masculinos en todos los ámbitos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.5",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar curiosidad por los distintos elementos de socialización (juegos y deportes, fiestas tradicionales y populares, gastronomía, música y danza...).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.6",
+      "objetivo_id": "CE1",
+      "descripcion": "Investigar personajes de los mitos y las leyendas asturianas, para elaborar diferentes textos y producciones artísticas (relatos, poesías, cómics, murales...).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.7",
+      "objetivo_id": "CE1",
+      "descripcion": "Poner en valor y participar activamente de los diferentes elementos de la cultura tradicional asturiana como manifestaciones culturales vivas (juegos, gastronomía, fiestas, música y danza...) desde una perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.8",
+      "objetivo_id": "CE1",
+      "descripcion": "Explicar la influencia de la tradición cultural en la sociedad asturiana, valorando cambio y continuidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Buscar y seleccionar información de diferentes fuentes, para agrupar, redactar y exponer información acerca de las manifestaciones del entorno físico y natural de Asturias.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer e interpretar las características básicas del clima y del relieve de Asturias en su diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer los ecosistemas más representativos asturianos, su fauna, su flora y las especies que están en estado de especial protección.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Establecer conexiones sencillas entre los diferentes elementos de los paisajes naturales protegidos de Asturias, así como, el uso responsable de los recursos naturales y conocer las principales organizaciones asturianas de protección del medio ambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Poner en valor y mostrar actitudes de conservación y mejora de los paisajes naturales de Asturias, a través de propuestas y acciones que reflejen compromisos y conductas en favor de la sostenibilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Buscar y seleccionar información de diferentes fuentes, para agrupar, redactar y exponer información acerca de aspectos relacionados con la historia, la sociedad y el patrimonio cultural de Asturias.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer, situar o reproducir símbolos recogidos en el Estatuto de Autonomía y otros iconos propios del Principado de Asturias (el himno, la bandera, el escudo, el Día de Asturias, Oviedo como capital y sede de las principales instituciones, accidentes geográficos señalados como el Cabo de Peñes, el Picu Urriellu...).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Diferenciar y valorar los distintos códigos de comunicación utilizados en Asturias a través de textos variados, canciones, recursos audiovisuales..., desde una perspectiva de género, así como la toponimia propia de Asturias.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Establecer conexiones entre la organización social y los diferentes elementos del paisaje humanizado asturiano (la agricultura, la ganadería y las razas autóctonas, la pesca, la minería, la industria, el comercio y el turismo); así como, organizaciones sociales y económicas en el pasado (los vaqueiros de alzada).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar la organización político-administrativa del territorio de Asturias (la parroquia, el concejo y la Comunidad Autónoma).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.6",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y ordenar temporalmente, de manera guiada, sociedades, hechos, acontecimientos y manifestaciones artísticas de la historia de Asturias, empleando nociones de medida y sucesión básicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.7",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer personas, instituciones y grupos sociales relevantes del presente y del pasado de Asturias haciendo hincapié en la visibilización del papel de las mujeres.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.8",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y analizar algunas obras más importantes del patrimonio artístico, arqueológico y monumental asturiano.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.9",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar y proteger el patrimonio cultural asturiano, reconociéndolo como un bien común, adoptando conductas respetuosas para su disfrute y proponiendo acciones para su conservación y mejora.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.10",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer de una forma elemental los marcos jurídicos de convivencia del Principado de Asturias: las Instituciones, el Estatuto de autonomía y el derecho consuetudinario asturiano.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Cultura tradicional"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Entorno natural y medio físico de Asturias"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Sociedad, historia y patrimonio cultural de Asturias"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo de estrategias para la búsqueda de información concreta, acerca de las manifestaciones de la cultura tradicional asturiana, utilizando diferentes fuentes. Técnicas para presentar ordenadamente los contenidos de forma oral o escrita y en diferentes soportes, y uso del vocabulario apropiado como fuente de conocimiento y disfrute.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Audición, dramatización y lectura de textos, canciones infantiles, cuentos populares y fórmulas sencillas de juegos infantiles de la tradición oral y escrita asturiana desde una perspectiva de género. Vocabulario específico de la tradición y la cultura asturiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Lectura de textos de la literatura asturiana adaptados a la edad: cuentos, poemas y cómics exentos de roles y estereotipos de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de las relaciones existentes entre la familia, la casa y el espacio agrario en la cultura tradicional asturiana. Comparación con las maternidades y paternidades corresponsables Las celebraciones y los ritos de paso.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Pasado y presente del traje tradicional asturiano: variedades de indumentaria, características y usos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Construcciones tradicionales asturianas y sus principales características, funciones y su influencia en la economía rural: la casa, el hórreo, la panera, el cabazo, el molino de agua y los batanes, el cortín...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Oficios tradicionales y actividades artesanales asturianas y sus herramientas: la ferrería, la artesanía de la madera, la carpintería de ribera, la apicultura, los telares, la cerámica… El reconocimiento del valor de actividades consideradas femeninas y, por lo tanto, social e históricamente devaluadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Los juegos y los deportes tradicionales asturianos con un características y reglas. Los bolos en Asturias. enfoque coeducativo:",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Las fiestas tradicionales y populares asturianas más representativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "La gastronomía tradicional asturiana y productos más representativos de platos típicos y postres. Los quesos en Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Las canciones, las danzas y los instrumentos tradicionales asturianos evitando roles y estereotipos sexistas. La tonada y la música folk en Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Acercamiento al mundo fantástico de los mitos y leyendas de Asturias: personajes y sus características, su utilización en la elaboración de diferentes textos y producciones artísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Fomento de la curiosidad y la iniciativa en la práctica activa de actividades grupales relacionadas con diferentes manifestaciones de la cultura tradicional asturiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo de estrategias para la búsqueda de información concreta utilizando diferentes fuentes. Técnicas para presentar ordenadamente los contenidos de forma oral o escrita en diferentes soportes. Vocabulario específico y apropiado para referirse a aspectos sobre el entorno físico y natural de Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "El clima asturiano: temperaturas y precipitaciones. La influencia del mar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Elementos del relieve costero, del relieve montañoso y de los valles. Las cuencas fluviales de Asturias. Playas de Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Especies representativas de la flora y la fauna asturianas. Ecosistemas terrestres y acuáticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Los espacios naturales protegidos: el uso responsable de los recursos naturales. Principales organizaciones asturianas de protección del medio ambiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Responsabilidad ecosocial. La degradación y transformación de los ecosistemas naturales por la acción humana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Desarrollo de estrategias para la búsqueda y obtención de información concreta sobre aspectos de la sociedad, de la historia y del patrimonio cultural de Asturias. Técnicas para presentar ordenadamente los contenidos de forma oral o escrita, en diferentes soportes, y uso del vocabulario apropiado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Símbolos recogidos en el Estatuto de Autonomía y otros iconos propios del Principado de Asturias: Oviedo como capital y sede de las principales instituciones, accidentes geográficos señalados como el Cabo de Peñes, el Picu Urriellu...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "La norma institucional básica de la Comunidad Autónoma del Principado de Asturias. Los órganos institucionales y de gobierno. Acercamiento al conocimiento del Estatuto de Autonomía. El derecho consuetudinario asturiano: costumbres, hábitos y comportamientos sociales, cuya repetición genera la convicción jurídica y que, por tanto, son de obligado cumplimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Diferencia entre los distintos códigos de comunicación en Asturias, valorando las diferencias lingüísticas como un hecho cultural enriquecedor. Vocabulario específico para referirse a aspectos sobre la sociedad, la historia y el patrimonio cultural de Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "La toponimia propia de Asturias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "La organización social y los diferentes elementos del paisaje humanizado asturiano: la agricultura, la ganadería y las razas autóctonas, la pesca, la minería, la industria, el comercio y el turismo. Organizaciones sociales y económicas en el pasado: los vaqueiros de alzada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Organización político-administrativa de Asturias: la parroquia rural, el concejo y la Comunidad Autónoma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "El tiempo histórico en Asturias: sociedades, hechos, acontecimientos y manifestaciones artísticas. Nociones temporales y cronología.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Las expresiones y producciones artísticas a través del tiempo. El patrimonio material (pinturas rupestres, túmulos, castros, castillos, iglesias, palacios…) y el patrimonio inmaterial (misa asturiana de gaita, cultura de la sidra, la asturianada, bolos asturianos, el traje...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Conocimiento de la labor de instituciones y centros culturales ubicados dentro y fuera de Asturias: la Academia de la Llingua Asturiana, la Universidad de Oviedo, Centros Asturianos, medios de comunicación...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Biografía de personajes de relevancia del pasado y del presente asturiano prestando especial atención a la visibilización de la aportación de las mujeres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "El currículo de la enseñanza de la religión católica y de las diferentes confesiones religiosas con las que el Estado español ha suscrito acuerdos de cooperación en materia educativa será el elaborado por la jerarquía eclesiástica y las correspondientes autoridades religiosas, formalmente publicado por el Ministerio competente en la materia o, en su caso, objeto de publicación mediante resolución de la Consejería competente en materia educativa una vez remitido por las citadas autoridades.",
+      "criterios_ids": []
+    }
+  ]
+}

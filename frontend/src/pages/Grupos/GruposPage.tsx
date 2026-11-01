@@ -22,6 +22,9 @@ const COMUNIDADES = [
   { value: 'CyL',       label: 'Castilla y León' },
   { value: 'CLM',       label: 'Castilla-La Mancha' },
   { value: 'Valencia',  label: 'Comunitat Valenciana' },
+  { value: 'Asturias',  label: 'Principado de Asturias' },
+  { value: 'Extremadura', label: 'Extremadura' },
+  { value: 'Murcia',    label: 'Región de Murcia' },
 ]
 
 export default function GruposPage() {

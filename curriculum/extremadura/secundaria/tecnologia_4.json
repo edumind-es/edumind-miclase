@@ -1,0 +1,644 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "tecnologia",
+    "asignatura_nombre": "Tecnología",
+    "ciclo_origen": "Cuarto de ESO",
+    "fuente": "Extremadura · Secundaria · Tecnología · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Identificar y proponer soluciones tecnológicas eficientes e innovadoras, estudiando las necesidades del entorno próximo y aplicando estrategias y procesos colaborativos e interactivos relativos a proyectos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Aplicar de forma apropiada y segura distintas técnicas y conocimientos interdisciplinares utilizando procedimientos y recursos tecnológicos diversos y adecuados en la construcción de soluciones tecnológicas accesibles y sostenibles que den respuesta a necesidades planteadas en el entorno académico, familiar y social del alumnado.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Expresar, comunicar y difundir ideas, propuestas o soluciones tecnológicas en diferentes ámbitos y plataformas digitales, empleando los recursos disponibles y aplicando los elementos y técnicas necesarias para el intercambio de información, mediante el trabajo individual y en equipo.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Desarrollar soluciones automatizadas a problemas planteados, mediante los conocimientos técnicos necesarios y tecnologías emergentes, diseñando, simulando y construyendo sistemas de control programables y robóticos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Aprovechar y emplear de manera responsable las posibilidades de las herramientas digitales, adaptándolas y configurándolas en función de las necesidades, mediante la aplicación de conocimientos interdisciplinares a la resolución eficiente de tareas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Abordar los procedimientos tecnológicos, teniendo en cuenta su impacto en la sociedad y el entorno, aplicando criterios de sostenibilidad y haciendo un uso ético y ecosocialmente responsable de la tecnología.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Idear y planificar soluciones tecnológicas emprendedoras que generen un valor para la comunidad, a partir de la observación y el análisis del entorno más cercano, estudiando sus necesidades, requisitos y posibilidades de mejora.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Aplicar, con iniciativa, estrategias colaborativas de gestión de proyectos con una perspectiva interdisciplinar, siguiendo un proceso iterativo de validación, desde la fase de ideación hasta la resolución de problemas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Abordar la gestión de proyectos de forma creativa, aplicando estrategias y técnicas colaborativas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Utilizar métodos de investigación adecuados para la ideación de soluciones lo más eficientes e innovadoras posibles.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Analizar el diseño de un producto que ofrezca respuesta a una necesidad planteada, evaluando su demanda, evolución y previsión de fin de ciclo de vida con un criterio ético y responsable.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Manejar materiales para la construcción de prototipos, sistemas o modelos empleando herramientas, máquinas, tecnologías de impresión 3D o control numérico CNC y respetando las normas de seguridad y salud.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Construir estructuras y mecanismos con elementos estructurales y operadores mecánicos o con simuladores según los requisitos establecidos y aplicando cálculos y conocimientos científicos multidisciplinares.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Diseñar, calcular, montar o simular circuitos eléctricos y electrónicos funcionales por medio de operadores eléctricos o electrónicos para resolver problemas concretos y aplicando conocimientos y técnicas de medida.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a la igualdad de género, colaborando en el reparto indistinto de funciones dentro de los grupos de trabajo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Intercambiar conocimientos y fomentar el trabajo en equipo de manera asertiva, empleando las herramientas digitales adecuadas y utilizando el vocabulario técnico, la simbología y los esquemas de sistemas tecnológicos apropiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Presentar y difundir las propuestas o soluciones tecnológicas de manera efectiva, empleando la entonación, expresión, gestión del tiempo y adaptación adecuadas del discurso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Debatir y compartir opiniones o información sobre las soluciones propuestas en redes sociales o aplicaciones y plataformas virtuales usando las normas establecidas en la etiqueta digital y valorando la importancia de la comunicación en diferentes lenguas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Diseñar, simular, construir y controlar sistemas de control automáticos programables y robots que sean capaces de realizar tareas de forma autónoma, aplicando los conocimientos técnicos estudiados: materiales, expresión gráfica, mecánica, neumática, hidráulica, electricidad y electrónica.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Integrar en la resolución de problemas tecnológicos lenguajes de programación, aplicaciones informáticas y tecnologías digitales emergentes como la internet de las cosas (IoT), big data e inteligencia artificial (IA) con sentido crítico y ético.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Resolver tareas propuestas de manera eficiente y autónoma mediante el uso de diferentes aplicaciones y herramientas digitales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Configurar debidamente las herramientas digitales utilizadas y adaptarlas a la necesidad existente y a la aplicación de los conocimientos interdisciplinares adquiridos en la materia.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Hacer un uso responsable de la tecnología, mediante el análisis y aplicación de criterios de sostenibilidad en la selección de materiales y en el diseño de estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Minimizar el impacto negativo en la sociedad y en el planeta de los procesos de fabricación de productos tecnológicos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Analizar los beneficios, en el cuidado del entorno, que aportan soluciones tecnológicas tales como la arquitectura bioclimática o el transporte eléctrico, valorando la contribución de las tecnologías al desarrollo sostenible.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Identificar y valorar la repercusión y los beneficios del desarrollo de proyectos tecnológicos de carácter social por medio de comunidades abiertas, acciones de voluntariado o proyectos de servicio a la comunidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.5",
+      "objetivo_id": "CE6",
+      "descripcion": "Identificar las principales actividades tecnológicas de la Comunidad Autónoma, valorando la situación del desarrollo tecnológico en Extremadura.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Proceso de resolución de problemas"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Operadores Tecnológicos"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Pensamiento computacional, automatización y robótica"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque D. Tecnología sostenible"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de gestión de proyectos colaborativos y técnicas de resolución de problemas iterativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estudio de necesidades: del centro, locales y regionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Proyectos colaborativos o cooperativos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de ideación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Presentación y difusión del proyecto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Elementos, técnicas y herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Comunicación efectiva: entonación, expresión, gestión del tiempo y adaptación del discurso.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Emprendimiento, perseverancia y creatividad en la resolución de problemas interdisciplinares.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Productos y materiales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Ciclo de vida de un producto y sus fases: análisis sencillos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de selección de materiales en base a sus propiedades o requisitos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Fabricación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Herramientas de diseño asistido por computador en 3D en la representación o fabricación de piezas aplicadas a proyectos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de fabricación manual y mecánica: aplicaciones prácticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de fabricación digital. Impresión 3D y corte: aplicaciones prácticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Técnicas de evaluación constructiva del proyecto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Electrónica analógica. Componentes básicos, simbología, análisis y montaje físico y simulado de circuitos elementales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Electrónica digital básica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Neumática e hidráulica básica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Análisis de circuitos simples neumáticos e hidráulicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Elementos mecánicos, electrónicos y neumáticos aplicados a la robótica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Montaje físico o simulado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Componentes en sistemas de control programado: controladores, sensores y actuadores.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Lenguajes de programación como elemento de automatización en sistemas de control y robótica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "El ordenador y dispositivos electrónicos móviles como elemento de programación y control.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Trabajo con simuladores informáticos en la verificación y comprobación del funcionamiento de los sistemas diseñados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Iniciación a la inteligencia artificial y big data: aplicaciones. Espacios compartidos y discos virtuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Telecomunicaciones en sistemas de control digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Internet de las cosas: elementos, comunicaciones y control.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Aplicaciones prácticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Sistemas robóticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Diseño, construcción y control de robots sencillos de manera física o simulada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Sostenibilidad y accesibilidad en la selección de materiales y diseño de procesos, de productos y sistemas tecnológicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Transporte y sostenibilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Compromiso ciudadano en el ámbito local y global para la sostenibilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Arquitectura bioclimática.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Instalaciones sostenibles en edificios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias y conciencia de ahorro energético.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Domótica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Comunidades abiertas, voluntariado tecnológico y proyectos de servicio a la comunidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "El papel de la mujer en la ingeniería. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II) nos permiten dar respuesta al cómo enseñar y evaluar, que retomamos a continuación para esta materia. Las situaciones de aprendizaje se desarrollan en torno a una serie de principios y criterios generales que favorecen la consecución de las competencias específicas planteadas para la materia de Tecnología, situando al alumnado como centro del proceso de enseñanza-aprendizaje. Para ello, las actividades parten de la contextualización de elementos clave al entorno en el que se desarrolla la actividad de aprendizaje, del desarrollo competencial, entendiendo como tal la combinación de conocimientos, destrezas y actitudes proyectadas mediante la definición de las competencias específicas de la materia, y por último, del papel del estudiante dentro del proceso aprendizaje, todo ello teniendo en cuenta el nivel de competencia adquirido por el alumnado, así como su momento evolutivo. Se aplican los principios básicos del Diseño Universal para el Aprendizaje (DUA): el análisis de estrategias de representación o reconocimiento de los contenidos y conocimientos establecidos, de estrategias de motivación que fundamentan el por qué aprender estos conocimientos y, por último, de aquellas estrategias de acción y expresión que respondan a cómo vamos a llevarlo a cabo. La organización de la materia requiere el desarrollo de proyectos prácticos colaborativos con recursos idóneos y en espacios adecuados, por lo que no han de existir barreras que impidan la accesibilidad física, cognitiva, sensorial y emocional de nuestro alumnado con el fin de asegurar su participación y aprendizaje. Del mismo modo, la aplicación de distintas técnicas de trabajo y la diversidad de situaciones de aprendizaje que intervienen en la materia debe promover la participación del alumnado con una visión integral de la disciplina, resaltando su esfera social ante los desafíos y retos tecnológicos que plantea nuestra sociedad para reducir la brecha digital y de género así como contribuir al logro de los objetivos de desarrollo sostenible. Por otra parte, es necesario tener en cuenta el carácter práctico de la materia, el enfoque competencial del currículo y la coherencia con la materia de Tecnología y Digitalización, así como la proyección hacia los estudios en Bachillerato de la modalidad de Tecnología e Ingeniería o en los Ciclos Formativos de Grado Medio. Por ello, la materia de Tecnología debe basarse en el diseño de situaciones de aprendizaje específicas para la resolución de problemas tecnológicos, aplicando la metodología de proyectos propia de la Tecnología y de la competencia STEM. Además, se ha de tener en cuenta el carácter interdisciplinar de la materia para adquirir un desarrollo competencial integral, participando y haciendo partícipes a las distintas materias. El docente, como guía o mediador del aprendizaje, ha de presentar la información a la diversidad del alumnado mediante diferentes sistemas de comunicación, expresión y representación, así como en formatos y soportes distintos, teniendo en cuenta su capacidad de percepción, comprensión o el uso del lenguaje, entre otros factores. Igualmente se ha de considerar el carácter positivo de las soluciones adoptadas desde la tecnología mediante la realización de propuestas donde la accesibilidad universal (física, espacial y cognitiva) esté presente en el ámbito de las personas con discapacidad. De acuerdo a estos principios, el planteamiento de las situaciones de aprendizaje parte de la definición de un problema o necesidad que se debe resolver y que tiene sentido en el mundo real, así como conexión con las experiencias e intereses del alumnado. Dicha definición debe contener alternativas visuales, proporcionando tablas, ilustraciones, imágenes, animaciones, vídeos, mapas conceptuales y también potenciando análisis de casos, objetos o sistemas tecnológicos a partir de diagramas visuales y organizadores gráficos. Igualmente, para completar dicho análisis, se debe favorecer la manipulación de objetos tecnológicos y modelos espaciales. Las estrategias de motivación para la materia de Tecnología se basan en que sus aprendizajes sean eminentemente funcionales y útiles. Organizar entornos de aprendizaje cooperativo e individual, permitir la exploración y experimentación tanto como lanzar propuestas creativas que impliquen no controlar una respuesta unívoca, son estrategias para consolidar la participación del alumno en todo el proceso de resolución de proyectos de una forma activa y crítica con su propio trabajo. El empleo de metodologías activas, como el aprendizaje basado en proyectos, el aprendizaje-servicio o el design thinking, frente a las metodologías tradicionales, promueve tanto el trabajo individual, de análisis y evaluación crítica del trabajo realizado como la interacción, colaboración y cooperación entre iguales, favoreciendo que, progresivamente, el alumnado tome más decisiones sobre la planificación, desarrollo y resultado del trabajo realizado, siendo el protagonista de su aprendizaje. El desarrollo competencial de la materia, mediante la aplicación del método de proyectos, debe abordar técnicas y procedimientos para el diseño, la construcción y fabricación de objetos y sistemas. Para ello, se hace necesario abordar tecnologías de fabricación asistida por ordenador como pudieran ser control número por ordenador CNC o diseño e impresión 3D. De esta forma, se pretende consolidar el proceso creativo de resolución de problemas tecnológicos iniciado con el proceso de diseño previo de las soluciones, la planificación de los procedimientos para dicha construcción y la previsión de una futura evaluación del prototipo fabricado. La intervención de los conocimientos necesarios, como pudieran ser operadores tecnológicos mecánicos, eléctricos, electrónicos, neumáticos e hidráulicos, se debe llevar a cabo a través de la aplicación lógica de procesos de simulación, a partir de software específico, para su posterior desarrollo en prototipos, sistemas o subsistemas dentro del desarrollo de las diferentes soluciones técnicas planteadas. En esta misma línea de acción, se debe completar el desarrollo competencial y fomentar el pensamiento computacional del alumnado a través de la automatización de los operadores anteriormente mencionados. En este sentido se establecen situaciones de aprendizaje que potencien el uso de tecnologías emergentes como la internet de las cosas (IoT), la inteligencia artificial (IA), etc. Especial relevancia merece durante todo el proceso de enseñanza-aprendizaje atender a los criterios de sostenibilidad en el diseño y fabricación de objetos tecnológicos. El desarrollo tecnológico debe fomentar el bienestar social minimizando las repercusiones negativas de la tecnología en el medioambiente, por lo que todo planteamiento precisa de un plan de impacto en la sociedad y en el entorno. En esta línea de actuación, se deben potenciar actividades complementarias que favorezcan el planteamiento anterior mediante el contacto con personas, empresas e instituciones de interés Por último, hay que resaltar que la motivación está íntimamente relacionada con el estado emocional y autoestima del alumnado, por lo que se deben valorar el esfuerzo y el trabajo diarios así como fomentar su participación para que se sienta protagonista y se produzca una retroalimentación efectiva, de modo que se logre un refuerzo positivo. También se tiene que realizar un análisis crítico de la información que tenga en cuenta la repercusión social y el valor positivo de la tecnología en la igualdad de oportunidades. La acción docente dentro del desarrollo del proceso de resolución de problemas, en cada una de sus fases (análisis, ideación, planificación y diseño, construcción y evaluación), tiene que potenciar el desarrollo del trabajo colaborativo y las habilidades de cada estudiante, ya sean técnicas o sociales, fomentando tanto el respeto como la autoconfianza a la vez que se promueve la adquisición de aprendizajes significativos. Además, se deben proporcionar alternativas para la interacción física del alumno con los materiales educativos, posibilitar el uso de medios sociales y herramientas web interactivas, emplear sistemas de planificación de proyectos, así como facilitar el aprendizaje con actividades digitales y manipulativas. Plantear situaciones de aprendizaje en las que el alumnado sea el impulsor de su propio aprendizaje ofrece un escenario perfecto para la evaluación competencial a través de diversos instrumentos de evaluación que logren reforzar la motivación y autoestima. En la misma línea, las posibilidades que ofrecen las herramientas digitales en lo que se refiere a diseño CAD, simulación de operadores tecnológicos y procesos de fabricación digital, permiten al docente contar con una gran variedad de registros digitales específicos en la evaluación de la consecución de los objetivos marcados para la materia de Tecnología durante el proceso de resolución de los proyectos, complementándolo con las valoraciones realizadas durante el proceso de diseño previo, la planificación u organización y la propia evaluación del prototipo realizado. De la misma manera, desarrollar estrategias de trabajo cooperativo dentro de los espacios propio de la materia permite valorar si el alumnado asume diferentes papeles con eficiencia y responsabilidad en la participación y gestión de proyectos colaborativos, si muestra empatía y respeto hacia las aportaciones de los demás, y en general, las actitudes humanas y profesionales necesarias para su desarrollo integral dentro de la sociedad.",
+      "criterios_ids": []
+    }
+  ]
+}

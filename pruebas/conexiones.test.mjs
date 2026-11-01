@@ -71,22 +71,37 @@ ok(objetivoDeCriterio({ id: 'CE2.3', objetivo_id: 'OBJ5' }) === 'OBJ5', 'si la m
 console.log('\n5. Los JSON de curriculum/ conectan con descriptores')
 // Mínimo de competencias específicas con descriptor en cada comunidad y
 // etapa. Valencia en Primaria solo nombra competencias clave: se le exige
-// que las nombre.
+// que las nombre. Una optativa propia de la comunidad (Cultura Clásica o
+// Unión Europea en Extremadura) no tiene competencia específica estatal con
+// la que casar si la matriz no trae «Enlaces»: el 85 % vale también contando
+// solo las materias que el Real Decreto tiene. Decisión de Luis (nov 2026).
 for (const comunidad of readdirSync(RAIZ).filter(c => !c.startsWith('_'))) {
   for (const etapa of ['primaria', 'secundaria']) {
     const dir = join(RAIZ, comunidad, etapa)
     if (!existsSync(dir)) continue
+    const materiasRD = new Set(estatal[etapa].estatales.map(c => c.materia))
     const cuenta = { comunidad: 0, competencia: 0, estatal: 0, ninguna: 0 }
+    const rd = { total: 0, conDescriptor: 0 }
     for (const f of readdirSync(dir).filter(f => f.endsWith('.json'))) {
       const d = JSON.parse(readFileSync(join(dir, f), 'utf8'))
-      for (const o of d.objetivos ?? []) cuenta[conexionDeObjetivo(o, estatal[etapa]).origen]++
+      for (const o of d.objetivos ?? []) {
+        const origen = conexionDeObjetivo(o, estatal[etapa]).origen
+        cuenta[origen]++
+        if (materiasRD.has(d.meta?.asignatura)) {
+          rd.total++
+          if (origen === 'comunidad' || origen === 'estatal') rd.conDescriptor++
+        }
+      }
     }
     const total = Object.values(cuenta).reduce((a, b) => a + b, 0)
     const conDescriptor = (cuenta.comunidad + cuenta.estatal) / total
     const conAlgo = (total - cuenta.ninguna) / total
+    const soloRD = rd.total ? rd.conDescriptor / rd.total : 0
     const valencianaPrimaria = comunidad === 'valencia' && etapa === 'primaria'
-    ok(total > 0 && (valencianaPrimaria ? conAlgo >= 0.9 : conDescriptor >= 0.85),
-      `${comunidad}/${etapa}: ${Math.round(100 * (valencianaPrimaria ? conAlgo : conDescriptor))} % conectado`,
+    const pasa = valencianaPrimaria ? conAlgo >= 0.9 : (conDescriptor >= 0.85 || soloRD >= 0.85)
+    ok(total > 0 && pasa,
+      `${comunidad}/${etapa}: ${Math.round(100 * (valencianaPrimaria ? conAlgo : conDescriptor))} % conectado`
+        + (!valencianaPrimaria && conDescriptor < 0.85 ? ` (${Math.round(100 * soloRD)} % en las materias del RD)` : ''),
       JSON.stringify(cuenta))
   }
 }

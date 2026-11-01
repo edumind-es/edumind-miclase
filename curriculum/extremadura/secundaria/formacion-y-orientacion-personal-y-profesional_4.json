@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "formacion-y-orientacion-personal-y-profesional",
+    "asignatura_nombre": "Formación y Orientación Personal y Profesional",
+    "ciclo_origen": "Cuarto de ESO",
+    "fuente": "Extremadura · Secundaria · Formación y Orientación Personal y Profesional · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Analizar los procesos implicados en la cognición, la motivación y el aprendizaje, así como sus implicaciones en la conducta, dando lugar a estrategias de gestión emocional y del propio proceso de aprendizaje.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Afrontar de forma eficaz los retos que plantea el camino hacia la vida adulta, comprendiendo las principales características del desarrollo evolutivo de la persona, así como aquellos elementos de la madurez que condicionan los comportamientos o actuaciones y que permiten potenciar las cualidades personales y de relación social.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Desarrollar y fomentar la empatía y el respeto a lo diferente y lo diverso, mediante el conocimiento y comprensión del ser humano, sus sociedades y culturas, con curiosidad y espíritu crítico.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Relacionarse asertivamente, comprendiendo los factores personales y socioculturales que intervienen en la configuración psicológica de la persona, respetando y valorando la diversidad personal, social y cultural, y desarrollando habilidades sociales adecuadas a diferentes contextos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Tomar decisiones adecuadas en el marco de un proyecto de vida en el ámbito personal, académico y profesional, descubriendo y primando las necesidades e intereses vocacionales, así como explorando las oportunidades académicas y profesionales que ofrece el entorno.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Aplicar estrategias de aprendizaje y gestión emocional que permitan aumentar el control sobre las acciones y sus consecuencias, tanto en el ámbito personal como en el social y académico.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer los procesos que intervienen en el aprendizaje, analizar sus implicaciones y desarrollar estrategias que favorezcan la adquisición de conocimientos.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Tomar conciencia de la importancia del componente emocional y su repercusión en el aprendizaje, así como desarrollar estrategias que mejoren el proceso cognitivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.4",
+      "objetivo_id": "CE1",
+      "descripcion": "Conocer las bases teóricas fundamentales de los procesos físicos y psicológicos que intervienen en la cognición, motivación, el aprendizaje y la gestión emocional, y la relación de estos con la conducta.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Afrontar de forma eficaz, con progresiva autonomía, nuevos retos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Analizar los elementos que condicionan los comportamientos, identificando cualidades personales y sociales y reconociendo cambios durante el proceso de desarrollo evolutivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Conocer el desarrollo evolutivo de las personas, analizando y comprendiendo las principales características de la madurez, en distintos planos: cognitivo, social, emocional.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar cualidades personales y de los demás, reflexionando sobre la importancia de potenciar aquellas que resultan necesarias para afrontar con eficacia nuevos retos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Aplicar cualidades personales que faciliten el proceso de transición de la adolescencia a la adultez.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Conocer el funcionamiento psicológico, social y cultural del ser humano, con espíritu crítico y desde distintas perspectivas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Mostrar actitudes de respeto y empatía por lo diferente y lo diverso.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Comprender al ser humano, sus sociedades y culturas reflexionado de manera crítica a partir del conocimiento que proporcionan las ciencias humanas y sociales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer los factores que intervienen en la configuración psicológica de la persona, mejorando la comprensión de uno mismo en relación con los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Desarrollar estrategias y habilidades sociales que faciliten la adaptación a nuevos grupos y contextos, desde la valoración y el respeto a la diversidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los factores personales y socioculturales que intervienen en la configuración psicológica de la persona a partir del conocimiento comparado de la dimensión social y antropológica del ser humano.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.4",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar la diversidad, desde el respeto y la inclusión, considerándola un elemento enriquecedor y de valor a nivel personal, social y cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Descubrir los propios intereses personales y vocacionales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Explorar las oportunidades académicas y profesionales que ofrece el entorno, desarrollando las destrezas necesarias en el proceso de toma de decisiones.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Diseñar el propio proyecto personal, académico y profesional, incorporando los tres planes: de autoconocimiento, conocimiento del entorno académico y profesional y aproximación a la búsqueda activa de empleo.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Explorar el entorno próximo identificando las oportunidades académicas y profesionales que más se ajustan al proyecto vital.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. El ser humano y el conocimiento de uno mismo"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Formación y orientación personal, académica y profesional. Hacia la"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Proyecto personal, académico-profesional y aproximación a la"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Visión y conocimiento del ser humano desde la perspectiva psicológica, antropológica y sociológica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estudio del cerebro. Descripción general. Sistema nervioso central y sistema nervioso periférico. Neuronas y estructura funcional del cerebro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Fundamentos biológicos de la conducta. Circuitos de recompensa y su relación con las adicciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Bienestar y hábitos saludables: alimentación, descanso, sueño, deporte, gestión emocional, componentes de afectividad, prevención de adicciones, gestión de la ansiedad y el estrés.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "La adolescencia desde el punto de vista psicológico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo cognitivo y desarrollo de la personalidad durante la adolescencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento y control de las emociones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo personal dentro del grupo. Influencia del grupo en el individuo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "El ser humano como ser cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Concepto antropológico de cultura. El ser humano como construcción cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Humanización y cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Diversidad cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "El ser humano como ser social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Concepto de sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de inclusión y cohesión social para mejorar la calidad de vida de las personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "El adolescente y sus relaciones: familia y pares. Diversidad y convivencia positiva dentro de los grupos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Búsqueda de autonomía y asunción progresiva de responsabilidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Conducta y comportamientos prosociales y antisociales. Normas y estereotipos. Igualdad de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Procesos de transición a la vida adulta en perspectiva comparada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Procesos implicados en el aprendizaje: atención, motivación y memoria. Estrategias de aprendizaje y estudio. Inteligencia emocional e inteligencia ejecutiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Lo heredado y lo aprendido: biología y cultura. Proceso de socialización. Agentes de socialización. Aprendizaje formal e informal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Autoconocimiento. Autonomía personal y autopercepción. Estilo atribucional. Capacidad autocrítica. Iniciativa personal. Pensamiento creativo. Confianza y seguridad en uno mismo. Perseverancia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para enfrentarse al fracaso y a la frustración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Objetivos de Desarrollo Sostenible (ODS-17) y Marco Europeo de la Competencia Emprendedora (EntreComp). Habilidades transversales. Emprendimiento,iniciativa, creatividad y cooperación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades sociales. Tolerancia y respeto. Empatía. Dinamismo, iniciativa y liderazgo. Capacidad de negociación. Estrategias que favorezcan el trabajo en equipo. Compromiso ante las situaciones de inequidad y exclusión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Habilidades comunicativas: escucha activa, asertiva y proactiva. Barreras en la comunicación: estrategias para superarlas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas de organización y gestión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas digitales para la interacción con los demás. Huella y reputación digital. Gestión de identidades: personal y profesional. Análisis crítico, ético y responsable de la cultura digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Programas, oportunidades y ayudas para la formación. Servicios de orientación académica y profesional. Formación permanente a lo largo de la vida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Exploración y descubrimiento del entorno de trabajo: las relaciones laborales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Tendencias laborales Yacimientos de empleo. y demandas del mercado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Retos de la revolución digital en el entorno profesional. Brecha digital y de género. Techo de cristal. Desigualdad salarial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "Emprendimiento e intraemprendimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Participación social activa. Oportunidades reales de participación en diferentes ámbitos, en condiciones de equidad y con garantía de igualdad de oportunidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "El ser humano como homo oeconomicus. Teorías críticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Colaboración y voluntariado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "Recursos y servicios para la orientación profesional en los entornos local y regional. Planes de búsqueda activa de empleo. Formación permanente a lo largo de la vida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Reflexión sobre las cualidades personales. Identificación de las fortalezas y debilidades propias. La diversidad como elemento enriquecedor para la persona.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Fases del plan: exploración, diagnóstico, reflexión sobre las distintas alternativas, relación entre formación y perfiles profesionales, toma de decisiones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Visibilización del papel de la mujer en la historia de las profesiones STEAM.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Definición de aspiraciones y metas. Priorización reflexiva de alternativas. Ayudas y recursos para superar carencias y afrontar retos personales y profesionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Toma de decisiones. Madurez vocacional: autoorientación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Aproximación a un plan de búsqueda activa de empleo con proyección hacia el futuro. Estrategias e instrumentos de búsqueda de empleo: portales de empleo, CV Europass y videocurrículum, entrevista de trabajo, portfolio profesional, red de contactos. Servicios del SEXPE: gestión de la demanda de empleo; clasificación de demandantes; programas de formación para el empleo; servicio de orientación; gestión de ofertas de empleo. Formación para el empleo y certificados de profesionalidad. Mercado de trabajo. Oferta pública y privada. Principales perfiles solicitados y datos de ocupación. Autoempleo: información y motivación para el emprendimiento. Requisitos y gestión de ayudas. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II) nos permiten dar respuesta al cómo enseñar y evaluar, que retomamos a continuación en relación con la materia de Formación y Orientación Personal y Profesional. Las situaciones de aprendizaje implican el despliegue, por parte del alumnado, de actuaciones asociadas a competencias específicas y, por tanto, también a las competencias clave que contribuyen a la adquisición y desarrollo de las mismas. En el diseño de situaciones de aprendizaje propias de esta materia es conveniente partir de una serie de principios de carácter general y específico. En primer lugar, el diseño de las situaciones de aprendizaje debe tener como meta el desarrollo por parte del alumnado de las competencias específicas de la materia y, por tanto, de las competencias clave. Respecto a estas últimas, en esta materia adquieren más peso la competencia personal, social y de aprender a aprender y la competencia emprendedora, así como el abordamiento directo de algunos retos del siglo XXI, concretamente, la aceptación y manejo de la incertidumbre, la resolución pacífica de conflictos, la igualdad de género y la cultura digital. La perspectiva de género es transversal a toda la materia, tomando conciencia de esta como un factor relevante para la toma de decisiones y en el análisis de las profesiones considerando los estereotipos de género. La finalidad de la materia es conocer los procesos que regulan la conducta, la cognición, el aprendizaje y las emociones desde los fundamentos neurocientíficos y analizar al individuo, los grupos humanos y las organizaciones sociales como una construcción cultural. Desde un punto de vista metodológico, la investigación-acción puede ser un eje vertebrador para las situaciones de aprendizaje, entendida como un proceso de indagación, de reflexión y análisis de las experiencias individuales para que el alumnado pueda ser capaz de planificar e introducir mejoras progresivas en su proyecto personal. La importancia de este enfoque deviene de la conjugación de dos aspectos: la dimensión personal y la dimensión social del ser humano. Desde el punto de vista personal, permitirá al alumnado adquirir diferentes tipos de conocimientos, priorizando las habilidades de observación y análisis, llegando a generar la transformación de actitudes y comportamientos. En cuanto a la dimensión social, permite hacer al alumnado consciente de las implicaciones sociales de los saberes trabajados y lo insta a participar y contrastar socialmente lo aprendido. Las funciones que se ponen en marcha en el desarrollo de esta área son complejas al estar conformadas por diversos procesos: cognitivos (atribuciones, toma de decisiones), emocionales (autocontrol, empatía, resiliencia) y sociales (habilidades de relación, colaboración y trabajo en equipo). Por este motivo, las situaciones de aprendizaje deben girar en torno a evidencias secuenciadas que integren los distintos tipos de conocimientos y se aborden alternándose con diferentes niveles de profundidad, desde el reconocimiento y la identificación hasta llegar a procesos de reflexión crítica y regulación. Las situaciones de aprendizaje deben partir de las experiencias, vivencias e intereses del alumnado. Puede ayudar en este aspecto la puesta en marcha de distintos tipos de aprendizaje en el aula, enriqueciendo la instrucción directa de los saberes implicados con situaciones que faciliten un aprendizaje activo y experiencial. Para ello pueden resultar pertinentes ciertas metodologías activas como son las dinámicas grupales con estructuras cooperativas, dramatizaciones, juegos de simulación, acompañadas con un aprendizaje personalizado, guiado hacia la reflexión, o, por último, los modelos dialógicos de resolución de conflictos. En su planificación y desarrollo se favorecerá la participación y presencia de todo el alumnado a través del Diseño Universal para el Aprendizaje (DUA), garantizando la inclusión. Estos principios están relacionados con las diferentes formas de implicación, de representación de la información, acción y expresión del aprendizaje. Para el diseño de situaciones de aprendizaje es conveniente aprovechar los contenidos de otras materias. Por un lado, en cada una de ellas se pueden realizar investigaciones sobre qué trabajos están relacionados con cada disciplina y profundizar en las tareas y perfiles de cada uno de ellos. La exploración en el proceso de orientación significa abrir el abanico de posibilidades, imaginarse en varias funciones profesionales, analizar y descubrir nuevas informaciones sobre el entorno y sobre sí misma o sí mismo, y profundizar en el conocimiento tanto de las propias potencialidades como de las limitaciones. Por otro lado, el desarrollo de estrategias de aprendizaje y gestión emocional en el proceso de aprendizaje de dichas materias permitirá poner en práctica lo aprendido. Las situaciones de aprendizaje pueden también contextualizarse en experiencias fuera del ámbito escolar, como visitas a ferias educativas o participación en acciones en el área STEAM donde se visibilicen trabajos con las experiencias de mujeres científicas o ingenieras. Se procurará trascender el área logrando una retroalimentación entre aula, centro y comunidad como base de los procesos de conocimiento, comprensión y análisis crítico, afrontamiento y propuestas de mejora, que permitan el desarrollo de programas globales que se abran a los distintos sectores del centro y del entorno. Se favorecerá la evolución del alumnado desde lo más conocido y cercano hasta contextos menos familiares o más complejos. Podrá afrontar aspectos relacionados con su aprendizaje y desarrollo personal para seguir con aquellos relacionados con el contexto social y cultural en el que se desenvuelve y, por último, del mundo laboral presente y futuro. Esto permitirá ir estableciendo hitos relevantes en el proceso de aprendizaje del alumnado. El acercamiento a cada uno de estos aspectos se podrá plantear alternando distintas estrategias como la observación, la realización de encuestas, entrevistas, análisis estadísticos o procesos de documentación a través de ejercicios de indagación, trabajando con distintas fuentes y destacando el uso de las tecnologías por su versatilidad. En el desarrollo de las situaciones de aprendizaje será necesario tener en cuenta una secuenciación de actividades que permitan movilizar los conocimientos previos del alumnado, utilizando dinámicas grupales que faciliten evidenciar conocimientos, destrezas y actitudes. En este sentido, se puede partir de procesos de autoconocimiento con la aplicación de cuestionarios en diferentes formatos que faciliten la introspección del alumnado y le aporte información sobre aspectos de personalidad, aptitudes e intereses. La dimensión social se incorpora también al aula a través de actividades que permitan el análisis de los estereotipos culturales, sociales y de género asociados a los distintos itinerarios formativos y desarrollo profesional. Para ello los debates y los modelos dialógicos de resolución de conflictos constituyen una herramienta útil en la explicitación de estos aspectos en el aula. Es necesario favorecer la adquisición de estrategias y habilidades sociales, metacognitivas y creativas a través del modelado del docente y el grupo-clase. Se tendrá en cuenta la heurística de los procesos cognitivos en la toma de decisiones, así como los distintos procesos emocionales y sociales que intervienen. A través de un proceso de andamiaje y de práctica guiada, se podrá explicitar el desarrollo de procesos, señalando los progresos del alumnado y valorando el error como fuente de aprendizaje. Durante este proceso se irá dejando espacio, de forma paulatina, a la práctica independiente del propio aprendiz. Las situaciones de aprendizaje deben personalizar el aprendizaje permitiendo que cada alumna y alumno disponga de oportunidades para explorar y posibilidades para elegir distintos itinerarios, los medios para enfrentarse a los mismos y diferentes formas de expresión (oral, gráfica, audiovisual, escrita, etc.), contribuyendo así a aumentar la implicación del alumnado y el sentido y valor personal que atribuye a los aprendizajes. Las TIC constituyen un medio idóneo para esta exploración y personalización, ya que a través de herramientas, plataformas y aplicaciones se puede plantear la realización de estos itinerarios, permitiendo la autonomía del alumnado en su desarrollo. La retroalimentación del docente y del resto del grupo debe estar presente a lo largo de todo el proceso desde su inicio, debiendo permitir al alumnado ser capaz de autorregular su aprendizaje, sus emociones y motivación. Es conveniente que se explicite tanto lo que se espera del alumnado como las formas concretas y diferenciadas a través de las que pueden llegar a ello. Los procedimientos de heteroevaluación, coevaluación y autoevaluación deberán estar incardinados en toda la situación de aprendizaje a través de distintos procedimientos e instrumentos. El papel del docente en el diseño, desarrollo y evaluación de las situaciones de aprendizaje viene marcado por varios aspectos: generar oportunidades de aprendizaje a partir de las vivencias personales, ofrecer retroalimentación personalizada en función de la situación de cada aprendiz, guiar el proceso personal ayudando a que el alumnado aborde los principales hitos de su formación y presentar modelos positivos de afrontamiento de las dificultades personales y profesionales. Por último, la evaluación del alumnado debe complementarse con la evaluación del propio diseño de las situaciones de aprendizaje y de la práctica docente, en un contexto de trabajo colaborativo con el resto del equipo docente.",
+      "criterios_ids": []
+    }
+  ]
+}
