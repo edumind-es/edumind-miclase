@@ -39,6 +39,12 @@ const NOMBRES: Record<string, string> = {
   'latin':                            'Latín',
   'religion':                         'Religión',
   'valores-civicos':                  'Valores Cívicos y Éticos',
+  // Áreas de las comunidades incorporadas desde CURRICULOS_NUEVOS
+  'educacion-artistica':              'Educación Artística',
+  'educacion-en-valores-civicos-y-eticos': 'Educación en Valores Cívicos y Éticos',
+  'lengua-castellana-y-literatura':   'Lengua Castellana y Literatura',
+  'cultura-asturiana':                'Cultura Asturiana',
+  'lengua-asturiana-y-literatura':    'Lengua Asturiana y Literatura',
 }
 
 interface Instrumento {

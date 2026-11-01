@@ -21,6 +21,7 @@ const COMUNIDADES = [
   { value: 'CyL',       label: 'Castilla y León' },
   { value: 'CLM',       label: 'Castilla-La Mancha' },
   { value: 'Valencia',  label: 'Comunitat Valenciana' },
+  { value: 'Asturias',  label: 'Principado de Asturias' },
 ]
 
 export default function GruposPage() {
