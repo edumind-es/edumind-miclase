@@ -96,6 +96,8 @@ export interface Transporte {
    * intercambiar nada: `estado()` los funde y no deja verlo.
    */
   configDelOtro?(): Promise<{ salt: string | null; verificador: string | null }>
+  /** `[id, updated_at]` de las evidencias que ya tiene el OTRO aparato. */
+  inventarioDelOtro?(): Promise<Array<[string, string]>>
 }
 
 export type Cabeceras = () => Record<string, string>

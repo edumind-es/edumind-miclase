@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { cifrarExport, descifrarExport, descargarBlob, type ExportCifrado } from '@/auth/crypto'
 import { exportarDatos, importarDatos } from '@/db/queries'
+import { registrarCopiaEnFichero } from '@/db/copia'
+import { db } from '@/db/localDb'
 
 interface Props { onClose: () => void }
 
@@ -13,6 +15,7 @@ export default function ExportImport({ onClose }: Props) {
   const [trabajando, setTrabajando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [datosImport, setDatosImport] = useState<any>(null)
+  const [conEvidencias, setConEvidencias] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -31,13 +34,15 @@ export default function ExportImport({ onClose }: Props) {
     setMsg(null)
     try {
       // Los datos viven en IndexedDB (local-first): se exportan directamente del navegador
-      const datos = JSON.parse(await exportarDatos())
+      const datos = JSON.parse(await exportarDatos(db, { sinEvidencias: !conEvidencias }))
 
       const cifrado = await cifrarExport(datos, password)
       const fecha = new Date().toISOString().slice(0, 10)
-      descargarBlob(JSON.stringify(cifrado, null, 2), `miclase-backup-${fecha}.miclase`)
+      const resultado = await descargarBlob(JSON.stringify(cifrado, null, 2), `miclase-backup-${fecha}.miclase`)
+      if (resultado === 'cancelado') { setMsg({ tipo: 'error', texto: 'Copia cancelada: no se ha guardado nada.' }); return }
+      await registrarCopiaEnFichero()
 
-      setMsg({ tipo: 'ok', texto: `Backup exportado con ${datos.grupos?.length || 0} grupos y ${datos.alumnos?.length || 0} alumnos. Guárdalo en un lugar seguro.` })
+      setMsg({ tipo: 'ok', texto: `Backup exportado con ${datos.grupos?.length || 0} grupos y ${datos.alumnos?.length || 0} alumnos${conEvidencias ? '' : ', sin fotos, audios ni vídeos'}. Guárdalo en un lugar seguro.` })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'Error al exportar.' })
     } finally {
@@ -132,6 +137,10 @@ export default function ExportImport({ onClose }: Props) {
               placeholder="Contraseña de cifrado (mín. 6 caracteres)" style={{ width: '100%' }} />
             <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)}
               placeholder="Confirmar contraseña" style={{ width: '100%' }} />
+            <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.5 }}>
+              <input type="checkbox" data-backup-evidencias checked={conEvidencias} onChange={e => setConEvidencias(e.target.checked)} style={{ marginTop: 3 }} />
+              <span>Incluir fotos, audios y vídeos. Con muchos vídeos, la copia puede pesar demasiado y fallar en el iPad.</span>
+            </label>
             {msg && <Aviso {...msg} />}
             <div style={{ display: 'flex', gap: 10 }}>
               <button className="btn-primary" onClick={exportar} disabled={trabajando}>
@@ -164,6 +173,7 @@ export default function ExportImport({ onClose }: Props) {
             <div style={{ fontSize: 12, background: 'var(--ambar-100)', color: 'var(--ambar-500)', padding: '8px 12px', borderRadius: 6 }}>
               ⚠️ La importación <strong>reemplaza</strong> todos los datos actuales de este navegador
               por los del backup. Si tienes datos aquí que quieras conservar, expórtalos antes.
+              Una copia sin fotos ni vídeos conserva los que ya haya aquí.
             </div>
             <input type="password" value={password} onChange={e => setPassword(e.target.value)}
               placeholder="Contraseña del backup" style={{ width: '100%' }} autoFocus />

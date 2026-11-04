@@ -308,6 +308,8 @@ async function principal() {
     await suite('sync directa, sin servidor', 'node', ['pruebas/sync-directo.test.mjs'], entorno)
     await suite('emparejamiento por pantalla', 'node', ['pruebas/emparejar-ui.test.mjs'], entorno)
     await suite('sincronizar sin silencios', 'node', ['pruebas/sync-sin-silencios.test.mjs'], entorno)
+    await suite('notas entre tres aparatos', 'node', ['pruebas/sync-varios-aparatos.test.mjs'], entorno)
+    await suite('fotos y vídeos: lo que viaja y lo que ocupa', 'node', ['pruebas/evidencias-peso.test.mjs'], entorno)
   }
 
   // ── Contra producción ──────────────────────────────────────────────

@@ -9,8 +9,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getCalificacionesPorGrupo, exportarDatos, importarDatos,
+  getCalificacionesPorGrupo, exportarDatos, importarDatos, getResumenEvidencias, esCopiaSinEvidencias,
 } from '@/db/queries'
+import { COPIA_GRANDE, tamanoLegible } from '@/db/almacen'
+import { registrarCopiaEnFichero } from '@/db/copia'
 import { useAuth } from '@/auth/AuthProvider'
 import { imprimir, descargarHTML } from '@/informes/lamina'
 import { descargarFichero } from '@/utils/compartir'
@@ -216,20 +218,29 @@ export default function InformesPage() {
 
   // ── Backup ───────────────────────────────────────────────────────────
 
-  const handleExportarBackup = async () => {
-    setGenerando('backup'); setMsg(null)
+  const handleExportarBackup = async (completa = false) => {
+    setMsg(null)
+    if (completa) {
+      const { total } = await getResumenEvidencias()
+      if (total.bytes > COPIA_GRANDE && !confirm(
+        `Tus fotos, audios y vídeos ocupan ${tamanoLegible(total.bytes)}. Una copia así puede agotar la memoria del aparato: la página se recargaría y no saldría ningún fichero. Tus datos no corren peligro.\n\n¿Intentarlo?`,
+      )) return
+    }
+    setGenerando('backup')
     try {
-      const json = await exportarDatos()
+      const json = await exportarDatos(undefined, { sinEvidencias: !completa })
       const resultado = await descargarFichero(
-        `miclase-backup-${new Date().toISOString().slice(0, 10)}.json`,
+        `miclase-backup-${completa ? 'completa-' : ''}${new Date().toISOString().slice(0, 10)}.json`,
         json, 'application/json', 'Copia de seguridad de MiClase',
       )
       if (resultado !== 'cancelado') {
+        await registrarCopiaEnFichero()
+        const queLleva = completa ? '' : ' Lleva todos los datos, sin fotos, audios ni vídeos.'
         setMsg({
           tipo: 'ok',
-          texto: esNativo()
+          texto: (esNativo()
             ? 'Copia de seguridad preparada. Guárdala en Archivos o envíatela: fuera de este dispositivo.'
-            : 'Copia de seguridad descargada. Guárdala en un lugar seguro.',
+            : 'Copia de seguridad descargada. Guárdala en un lugar seguro.') + queLleva,
         })
       }
     } catch (e: any) {
@@ -240,13 +251,16 @@ export default function InformesPage() {
   const handleImportarBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!confirm('¿Restaurar datos desde este backup?\n\nSe borrarán TODOS los datos actuales de este dispositivo y se reemplazarán por los del fichero.')) {
+    const texto = await file.text()
+    if (!confirm(esCopiaSinEvidencias(texto)
+      ? '¿Restaurar datos desde este backup?\n\nSe reemplazarán todos los datos de este dispositivo por los del fichero. Sus fotos, audios y vídeos se conservan: esta copia no los lleva.'
+      : '¿Restaurar datos desde este backup?\n\nSe borrarán TODOS los datos actuales de este dispositivo y se reemplazarán por los del fichero.')) {
       e.target.value = ''
       return
     }
     setGenerando('restaurar'); setMsg(null)
     try {
-      await importarDatos(await file.text())
+      await importarDatos(texto)
       setMsg({ tipo: 'ok', texto: 'Datos restaurados. Recarga la página para verlos.' })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'Error al importar.' })
@@ -403,8 +417,11 @@ export default function InformesPage() {
           <Link to="/sincronizar" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>sincronización</Link>.
         </p>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <button className="btn-primary" onClick={handleExportarBackup} disabled={!!generando}>
-            {generando === 'backup' ? 'Generando…' : '⬇️ Descargar copia de seguridad'}
+          <button className="btn-primary" onClick={() => handleExportarBackup()} disabled={!!generando}>
+            {generando === 'backup' ? 'Generando…' : '⬇️ Descargar copia de seguridad (sin fotos ni vídeos)'}
+          </button>
+          <button className="btn-secondary" data-backup-completa onClick={() => handleExportarBackup(true)} disabled={!!generando}>
+            Copia completa, con fotos y vídeos
           </button>
           <button className="btn-secondary" onClick={() => importRef.current?.click()} disabled={!!generando}>
             {generando === 'restaurar' ? 'Restaurando…' : '⬆️ Restaurar desde fichero'}
@@ -413,6 +430,7 @@ export default function InformesPage() {
         </div>
         <p style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 10 }}>
           El fichero no sube a ningún servidor: es un JSON local que puedes guardar donde quieras.
+          No va cifrado y lleva datos de tu alumnado: guárdalo en un sitio seguro. Con 📦, abajo en la barra lateral, sale cifrado con contraseña.
         </p>
       </div>
     </>

@@ -3,8 +3,9 @@
  *
  * La foto se comprime a JPEG; el audio se graba con MediaRecorder (lo que
  * permite grabar sin salir de la app, con el cronómetro a la vista); el vídeo
- * se delega en la cámara del sistema, que comprime mucho mejor que el
- * navegador y no obliga a mantener la pestaña activa.
+ * se graba también aquí, a calidad reducida (`GrabadorVideo`), y la cámara del
+ * sistema queda como alternativa: da más calidad y no obliga a mantener la app
+ * abierta, pero sus vídeos pasan enseguida del tope de sincronización.
  *
  * Todo se queda en IndexedDB. Lo único que sale del dispositivo es lo que
  * viaje cifrado por la sincronización, y solo si cabe en un sobre.
@@ -13,6 +14,7 @@ import { useEffect, useRef, useState } from 'react'
 import { comprimirImagen, revisarTamano, LIMITE_EVIDENCIA, type AvisoEvidencia } from '@/db/queries'
 import type { TipoEvidencia } from '@/db/localDb'
 import { verEvidencias } from '@/db/datosSensibles'
+import GrabadorVideo, { puedeGrabarVideo } from './GrabadorVideo'
 
 export type EvidenciaCapturada = {
   tipo: TipoEvidencia
@@ -62,6 +64,7 @@ export default function CapturaEvidencia({ onCapturada, compacto, deshabilitado 
   const [transcurrido, setTranscurrido] = useState(0)
   const [aviso, setAviso] = useState<AvisoEvidencia | null>(null)
   const [trabajando, setTrabajando] = useState(false)
+  const [grabandoVideo, setGrabandoVideo] = useState(false)
 
   const fotoRef = useRef<HTMLInputElement>(null)
   const videoRef = useRef<HTMLInputElement>(null)
@@ -204,7 +207,8 @@ export default function CapturaEvidencia({ onCapturada, compacto, deshabilitado 
           🎙 Audio
         </button>
         <button className="btn-secondary" style={btn} disabled={deshabilitado || trabajando}
-          onClick={() => videoRef.current?.click()} title="Grabar un vídeo corto con la cámara">
+          onClick={() => { setAviso(null); puedeGrabarVideo() ? setGrabandoVideo(true) : videoRef.current?.click() }}
+          title="Grabar un vídeo corto con la cámara">
           🎬 Vídeo
         </button>
 
@@ -213,6 +217,14 @@ export default function CapturaEvidencia({ onCapturada, compacto, deshabilitado 
         <input ref={videoRef} type="file" accept="video/*" capture="environment"
           style={{ display: 'none' }} onChange={tomarVideo} />
       </div>
+
+      {grabandoVideo && (
+        <GrabadorVideo
+          onGuardar={(blob, duracion) => entregar(blob, 'video', duracion)}
+          onCerrar={() => setGrabandoVideo(false)}
+          onCamaraDelSistema={() => videoRef.current?.click()}
+        />
+      )}
 
       {aviso && (
         <div style={{

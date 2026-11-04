@@ -98,6 +98,45 @@ edumind_miclase/
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
+- **Por QR y por paquete los datos van siempre enteros** (`TABLAS_DATOS`,
+  `kDesde: null`), y quien recibe descarta lo que ya tiene. El cursor es de cada
+  camino, no de cada aparato: lo que recibió el Mac mini se daba por enviado y no
+  le llegaba al MacBook, y lo recibido de un tercero, con su fecha, quedaba
+  detrás del cursor. Quitarlo exige que nada viejo pise lo nuevo: ver la regla
+  siguiente. **Las evidencias no**: el iPad de Luis ocupa 812 MB, y montar eso en
+  un paquete agotaría su memoria. Por QR se pregunta al otro cuáles le faltan
+  (`inventarioDelOtro`); en un paquete van las posteriores al anterior (el cursor
+  `sync_push_desde:carpeta` ya solo cuenta evidencias) y el docente puede pedir
+  todas (`todasLasEvidencias`, con `confirm`). El buzón y la copia en carpeta
+  siguen por cursor, y lo recibido baja el de la copia (`incluirEnLaCopia`): si
+  no, las notas del iPad llegaban al Mac pero no a su carpeta.
+- **Una evidencia borrada no guarda su contenido.** `eliminarEvidencia` y
+  `sinContenidoSiBorrada` dejan un blob vacío (la fila sigue: el borrado tiene
+  que viajar) y `aSobre` la manda sin él. Lo borrado antes se vacía con
+  `liberarEvidenciasBorradas`, que el desglose ofrece con `confirm`.
+- **Qué ocupa cada cosa lo dice `db/almacen.ts`** (puro) en
+  `AlmacenamientoLocal` (`[data-almacen-desglose]`). La copia de seguridad sale
+  por defecto **sin evidencias** (`exportarDatos(…, { sinEvidencias })`, con
+  `sin_evidencias: true` como primer campo; `esCopiaSinEvidencias`) e
+  `importarDatos` conserva entonces las del aparato: si las borrase, restaurar
+  una copia ligera se llevaría todos los vídeos. Las copias descargadas y los
+  paquetes enviados cuentan para el aviso (`registrarCopiaEnFichero`).
+- **El vídeo se graba en la app a calidad reducida** (`GrabadorVideo`: 720p,
+  1 Mbps, unos 7,5 MB por minuto), porque la cámara del sistema pasaba del tope
+  de sincronización (`LIMITE_EVIDENCIA_SINC`) en segundos. La cámara del sistema
+  sigue como alternativa dentro del grabador y si no hay `MediaRecorder`. En
+  `e2e.test.mjs` se prueba con cámara de mentira de Chromium; en Safari real, no.
+  Comprimir los vídeos ya guardados está pendiente (necesita una librería).
+- **Nada viejo pisa una nota.** `fusionarTresBandas` no aplica lo anterior a la
+  base (`obsoleto`): «solo lo cambió el remoto» no distingue una edición de una
+  versión vieja, y un Mac atrasado devolvía el 9 del iPad a su 5, con el sello
+  del 9. Y en `calificaciones` una nota editada gana al borrado
+  (`notaGanaAlBorrado`): esos borrados los hace casi siempre
+  `reconciliarDuplicados`, y la nota nueva quedaba en una fila retirada. El
+  recibo del enlace directo no es terreno común (`aceptados: []`): dejaba la
+  base igual a lo local. Se prueba en `sync-varios-aparatos.test.mjs`, con tres
+  aparatos. Nació de que las notas de Lingua galega del iPad no llegaban a los
+  Macs (nov 2026).
 - **Antes de pasar nada por el enlace directo se comparan las contraseñas**
   (`compararContrasenaConElOtro`, por la sal). Dos aparatos con contraseñas
   creadas por separado no pueden abrir nada del otro, y sin la comprobación
