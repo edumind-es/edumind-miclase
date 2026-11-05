@@ -8,14 +8,14 @@
 import {
   getGrupo, getAsignaturas, getInstrumentos, getAlumnosByGrupo,
   getCalificacionesPorGrupo, getEvidenciasAlumno, getResumenAsistencia,
-  getUnidades,
+  getUnidades, getMedidasDeGrupo,
 } from '@/db/queries'
 import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
 import {
   conexionesDeCriterios, perfilCompetenciasClave,
   type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
 } from '@/db/competenciasClave'
-import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
+import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion, Medida } from '@/db/localDb'
 import { api } from '@/api'
 
 export type AreaInforme = {
@@ -41,6 +41,8 @@ export type DatosGrupo = {
   trimestreAsistencia: number | null
   /** Descriptores operativos de la etapa (vacío sin conexión) */
   descriptores: Descriptor[]
+  /** `alumno_id:asignatura_id` → medidas de atención a la diversidad (`db/medidas.ts`). */
+  medidas: Map<string, Medida[]>
 }
 
 type Cabeceras = () => Record<string, string>
@@ -97,12 +99,13 @@ export async function reunirDatosGrupo(
   const grupo = await getGrupo(grupoId)
   if (!grupo) throw new Error('La clase ya no existe.')
 
-  const [alumnos, asigs, { calificaciones }, asistencia, descriptores] = await Promise.all([
+  const [alumnos, asigs, { calificaciones }, asistencia, descriptores, medidas] = await Promise.all([
     getAlumnosByGrupo(grupoId),
     getAsignaturas(grupoId),
     getCalificacionesPorGrupo(grupoId),
     getResumenAsistencia(grupoId, trimestre),
     descriptoresDeEtapa(grupo, headers),
+    getMedidasDeGrupo(grupoId),
   ])
 
   const areas: AreaInforme[] = []
@@ -125,7 +128,7 @@ export async function reunirDatosGrupo(
     })
   }
 
-  return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre, descriptores }
+  return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre, descriptores, medidas }
 }
 
 /** Notas de un alumno en todas sus áreas. */
@@ -139,7 +142,8 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
       nota: calcularNotaArea(
         area.asig.id!, propias, area.instrumentos,
         area.asig.pesos_trimestres, area.pesosCriterio, area.pesosVinculo,
-        normalizarReglaFinal(area.asig.regla_final), normalizarReglaArea(area.asig.regla_area)
+        normalizarReglaFinal(area.asig.regla_final), normalizarReglaArea(area.asig.regla_area),
+        { medidas: datos.medidas.get(`${alumnoId}:${area.asig.id}`) }
       ),
     }
   })

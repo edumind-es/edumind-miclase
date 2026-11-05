@@ -21,6 +21,7 @@ import { normalizarReglaArea } from '@/db/calculo'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
+import SelloMedida from './SelloMedida'
 
 /** Lo que pide una casilla al pulsarla: qué nota y de qué trimestre (null = la final). */
 export type PeticionExplicacion = {
@@ -41,6 +42,8 @@ interface Props {
   onExplicar: (p: PeticionExplicacion) => void
   /** Un criterio sin instrumento en ningún trimestre: se explica cómo arreglarlo, como en una unidad. */
   onSinInstrumento: (criterio: Criterio) => void
+  /** Pulsar el sello ACI/RE de un alumno abre sus medidas. */
+  onMedidas?: (alumno: Alumno) => void
 }
 
 type Columna = number | 'final'
@@ -61,7 +64,7 @@ function Etiquetas({ columnas }: { columnas: Columna[] }) {
   )
 }
 
-export default function ResumenCurso({ datos, criterios, vista, plegadas, alternarPlegada, onExplicar, onSinInstrumento }: Props) {
+export default function ResumenCurso({ datos, criterios, vista, plegadas, alternarPlegada, onExplicar, onSinInstrumento, onMedidas }: Props) {
   const { alumnos, notas, porTrimestre } = datos
   /** Familias con los hijos a la vista (no se recuerda: es un vistazo). */
   const [desplegadas, setDesplegadas] = useState<Set<number>>(new Set())
@@ -100,6 +103,7 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
     <td className="col-alumno">
       {nombre(al)}
       {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+      <SelloMedida medidas={datos.medidas.get(al.id!)} onClick={onMedidas ? () => onMedidas(al) : undefined} />
     </td>
   )
 
