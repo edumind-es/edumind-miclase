@@ -13,7 +13,7 @@ import {
 import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades, getMedidasDeAsignatura } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { calcularNotaArea, calificativo, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
+import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
 
@@ -73,7 +73,7 @@ export default function SeguimientoPage() {
         const n = calcularNotaArea(
           asignaturaId, propias, instrumentos as Instrumento[],
           asig?.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(asig?.regla_final),
-          { medidas: medidas.get(al.id!) })
+          normalizarReglaArea(asig?.regla_area), { medidas: medidas.get(al.id!) })
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
           const e = acumulado.get(comp.numero) ??

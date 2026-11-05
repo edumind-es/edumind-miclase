@@ -5,6 +5,7 @@ import {
   pesosVinculoDeUnidades, fundirHijosEnFamilias, fundirUnidades,
   porcentajesEnFamilia, pesosAlFijarPorcentaje,
   notaFinal, normalizarReglaFinal, REGLAS_FINAL,
+  normalizarReglaArea, REGLAS_AREA,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -417,6 +418,48 @@ console.log('\n16. Regla de la nota final por área')
   // El área con mediana: sobre sus tres notas de trimestre (8 · 5 · 4,5) → 5, no la media de las medianas (5).
   ok(med.final === 5, 'mediana del área sobre sus notas de trimestre', `${med.final}`)
   ok(cont.criterios[0].final === 5 && cont.criterios[1].final === 4 && cont.final === 4.5, 'continua: el tercer trimestre en todo', `${cont.final}`)
+}
+
+console.log('\n12b. La nota del área pondera los instrumentos (80/20), no los criterios')
+{
+  // Lo del iPad de Luis (nov 2026): prueba escrita 80 % con 5 criterios y
+  // tabla de indicadores 20 % con 20 (los 5 de la prueba entre ellos). Por
+  // criterio, los 15 que solo evalúa la tabla entraban enteros y el 80/20 no
+  // se cumplía: 8,7 y 7,5 daban 7,74. Por instrumento: 0,8·8,7 + 0,2·7,5 = 8,46.
+  const instrs = [instr(10, 'Proba escrita', 80), instr(20, 'Táboa', 20)]
+  const cals: any[] = []
+  for (let k = 1; k <= 20; k++) {
+    cals.push({ ...cal(1, 20, `CE1.${k}`, 1, 7.5), unidad_id: 1 })
+    if (k <= 5) cals.push({ ...cal(1, 10, `CE1.${k}`, 1, 8.7), unidad_id: 1 })
+  }
+  const T1 = '{"1":100,"2":0,"3":0}'
+  const porInstr = calcularNotaArea(1, cals, instrs, T1)
+  const porCrit = calcularNotaArea(1, cals, instrs, T1, new Map(), undefined, 'ponderada', 'criterio')
+  ok(porInstr.trimestres[1] === 8.46, 'por instrumento (sin declarar): 80 % de 8,7 + 20 % de 7,5 = 8,46', String(porInstr.trimestres[1]))
+  ok(porCrit.trimestres[1] === 7.74, 'por criterio: la tabla manda, 7,74', String(porCrit.trimestres[1]))
+  ok(porInstr.criterios[0].trimestres[1] === porCrit.criterios[0].trimestres[1], 'la nota de cada criterio no cambia con la regla')
+  ok(porInstr.instrumentos.length === 2 && porInstr.instrumentos[0].trimestres[1] === 8.7 && porInstr.instrumentos[1].trimestres[1] === 7.5
+     && porInstr.instrumentos[1].criterios[1] === 20, 'cada instrumento lleva su media de criterios y cuántos entran',
+     JSON.stringify(porInstr.instrumentos))
+  ok(porInstr.regla_area === 'instrumento' && porCrit.regla_area === 'criterio', 'el resultado dice con qué regla se calculó')
+
+  // Un instrumento sin nota en el trimestre no cuenta: solo la tabla → su media, sin que el 80 % pese como cero.
+  const soloTabla = calcularNotaArea(1, cals.filter(c => c.instrumento_id === 20), instrs, T1)
+  ok(soloTabla.trimestres[1] === 7.5, 'sin notas de la prueba, el área es la media de la tabla', String(soloTabla.trimestres[1]))
+
+  // Los hijos se funden antes en su familia: dos exámenes dentro de «Proba escrita» no son dos instrumentos en el área.
+  const conHijos = [...instrs, { ...instr(11, 'Examen UD1', 1), familia_id: 10 }, { ...instr(12, 'Examen UD2', 1), familia_id: 10 }]
+  const calsHijos = [
+    ...cals.filter(c => c.instrumento_id === 20),
+    ...[1, 2, 3, 4, 5].flatMap(k => [{ ...cal(1, 11, `CE1.${k}`, 1, 10), unidad_id: 1 }, { ...cal(1, 12, `CE1.${k}`, 1, 6), unidad_id: 2 }]),
+  ]
+  const hijos = calcularNotaArea(1, calsHijos, conHijos, T1)
+  ok(hijos.instrumentos.length === 2 && hijos.instrumentos[0].instrumento_id === 10, 'los hijos cuentan dentro de su familia, no aparte', JSON.stringify(hijos.instrumentos.map(i => i.instrumento_id)))
+  ok(hijos.trimestres[1] === 7.9, 'familia 8 (10 y 6 a partes iguales) al 80 % + tabla 7,5 al 20 % = 7,9', String(hijos.trimestres[1]))
+
+  ok(normalizarReglaArea(undefined) === 'instrumento' && normalizarReglaArea('rara') === 'instrumento' && normalizarReglaArea('criterio') === 'criterio',
+     'lo guardado se normaliza: vacío o desconocido → instrumento')
+  ok(REGLAS_AREA.length === 2 && REGLAS_AREA.every(r => r.nombre && r.descripcion), 'las dos reglas llevan nombre y explicación')
 }
 
 console.log('\n13. El redondeo no se acumula escalón a escalón')

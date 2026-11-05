@@ -17,6 +17,7 @@ import { Fragment, useState, type ReactNode } from 'react'
 import type { ResumenCurso as DatosResumen } from '@/db/queries'
 import { agruparPorCompetencia, mediaDe } from '@/db/cobertura'
 import { familiasDelCurso, mediaEnCriterios, criteriosDelCurso, TRIMESTRES_CURSO, type Criterio, type FamiliaCurso } from '@/db/resumenCurso'
+import { normalizarReglaArea } from '@/db/calculo'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
@@ -110,7 +111,9 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
   const thArea = (
     <th scope="col" className="criterio-th area-th grupo-fin" colSpan={CON_FINAL.length} data-area-th>
       <div className="criterio-th-id">Nota del área</div>
-      <div className="criterio-th-desc">media de los criterios, ponderada por su peso; la final, con la regla del área</div>
+      <div className="criterio-th-desc">{normalizarReglaArea(datos.asig.regla_area) === 'instrumento'
+        ? 'media de los instrumentos, ponderada por su peso; la final, con la regla del área'
+        : 'media de los criterios, ponderada por su peso; la final, con la regla del área'}</div>
       <Etiquetas columnas={CON_FINAL} />
     </th>
   )
