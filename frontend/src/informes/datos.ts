@@ -10,7 +10,7 @@ import {
   getCalificacionesPorGrupo, getEvidenciasAlumno, getResumenAsistencia,
   getUnidades,
 } from '@/db/queries'
-import { calcularNotaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
+import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
 import {
   conexionesDeCriterios, perfilCompetenciasClave,
   type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
@@ -139,7 +139,7 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
       nota: calcularNotaArea(
         area.asig.id!, propias, area.instrumentos,
         area.asig.pesos_trimestres, area.pesosCriterio, area.pesosVinculo,
-        normalizarReglaFinal(area.asig.regla_final)
+        normalizarReglaFinal(area.asig.regla_final), normalizarReglaArea(area.asig.regla_area)
       ),
     }
   })

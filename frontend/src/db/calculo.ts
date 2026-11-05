@@ -8,14 +8,16 @@
  * Jerarquía:
  *   nota de familia (criterio, trimestre) = Σ(nota_hijo · peso_hijo) / Σ(peso_hijo)
  *   nota de criterio (trimestre) = Σ(nota · peso_instrumento) / Σ(peso_instrumento)
- *   nota de área (trimestre)     = Σ(nota_criterio · peso_criterio) / Σ(peso_criterio)
+ *   nota de área (trimestre), según `ReglaArea`:
+ *     'instrumento' (por defecto) = Σ(media de criterios del instrumento · peso_instrumento) / Σ(peso_instrumento)
+ *     'criterio'                  = Σ(nota_criterio · peso_criterio) / Σ(peso_criterio)
  *   nota de área (final)         = Σ(nota_trimestre · peso_trimestre) / Σ(peso_trimestre)
  *                                  …o la regla que el área declare (`ReglaFinal`)
  *
  * Solo cuentan los trimestres con datos: si un área aún no tiene nada en el
  * 3er trimestre, la nota final es la de lo que sí hay, no un 0 encubierto.
  */
-import type { Calificacion, Instrumento, ReglaFinal } from './localDb'
+import type { Calificacion, Instrumento, ReglaArea, ReglaFinal } from './localDb'
 
 export type NotaCriterio = {
   criterio_id: string
@@ -25,11 +27,26 @@ export type NotaCriterio = {
   aportaciones: { instrumento_id: number; nombre: string; valor: number; peso: number; trimestre: number }[]
 }
 
+export type NotaInstrumento = {
+  instrumento_id: number
+  nombre: string
+  /** Peso del instrumento en el área, tal cual lo declara */
+  peso: number
+  /** Media de sus criterios con nota, por trimestre */
+  trimestres: Record<number, number | null>
+  /** Cuántos criterios con nota entran en cada trimestre */
+  criterios: Record<number, number>
+}
+
 export type NotaArea = {
   asignatura_id: number
   trimestres: Record<number, number | null>
   final: number | null
   criterios: NotaCriterio[]
+  /** Las familias (instrumentos de primer nivel) con su media de criterios: lo que pondera la regla 'instrumento' */
+  instrumentos: NotaInstrumento[]
+  /** Con qué regla se ha obtenido la nota del área a partir de los criterios */
+  regla_area: ReglaArea
 }
 
 const TRIMESTRES = [1, 2, 3]
@@ -120,6 +137,31 @@ export const REGLAS_FINAL: { id: ReglaFinal; nombre: string; descripcion: string
 /** Lo guardado puede venir vacío o de una versión futura: sin reconocer, 'ponderada'. */
 export function normalizarReglaFinal(valor: unknown): ReglaFinal {
   return REGLAS_FINAL.some(r => r.id === valor) ? valor as ReglaFinal : 'ponderada'
+}
+
+/**
+ * Cómo pasa la nota de los criterios a la del área en cada trimestre.
+ *
+ * 'instrumento': cada familia vale la media de sus criterios con nota y el
+ * área es la media de las familias ponderada por su peso (80 % prueba
+ * escrita + 20 % tabla de indicadores, tal como lo lee PROENS). Es la de
+ * siempre para el docente, y por eso es la que vale sin declarar.
+ *
+ * 'criterio': el área es la media de los criterios ponderada por su peso,
+ * con el instrumento pesando solo DENTRO de cada criterio. Un criterio que
+ * evalúa un solo instrumento entra con esa nota entera, así que el 80/20
+ * solo se cumple en los criterios que evalúan los dos: con 5 criterios de
+ * examen y 20 de tabla, la tabla mandaba en el área. Luis lo vio en el
+ * iPad (nov 2026) y lo tomó por una media aritmética.
+ */
+export const REGLAS_AREA: { id: ReglaArea; nombre: string; descripcion: string }[] = [
+  { id: 'instrumento', nombre: 'Por instrumento', descripcion: 'Cada instrumento vale la media de sus criterios y el área pondera los instrumentos por su peso (80/20).' },
+  { id: 'criterio', nombre: 'Por criterio', descripcion: 'El área es la media de los criterios por su peso; el instrumento pesa solo dentro de cada criterio.' },
+]
+
+/** Lo guardado puede venir vacío o de una versión futura: sin reconocer, 'instrumento'. */
+export function normalizarReglaArea(valor: unknown): ReglaArea {
+  return REGLAS_AREA.some(r => r.id === valor) ? valor as ReglaArea : 'instrumento'
 }
 
 /**
@@ -355,6 +397,8 @@ function pesoDeclarado(
  * @param instrumentos   instrumentos del área (aportan el peso por defecto)
  * @param pesosCriterio  peso de cada criterio en la programación (por defecto 1)
  * @param pesosVinculo   reparto propio de cada criterio, si lo tiene declarado
+ * @param regla          regla de la nota final del curso
+ * @param reglaArea      cómo pasa de los criterios al área (ver `REGLAS_AREA`)
  */
 export function calcularNotaArea(
   asignatura_id: number,
@@ -363,7 +407,8 @@ export function calcularNotaArea(
   pesosTrimestresJson: string | undefined,
   pesosCriterio: Map<string, number> = new Map(),
   pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO,
-  regla: ReglaFinal = 'ponderada'
+  regla: ReglaFinal = 'ponderada',
+  reglaArea: ReglaArea = 'instrumento'
 ): NotaArea {
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
   // Primero las unidades (una nota por alumno, criterio e instrumento en el
@@ -421,15 +466,54 @@ export function calcularNotaArea(
       }
     })
 
-  // Nota de área por trimestre: media de criterios ponderada por su peso.
-  // Se calcula sobre los valores SIN redondear de los criterios.
+  // Nota de cada instrumento (ya fundidos los hijos en su familia) por
+  // trimestre: la media de sus criterios con nota, ponderada por el peso del
+  // criterio. Es la misma cuenta que la casilla de «Todo el curso».
+  const porInstrumento = new Map<number, Map<number, { valor: number; peso: number }[]>>()
+  for (const c of conValor) {
+    if (!porInstrumento.has(c.instrumento_id)) porInstrumento.set(c.instrumento_id, new Map())
+    const porTrim = porInstrumento.get(c.instrumento_id)!
+    if (!porTrim.has(c.trimestre)) porTrim.set(c.trimestre, [])
+    porTrim.get(c.trimestre)!.push({ valor: c.valor!, peso: pesosCriterio.get(c.criterio_id) ?? 1 })
+  }
+  const notasInstrumentos: NotaInstrumento[] = [...porInstrumento.entries()]
+    .sort((a, b) => (instrById.get(a[0])?.orden ?? 999) - (instrById.get(b[0])?.orden ?? 999) || a[0] - b[0])
+    .map(([instrumento_id, porTrim]) => {
+      const ins = instrById.get(instrumento_id)
+      const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
+      const cuenta: Record<number, number> = { 1: 0, 2: 0, 3: 0 }
+      for (const t of TRIMESTRES) {
+        trimestres[t] = ponderada(porTrim.get(t) || [])
+        cuenta[t] = (porTrim.get(t) || []).length
+      }
+      return {
+        instrumento_id,
+        nombre: ins?.nombre ?? '(instrumento retirado)',
+        // Un instrumento retirado conserva su nota con peso 1, como en el criterio
+        peso: ins ? (ins.peso > 0 ? ins.peso : 0) : 1,
+        trimestres,
+        criterios: cuenta,
+      }
+    })
+
+  // Nota de área por trimestre, con la regla del área. Se calcula sobre los
+  // valores SIN redondear.
+  //   'instrumento': media de los instrumentos ponderada por su peso en el
+  //   área; un instrumento sin nota en el trimestre no cuenta.
+  //   'criterio': media de los criterios ponderada por su peso.
   const trimestres: Record<number, number | null> = { 1: null, 2: null, 3: null }
   for (const t of TRIMESTRES) {
-    trimestres[t] = ponderada(
-      criterios
-        .filter(c => c.trimestres[t] != null)
-        .map(c => ({ valor: c.trimestres[t]!, peso: pesosCriterio.get(c.criterio_id) ?? 1 }))
-    )
+    trimestres[t] = reglaArea === 'instrumento'
+      ? ponderada(
+          notasInstrumentos
+            .filter(i => i.trimestres[t] != null)
+            .map(i => ({ valor: i.trimestres[t]!, peso: i.peso }))
+        )
+      : ponderada(
+          criterios
+            .filter(c => c.trimestres[t] != null)
+            .map(c => ({ valor: c.trimestres[t]!, peso: pesosCriterio.get(c.criterio_id) ?? 1 }))
+        )
   }
 
   const final = notaFinal(trimestres, pesosTrim, regla)
@@ -441,12 +525,15 @@ export function calcularNotaArea(
   }
   const trimestresRedondeados: Record<number, number | null> = { 1: null, 2: null, 3: null }
   for (const t of TRIMESTRES) trimestresRedondeados[t] = redondearOpcional(trimestres[t])
+  for (const i of notasInstrumentos) for (const t of TRIMESTRES) i.trimestres[t] = redondearOpcional(i.trimestres[t])
 
   return {
     asignatura_id,
     trimestres: trimestresRedondeados,
     final: redondearOpcional(final),
     criterios,
+    instrumentos: notasInstrumentos,
+    regla_area: reglaArea,
   }
 }
 

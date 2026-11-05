@@ -21,7 +21,7 @@ import { getCalificacionesAlumnoAsignatura, type UnidadConCriterios } from '@/db
 import {
   calcularNotaArea, calificativo, fundirHijosEnFamilias, fundirUnidades, parsearPesosTrimestres,
   pesosCriterioDeUnidades, pesosVinculoDeUnidades, porcentajesEnFamilia, type NotaArea,
-  normalizarReglaFinal, REGLAS_FINAL,
+  normalizarReglaArea, normalizarReglaFinal, REGLAS_AREA, REGLAS_FINAL,
 } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Calificacion, Instrumento } from '@/db/localDb'
@@ -68,7 +68,8 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
       if (!vigente) return
       setCals(lista)
       setNota(calcularNotaArea(asig.id!, lista, instrumentos, asig.pesos_trimestres,
-        pesosCriterioDeUnidades(unidades), pesosVinculoDeUnidades(unidades), normalizarReglaFinal(asig.regla_final)))
+        pesosCriterioDeUnidades(unidades), pesosVinculoDeUnidades(unidades), normalizarReglaFinal(asig.regla_final),
+        normalizarReglaArea(asig.regla_area)))
     })
     return () => { vigente = false }
   }, [alumno.id, asig.id, instrumentos, unidades])
@@ -270,10 +271,21 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
     )
   }
 
-  /** La nota del área: cada criterio con su nota del trimestre y su peso. */
+  /**
+   * La nota del área: con la regla por instrumento, cada instrumento con la
+   * media de sus criterios y su peso; con la regla por criterio, cada
+   * criterio con su nota y su peso.
+   */
   const bloqueArea = () => {
     if (!nota) return null
+    const porInstrumento = nota.regla_area === 'instrumento'
     const filas = (t: number) => nota.criterios.filter(c => c.trimestres[t] != null)
+    const filasInstr = (t: number) => nota.instrumentos.filter(i => i.trimestres[t] != null)
+    const pesoTotal = (t: number) => filasInstr(t).reduce((s, i) => s + i.peso, 0)
+    const pct = (i: NotaArea['instrumentos'][number], t: number) => {
+      const total = pesoTotal(t)
+      return total > 0 ? Math.round((i.peso / total) * 100) : 0
+    }
     const listaTrimestre = (t: number) => (
       <section key={t} data-explicacion-trimestre={t} className="explicacion-bloque">
         <div className="explicacion-valor-fila">
@@ -282,11 +294,22 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
             background: nota.trimestres[t] == null ? 'var(--gris-100)' : calificativo(nota.trimestres[t]).color,
           }}>{r1(nota.trimestres[t]) ?? '—'}</span>
           <div style={{ fontSize: 12.5 }}><strong style={{ color: 'var(--azul-900)' }}>{asig.nombre_display}</strong> · {ordinal(t)}
-            <div style={{ color: 'var(--gris-600)', fontSize: 12 }}>media de los criterios con nota, ponderada por su peso</div></div>
+            <div style={{ color: 'var(--gris-600)', fontSize: 12 }}>{porInstrumento
+              ? 'media de los instrumentos con nota, ponderada por su peso; cada instrumento, la media de sus criterios'
+              : 'media de los criterios con nota, ponderada por su peso'}</div></div>
         </div>
         {filas(t).length === 0
           ? <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '4px 0 0' }}>Sin ninguna nota en este trimestre.</p>
-          : (
+          : porInstrumento ? (
+            <ul className="explicacion-crudas" style={{ marginLeft: 0 }}>
+              {filasInstr(t).map(i => (
+                <li key={i.instrumento_id} data-explicacion-instrumento-area className="explicacion-fila">
+                  <strong style={{ color: calificativo(i.trimestres[t]).color }}>{r1(i.trimestres[t])}</strong>
+                  <span><b>{i.nombre}</b><span className="suave"> · {pct(i, t)} % · media de {i.criterios[t]} {i.criterios[t] === 1 ? 'criterio' : 'criterios'}</span></span>
+                </li>
+              ))}
+            </ul>
+          ) : (
             <ul className="explicacion-crudas" style={{ marginLeft: 0 }}>
               {filas(t).map(c => (
                 <li key={c.criterio_id} data-explicacion-fila className="explicacion-fila">
