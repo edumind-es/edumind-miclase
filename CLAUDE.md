@@ -42,8 +42,11 @@ edumind_miclase/
 │   │                   esquema de URL en App/App/Info.plist; plugins propios en
 │   │                   App/CapApp-SPM/Sources/CapApp-SPM/ (ImpresoraPlugin, MiClaseViewController)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
+│   ├── src/curriculo/ ← ÚNICA puerta al currículo: fuente.ts (puro) + index.ts (carga y reserva)
+│   └── public/curriculo/ ← el currículo empaquetado (generado en cada build; no se versiona)
 ├── curriculum/       ← currículum por CCAA; _estatal/ = descriptores y conexiones de los RD
 ├── scripts/          ← parse_curriculum.py · extraer_estatal.py · generar_iconos.py (todos los iconos)
+│                       empaquetar_curriculo.mjs (curriculum/ → frontend/public/curriculo/)
 ├── PRIVACIDAD.md     ← qué datos se tratan y qué ve el servidor
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos
 
@@ -759,6 +762,33 @@ edumind_miclase/
   antes (`e2e.test.mjs` escribe `miclase.sensibles` y lanza
   `miclase:sensibles`). Motivo: art. 9 RGPD y arts. 17.4 y 31.5 del
   anteproyecto de Lei de educación dixital.
+- **El currículo viaja dentro de la app, y las pantallas lo piden a
+  `src/curriculo/`**, nunca a `/api/curriculum` (`e2e.test.mjs` exige cero
+  peticiones en toda la sesión). `scripts/empaquetar_curriculo.mjs` lee
+  `curriculum/` en cada build y cada arranque de dev —lo lanza el plugin
+  `miclase-curriculo` de `vite.config.ts`, no un «prebuild» de npm, porque
+  `desplegar.sh` y las pruebas llaman a `vite` directamente; a mano,
+  `npm run curriculo`— y escribe en `frontend/public/curriculo/`
+  (gitignored): `indice.json` (comunidades → etapas → áreas → cursos, con
+  la comunidad escrita como la escribe cada JSON: `MADRID`, `CyL`),
+  `descriptores/<etapa>.json` (texto estatal) y un paquete de criterios por
+  comunidad y etapa (`criterios/<carpeta>-<etapa>.json`: por área y curso,
+  los criterios y la conexión de cada competencia específica, UNA vez). Las
+  conexiones las calcula el MISMO `conexiones.js` que usa el seed, en Node;
+  el frontend no lo importa. `fuente.ts` (puro) compone exactamente lo que
+  da el servidor, con su normalización del curso («4» → «4º»), y
+  `curriculo-vs-servidor.test.ts` lo compara campo a campo para cada
+  comunidad y etapa; `curriculo-empaquetado.test.ts` es la prueba pura. El
+  service worker precachea índice, descriptores y los 15 paquetes de
+  criterios (6 MB en el aparato, 0,75 MB por la red una vez): sin red, con
+  cualquier comunidad, se crea la clase, se listan áreas y cursos y se
+  califica. Los saberes van aparte y no se precachean (nadie los pide). El
+  servidor (`routes/curriculum.js`, intacto) es solo RESERVA: `index.ts` lo
+  llama por `api()` si la comunidad no está en el índice o un paquete no
+  llega. Una comunidad nueva es su carpeta en `curriculum/` y regenerar;
+  el selector de clases la lee del índice (`comunidades()`) y su nombre
+  largo es una línea en `curriculo/nombres.ts`. Decisión de Luis (nov
+  2026): precachear todas, no bajar a demanda.
 - **Las competencias clave salen de la competencia específica de cada
   criterio**, y cada conexión dice de dónde sale. Formato del currículo, que
   cualquier comunidad nueva tiene que cumplir para tenerlas sin tocar nada:
@@ -859,6 +889,7 @@ edumind_miclase/
 - Backend solo: `npm run dev:backend` (puerto 3270)
 - Frontend solo: `npm run dev:frontend` (puerto 5173)
 - Seed DB: `npm run seed`
+- Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar
@@ -898,6 +929,8 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No compilar a mano sobre `frontend/dist`: usar `./desplegar.sh`
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
+- No hacer `fetch` de `/api/curriculum` desde una pantalla: todo pasa por
+  `src/curriculo/`, que lee el currículo empaquetado y deja el servidor de reserva
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
   `updated_at` en los registros existentes. Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del

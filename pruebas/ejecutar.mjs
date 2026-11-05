@@ -167,6 +167,10 @@ async function principal() {
     await suite('competencias clave: niveles e informe', 'node', [competencias])
     await suite('conexión con los descriptores operativos', 'node', ['pruebas/conexiones.test.mjs'])
 
+    const curriculoEmpaquetado = join(scratch, 'curriculo-empaquetado.mjs')
+    await paquete('pruebas/curriculo-empaquetado.test.ts', curriculoEmpaquetado, ['--platform=node', '--format=esm'])
+    await suite('currículo empaquetado en la app', 'node', [curriculoEmpaquetado])
+
     const informePrueba = join(scratch, 'informe-prueba.mjs')
     await paquete('pruebas/informe-prueba.test.ts', informePrueba, ['--platform=node', '--format=esm'])
     await suite('informe de una prueba corregida', 'node', [informePrueba])
@@ -265,6 +269,9 @@ async function principal() {
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
     await suite('competencias clave en el currículo del servidor', 'node', ['pruebas/competencias-clave-api.test.mjs'], entorno)
+    const curriculoVsServidor = join(scratch, 'curriculo-vs-servidor.mjs')
+    await paquete('pruebas/curriculo-vs-servidor.test.ts', curriculoVsServidor, ['--platform=node', '--format=esm'])
+    await suite('currículo empaquetado frente al servidor', 'node', [curriculoVsServidor], entorno)
 
     // Un segundo backend, sobre su propia copia, con el buzón cerrado.
     const bdCerrado = join(scratch, 'prueba-cerrado.db')

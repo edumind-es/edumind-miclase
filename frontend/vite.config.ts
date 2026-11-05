@@ -3,9 +3,29 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 import { realpathSync } from 'fs'
+import type { Plugin } from 'vite'
+import { escribirPaquetes } from '../scripts/empaquetar_curriculo.mjs'
+
+/**
+ * El currículo viaja dentro de la app: en cada build y en cada arranque del
+ * servidor de desarrollo se regenera `public/curriculo/` desde `curriculum/`
+ * (scripts/empaquetar_curriculo.mjs). Va aquí y no en un «prebuild» de npm
+ * porque desplegar.sh y las pruebas llaman a `vite` directamente.
+ */
+function curriculoEmpaquetado(): Plugin {
+  return {
+    name: 'miclase-curriculo',
+    buildStart() {
+      const r = escribirPaquetes()
+      this.info(`currículo empaquetado: ${r.comunidades} comunidades, ${r.paquetes} paquetes, ${(r.bytes / 1024 / 1024).toFixed(1)} MB`)
+      for (const a of r.avisos) this.warn(`currículo: ${a}`)
+    },
+  }
+}
 
 export default defineConfig({
   plugins: [
+    curriculoEmpaquetado(),
     react(),
     VitePWA({
       // El registro del service worker lo hace ActualizacionApp.tsx, no la
@@ -19,12 +39,18 @@ export default defineConfig({
       injectRegister: false,
       workbox: {
         maximumFileSizeToCacheInBytes: 7_000_000,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        // El currículo empaquetado (`curriculo/`) entra entero en el precaché:
+        // índice, descriptores y los paquetes de criterios de TODAS las
+        // comunidades (6 MB en el aparato, 0,75 MB por la red una vez; workbox
+        // solo vuelve a bajar lo que cambia). Así, sin red, se puede crear una
+        // clase de cualquier comunidad y calificar. Decisión de Luis (nov 2026).
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}', 'curriculo/**/*.json'],
         // El motor de IA local pesa 6 MB y solo se puede usar en Chrome o Edge
         // de escritorio. Precachearlo obligaba a TODA instalación de la PWA
         // —el iPad incluido, donde no hay WebGPU— a descargarlo para nada.
         // Se sigue sirviendo desde el mismo origen cuando se pide.
-        globIgnores: ['**/web-llm-*.js'],
+        // Los saberes (otros 8 MB) tampoco: ninguna pantalla los pide hoy.
+        globIgnores: ['**/web-llm-*.js', 'curriculo/saberes/**'],
         // Cualquier ruta de la SPA debe abrir sin red: el docente entra en
         // /evaluacion desde el acceso directo del móvil, no por la portada
         navigateFallback: 'index.html',
@@ -32,11 +58,11 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
-            // El currículo es público y prácticamente inmutable durante el
-            // curso: se cachea a lo grande para poder evaluar sin cobertura
-            // en el gimnasio, el patio o una salida.
+            // Lo del currículo que no va en el precaché (los saberes) y el
+            // servidor de reserva: se guardan al pedirlos, por si vuelven a
+            // hacer falta sin cobertura.
             urlPattern: ({ url, sameOrigin }) =>
-              sameOrigin && url.pathname.startsWith('/api/curriculum/'),
+              sameOrigin && (url.pathname.startsWith('/curriculo/saberes/') || url.pathname.startsWith('/api/curriculum/')),
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'curriculo',

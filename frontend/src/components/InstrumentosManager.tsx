@@ -12,8 +12,7 @@ import {
   actualizarInstrumento, moverInstrumento, getGrupo,
   usoDeInstrumento, retirarInstrumentoDeUnidad, type UsoDeInstrumento,
 } from '@/db/queries'
-import { api } from '@/api'
-import { useAppStore } from '@/store/useAppStore'
+import * as curriculo from '@/curriculo'
 import FamiliaHijos from './FamiliaHijos'
 import type { Instrumento, Agregacion } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
@@ -64,7 +63,6 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   const [avisoUso, setAvisoUso] = useState<string | null>(null)
   /** Enunciados del currículo, para que el asistente reparta criterios por sus palabras. */
   const [criterios, setCriterios] = useState<{ id: string; descripcion: string }[]>([])
-  const headers = useAppStore(s => s._headers)
 
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
@@ -82,12 +80,9 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
       const asig = await getAsignaturaDetalle(asignaturaId)
       const grupo = asig ? await getGrupo(asig.grupo_id) : undefined
       if (!asig || !grupo) return
-      const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-      const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
       try {
-        const r = await fetch(api(url), { headers: headers() })
-        const all = r.ok ? await r.json() : []
-        if (vigente) setCriterios(Array.isArray(all) ? all : [])
+        const all = await curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
+        if (vigente) setCriterios(all)
       } catch { if (vigente) setCriterios([]) }
     })()
     return () => { vigente = false }

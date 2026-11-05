@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Routes, Route, Link, useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { comunidades } from '@/curriculo'
+import { opcionesDeComunidad } from '@/curriculo/nombres'
 import { useAppStore } from '@/store/useAppStore'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { getGrupoDetalle, actualizarGrupo } from '@/db/queries'
@@ -14,18 +16,17 @@ const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
 const CURSOS_ESO = ['1','2','3','4']
 
-const COMUNIDADES = [
-  { value: 'Galicia',   label: 'Galicia' },
-  { value: 'MADRID',    label: 'Comunidad de Madrid' },
-  { value: 'Aragon',    label: 'Aragón' },
-  { value: 'Canarias',  label: 'Canarias' },
-  { value: 'CyL',       label: 'Castilla y León' },
-  { value: 'CLM',       label: 'Castilla-La Mancha' },
-  { value: 'Valencia',  label: 'Comunitat Valenciana' },
-  { value: 'Asturias',  label: 'Principado de Asturias' },
-  { value: 'Extremadura', label: 'Extremadura' },
-  { value: 'Murcia',    label: 'Región de Murcia' },
-]
+/**
+ * Las comunidades con currículo, del índice empaquetado en la app: una
+ * comunidad nueva en `curriculum/` aparece aquí sin tocar nada (su nombre
+ * largo va en `curriculo/nombres.ts`). La elegida sale siempre, aunque el
+ * índice no la traiga, para no cambiarle la comunidad a una clase sin querer.
+ */
+function useComunidades(elegida: string) {
+  const [disponibles, setDisponibles] = useState<string[]>([])
+  useEffect(() => { comunidades().then(setDisponibles) }, [])
+  return useMemo(() => opcionesDeComunidad(disponibles, elegida), [disponibles, elegida])
+}
 
 export default function GruposPage() {
   return (
@@ -89,6 +90,7 @@ function NuevoGrupo() {
   const [form, setForm] = useState({
     nombre: '', etapa: 'primaria', curso: '3', comunidad: 'Galicia', curso_escolar: '2025-2026', color: COLORES[0]
   })
+  const COMUNIDADES = useComunidades(form.comunidad)
   const [guardando, setGuardando] = useState(false)
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }))
@@ -287,6 +289,7 @@ function DatosClase({ grupo, onGuardado }: { grupo: any; onGuardado: () => Promi
     curso_escolar: grupo.curso_escolar || '',
     color: grupo.color || COLORES[0],
   })
+  const COMUNIDADES = useComunidades(form.comunidad)
   const [guardando, setGuardando] = useState(false)
   const [guardado, setGuardado] = useState(false)
 
