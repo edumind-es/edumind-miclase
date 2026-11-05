@@ -1,0 +1,419 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "secundaria",
+    "asignatura": "latin",
+    "asignatura_nombre": "Latín",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Murcia · Secundaria · Latín · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Valorar el papel de la civilización latina en el origen de la identidad europea, comparando y reconociendo las semejanzas y diferencias entre lenguas y culturas, para analizar críticamente el presente.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Conocer los aspectos básicos de la lengua latina, comparándola con las lenguas de enseñanza y con otras lenguas del repertorio individual del alumnado, para valorar los rasgos comunes y apreciar la diversidad lingüística como muestra de riqueza cultural.",
+      "descriptores_ids": [
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Leer e interpretar textos latinos, asumiendo la aproximación a los textos como un proceso dinámico y tomando conciencia de los conocimientos y experiencias propias, para identificar su carácter clásico y fundamental.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender textos originales latinos, traduciendo del latín a la lengua de enseñanza y desarrollando estrategias de acceso al significado de un enunciado sencillo en lengua latina, para alcanzar y justificar la traducción propia de un pasaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CD2",
+        "STEM1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Descubrir, conocer y valorar el patrimonio cultural, arqueológico y artístico romano, apreciándolo y reconociéndolo como producto de la creación humana y como testimonio de la historia, para identificar las fuentes de inspiración y distinguir los procesos de construcción, preservación, conservación y restauración, así como para garantizar su sostenibilidad.",
+      "descriptores_ids": [
+        "CP3",
+        "CD1",
+        "CD3",
+        "CC1",
+        "CC4",
+        "CCEC1",
+        "CCEC2"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Describir el significado de productos culturales del presente, en el contexto de los desarrollos culturales en Europa, comparando las semejanzas y diferencias con la Antigüedad latina.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar de manera crítica los modos de vida, costumbres y actitudes de la sociedad romana en comparación con los de nuestras sociedades a partir del contenido de fuentes latinas en diferentes soportes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar los periodos de la historia de Roma, los acontecimientos y personajes, así como los aspectos de la civilización romana en su contexto histórico, relacionando los datos con referentes actuales y aplicando los conocimientos adquiridos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística y cultural a la que da origen el latín, identificando y explicando semejanzas y diferencias entre los elementos lingüísticos de su entorno, relacionándolos con los de la propia cultura y desarrollando una cultura compartida y una ciudadanía comprometida con los valores democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Inferir significados de términos latinos aplicando los conocimientos léxicos y fonéticos de otras lenguas del repertorio individual propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Ampliar el caudal léxico y mejorar la expresión oral y escrita, incorporando latinismos y locuciones usuales de origen latino de manera coherente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Producir definiciones etimológicas de términos cotidianos, científicos y técnicos, reconociendo los elementos latinos en diferentes contextos lingüísticos y estableciendo, si procede, la relación semántica entre un término patrimonial y un cultismo.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Explicar de forma oral, escrita o multimodal el carácter clásico y humanista de las diversas manifestaciones literarias y artísticas de la civilización latina utilizando un vocabulario correcto y una expresión adecuada.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Reconocer el sentido global y las ideas principales y secundarias de un texto, contextualizándolo e identificando las referencias históricas, sociales, políticas o religiosas que aparecen en él, y sirviéndose de conocimientos sobre personajes y acontecimientos históricos ya estudiados.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar de manera crítica el contenido de textos latinos de dificultad adecuada, atendiendo al contexto en el que se produjeron, conectándolos con la experiencia propia y valorando cómo contribuyen a entender los modos de vida, costumbres y actitudes de nuestra sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los aspectos morfológicos, sintácticos y léxicos elementales de la lengua latina, identificándolos y comparándolos con los de la lengua familiar.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Traducir textos breves y sencillos con términos adecuados y expresión correcta en la lengua de enseñanza, justificando la traducción y manifestando la correspondencia entre el análisis y la versión realizada.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Producir mediante retroversión oraciones simples utilizando las estructuras propias de la lengua latina.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Explicar los elementos de la civilización latina, especialmente los relacionados con la mitología clásica, identificándolos como fuente de inspiración de manifestaciones literarias y artísticas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer las huellas de la romanización en el patrimonio cultural y arqueológico del entorno, identificando los procesos de preservación, conservación y restauración como un aspecto fundamental de una ciudadanía comprometida con la sostenibilidad ambiental y el cuidado de su legado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Exponer de forma oral, escrita o multimodal las conclusiones obtenidas a partir de la investigación, individual o colectiva, del legado material e inmaterial de la civilización romana y su pervivencia en el presente a través de soportes analógicos y digitales, seleccionando información, contrastándola y organizándola a partir de criterios de validez, calidad y fiabilidad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El presente de la civilización latina"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Latín y plurilingüismo"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. El texto latino y la traducción"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Legado y patrimonio"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": " Aspectos geográficos, históricos, culturales, políticos y lingüísticos de la civilización latina presentes en la noción actual de Europa y de su cultura. o Marco geográfico de la civilización romana. Urbs Roma. o La historia de Roma y sus periodos. Hitos históricos más importantes y su importancia en la configuración en la Europa actual.  Estrategias y herramientas para relacionar el pasado y el presente a partir de los conocimientos adquiridos.  Obras fundamentales de la literatura latina en su contexto y su pervivencia a través de la tradición clásica.  Importancia de la civilización latina en la configuración, reconocimiento y análisis crítico de nuestra identidad como sociedad.  Estrategias para comprender, comentar e interpretar textos latinos a partir de los conocimientos adquiridos y de la experiencia propia.  Léxico latino: evolución de los conceptos fundamentales de la civilización latina hasta la actualidad (civis, populus, sacer, homo, etc.)  Importancia de los textos clásicos latinos como testimonio de aquellos aspectos constitutivos de nuestra condición humana.  El papel del humanismo y su presencia en la sociedad actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": " El abecedario latino y su pronunciación clásica. Permanencia e influencia en las lenguas del repertorio lingüístico individual del alumno. o El latín como origen de las lenguas romances. o Lenguas romances y no romances de España. o Pervivencia de elementos lingüísticos latinos en la propia lengua y en aquellas que conforman el repertorio lingüístico del alumno.  Explicación de los cambios fonéticos más frecuentes desde el latín culto y el latín vulgar. Palabras patrimoniales, cultismos y neologismos.  Identificación palabras con los principales lexemas, sufijos y prefijos de origen latino en textos escritos en las lenguas de enseñanza.  Procedimientos de composición y derivación latinos en la elaboración de familias de palabras.  Iniciación al significado etimológico de las palabras.  Estrategias básicas para inferir significados en léxico especializado y de nueva aparición a partir de la identificación de formantes latinos.  Latinismos y locuciones latinas más frecuentes en la propia lengua y en el resto de lenguas modernas.  Técnicas de reconocimiento, organización e incorporación a la producción escrita, oral o multimodal de léxico de raíz común entre las distintas lenguas del repertorio lingüístico individual.  Comparación entre lenguas a partir de su origen y parentescos.  Importancia del latín como herramienta de mejora de la expresión escrita, oral y multimodal en las distintas lenguas del repertorio lingüístico individual.  Herramientas analógicas y digitales para el aprendizaje y la reflexión de la lengua latina como vínculo e impulso para el aprendizaje de otras lenguas.  Vocabulario básico latino relacionado con los principales aspectos de la cultura romana estudiados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " La flexión nominal. Concepto de declinación. Los casos y sus principales valores sintácticos. Las declinaciones.  La flexión pronominal. Los pronombres básicos.  La flexión verbal. Las conjugaciones. Formas personales y no personales del verbo. El infinitivo de presente y el participio de perfecto.  Estructuras oracionales básicas. Concepto de oración. Elementos de la oración. La concordancia y el orden de palabras. o La oración simple. La oración atributiva y la oración predicativa. o Las oraciones coordinadas. Conjunciones más utilizadas. o Oraciones de infinitivo concertado. o Usos del participio de pasado.  Estrategias básicas para identificar, analizar y traducir unidades lingüísticas (léxico, morfosintaxis) a partir de la comparación de las lenguas y variedades que conforman el repertorio lingüístico personal.  Lectura comprensiva de textos clásicos sencillos, originales o traducidos.  Recursos para el aprendizaje y estrategias básicas de adquisición de lenguas tales como el Portfolio Europeo de las lenguas, glosarios o diccionarios. Iniciación al uso de glosarios y diccionarios.  Iniciación a las técnicas de análisis y la traducción de textos latinos. Reflexión y justificación de la traducción ofrecida: importancia del análisis morfosintáctico.  Estrategias básicas de retroversión de oraciones sencillas.  Autoconfianza, autonomía e iniciativa. El error como parte integrante del proceso de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": " Pervivencia del legado material e inmaterial de la cultura y de la civilización latinas. o Sitios arqueológicos, inscripciones, construcciones manifestaciones artísticas de la Antigua Roma. o Vida cotidiana romana: la familia. Roles de cada miembro y su pervivencia en la sociedad actual. monumentales y o Mitología y religiosidad romana. Principales dioses, mitos y héroes latinos y sus semejanzas con los mitos y héroes actuales. o Pervivencia de las instituciones políticas romanas en el sistema político actual. Influencia de la oratoria romana en los debates políticos actuales. o El derecho romano y su pervivencia en la sociedad actual. o Fiestas, ritos y celebraciones en Roma y su pervivencia en el mundo actual.  La transmisión textual y los soportes de escritura.  Características del patrimonio cultural romano y del proceso de romanización.  Interés e iniciativa en participar en procesos destinados a conservar, preservar y difundir el patrimonio arqueológico del entorno.  Herramientas analógicas y digitales para la comprensión, producción y coproducción oral, escrita y multimodal.  Respeto de la propiedad intelectual y de los derechos de autor sobre las fuentes consultadas y los contenidos utilizados.  Estrategias y herramientas, analógicas y digitales, individuales y cooperativas, para la autoevaluación, la coevaluación y la autorreparación.  La Antigüedad clásica en el patrimonio español y de la Región de Murcia. Sitios arqueológicos, museos y festivales.",
+      "criterios_ids": []
+    }
+  ]
+}

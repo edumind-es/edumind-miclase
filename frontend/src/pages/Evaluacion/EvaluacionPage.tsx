@@ -43,6 +43,7 @@ import ExplicacionNota from '@/components/ExplicacionNota'
 import ResumenCurso, { type PeticionExplicacion } from '@/components/ResumenCurso'
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
+import { verNeae } from '@/db/datosSensibles'
 
 type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number }
 
@@ -917,7 +918,7 @@ export default function EvaluacionPage() {
                       <tr key={al.id}>
                         <td className="col-alumno">
                           {al.apellidos}, {al.nombre}
-                          {al.neae ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                          {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                         </td>
                         {competencias.flatMap(g => g.plegada ? [tdPlegado(al, g)] : g.criterios.map(cr => {
                           const instrs = matriz.porCriterio.get(cr.id) ?? []

@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import ProgramacionPanel from './ProgramacionPanel'
 import RubricaEditor from './RubricaEditor'
 import NotaFinalPanel from './NotaFinalPanel'
-import type { ReglaFinal } from '@/db/localDb'
+import type { ReglaArea, ReglaFinal } from '@/db/localDb'
 import {
   getAsignaturas, getAsignaturaDetalle, crearAsignatura, crearAsignaturasEnLote,
   eliminarAsignatura, crearInstrumento, eliminarInstrumento, actualizarInstrumento,
@@ -11,6 +11,7 @@ import {
 import { useAppStore } from '@/store/useAppStore'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import { api } from '@/api'
+import { NOMBRES_AREAS } from './nombresAreas'
 
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
@@ -55,6 +56,7 @@ interface Asignatura {
   nombre_display: string
   pesos_trimestres?: string
   regla_final?: ReglaFinal | null
+  regla_area?: ReglaArea | null
   instrumentos?: Instrumento[]
 }
 
@@ -77,6 +79,7 @@ type Pestana = 'instrumentos' | 'programacion' | 'final'
 
 function humanizarSlug(slug: string): string {
   if (NOMBRES[slug]) return NOMBRES[slug]
+  if (NOMBRES_AREAS[slug]) return NOMBRES_AREAS[slug]
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 

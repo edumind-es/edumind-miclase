@@ -11,6 +11,70 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { esNativo } from '@/api'
+import { getResumenEvidencias, liberarEvidenciasBorradas } from '@/db/queries'
+import { tamanoLegible, type ResumenEvidencias } from '@/db/almacen'
+import { enMB, LIMITE_EVIDENCIA_SINC } from '@/db/limites'
+import { verEvidencias } from '@/db/datosSensibles'
+
+const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
+const NOMBRE: Record<string, [string, string]> = { foto: ['foto', 'fotos'], audio: ['audio', 'audios'], video: ['vídeo', 'vídeos'] }
+
+/** Qué ocupa cada cosa, para poder decidir qué hacer con los vídeos. */
+function DesgloseEvidencias() {
+  const [r, setR] = useState<ResumenEvidencias | null>(null)
+  const [aviso, setAviso] = useState('')
+  const mirar = () => getResumenEvidencias().then(setR).catch(() => setR(null))
+  useEffect(() => { void mirar() }, [])
+  if (!r || (!r.total.n && !r.borradas.n)) return null
+
+  const liberar = async () => {
+    if (!confirm(`Las ${r.borradas.n} evidencias que ya borraste aún guardan su contenido (${tamanoLegible(r.borradas.bytes)}). Se eliminará para siempre de este aparato.\n\n¿Seguir?`)) return
+    const bytes = await liberarEvidenciasBorradas()
+    setAviso(`Liberados ${tamanoLegible(bytes)}. El navegador puede tardar en descontarlos de lo que ocupas.`)
+    await mirar()
+  }
+
+  return (
+    <div data-almacen-desglose style={{ marginBottom: 10, fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.65 }}>
+      <div>
+        <strong>Fotos, audios y vídeos:</strong>{' '}
+        {(['video', 'foto', 'audio'] as const).filter(t => r.porTipo[t].n > 0).map((t) => (
+          <span key={t} data-almacen-tipo={t} style={{ marginRight: 10, whiteSpace: 'nowrap' }}>
+            {ICONO[t]} {r.porTipo[t].n} {NOMBRE[t][r.porTipo[t].n === 1 ? 0 : 1]} · {tamanoLegible(r.porTipo[t].bytes)}
+          </span>
+        ))}
+      </div>
+      {r.noViajan.n > 0 && (
+        <div data-almacen-no-viajan style={{ color: '#92400e' }}>
+          ⚠️ {r.noViajan.n} ({tamanoLegible(r.noViajan.bytes)}) pasan de {enMB(LIMITE_EVIDENCIA_SINC)} MB: se quedan solo en este aparato.
+        </div>
+      )}
+      {r.borradas.n > 0 && (
+        <div data-almacen-borradas>
+          {r.borradas.n} ya borradas aún ocupan {tamanoLegible(r.borradas.bytes)}.{' '}
+          <button data-almacen-liberar onClick={liberar}
+            style={{ background: 'none', border: 'none', padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', fontSize: 12.5 }}>
+            Liberar ese espacio
+          </button>
+        </div>
+      )}
+      {aviso && <div role="status" style={{ color: 'var(--verde-500)' }}>✅ {aviso}</div>}
+      {r.masPesadas.length > 0 && (
+        <details style={{ marginTop: 4 }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Ver las que más ocupan</summary>
+          <ol data-almacen-pesadas style={{ margin: '6px 0 0', paddingLeft: 20 }}>
+            {r.masPesadas.map(e => (
+              <li key={e.id}>
+                {ICONO[e.tipo]} <strong>{tamanoLegible(e.bytes)}</strong> · {e.alumno} · {new Date(e.fecha).toLocaleDateString('es-ES')}
+                {e.descripcion ? ` · ${e.descripcion}` : ''}
+              </li>
+            ))}
+          </ol>
+        </details>
+      )}
+    </div>
+  )
+}
 
 type Estado = {
   persistente: boolean
@@ -69,6 +133,8 @@ export default function AlmacenamientoLocal() {
             {estado.cuotaMB ? ` de unos ${(estado.cuotaMB / 1024).toFixed(1)} GB disponibles` : ''}.</>
         )}
       </p>
+
+      {verEvidencias() && <DesgloseEvidencias />}
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
         {!seguro && (

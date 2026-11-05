@@ -1,0 +1,518 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "emprendimiento-social-y-sostenibilidad",
+    "asignatura_nombre": "Emprendimiento Social y Sostenibilidad",
+    "ciclo_origen": "Segundo curso",
+    "fuente": "Extremadura · Secundaria · Emprendimiento Social y Sostenibilidad · Segundo curso.xlsx",
+    "generado": "2026-11-01",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Descubrir y promover el conocimiento personal de sus cualidades individuales y sociales, buscando y favoreciendo aquellas que impulsan el desarrollo de su creatividad e iniciativa emprendedora y favoreciendo entornos educativos que permitan desarrollar el trabajo cooperativo en equipo.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Identificar y desarrollar en el alumnado las cualidades del emprendedor como importantes elementos en el desarrollo de las sociedades actuales, usando herramientas como la gamificación y los proyectos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Promover el desarrollo sostenible mediante actuaciones locales y globales de la economía social que favorezcan el desarrollo de una ciudadanía global, consiguiendo actuar de forma solidaria y atender a los retos de una ciudadanía global.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Construir, con sentido ético y solidario, ideas y soluciones innovadoras y sostenibles que den respuesta a las necesidades detectadas en los entornos locales, así como valorar la presencia de la economía social y sus formas en el marco de la Comunidad Autónoma de Extremadura, analizando los problemas económicos, medioambientales y sociales.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Comprender y valorar el funcionamiento de la economía verde y circular, analizando la función que tiene en el desarrollo sostenible del entorno socioeconómico.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprender y valorar el funcionamiento general de las organizaciones generando respuestas creativas e innovadoras frente a la obsolescencia programada, reciclaje y reutilización, usando la metodología design-thinking para conseguir realismo en el proceso de enseñanza mediante laboratorios experimentales.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Ser capaces de entender y reconocer las cualidades personales y sociales de la persona emprendedora, así como la capacidad de desarrollar y hacer crecer dichas cualidades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprender la importancia de trabajar en equipo desarrollando las habilidades sociales, las personales, la comunicación, la inteligencia emocional de una manera proactiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar y reconocer la realidad que nos rodea como fuente para desarrollar los proyectos y para participar de las ayudas y conocimientos que dicho entorno nos facilita.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Consolidar el desarrollo de las cualidades de la persona emprendedora como fuente de cambios sociales y medioambientales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Imaginar una sociedad acorde a las inquietudes de los jóvenes creando proyectos innovadores donde el alumnado protagonice la acción.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Entrar en contacto con acciones emprendedoras personales y sociales del entorno cercano.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Desarrollar en los alumnos y alumnas un sentido de responsabilidad ante la sociedad en la que viven y ante el entorno que los rodea.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar y respetar las aportaciones de los demás aprovechando las sinergias del trabajo en equipo y el crecimiento de las ideas al desarrollarlas de forma cooperativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Relacionar la nueva realidad empresarial con las actuales preocupaciones sociales y medioambientales.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer y comprender la importancia de las empresas de economía social en el entorno propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Conocer y aplicar los diecisiete ODS de la ONU y la Agenda 2030.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Aplicar el conocimiento de los ODS en la región de Extremadura, valorando su importancia y la puesta en práctica en nuestras vidas",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Conocer lo que es la economía circular en el marco de la Unión Europea y por tanto las 7R (rediseñar, reducir, reutilizar, reparar, renovar, recuperar y reciclar).",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Descubrir las necesidades y las formas de transformar, para aplicar tecnologías sostenibles en un proyecto sencillo, dentro de un entorno local.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Afrontar el reto, con un compromiso de servicio a la comunidad, de definir un proyecto básico de emprendimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Conocer lo que es la economía circular en el marco de la Unión Europea y por tanto las 7R (rediseñar, reducir, reutilizar, reparar, renovar, recuperar y reciclar).",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Descubrir las necesidades y las formas de transformar para aplicar tecnologías en un proyecto sencillo a través de medios sostenibles, dentro de un entorno local.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Afrontar el reto, con un compromiso de servicio a la comunidad, de definir un proyecto básico de emprendimiento.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Emprender desde una ciudadanía social › Cualidades personales"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque A. Emprender desde una ciudadanía social › La toma de decisiones y el aprendizaje. 2.º ESO"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque B. Economía social y sostenibilidad › La economía social"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque B. Economía social y sostenibilidad › Aspectos del entorno. General y próximo. 2.º ESO"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque B. Economía social y sostenibilidad › Problemas sociales actuales y su futuro"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque C. La economía verde y circular: un nuevo modelo de producción y de › La economía verde y circular"
+    },
+    {
+      "id": "B7",
+      "titulo": "Bloque C. La economía verde y circular: un nuevo modelo de producción y de › Soluciones de la economía circular. 2.º ESO"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Conocerte a ti mismo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "El perfil de la persona emprendedora y creadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "El trabajo en equipo y la inteligencia emocional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "El enfoque proactivo y la búsqueda de oportunidades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La dimensión del emprendimiento: personal, social y productiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "El valor social del emprendimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La creatividad y la innovación al servicio de la sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La gamificación y el desarrollo de iniciativas emprendedoras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "La economía social en el marco de una ciudadanía global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Organizaciones empresariales al servicio de la economía social. Responsabilidad social corporativa (RSC).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Las monedas sociales: una solución local a un problema global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Retos de la ciudadanía global. La solidaridad como un complemento del desarrollo local.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Observando el entorno local. Formas de economía social en Extremadura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "La exclusión social, la pobreza y el desarrollo sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Compromiso social y sostenibilidad: ODS y la Agenda 2030.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "La economía verde y circular. La sostenibilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Análisis de las 7R.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "Un proyecto básico de emprendimiento en economía circular, con retorno local.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "El producto y su diseño. Obsolescencia programada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.3",
+      "bloque_id": "B7",
+      "descripcion": "Observando y aprendiendo a hacer. El proceso desing thinking.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.4",
+      "bloque_id": "B7",
+      "descripcion": "El laboratorio de ideas innovadoras. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo por determinar) nos permiten dar respuesta al cómo enseñar y evaluar, que se retoma en esta materia para su contextualización. En su planificación y desarrollo en la materia de Economía Social y Sostenibilidad, las situaciones de aprendizajes deben favorecer la presencia y progreso de todo el alumnado a través de Diseño Universal para el Aprendizaje (DUA), garantizando la inclusión. Estos principios relacionados con las diferentes formas de implicación, de representación de la información, acción y expresión del aprendizaje, tienen como objetivo alcanzar el Perfil de salida del alumnado al finalizar la ESO. Las situaciones de aprendizaje pretenden movilizar competencias clave y específicas a partir de los retos del siglo XXI, conectando con los intereses, experiencias, conocimientos previos y necesidades del alumnado para conseguir aprendizajes significativos. El aprendizaje por proyectos promueve que el alumnado se convierta en protagonista de su propio aprendizaje partiendo del diseño, elaboración y desarrollo de proyectos de emprendimiento reales. Atravesando por las diferentes fases de ideación, planificación, gestión y ejecución de un proyecto emprendedor se irán aplicando los saberes básicos de la materia o materias correspondientes, ya que estos proyectos podrían ser planteados de manera interdisciplinar, lo que enriquece el desarrollo competencial del alumnado. Utilizando la metodología de la cultura emprendedora en nuestro contexto educativo, también se pueden enfocar situaciones de aprendizaje desde una visión de proyecto global de centro de modo que el alumnado contribuya al diseño y desarrollo de proyectos dirigidos a la búsqueda de soluciones más amplias que den respuesta a necesidades concretas del centro escolar o del entorno local, vinculadas a experiencias de aprendizaje complementarias. La realización de visitas a entidades, organizaciones y empresas de distintos sectores favorece la consideración del entorno como fuente de ideas y oportunidades. Asimismo, se puede proponer la participación de profesionales y emprendedores locales, empresarios y empresarias, en foros, debates, entrevistas y charlas, conectando el aprendizaje con una visión más cercana y realista del entorno económico y de emprendimiento. En este sentido, es necesario poner en valor la perspectiva de género dado el papel que tienen las mujeres en la actualidad como emprendedoras y su impacto en su desarrollo económico y social. Por una parte, también se favorecerá la participación activa del alumnado en la vida del centro y en su entorno local. La realización de asambleas o comisiones permiten la creación de contextos de reflexión conjunta sobre cuestiones relacionadas con la realización y recursos necesarios para llevar a cabo un proyecto emprendedor. Por otra parte, se planteará la realización de actividades de ideación y creación emprendedora en espacios, físicos o virtuales del centro y, en particular, relacionadas con potenciar el emprendimiento cultural en ellos; además, basadas en experiencias reales o simuladas de la vida cotidiana que contribuyan (uso de simuladores empresariales) a concienciar al alumnado del valor que el aprendizaje tiene sobre cuestiones de interés para su vida y para construir una ciudadanía responsable. También, con base en un aprendizaje-servicio, deben desarrollarse experiencias de aprendizaje colaborativo y cooperativo, en las que el alumnado, una vez estudiadas las necesidades de un contexto comunitario y en coordinación con los usuarios que se determinen, reflexione sobre el modo de búsqueda de soluciones conjuntas para afrontar esas necesidades y decidir de qué manera pueden aportar su contribución y compromiso de transformación al cambio efectivo. Una situación de aprendizaje debe estar basada en experiencias reales o simuladas de la vida cotidiana del alumnado, que contribuyan a concienciarle del valor que el aprendizaje tiene sobre cuestiones de interés para su vida y para construir una ciudadanía responsable. En estas situaciones de aprendizaje será necesario el uso de herramientas y tecnologías informáticas, así como otras tecnologías y materiales educativos, que permitan la personalización de las actividades, el autoaprendizaje, la autoevaluación, el trabajo individual y en equipo, compensando las desigualdades en relación a las distintas capacidades del alumnado. La retroalimentación del docente y de las alumnas y alumnos debe estar presente a lo largo de todo el proceso desde su inicio, debiendo permitir al alumnado ser capaz de autorregular su aprendizaje, sus emociones y motivación. Es conveniente que se explicite tanto lo que se espera del alumnado, como las formas concretas y diferenciadas a través de las que pueden llegar a ello. En este sentido, el aspecto emocional del alumnado debe ser tenido en cuenta porque favorece el autoconocimiento, el crecimiento personal y el desarrollo de la autoestima, autoconfianza, etc., vinculados de manera directa al perfil de una persona emprendedora. Los procedimientos de heteroevaluación, coevaluación y autoevaluación deberán estar incardinados en toda la situación de aprendizaje a través de distintos procedimientos e instrumentos. El papel del docente en el diseño, desarrollo y evaluación de las situaciones de aprendizaje viene marcado por varios aspectos: generar oportunidades de aprendizaje a partir de las vivencias personales, ofrecer retroalimentación personalizada en función de la situación de cada aprendiz, guiar el proceso personal ayudando a que el alumnado aborde los principales hitos de su formación y presentar modelos positivos de afrontamiento de las dificultades personales y profesionales. Por último, la evaluación del alumnado tendrá en cuenta lo siguiente: autorregulación del propio aprendizaje, la autonomía en la gestión de la información, la selección de recursos y herramientas para el aprendizaje, revisión de lo aprendido y cómo aplicarlo, reflexión metacognitiva, aprender a pensar, creatividad, espíritu crítico, aceptación y regulación de la incertidumbre, control de impulsos, perseverancia en las tareas, toma de decisión, etc., y debe complementarse con la evaluación del propio diseño de las situaciones de aprendizaje y de la práctica docente, en un contexto de trabajo colaborativo con el resto del equipo docente.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,1882 @@
+{
+  "meta": {
+    "etapa": "secundaria",
+    "fuente": "RealesDecretos/Secundaria/HTML",
+    "norma": "RD 217/2022 (ESO)",
+    "generado": "2026-11-01"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "competencias_especificas": [
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE1",
+      "descripcion": "Reconocer los motivos por los que ocurren los principales fenómenos naturales, a partir de situaciones cotidianas, y explicarlos en términos de las leyes y teorías científicas adecuadas, para poner en valor la contribución de la ciencia a la sociedad.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CD1",
+        "CPSAA4",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE2",
+      "descripcion": "Interpretar y modelizar en términos científicos problemas y situaciones de la vida cotidiana y profesional, aplicando diferentes estrategias, formas de razonamiento, herramientas tecnológicas y el pensamiento computacional, para hallar y analizar soluciones comprobando su validez.",
+      "descriptores_ids": [
+        "CCL2",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD2",
+        "CPSAA4",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE3",
+      "descripcion": "Utilizar los métodos científicos, haciendo indagaciones y llevando a cabo proyectos, para desarrollar los razonamientos propios del pensamiento científico y mejorar las destrezas en el uso de las metodologías científicas.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD1",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE4",
+      "descripcion": "Analizar los efectos de determinadas acciones cotidianas o del entorno profesional sobre la salud, el medio natural y social, basándose en fundamentos científicos, para valorar la importancia de los hábitos que mejoran la salud individual y colectiva, evitan o minimizan los impactos medioambientales negativos y son compatibles con un desarrollo sostenible.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CC4"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE5",
+      "descripcion": "Interpretar y transmitir información y datos científicos, contrastando previamente su veracidad y utilizando lenguaje verbal o gráfico apropiado, para adquirir y afianzar conocimientos del entorno natural, social y profesional.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CPSAA4",
+        "CC4",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE6",
+      "descripcion": "Identificar las ciencias y las matemáticas implicadas en contextos diversos, interrelacionando conceptos y procedimientos, para aplicarlos en situaciones de la vida cotidiana y del ámbito profesional correspondiente.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM5",
+        "CD5",
+        "CPSAA5",
+        "CC4",
+        "CE1",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE7",
+      "descripcion": "Desarrollar destrezas personales identificando y gestionando emociones, poniendo en práctica estrategias de aceptación del error como parte del proceso de aprendizaje y adaptándose ante situaciones de incertidumbre, para mejorar la perseverancia en la consecución de objetivos y la valoración del aprendizaje de las ciencias.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD2",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "ambito-de-ciencias-aplicadas",
+      "id": "CE8",
+      "descripcion": "Desarrollar destrezas sociales y trabajar de forma colaborativa en equipos diversos con roles asignados que permitan potenciar el crecimiento entre iguales, valorando la importancia de romper los estereotipos de género en la investigación científica, para el emprendimiento personal y laboral.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM2",
+        "STEM4",
+        "CD3",
+        "CPSAA3",
+        "CC2",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE1",
+      "descripcion": "Identificar y comprender la naturaleza histórica y geográfica de las relaciones sociales, las actividades económicas, las manifestaciones culturales y los bienes patrimoniales, analizando sus orígenes y evolución e identificando las causas y consecuencias de los cambios producidos, los problemas actuales y sus valores presentes, para realizar propuestas que contribuyan al bienestar futuro y al desarrollo sostenible de la sociedad.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE2",
+      "descripcion": "Comprender los orígenes y evolución de los procesos de integración europea y su relevancia en el presente y futuro de la sociedad española y de las comunidades locales, destacando la contribución del Estado, sus instituciones y las entidades sociales a la paz, a la seguridad integral ciudadana, a la cooperación internacional, al desarrollo sostenible frente al cambio climático y a la ciudadanía global, para contribuir a crear un mundo más seguro, solidario, sostenible y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE3",
+      "descripcion": "Reconocer los principios, valores, derechos y deberes de nuestro sistema democrático y constitucional, analizando de forma crítica los planteamientos históricos y geográficos, las instituciones y las diferentes organizaciones políticas y económicas en que se enmarcan y manifiestan, para adecuar el comportamiento propio al cumplimiento de dichos principios, valores, derechos y deberes.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE4",
+      "descripcion": "Buscar y seleccionar información de manera progresivamente autónoma a partir de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de las necesidades detectadas y evitando los riesgos de manipulación y desinformación, para integrarla como conocimiento y compartirla desde un punto de vista crítico, personal y respetuoso con la propiedad intelectual.",
+      "descriptores_ids": [
+        "CCL3",
+        "CD1",
+        "CD4",
+        "CPSAA4",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE5",
+      "descripcion": "Comunicar en lengua castellana de manera cooperativa y respetuosa, atendiendo a las convenciones propias de los diferentes géneros discursivos y a su adecuación a diferentes ámbitos y contextos, para dar respuesta a necesidades concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM4",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CC3",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE6",
+      "descripcion": "Interpretar y valorar obras diversas como fuente de placer y conocimiento, compartiendo experiencias de lectura, para construir la propia identidad lectora y disfrutar de la dimensión social de esta actividad.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL4",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE7",
+      "descripcion": "Comunicarse en lengua extranjera, con creciente autonomía, empleando recursos analógicos y digitales y usando estrategias básicas de comprensión, producción e interacción, para responder de manera creativa y eficaz a necesidades personales y profesionales concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD3",
+        "CPSAA5",
+        "CC1"
+      ]
+    },
+    {
+      "materia": "ambito-de-comunicacion-y-ciencias-sociales",
+      "id": "CE8",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística y cultural, usando los repertorios personales y tomando conciencia de las estrategias y conocimientos propios, para gestionar de forma empática y respetuosa situaciones interculturales.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE1",
+      "descripcion": "Interpretar y transmitir información y datos científicos, argumentando sobre ellos y utilizando diferentes formatos, para analizar conceptos y procesos de las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE2",
+      "descripcion": "Identificar, localizar y seleccionar información, contrastando su veracidad, organizándola y evaluándola críticamente, para resolver preguntas relacionadas con las ciencias biológicas y geológicas.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA4"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE3",
+      "descripcion": "Planificar y desarrollar proyectos de investigación, siguiendo los pasos de las metodologías científicas y cooperando cuando sea necesario, para indagar en aspectos relacionados con las ciencias geológicas y biológicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE4",
+      "descripcion": "Utilizar el razonamiento y el pensamiento computacional, analizando críticamente las respuestas y soluciones y reformulando el procedimiento, si fuera necesario, para resolver problemas o dar explicación a procesos de la vida cotidiana relacionados con la biología y la geología.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD5",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE5",
+      "descripcion": "Analizar los efectos de determinadas acciones sobre el medio ambiente y la salud, basándose en los fundamentos de las ciencias biológicas y de la Tierra, para promover y adoptar hábitos que eviten o minimicen los impactos medioambientales negativos, sean compatibles con un desarrollo sostenible y permitan mantener y mejorar la salud individual y colectiva.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CC4",
+        "CE1",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "biologia-y-geologia",
+      "id": "CE6",
+      "descripcion": "Analizar los elementos de un paisaje concreto valorándolo como patrimonio natural y utilizando conocimientos sobre geología y ciencias de la Tierra para explicar su historia geológica, proponer acciones encaminadas a su protección e identificar posibles riesgos naturales.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "digitalizacion",
+      "id": "CE1",
+      "descripcion": "Identificar y resolver problemas técnicos sencillos, conectar y configurar dispositivos a redes domésticas, aplicando los conocimientos de hardware y sistemas operativos, para gestionar las herramientas e instalaciones informáticas y de comunicación de uso cotidiano.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD4",
+        "CD5",
+        "CPSAA1",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "digitalizacion",
+      "id": "CE2",
+      "descripcion": "Configurar el entorno personal de aprendizaje, interactuando y aprovechando los recursos del ámbito digital, para optimizar y gestionar el aprendizaje permanente.",
+      "descriptores_ids": [
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "digitalizacion",
+      "id": "CE3",
+      "descripcion": "Desarrollar hábitos que fomenten el bienestar digital, aplicando medidas preventivas y correctivas, para proteger dispositivos, datos personales y la propia salud.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM5",
+        "CD1",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "digitalizacion",
+      "id": "CE4",
+      "descripcion": "Ejercer una ciudadanía digital crítica, conociendo las posibles acciones que realizar en la red, e identificando sus repercusiones, para hacer un uso activo, responsable y ético de la tecnología.",
+      "descriptores_ids": [
+        "CD3",
+        "CD4",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE1",
+      "descripcion": "Analizar y valorar las fortalezas y debilidades propias y de los demás, reflexionando sobre las aptitudes y gestionando de forma eficaz las emociones y las destrezas necesarias, para adaptarse a entornos cambiantes y diseñar un proyecto personal que genere valor para los demás.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CC1",
+        "CE2",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE2",
+      "descripcion": "Utilizar estrategias de conformación de equipos, así como habilidades sociales, de comunicación e innovación ágil, aplicándolas con autonomía y motivación a las dinámicas de trabajo en distintos contextos, para constituir equipos eficaces y descubrir el valor de cooperar con otras personas durante el proceso de ideación y desarrollo de soluciones emprendedoras.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE3",
+      "descripcion": "Elaborar, con sentido ético y solidario, ideas y soluciones innovadoras y sostenibles que den respuesta a las necesidades locales y globales detectadas, utilizando metodologías ágiles de ideación y analizando tanto sus puntos fuertes y débiles como el impacto que puedan generar esas ideas en el entorno, para lograr la superación de retos relacionados con la preservación y cuidado del medio natural, social, cultural y artístico.",
+      "descriptores_ids": [
+        "STEM3",
+        "CC4",
+        "CE1",
+        "CE2",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE4",
+      "descripcion": "Seleccionar y reunir los recursos disponibles en el proceso de desarrollo de la idea o solución creativa propuesta, conociendo los medios de producción y las fuentes financieras que proporcionan dichos recursos y aplicando estrategias de captación de los mismos, para poner en marcha el proyecto que lleve a la realidad la solución emprendedora.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD2",
+        "CE1",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE5",
+      "descripcion": "Presentar y exponer ideas y soluciones creativas, utilizando estrategias comunicativas ágiles y valorando la importancia de una comunicación efectiva y respetuosa, para transmitir mensajes convincentes adecuados al contexto y a los objetivos concretos de cada situación y validar las ideas y soluciones presentadas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CD3",
+        "CPSAA1",
+        "CC1",
+        "CE1",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE6",
+      "descripcion": "Comprender aspectos básicos de la economía y las finanzas, valorando críticamente el problema de la escasez de recursos y la necesidad de elegir, así como los principios de interacción social desde el punto de vista económico, para relacionar dichos aspectos con la búsqueda y planificación de los recursos necesarios en el desarrollo de la idea o solución emprendedora que afronte el reto planteado de manera eficiente, equitativa y sostenible.",
+      "descriptores_ids": [
+        "CC1",
+        "CE1",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "economia-y-emprendimiento",
+      "id": "CE7",
+      "descripcion": "Construir y analizar de manera cooperativa, autónoma y ágil prototipos innovadores y sostenibles, aplicando estrategias eficaces de diseño y ejecución, evaluando todas las fases del proceso de manera crítica y ética y validando los resultados obtenidos, para mejorar y perfeccionar los prototipos creados y para contribuir al aprendizaje y el desarrollo personal y colectivo.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD5",
+        "CPSAA3",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "educacion-en-valores-civicos-y-eticos",
+      "id": "CE1",
+      "descripcion": "Inquirir e investigar cuanto se refiere a la identidad humana y a cuestiones éticas relativas al propio proyecto vital, analizando críticamente información fiable y generando una actitud reflexiva al respecto, para promover el autonocimiento y la elaboración de planteamientos y juicios morales de manera autónoma y razonada.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "educacion-en-valores-civicos-y-eticos",
+      "id": "CE2",
+      "descripcion": "Actuar e interactuar de acuerdo con normas y valores cívicos y éticos, a partir del reconocimiento fundado de su importancia para regular la vida comunitaria y su aplicación efectiva y justificada en distintos contextos, para promover una convivencia pacífica, respetuosa, democrática y comprometida con el bien común.",
+      "descriptores_ids": [
+        "CCL5",
+        "CD3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "educacion-en-valores-civicos-y-eticos",
+      "id": "CE3",
+      "descripcion": "Entender la naturaleza interconectada e inter y ecodependiente de las actividades humanas, mediante la identificación y análisis de problemas ecosociales de relevancia, para promover hábitos y actitudes éticamente comprometidos con el logro de formas de vida sostenibles.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "educacion-en-valores-civicos-y-eticos",
+      "id": "CE4",
+      "descripcion": "Mostrar una adecuada estima de sí mismo y del entorno, reconociendo y valorando las emociones y los sentimientos propios y ajenos, para el logro de una actitud empática y cuidadosa con respecto a los demás y a la naturaleza.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "educacion-fisica",
+      "id": "CE1",
+      "descripcion": "Adoptar un estilo de vida activo y saludable, seleccionando e incorporando intencionalmente actividades físicas y deportivas en las rutinas diarias a partir de un análisis crítico de los modelos corporales y del rechazo de las prácticas que carezcan de base científica, para hacer un uso saludable y autónomo del tiempo libre y así mejorar la calidad de vida.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA4"
+      ]
+    },
+    {
+      "materia": "educacion-fisica",
+      "id": "CE2",
+      "descripcion": "Adaptar, con progresiva autonomía en su ejecución, las capacidades físicas, perceptivo-motrices y coordinativas, así como las habilidades y destrezas motrices, aplicando procesos de percepción, decisión y ejecución adecuados a la lógica interna y a los objetivos de diferentes situaciones con dificultad variable, para resolver situaciones de carácter motor vinculadas con distintas actividades físicas funcionales, deportivas, expresivas y recreativas, y para consolidar actitudes de superación, crecimiento y resiliencia al enfrentarse a desafíos físicos.",
+      "descriptores_ids": [
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "educacion-fisica",
+      "id": "CE3",
+      "descripcion": "Compartir espacios de práctica físico-deportiva con independencia de las diferencias culturales, sociales, de género y de habilidad, priorizando el respeto entre participantes y a las reglas sobre los resultados, adoptando una actitud crítica ante comportamientos antideportivos o contrarios a la convivencia y desarrollando procesos de autorregulación emocional que canalicen el fracaso y el éxito en estas situaciones, para contribuir con progresiva autonomía al entendimiento social y al compromiso ético en los diferentes espacios en los que se participa.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA5",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "educacion-fisica",
+      "id": "CE4",
+      "descripcion": "Practicar, analizar y valorar distintas manifestaciones de la cultura motriz aprovechando las posibilidades y recursos expresivos que ofrecen el cuerpo y el movimiento y profundizando en las consecuencias del deporte como fenómeno social, analizando críticamente sus manifestaciones desde la perspectiva de género y desde los intereses económico-políticos que lo rodean, para alcanzar una visión más realista, contextualizada y justa de la motricidad en el marco de las sociedades actuales.",
+      "descriptores_ids": [
+        "CC2",
+        "CC3",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "educacion-fisica",
+      "id": "CE5",
+      "descripcion": "Adoptar un estilo de vida sostenible y ecosocialmente responsable aplicando medidas de seguridad individuales y colectivas en la práctica físico-deportiva según el entorno y desarrollando colaborativa y cooperativamente acciones de servicio a la comunidad vinculadas a la actividad física y al deporte, para contribuir activamente a la conservación del medio natural y urbano.",
+      "descriptores_ids": [
+        "STEM5",
+        "CC4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE1",
+      "descripcion": "Comprender la importancia que algunos ejemplos seleccionados de las distintas manifestaciones culturales y artísticas han tenido en el desarrollo del ser humano, mostrando interés por el patrimonio como parte de la propia cultura, para entender cómo se convierten en el testimonio de los valores y convicciones de cada persona y de la sociedad en su conjunto, y para reconocer la necesidad de su protección y conservación.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE2",
+      "descripcion": "Explicar las producciones plásticas, visuales y audiovisuales propias, comparándolas con las de sus iguales y con algunas de las que conforman el patrimonio cultural y artístico, justificando las opiniones y teniendo en cuenta el progreso desde la intención hasta la realización, para valorar el intercambio, las experiencias compartidas y el diálogo intercultural, así como para superar estereotipos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE3",
+      "descripcion": "Analizar diferentes propuestas plásticas, visuales y audiovisuales, mostrando respeto y desarrollando la capacidad de observación e interiorización de la experiencia y del disfrute estético, para enriquecer la cultura artística individual y alimentar el imaginario.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD1",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE4",
+      "descripcion": "Explorar las técnicas, los lenguajes y las intenciones de diferentes producciones culturales y artísticas, analizando, de forma abierta y respetuosa, tanto el proceso como el producto final, su recepción y su contexto, para descubrir las diversas posibilidades que ofrecen como fuente generadora de ideas y respuestas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE5",
+      "descripcion": "Realizar producciones artísticas individuales o colectivas con creatividad e imaginación, seleccionando y aplicando herramientas, técnicas y soportes en función de la intencionalidad, para expresar la visión del mundo, las emociones y los sentimientos propios, así como para mejorar la capacidad de comunicación y desarrollar la reflexión crítica y la autoconfianza.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE6",
+      "descripcion": "Apropiarse de las referencias culturales y artísticas del entorno, identificando sus singularidades, para enriquecer las creaciones propias y desarrollar la identidad personal, cultural y social.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE7",
+      "descripcion": "Aplicar las principales técnicas, recursos y convenciones de los lenguajes artísticos, incorporando, de forma creativa, las posibilidades que ofrecen las diversas tecnologías, para integrarlos y enriquecer el diseño y la realización de un proyecto artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM3",
+        "CD1",
+        "CD5",
+        "CC1",
+        "CC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "educacion-plastica-visual-y-audiovisual",
+      "id": "CE8",
+      "descripcion": "Compartir producciones y manifestaciones artísticas, adaptando el proyecto a la intención y a las características del público destinatario, para valorar distintas oportunidades de desarrollo personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "expresion-artistica",
+      "id": "CE1",
+      "descripcion": "Analizar manifestaciones artísticas, contextualizándolas, describiendo sus aspectos esenciales y valorando el proceso de creación y el resultado final, para educar la mirada, alimentar el imaginario, reforzar la confianza y ampliar las posibilidades de disfrute del patrimonio cultural y artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "expresion-artistica",
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas gráfico-plásticas, empleando distintos medios, soportes, herramientas y lenguajes, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las más adecuadas a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD2",
+        "CPSAA1",
+        "CC1",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "expresion-artistica",
+      "id": "CE3",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes medios, técnicas y formatos audiovisuales, decodificando sus lenguajes, identificando las herramientas y distinguiendo sus fines, para incorporarlos al repertorio personal de recursos y desarrollar el criterio de selección de los más adecuados a cada necesidad o intención.",
+      "descriptores_ids": [
+        "CD5",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "expresion-artistica",
+      "id": "CE4",
+      "descripcion": "Crear producciones artísticas, individuales o grupales, realizadas con diferentes técnicas y herramientas, incluido el propio cuerpo, a partir de un motivo o intención previos, adaptando el diseño y el proceso a las necesidades e indicaciones de realización y teniendo en cuenta las características del público destinatario, para compartirlas y valorar las oportunidades de desarrollo personal, social, académico o profesional que pueden derivarse de esta actividad.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE1",
+      "descripcion": "Comprender y relacionar los motivos por los que ocurren los principales fenómenos fisicoquímicos del entorno, explicándolos en términos de las leyes y teorías científicas adecuadas, para resolver problemas con el fin de aplicarlas para mejorar la realidad cercana y la calidad de vida humana.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CPSAA4"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE2",
+      "descripcion": "Expresar las observaciones realizadas por el alumnado en forma de preguntas, formulando hipótesis para explicarlas y demostrando dichas hipótesis a través de la experimentación científica, la indagación y la búsqueda de evidencias, para desarrollar los razonamientos propios del pensamiento científico y mejorar las destrezas en el uso de las metodologías científicas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE3",
+      "descripcion": "Manejar con soltura las reglas y normas básicas de la física y la química en lo referente al lenguaje de la IUPAC, al lenguaje matemático, al empleo de unidades de medida correctas, al uso seguro del laboratorio y a la interpretación y producción de datos e información en diferentes formatos y fuentes, para reconocer el carácter universal y transversal del lenguaje científico y la necesidad de una comunicación fiable en investigación y ciencia entre diferentes países y culturas.",
+      "descriptores_ids": [
+        "STEM4",
+        "STEM5",
+        "CD3",
+        "CPSAA2",
+        "CC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE4",
+      "descripcion": "Utilizar de forma crítica, eficiente y segura plataformas digitales y recursos variados, tanto para el trabajo individual como en equipo, para fomentar la creatividad, el desarrollo personal y el aprendizaje individual y social, mediante la consulta de información, la creación de materiales y la comunicación efectiva en los diferentes entornos de aprendizaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE5",
+      "descripcion": "Utilizar las estrategias propias del trabajo colaborativo, potenciando el crecimiento entre iguales como base emprendedora de una comunidad científica crítica, ética y eficiente, para comprender la importancia de la ciencia en la mejora de la sociedad, las aplicaciones y repercusiones de los avances científicos, la preservación de la salud y la conservación sostenible del medio ambiente.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "STEM5",
+        "CD3",
+        "CPSAA3",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "fisica-y-quimica",
+      "id": "CE6",
+      "descripcion": "Comprender y valorar la ciencia como una construcción colectiva en continuo cambio y evolución, en la que no solo participan las personas dedicadas a ella, sino que también requiere de una interacción con el resto de la sociedad, para obtener resultados que repercutan en el avance tecnológico, económico, ambiental y social.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA4",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "formacion-y-orientacion-personal-y-profesional",
+      "id": "CE1",
+      "descripcion": "Comprender los procesos físicos y psicológicos implicados en la cognición, la motivación y el aprendizaje, analizando sus implicaciones en la conducta y desarrollando estrategias de gestión emocional y del propio proceso de aprendizaje, para mejorar el desempeño en el ámbito personal, social y académico y lograr mayor control sobre las acciones y sus consecuencias.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "materia": "formacion-y-orientacion-personal-y-profesional",
+      "id": "CE2",
+      "descripcion": "Comprender las principales características del desarrollo evolutivo de la persona, analizando aquellos elementos de la madurez que condicionan los comportamientos e identificando las cualidades personales y de relación social propias y de los demás, para potenciar las que favorecen la autonomía y permiten afrontar de forma eficaz los nuevos retos.",
+      "descriptores_ids": [
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "formacion-y-orientacion-personal-y-profesional",
+      "id": "CE3",
+      "descripcion": "Conocer y comprender al ser humano, sus sociedades y culturas, analizando con empatía su diversidad y complejidad desde diferentes perspectivas, para fomentar el espíritu crítico sobre aspectos que dirigen el funcionamiento humano, social y cultural.",
+      "descriptores_ids": [
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "formacion-y-orientacion-personal-y-profesional",
+      "id": "CE4",
+      "descripcion": "Conocer la dimensión social y antropológica del ser humano y desarrollar estrategias y habilidades sociales adecuadas a contextos cambiantes y a grupos diferentes, considerando los factores personales y socioculturales que intervienen en la configuración psicológica de la persona, para comprenderse a sí misma e interactuar con los demás desde el respeto a la diversidad personal, social y cultural.",
+      "descriptores_ids": [
+        "CC1",
+        "CC2",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "materia": "formacion-y-orientacion-personal-y-profesional",
+      "id": "CE5",
+      "descripcion": "Explorar las oportunidades académicas y profesionales que ofrece el entorno, descubriendo y priorizando las necesidades e intereses personales y vocacionales y desarrollando el espíritu de iniciativa y de superación, así como las destrezas necesarias en la toma de decisiones, para llevar a cabo un proyecto personal, académico y profesional propio y realizar una primera aproximación al diseño de un plan de búsqueda activa de empleo.",
+      "descriptores_ids": [
+        "CD1",
+        "CD3",
+        "CPSAA4",
+        "CPSAA5",
+        "CE1",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE1",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre temas relevantes del presente y del pasado, usando críticamente fuentes históricas y geográficas, para adquirir conocimientos, elaborar y expresar contenidos en varios formatos.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar y elaborar productos propios sobre problemas geográficos, históricos y sociales que resulten relevantes en la actualidad, desde lo local a lo global, para desarrollar un pensamiento crítico, respetuoso con las diferencias, que contribuya a la construcción de la propia identidad y a enriquecer el acervo común.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE3",
+      "descripcion": "Conocer los principales desafíos a los que se han enfrentado distintas sociedades a lo largo del tiempo, identificando las causas y consecuencias de los cambios producidos y los problemas a los que se enfrentan en la actualidad, mediante el desarrollo de proyectos de investigación y el uso de fuentes fiables, para realizar propuestas que contribuyan al desarrollo sostenible.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE4",
+      "descripcion": "Identificar y analizar los elementos del paisaje y su articulación en sistemas complejos naturales, rurales y urbanos, así como su evolución en el tiempo, interpretando las causas de las transformaciones y valorando el grado de equilibrio existente en los distintos ecosistemas, para promover su conservación, mejora y uso sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE5",
+      "descripcion": "Analizar de forma crítica planteamientos históricos y geográficos explicando la construcción de los sistemas democráticos y los principios constitucionales que rigen la vida en comunidad, así como asumiendo los deberes y derechos propios de nuestro marco de convivencia, para promover la participación ciudadana y la cohesión social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE6",
+      "descripcion": "Comprender los procesos geográficos, históricos y culturales que han conformado la realidad multicultural en la que vivimos, conociendo y difundiendo la historia y cultura de las minorías étnicas presentes en nuestro país y valorando la aportación de los movimientos en defensa de la igualdad y la inclusión, para reducir estereotipos, evitar cualquier tipo de discriminación y violencia, y reconocer la riqueza de la diversidad.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE7",
+      "descripcion": "Identificar los fundamentos que sostienen las diversas identidades propias y las ajenas, a través del conocimiento y puesta en valor del patrimonio material e inmaterial que compartimos para conservarlo y respetar los sentimientos de pertenencia, así como para favorecer procesos que contribuyan a la cohesión y solidaridad territorial en orden a los valores del europeísmo y de la Declaración Universal de los Derechos Humanos.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE8",
+      "descripcion": "Tomar conciencia del papel de los ciclos demográficos, el ciclo vital, las formas de vida y las relaciones intergeneracionales y de dependencia en la sociedad actual y su evolución a lo largo del tiempo, analizándolas de forma crítica, para promover alternativas saludables, sostenibles, enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "geografia-e-historia",
+      "id": "CE9",
+      "descripcion": "Conocer y valorar la importancia de la seguridad integral ciudadana en la cultura de convivencia nacional e internacional, reconociendo la contribución del Estado, sus instituciones y otras entidades sociales a la ciudadanía global, a la paz, a la cooperación internacional y al desarrollo sostenible, para promover la consecución de un mundo más seguro, solidario, sostenible y justo.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "latin",
+      "id": "CE1",
+      "descripcion": "Valorar el papel de la civilización latina en el origen de la identidad europea, comparando y reconociendo las semejanzas y diferencias entre lenguas y culturas, para analizar críticamente el presente.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "latin",
+      "id": "CE2",
+      "descripcion": "Conocer los aspectos básicos de la lengua latina, comparándola con las lenguas de enseñanza y con otras lenguas del repertorio individual del alumnado, para valorar los rasgos comunes y apreciar la diversidad lingüística como muestra de riqueza cultural.",
+      "descriptores_ids": [
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "latin",
+      "id": "CE3",
+      "descripcion": "Leer e interpretar textos latinos, asumiendo la aproximación a los textos como un proceso dinámico y tomando conciencia de los conocimientos y experiencias propias, para identificar su carácter clásico y fundamental.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA4",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "latin",
+      "id": "CE4",
+      "descripcion": "Comprender textos originales latinos, traduciendo del latín a la lengua de enseñanza y desarrollando estrategias de acceso al significado de un enunciado sencillo en lengua latina, para alcanzar y justificar la traducción propia de un pasaje.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "CP3",
+        "CD2",
+        "STEM1"
+      ]
+    },
+    {
+      "materia": "latin",
+      "id": "CE5",
+      "descripcion": "Descubrir, conocer y valorar el patrimonio cultural, arqueológico y artístico romano, apreciándolo y reconociéndolo como producto de la creación humana y como testimonio de la historia, para identificar las fuentes de inspiración y distinguir los procesos de construcción, preservación, conservación y restauración, así como para garantizar su sostenibilidad.",
+      "descriptores_ids": [
+        "CP3",
+        "CD1",
+        "CD3",
+        "CC1",
+        "CC4",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE1",
+      "descripcion": "Describir y apreciar la diversidad lingüística del mundo a partir del reconocimiento de las lenguas del alumnado y la realidad plurilingüe y pluricultural de España, analizando el origen y desarrollo sociohistórico de sus lenguas y las características de las principales variedades dialectales del español, para favorecer la reflexión interlingüística, para combatir los estereotipos y prejuicios lingüísticos y para valorar dicha diversidad como fuente de riqueza cultural.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP2",
+        "CP3",
+        "CC1",
+        "CC2",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE2",
+      "descripcion": "Comprender e interpretar textos orales y multimodales, recogiendo el sentido general y la información más relevante, identificando el punto de vista y la intención del emisor y valorando su fiabilidad, su forma y su contenido, para construir conocimiento, para formarse opinión y para ensanchar las posibilidades de disfrute y ocio.",
+      "descriptores_ids": [
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA4",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE3",
+      "descripcion": "Producir textos orales y multimodales con fluidez, coherencia, cohesión y registro adecuado, atendiendo a las convenciones propias de los diferentes géneros discursivos, y participar en interacciones orales con actitud cooperativa y respetuosa, tanto para construir conocimiento y establecer vínculos personales como para intervenir de manera activa e informada en diferentes contextos sociales.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CC2",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE4",
+      "descripcion": "Comprender, interpretar y valorar textos escritos, con sentido crítico y diferentes propósitos de lectura, reconociendo el sentido global y las ideas principales y secundarias, identificando la intención del emisor, reflexionando sobre el contenido y la forma y evaluando su calidad y fiabilidad, para dar respuesta a necesidades e intereses comunicativos diversos y para construir conocimiento.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CCL5",
+        "CP2",
+        "STEM4",
+        "CD1",
+        "CPSAA4",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE5",
+      "descripcion": "Producir textos escritos y multimodales coherentes, cohesionados, adecuados y correctos, atendiendo a las convenciones propias del género discursivo elegido, para construir conocimiento y para dar respuesta de manera informada, eficaz y creativa a demandas comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CCL5",
+        "STEM1",
+        "CD2",
+        "CD3",
+        "CPSAA5",
+        "CC2"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE6",
+      "descripcion": "Seleccionar y contrastar información procedente de diferentes fuentes de manera progresivamente autónoma, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, e integrarla y transformarla en conocimiento, para comunicarla desde un punto de vista crítico y personal a la par que respetuoso con la propiedad intelectual.",
+      "descriptores_ids": [
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CPSAA4",
+        "CC2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE7",
+      "descripcion": "Seleccionar y leer de manera progresivamente autónoma obras diversas como fuente de placer y conocimiento, configurando un itinerario lector que evolucione en cuanto a diversidad, complejidad y calidad de las obras, y compartir experiencias de lectura, para construir la propia identidad lectora y para disfrutar de la dimensión social de la lectura.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CD3",
+        "CPSAA1",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE8",
+      "descripcion": "Leer, interpretar y valorar obras o fragmentos literarios del patrimonio nacional y universal, utilizando un metalenguaje específico y movilizando la experiencia biográfica y los conocimientos literarios y culturales que permiten establecer vínculos entre textos diversos y con otras manifestaciones artísticas, para conformar un mapa cultural, para ensanchar las posibilidades de disfrute de la literatura y para crear textos de intención literaria.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL4",
+        "CC1",
+        "CCEC1",
+        "CCEC2",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE9",
+      "descripcion": "Movilizar el conocimiento sobre la estructura de la lengua y sus usos y reflexionar de manera progresivamente autónoma sobre las elecciones lingüísticas y discursivas, con la terminología adecuada, para desarrollar la conciencia lingüística, para aumentar el repertorio comunicativo y para mejorar las destrezas tanto de producción oral y escrita como de comprensión e interpretación crítica.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CP2",
+        "STEM1",
+        "STEM2",
+        "CPSAA5"
+      ]
+    },
+    {
+      "materia": "lengua-castellana-y-literatura",
+      "id": "CE10",
+      "descripcion": "Poner las propias prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, utilizando un lenguaje no discriminatorio y desterrando los abusos de poder a través de la palabra, para favorecer un uso no solo eficaz sino también ético y democrático del lenguaje.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL5",
+        "CP3",
+        "CD3",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE1",
+      "descripcion": "Comprender e interpretar el sentido general y los detalles más relevantes de textos expresados de forma clara y en la lengua estándar, buscando fuentes fiables y haciendo uso de estrategias como la inferencia de significados, para responder a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD1",
+        "CPSAA5",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE2",
+      "descripcion": "Producir textos originales, de extensión media, sencillos y con una organización clara, usando estrategias tales como la planificación, la compensación o la autorreparación, para expresar de forma creativa, adecuada y coherente mensajes relevantes y responder a propósitos comunicativos concretos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CD2",
+        "CPSAA5",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE3",
+      "descripcion": "Interactuar con otras personas con creciente autonomía, usando estrategias de cooperación y empleando recursos analógicos y digitales, para responder a propósitos comunicativos concretos en intercambios respetuosos con las normas de cortesía.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "STEM1",
+        "CPSAA3",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE4",
+      "descripcion": "Mediar en situaciones cotidianas entre distintas lenguas, usando estrategias y conocimientos sencillos orientados a explicar conceptos o simplificar mensajes, para transmitir información de manera eficaz, clara y responsable.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP1",
+        "CP2",
+        "CP3",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE5",
+      "descripcion": "Ampliar y usar los repertorios lingüísticos personales entre distintas lenguas, reflexionando de forma crítica sobre su funcionamiento y tomando conciencia de las estrategias y conocimientos propios, para mejorar la respuesta a necesidades comunicativas concretas.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "CPSAA1",
+        "CPSAA5",
+        "CD2"
+      ]
+    },
+    {
+      "materia": "lengua-extranjera",
+      "id": "CE6",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística, cultural y artística a partir de la lengua extranjera, identificando y compartiendo las semejanzas y las diferencias entre lenguas y culturas, para actuar de forma empática y respetuosa en situaciones interculturales.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE1",
+      "descripcion": "Interpretar, modelizar y resolver problemas de la vida cotidiana y propios de las matemáticas, aplicando diferentes estrategias y formas de razonamiento, para explorar distintas maneras de proceder y obtener posibles soluciones.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD2",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE2",
+      "descripcion": "Analizar las soluciones de un problema usando diferentes técnicas y herramientas, evaluando las respuestas obtenidas, para verificar su validez e idoneidad desde un punto de vista matemático y su repercusión global.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD2",
+        "CPSAA4",
+        "CC3",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE3",
+      "descripcion": "Formular y comprobar conjeturas sencillas o plantear problemas de forma autónoma, reconociendo el valor del razonamiento y la argumentación, para generar nuevo conocimiento.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE4",
+      "descripcion": "Utilizar los principios del pensamiento computacional organizando datos, descomponiendo en partes, reconociendo patrones, interpretando, modificando y creando algoritmos, para modelizar situaciones y resolver problemas de forma eficaz.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE5",
+      "descripcion": "Reconocer y utilizar conexiones entre los diferentes elementos matemáticos, interconectando conceptos y procedimientos, para desarrollar una visión de las matemáticas como un todo integrado.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE6",
+      "descripcion": "Identificar las matemáticas implicadas en otras materias y en situaciones reales susceptibles de ser abordadas en términos matemáticos, interrelacionando conceptos y procedimientos, para aplicarlos en situaciones diversas.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD3",
+        "CD5",
+        "CC4",
+        "CE2",
+        "CE3",
+        "CCEC1"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE7",
+      "descripcion": "Representar, de forma individual y colectiva, conceptos, procedimientos, información y resultados matemáticos, usando diferentes tecnologías, para visualizar ideas y estructurar procesos matemáticos.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE8",
+      "descripcion": "Comunicar de forma individual y colectiva conceptos, procedimientos y argumentos matemáticos, usando lenguaje oral, escrito o gráfico, utilizando la terminología matemática apropiada, para dar significado y coherencia a las ideas matemáticas.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CP1",
+        "STEM2",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE9",
+      "descripcion": "Desarrollar destrezas personales, identificando y gestionando emociones, poniendo en práctica estrategias de aceptación del error como parte del proceso de aprendizaje y adaptándose ante situaciones de incertidumbre, para mejorar la perseverancia en la consecución de objetivos y el disfrute en el aprendizaje de las matemáticas.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "matematicas",
+      "id": "CE10",
+      "descripcion": "Desarrollar destrezas sociales reconociendo y respetando las emociones y experiencias de los demás, participando activa y reflexivamente en proyectos en equipos heterogéneos con roles asignados, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y grupal y crear relaciones saludables.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "materia": "musica",
+      "id": "CE1",
+      "descripcion": "Analizar obras de diferentes épocas y culturas, identificando sus principales rasgos estilísticos y estableciendo relaciones con su contexto, para valorar el patrimonio musical y dancístico como fuente de disfrute y enriquecimiento personal.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "materia": "musica",
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas musicales y dancísticas, a través de actividades de improvisación, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las técnicas más adecuadas a la intención expresiva.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "musica",
+      "id": "CE3",
+      "descripcion": "Interpretar piezas musicales y dancísticas, gestionando adecuadamente las emociones y empleando diversas estrategias y técnicas vocales, corporales o instrumentales, para ampliar las posibilidades de expresión personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "musica",
+      "id": "CE4",
+      "descripcion": "Crear propuestas artístico-musicales, empleando la voz, el cuerpo, instrumentos musicales y herramientas tecnológicas, para potenciar la creatividad e identificar oportunidades de desarrollo personal, social, académico y profesional.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE1",
+      "descripcion": "Buscar y seleccionar la información adecuada proveniente de diversas fuentes, de manera crítica y segura, aplicando procesos de investigación, métodos de análisis de productos y experimentando con herramientas de simulación, para definir problemas tecnológicos e iniciar procesos de creación de soluciones a partir de la información obtenida.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM2",
+        "CD1",
+        "CD4",
+        "CPSAA4",
+        "CE1"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE2",
+      "descripcion": "Abordar problemas tecnológicos con autonomía y actitud creativa, aplicando conocimientos interdisciplinares y trabajando de forma cooperativa y colaborativa, para diseñar y planificar soluciones a un problema o necesidad de forma eficaz, innovadora y sostenible.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE3",
+      "descripcion": "Aplicar de forma apropiada y segura distintas técnicas y conocimientos interdisciplinares utilizando operadores, sistemas tecnológicos y herramientas, teniendo en cuenta la planificación y el diseño previo, para construir o fabricar soluciones tecnológicas y sostenibles que den respuesta a necesidades en diferentes contextos.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM3",
+        "STEM5",
+        "CD5",
+        "CPSAA1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE4",
+      "descripcion": "Describir, representar e intercambiar ideas o soluciones a problemas tecnológicos o digitales, utilizando medios de representación, simbología y vocabulario adecuados, así como los instrumentos y recursos disponibles y valorando la utilidad de las herramientas digitales, para comunicar y difundir información y propuestas.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM4",
+        "CD3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE5",
+      "descripcion": "Desarrollar algoritmos y aplicaciones informáticas en distintos entornos, aplicando los principios del pensamiento computacional e incorporando las tecnologías emergentes, para crear soluciones a problemas concretos, automatizar procesos y aplicarlos en sistemas de control o en robótica.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE6",
+      "descripcion": "Comprender los fundamentos del funcionamiento de los dispositivos y aplicaciones habituales de su entorno digital de aprendizaje, analizando sus componentes y funciones y ajustándolos a sus necesidades, para hacer un uso más eficiente y seguro de los mismos y para detectar y resolver problemas técnicos sencillos.",
+      "descriptores_ids": [
+        "CP2",
+        "CD2",
+        "CD4",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "materia": "tecnologia-y-digitalizacion",
+      "id": "CE7",
+      "descripcion": "Hacer un uso responsable y ético de la tecnología, mostrando interés por un desarrollo sostenible, identificando sus repercusiones y valorando la contribución de las tecnologías emergentes, para identificar las aportaciones y el impacto del desarrollo tecnológico en la sociedad y en el entorno.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CC4"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE1",
+      "descripcion": "Identificar y proponer problemas tecnológicos con iniciativa y creatividad, estudiando las necesidades de su entorno próximo y aplicando estrategias y procesos colaborativos e iterativos relativos a proyectos, para idear y planificar soluciones de manera eficiente, accesible, sostenible e innovadora.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD3",
+        "CPSAA3",
+        "CPSAA4",
+        "CE1",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE2",
+      "descripcion": "Aplicar de forma apropiada y segura distintas técnicas y conocimientos interdisciplinares, utilizando procedimientos y recursos tecnológicos y analizando el ciclo de vida de productos, para fabricar soluciones tecnológicas accesibles y sostenibles que den respuesta a necesidades planteadas.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD2",
+        "CPSAA4",
+        "CC4",
+        "CCEC4"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE3",
+      "descripcion": "Expresar, comunicar y difundir ideas, propuestas o soluciones tecnológicas en diferentes foros de manera efectiva, usando un lenguaje inclusivo y no sexista, empleando los recursos disponibles y aplicando los elementos y técnicas necesarias, para intercambiar la información de manera responsable y fomentar el trabajo en equipo.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM4",
+        "CD3",
+        "CPSAA3",
+        "CCEC3"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE4",
+      "descripcion": "Desarrollar soluciones automatizadas a problemas planteados, aplicando los conocimientos necesarios e incorporando tecnologías emergentes, para diseñar y construir sistemas de control programables y robóticos.",
+      "descriptores_ids": [
+        "CP2",
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CPSAA5",
+        "CE3"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE5",
+      "descripcion": "Aprovechar y emplear de manera responsable las posibilidades de las herramientas digitales, adaptándolas a sus necesidades, configurándolas y aplicando conocimientos interdisciplinares, para la resolución de tareas de una manera más eficiente.",
+      "descriptores_ids": [
+        "CP2",
+        "CD2",
+        "CD5",
+        "CPSAA4",
+        "CPSAA5"
+      ]
+    },
+    {
+      "materia": "tecnologia",
+      "id": "CE6",
+      "descripcion": "Analizar procesos tecnológicos, teniendo en cuenta su impacto en la sociedad y el entorno y aplicando criterios de sostenibilidad y accesibilidad, para hacer un uso ético y ecosocialmente responsable de la tecnología.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CC4"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,814 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "ambito-de-ciencias-aplicadas",
+    "asignatura_nombre": "Ámbito de Ciencias Aplicadas",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Extremadura · Secundaria · Ámbito de Ciencias Aplicadas · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Razonar sobre las causas de los principales fenómenos naturales a través de situaciones cotidianas, en términos de leyes y teorías científicas poniendo en valor la contribución de la ciencia a la sociedad.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Aplicar diferentes estrategias, formas de razonamiento, herramientas tecnológicas y el pensamiento computacional, interpretando, modelizando y analizando en términos científicos problemas y situaciones de la vida cotidiana y profesional, garantizando su validez.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Desarrollar los razonamientos propios del pensamiento científico y mejorar las destrezas en el uso de los métodos científicos, desarrollando proyectos y haciendo indagaciones.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Analizar los efectos de determinadas acciones cotidianas sobre el entorno, basándose en fundamentos científicos y valorando la importancia de los hábitos que mejoran la salud, minimizan el impacto sobre el medioambiente y son compatibles con un desarrollo sostenible.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Interpretar y transmitir información y datos científicos en formato analógico y digital, contrastando previamente su veracidad, utilizando un lenguaje verbal o gráfico apropiado y afianzando conocimientos del entorno social y profesional.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Aplicar en situaciones de la vida cotidiana y del ámbito profesional correspondiente conceptos y procedimientos identificados de las ciencias y las matemáticas en contextos diversos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Poner en práctica estrategias de aceptación del error como parte del proceso de aprendizaje desarrollando destrezas personales, identificando y gestionando emociones, mejorando así la perseverancia en la consecución de los objetivos y la valoración del aprendizaje de las ciencias.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Trabajar de forma colaborativa en equipos diversos que permitan potenciar el crecimiento entre iguales, desarrollando destrezas sociales, valorando la importancia de romper los estereotipos de género en la investigación científica, para el emprendimiento personal y laboral.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Explicar los fenómenos naturales más relevantes en términos de principios, teorías y leyes científicos adecuados, como estrategia en la toma de decisiones fundamentadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Justificar la contribución de la ciencia a la sociedad y la labor de los hombres y mujeres dedicados a su desarrollo, entendiendo la investigación como una labor colectiva en constante evolución fruto de la interacción entre la ciencia, la tecnología, la sociedad y el medioambiente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar representaciones que ayuden en la búsqueda de estrategias de resolución de una situación problematizada, organizando los datos dados y comprendiendo las preguntas formuladas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Hallar la solución de un problema utilizando conocimientos, datos e información aportados, estrategias y herramientas apropiadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprobar la corrección de las soluciones de un problema y su coherencia en el contexto planteado.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Emplear herramientas tecnológicas adecuadas en la representación, la resolución de problemas y la comprobación de las soluciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Plantear preguntas e hipótesis que puedan ser respondidas o contrastadas utilizando el método científico, la observación, la información y el razonamiento para intentar explicar fenómenos naturales y realizar predicciones sobre estos.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Diseñar y realizar experimentos y obtener datos cuantitativos y cualitativos sobre fenómenos naturales en el medio natural y en el laboratorio utilizando los instrumentos, herramientas o técnicas adecuadas con corrección para obtener resultados claros que respondan a cuestiones concretas o contrastar la veracidad de una hipótesis.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar resultados obtenidos en proyectos de investigación utilizando el razonamiento y, cuando sea necesario, herramientas matemáticas y tecnológicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Evaluar los efectos de determinadas acciones individuales sobre el organismo y el medio natural y proponer hábitos saludables y sostenibles basados en los conocimientos adquiridos y la información disponible.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Relacionar con fundamentos científicos la preservación de la biodiversidad, la conservación del medioambiente, la protección de los seres vivos del entorno, el desarrollo sostenible y la calidad de vida.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Organizar y comunicar información científica y matemática de forma clara y rigurosa de manera verbal, gráfica, numérica, etc., utilizando el formato más adecuado.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Analizar e interpretar información científica y matemática presente en la vida cotidiana manteniendo una actitud crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Emplear y citar de forma adecuada fuentes fiables seleccionando la información científica relevante en la consulta y creación de contenidos para la mejora del aprendizaje propio y colectivo.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Aplicar procedimientos propios de las ciencias y las matemáticas en situaciones diversas estableciendo conexiones entre distintas áreas de conocimiento en contextos sociales y profesionales.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Mostrar resiliencia ante los retos académicos asumiendo el error como una oportunidad para la mejora.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Desarrollo de un autoconcepto positivo ante las ciencias.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Asumir responsablemente una función concreta dentro de un proyecto científico, utilizando espacios virtuales cuando sea necesario, aportando valor, analizando críticamente las contribuciones del resto del equipo, respetando la diversidad y favoreciendo la inclusión.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Emprender, de forma guiada y de acuerdo con la metodología adecuada, proyectos científicos colaborativos orientados a la mejora y a la creación de valor en la sociedad.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Destrezas científicas básicas"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Sentido numérico"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Sentido de la medida"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque D. Sentido espacial"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque E. Sentido algebraico y pensamiento computacional"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque F. Sentido estocástico"
+    },
+    {
+      "id": "B7",
+      "titulo": "Bloque G. La materia y sus cambios"
+    },
+    {
+      "id": "B8",
+      "titulo": "Bloque H. Las interacciones y la energía"
+    },
+    {
+      "id": "B9",
+      "titulo": "Bloque I. El cuerpo humano y la salud"
+    },
+    {
+      "id": "B10",
+      "titulo": "Bloque J. La Tierra como sistema y el desarrollo sostenible"
+    },
+    {
+      "id": "B11",
+      "titulo": "Bloque K. Sentido socioemocional"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Metodologías de la investigación científica: identificación y formulación de cuestiones, elaboración de hipótesis y comprobación mediante experimentación y proyectos de investigación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Entornos y recursos de aprendizaje científico como el laboratorio y los entornos virtuales, utilización adecuada, salvaguardando la conservación de la salud propia y comunitaria, la seguridad y el respeto al medioambiente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Lenguaje científico: interpretación, producción y comunicación eficaz de información de carácter científico en el contexto escolar y profesional en diferentes formatos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Valoración de la ciencia y de la actividad desarrollada por las personas que se dedican a ella.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de su contribución a los distintos ámbitos del saber humano, así como al avance y la mejora de la sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "La medida y la expresión numérica de las magnitudes físicas: orden de magnitud, notación científica, indicadores de precisión de las mediciones y los resultados, y relevancia de las unidades de medida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Números naturales, enteros, decimales, racionales e irracionales relevantes (raíces cuadradas, π…): interpretación, ordenación en la recta numérica y aplicación en la resolución de problemas de la vida cotidiana y profesional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Orden de magnitud de los números: reconocimiento y utilización de la notación científica. Uso de la calculadora en la representación de números grandes y pequeños.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Operaciones o combinación de operaciones (suma, resta, multiplicación, división y potencias con exponentes enteros) con números naturales, enteros, racionales o decimales: identificación, propiedades y aplicación en la resolución de problemas. Estrategias de cálculo mental, de forma manual o con calculadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Relaciones inversas (adición y sustracción, multiplicación y división, cuadrado y raíz cuadrada): utilización en la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Factores y múltiplos: relaciones y uso de la factorización en números primos en la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Razones y proporciones: comprensión representación de relaciones cuantitativas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Porcentajes: comprensión y utilización en la resolución de problemas de aumentos y disminuciones porcentuales en contextos cotidianos y profesionales, rebajas, descuentos, impuestos, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Proporcionalidad directa e inversa: comprensión y uso en la resolución de problemas de escalas, cambios de divisa, etc. B.5. responsable. Consumo B.5.1. Toma de decisiones: consumo responsable, relaciones calidad-precio y valor-precio, en contextos cotidianos y profesionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Estimación y relaciones: toma de decisión justificada del grado de precisión en situaciones de medida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias de estimación o cálculo de medidas indirectas de formas planas y tridimensionales y objetos de la vida cotidiana y profesional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Perímetros, áreas y volúmenes: interpretación, obtención de fórmulas y aplicación en formas planas y tridimensionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Representación plana de objetos tridimensionales: visualización y utilización en la resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Instrumentos de dibujo y herramientas digitales: utilización, realización de dibujos de objetos geométricos con propiedades fijadas, como las longitudes de lados o las medidas de ángulos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Formas geométricas de dos y tres dimensiones: descripción y clasificación en función de sus propiedades o características.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Objetos geométricos: construcción con instrumentos de dibujo, con herramientas manipulativas y digitales como programas de geometría dinámica, realidad aumentada, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Coordenadas cartesianas: descripción de relaciones espaciales. localización y.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Patrones: identificación y extensión determinando la regla de formación de diversas estructuras, numéricas, espaciales, tablas, mosaicos, frisos o gráficos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Variable: comprensión y expresión de relaciones sencillas mediante lenguaje algebraico. Equivalencia entre expresiones algebraicas de primer y segundo grado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Ecuaciones lineales y cuadráticas: resolución algebraica y gráfica en contextos de resolución de problemas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Herramientas tecnológicas: utilización en la resolución de problemas e interpretación de las soluciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Formas de representación de una relación: enunciado, tablas, gráficas y expresión analítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Relaciones lineales: interpretación en situaciones contextualizadas descritas mediante un enunciado, tabla, gráfica o expresión analítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Funciones: interpretación de información relevante en situaciones reales, funciones cuadráticas, de proporcionalidad inversa, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Estrategias para la interpretación y modificación de algoritmos. Formulación de problemas susceptibles de ser analizados utilizando programas y otras herramientas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Diseño de estudios estadísticos: formulación de preguntas, organización de datos, realización de tablas y gráficos adecuados, cálculo e interpretación de.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Análisis crítico e interpretación de información estadística en contextos cotidianos y obtención de conclusiones razonadas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Fenómenos deterministas y aleatorios. Azar y aproximación a la probabilidad: frecuencias relativas. Regla de Laplace y técnicas de recuento. Toma de decisiones sobre experimentos simples en diferentes contextos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "Teoría cinético-molecular: aplicación y explicación de las propiedades más importantes de los sistemas materiales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "Composición de la materia: descripción a partir de los conocimientos sobre la estructura de los átomos y de los compuestos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.3",
+      "bloque_id": "B7",
+      "descripcion": "Formulación y nomenclatura de sustancias.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.4",
+      "bloque_id": "B7",
+      "descripcion": "Cambios físicos y químicos en los sistemas materiales: análisis, causas y consecuencias. G.3. Cambios representación. Estequiometría. y.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.5",
+      "bloque_id": "B7",
+      "descripcion": "Ecuaciones químicas sencillas: interpretación su cualitativa y cuantitativa. Cálculos estequiométricos sencillos e interpretación de los factores que las afectan. Relevancia en el mundo cotidiano y profesional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.6",
+      "bloque_id": "B7",
+      "descripcion": "Experimentación con los sistemas materiales: conocimiento y descripción de sus propiedades, composición y clasificación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.1",
+      "bloque_id": "B8",
+      "descripcion": "Movimiento de los cuerpos: descripción y uso de las magnitudes cinemáticas adecuadas a cada caso.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.2",
+      "bloque_id": "B8",
+      "descripcion": "Relación de las fuerzas con los cambios que producen sobre los sistemas y aplicación a la resolución de problemas de la vida cotidiana y profesional relacionados con las fuerzas presentes en la naturaleza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.3",
+      "bloque_id": "B8",
+      "descripcion": "Leyes de Newton: aplicación y relación con la acción de una fuerza con el estado de reposo o movimiento de un sistema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.4",
+      "bloque_id": "B8",
+      "descripcion": "La energía: análisis y formulación de hipótesis, propiedades y manifestaciones relacionando la obtención y consumo de la energía con las repercusiones medioambientales que produce.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.5",
+      "bloque_id": "B8",
+      "descripcion": "El calor: análisis de sus efectos sobre la materia, explicación de comportamientos en situaciones cotidianas y profesionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.6",
+      "bloque_id": "B8",
+      "descripcion": "La electricidad: corriente eléctrica en circuitos simples. Obtención experimental de magnitudes y relación entre ellas. Medidas de seguridad y prevención.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.1",
+      "bloque_id": "B9",
+      "descripcion": "Los aparatos digestivo, respiratorio, circulatorio y excretor: anatomía, fisiología y relación y análisis global de la función de nutrición y su importancia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.2",
+      "bloque_id": "B9",
+      "descripcion": "El aparato reproductor: anatomía y fisiología, análisis, reflexión de la importancia de las prácticas sexuales responsables y del uso del preservativo en la prevención de enfermedades de transmisión sexual y de embarazos no deseados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.3",
+      "bloque_id": "B9",
+      "descripcion": "Los receptores sensoriales, centros de coordinación y órganos efectores: análisis general de la función de relación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.4",
+      "bloque_id": "B9",
+      "descripcion": "Los hábitos saludables (postura adecuada, dieta equilibrada, uso responsable de los dispositivos tecnológicos, ejercicio físico, higiene del sueño…): argumentación fundamentada científicamente sobre su importancia destacando la prevención del consumo de drogas legales e ilegales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.5",
+      "bloque_id": "B9",
+      "descripcion": "Educación afectivo-sexual desde la perspectiva de la igualdad entre personas y el respeto a la diversidad sexual. La importancia de las prácticas sexuales responsables. La asertividad y el autocuidado. La prevención de infecciones de transmisión sexual (ITS) y de embarazos no deseados. El uso adecuado de métodos anticonceptivos y de métodos de prevención de ITS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.6",
+      "bloque_id": "B9",
+      "descripcion": "El sistema inmune: reflexión sobre su funcionamiento y su importancia en la prevención y superación de enfermedades infecciosas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.7",
+      "bloque_id": "B9",
+      "descripcion": "Las enfermedades infecciosas: tratamientos según su etiología, reflexión sobre el funcionamiento de los antibióticos y de la importancia de su uso adecuado y responsable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.8",
+      "bloque_id": "B9",
+      "descripcion": "Las vacunas: reflexión sobre su funcionamiento y valoración de su efecto positivo en la sociedad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.9",
+      "bloque_id": "B9",
+      "descripcion": "Los trasplantes: análisis de su importancia en el tratamiento de determinadas enfermedades y reflexión sobre la donación de órganos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.1",
+      "bloque_id": "B10",
+      "descripcion": "La atmósfera y la hidrosfera: reflexión sobre sus funciones, su papel junto con la biosfera y la geosfera en la formación del suelo (edafogénesis) y valoración de su papel esencial para la vida en la Tierra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.2",
+      "bloque_id": "B10",
+      "descripcion": "Los ecosistemas: identificación de sus elementos y las relaciones intraespecíficas e interespecíficas, argumentación sobre las causas y consecuencias del deterioro del medioambiente e importancia de contribuir a su conservación mediante la adopción de hábitos compatibles con un modelo de desarrollo sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.3",
+      "bloque_id": "B10",
+      "descripcion": "Causas y consecuencias del cambio climático y del deterioro del medioambiente: importancia de la conservación de los ecosistemas mediante hábitos sostenibles y reflexión sobre los efectos globales de las acciones individuales y colectivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.4",
+      "bloque_id": "B10",
+      "descripcion": "Los fenómenos geológicos internos y externos: diferenciación, reconocimiento de sus manifestaciones en la superficie terrestre y argumentación sobre la dinámica global del planeta a la luz de la teoría de la tectónica de placas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.5",
+      "bloque_id": "B10",
+      "descripcion": "Los riesgos naturales: relación con los fenómenos geológicos y determinadas actividades humanas valorando la importancia de respetar el relieve y los ciclos de la naturaleza en el desarrollo económico y social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.1",
+      "bloque_id": "B11",
+      "descripcion": "Estrategias para el reconocimiento de las emociones que intervienen en el aprendizaje propio para incrementar la curiosidad, la iniciativa, la perseverancia y la resiliencia, así como el placer de aprender y comprender la ciencia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.2",
+      "bloque_id": "B11",
+      "descripcion": "Estrategias para aumentar la flexibilidad cognitiva y la apertura a cambios cuando sea necesario, transformando el error en oportunidad de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.3",
+      "bloque_id": "B11",
+      "descripcion": "Técnicas cooperativas que optimicen el trabajo en equipo, despliegue de conductas empáticas y estrategias para la gestión de conflictos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.4",
+      "bloque_id": "B11",
+      "descripcion": "Actitudes inclusivas como la igualdad efectiva de género, la corresponsabilidad, el respeto por las minorías y la valoración de la diversidad presente en el aula y en la sociedad como una riqueza cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.5",
+      "bloque_id": "B11",
+      "descripcion": "Estrategias de identificación y prevención de abusos, de agresiones, de situaciones de violencia o de vulneración de la integridad física, psíquica y emocional. SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II) nos permiten dar respuesta al cómo enseñar y evaluar, y se retoman a continuación en relación con el ámbito de Ciencias Aplicadas. Las situaciones de aprendizaje favorecen el desarrollo competencial y exigen que el alumnado despliegue capacidades asociadas a competencias, mediante la movilización y articulación de un conjunto de saberes. En su diseño, se considera al estudiante como el protagonista de su propio aprendizaje y lo sitúa como ser social activo en el centro de todo el proceso, favoreciendo su autonomía para el aprendizaje a lo largo de la vida. En su planificación y desarrollo, las situaciones de aprendizaje deben favorecer la presencia, participación y progreso de todo el alumnado a través del Diseño Universal para el Aprendizaje (DUA), garantizando la inclusión. Esto supone diferentes formas de implicación, de representación de la información y acción y expresión del aprendizaje. En el diseño y planificación de las situaciones de aprendizaje del ámbito de Ciencias Aplicadas de la FP de Grado Básico deben resaltarse de entre los principios del DUA aquellos aspectos metodológicos que suponen la adaptación a las características específicas del alumnado de manera que se garantice la inclusión de los mismos, como son, el primer lugar, proporcionar múltiples formas de implicación que motiven al alumnado para el aprendizaje con el fin de facilitarle la continuidad dentro del sistema educativo o de facilitarle la transición a la vida activa; en segundo lugar, equilibrar en las situaciones de aprendizaje las actividades de carácter práctico con aquellas de base teórica, donde a veces habrá que solventar aprendizajes básicos no adquiridos, y, por último, la necesidad de propiciar un desarrollo socioemocional ajustado en un alumnado al que el sistema educativo no ha dado una respuesta adecuada a sus expectativas e intereses. Una situación de aprendizaje debe partir de un desafío, problema o situación real relacionado con los saberes básicos, que despierten un claro interés social. Estos retos, planteados desde el ámbito de Ciencias Aplicadas, ayudarán al alumnado a interpretar desde un punto de vista científico lo que ocurre a su alrededor y deberán estar conectados tanto con las situaciones de su entorno cercano como con los retos que presenta el siglo XXI, potenciando la reflexión sobre la necesidad de conseguir un futuro mejor y más sostenible. Las situaciones deben estar contextualizadas en la realidad del alumnado y entroncar con sus experiencias posibilitando que el aprendiz aplique los conocimientos científicos adquiridos para la resolución de problemas de la vida real. En este sentido, un entorno ligado a aspectos, entre otros, como el campo, la agricultura, la ganadería, el turismo basado en el patrimonio cultural y el medio natural, las energías renovables y las experiencias científico-tecnológicas desarrolladas en nuestra comunidad, determinan en Extremadura múltiples situaciones para ofrecer al alumnado la oportunidad de conectar y aplicar lo aprendido en estos contextos, fomentando el aprender a aprender y sentando las bases para el aprendizaje a lo largo de la vida. Por otro lado, el desafío o problema que se plantee en las situaciones debe tener un claro interés social que, desde el planteamiento de Ciencias Aplicadas, ayudará al alumnado a interpretar lo que ocurre a su alrededor. El razonamiento lógico-matemático se desarrolla cuando se plantean situaciones problemáticas relacionadas con las ciencias y las tecnologías, donde hay que realizar acciones de identificación, reconocimiento, organización, conexión, enjuiciamiento, evaluación, interpretación o argumentación, entre otras, en función de las necesidades de su vida como ciudadano constructivo y comprometido. Asimismo, el aprendizaje entre iguales, a través del trabajo colaborativo y el aprendizaje dialógico, propicia el desarrollo de estas capacidades y ayuda a entrelazar los procesos cognitivos y emocionales necesarios para despertar el interés y el deseo de aprender. Se ha de favorecer un desarrollo competencial mediante diversas metodologías. El empleo de metodologías activas y variadas en el aula favorecerá que la adquisición de las competencias sea más ajustada a las distintas formas de aprender que tiene el alumnado y dará también respuesta a sus diversos intereses y expectativas. El diseño de la situación de aprendizaje se debe enfocar desde una visión inclusiva, teniendo en cuenta el alumnado real al que va dirigida, proporcionando distintas opciones tanto en la transmisión de conocimientos como en la respuesta que se espera del alumnado. Además, se asegurará la eliminación de barreras que impidan la accesibilidad física, cognitiva, sensorial y emocional, con el fin de facilitar la participación de todos y todas. Se deberían, por tanto, incorporar opciones diferentes o itinerarios diversificados para adaptarse a los distintos ritmos de aprendizaje, las diferentes capacidades y la diversidad de motivaciones. Es importante resaltar el carácter experimental del ámbito de Ciencias Aplicadas, que ha de dar a conocer y estimular el acercamiento al uso y desarrollo del método científico, al considerarse como el medio que tiene la ciencia para conocer, interactuar y mejorar el entorno que nos rodea. El laboratorio y el aula son los espacios más comunes, pero las experiencias de aprendizaje pueden desarrollarse en otros contextos aprovechando el entorno próximo. En ellas, se debe partir de las experiencias y conocimientos previos sobre fenómenos científicos que acontecen en el medio social y natural, a partir de los cuales se pueden elaborar situaciones de investigación e indagación. A través del planteamiento de las destrezas científicas básicas se pueden abordar los desafíos relacionados con el aprovechamiento crítico, ético y responsable de la cultura digital y la confianza en el conocimiento como motor de desarrollo. También se pueden propiciar situaciones que requieran de la lectura crítica o dialógica de artículos o libros de divulgación científica que extienda el placer de leer, por entretenimiento o búsqueda de conocimientos, hacia la reflexión personal. Teniendo en cuenta el componente emocional presente en el aprendizaje, implicar a las familias y al resto de la comunidad educativa en los mismos ayudará a conocer mejor las distintas características y necesidades individuales. Las actividades del aprendizaje colaborativo ayudan a esta conexión y hacen posible la mayor efectividad de las situaciones al favorecer en el alumnado su autoconocimiento, el crecimiento personal y la autoestima. Es importante resaltar el papel del desarrollo científico en la compensación de desigualdades. Y en este sentido, hay que hacer visible entre otros, el papel que la mujer ha desarrollado en la ciencia e impulsar la continuidad de estudios eliminando los estereotipos de género. Considerando el papel que juega el ámbito de Ciencias Aplicadas en el aprendizaje del desarrollo de los avances científicos y tecnológicos, así como de la cultura y sociedad en general, el planteamiento de las situaciones de aprendizaje se puede abordar interdisciplinariamente con otros ámbitos o materias, favoreciendo un aprendizaje competencial a través del desarrollo de proyectos interrelacionados. Por otro lado, se pueden diseñar situaciones de aprendizaje que permitan la participación conjunta del alumnado de FP de Grado Básico con el resto del alumnado del centro y de otros centros en condiciones de respeto y tolerancia, por ejemplo a través de trabajos cooperativos. Esta manera de implicación favorecerá la autoestima, la motivación y la inclusión. Asimismo, dadas las características específicas de desarrollo de estos aprendizajes en el ámbito de una enseñanza con un carácter profesional, se han de hacer visibles las relaciones que existen entre lo adquirido en el ámbito y su aplicación práctica en el entorno laboral. En cuanto al docente, su labor es la de guía y facilitador del proceso educativo, planificando diferentes estrategias que ayuden al estudiante a ser cada vez más autónomo y proporcionando los distintos medios de representación según sus intereses. Este andamiaje que ofrece el docente, según las distintas necesidades de los aprendices, propiciará el desarrollo de la creatividad y permitirá que cada uno de ellos lleve su propio ritmo de aprendizaje. El uso de las TIC debería considerarse en una doble vertiente. Por un lado, como herramienta para la investigación, el estudio y la experimentación dentro del ámbito, así como la simulación virtual de fenómenos matemáticos, físicos y químicos que lleve al desarrollo del pensamiento creativo y computacional; y por otro, como herramienta que permita desarrollar los tres principios generales del DUA. Conjuntamente con el uso de las TIC sería conveniente plantear situaciones donde el trabajo experimental y la observación de los fenómenos naturales se lleve a cabo en condiciones controladas de laboratorio. El diseño de las situaciones de evaluación debe seguir los mismos principios que el diseño de las situaciones de aprendizaje. El fin de la evaluación es mejorar el aprendizaje y debe ser entendida como autoevaluación, heteroevaluación y coevaluación, ha de ser formativa y permitir la retroalimentación en cualquier momento del mismo, tanto por parte del profesorado que diseña y guía las situaciones de aprendizaje como del alumnado. A este respecto, las situaciones de aprendizaje deben incluir procedimientos, técnicas e instrumentos de evaluación variados que permitan valorar el desarrollo competencial que el alumnado va adquiriendo en el proceso. Además, han de estar bien estructuradas y con unos fines claros sobre lo que se espera del alumnado, lo que hace y el porqué. De esta forma, le permitirá ser consciente de sus propios procesos evaluativos y, por lo tanto, le ofrecerá la posibilidad de tomar parte de este, lo que dará sentido global y unitario a todo su aprendizaje.",
+      "criterios_ids": []
+    }
+  ]
+}

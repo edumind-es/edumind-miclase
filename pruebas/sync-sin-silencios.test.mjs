@@ -182,17 +182,11 @@ try {
     await B.locator('input[data-uso="paquete"]').setInputFiles(ruta)
     ok(await aparece(fichero(B).getByText(/ya los tenía todos al día/)), 'recibir el mismo paquete otra vez también dice algo')
 
-    ok(await aparece(fichero(A).getByText(/Enviar todo de nuevo/)), 'el portátil ofrece reenviarlo todo si el paquete se perdió')
-    // Sin cambios, el paquete siguiente solo repite el registro del límite
-    // (el cursor es inclusivo a propósito, para no saltarse los que comparten sello).
+    // El paquete no sabe a qué aparato va: el segundo Mac necesita lo mismo que el primero.
     await Promise.all([A.waitForEvent('download'), fichero(A).getByRole('button', { name: /Descargar paquete/ }).click()])
     await A.waitForTimeout(400)
     const segundo = await cuantos()
-    ok(segundo < primero, 'sin cambios, el paquete siguiente lleva solo lo del límite, no todo', `${primero} → ${segundo}`)
-    await Promise.all([A.waitForEvent('download'), fichero(A).getByRole('button', { name: 'Enviar todo de nuevo' }).click()])
-    await A.waitForTimeout(400)
-    const tercero = await cuantos()
-    ok(tercero === primero, '«Enviar todo de nuevo» vuelve a sacarlo entero', `${tercero} registros`)
+    ok(segundo === primero, 'el paquete siguiente vuelve a llevarlo todo', `${primero} → ${segundo}`)
 
     console.log('\n4. Un paquete cifrado con otra contraseña')
     const C = await dispositivo('C3')

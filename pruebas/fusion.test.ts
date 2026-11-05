@@ -108,5 +108,37 @@ console.log('\n9. El blob de una evidencia llega solo si aquí no lo teníamos')
   ok(r2.registro.blob.size === 99, 'pero no se pisa el blob que ya está aquí')
 }
 
+console.log('\n10. Lo anterior a la última versión común no pisa nada')
+{
+  const nueva = { id: 1, valor: 9, deleted_at: null, updated_at: T(4) }
+  const vieja = { id: 1, valor: 5, deleted_at: null, updated_at: T(1) }
+  const r = fusionarTresBandas(nueva, nueva, vieja)
+  ok(r.obsoleto === true, 'se reconoce como obsoleto')
+  ok(r.registro.valor === 9, 'la nota nueva se queda', String(r.registro.valor))
+  const c = fusionarTresBandas(vieja, nueva, vieja)
+  ok(c.registro.valor === 9 && !c.obsoleto, 'y si esa versión ES la común, tampoco cambia nada', String(c.registro.valor))
+}
+
+console.log('\n11. En una casilla, una nota editada gana al borrado')
+{
+  const conNota = { notaGanaAlBorrado: true }
+  const base    = { id: 1, valor: 5, deleted_at: null, updated_at: T(1) }
+  const retirada = { ...base, deleted_at: T(3), updated_at: T(3) }
+  const editada  = { ...base, valor: 9, updated_at: T(2) }
+
+  const aqui = fusionarTresBandas(base, retirada, editada, conNota)
+  ok(aqui.registro.deleted_at === null && aqui.registro.valor === 9, 'llega la nota sobre una fila retirada: vuelve', `${aqui.registro.valor}`)
+  ok(aqui.registro.updated_at === T(2), 'con su fecha, no con la del borrado', aqui.registro.updated_at)
+
+  const alli = fusionarTresBandas(base, editada, retirada, conNota)
+  ok(alli.registro.deleted_at === null && alli.registro.valor === 9, 'llega el borrado sobre una nota editada: la nota se queda')
+
+  const sinEditar = fusionarTresBandas(base, base, retirada, conNota)
+  ok(!!sinEditar.registro.deleted_at, 'sin nota editada, el borrado se aplica')
+
+  const otraTabla = fusionarTresBandas(base, retirada, editada)
+  ok(!!otraTabla.registro.deleted_at, 'y fuera de las notas el borrado sigue mandando')
+}
+
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)
 process.exit(fallos === 0 ? 0 : 1)

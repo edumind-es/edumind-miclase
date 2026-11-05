@@ -69,14 +69,15 @@ export type Diagnostico = {
   nivel: 'ok' | 'aviso' | 'nunca' | 'reciente'
   /** Días desde la última copia válida, por el camino que sea. */
   dias: number | null
-  via: 'carpeta' | 'buzon' | null
+  via: 'carpeta' | 'buzon' | 'fichero' | null
   texto: string
 }
 
 /**
- * ¿Hay una copia válida fuera del aparato? Cuenta la carpeta y, si la
- * sincronización automática está activa, también el buzón: una sincronización
- * reciente es una copia cifrada en el servidor aunque no se llame así.
+ * ¿Hay una copia válida fuera del aparato? Cuenta la carpeta, una copia
+ * descargada o un paquete enviado y, si la sincronización automática está
+ * activa, también el buzón: una sincronización reciente es una copia cifrada en
+ * el servidor aunque no se llame así.
  *
  * `primerUso` evita avisar el primer día: sin ninguna copia, se calla hasta
  * que pasan `DIAS_AVISO` días desde que se empezó a usar la app.
@@ -84,11 +85,13 @@ export type Diagnostico = {
 export function diagnosticoCopia(p: {
   ultimaCopia: string | null
   ultimaSync: string | null
+  ultimoFichero?: string | null
   autoSync: boolean
   primerUso: string | null
 }, ahora = Date.now()): Diagnostico {
-  const candidatos: Array<{ via: 'carpeta' | 'buzon'; iso: string }> = []
+  const candidatos: Array<{ via: 'carpeta' | 'buzon' | 'fichero'; iso: string }> = []
   if (p.ultimaCopia) candidatos.push({ via: 'carpeta', iso: p.ultimaCopia })
+  if (p.ultimoFichero) candidatos.push({ via: 'fichero', iso: p.ultimoFichero })
   if (p.autoSync && p.ultimaSync) candidatos.push({ via: 'buzon', iso: p.ultimaSync })
   const mejor = candidatos.sort((a, b) => b.iso.localeCompare(a.iso))[0]
   if (!mejor) {
@@ -99,7 +102,7 @@ export function diagnosticoCopia(p: {
     return { nivel: 'nunca', dias: null, via: null, texto: `Llevas ${desdeInicio} días usando la app sin ninguna copia fuera de este aparato.` }
   }
   const dias = diasDesde(mejor.iso, ahora) ?? 0
-  const donde = mejor.via === 'carpeta' ? 'en tu carpeta' : 'en el buzón cifrado'
+  const donde = mejor.via === 'carpeta' ? 'en tu carpeta' : mejor.via === 'fichero' ? 'en un fichero' : 'en el buzón cifrado'
   if (dias >= DIAS_AVISO) {
     return { nivel: 'aviso', dias, via: mejor.via, texto: `La última copia ${donde} es de hace ${dias} días.` }
   }

@@ -3,8 +3,9 @@
  *
  * El riesgo real de una app local no es el espacio: es que el navegador vacíe
  * el almacén o que el aparato se pierda, y que nadie se haya dado cuenta de
- * que llevaba semanas sin copia. Cuenta como copia la carpeta automática y,
- * con la sincronización automática activa, el buzón cifrado.
+ * que llevaba semanas sin copia. Cuenta como copia la carpeta automática, una
+ * copia descargada, un paquete enviado y, con la sincronización automática
+ * activa, el buzón cifrado.
  */
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
