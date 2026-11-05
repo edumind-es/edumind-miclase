@@ -496,8 +496,9 @@ const fBackup = await descargaBackup
 const rutaBackup = process.env.SCRATCH + '/backup.json'
 await fBackup.saveAs(rutaBackup)
 const backup = JSON.parse(readFileSync(rutaBackup, 'utf8'))
-ok(backup.version === 7, 'el backup es de la versión 7, la del esquema actual (unidades estancas)')
+ok(backup.version === 8, 'el backup es de la versión 8, la del esquema actual (medidas)')
 ok(Array.isArray(backup.diario), 'incluye la tabla del diario de evaluación')
+ok(Array.isArray(backup.medidas), 'incluye la tabla de medidas de atención a la diversidad')
 ok(Array.isArray(backup.criterio_instrumentos) && backup.criterio_instrumentos.length > 0,
    'incluye las asignaciones criterio↔instrumento', `${backup.criterio_instrumentos.length} vínculos`)
 ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y alumnado')

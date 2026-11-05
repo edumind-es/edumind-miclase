@@ -15,7 +15,8 @@
  * Solo cuentan los trimestres con datos: si un área aún no tiene nada en el
  * 3er trimestre, la nota final es la de lo que sí hay, no un 0 encubierto.
  */
-import type { Calificacion, Instrumento, ReglaFinal } from './localDb'
+import type { Calificacion, Instrumento, Medida, ReglaFinal } from './localDb'
+import { instrumentosParaAlumno, criteriosExcluidos, medidasVigentes, medidaDe, parsearPesos } from './medidas'
 
 export type NotaCriterio = {
   criterio_id: string
@@ -348,6 +349,9 @@ function pesoDeclarado(
   return pesos.porCriterio.get(`${criterio_id}|${instrumento_id}`) ?? null
 }
 
+/** Ajustes propios de un alumno: sus medidas de atención a la diversidad. */
+export type OpcionesCalculo = { medidas?: Medida[] }
+
 /**
  * Calcula las notas de un alumno en un área.
  *
@@ -355,6 +359,12 @@ function pesoDeclarado(
  * @param instrumentos   instrumentos del área (aportan el peso por defecto)
  * @param pesosCriterio  peso de cada criterio en la programación (por defecto 1)
  * @param pesosVinculo   reparto propio de cada criterio, si lo tiene declarado
+ * @param opciones       `medidas`: las del alumno en el área (`db/medidas.ts`).
+ *                       Un refuerzo vigente en el trimestre fija el peso de los
+ *                       instrumentos que nombra (por encima del reparto del
+ *                       criterio y del peso global; 0 = no cuenta) y una
+ *                       adaptación retira los criterios que excluye. Sin
+ *                       medidas, el cálculo es el de siempre.
  */
 export function calcularNotaArea(
   asignatura_id: number,
@@ -363,28 +373,48 @@ export function calcularNotaArea(
   pesosTrimestresJson: string | undefined,
   pesosCriterio: Map<string, number> = new Map(),
   pesosVinculo: PesosVinculo = SIN_PESOS_VINCULO,
-  regla: ReglaFinal = 'ponderada'
+  regla: ReglaFinal = 'ponderada',
+  opciones: OpcionesCalculo = {}
 ): NotaArea {
-  const instrById = new Map(instrumentos.map(i => [i.id!, i]))
+  const medidas = opciones.medidas
+  // Los instrumentos como pesan para este alumno en cada trimestre (la
+  // medida tiene vigencia por trimestres), y lo que su refuerzo fija a mano.
+  const instrumentosEn = new Map<number, Map<number, Instrumento>>()
+  const fijadosEn = new Map<number, Map<number, number>>()
   // Primero las unidades (una nota por alumno, criterio e instrumento en el
   // trimestre) y después los hijos en su familia: de aquí en adelante solo
   // hay instrumentos de primer nivel, con su peso en el área.
-  const conValor = fundirHijosEnFamilias(fundirUnidades(calificaciones.filter(c => c.valor != null)), instrumentos)
-    .filter(c => c.valor != null)
+  const conValor: Calificacion[] = []
+  for (const t of TRIMESTRES) {
+    const insT = instrumentosParaAlumno(instrumentos, medidas, t)
+    const byId = new Map(insT.map(i => [i.id!, i]))
+    instrumentosEn.set(t, byId)
+    fijadosEn.set(t, parsearPesos(medidaDe(medidasVigentes(medidas, t, 'refuerzo'), 'refuerzo')))
+    const ajustado = insT !== instrumentos
+    const excluidos = criteriosExcluidos(medidas, t)
+    const deT = calificaciones.filter(c =>
+      c.trimestre === t && c.valor != null && !excluidos.has(c.criterio_id)
+      // Un instrumento que no cuenta para este alumno no entra ni en la
+      // fusión de su familia: con peso 0 un hijo contaría como 1.
+      && !(ajustado && byId.has(c.instrumento_id) && byId.get(c.instrumento_id)!.peso <= 0))
+    conValor.push(...fundirHijosEnFamilias(fundirUnidades(deT), insT).filter(c => c.valor != null))
+  }
 
   // criterio → trimestre → aportaciones
   const porCriterio = new Map<string, Map<number, { valor: number; peso: number }[]>>()
   const aportacionesPorCriterio = new Map<string, NotaCriterio['aportaciones']>()
 
   for (const c of conValor) {
-    const ins = instrById.get(c.instrumento_id)
+    const ins = instrumentosEn.get(c.trimestre)?.get(c.instrumento_id)
     // El reparto propio del criterio manda sobre el peso global del
     // instrumento: un criterio de investigación puede evaluarse con prueba,
     // cuaderno y lista de control contando por igual, sin que eso obligue a
     // mover el peso de esos instrumentos en el resto del área.
     const declarado = pesoDeclarado(pesosVinculo, c.criterio_id, c.instrumento_id, c.unidad_id)
+    // Lo que fija el refuerzo del alumno manda sobre todo lo demás.
+    const fijado = fijadosEn.get(c.trimestre)?.get(c.instrumento_id) ?? null
     // Una nota cuyo instrumento ya no existe conserva valor histórico con peso 1
-    const peso = declarado ?? (ins ? (ins.peso > 0 ? ins.peso : 0) : 1)
+    const peso = fijado ?? declarado ?? (ins ? (ins.peso > 0 ? ins.peso : 0) : 1)
     if (peso <= 0) continue
 
     if (!porCriterio.has(c.criterio_id)) porCriterio.set(c.criterio_id, new Map())

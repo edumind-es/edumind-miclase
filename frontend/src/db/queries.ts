@@ -17,9 +17,10 @@ import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
-  GrupoAlumno, UnidadCriterio,
+  GrupoAlumno, UnidadCriterio, Medida,
 } from './localDb'
 import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
+import { medidaDe } from './medidas'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
 
@@ -262,6 +263,119 @@ export async function actualizarAlumno(id: number, data: Partial<Alumno>): Promi
   await db.alumnos.update(id, tocado(data))
 }
 
+// ─── MEDIDAS DE ATENCIÓN A LA DIVERSIDAD ─────────────────────────────────────
+// Adaptación curricular y refuerzo educativo por alumno y área (esquema v8).
+// Qué significan para el cálculo lo decide `db/medidas.ts`; aquí solo se leen
+// y se escriben. Una fila viva por alumno, área y tipo.
+
+/** Las medidas vivas de un alumno en un área (puede haber dos: una por tipo). */
+export async function getMedidas(alumno_id: number, asignatura_id: number): Promise<Medida[]> {
+  return vivos(await db.medidas.where('[alumno_id+asignatura_id]').equals([alumno_id, asignatura_id]).toArray())
+}
+
+/** alumno_id → sus medidas vivas en el área. */
+export async function getMedidasDeAsignatura(asignatura_id: number): Promise<Map<number, Medida[]>> {
+  const out = new Map<number, Medida[]>()
+  for (const m of vivos(await db.medidas.where('asignatura_id').equals(asignatura_id).toArray())) {
+    out.set(m.alumno_id, [...(out.get(m.alumno_id) ?? []), m])
+  }
+  return out
+}
+
+/** `alumno_id:asignatura_id` → medidas vivas, de todas las áreas del grupo. */
+export async function getMedidasDeGrupo(grupo_id: number): Promise<Map<string, Medida[]>> {
+  const asigs = await getAsignaturas(grupo_id)
+  const out = new Map<string, Medida[]>()
+  for (const a of asigs) {
+    for (const [alumno, lista] of await getMedidasDeAsignatura(a.id!)) out.set(`${alumno}:${a.id}`, lista)
+  }
+  return out
+}
+
+/**
+ * Guarda la medida de un tipo para un alumno y área: escribe en la fila viva
+ * más reciente de ese tipo (`medidaDe`) y retira las demás, para que dos
+ * aparatos que la crearon por separado acaben con una sola.
+ */
+export async function guardarMedida(
+  datos: Pick<Medida, 'alumno_id' | 'asignatura_id' | 'tipo'> & Partial<Medida>
+): Promise<number> {
+  const vivas = (await getMedidas(datos.alumno_id, datos.asignatura_id)).filter(m => m.tipo === datos.tipo)
+  const actual = medidaDe(vivas, datos.tipo)
+  const t = sello()
+  const campos = {
+    trimestres: datos.trimestres ?? actual?.trimestres ?? '[1,2,3]',
+    descripcion: datos.descripcion ?? actual?.descripcion ?? null,
+    pesos_json: datos.pesos_json !== undefined ? datos.pesos_json : actual?.pesos_json ?? null,
+    criterios_json: datos.criterios_json !== undefined ? datos.criterios_json : actual?.criterios_json ?? null,
+    curso_referencia: datos.curso_referencia !== undefined ? datos.curso_referencia : actual?.curso_referencia ?? null,
+  }
+  return db.transaction('rw', db.medidas, async () => {
+    for (const m of vivas) if (m.id !== actual?.id) await db.medidas.update(m.id!, { deleted_at: t, updated_at: t })
+    if (actual) {
+      await db.medidas.update(actual.id!, { ...campos, updated_at: t })
+      return actual.id!
+    }
+    const reg = nuevo({
+      alumno_id: datos.alumno_id, asignatura_id: datos.asignatura_id, tipo: datos.tipo,
+      ...campos, created_at: t,
+    })
+    await db.medidas.add(reg)
+    return reg.id
+  })
+}
+
+/**
+ * Da de alta un instrumento propio del alumnado con medida (refuerzo): un
+ * instrumento normal del área con `solo_medidas`, suelto o dentro de una
+ * familia, que en cada unidad evalúa los criterios del instrumento al que
+ * sustituye (si se dice) o, si no, todos los que la familia (o la unidad)
+ * evalúa. Para el resto de la clase pesa 0 (`db/medidas.ts`).
+ */
+export async function crearInstrumentoPropio(
+  asignatura_id: number,
+  data: { nombre: string; tipo: string; familia_id?: number | null; en_lugar_de?: number | null }
+): Promise<number> {
+  const todos = await getInstrumentos(asignatura_id)
+  const familia = data.familia_id != null ? todos.find(i => i.id === data.familia_id && i.familia_id == null) : undefined
+  const sustituido = data.en_lugar_de != null ? todos.find(i => i.id === data.en_lugar_de) : undefined
+  let id: number
+  if (familia) {
+    id = await crearInstrumentoHijo(familia.id!, { nombre: data.nombre, tipo: data.tipo })
+  } else {
+    id = await crearInstrumento(asignatura_id, {
+      nombre: data.nombre.trim(), tipo: data.tipo, peso: sustituido?.peso ?? 0,
+      trimestres: '[1,2,3]', orden: todos.length,
+    })
+  }
+  await db.instrumentos.update(id, tocado({ solo_medidas: 1 }))
+  // Programación: en cada unidad, los criterios del sustituido; si no hay,
+  // los de la familia; suelto y sin sustituido, los de la unidad.
+  const unidades = vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray())
+  for (const u of unidades) {
+    const filas = vivos(await db.criterio_instrumentos.where('unidad_id').equals(u.id!).toArray())
+    let criterios: string[]
+    if (sustituido) criterios = [...new Set(filas.filter(f => f.instrumento_id === sustituido.id).map(f => f.criterio_id))]
+    else if (familia) criterios = [...new Set(filas.filter(f => f.instrumento_id === familia.id).map(f => f.criterio_id))]
+    else criterios = vivos(await db.unidad_criterios.where('unidad_id').equals(u.id!).toArray()).map(uc => uc.criterio_id)
+    if (!criterios.length) continue
+    if (familia) {
+      // Un hijo no puede salirse de su familia: lo que ella no evaluaba se le asigna antes.
+      for (const c of criterios) await asignarInstrumentoACriterio(u.id!, c, familia.id!)
+      await fijarCriteriosDeHijo(u.id!, id, criterios)
+    } else {
+      for (const c of criterios) await asignarInstrumentoACriterio(u.id!, c, id)
+    }
+  }
+  return id
+}
+
+/** Retira la medida (borrado lógico: tiene que viajar en el sync). */
+export async function eliminarMedida(id: number): Promise<void> {
+  const t = sello()
+  await db.medidas.update(id, { deleted_at: t, updated_at: t })
+}
+
 // Búsqueda por código de anonimización (lo que contiene el QR de la mesa)
 export async function getAlumnoPorCodigo(codigo: string): Promise<Alumno | undefined> {
   const a = await db.alumnos.where('codigo_cifrado').equals(codigo.toUpperCase().trim()).first()
@@ -352,8 +466,9 @@ export async function eliminarAsignatura(id: number): Promise<void> {
   const marcar = { deleted_at: t, updated_at: t }
   await db.transaction('rw',
     [db.asignaturas, db.instrumentos, db.calificaciones, db.diario, db.rubricas,
-     db.unidades, db.unidad_criterios, db.criterio_instrumentos],
+     db.unidades, db.unidad_criterios, db.criterio_instrumentos, db.medidas],
     async () => {
+      await db.medidas.where('asignatura_id').equals(id).modify(marcar)
       const instrs = await db.instrumentos.where('asignatura_id').equals(id).toArray()
       for (const i of instrs) {
         await db.calificaciones.where('instrumento_id').equals(i.id!).modify(marcar)
@@ -1238,7 +1353,7 @@ export async function crearInstrumento(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color' | 'solo_medidas'>>
 ): Promise<void> {
   const antes = 'agregacion' in fields ? (await db.instrumentos.get(id))?.agregacion ?? 'media' : null
   await db.instrumentos.update(id, tocado(fields))
@@ -3233,6 +3348,8 @@ export type MatrizEvaluacion = {
   familiasConDatosEscondidos: FamiliaConDatosEscondidos[]
   /** Criterios de la unidad activa (vacío = todos los de la asignatura) */
   criteriosDeUnidad: Set<string> | null
+  /** alumno_id → sus medidas de atención a la diversidad en el área (`db/medidas.ts`). */
+  medidas: Map<number, Medida[]>
 }
 
 /**
@@ -3252,9 +3369,10 @@ export async function getMatrizEvaluacion(
   const grupo = await getGrupo(asig.grupo_id)
   if (!grupo) return null
 
-  const [alumnos, instrumentos] = await Promise.all([
+  const [alumnos, instrumentos, medidas] = await Promise.all([
     getAlumnosByGrupo(asig.grupo_id),
     getInstrumentos(asignatura_id),
+    getMedidasDeAsignatura(asignatura_id),
   ])
   const instrById = new Map(instrumentos.map(i => [i.id!, i]))
 
@@ -3408,7 +3526,7 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
-    familiasConDatosEscondidos,
+    familiasConDatosEscondidos, medidas,
   }
 }
 
@@ -3431,6 +3549,8 @@ export type ResumenCurso = {
   /** alumno_id → notas del área, con los tres trimestres y la final */
   notas: Map<number, NotaArea>
   unidades: UnidadConCriterios[]
+  /** alumno_id → sus medidas en el área (las mismas de `porTrimestre[t].medidas`). */
+  medidas: Map<number, Medida[]>
 }
 
 export async function getResumenCurso(asignatura_id: number): Promise<ResumenCurso | null> {
@@ -3451,11 +3571,12 @@ export async function getResumenCurso(asignatura_id: number): Promise<ResumenCur
   const notas = new Map<number, NotaArea>()
   for (const al of m1.alumnos) {
     notas.set(al.id!, calcularNotaArea(asignatura_id, porAlumno.get(al.id!) ?? [], m1.instrumentos,
-      m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(m1.asig.regla_final)))
+      m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(m1.asig.regla_final),
+      { medidas: m1.medidas.get(al.id!) }))
   }
   return {
     grupo: m1.grupo, asig: m1.asig, alumnos: m1.alumnos, instrumentos: m1.instrumentos,
-    porTrimestre: { 1: m1, 2: m2, 3: m3 }, notas, unidades,
+    porTrimestre: { 1: m1, 2: m2, 3: m3 }, notas, unidades, medidas: m1.medidas,
   }
 }
 
@@ -3578,7 +3699,7 @@ export async function exportarDatos(
     base.tables.some(t => t.name === nombre) ? base.table(nombre).toArray() : Promise.resolve([])
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
-         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario] = await Promise.all([
+         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas] = await Promise.all([
     leer<Grupo>('grupos'),
     leer<Alumno>('alumnos'),
     leer<GrupoAlumno>('grupo_alumnos'),
@@ -3595,6 +3716,7 @@ export async function exportarDatos(
     leer<Plano>('planos'),
     leer<Asiento>('asientos'),
     leer<RegistroDiario>('diario'),
+    leer<Medida>('medidas'),
   ])
 
   // Serializar los blobs de evidencias a base64. En la copia ligera no van: con
@@ -3612,7 +3734,7 @@ export async function exportarDatos(
     grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
     criterio_instrumentos, rubricas,
-    evidencias: evidenciasSerial, planos, asientos, diario,
+    evidencias: evidenciasSerial, planos, asientos, diario, medidas,
   }, null, 2)
 }
 
@@ -3654,6 +3776,7 @@ export async function importarDatos(json: string): Promise<void> {
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.diario,
+     db.medidas,
      // La restauración también toca el estado de sincronización: ver abajo.
      db.sync_base, db.meta],
     async () => {
@@ -3664,7 +3787,7 @@ export async function importarDatos(json: string): Promise<void> {
         db.unidad_criterios.clear(), db.criterio_instrumentos.clear(), db.rubricas.clear(),
         // Una copia sin evidencias no puede dejar el aparato sin las suyas.
         ...(data.sin_evidencias ? [] : [db.evidencias.clear()]),
-        db.planos.clear(), db.asientos.clear(), db.diario.clear(),
+        db.planos.clear(), db.asientos.clear(), db.diario.clear(), db.medidas.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))
@@ -3682,6 +3805,8 @@ export async function importarDatos(json: string): Promise<void> {
       await db.planos.bulkAdd(sellar(data.planos || []))
       await db.asientos.bulkAdd(sellar(data.asientos || []))
       await db.diario.bulkAdd(sellar(data.diario || []))
+      // Las copias anteriores a la v8 no traen medidas.
+      await db.medidas.bulkAdd(sellar(data.medidas || []))
 
       // Los ids siguen existiendo pero su contenido es otro. Si no se
       // reinicia, la base de fusión apunta a versiones que ya no tienen nada

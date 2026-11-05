@@ -7,6 +7,7 @@ import {
 } from '@/db/queries'
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
 import AjustesDatosSensibles from '@/components/AjustesDatosSensibles'
+import MedidasAlumno from '@/components/MedidasAlumno'
 import { useDatosSensibles } from '@/db/datosSensibles'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
@@ -400,6 +401,8 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   onGuardado: () => void
 }) {
   const sensibles = useDatosSensibles()
+  const { grupo } = useClaseActiva()
+  const [medidasAbiertas, setMedidasAbiertas] = useState(false)
   const [form, setForm] = useState({
     nombre: alumno.nombre,
     apellidos: alumno.apellidos,
@@ -461,6 +464,17 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
             onChange={e => setForm({ ...form, neae: e.target.checked })} />
           Necesidades específicas de apoyo educativo (NEAE)
         </label>}
+
+        {/* Medidas por área (adaptación curricular, refuerzo): dato de NEAE, tras el mismo interruptor */}
+        {sensibles.neae && grupo && (
+          <button type="button" className="btn-secondary" data-medidas-abrir onClick={() => setMedidasAbiertas(true)}
+            style={{ fontSize: 13, marginBottom: 12 }}>
+            Medidas de atención a la diversidad…
+          </button>
+        )}
+        {medidasAbiertas && grupo && (
+          <MedidasAlumno alumno={alumno} grupo={grupo} onCerrar={() => setMedidasAbiertas(false)} />
+        )}
 
         <label htmlFor="ed-obs" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
         <textarea id="ed-obs" value={form.observaciones} rows={3}

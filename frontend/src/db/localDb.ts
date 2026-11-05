@@ -4,7 +4,7 @@ import {
 } from './migracionUnidades'
 
 /** Versión actual del esquema Dexie. La copia de seguridad la lleva también. */
-export const VERSION_ESQUEMA = 7
+export const VERSION_ESQUEMA = 8
 
 /**
  * Campos comunes de sincronización.
@@ -111,6 +111,48 @@ export interface Instrumento extends Sincronizable {
   familia_id?: number | null
   /** Color propio (#rrggbb). Sin él, el que le toca por orden (`colorDeInstrumento`). Sin índice. */
   color?: string | null
+  /**
+   * Instrumento propio del alumnado con medida (refuerzo educativo): solo
+   * cuenta para quien lo incluya en su medida (`Medida.pesos_json`); para el
+   * resto pesa 0 y su casilla sale apagada. Por lo demás es un instrumento
+   * normal (familia o hijo, rúbrica, examen, programación por unidad). Sin
+   * índice: no exige versión de esquema.
+   */
+  solo_medidas?: number | null
+}
+
+export type TipoMedida = 'adaptacion' | 'refuerzo'
+
+/**
+ * Medida de atención a la diversidad de un alumno en un área (esquema v8).
+ *
+ * La programación manda para toda la clase; la medida ajusta el CÁLCULO de
+ * ese alumno, no la programación. Una fila viva por alumno, área y tipo
+ * (si llegan dos por sync, cuenta la de `updated_at` más reciente).
+ * Es dato de NEAE: se ofrece y se enseña solo con el interruptor encendido
+ * (`db/datosSensibles.ts`), pero la nota se calcula siempre con ella.
+ */
+export interface Medida extends Sincronizable {
+  id?: number
+  alumno_id: number
+  asignatura_id: number
+  tipo: TipoMedida
+  /** JSON '[1,2,3]': trimestres en los que aplica (misma forma que `Instrumento.trimestres`). */
+  trimestres: string
+  /** Texto libre del docente (motivo, referencia al informe). */
+  descripcion?: string | null
+  /** refuerzo: JSON `{ [instrumento_id]: peso }`. 0 = no cuenta. Familias e hijos. */
+  pesos_json?: string | null
+  /**
+   * adaptación: JSON `{ [criterio_id]: null | { codigo, descripcion, curso } }`.
+   * null = el criterio no cuenta; objeto = sustituido por ese texto (la nota
+   * se guarda en la casilla del criterio de la clase). Lo que no aparece se
+   * evalúa igual que al resto.
+   */
+  criterios_json?: string | null
+  /** adaptación: '4º' si los sustitutos vienen de otro curso del currículo. */
+  curso_referencia?: string | null
+  created_at?: string
 }
 
 export interface Calificacion extends Sincronizable {
@@ -444,6 +486,7 @@ export class MiClaseDB extends Dexie {
   asientos!: Table<Asiento>
   meta!: Table<Meta>
   sync_base!: Table<SyncBase>
+  medidas!: Table<Medida>
 
   /**
    * `hasta` limita las versiones declaradas. La app usa la última; la puerta
@@ -560,8 +603,29 @@ export class MiClaseDB extends Dexie {
         localStorage.setItem(CLAVE_RESUMEN_MIGRACION, JSON.stringify({ ...resumen, fecha: sello }))
       } catch { /* sin localStorage no hay aviso, pero la migración vale igual */ }
     })
+
+    // v8 — medidas de atención a la diversidad (adaptación curricular y
+    // refuerzo educativo) por alumno y área. Tabla nueva y vacía: no toca
+    // ninguna fila, así que la puerta de migración no pide copia (ver
+    // `VERSION_PUERTA`). `updated_at` indexado porque es la consulta del sync.
+    if (hasta >= 8) this.version(8).stores({
+      medidas: '++id, alumno_id, asignatura_id, [alumno_id+asignatura_id], updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      await tx.table('medidas').toCollection().modify(r => {
+        if (!r.updated_at) r.updated_at = r.created_at || sello
+        if (r.deleted_at === undefined) r.deleted_at = null
+      })
+    })
   }
 }
+
+/**
+ * Última versión del esquema que modifica filas existentes. Una base por
+ * debajo pasa por `PuertaMigracion` (copia cifrada antes de abrir); una base
+ * entre esta y `VERSION_ESQUEMA` solo gana tablas vacías y abre directa.
+ */
+export const VERSION_PUERTA = 7
 
 export const db = new MiClaseDB()
 
@@ -569,7 +633,7 @@ export const db = new MiClaseDB()
 export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
-  'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos',
+  'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos', 'medidas',
 ] as const
 
 export type TablaSinc = typeof TABLAS_SINC[number]
