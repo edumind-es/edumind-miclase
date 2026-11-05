@@ -42,6 +42,7 @@ aplicación insiste con las copias de seguridad.
 | Nombre y apellidos | Identificar a quién se evalúa |
 | Código de anonimización (5 caracteres) | Los QR de mesa, para no exponer nombres |
 | Indicador de NEAE | Adaptaciones y su reflejo en los informes |
+| Medidas de atención a la diversidad (adaptación curricular, refuerzo educativo) por área | Calcular la nota del alumno con sus criterios y porcentajes propios |
 | Etiquetas y observaciones del docente | Seguimiento individual |
 | Calificaciones por criterio, instrumento y trimestre | Evaluación competencial |
 | Evidencias: fotografías, audio y vídeo de producciones | Justificar la calificación |
@@ -277,6 +278,13 @@ dispositivo y lo recibe ese tercero.
   sensibles», con un aviso. Un aparato que ya los tenía en uso al actualizar
   los conserva encendidos. Apagarlos no borra nada: dejan de ofrecerse y de
   mostrarse, también en los informes.
+- Las **medidas de atención a la diversidad** (adaptación curricular y refuerzo
+  educativo, por alumno y área; noviembre de 2026) son dato de NEAE y van tras
+  el mismo interruptor: sin él no se ofrecen, no se enseñan ni salen en los
+  informes. La nota del alumno se calcula con ellas en todo caso, porque es la
+  nota que le corresponde. Los criterios de otro curso que una adaptación pueda
+  usar se piden al servidor como dato público del currículo; el nombre del
+  alumno nunca va en esa petición.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

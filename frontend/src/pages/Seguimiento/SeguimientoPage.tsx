@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
+import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades, getMedidasDeAsignatura } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
@@ -43,7 +43,8 @@ export default function SeguimientoPage() {
       getCalificacionesPorGrupo(grupoId),
       getInstrumentos(asignaturaId),
       getUnidades(asignaturaId),
-    ]).then(([rows, { alumnos, calificaciones, asignaturas: asigsDet }, instrumentos, unidades]) => {
+      getMedidasDeAsignatura(asignaturaId),
+    ]).then(([rows, { alumnos, calificaciones, asignaturas: asigsDet }, instrumentos, unidades, medidas]) => {
       // Gráfica por criterio
       const mapa: Record<string, any> = {}
       for (const r of rows) {
@@ -73,7 +74,7 @@ export default function SeguimientoPage() {
         const n = calcularNotaArea(
           asignaturaId, propias, instrumentos as Instrumento[],
           asig?.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(asig?.regla_final),
-          normalizarReglaArea(asig?.regla_area))
+          normalizarReglaArea(asig?.regla_area), { medidas: medidas.get(al.id!) })
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
           const e = acumulado.get(comp.numero) ??

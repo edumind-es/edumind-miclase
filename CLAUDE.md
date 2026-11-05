@@ -754,6 +754,28 @@ edumind_miclase/
   cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
   el endpoint de programación y los proveedores: si cambia alguno, se
   actualiza allí con fecha.
+- **La medida ajusta el cálculo del alumno, no la programación.** Tabla
+  `medidas` (esquema v8; `db/medidas.ts`, puro; `pruebas/medidas.test.ts`):
+  una fila viva por alumno, área y tipo (`adaptacion` | `refuerzo`), con
+  vigencia por trimestres. El refuerzo guarda `pesos_json` (instrumento →
+  peso; 0 = no cuenta) y manda sobre el peso de la clase y sobre el reparto
+  del criterio; un instrumento `solo_medidas` (`crearInstrumentoPropio`) es
+  un instrumento normal del área que pesa 0 para quien no lo incluya. La
+  adaptación guarda `criterios_json` (criterio de la clase → null = no
+  cuenta | sustituto con código, texto y curso): **la nota del criterio
+  adaptado vive en la casilla del criterio de la clase al que sustituye**,
+  porque el `criterio_id` («CE1.1») se repite en todos los cursos y crear
+  otro rompería claves, vínculos y programación. `calcularNotaArea` recibe
+  `{ medidas }` como último parámetro y los cuatro llamadores lo pasan
+  (`getResumenCurso`, `ExplicacionNota`, `informes/datos.ts`, Seguimiento);
+  `getMatrizEvaluacion` devuelve `medidas` por alumno. Es dato de NEAE: el
+  sello ACI/RE (`SelloMedida`, `[data-sello-medida]`), la franja del panel
+  (`[data-medida-aviso]`), el editor (`MedidasAlumno`, desde la ficha y desde
+  el sello) y los informes miran `verNeae()`; **la nota se calcula con la
+  medida en todo caso**. Las casillas que no cuentan salen `[data-no-cuenta]`
+  y siguen abriéndose. Una base v7 no pasa por la puerta de migración
+  (`VERSION_PUERTA`): solo gana una tabla vacía. Tras desplegar hay que
+  reiniciar el backend: `medidas` está en su lista blanca.
 - **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
   nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
   docente los enciende en Alumnado (`AjustesDatosSensibles`,
@@ -926,5 +948,5 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
   `updated_at` en los registros existentes. Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
-  (`migracion.test.mjs`, `e2e.test.mjs`)
+  (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)
 - No probar la sincronización contra la BD de producción: usar una copia

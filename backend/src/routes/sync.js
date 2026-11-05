@@ -45,6 +45,7 @@ const TABLAS = new Set([
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos',
   'diario',   // diario de evaluación (esquema Dexie v6)
+  'medidas',  // medidas de atención a la diversidad (esquema Dexie v8)
 ])
 
 export default async function syncRoutes(app) {

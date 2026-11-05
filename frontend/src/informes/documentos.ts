@@ -15,6 +15,29 @@ import {
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
 import { bloqueCompetenciasClave } from './competenciasClave'
+import { criterioAdaptado, criteriosExcluidos, etiquetaMedida, medidasDelAlumno } from '@/db/medidas'
+import type { Medida } from '@/db/localDb'
+
+/** Siglas de las medidas del alumno en un área para el informe: solo con NEAE a la vista. */
+function selloMedidas(medidas: Medida[] | undefined): string {
+  if (!verNeae()) return ''
+  return medidasDelAlumno(medidas).map(m => {
+    const e = etiquetaMedida(m)
+    return ` <span class="sello" style="color:var(--lm-social-deep)" title="${esc(e.texto)}">${esc(e.sigla)}</span>`
+  }).join('')
+}
+
+/** Las medidas de un alumno en todas sus áreas, para la ficha «Medidas» del informe. */
+function textoMedidas(datos: DatosGrupo, alumnoId: number): string | null {
+  if (!verNeae()) return null
+  const partes: string[] = []
+  for (const area of datos.areas) {
+    for (const m of medidasDelAlumno(datos.medidas.get(`${alumnoId}:${area.asig.id}`))) {
+      partes.push(`${etiquetaMedida(m).sigla} ${area.asig.nombre_display}`)
+    }
+  }
+  return partes.length ? partes.join(' · ') : null
+}
 
 const TRIM = [1, 2, 3]
 
@@ -86,12 +109,17 @@ export function informeIndividual(
     if (!criterios.length) return ''
 
     const pesos = parsearPesosTrimestres(area.asig.pesos_trimestres)
+    // Con NEAE a la vista, el criterio adaptado se imprime con su texto (es lo
+    // que se ha evaluado); apagado, el de la clase y sin sello. La nota es la
+    // misma en los dos casos.
+    const medidas = datos.medidas.get(`${alumno.id}:${area.asig.id}`)
     const filas = criterios.map(c => {
       const valores = trimestre ? [c.trimestres[trimestre]] : TRIM.map(t => c.trimestres[t])
       const instrs = [...new Set(c.aportaciones.map(a => a.nombre))].join(', ')
+      const adaptado = verNeae() ? criterioAdaptado(medidas, c.criterio_id, trimestre ?? TRIM.find(t => c.trimestres[t] != null) ?? 1) : null
       return `<tr>
-        <td class="criterio-id">${esc(c.criterio_id)}</td>
-        <td class="desc">${esc(area.descripciones.get(c.criterio_id) || '—')}
+        <td class="criterio-id">${esc(c.criterio_id)}${adaptado ? ' <span class="sello">ACI</span>' : ''}</td>
+        <td class="desc">${esc(adaptado ? `${adaptado.codigo !== c.criterio_id ? adaptado.codigo + ' · ' : ''}${adaptado.descripcion}${adaptado.curso ? ` (${adaptado.curso})` : ''}` : area.descripciones.get(c.criterio_id) || '—')}
           ${instrs ? `<br><span style="font-family:var(--lm-mono);font-size:6.5pt;color:var(--lm-ink-3)">${esc(instrs)}</span>` : ''}
         </td>
         ${valores.map(v => celdaNota(v)).join('')}
@@ -103,9 +131,16 @@ export function informeIndividual(
       ? `<th style="width:20mm">Criterio</th><th>Descripción e instrumentos</th><th class="n">Nota</th><th class="n">—</th>`
       : `<th style="width:20mm">Criterio</th><th>Descripción e instrumentos</th><th class="n">1T</th><th class="n">2T</th><th class="n">3T</th><th class="n">Final</th>`
 
+    const excluidos = verNeae() && trimestre ? [...criteriosExcluidos(medidas, trimestre)] : []
+    const filasExcluidas = excluidos.map(id => `<tr>
+        <td class="criterio-id">${esc(id)} <span class="sello">ACI</span></td>
+        <td class="desc">${esc(area.descripciones.get(id) || '—')}<br><span style="font-family:var(--lm-mono);font-size:6.5pt;color:var(--lm-ink-3)">No cuenta para este alumno (adaptación curricular)</span></td>
+        <td class="n">—</td><td class="n">—</td>
+      </tr>`).join('')
+
     return `<p class="sub">${esc(area.asig.nombre_display)}${
       trimestre ? '' : ` · ponderación ${pesos[1]}/${pesos[2]}/${pesos[3]}`}</p>
-      <table><thead><tr>${cab}</tr></thead><tbody>${filas}</tbody></table>`
+      <table><thead><tr>${cab}</tr></thead><tbody>${filas}${filasExcluidas}</tbody></table>`
   }).join('')
 
   // ── Perfil competencial: cómo va en cada competencia específica
@@ -199,7 +234,10 @@ export function informeIndividual(
       ['Clase', datos.grupo.nombre],
       ['Curso escolar', datos.grupo.curso_escolar],
       ['Áreas', String(conDatos.length)],
-      ...(alumno.neae && verNeae() ? [['Medidas', 'NEAE'] as [string, string]] : []),
+      ...((() => {
+        const m = [alumno.neae && verNeae() ? 'NEAE' : null, textoMedidas(datos, alumno.id!)].filter(Boolean).join(' · ')
+        return m ? [['Medidas', m] as [string, string]] : []
+      })()),
     ])}
     ${bloqueAsistencia}
 
@@ -330,7 +368,7 @@ export function actaArea(datos: DatosGrupo, asignaturaId: number, trimestre: num
   const filas = datos.alumnos.map(al => {
     const n = notasDeAlumno(datos, al.id!).find(x => x.area.asig.id === asignaturaId)!.nota
     return `<tr>
-      <td>${esc(al.apellidos)}, ${esc(al.nombre)}${al.neae && verNeae() ? ' <span class="sello" style="color:var(--lm-social-deep)">NEAE</span>' : ''}</td>
+      <td>${esc(al.apellidos)}, ${esc(al.nombre)}${al.neae && verNeae() ? ' <span class="sello" style="color:var(--lm-social-deep)">NEAE</span>' : ''}${selloMedidas(datos.medidas.get(`${al.id}:${asignaturaId}`))}</td>
       ${trimestre
         ? celdaNota(n.trimestres[trimestre], true)
         : TRIM.map(t => celdaNota(n.trimestres[t])).join('') + celdaNota(n.final, true)}

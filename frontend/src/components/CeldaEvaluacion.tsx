@@ -28,7 +28,9 @@ import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
-import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
+import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario, Instrumento, Medida } from '@/db/localDb'
+import { celdasParaAlumno, estadoCasilla } from '@/db/medidasVista'
+import { etiquetaMedida, medidasDelAlumno } from '@/db/medidas'
 import { claveUnidad } from '@/db/migracionUnidades'
 import { verNeae, verEvidencias } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
@@ -85,13 +87,29 @@ interface Props {
   enfoque?: 'criterio' | 'instrumento'
   /** Con enfoque de instrumento: pasar a otro de sus criterios. */
   onElegirCriterio?: (criterio: { id: string; descripcion: string }) => void
+  /**
+   * Todos los instrumentos del área y las medidas del alumno (`db/medidas.ts`):
+   * con ellas los pesos que se enseñan son los de ESTE alumno y la franja
+   * `[data-medida-aviso]` dice qué cambia. Sin ellas, lo de la clase.
+   */
+  instrumentosArea?: Instrumento[]
+  medidas?: Medida[]
 }
 
 export default function CeldaEvaluacion({
-  alumno, criterio, conexion, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
+  alumno, criterio, conexion, instrumentos: instrumentosClase, grupo, asig, trimestre, unidadId, unidadNombre,
   onGuardado, onCerrar, onAnterior, onSiguiente, posicion, hermanosDe, alumnoIds,
-  enfoque = 'criterio', onElegirCriterio,
+  enfoque = 'criterio', onElegirCriterio, instrumentosArea, medidas,
 }: Props) {
+  // Los pesos que ve el docente son los que valen para este alumno: con un
+  // refuerzo, «Proba escrita · 50 %» en vez del 80 % de la clase.
+  const instrumentos = instrumentosArea
+    ? celdasParaAlumno(instrumentosClase, instrumentosArea, medidas, trimestre)
+    : instrumentosClase
+  const medida = instrumentosArea
+    ? estadoCasilla(instrumentosArea, medidas, criterio.id, instrumentosClase.map(i => i.instrumento_id), trimestre)
+    : { noCuenta: null, adaptado: null }
+  const medidasVisibles = verNeae() ? medidasDelAlumno(medidas) : []
   const [instrumentoId, setInstrumentoId] = useState<number | null>(instrumentos[0]?.instrumento_id ?? null)
   const [niveles, setNiveles] = useState<NivelRubrica[]>([])
   const [indicadores, setIndicadores] = useState<IndicadorRubrica[]>([])
@@ -556,6 +574,23 @@ export default function CeldaEvaluacion({
         </div>
 
         <div style={{ padding: '14px 18px 18px' }}>
+          {/* 0. La medida del alumno, si la hay y el interruptor NEAE está
+              encendido: el criterio adaptado en lugar del de la clase, o que
+              la casilla no cuenta. La nota se calcula con ella en todo caso. */}
+          {(medidasVisibles.length > 0 && (medida.noCuenta || medida.adaptado || instrumentos !== instrumentosClase)) && (
+            <div data-medida-aviso style={{ padding: '8px 12px', marginBottom: 10, borderRadius: 8, background: 'var(--azul-50, #eff6ff)', borderLeft: '4px solid var(--azul-700)', fontSize: 12.5, color: 'var(--azul-900)' }}>
+              <strong>{medidasVisibles.map(m => etiquetaMedida(m).texto).join(' · ')}</strong>
+              {medida.adaptado && (
+                <div style={{ marginTop: 3 }}>
+                  Criterio adaptado{medida.adaptado.curso ? ` (${medida.adaptado.curso})` : ''}: <b>{medida.adaptado.codigo}</b> {medida.adaptado.descripcion}
+                </div>
+              )}
+              {medida.noCuenta && <div style={{ marginTop: 3 }}>{medida.noCuenta} La nota se guarda, pero no entra en la del área.</div>}
+              {!medida.noCuenta && instrumentos !== instrumentosClase && (
+                <div style={{ marginTop: 3, color: 'var(--gris-600)' }}>Los porcentajes de abajo son los de este alumno, no los de la clase.</div>
+              )}
+            </div>
+          )}
           {/* 1. Franja del instrumento: qué se corrige y con qué nota va. Lo
               primero que se ve es el instrumento, no el criterio: el docente
               corrige el cuaderno o el examen, y el criterio es la etiqueta. */}

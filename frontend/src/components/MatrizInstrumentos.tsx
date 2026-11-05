@@ -16,6 +16,8 @@ import { aplicaEnTrimestre } from '@/db/calculo'
 import type { CeldaInstrumento, MatrizEvaluacion } from '@/db/queries'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
+import { estadoCasilla } from '@/db/medidasVista'
+import SelloMedida from './SelloMedida'
 
 export type Criterio = { id: string; descripcion: string }
 
@@ -145,6 +147,8 @@ function claseNota(v: number | null) {
 
 interface Props {
   matriz: MatrizEvaluacion
+  /** Pulsar el sello ACI/RE de un alumno abre sus medidas. */
+  onMedidas?: (alumno: Alumno) => void
   columnas: ColumnaInstrumento[]
   alumnos: Alumno[]
   trimestre: number
@@ -187,7 +191,7 @@ interface Props {
   onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -405,15 +409,25 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
               <td className="col-alumno">
                 {al.apellidos}, {al.nombre}
                 {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={onMedidas ? () => onMedidas(al) : undefined} />
               </td>
               {columnas.map(col => {
                 const r = resumenCelda(matriz, al.id!, col, trimestre)
                 const parcial = r.conNota > 0 && r.conNota < r.total
+                // Con una medida, la columna puede no contar para este alumno
+                // (instrumento excluido o solo para alumnado con medida). La
+                // nota sigue ahí y se puede abrir: solo se avisa.
+                const medidasAl = matriz.medidas.get(al.id!)
+                const noCuenta = col.criterios.length
+                  ? col.criterios.map(cr => estadoCasilla(matriz.instrumentos, medidasAl, cr.id, [col.ins.instrumento_id], trimestre).noCuenta)
+                  : []
+                const apagada = noCuenta.length > 0 && noCuenta.every(Boolean) ? noCuenta[0]! : null
                 return (
                   <td key={col.ins.instrumento_id} className="celda">
-                    <button type="button" className={`celda-btn ${claseNota(r.valor)}`} data-celda-instr
+                    <button type="button" className={`celda-btn ${claseNota(r.valor)}${apagada ? ' no-cuenta' : ''}`} data-celda-instr
+                      data-no-cuenta={apagada ? '' : undefined}
                       onClick={() => onCelda(idx, col)}
-                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}`}>
+                      title={`${al.apellidos}, ${al.nombre} · ${col.ins.nombre}\n${r.valor == null ? 'Sin calificar' : `Media: ${r.valor} (${r.conNota} de ${r.total} criterios con nota)`}${r.diario ? `\nDiario: ${r.diario.join(' · ')}` : ''}${apagada ? `\n${apagada}` : ''}`}>
                       <span>{r.valor == null ? '·' : r.valor}</span>
                       {(parcial || r.diario) && (
                         <span className="celda-instr">
