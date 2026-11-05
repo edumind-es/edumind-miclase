@@ -60,6 +60,15 @@ export interface GrupoAlumno extends Sincronizable {
  */
 export type ReglaFinal = 'ponderada' | 'continua' | 'maxima' | 'mediana'
 
+/**
+ * Cómo pasa la nota de los criterios a la del área en cada trimestre.
+ * 'instrumento' (por defecto): cada instrumento vale la media de sus
+ * criterios y el área pondera los instrumentos por su peso (el 80/20 de la
+ * programación). 'criterio': media de los criterios por su peso, con el
+ * instrumento pesando solo dentro de cada criterio. Ver `REGLAS_AREA`.
+ */
+export type ReglaArea = 'instrumento' | 'criterio'
+
 export interface Asignatura extends Sincronizable {
   id?: number
   grupo_id: number
@@ -73,6 +82,8 @@ export interface Asignatura extends Sincronizable {
    * cada criterio y a la del área (`notaFinal` en `calculo.ts`).
    */
   regla_final?: ReglaFinal | null
+  /** Regla de la nota del área (ver `ReglaArea`). Sin declarar vale 'instrumento'. Sin índice. */
+  regla_area?: ReglaArea | null
   orden?: number
   created_at?: string
 }

@@ -7,17 +7,23 @@
  * (`regla_final`: ponderada, continua, más alta, mediana). Decisión de Luis:
  * lo normal es la media de los tres, pero hay docentes que no lo hacen así.
  *
+ * Y la regla de la nota del área en cada trimestre (`regla_area`): por
+ * instrumento (el 80/20 de la programación sobre el área, lo de siempre) o
+ * por criterio (el instrumento pesa solo dentro de cada criterio). Luis vio
+ * en el iPad que con 5 criterios de examen y 20 de tabla el 80/20 no se
+ * cumplía: era la regla por criterio.
+ *
  * Guarda al soltar el control, sin botón, y avisa si los porcentajes no
  * suman 100 (el cálculo normaliza por la suma, así que no rompe nada; es
  * solo para que el docente vea lo que ha escrito).
  */
 import { useState } from 'react'
-import type { ReglaFinal } from '@/db/localDb'
-import { REGLAS_FINAL, normalizarReglaFinal, parsearPesosTrimestres } from '@/db/calculo'
+import type { ReglaArea, ReglaFinal } from '@/db/localDb'
+import { REGLAS_AREA, REGLAS_FINAL, normalizarReglaArea, normalizarReglaFinal, parsearPesosTrimestres } from '@/db/calculo'
 import { actualizarAsignatura } from '@/db/queries'
 
 /** Lo mínimo del área que hace falta aquí: el panel trabaja con su propio tipo recortado. */
-type AreaMin = { id?: number; pesos_trimestres?: string; regla_final?: ReglaFinal | null }
+type AreaMin = { id?: number; pesos_trimestres?: string; regla_final?: ReglaFinal | null; regla_area?: ReglaArea | null }
 type Props = { asignatura: AreaMin; onCambio?: () => void }
 
 const ORDINAL: Record<number, string> = { 1: '1er trimestre', 2: '2º trimestre', 3: '3er trimestre' }
@@ -25,10 +31,12 @@ const ORDINAL: Record<number, string> = { 1: '1er trimestre', 2: '2º trimestre'
 export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
   const [pesos, setPesos] = useState<Record<number, number>>(() => parsearPesosTrimestres(asignatura.pesos_trimestres))
   const [regla, setRegla] = useState<ReglaFinal>(() => normalizarReglaFinal(asignatura.regla_final))
+  const [reglaArea, setReglaArea] = useState<ReglaArea>(() => normalizarReglaArea(asignatura.regla_area))
   const [guardado, setGuardado] = useState('')
 
   const total = pesos[1] + pesos[2] + pesos[3]
   const descripcion = REGLAS_FINAL.find(r => r.id === regla)!.descripcion
+  const descripcionArea = REGLAS_AREA.find(r => r.id === reglaArea)!.descripcion
 
   const guardarPesos = async (nuevos: Record<number, number>) => {
     await actualizarAsignatura(asignatura.id!, { pesos_trimestres: JSON.stringify({ 1: nuevos[1], 2: nuevos[2], 3: nuevos[3] }) })
@@ -43,8 +51,26 @@ export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
     onCambio?.()
   }
 
+  const guardarReglaArea = async (nueva: ReglaArea) => {
+    setReglaArea(nueva)
+    await actualizarAsignatura(asignatura.id!, { regla_area: nueva })
+    setGuardado('Regla guardada')
+    onCambio?.()
+  }
+
   return (
     <div data-nota-final-panel style={{ display: 'grid', gap: 14 }}>
+      <div>
+        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Nota del área en cada trimestre</div>
+        <select value={reglaArea} onChange={e => guardarReglaArea(e.target.value as ReglaArea)} data-regla-area
+          style={{ fontSize: 14, padding: '6px 8px', maxWidth: 320 }} aria-label="Regla de la nota del área">
+          {REGLAS_AREA.map(r => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+        </select>
+        <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '6px 0 0' }}>
+          {descripcionArea} Un instrumento sin nota en el trimestre no cuenta. La nota de cada criterio no cambia.
+        </p>
+      </div>
+
       <div>
         <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Regla de la nota final</div>
         <select value={regla} onChange={e => guardarRegla(e.target.value as ReglaFinal)} data-regla-final

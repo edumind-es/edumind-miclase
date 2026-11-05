@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import ProgramacionPanel from './ProgramacionPanel'
 import RubricaEditor from './RubricaEditor'
 import NotaFinalPanel from './NotaFinalPanel'
-import type { ReglaFinal } from '@/db/localDb'
+import type { ReglaArea, ReglaFinal } from '@/db/localDb'
 import {
   getAsignaturas, getAsignaturaDetalle, crearAsignatura, crearAsignaturasEnLote,
   eliminarAsignatura, crearInstrumento, eliminarInstrumento, actualizarInstrumento,
@@ -56,6 +56,7 @@ interface Asignatura {
   nombre_display: string
   pesos_trimestres?: string
   regla_final?: ReglaFinal | null
+  regla_area?: ReglaArea | null
   instrumentos?: Instrumento[]
 }
 

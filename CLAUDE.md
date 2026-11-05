@@ -56,8 +56,19 @@ edumind_miclase/
   físico es invisible para el merge y reaparecería en el siguiente sync. Toda
   lectura debe filtrar con `vivos()`.
 - **Las notas se ponderan en `calculo.ts`**, no en las pantallas. Peso de
-  instrumento → nota de criterio → peso de criterio → nota de área → pesos de
-  trimestre → nota final. Un trimestre sin datos no cuenta como cero.
+  instrumento → nota de criterio; después la nota del área según
+  `Asignatura.regla_area` (sin índice; `REGLAS_AREA`, `normalizarReglaArea`):
+  **por instrumento** (por defecto: cada familia vale la media de sus
+  criterios con nota y el área pondera las familias por su peso, el 80/20 de
+  PROENS; `NotaArea.instrumentos` lo desglosa) o **por criterio** (media de
+  los criterios por su peso, con el instrumento pesando solo dentro de cada
+  criterio). Luego pesos de trimestre → nota final. La regla se elige en la
+  pestaña «Nota final» (`[data-regla-area]`) y `ExplicacionNota` la nombra.
+  Por criterio era lo único que había: con 5 criterios de examen y 20 de
+  tabla, los 15 que solo evalúa la tabla entraban enteros y el 80/20 no se
+  cumplía; Luis lo vio en el iPad (nov 2026) y decidió el cambio. La nota de
+  cada criterio y las competencias clave no dependen de la regla. Un
+  trimestre sin datos no cuenta como cero, ni un instrumento sin nota.
 - **Cambiar la programación no borra calificaciones.** Retirar un instrumento de
   un criterio conserva las notas ya puestas.
 - **Toda llamada al API pasa por `api()` de `src/api.ts`.** Una ruta relativa
