@@ -11,8 +11,12 @@ import {
   getUnidades,
 } from '@/db/queries'
 import { calcularNotaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
+import {
+  conexionesDeCriterios, perfilCompetenciasClave,
+  type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
+} from '@/db/competenciasClave'
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion } from '@/db/localDb'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 
 export type AreaInforme = {
   asig: Asignatura
@@ -23,6 +27,8 @@ export type AreaInforme = {
   pesosCriterio: Map<string, number>
   /** Reparto propio de cada criterio, cuando la programación lo declara. */
   pesosVinculo: PesosVinculo
+  /** criterio_id → descriptores y competencias clave de su competencia específica */
+  conexiones: Map<string, ConexionCriterio>
 }
 
 export type DatosGrupo = {
@@ -33,25 +39,44 @@ export type DatosGrupo = {
   asistencia: Map<number, Record<string, number>>
   /** Periodo del que se ha recontado la asistencia (null = curso completo) */
   trimestreAsistencia: number | null
+  /** Descriptores operativos de la etapa (vacío sin conexión) */
+  descriptores: Descriptor[]
 }
 
 type Cabeceras = () => Record<string, string>
 
-/** Descripciones de los criterios del área, del currículo del servidor (vacío sin conexión). */
-export async function criteriosDeArea(
-  grupo: Grupo, asig: Asignatura, headers: Cabeceras
-): Promise<Map<string, string>> {
-  const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-  const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}` +
-              `&curso=${cursoNorm}&etapa=${grupo.etapa}` +
-              `&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
+/**
+ * Criterios del área en el currículo (empaquetado en la app; el servidor, de
+ * reserva): su descripción y su conexión con las competencias clave (vacío si
+ * no hay de dónde leer). El currículo es público: las cabeceras de sesión ya
+ * no hacen falta y se aceptan solo para no cambiar a quien llama.
+ */
+export async function curriculoDeArea(
+  grupo: Grupo, asig: Asignatura, _headers?: Cabeceras
+): Promise<{ descripciones: Map<string, string>; conexiones: Map<string, ConexionCriterio> }> {
   try {
-    const lista = await fetch(api(url), { headers: headers() }).then(r => r.ok ? r.json() : [])
-    const m = new Map<string, string>()
-    if (Array.isArray(lista)) for (const c of lista) m.set(c.id, c.descripcion)
-    return m
+    const lista = await curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
+    const descripciones = new Map<string, string>()
+    for (const c of lista) descripciones.set(c.id, c.descripcion)
+    return { descripciones, conexiones: conexionesDeCriterios(lista) }
   } catch {
-    return new Map()
+    return { descripciones: new Map(), conexiones: new Map() }
+  }
+}
+
+/** Descripciones de los criterios del área, del currículo (vacío si no hay de dónde leer). */
+export async function criteriosDeArea(
+  grupo: Grupo, asig: Asignatura, headers?: Cabeceras
+): Promise<Map<string, string>> {
+  return (await curriculoDeArea(grupo, asig, headers)).descripciones
+}
+
+/** Descriptores operativos de la etapa de la clase (vacío si no hay de dónde leer). */
+export async function descriptoresDeEtapa(grupo: Grupo, _headers?: Cabeceras): Promise<Descriptor[]> {
+  try {
+    return (await curriculo.descriptores(grupo.etapa, grupo.comunidad)).descriptores
+  } catch {
+    return []
   }
 }
 
@@ -67,18 +92,19 @@ export async function reunirDatosGrupo(
   const grupo = await getGrupo(grupoId)
   if (!grupo) throw new Error('La clase ya no existe.')
 
-  const [alumnos, asigs, { calificaciones }, asistencia] = await Promise.all([
+  const [alumnos, asigs, { calificaciones }, asistencia, descriptores] = await Promise.all([
     getAlumnosByGrupo(grupoId),
     getAsignaturas(grupoId),
     getCalificacionesPorGrupo(grupoId),
     getResumenAsistencia(grupoId, trimestre),
+    descriptoresDeEtapa(grupo, headers),
   ])
 
   const areas: AreaInforme[] = []
   for (const asig of asigs) {
-    const [instrumentos, descripciones, unidades] = await Promise.all([
+    const [instrumentos, { descripciones, conexiones }, unidades] = await Promise.all([
       getInstrumentos(asig.id!),
-      criteriosDeArea(grupo, asig, headers),
+      curriculoDeArea(grupo, asig, headers),
       getUnidades(asig.id!),
     ])
     const pesosCriterio = new Map<string, number>()
@@ -90,10 +116,11 @@ export async function reunirDatosGrupo(
     areas.push({
       asig, instrumentos, descripciones, pesosCriterio,
       pesosVinculo: pesosVinculoDeUnidades(unidades),
+      conexiones,
     })
   }
 
-  return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre }
+  return { grupo, alumnos, areas, calificaciones, asistencia, trimestreAsistencia: trimestre, descriptores }
 }
 
 /** Notas de un alumno en todas sus áreas. */
@@ -111,6 +138,23 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
       ),
     }
   })
+}
+
+/**
+ * Perfil de competencias clave de un alumno: sus notas de criterio de todas
+ * las áreas, con la conexión de cada criterio. El cálculo es de
+ * `db/competenciasClave.ts`.
+ */
+export function competenciasDeAlumno(datos: DatosGrupo, alumnoId: number): PerfilCompetenciasClave {
+  return perfilCompetenciasClave(
+    notasDeAlumno(datos, alumnoId).map(({ area, nota }) => ({
+      area: area.asig.nombre_display,
+      criterios: nota.criterios,
+      pesosCriterio: area.pesosCriterio,
+      conexiones: area.conexiones,
+    })),
+    datos.descriptores,
+  )
 }
 
 /** Observaciones registradas por el docente, con su criterio y trimestre. */

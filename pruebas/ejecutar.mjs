@@ -162,6 +162,15 @@ async function principal() {
     await paquete('pruebas/prueba-escrita.test.ts', pruebaEscrita, ['--platform=node', '--format=esm'])
     await suite('prueba escrita: nota e importación', 'node', [pruebaEscrita])
 
+    const competencias = join(scratch, 'competencias-clave.mjs')
+    await paquete('pruebas/competencias-clave.test.ts', competencias, ['--platform=node', '--format=esm'])
+    await suite('competencias clave: niveles e informe', 'node', [competencias])
+    await suite('conexión con los descriptores operativos', 'node', ['pruebas/conexiones.test.mjs'])
+
+    const curriculoEmpaquetado = join(scratch, 'curriculo-empaquetado.mjs')
+    await paquete('pruebas/curriculo-empaquetado.test.ts', curriculoEmpaquetado, ['--platform=node', '--format=esm'])
+    await suite('currículo empaquetado en la app', 'node', [curriculoEmpaquetado])
+
     const informePrueba = join(scratch, 'informe-prueba.mjs')
     await paquete('pruebas/informe-prueba.test.ts', informePrueba, ['--platform=node', '--format=esm'])
     await suite('informe de una prueba corregida', 'node', [informePrueba])
@@ -224,6 +233,16 @@ async function principal() {
     const bd = join(scratch, 'prueba.db')
     if (resolve(bd) === BD_PRODUCCION) throw new Error('jamás contra la BD de producción')
     cpSync(BD_PRODUCCION, bd)
+    // La copia se vuelve a sembrar con el currículo del árbol de trabajo: si
+    // no, las pruebas verían el de producción, anterior a los cambios. Va
+    // siempre, también con --solo: las suites del currículo dependen de ella.
+    {
+      const inicio = Date.now()
+      const { bien, salida } = await correr('node', ['backend/src/db/seed.js'], { DB_PATH: bd })
+      const seg = ((Date.now() - inicio) / 1000).toFixed(1)
+      console.log(gris('  carga del currículo (seed)… ') + (bien ? verde(`✓ ${seg}s`) : rojo(`✗ ${seg}s`)))
+      if (!bien) resultados.push({ nombre: 'carga del currículo (seed)', bien, salida, seg })
+    }
 
     const puertoApi = await puertoLibre()
     const api = `http://127.0.0.1:${puertoApi}`
@@ -249,6 +268,10 @@ async function principal() {
 
     const entorno = { SYNC_API: `${api}/api/sync`, API: api, BASE: base }
     await suite('buzón del servidor', 'node', ['pruebas/sync.test.mjs'], entorno)
+    await suite('competencias clave en el currículo del servidor', 'node', ['pruebas/competencias-clave-api.test.mjs'], entorno)
+    const curriculoVsServidor = join(scratch, 'curriculo-vs-servidor.mjs')
+    await paquete('pruebas/curriculo-vs-servidor.test.ts', curriculoVsServidor, ['--platform=node', '--format=esm'])
+    await suite('currículo empaquetado frente al servidor', 'node', [curriculoVsServidor], entorno)
 
     // Un segundo backend, sobre su propia copia, con el buzón cerrado.
     const bdCerrado = join(scratch, 'prueba-cerrado.db')
@@ -275,6 +298,7 @@ async function principal() {
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('convertir lo que ya hay en una familia en su primer hijo', 'node', ['pruebas/familias-convertir-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
+    await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
@@ -291,6 +315,8 @@ async function principal() {
     await suite('sync directa, sin servidor', 'node', ['pruebas/sync-directo.test.mjs'], entorno)
     await suite('emparejamiento por pantalla', 'node', ['pruebas/emparejar-ui.test.mjs'], entorno)
     await suite('sincronizar sin silencios', 'node', ['pruebas/sync-sin-silencios.test.mjs'], entorno)
+    await suite('notas entre tres aparatos', 'node', ['pruebas/sync-varios-aparatos.test.mjs'], entorno)
+    await suite('fotos y vídeos: lo que viaja y lo que ocupa', 'node', ['pruebas/evidencias-peso.test.mjs'], entorno)
   }
 
   // ── Contra producción ──────────────────────────────────────────────

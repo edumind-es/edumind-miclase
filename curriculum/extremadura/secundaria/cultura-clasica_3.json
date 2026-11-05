@@ -1,0 +1,703 @@
+{
+  "meta": {
+    "comunidad": "Extremadura",
+    "etapa": "secundaria",
+    "asignatura": "cultura-clasica",
+    "asignatura_nombre": "Cultura Clásica",
+    "ciclo_origen": "3.º ESO",
+    "fuente": "Extremadura · Secundaria · Cultura Clásica · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar críticamente la influencia de las civilizaciones griega y romana en los procesos que han conformado la identidad europea y la realidad multicultural en la que vivimos, analizando el marco geográfico de su desarrollo, así como lugares, mitos y topónimos asociados.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Buscar, seleccionar, tratar y organizar información sobre los principales procesos históricos del mundo clásico, su organización social, relaciones sociales y aspectos relevantes de la vida cotidiana, para adquirir conocimientos e investigar las aportaciones de estos a nuestro bagaje histórico, adoptando una posición crítica ante las desigualdades sociales y las situaciones de discriminación de género.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Identificar y valorar la aportación de la mitología y religión grecorromana, así como de la oratoria, al pensamiento actual, en especial en el mundo de las artes y de la comunicación política, con el fin de promover alternativas enriquecedoras y respetuosas con la dignidad humana y el compromiso con la sociedad y el entorno.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar las manifestaciones artísticas del mundo griego y romano, así como los espacios urbanos y las obras públicas, seleccionando y analizando información diversa de forma crítica, para valorar el arte y la arquitectura clásicos como la base de las creaciones artísticas del presente y, de este modo, fomentar una participación activa y comprometida con su conservación.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Leer, interpretar y valorar obras, de distintos géneros, y en las que se hallen presentes los principales tópicos literarios del mundo clásico, utilizando un metalenguaje específico y movilizando la experiencia biográfica y los conocimientos literarios y culturales para establecer vínculos entre textos diversos a fin de conformar un mapa cultural, ensanchar las posibilidades de disfrute de la literatura y crear textos de intención literaria.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Analizar y valorar, como muestra de riqueza cultural, los rasgos comunes y la diversidad lingüística europea, identificando el origen común de las lenguas de Europa, así como la procedencia clásica del léxico, y comparándolas con la lengua de enseñanza y con otras lenguas del repertorio individual.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Comprometerse desde una visión creativa, emprendedora y con actitud de servicio a los demás, con el desarrollo sostenible mediante actuaciones locales y globales, buscando y creando oportunidades de mejora para preservar y cuidar el patrimonio cultural, arqueológico y artístico romano, en especial el presente en Extremadura.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar los hitos geográficos y enclaves concretos de las civilizaciones griega y romana como señas de identidad de la construcción europea.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Interpretar de manera crítica los diferentes marcos geográficos en los que se desarrollan las civilizaciones griega y romana a lo largo de su historia y relacionar los datos con referentes actuales, aplicando los conocimientos adquiridos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar los periodos de la historia de Roma, así como los acontecimientos, personajes y aspectos de la civilización romana en su contexto histórico, comparándolos con los de las sociedades actuales, desde una perspectiva acorde a los derechos humanos y a la igualdad de género y comprometida con los valores democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Interpretar los principales hitos de la romanización en la Península y en Extremadura, así como las particularidades de Hispania y su aportación a la historia de Roma.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Exponer de forma oral, escrita o multimodal las conclusiones obtenidas a partir de la investigación, individual o colaborativa, del legado material e inmaterial de la civilización grecorromana y de su pervivencia en el presente a través de soportes analógicos y digitales, seleccionando información, contrastándola y organizándola.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Reconocer la influencia de la historia y el legado de la civilización de Grecia y Roma en la configuración política, social y cultural de Europa.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Identificar, interpretar y analizar los mecanismos que han regulado la convivencia y la vida en común en las civilizaciones griega y romana, señalando los principales modelos de organización social y política que se han ido gestando.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Interpretar de manera crítica el contenido de textos pertenecientes o relativos al mundo clásico, atendiendo al contexto en el que se produjeron, conectándolos con la propia experiencia y valorando cómo contribuyen a entender los modos de vida, costumbres y actitudes de nuestra sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar los principales dioses de la mitología grecolatina como fuente de inspiración de manifestaciones tanto literarias como artísticas y comparar los mitos y héroes grecolatinos con manifestaciones posteriores de esta naturaleza, argumentando contra cualquier actitud y comportamiento discriminatorio.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar y comparar las características de la religiosidad y religión grecolatinas con las actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Relacionar las manifestaciones deportivas del mundo clásico con las que se han ido construyendo hasta la actualidad, reflexionando sobre los múltiples significados que adoptan y aportaciones de cada una de ellas a la cultura humana universal.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Elaborar productos que reflejen la comprensión de los fenómenos y problemas abordados a través de procesos inductivos, la investigación y el trabajo por proyectos o retos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar las características fundamentales del arte y arquitectura clásicos y relacionar las manifestaciones actuales de esta naturaleza con sus modelos grecorromanos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Valorar, proteger y conservar el patrimonio artístico y arquitectónico clásico como base de nuestra identidad local, nacional y europea, considerándolo un bien para el disfrute recreativo y cultural al tiempo que un recurso para el desarrollo de los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar productos culturales del presente mediante la comparación de similitudes y diferencias con la Antigüedad grecolatina y describir su significado en el contexto de los desarrollos culturales en Europa.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Argumentar la relación de textos y obras literarias con su género correspondiente a partir de las principales características de los géneros literarios grecolatinos.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar los hitos esenciales de las literaturas griega y latina como base literaria de la cultura europea y occidental.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Relacionar la pervivencia de géneros, temas y tópicos literarios con los de las literaturas actuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Exponer de forma oral, escrita o multimodal el carácter clásico y humanista de las diversas manifestaciones literarias y artísticas de la civilización latina, utilizando un vocabulario correcto y una expresión adecuada.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar críticamente y adecuarse a la diversidad lingüística y cultural a la que dan origen el latín y el griego, identificando y explicando semejanzas y diferencias entre los elementos lingüísticos de su entorno, relacionándolos con los de su propia cultura y desarrollando una cultura compartida y una ciudadanía comprometida con los valores democráticos.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconocer el origen y la existencia de diversos tipos de escritura y alfabetos, en especial el latino y el griego, distinguirlos e identificar tanto su presencia en los alfabetos actuales como sus usos en otros campos del conocimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Inferir significados de términos latinos y griegos aplicando los conocimientos léxicos y fonéticos de otras lenguas de su repertorio individual.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Utilizar con propiedad terminología científico-técnica de origen grecolatino con el fin de ampliar el caudal léxico y mejorar la expresión oral y escrita.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Reconocer las huellas de la romanización en el patrimonio cultural y arqueológico de Extremadura, identificando los procesos de preservación, conservación y restauración como un aspecto fundamental de una ciudadanía comprometida con la sostenibilidad ambiental y el cuidado de su legado.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Exponer de forma oral, escrita o multimodal las conclusiones obtenidas a partir de la investigación, individual o colaborativa, del legado material e inmaterial de la civilización clásica y de su pervivencia en el presente a través de soportes analógicos y digitales, seleccionando información, contrastándola y organizándola.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Valorar, proteger y conservar el patrimonio artístico, histórico y cultural como fundamento de identidad colectiva (local, autonómica, nacional, europea o universal), considerándolo un bien para el disfrute recreativo y cultural al tiempo que un recurso para el desarrollo de los pueblos.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.4",
+      "objetivo_id": "CE7",
+      "descripcion": "Elaborar un proyecto cuyo objeto sea la preservación y el cuidado del patrimonio cultural, arqueológico y artístico romano, que contemple actuaciones locales y globales, que promueva el desarrollo sostenible con una visión creativa, emprendedora y comprometida, y que proponga soluciones de carácter individual o colectivo que se traduzcan en una mejora del entorno.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Geografía del mundo clásico"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Historia y sociedad"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Religión y mitología"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque D. Arquitectura y arte"
+    },
+    {
+      "id": "B5",
+      "titulo": "Bloque E. Literatura"
+    },
+    {
+      "id": "B6",
+      "titulo": "Bloque F. Lengua y léxico"
+    },
+    {
+      "id": "B7",
+      "titulo": "Bloque G. Emprendimiento y mundo clásico"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Marco geográfico de Grecia y Roma en sus diferentes períodos históricos. Expansión de la civilización grecolatina.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Ciudades de Grecia y Roma: Roma, Atenas, Esparta, Alejandría, Micenas, Pompeya… Su relevancia en los distintos momentos históricos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Emplazamientos legendarios: Troya, el Hades, el monte Olimpo. las Columnas de Hércules, la roca Tarpeya, las Hespérides, Escila y Caribdis, la cueva de Calipso, los montes Helicón y Parnaso, Ícaro y el mar Egeo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Arqueólogos de la Antigüedad: Schliemann, Evans, Fiorelli….",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "La proyección geográfica de griegos y romanos. Lugares de España, y de Extremadura en particular, que han recibido mayor influencia de la civilización grecolatina y sus restos. Toponimia grecolatina.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Historia básica de Grecia y Roma: desarrollo y personajes destacados. La guerra en el mundo antiguo: principales conflictos y sus protagonistas. La historia de Grecia y Roma en relación con otras civilizaciones. Análisis de la proyección en el mundo contemporáneo de los conflictos de la Antigüedad. Grecia y Roma en la base de la identidad europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Proceso histórico de la romanización de Hispania. La romanización de Extremadura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Hombres y mujeres destacados de la historia de Grecia y Roma y su pervivencia en el mundo actual. Precursores del pensamiento, la ciencia y la tecnología: aplicación de sus descubrimientos en la sociedad actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "La sociedad griega y romana: características y evolución de las clases sociales. Los oficios de griegos y romanos. La esclavitud en Grecia y Roma. La situación de la mujer en Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "La vida familiar en Grecia y en Roma. La educación. Etapas de la vida. La muerte y sus rituales. Veinticuatro horas en el mundo antiguo: la jornada de un ciudadano en Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Cálculos cotidianos y medida del tiempo. Léxico comparativo de la denominación del calendario y las festividades en el ámbito europeo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Democracias, monarquías y repúblicas. Reflejo de la ordenación política romana en la historia de los siglos XX y XXI.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para la realización de trabajos de investigación utilizando las TIC.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Búsqueda y análisis de las fuentes de información en las que se basa la transmisión histórica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Religión y mitología. El concepto de mito y su tratamiento a lo largo de la historia. C.1. Sentimiento religioso y pensamiento mítico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "La religión en Grecia y Roma. Características y manifestaciones más destacadas: influencias, rituales, culto público y privado, oráculos, grandes celebraciones religiosas y deportivas. La mujer en la religión grecorromana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Mitología grecolatina: dioses y héroes principales. Genealogía, características y mitos más célebres en los que intervienen. Otros personajes mitológicos. Relaciones con otras culturas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Destrezas oratorias básicas para la exposición pública de trabajos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Pervivencia de la mitología grecolatina en el mundo actual: léxico común y científico, literatura, artes plásticas, cine, televisión, videojuegos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "La ciudad en el mundo antiguo: modelos y principales espacios y edificios públicos (ágora y foro, templos, termas, basílicas, teatros, anfiteatros, circos…). Pervivencia en los núcleos urbanos modernos. Principales restos, en particular en Extremadura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Las obras públicas romanas (acueductos, cloacas, calzadas y puentes): características, función, influencia posterior y pervivencia actual, en particular en Extremadura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "La vivienda en Grecia y en Roma: diferentes tipos y sus huellas en la actualidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Principales manifestaciones del arte griego y romano: pintura, escultura, cerámica, mosaico. Etapas y características principales. Modelos transmitidos a la posteridad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Los géneros literarios grecolatinos a través de la lectura y el comentario de sus textos. Principales escritores y obras de Grecia y Roma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Tópicos literarios heredados de Grecia y Roma. Reconocimiento de los tópicos clásicos en la literatura universal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Proyección de los principales géneros de la literatura clásica en la cultura occidental. Su influencia en los autores contemporáneos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Proyección de la literatura grecolatina en las distintas artes y medios contemporáneos: cine, televisión, pintura, escultura, cómic, videojuegos, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "El origen de la escritura. Los sistemas de escritura y su evolución. Soportes de escritura: tablillas, papiros y pergaminos. Los libros en el mundo antiguo. La transmisión de la cultura clásica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Origen del alfabeto. Tipos de alfabetos. El alfabeto griego. El alfabeto latino. Otros alfabetos derivados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "El indoeuropeo en el origen de nuestras lenguas: lenguas de la familia indoeuropea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Principales rasgos formales de la lengua griega y latina.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "El latín y las lenguas romances. Las lenguas romances en la península y en el mundo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Origen grecolatino de formantes usados en palabras del español, de las demás lenguas habladas en España y de otras lenguas del repertorio del alumno. Raíces griegas y latinas de uso más frecuente en castellano y en otras lenguas romances.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Etimologías grecolatinas. Locuciones latinas. Citas de grandes personajes de Grecia y Roma en su lengua original. Las inscripciones en latín en nuestro entorno cercano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Proceso de evolución a las lenguas romances. Noción de cultismo, palabra patrimonial y doblete. Reglas fonéticas básicas de la evolución del latín vulgar al castellano. Los neologismos de base grecolatina en las lenguas europeas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.9",
+      "bloque_id": "B6",
+      "descripcion": "El lenguaje científico-técnico y la importancia del griego y del latín en su creación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.10",
+      "bloque_id": "B6",
+      "descripcion": "El griego y el latín en las lenguas modernas: pervivencia del léxico y de sus estructuras en la publicidad, la universidad o el deporte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.11",
+      "bloque_id": "B6",
+      "descripcion": "La diversidad lingüística como signo de riqueza y variedad cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "La cultura clásica como motor de emprendimiento: iniciativas arqueológicas, creación de talleres, empresas especializadas en recreación histórica, compañías de teatro grecolatino, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "La interactuación de diversos campos de la ciencia y la tecnología para la preservación del patrimonio. Su importancia en la elaboración de proyectos de valorización patrimonial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.3",
+      "bloque_id": "B7",
+      "descripcion": "Análisis del estado de yacimientos y vestigios del entorno del alumno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.4",
+      "bloque_id": "B7",
+      "descripcion": "Estudio de iniciativas que en el entorno del alumno hayan propiciado el desarrollo sostenible de la economía local SITUACIONES DE APRENDIZAJE Los principios y orientaciones generales para el diseño y desarrollo de las situaciones de aprendizaje (anexo II) nos permiten dar respuesta al cómo enseñar y evaluar e implican el despliegue, por parte del alumnado, de actuaciones asociadas a competencias específicas que contribuyen a su adquisición y desarrollo. Se dan a continuación, a título indicativo, algunas de las características generales que deben tener en la materia de Cultura Clásica, comunes con las materias lingüísticas del repertorio del alumno y la alumna, por un lado, y por otro, con las materias no lingüísticas en la doble faceta que posee esta materia. Del mismo modo se plantean criterios específicos de la propia materia. Las situaciones de aprendizaje de Cultura Clásica deberían enmarcarse en realidades cercanas a las experiencias e intereses del alumnado, de forma que contribuyan a su mayor significación, para aportar riqueza cultural, lingüística y de construcción europea, entendiendo el aprendizaje como algo que trasciende el contexto educativo. En este sentido, deben ser variadas y estar conectadas con múltiples experiencias, de forma que promuevan respuestas a cuestiones actuales y de interés, conectando el pasado con el presente para dar mayor significatividad a la materia. Las situaciones deberían ser planteadas de forma que el alumnado vaya creando gradualmente su propio conocimiento a partir de sus conocimientos previos, movilizando diversas competencias, unificando sus experiencias escolares y extraescolares, así como extrapolando los aprendizajes a otras situaciones e identificando los elementos sociales y emocionales que, junto con los cognitivos, están presentes en cualquier situación curricular. Dentro del conocimiento adquirido, el alumnado ha de incluir una reflexión acerca de lo aprendido y de la conexión con su entorno inmediato, extrayendo si es posible modelos que puedan aplicarse a situaciones de aprendizaje similares mediante inferencia. El docente debe plantear diferentes escenarios que proporcionen múltiples formas de implicación, para asegurar la motivación del alumnado en todo el proceso, y que se basen en los principios del Diseño Universal para el Aprendizaje (DUA), minimizando así las barreras físicas, sensoriales, cognitivas y culturales que pudieran existir en el aula. A través de un proceso de andamiaje y práctica guiada, el docente, mediante una retroalimentación continuada, promoverá el aprendizaje. A medida que el alumnado vaya elevando su competencia, el apoyo del profesorado se podrá ir reduciendo y el alumno trabajará de una forma más autónoma. El trabajo cooperativo es un método adecuado para modelar y constatar la gestión socioemocional del alumnado a través de la asunción de diferentes papeles, fomentando el respeto y valoración de las contribuciones de los demás. Las situaciones de aprendizaje deberían contemplar los usos lingüísticos en los contextos formales (aula), los no formales (centro educativo) y los informales (entornos físicos y virtuales) en las distintas lenguas del repertorio del alumno. El aprendizaje dialógico será la vía que permitirá pasar del plano social e intersubjetivo al plano individual, conectando así medio y sujeto. Se recomienda el uso de una metodología activa en el aula donde docente y alumnado interaccionen, ya que promueve una comunicación efectiva con actividades significativas y una autonomía responsable a través de la exploración en las distintas situaciones de aprendizaje por parte del alumnado. Las tecnologías de la información y comunicación constituyen una herramienta que permite la exploración autónoma y personalizada del discente. Las metodologías activas contribuyen a favorecer la adquisición de las competencias clave y los retos del siglo XXI, promoviendo el trabajo individual, así como la interacción, colaboración y cooperación entre iguales, para favorecer progresivamente, la toma de decisiones por parte del alumnado sobre los objetivos, la planificación y el desarrollo del proceso y la evaluación. En este sentido, el trabajo por proyectos de carácter interdisciplinar permite establecer conexiones entre materias distintas, así como con los retos del siglo XXI. Actividades como el estudio de la etimología de las partes del cuerpo humano, la terminología científica en la botánica o los nombres de planetas y satélites del sistema solar conectan con la Biología y Geología, así como la elaboración de guías arqueológicas de una ciudad antigua conecta con las materias de Geografía e Historia y la de Economía y Emprendimiento. La representación de una escena de un texto perteneciente al mundo clásico, la elaboración de vídeos, pódcasts, cómics o un periódico digital suponen una inmersión activa en la materia objeto de estudio a la vez que permiten la personalización del proceso a través de múltiples formas de expresión del aprendizaje. Por su parte, la utilización activa en las lenguas del repertorio del alumnado de las técnicas retóricas de la Antigüedad mediante el uso de la oratoria coadyuva a la consecución de las competencias lingüísticas. También resulta útil la búsqueda de referencias clásicas en el entorno cultural o la investigación de emprendimiento sobre el patrimonio local y global, ya que conectan con las experiencias personales y en las lenguas del repertorio del alumno a la vez que enriquecen la comprensión de su entorno. La participación en proyectos de carácter europeo, bien sea a través de la red o en intercambios escolares, pone la Cultura Clásica en la base de la identidad europea. Las actividades de lectura tienen que ir encaminadas a promover su fomento y la mejora de la competencia, combinando los diferentes objetivos: leer para aprender y leer por placer. Hay que diseñarlas teniendo en cuenta el Plan Lector del centro y el uso de las bibliotecas (también la virtual, para favorecer el desarrollo de la competencia digital), como parte del proceso de aprendizaje en cuanto al tratamiento de la información. El uso de diferentes instrumentos de evaluación, autoevaluación y coevaluación, tales como rúbricas, portfolios, escalas, etc., debería servir al profesor de un lado para valorar y mejorar la planificación y el desarrollo de la situación de aprendizaje, y de otro para constatar la adquisición de las competencias clave y específicas del alumnado ligadas a los desafíos del siglo XXI. En este sentido, la evaluación permitirá al discente obtener una retroalimentación continuada sobre el proceso de aprendizaje y le permitirá reflexionar sobre él y mejorarlo, así como al docente diseñar nuevos puntos de partida en ese proceso. El desarrollo del proceso evaluador debe enmarcarse dentro de los mismos principios pedagógicos que vertebran el diseño y desarrollo de las situaciones de aprendizaje.",
+      "criterios_ids": []
+    }
+  ]
+}

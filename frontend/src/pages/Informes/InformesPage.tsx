@@ -9,15 +9,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getCalificacionesPorGrupo, exportarDatos, importarDatos,
+  getCalificacionesPorGrupo, exportarDatos, importarDatos, getResumenEvidencias, esCopiaSinEvidencias,
 } from '@/db/queries'
+import { COPIA_GRANDE, tamanoLegible } from '@/db/almacen'
+import { registrarCopiaEnFichero } from '@/db/copia'
 import { useAuth } from '@/auth/AuthProvider'
 import { imprimir, descargarHTML } from '@/informes/lamina'
 import { descargarFichero } from '@/utils/compartir'
 import { esNativo } from '@/api'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
-import { reunirDatosGrupo, evidenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
-import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea } from '@/informes/documentos'
+import { reunirDatosGrupo, evidenciasDeAlumno, competenciasDeAlumno, type DatosGrupo, type EvidenciaInforme } from '@/informes/datos'
+import { informeIndividual, informesDelGrupo, boletinGrupo, actaArea, subtituloGrupo } from '@/informes/documentos'
+import { documentoCompetenciasAlumnos, documentoCompetenciasGrupo } from '@/informes/competenciasClave'
+import { useDatosSensibles } from '@/db/datosSensibles'
 
 
 function normalizar(s: string) {
@@ -31,9 +35,14 @@ export default function InformesPage() {
   const [datos, setDatos] = useState<DatosGrupo | null>(null)
   const [alumnoSelId, setAlumnoSelId] = useState('')
   const [areaSelId, setAreaSelId] = useState('')
+  // Competencias clave: 'grupo' (resumen), 'todos' (una lámina por alumno) o el id de un alumno
+  const [competenciasSel, setCompetenciasSel] = useState('grupo')
   const [trimestre, setTrimestre] = useState<string>('')      // '' = curso completo
   const [conCriterios, setConCriterios] = useState(true)
   const [conEvidencias, setConEvidencias] = useState(true)
+  const sensibles = useDatosSensibles()
+  // Apagados en este aparato, ni evidencias ni sello NEAE salen en ningún documento
+  const evidenciasEnInforme = conEvidencias && sensibles.evidencias
   const [generando, setGenerando] = useState('')
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const importRef = useRef<HTMLInputElement>(null)
@@ -62,7 +71,7 @@ export default function InformesPage() {
   const opciones = { trimestre: trim, incluirCriterios: conCriterios }
 
   const conEvidenciasDe = async (alumnoId: number): Promise<EvidenciaInforme[]> =>
-    conEvidencias ? evidenciasDeAlumno(alumnoId) : []
+    evidenciasEnInforme ? evidenciasDeAlumno(alumnoId) : []
 
   // ── Generadores ──────────────────────────────────────────────────────
 
@@ -106,7 +115,7 @@ export default function InformesPage() {
     if (!datos) throw new Error('Sin datos')
     if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
     const mapa = new Map<number, EvidenciaInforme[]>()
-    if (conEvidencias) {
+    if (evidenciasEnInforme) {
       for (const al of alumnos) mapa.set(al.id!, await evidenciasDeAlumno(al.id!, 6))
     }
     return {
@@ -132,6 +141,31 @@ export default function InformesPage() {
       html: actaArea(datos, Number(areaSelId), trim),
       nombre: `acta-${normalizar(area?.asig.nombre_display || 'area')}-${normalizar(datos.grupo.nombre)}.html`,
     }
+  }
+
+  const docCompetencias = async () => {
+    if (!datos) throw new Error('Sin datos')
+    if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
+    if (!datos.descriptores.length) {
+      throw new Error('No se pudieron leer los descriptores operativos del servidor: el informe de competencias clave necesita conexión.')
+    }
+    const elegidos = competenciasSel === 'grupo' || competenciasSel === 'todos'
+      ? alumnos
+      : alumnos.filter(a => String(a.id) === competenciasSel)
+    if (!elegidos.length) throw new Error('Selecciona un alumno.')
+    const filas = elegidos.map(a => ({ nombre: a.nombre, apellidos: a.apellidos, perfil: competenciasDeAlumno(datos, a.id!) }))
+    const contexto = {
+      titulo: subtituloGrupo(datos), etapa: datos.grupo.etapa,
+      catalogo: datos.descriptores, periodo: trim,
+    }
+    const sufijo = `${normalizar(datos.grupo.nombre)}-${datos.grupo.curso_escolar}`
+    if (competenciasSel === 'grupo') {
+      return { html: documentoCompetenciasGrupo(filas, contexto), nombre: `competencias-clave-grupo-${sufijo}.html` }
+    }
+    const nombre = elegidos.length === 1
+      ? `competencias-clave-${normalizar(elegidos[0].apellidos)}-${normalizar(elegidos[0].nombre)}-${datos.grupo.curso_escolar}.html`
+      : `competencias-clave-${sufijo}.html`
+    return { html: documentoCompetenciasAlumnos(filas, contexto), nombre }
   }
 
   // ── CSV ──────────────────────────────────────────────────────────────
@@ -184,20 +218,29 @@ export default function InformesPage() {
 
   // ── Backup ───────────────────────────────────────────────────────────
 
-  const handleExportarBackup = async () => {
-    setGenerando('backup'); setMsg(null)
+  const handleExportarBackup = async (completa = false) => {
+    setMsg(null)
+    if (completa) {
+      const { total } = await getResumenEvidencias()
+      if (total.bytes > COPIA_GRANDE && !confirm(
+        `Tus fotos, audios y vídeos ocupan ${tamanoLegible(total.bytes)}. Una copia así puede agotar la memoria del aparato: la página se recargaría y no saldría ningún fichero. Tus datos no corren peligro.\n\n¿Intentarlo?`,
+      )) return
+    }
+    setGenerando('backup')
     try {
-      const json = await exportarDatos()
+      const json = await exportarDatos(undefined, { sinEvidencias: !completa })
       const resultado = await descargarFichero(
-        `miclase-backup-${new Date().toISOString().slice(0, 10)}.json`,
+        `miclase-backup-${completa ? 'completa-' : ''}${new Date().toISOString().slice(0, 10)}.json`,
         json, 'application/json', 'Copia de seguridad de MiClase',
       )
       if (resultado !== 'cancelado') {
+        await registrarCopiaEnFichero()
+        const queLleva = completa ? '' : ' Lleva todos los datos, sin fotos, audios ni vídeos.'
         setMsg({
           tipo: 'ok',
-          texto: esNativo()
+          texto: (esNativo()
             ? 'Copia de seguridad preparada. Guárdala en Archivos o envíatela: fuera de este dispositivo.'
-            : 'Copia de seguridad descargada. Guárdala en un lugar seguro.',
+            : 'Copia de seguridad descargada. Guárdala en un lugar seguro.') + queLleva,
         })
       }
     } catch (e: any) {
@@ -208,13 +251,16 @@ export default function InformesPage() {
   const handleImportarBackup = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    if (!confirm('¿Restaurar datos desde este backup?\n\nSe borrarán TODOS los datos actuales de este dispositivo y se reemplazarán por los del fichero.')) {
+    const texto = await file.text()
+    if (!confirm(esCopiaSinEvidencias(texto)
+      ? '¿Restaurar datos desde este backup?\n\nSe reemplazarán todos los datos de este dispositivo por los del fichero. Sus fotos, audios y vídeos se conservan: esta copia no los lleva.'
+      : '¿Restaurar datos desde este backup?\n\nSe borrarán TODOS los datos actuales de este dispositivo y se reemplazarán por los del fichero.')) {
       e.target.value = ''
       return
     }
     setGenerando('restaurar'); setMsg(null)
     try {
-      await importarDatos(await file.text())
+      await importarDatos(texto)
       setMsg({ tipo: 'ok', texto: 'Datos restaurados. Recarga la página para verlos.' })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'Error al importar.' })
@@ -263,10 +309,10 @@ export default function InformesPage() {
             <input type="checkbox" checked={conCriterios} onChange={e => setConCriterios(e.target.checked)} />
             Detalle por criterio
           </label>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
+          {sensibles.evidencias && <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--gris-600)', cursor: 'pointer' }}>
             <input type="checkbox" checked={conEvidencias} onChange={e => setConEvidencias(e.target.checked)} />
             Incluir evidencias
-          </label>
+          </label>}
         </div>
       </div>
 
@@ -330,6 +376,22 @@ export default function InformesPage() {
           onImprimir={() => generar('acta', docActa, 'imprimir')}
           onDescargar={() => generar('acta', docActa, 'descargar')}
         />
+
+        <Documento
+          icono="🧭" titulo="Competencias clave"
+          texto="Nivel de desarrollo por competencia clave y por descriptor operativo del Perfil de salida, con las áreas y criterios de los que sale cada uno."
+          extra={
+            <select data-competencias-alcance value={competenciasSel} onChange={e => setCompetenciasSel(e.target.value)} style={{ width: '100%', marginBottom: 10 }}>
+              <option value="grupo">Resumen del grupo</option>
+              <option value="todos">Una lámina por alumno</option>
+              {alumnos.map(a => <option key={a.id} value={a.id}>{a.apellidos}, {a.nombre}</option>)}
+            </select>
+          }
+          ocupado={generando === 'cc'}
+          deshabilitado={alumnos.length === 0}
+          onImprimir={() => generar('cc', docCompetencias, 'imprimir')}
+          onDescargar={() => generar('cc', docCompetencias, 'descargar')}
+        />
       </div>
 
       {/* Datos en bruto */}
@@ -355,8 +417,11 @@ export default function InformesPage() {
           <Link to="/sincronizar" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>sincronización</Link>.
         </p>
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <button className="btn-primary" onClick={handleExportarBackup} disabled={!!generando}>
-            {generando === 'backup' ? 'Generando…' : '⬇️ Descargar copia de seguridad'}
+          <button className="btn-primary" onClick={() => handleExportarBackup()} disabled={!!generando}>
+            {generando === 'backup' ? 'Generando…' : '⬇️ Descargar copia de seguridad (sin fotos ni vídeos)'}
+          </button>
+          <button className="btn-secondary" data-backup-completa onClick={() => handleExportarBackup(true)} disabled={!!generando}>
+            Copia completa, con fotos y vídeos
           </button>
           <button className="btn-secondary" onClick={() => importRef.current?.click()} disabled={!!generando}>
             {generando === 'restaurar' ? 'Restaurando…' : '⬆️ Restaurar desde fichero'}
@@ -365,6 +430,7 @@ export default function InformesPage() {
         </div>
         <p style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 10 }}>
           El fichero no sube a ningún servidor: es un JSON local que puedes guardar donde quieras.
+          No va cifrado y lleva datos de tu alumnado: guárdalo en un sitio seguro. Con 📦, abajo en la barra lateral, sale cifrado con contraseña.
         </p>
       </div>
     </>

@@ -1,0 +1,697 @@
+{
+  "meta": {
+    "comunidad": "Asturias",
+    "etapa": "primaria",
+    "asignatura": "lengua-asturiana-y-literatura",
+    "asignatura_nombre": "Lengua Asturiana y Literatura",
+    "ciclo_origen": "Tercer ciclo",
+    "fuente": "Asturias · Primaria · Lengua Asturiana y Literatura · Tercer ciclo.xlsx",
+    "generado": "2026-11-01",
+    "curso": "6º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia La competencia matemática y compe (competencia STEM por sus siglas en inglés los métodos científicos, el pensamiento y re métodos de la ingeniería para transformar el e sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolv La competencia en ciencia conlleva la co social, utilizando un conjunto de conocimiento experimentación, con el fin de plantear pr pruebas para poder interpretar y transformar e La competencia en tecnología e ingeniería y metodologías propios de las ciencias para las necesidades o deseos de las personas sostenibilidad."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. Competenci La competencia digital implica el uso segu de las tecnologías digitales para el aprendiza sociedad, así como la interacción con estas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia em La competencia emprendedora implica d sobre oportunidades e ideas, utilizando los generar resultados de valor para otras person mirada para detectar necesidades y oportunid evaluar el entorno, y crear y replantear idea pensamiento estratégico y la reflexión ética, creativos y de innovación; y despertar la disp incertidumbre. Asimismo, implica tomar d conocimiento y colaborar de manera ágil co habilidades de comunicación y de negociació mediante la planificación y gestión de proy económico-financiero."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresió modo en que las ideas, las opiniones, los se comunican de forma creativa en distintas cu manifestaciones artísticas y culturales. Implica el desarrollo y la expresión de las ideas prop papel que se desempeña en la sociedad."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. ANE Áreas de Edu Conocimiento del Medio Los retos del siglo XXI demandan que herramientas para que el alumnado pueda éxito. El área de Conocimiento del Medio N ámbito con el objetivo de que niños y niñas l respetuosas con el mundo en el que viven y p éticos y sostenibles fundados en valores dem En una sociedad cada vez más diversa formas de sentir, de pensar y de actuar."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Reconocer, utilizar y valorar positivamente la diversidad lingüística a partir de la identificación del asturiano, gallego-asturiano o eonaviego, de otras lenguas del alumnado y de la realidad plurilingüe y multicultural de Asturias, para favorecer la formación de un pensamiento crítico que impida prejuicios hacia el uso de la propia lengua, rechace un uso del lenguaje discriminatorio y favorezca la convivencia democrática y, apreciar dicha variedad lingüística como fuente de riqueza cultural en los usos sociales de las lenguas en contextos multilingües.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Participar activamente en intercambios comunicativos orales y multimodales captando el sentido general, identificando la información más relevante, valorando aspectos formales y de contenido básicos; expresando hechos, ideas, sentimientos y opiniones, con claridad, para mejorar la expresión oral en lengua asturiana, construir conocimiento, establecer vínculos personales, y participar con autonomía y actitud cooperativa y empática en interacciones orales dentro y fuera del aula.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Comprender y deducir el sentido general de textos escritos y multimodales, identificando el sentido global, resumiendo las ideas principales, la información más relevante y las expresiones propias de la lengua asturiana, y valorando con ayuda aspectos formales y de contenido básicos, para adquirir y construir conocimiento y responder a necesidades e intereses comunicativos diversos.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Realizar textos escritos y multimodales con distintas finalidades comunicativas, exponiendo linealmente los hechos, ideas, sentimientos y opiniones, respetando las normas gramaticales y ortográficas básicas con una correcta presentación para buscar una mejora de la expresión escrita en lengua asturiana, construir conocimiento y dar respuesta a demandas comunicativas concretas.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Localizar, reconocer y valorar información procedente de diversidad de fuentes de información, de forma planificada y acompañada, evaluando su fiabilidad para favorecer y ampliar el conocimiento de la lengua y de aspectos del patrimonio cultural y sociolingüístico asturiano con un punto de vista personal y respetuoso con la propiedad intelectual.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Leer, identificar y valorar el patrimonio literario asturiano en diferentes soportes, analizando e interpretando textos literarios adecuados a su desarrollo, atendiendo a sus gustos e intereses para iniciarse en el reconocimiento de la literatura como manifestación artística, y de conocimiento e inspiración para la creación de textos de intención literaria orales, escritos o como parte de obras audiovisuales.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Reflexionar de forma guiada sobre el lenguaje a partir de la práctica de la escritura y la comprensión de textos, usando la terminología elemental adecuada para mejorar las destrezas de producción y comprensión oral y escrita en lengua asturiana e iniciarse en el desarrollo de una conciencia lingüística asturiana que valore la convivencia, el respeto y el entendimiento entre las personas.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar y distinguir algunas expresiones de uso cotidiano libres de estereotipos sexistas y los fonemas más característicos de la lengua asturiana o de otros códigos lingüísticos en su ambiente más cercano, indicando las relaciones e interacciones entre las diferentes lenguas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Expresar, utilizando un lenguaje no discriminatorio y respetuoso, impresiones, sentimientos o vivencias propias en lengua asturiana y detectar con autonomía creciente y en contextos próximos, algunos prejuicios y estereotipos lingüísticos y culturales hacia el uso de la propia lengua u otras lenguas del entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar curiosidad y respeto por la diversidad de lenguas y las personas que las hablan, incluidas las diferentes variantes de la lengua asturiana y las lenguas de signos, valorando la pluralidad lingüística como una fuente de riqueza cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Participar activamente y de forma guiada, en intercambios comunicativos orales y multimodales (espontáneos o planificados) habituales en el aula y del contexto asturiano, empleando un lenguaje no sexista, desarrollando estrategias de escucha activa manifestando sus propias opiniones y respetando las de las y los demás.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Expresar con fluidez impresiones, sentimientos o vivencias, utilizando las formas básicas de cortesía y relación social (inicio, mantenimiento y final de la conversación) y empleando elementos no verbales (gestualidad y modulación de la voz).",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Responder a preguntas básicas para la comunicación en lengua asturiana, referidas a la comprensión de textos orales y multimodales, señalar las relaciones que se establecen entre las ideas y progresar en la valoración crítica del contenido, realizando inferencias.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Leer de manera silenciosa y en voz alta, variedad de tipos de textos escritos y multimodales apropiados a su edad, identificando la idea global y otras ideas relevantes y manejar herramientas, de forma acompañada, para la mejora de la comprensión (relectura, intuir significado de palabras, uso del diccionario, subrayado, esquemas...).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Analizar y reconocer, de manera acompañada, el contenido y elementos de textos escritos y multimodales que ayudan a su comprensión e identificar su tipología (tipografía, ilustraciones, elementos gráficos, iconos propios de Asturias y maquetación), identificando el tipo de texto y valorando su contenido y finalidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Realizar textos escritos y multimodales sencillos y de forma clara y legible en distintos soportes de acuerdo con la finalidad comunicativa prevista (descripciones, narraciones, noticias, cómics, biografías, carteles... libres de estereotipos de género), expresando ordenadamente hechos, ideas, sentimientos y opiniones, aplicando las principales reglas ortográficas y de puntuación, y valorando la correcta presentación.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Organizar y planificar, progresando de manera acompañada, estrategias sencillas de redacción y revisión de los elementos que dan forma y sentido a los textos escritos y multimodales (fecha, márgenes, título, encabezamiento y párrafos, saludo y despedida, imágenes, gráficos, bocadillos...).",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Enriquecer y buscar la mejora de las producciones escritas integrando, con cierta soltura, vocabulario y expresiones propias de la lengua asturiana relativas a aspectos del patrimonio cultural y sociolingüístico asturiano desde una perspectiva de género, manejando diversidad de fuentes (diccionarios, recursos multimedia...).",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Participar en un proceso de investigación sencillo (individual o grupal), de manera acompañada, sobre algún tema de interés del patrimonio cultural asturiano y compartir el trabajo realizado, aplicando el punto de vista personal, creativo y respetuoso con la propiedad intelectual.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Utilizar, de forma dirigida, la biblioteca, los textos escritos, los recursos multimedia y medios audiovisuales de comunicación y de internet en asturiano como fuentes de información, conocimiento y disfrute personal, valorando su fiabilidad y la dimensión lúdica y de aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Escuchar y leer textos orales y escritos de la tradición oral y de la literatura infantil asturiana libres de estereotipos de género, utilizando la biblioteca de aula y de centro o recursos multimedia, para seleccionar lecturas con criterio propio, reconociendo y valorando sus géneros literarios (canciones, cuentos, poesías, adivinanzas, dichos y refranes) y expresando valoraciones personales.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Participar activamente en actividades orientadas a fomentar el gusto por leer obras escritas en lengua asturiana visibilizando la aportación tanto de las mujeres como de los hombres (audiciones, lecturas colectivas, compartir oralmente las experiencias de lectura, debates sobre ellas...) mostrando capacidad para valorar y recomendar libros en función de sus intereses.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Crear o interpretar, de manera acompañada, textos con intención literaria y a partir de pautas dadas, incrementando gradualmente el sentido estético y creativo de las producciones (cuentos, poesías, dramatizaciones...).",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Manejar de forma progresiva las normas ortográficas y gramaticales básicas, a través de la práctica de la expresión oral, la escritura y la comprensión de textos, poniendo especial atención en los fonemas y las grafías específicas del asturiano.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Enriquecer y mejorar de manera cada vez más autónoma los textos orales y escritos reflexionando sobre los componentes y la estructura propia de la lengua asturiana, y usando la terminología lingüística básica adecuada.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloque A. Las lenguas y sus hablantes"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloque B. Comunicación"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloque C. Educación literaria"
+    },
+    {
+      "id": "B4",
+      "titulo": "Bloque D. Reflexiones sobre la lengua"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La diversidad cultural y lingüística como fuente de riqueza. Diversidad y unidad lingüística asturiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias para, de manera cada vez más autónoma, detectar la presencia de prejuicios y estereotipos lingüísticos y culturales hacia el uso de la lengua asturiana u otras lenguas del entorno.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Uso de un lenguaje igualitario, no discriminatorio y respetuoso con las demás personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para la coherencia, cohesión y adecuación textual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Elementos básicos de contenido (tema, expresiones propias, vocabulario, inferencias de información...) y forma (estructura, formato, título, imágenes, tipografía...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Finalidades de la comunicación y claves de tipología textual básica: narración, descripción, diálogo...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Interés por expresarse oralmente en el aula, respetando el turno de palabra, las opiniones de las demás personas y ajustándose al tema de lo que se habla.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para la comprensión y expresión de mensajes orales y multimodales de mayor complejidad con distinta intención, que tengan orden y coherencia, y que permitan al alumnado resolver cualquier tipo de situación comunicativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Uso de estrategias para una comunicación oral respetuosa y constructiva, tales como la pronunciación, gesticulación, entonación adecuada, escucha activa y respeto por los gustos, opiniones y conocimientos de las demás personas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Procedimientos de adquisición y empleo del vocabulario en el nivel léxico-referencial apropiado para comunicarse en diferentes contextos temáticos habituales: la ciudad, la música, los viajes, las actividades económicas, los actos sociales...",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de identificación, comprensión y producción de textos orales y multimodales, para argumentar y exponer conocimientos, ideas, pensamientos y deseos, captando el sentido global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Intercambios informativos diversos y acercamiento a los debates en el aula, emitiendo y respetando juicios personales y las reglas básicas de interacción oral.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Reconocimiento de los sonidos, ritmos y entonaciones característicos de la lengua asturiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Uso de la expresión oral, de modo habitual, empleando un lenguaje igualitario, no discriminatorio y evitando prejuicios lingüísticos, mostrando respeto hacia las personas que utilizan la lengua asturiana para expresarse oralmente en cualquiera de sus variantes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Interés por conocer las tradiciones orales asturianas y por participar en ellas mediante la práctica de juegos infantiles tradicionales apropiados a la edad evitando roles y estereotipos de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Lectura comprensiva en voz alta de diferentes tipos de textos, con la velocidad adecuada, con la pronunciación y vocalización correcta y entonación ajustada a su contenido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de captación del sentido global de textos diversos, distinguiendo las ideas principales de las secundarias, siendo capaz de resumir oralmente lo que se ha leído y hacer predicciones de acontecimientos de la trama.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Empleo del diccionario (tanto en papel como en soporte digital) como herramienta fundamental para la comprensión de textos escritos y uso de la biblioteca con fines lúdicos y de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para la comprensión de textos escritos y multimodales: análisis del título y de las ilustraciones, lectura, relectura, identificación de palabras clave e ideas principales, uso del diccionario, análisis de la estructura y tipo de texto y su intencionalidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Desarrollo del hábito lector y valoración de la lectura silenciosa como fuente de conocimiento y diversión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "Lectura comentada de textos escritos y multimodales en lengua asturiana que recojan conocimientos acerca del patrimonio cultural y sociolingüístico de Asturias libres de estereotipos de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.19",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias para la composición de diferentes tipos de textos que atiendan a fines comunicativos diversos (informar, convencer, conmover...) y que se adecuen a distintas estructuras textuales, presentando especial atención a la coherencia textual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.20",
+      "bloque_id": "B2",
+      "descripcion": "Interés por la organización y planificación de estrategias sencillas de redacción y revisión a la hora de crear textos escritos y multimodales básicos, adecuándose a la tipología textual (fecha, márgenes, título, encabezamiento, saludo y despedida, caligramas, dibujos y bocadillos).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.21",
+      "bloque_id": "B2",
+      "descripcion": "Uso y ampliación de vocabulario adecuado, elementos de cohesión y estructuras lingüísticas necesarias para expresar textos diversos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.22",
+      "bloque_id": "B2",
+      "descripcion": "Esmero en la presentación de textos escritos y multimodales propios, organizando con claridad su contenido y sus aspectos formales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.23",
+      "bloque_id": "B2",
+      "descripcion": "Nuevo vocabulario básico en lengua asturiana para resolver por escrito situaciones sencillas de comunicación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.24",
+      "bloque_id": "B2",
+      "descripcion": "Empleo del diccionario (en soporte escrito o digital) como herramienta fundamental para la creación de textos escritos y multimodales y uso de la biblioteca como fuente de información.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.25",
+      "bloque_id": "B2",
+      "descripcion": "Progreso en el uso de modelos para la creación de textos propios de calidad y respeto hacia las creaciones ajenas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.26",
+      "bloque_id": "B2",
+      "descripcion": "Uso de expresiones escritas en lengua asturiana que conlleven un lenguaje igualitario, no discriminatorio, evitando prejuicios lingüísticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.27",
+      "bloque_id": "B2",
+      "descripcion": "Aplicación de fórmulas de respeto hacia las personas que escriben en lengua asturiana y en cualquiera de sus variantes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.28",
+      "bloque_id": "B2",
+      "descripcion": "Fórmulas para la inclusión de conocimientos acerca del patrimonio cultural y sociolingüístico de Asturias en los textos escritos y multimodales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.29",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias básicas para la búsqueda guiada de información sencilla en fuentes documentales variadas y con distintos soportes y formatos con criterios de fiabilidad, aplicando un criterio propio e informado para identificar estereotipos de género y rechazar el sexismo presente en la red.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.30",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias básicas para un uso adecuado de los recursos multimedia y de los medios audiovisuales de comunicación a la hora de organizar y valorar la información. La manipulación informativa: hechos y opiniones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.31",
+      "bloque_id": "B2",
+      "descripcion": "Manejo guiado de las tecnologías de la información y comunicación para la mejora de los procesos de lectura, escritura y reflexión de la lengua y de la literatura asturiana (aplicaciones educativas, procesador de textos, correo electrónico, audiolibros, medios audiovisuales…). Síntesis y reelaboración de conocimientos con apoyo de modelos y con respeto por la propiedad intelectual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.32",
+      "bloque_id": "B2",
+      "descripcion": "Uso de la biblioteca escolar y de los recursos digitales del centro o del aula.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Lectura progresivamente autónoma de obras o fragmentos variados y diversos de la literatura infantil asturiana adaptados a sus intereses, visibilizando la aportación de las mujeres a la literatura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Audición y reproducción de diversos tipos de textos, orales o escritos, tradicionales o fruto de la creación literaria actual, que forman parte del patrimonio literario asturiano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Comentarios dirigidos de textos literarios (tema, trama, protagonistas, personajes, escenario...) y análisis acompañado de los elementos básicos del género literario (estructura, rima...).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Estrategias para la expresión de gustos e intereses por la literatura infantil asturiana y en la valoración personal y crítica de las obras. Progreso en la construcción de la identidad lectora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Interés por los textos orales y escritos de la tradición oral y de la literatura infantil asturiana con perspectiva de género.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Lectura expresiva, dramatización o interpretación de textos adaptados a la edad y características del alumnado.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Creación de textos literarios, de manera libre, valorando el sentido estético y la creatividad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Funcionamiento de la biblioteca de aula o de centro como fuente de estímulos literarios.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Correspondencia entre la lengua oral y la lengua escrita, poniendo especial atención en los fonemas y las grafías específicas de la lengua asturiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Estrategias para la discriminación y comparación de los sonidos, ritmos y entonaciones de la lengua asturiana con los de otras lenguas que se estudian en el centro. Generalizaciones sobre la acentuación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Interés por reproducir correctamente los fonemas más característicos de la lengua asturiana, incluyendo los dialectales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Empleo y reflexión de términos lingüísticos elementales para hablar de las regularidades morfológicas, sintácticas y ortográficas, a través de la práctica de la expresión oral, la lectura y la escritura (el grupo nominal, el verbo, los pronombres…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Manejo con interés y respeto de técnicas de aplicación de las normas ortográficas para organizar el texto escrito y para expresar la intención comunicativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Procedimientos de adquisición de vocabulario relacionado con el patrimonio cultural y sociolingüístico de Asturias. Mecanismos básicos para la formación de palabras.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Desarrollo del hábito de consultar la escritura de palabras nuevas, difíciles o dudosas. Uso progresivamente autónomo del diccionario tanto en papel como en formato digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Modalidades oracionales en relación a su intención comunicativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Mecanismos básicos de coherencia y cohesión textual. Los tiempos verbales como correlación temporal.",
+      "criterios_ids": []
+    }
+  ]
+}

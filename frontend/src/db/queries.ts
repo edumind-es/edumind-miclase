@@ -8,6 +8,7 @@ import {
 } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
+import { resumirEvidencias, type ResumenEvidencias } from './almacen'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
 import { normalizarPrueba, notaDePrueba, unidadesDelExamen, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
@@ -2789,7 +2790,32 @@ export async function getEvidenciasPorCriterio(alumno_ids: number[]): Promise<Ma
 
 export async function eliminarEvidencia(id: number): Promise<void> {
   const t = sello()
-  await db.evidencias.update(id, { deleted_at: t, updated_at: t })
+  const ev = await db.evidencias.get(id)
+  // Se vacía el contenido: la fila borrada solo tiene que viajar como aviso, y
+  // con él dentro un vídeo borrado seguía ocupando el aparato.
+  await db.evidencias.update(id, { deleted_at: t, updated_at: t, blob: new Blob([], { type: ev?.mime }) })
+}
+
+/** Qué ocupan las evidencias de este aparato, con el nombre de cada alumno. */
+export async function getResumenEvidencias(): Promise<ResumenEvidencias> {
+  const [evidencias, alumnos] = await Promise.all([db.evidencias.toArray(), db.alumnos.toArray()])
+  const nombres = new Map(alumnos.map(a => [a.id, `${a.nombre} ${a.apellidos}`.trim()]))
+  return resumirEvidencias(evidencias, id => nombres.get(id) ?? 'Alumno sin ficha')
+}
+
+/**
+ * Vacía el contenido de lo ya borrado antes de que `eliminarEvidencia` lo
+ * hiciera. No toca `updated_at`: no hay nada que contarle a nadie. Devuelve
+ * los bytes liberados.
+ */
+export async function liberarEvidenciasBorradas(): Promise<number> {
+  const borradas = (await db.evidencias.toArray()).filter(e => e.deleted_at && e.blob?.size)
+  let bytes = 0
+  for (const e of borradas) {
+    bytes += e.blob.size
+    await db.evidencias.update(e.id!, { blob: new Blob([], { type: e.mime }) })
+  }
+  return bytes
 }
 
 export async function actualizarEvidencia(
@@ -3542,7 +3568,9 @@ function base64ABlob(b64: string, mime: string): Blob {
  * migración, que exporta desde la base ANTIGUA antes de dejar que se
  * actualice: por eso la versión del fichero es la del esquema que se abre.
  */
-export async function exportarDatos(base: MiClaseDB = db): Promise<string> {
+export async function exportarDatos(
+  base: MiClaseDB = db, opciones: { sinEvidencias?: boolean } = {},
+): Promise<string> {
   // Una base antigua no tiene todas las tablas (rúbricas desde la v2,
   // evidencias desde la v3, criterio_instrumentos desde la v4, diario desde
   // la v6): las que no existen salen vacías en vez de reventar la copia.
@@ -3569,13 +3597,15 @@ export async function exportarDatos(base: MiClaseDB = db): Promise<string> {
     leer<RegistroDiario>('diario'),
   ])
 
-  // Serializar los blobs de evidencias a base64
-  const evidenciasSerial = await Promise.all(evidencias.map(async ev => {
+  // Serializar los blobs de evidencias a base64. En la copia ligera no van: con
+  // cientos de megas de vídeos, montar este texto puede agotar la memoria de un iPad.
+  const evidenciasSerial = opciones.sinEvidencias ? [] : await Promise.all(evidencias.map(async ev => {
     const { blob, ...rest } = ev
-    return { ...rest, blob_b64: await blobABase64(blob) }
+    return { ...rest, blob_b64: blob ? await blobABase64(blob) : '' }
   }))
 
   return JSON.stringify({
+    ...(opciones.sinEvidencias ? { sin_evidencias: true } : {}),
     // La versión del backup sigue a la del esquema Dexie que se ha abierto.
     version: Math.round(base.verno),
     exported_at: now(),
@@ -3584,6 +3614,11 @@ export async function exportarDatos(base: MiClaseDB = db): Promise<string> {
     criterio_instrumentos, rubricas,
     evidencias: evidenciasSerial, planos, asientos, diario,
   }, null, 2)
+}
+
+/** ¿Es una copia sin evidencias? Sin parsear el fichero entero, que puede ser enorme. */
+export function esCopiaSinEvidencias(json: string): boolean {
+  return /^\s*\{\s*"sin_evidencias"\s*:\s*true/.test(json.slice(0, 100))
 }
 
 export async function importarDatos(json: string): Promise<void> {
@@ -3627,7 +3662,9 @@ export async function importarDatos(json: string): Promise<void> {
         db.asignaturas.clear(), db.instrumentos.clear(), db.calificaciones.clear(),
         db.sesiones.clear(), db.asistencia.clear(), db.unidades.clear(),
         db.unidad_criterios.clear(), db.criterio_instrumentos.clear(), db.rubricas.clear(),
-        db.evidencias.clear(), db.planos.clear(), db.asientos.clear(), db.diario.clear(),
+        // Una copia sin evidencias no puede dejar el aparato sin las suyas.
+        ...(data.sin_evidencias ? [] : [db.evidencias.clear()]),
+        db.planos.clear(), db.asientos.clear(), db.diario.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))

@@ -28,6 +28,7 @@ import {
 const K_ULTIMA = 'copia_ultima'
 const K_ERROR = 'copia_error'
 const K_PRIMER_USO = 'copia_primer_uso'
+const K_ULTIMO_FICHERO = 'copia_ultimo_fichero'
 const K_AUTO_SYNC = 'miclase_sync_auto'
 /**
  * Lo último que se escribió: el sello más alto y qué registros lo llevaban.
@@ -150,6 +151,14 @@ export async function restaurarDesdeCopia(destino: DestinoCopia, password?: stri
   return { ficheros: ficheros.length, resultado: total }
 }
 
+/**
+ * Una copia descargada o un paquete enviado también están fuera del aparato: sin
+ * contarlos, el aviso decía «sin ninguna copia» a quien las hacía a mano.
+ */
+export async function registrarCopiaEnFichero(): Promise<void> {
+  await metaSync.guardar(K_ULTIMO_FICHERO, new Date().toISOString())
+}
+
 /** ¿Hay copia válida fuera del aparato? Para la tarjeta de Inicio y la de Sincronizar. */
 export async function diagnostico(): Promise<Diagnostico> {
   let primerUso = await metaSync.leer<string | null>(K_PRIMER_USO, null)
@@ -164,6 +173,7 @@ export async function diagnostico(): Promise<Diagnostico> {
   return diagnosticoCopia({
     ultimaCopia: await ultimaCopia(),
     ultimaSync: await ultimaSincronizacion(),
+    ultimoFichero: await metaSync.leer<string | null>(K_ULTIMO_FICHERO, null),
     autoSync,
     primerUso,
   })

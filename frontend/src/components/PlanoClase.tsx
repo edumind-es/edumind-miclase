@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPlano, redimensionarPlano, asignarAsiento, quitarAsiento } from '@/db/queries'
 import type { Alumno, Asiento } from '@/db/localDb'
+import { verNeae } from '@/db/datosSensibles'
 
 interface Props {
   grupoId: number
@@ -133,7 +134,7 @@ export default function PlanoClase({ grupoId, alumnos, modoAnon }: Props) {
                     fontFamily: modoAnon && al ? 'monospace' : undefined,
                   }}>
                   {al ? etiqueta(al) : (editando ? '+' : '')}
-                  {al?.neae ? <div style={{ fontSize: 9, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</div> : null}
+                  {al?.neae && verNeae() ? <div style={{ fontSize: 9, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</div> : null}
                 </button>
               )
             })}

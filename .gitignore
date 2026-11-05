@@ -39,3 +39,7 @@ frontend/releases/
 # Temporales de pruebas/migracion.test.mjs
 frontend/public/__dexie-tmp.mjs
 frontend/public/__sembrar-v3.html
+
+# Currículo empaquetado para la PWA: lo genera scripts/empaquetar_curriculo.mjs
+# en cada build (plugin de Vite), desde curriculum/.
+frontend/public/curriculo/

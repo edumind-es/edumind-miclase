@@ -37,6 +37,35 @@ CREATE TABLE IF NOT EXISTS c_criterios (
   PRIMARY KEY (id, asignatura, curso, etapa, comunidad)
 );
 
+-- Competencias específicas de cada materia y curso (los «objetivos» del JSON)
+CREATE TABLE IF NOT EXISTS c_objetivos (
+  id          TEXT NOT NULL,     -- CE1, OBJ3…
+  asignatura  TEXT NOT NULL,
+  curso       TEXT NOT NULL,
+  etapa       TEXT NOT NULL,
+  comunidad   TEXT NOT NULL,
+  descripcion TEXT NOT NULL,
+  -- De dónde sale su conexión con las competencias clave
+  -- ('comunidad' | 'competencia' | 'estatal' | 'ninguna'; ver db/conexiones.js)
+  conexion_origen TEXT NOT NULL DEFAULT 'ninguna',
+  PRIMARY KEY (id, asignatura, curso, etapa, comunidad)
+);
+
+-- Conexión competencia específica → descriptor operativo o competencia clave.
+-- `codigo` es un descriptor (CCL1) si tipo = 'descriptor' y una competencia
+-- clave (CCL) si tipo = 'competencia'. Cada descriptor arrastra también su
+-- competencia, así que la competencia siempre se puede leer de aquí.
+CREATE TABLE IF NOT EXISTS c_conexiones (
+  objetivo_id TEXT NOT NULL,
+  tipo        TEXT NOT NULL CHECK (tipo IN ('descriptor', 'competencia')),
+  codigo      TEXT NOT NULL,
+  asignatura  TEXT NOT NULL,
+  curso       TEXT NOT NULL,
+  etapa       TEXT NOT NULL,
+  comunidad   TEXT NOT NULL,
+  PRIMARY KEY (objetivo_id, tipo, codigo, asignatura, curso, etapa, comunidad)
+);
+
 CREATE TABLE IF NOT EXISTS c_bloques (
   id          TEXT NOT NULL,
   asignatura  TEXT NOT NULL,
@@ -90,6 +119,7 @@ CREATE TABLE IF NOT EXISTS docentes (
 -- ------------------------------------------------------------
 
 CREATE INDEX IF NOT EXISTS idx_c_criterios_asig ON c_criterios(asignatura, curso, etapa, comunidad);
+CREATE INDEX IF NOT EXISTS idx_c_conexiones_asig ON c_conexiones(asignatura, curso, etapa, comunidad);
 
 -- ------------------------------------------------------------
 -- SINCRONIZACIÓN MULTI-DISPOSITIVO (extremo a extremo)

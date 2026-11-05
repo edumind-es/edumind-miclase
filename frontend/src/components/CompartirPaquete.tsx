@@ -22,6 +22,9 @@ import {
 } from '@/db/sync'
 import { EXTENSION, MIME, type PaqueteSync } from '@/db/transporteFichero'
 import { compartirFichero, puedeCompartirFicheros } from '@/utils/compartir'
+import { getResumenEvidencias } from '@/db/queries'
+import { COPIA_GRANDE, tamanoLegible, type Cuenta } from '@/db/almacen'
+import { registrarCopiaEnFichero } from '@/db/copia'
 
 /** Por qué se pide contraseña antes de aplicar un paquete. */
 type Pendiente = { paquete: PaqueteSync; motivo: 'desbloquear' | 'unificar' }
@@ -35,8 +38,6 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
   const [error, setError] = useState('')
   const [aviso, setAviso] = useState('')
   const [resultado, setResultado] = useState<ResultadoSync | null>(null)
-  /** Hay un «no hay nada nuevo» en pantalla: se ofrece enviarlo todo igualmente. */
-  const [ofrecerTodo, setOfrecerTodo] = useState(false)
   const [pendiente, setPendiente] = useState<Pendiente | null>(null)
   const [password, setPassword] = useState('')
   // Un dispositivo sin contraseña de sincronización no puede ni enviar. Antes
@@ -48,10 +49,14 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
   const [nueva2, setNueva2] = useState('')
   const ficheroRef = useRef<HTMLInputElement>(null)
 
+  /** Las evidencias que un paquete puede llevar: cuánto pesaría mandarlas todas. */
+  const [evidencias, setEvidencias] = useState<Cuenta | null>(null)
+
   const mirarClave = async () => setTieneClave(!!(await claveGuardada()))
   useEffect(() => { void mirarClave() }, [desbloqueado])
+  useEffect(() => { getResumenEvidencias().then(r => setEvidencias(r.viajan)).catch(() => setEvidencias(null)) }, [])
 
-  const limpiar = () => { setError(''); setAviso(''); setResultado(null); setOfrecerTodo(false) }
+  const limpiar = () => { setError(''); setAviso(''); setResultado(null) }
 
   const crearContrasena = async () => {
     setError('')
@@ -64,14 +69,19 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
     onCambio?.()
   }
 
-  const enviar = async (todo = false) => {
+  const enviar = async (todasLasEvidencias = false) => {
     limpiar()
+    if (todasLasEvidencias && evidencias && !confirm(
+      `El paquete llevará ${evidencias.n} fotos, audios y vídeos (${tamanoLegible(evidencias.bytes)}, algo más al cifrarlos).` +
+      (evidencias.bytes > COPIA_GRANDE
+        ? ' Puede agotar la memoria del aparato: la página se recargaría y no saldría ningún fichero. Tus datos no corren peligro.'
+        : '') + '\n\n¿Seguir?',
+    )) return
     setTrabajando('enviando')
     try {
-      const { paquete, deshacer } = await empaquetarParaOtroDispositivo({ todo })
+      const { paquete, deshacer } = await empaquetarParaOtroDispositivo({ todasLasEvidencias })
       if (paquete.sobres.length === 0) {
-        setAviso('No hay nada nuevo que pasar desde el último paquete.')
-        setOfrecerTodo(true)
+        setAviso('Este dispositivo todavía no tiene datos que pasar.')
         return
       }
       const fecha = new Date().toISOString().slice(0, 10)
@@ -91,10 +101,10 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
         setAviso('Envío cancelado: no se ha mandado nada. Puedes volver a intentarlo.')
         return
       }
+      await registrarCopiaEnFichero()
       setAviso(cual === 'compartido'
         ? `Paquete enviado con ${paquete.sobres.length} registros. Ábrelo en el otro dispositivo con «Recibir un paquete».`
         : `Paquete descargado con ${paquete.sobres.length} registros (mira en Descargas). Pásalo al otro dispositivo y ábrelo allí con «Recibir un paquete».`)
-      setOfrecerTodo(true)
     } catch (e: any) {
       setError(e.message || 'No se ha podido preparar el paquete')
     } finally {
@@ -257,18 +267,18 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
         </div>
       )}
 
+      {!!evidencias?.n && (
+        <p data-paquete-evidencias style={{ marginTop: 10, fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5 }}>
+          El paquete lleva todos los datos y las fotos, audios y vídeos nuevos desde el anterior. ¿Se quedaron sin llegar a algún aparato?{' '}
+          <button data-paquete-todas onClick={() => enviar(true)} disabled={!!trabajando || tieneClave === false}
+            style={{ background: 'none', border: 'none', padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', fontSize: 12.5 }}>
+            Enviar también todos ({tamanoLegible(evidencias.bytes)})
+          </button>
+        </p>
+      )}
       {aviso && (
         <p role="status" style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, fontSize: 13.5,
                     background: 'var(--verde-100)', color: 'var(--verde-500)' }}>✅ {aviso}</p>
-      )}
-      {ofrecerTodo && !trabajando && (
-        <p style={{ marginTop: 8, fontSize: 12.5, color: 'var(--gris-600)' }}>
-          ¿Un paquete anterior no llegó a abrirse en el otro dispositivo?{' '}
-          <button onClick={() => enviar(true)}
-            style={{ background: 'none', border: 'none', padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline', fontSize: 12.5 }}>
-            Enviar todo de nuevo
-          </button>
-        </p>
       )}
       {error && (
         <p role="alert" style={{ marginTop: 12, padding: '10px 14px', borderRadius: 8, fontSize: 13.5,

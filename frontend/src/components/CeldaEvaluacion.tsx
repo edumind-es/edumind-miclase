@@ -30,6 +30,7 @@ import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
 import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
 import { claveUnidad } from '@/db/migracionUnidades'
+import { verNeae, verEvidencias } from '@/db/datosSensibles'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 
@@ -531,7 +532,7 @@ export default function CeldaEvaluacion({
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--azul-900)' }}>
               {alumno.apellidos}, {alumno.nombre}
-              {alumno.neae ? <span style={{ marginLeft: 8, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+              {alumno.neae && verNeae() ? <span style={{ marginLeft: 8, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
             </div>
             <div style={{ fontSize: 12, color: 'var(--gris-600)' }}>
               {grupo.nombre} · {asig.nombre_display} · {trimestre}º trim.
@@ -1009,7 +1010,7 @@ export default function CeldaEvaluacion({
             <CapturaEvidencia onCapturada={guardarEvidencia} compacto deshabilitado={guardando} />
           </div>
 
-          {evidencias.length > 0 && (
+          {evidencias.length > 0 && verEvidencias() && (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
               {evidencias.map(ev => (
                 <MiniaturaEvidencia key={ev.id} evidencia={ev} onBorrar={() => borrarEvidencia(ev.id!)} />

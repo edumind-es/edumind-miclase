@@ -20,12 +20,13 @@ import {
 import CorregirPrueba from './CorregirPrueba'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
 import InstrumentosManager from './InstrumentosManager'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
 import { trimestreActual, aplicaEnTrimestre } from '@/db/calculo'
 import { claveUnidad } from '@/db/migracionUnidades'
+import { verNeae, verEvidencias } from '@/db/datosSensibles'
 
 type Criterio = { id: string; descripcion: string }
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -152,12 +153,8 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   // 5) Criterios del currículo, filtrados por la unidad activa
   useEffect(() => {
     if (!asig || !grupo) { setCriterios([]); return }
-    const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-    const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
-    fetch(api(url))
-      .then(r => { if (!r.ok) throw new Error(); return r.json() })
-      .then((all: Criterio[]) => {
-        const lista = Array.isArray(all) ? all : []
+    curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
+      .then((lista: Criterio[]) => {
         if (unidadId) {
           const u = unidades.find(u => u.id === unidadId)
           const ids = new Set((u?.criterios || []).map(c => c.criterio_id))
@@ -327,11 +324,11 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         <div>
           <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--azul-900)' }}>
             {alumno.apellidos}, {alumno.nombre}
-            {alumno.neae ? <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+            {alumno.neae && verNeae() ? <span style={{ marginLeft: 8, fontSize: 11, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
           </div>
           <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
             {grupo ? `${grupo.nombre} · ${grupo.curso_escolar}` : 'Sin clase activa'}
-            {nEvidencias > 0 && ` · ${nEvidencias} evidencia${nEvidencias !== 1 ? 's' : ''}`}
+            {nEvidencias > 0 && verEvidencias() && ` · ${nEvidencias} evidencia${nEvidencias !== 1 ? 's' : ''}`}
           </div>
         </div>
         <button onClick={onCerrar} className="modal-close" aria-label="Cerrar panel">✕</button>
@@ -402,7 +399,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           ) : (
             <div style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 12 }}>
               No hay criterios disponibles (¿sin conexión con el servidor de currículo?).
-              Puedes guardar evidencias igualmente.
+              {verEvidencias() && ' Puedes guardar evidencias igualmente.'}
             </div>
           )}
 

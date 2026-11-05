@@ -10,6 +10,8 @@
  *
  *   {t:'config?'}                     ¿cuál es la sal de este docente?
  *   {t:'config',  salt, verificador}
+ *   {t:'inventario?'}                 ¿qué evidencias tienes ya?
+ *   {t:'inventario', evidencias}      [id, updated_at] de cada una
  *   {t:'sobres',  id, registros}      aquí van los míos
  *   {t:'recibo',  id, aceptados}      recibidos
  *   {t:'fin'}                         no tengo nada más que enviar
@@ -53,6 +55,8 @@ export type OpcionesDirecto = {
   espera?: number
   /** Periodo del latido, en ms. */
   latido?: number
+  /** Qué evidencias hay aquí, para que el otro no reenvíe las que ya tengo. */
+  inventario?: () => Promise<Array<[string, string]>>
 }
 
 type Config = { salt: string | null; verificador: string | null }
@@ -124,6 +128,11 @@ export function transporteDirecto(
         // a `preguntar()` casarlas cuando los dos lados hablan a la vez.
         void configLocal().then((c) =>
           enlace.enviar({ t: 'config', id: m.id, salt: c.salt, verificador: c.verificador }))
+        return
+
+      case 'inventario?':
+        void (opciones.inventario?.() ?? Promise.resolve([])).then((evidencias) =>
+          enlace.enviar({ t: 'inventario', id: m.id, evidencias }))
         return
 
       case 'sobres':
@@ -224,6 +233,11 @@ export function transporteDirecto(
       return { salt: m.salt ?? null, verificador: m.verificador ?? null }
     },
 
+    async inventarioDelOtro(): Promise<Array<[string, string]>> {
+      const m = await preguntar({ t: 'inventario?' })
+      return Array.isArray(m.evidencias) ? m.evidencias : []
+    },
+
     async configurar() {
       // No hay nada que publicar: en un enlace directo la sal se guarda en
       // cada aparato y se la piden entre ellos al emparejarse.
@@ -235,7 +249,10 @@ export function transporteDirecto(
       return {
         escritos: aceptados.length,
         descartados: registros.length - aceptados.length,
-        aceptados,
+        // El recibo dice que llegó, no que se aplicó ni que el otro no tenga
+        // algo distinto. Darlo por terreno común dejaba la base igual a lo
+        // local y la fusión tomaba por edición cualquier versión del otro.
+        aceptados: [],
         rechazados: [],
       }
     },

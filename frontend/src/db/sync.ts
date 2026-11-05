@@ -357,7 +357,20 @@ export type ResultadoFusion = {
    * es lo que hacía que un apellido corregido desapareciera sin explicación.
    */
   borradoConEdicion: boolean
+  /** Lo recibido es anterior a la última versión común: no se aplica. */
+  obsoleto?: boolean
 }
+
+export type OpcionesFusion = {
+  /** Una nota editada gana a un borrado. Solo para `calificaciones`. */
+  notaGanaAlBorrado?: boolean
+}
+
+/** Lo que el docente ha puesto en una casilla. */
+const CAMPOS_DE_NOTA = ['valor', 'observacion', 'niveles_rubrica']
+
+const notaDistinta = (a: any, b: any): boolean =>
+  CAMPOS_DE_NOTA.some(c => !iguales(a[c], b[c]))
 
 /**
  * Fusión a tres bandas: base (lo último que ambos compartían), local y remoto.
@@ -369,8 +382,22 @@ export type ResultadoFusion = {
  *
  * Así, si en el portátil se corrige el apellido de un alumno y en la tablet se
  * le marca NEAE, no se pierde ninguno de los dos cambios.
+ *
+ * Dos excepciones, las dos porque se perdían notas sin decir nada:
+ *   · Lo anterior a la base no se aplica. «Solo lo cambió el remoto» no distingue
+ *     una edición de una versión vieja: un Mac atrasado o un paquete antiguo
+ *     devolvían el 9 del iPad a su 5, y además con el sello del 9.
+ *   · En una casilla, una nota editada gana al borrado. Esos borrados los hace
+ *     sobre todo `reconciliarDuplicados`, no el docente: la nota nueva entraba
+ *     en una fila retirada y la casilla seguía enseñando la antigua.
  */
-export function fusionarTresBandas(base: any, local: any, remoto: any): ResultadoFusion {
+export function fusionarTresBandas(
+  base: any, local: any, remoto: any, opciones: OpcionesFusion = {}
+): ResultadoFusion {
+  if ((remoto.updated_at ?? '') < (base.updated_at ?? '')) {
+    return { registro: local, huboFusion: false, campos: [], borradoConEdicion: false, obsoleto: true }
+  }
+
   const remotoEsMasNuevo = (remoto.updated_at ?? '') > (local.updated_at ?? '')
   const salida: any = { ...local }
   const campos: string[] = []
@@ -392,6 +419,17 @@ export function fusionarTresBandas(base: any, local: any, remoto: any): Resultad
     // resto de casos: se queda el valor local
   }
 
+  // Un lado retiró la fila y el otro siguió calificando en ella: vuelve la nota.
+  let vuelveLaRemota = false
+  if (opciones.notaGanaAlBorrado && !!local.deleted_at !== !!remoto.deleted_at) {
+    const viva = local.deleted_at ? remoto : local
+    if (notaDistinta(viva, base)) {
+      salida.deleted_at = null
+      for (const c of CAMPOS_DE_NOTA) salida[c] = viva[c]
+      vuelveLaRemota = viva === remoto
+    }
+  }
+
   // El blob solo puede venir del remoto si aquí no lo teníamos
   if (remoto.blob && !local.blob) salida.blob = remoto.blob
 
@@ -402,7 +440,9 @@ export function fusionarTresBandas(base: any, local: any, remoto: any): Resultad
 
   salida.updated_at = difiereDelRemoto
     ? sello()
-    : (remotoEsMasNuevo ? remoto.updated_at : local.updated_at)
+    // La nota que vuelve conserva su fecha: el sello del borrado la haría pasar
+    // por más reciente que otra puesta después en la misma casilla.
+    : (remotoEsMasNuevo || vuelveLaRemota ? remoto.updated_at : local.updated_at)
 
   // El borrado gana, pero si el otro lado había tocado campos de contenido
   // hay que decirlo: esos cambios ya no se van a ver en ninguna parte.
@@ -425,6 +465,8 @@ export function fusionarTresBandas(base: any, local: any, remoto: any): Resultad
 async function aSobre(tabla: TablaSinc, reg: any): Promise<string> {
   if (tabla === 'evidencias' && reg.blob instanceof Blob) {
     const { blob, ...resto } = reg
+    // Una evidencia borrada viaja como aviso: su contenido ya no le sirve a nadie.
+    if (reg.deleted_at) return JSON.stringify(resto)
     return JSON.stringify({ ...resto, blob_b64: await blobABase64(blob) })
   }
   return JSON.stringify(reg)
@@ -439,12 +481,39 @@ function deSobre(tabla: TablaSinc, json: string): any {
   return reg
 }
 
+/**
+ * Una evidencia borrada no guarda su contenido. La fila se queda (el borrado
+ * es lógico y tiene que viajar) con un blob vacío: el resto del código espera
+ * que exista, y sin vaciarlo los vídeos borrados seguían ocupando el aparato.
+ */
+function sinContenidoSiBorrada(tabla: TablaSinc, reg: any): any {
+  if (tabla !== 'evidencias' || !reg.deleted_at) return reg
+  return { ...reg, blob: new Blob([], { type: reg.mime || 'application/octet-stream' }) }
+}
+
 // ─── Empuje ──────────────────────────────────────────────────────────────
 
-async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
-  const kDesde = cursor(K_PUSH_DESDE, canal)
+/**
+ * Qué se manda en un envío. Por defecto, lo de siempre: todo lo posterior al
+ * cursor del camino. `kDesde: null` lo manda entero, sin mirar ni mover cursor.
+ */
+type PlanEnvio = {
+  tablas: readonly TablaSinc[]
+  kDesde: string | null
+  /** Filtro por registro: `false` es que no hace falta mandarlo. */
+  falta?: (reg: any) => boolean
+}
+
+/** Todo menos las evidencias: pesa poco y se puede mandar entero cada vez. */
+const TABLAS_DATOS = TABLAS_SINC.filter((t) => t !== 'evidencias')
+
+async function empujar(
+  clave: CryptoKey, canal: Transporte, res: ResultadoSync,
+  plan: PlanEnvio = { tablas: TABLAS_SINC, kDesde: cursor(K_PUSH_DESDE, canal) },
+) {
+  const { kDesde } = plan
   const kAislados = cursor(K_CUARENTENA, canal)
-  const desde: string = await leerMeta(kDesde, '')
+  const desde: string = kDesde ? await leerMeta(kDesde, '') : ''
   const cuarentena: Cuarentena = await leerMeta(kAislados, {})
   const device_id = idDispositivo()
 
@@ -459,7 +528,7 @@ async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) 
     res.errores.push(`${tabla}#${reg.id}: ${MOTIVOS[motivo] ?? motivo}`)
   }
 
-  for (const tabla of TABLAS_SINC) {
+  for (const tabla of plan.tablas) {
     const t = db.table(tabla)
     // `updated_at` está indexado: solo se leen los registros tocados
     const pendientes = desde
@@ -513,6 +582,7 @@ async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) 
 
     for (const reg of pendientes) {
       if (reg.id == null || !reg.updated_at) continue
+      if (plan.falta && !plan.falta(reg)) continue
 
       const aislado = cuarentena[`${tabla}:${reg.id}`]
       if (aislado && aislado.updated_at === reg.updated_at) {
@@ -546,7 +616,7 @@ async function empujar(clave: CryptoKey, canal: Transporte, res: ResultadoSync) 
     await enviar()
   }
 
-  if (maxSello) {
+  if (kDesde && maxSello) {
     const frenado = sinEnviar.length ? sinEnviar.reduce((a, b) => (a < b ? a : b)) : null
     const hasta = frenado && frenado < maxSello ? frenado : maxSello
     await guardarMeta(kDesde, hasta)
@@ -561,6 +631,8 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
   const kSeq = cursor(K_PULL_SEQ, canal)
   let desde: number = await leerMeta(kSeq, 0)
   let hayMas = true
+  /** La fecha más antigua de lo que ha entrado aquí: ver `incluirEnLaCopia`. */
+  let masAntiguo: string | null = null
 
   // Un buzón que va por detrás del cursor es un buzón nuevo: «Cambiar y
   // borrar buzón» en otro aparato lo vuelve a numerar desde cero, y este
@@ -588,6 +660,9 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
         const remoto = deSobre(fila.tabla as TablaSinc, json)
         const aplicado = await fusionar(fila.tabla as TablaSinc, remoto, res)
         aplicado ? res.aplicados++ : res.descartados++
+        if (aplicado && remoto.updated_at && (!masAntiguo || remoto.updated_at < masAntiguo)) {
+          masAntiguo = remoto.updated_at
+        }
       } catch (e: any) {
         // WebCrypto falla al descifrar con un `OperationError` cuyo texto es
         // distinto en cada navegador y no dice nada. Se cuenta aparte: que
@@ -605,6 +680,18 @@ async function traer(clave: CryptoKey, canal: Transporte, res: ResultadoSync) {
     hayMas = r.hay_mas
     await guardarMeta(kSeq, desde)
   }
+  if (masAntiguo) await incluirEnLaCopia(masAntiguo)
+}
+
+/**
+ * Lo recibido conserva la fecha de quien lo escribió, que suele ser anterior a
+ * la última copia en carpeta de este aparato: quedaba detrás del cursor y nunca
+ * entraba en ella. Las notas del iPad llegaban al Mac, pero no a su copia.
+ */
+async function incluirEnLaCopia(masAntiguo: string): Promise<void> {
+  const kCopia = `${K_PUSH_DESDE}:copia`
+  const desde: string = await leerMeta(kCopia, '')
+  if (desde && masAntiguo < desde) await guardarMeta(kCopia, masAntiguo)
 }
 
 /**
@@ -625,22 +712,36 @@ async function fusionar(
 
   // No lo teníamos: se acepta tal cual
   if (!local) {
-    await t.put(remoto)
+    await t.put(sinContenidoSiBorrada(tabla, remoto))
     await guardarBase(tabla, remoto)
     return true
   }
 
   const base = await leerBase(tabla, remoto.id)
+  const esNota = tabla === 'calificaciones'
 
   if (!base) {
-    // Sin terreno común: solo cabe quedarse con el más reciente
+    // Sin terreno común, en una casilla: si un lado retiró la fila y el otro
+    // tiene otra nota, se queda la nota (ver `fusionarTresBandas`).
+    if (esNota && !!local.deleted_at !== !!remoto.deleted_at && notaDistinta(local, remoto)) {
+      if (remoto.deleted_at) return false
+      await t.put(remoto)
+      await guardarBase(tabla, remoto)
+      return true
+    }
+    // Si no, solo cabe quedarse con el más reciente
     if ((local.updated_at ?? '') >= (remoto.updated_at ?? '')) return false
-    await t.put(remoto)
+    // Un borrado no trae blob: el `put` tiene que dejar el vacío, no quedarse sin él.
+    await t.put(sinContenidoSiBorrada(tabla, remoto))
     await guardarBase(tabla, remoto)
     return true
   }
 
-  const { registro, huboFusion, campos, borradoConEdicion } = fusionarTresBandas(base, local, remoto)
+  const { registro, huboFusion, campos, borradoConEdicion, obsoleto } =
+    fusionarTresBandas(base, local, remoto, { notaGanaAlBorrado: esNota })
+
+  // Sin tocar la base: bajarla a una versión vieja reabriría la misma puerta.
+  if (obsoleto) return false
 
   if (borradoConEdicion) {
     res.detalleFusion.push(
@@ -654,7 +755,7 @@ async function fusionar(
     return false
   }
 
-  await t.put(registro)
+  await t.put(sinContenidoSiBorrada(tabla, registro))
   // La base pasa a ser lo que el servidor tiene; si hemos fusionado, nuestro
   // resultado se le devolverá en el siguiente envío
   await guardarBase(tabla, huboFusion ? remoto : registro)
@@ -695,7 +796,10 @@ async function avisarTrasAplicar(res: ResultadoSync): Promise<void> {
 
 // ─── Ciclo completo ──────────────────────────────────────────────────────
 
-async function ejecutar(canal: Transporte): Promise<ResultadoSync> {
+async function ejecutar(
+  canal: Transporte,
+  enviar: (clave: CryptoKey, res: ResultadoSync) => Promise<void> = (clave, res) => empujar(clave, canal, res),
+): Promise<ResultadoSync> {
   const clave = await claveGuardada()
   if (!clave) throw new Error('Este dispositivo no tiene desbloqueada la sincronización')
 
@@ -706,7 +810,7 @@ async function ejecutar(canal: Transporte): Promise<ResultadoSync> {
 
   // Primero enviar y después recibir: así lo local nunca se pierde por una
   // fusión que llegue antes de haber publicado los propios cambios.
-  await empujar(clave, canal, res)
+  await enviar(clave, res)
   await traer(clave, canal, res)
   await avisarTrasAplicar(res)
 
@@ -736,7 +840,7 @@ const sesiones = new WeakMap<Enlace, Transporte>()
 export function atenderEnlace(enlace: Enlace, opciones?: OpcionesDirecto): Transporte {
   let canal = sesiones.get(enlace)
   if (!canal) {
-    canal = transporteDirecto(enlace, configLocal, opciones)
+    canal = transporteDirecto(enlace, configLocal, { inventario: inventarioDeEvidencias, ...opciones })
     sesiones.set(enlace, canal)
   }
   return canal
@@ -749,7 +853,40 @@ export function atenderEnlace(enlace: Enlace, opciones?: OpcionesDirecto): Trans
  * del otro por el mismo canal. Nada queda depositado en ninguna parte.
  */
 export async function sincronizarPorEnlace(enlace: Enlace): Promise<ResultadoSync> {
-  return ejecutar(atenderEnlace(enlace))
+  const canal = atenderEnlace(enlace)
+  return ejecutar(canal, async (clave, res) => {
+    await empujar(clave, canal, res, { tablas: TABLAS_DATOS, kDesde: null })
+    const suyas = await evidenciasDelOtro(canal)
+    await empujar(clave, canal, res, {
+      tablas: ['evidencias'], kDesde: null,
+      falta: (reg) => (suyas.get(String(reg.id)) ?? '') < reg.updated_at,
+    })
+  })
+}
+
+/**
+ * Por QR y por paquete los datos van siempre enteros y quien recibe descarta lo
+ * que ya tiene. El cursor es de cada camino, no de cada aparato: lo que recibió
+ * el Mac mini se daba por enviado y ya no le llegaba al MacBook. Y lo recibido
+ * de un tercero conserva su fecha, así que se quedaba detrás del cursor.
+ *
+ * Las evidencias son otra cosa: pueden ser cientos de megas. Por QR se pregunta
+ * al otro cuáles le faltan; un paquete no puede preguntar y lleva solo las
+ * posteriores al anterior, salvo que el docente pida todas.
+ */
+async function inventarioDeEvidencias(): Promise<Array<[string, string]>> {
+  return (await db.evidencias.toArray())
+    .filter((e) => e.id != null && e.updated_at)
+    .map((e) => [String(e.id), e.updated_at!])
+}
+
+/** Un aparato sin actualizar no contesta: entonces se le manda todo, como antes. */
+async function evidenciasDelOtro(canal: Transporte): Promise<Map<string, string>> {
+  try {
+    return new Map(await canal.inventarioDelOtro?.() ?? [])
+  } catch {
+    return new Map()
+  }
 }
 
 /**
@@ -843,8 +980,9 @@ export async function unificarContrasenaPorPaquete(password: string, paquete: Pa
 // ─── Paquete para otro dispositivo (AirDrop, Quick Share, cable…) ────────
 
 /**
- * Empaqueta lo pendiente de enviar en un objeto que se puede guardar como
- * fichero y mandar por donde sea.
+ * Empaqueta los datos en un objeto que se puede guardar como fichero y mandar
+ * por donde sea. Para otro aparato van todos los datos y las evidencias nuevas
+ * (ver `inventarioDeEvidencias`); para la copia en carpeta, solo lo pendiente.
  *
  * Solo empuja: al escribir un paquete no se recibe nada, y correr también la
  * recogida movería el cursor de lectura sin que hubiera llegado nada.
@@ -853,7 +991,7 @@ export async function unificarContrasenaPorPaquete(password: string, paquete: Pa
  * que los que se suben al buzón. El fichero enseña lo mismo que ve el
  * servidor: tabla, id y fecha. Nada más.
  */
-export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean; canal?: 'carpeta' | 'copia' } = {}): Promise<{
+export async function empaquetarParaOtroDispositivo(opciones: { canal?: 'carpeta' | 'copia'; todasLasEvidencias?: boolean } = {}): Promise<{
   paquete: PaqueteSync
   resultado: ResultadoSync
   /**
@@ -870,13 +1008,18 @@ export async function empaquetarParaOtroDispositivo(opciones: { todo?: boolean; 
   const canal = transporteFicheroEscritura(opciones.canal ?? 'carpeta')
   const kDesde = cursor(K_PUSH_DESDE, canal)
   const antes: string = await leerMeta(kDesde, '')
-  // «Todo» es para cuando un paquete anterior se perdió por el camino.
-  if (opciones.todo) await guardarMeta(kDesde, '')
   const resultado: ResultadoSync = {
     enviados: 0, recibidos: 0, aplicados: 0, descartados: 0, conflictos: 0,
     fusionados: 0, detalleFusion: [], errores: [],
   }
-  await empujar(clave, canal, resultado)
+  if (canal.id === 'carpeta') {
+    // El cursor de este camino pasa a contar solo las evidencias.
+    if (opciones.todasLasEvidencias) await guardarMeta(kDesde, '')
+    await empujar(clave, canal, resultado, { tablas: TABLAS_DATOS, kDesde: null })
+    await empujar(clave, canal, resultado, { tablas: ['evidencias'], kDesde })
+  } else {
+    await empujar(clave, canal, resultado)
+  }
 
   const { salt, verificador } = await configLocal()
   return {

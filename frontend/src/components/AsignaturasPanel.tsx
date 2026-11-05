@@ -8,9 +8,9 @@ import {
   getAsignaturas, getAsignaturaDetalle, crearAsignatura, crearAsignaturasEnLote,
   eliminarAsignatura, crearInstrumento, eliminarInstrumento, actualizarInstrumento,
 } from '@/db/queries'
-import { useAppStore } from '@/store/useAppStore'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
+import { NOMBRES_AREAS } from './nombresAreas'
 
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
@@ -77,6 +77,7 @@ type Pestana = 'instrumentos' | 'programacion' | 'final'
 
 function humanizarSlug(slug: string): string {
   if (NOMBRES[slug]) return NOMBRES[slug]
+  if (NOMBRES_AREAS[slug]) return NOMBRES_AREAS[slug]
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
@@ -104,7 +105,6 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   const [instrEditId, setInstrEditId] = useState<number | null>(null)
   const [instrEditForm, setInstrEditForm] = useState({ nombre: '', tipo: '', peso: 0 })
 
-  const headers = useAppStore(s => s._headers)
 
   const getTab = (id: number) => tabActiva[id] || 'programacion'
   const setTab = (id: number, tab: Pestana) =>
@@ -113,8 +113,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   const cargar = async () => {
     const [asigs, currList] = await Promise.all([
       getAsignaturas(Number(grupoId)),
-      fetch(api(`/api/curriculum/asignaturas?etapa=${etapa}&comunidad=${encodeURIComponent(comunidad)}`),
-        { headers: headers() }).then(r => r.json()).catch(() => []),
+      curriculo.asignaturas(etapa, comunidad).catch(() => []),
     ])
     const conInstr = await Promise.all(
       asigs.map(async (a: any) => {
@@ -124,11 +123,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
     )
     setAsignaturas(conInstr)
     const slugsYa = new Set(asigs.map((a: any) => a.nombre))
-    setDisponibles(
-      Array.isArray(currList)
-        ? currList.map((c: any) => c.asignatura).filter((s: string) => !slugsYa.has(s))
-        : []
-    )
+    setDisponibles(currList.map(c => c.asignatura).filter(s => !slugsYa.has(s)))
     onCambio?.()
   }
 

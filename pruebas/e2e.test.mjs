@@ -15,13 +15,19 @@ const ok = (cond, msg, extra = '') => {
   if (!cond) fallos++
 }
 
-const navegador = await chromium.launch()
+const navegador = await chromium.launch({
+  args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'],
+})
 const ctx = await navegador.newContext({ viewport: { width: 1400, height: 950 } })
 const p = await ctx.newPage()
 
 const erroresConsola = []
 p.on('console', m => { if (m.type() === 'error') erroresConsola.push(m.text()) })
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
+// El currículo viaja dentro de la app (src/curriculo/): calificar no puede
+// pedirle nada al servidor, o la PWA dejaría de funcionar sin red.
+const curriculoAlServidor = []
+p.on('request', r => { if (r.url().includes('/api/curriculum/')) curriculoAlServidor.push(r.url()) })
 
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: false })
 
@@ -285,9 +291,35 @@ await foto('11-celda-evaluacion')
 ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'las evidencias no se interponen entre el docente y la nota')
 await p.locator('[data-mas-toggle]').click()
 await p.waitForTimeout(300)
-ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'se puede adjuntar una foto como evidencia')
+// Un aparato nuevo trae las evidencias apagadas (datos sensibles): no se ofrecen
+ok(await p.getByRole('button', { name: /📸 Foto/ }).count() === 0, 'en un aparato nuevo las evidencias vienen apagadas')
+await p.evaluate(() => {
+  const d = { neae: false, evidencias: true }
+  localStorage.setItem('miclase.sensibles', JSON.stringify(d))
+  window.dispatchEvent(new CustomEvent('miclase:sensibles', { detail: d }))
+})
+await p.waitForTimeout(300)
+ok(await p.getByRole('button', { name: /📸 Foto/ }).isVisible(), 'encendidas, se puede adjuntar una foto como evidencia')
 ok(await p.getByRole('button', { name: /🎙 Audio/ }).isVisible(), 'y grabar audio (exposición oral, lectura)')
 ok(await p.getByRole('button', { name: /🎬 Vídeo/ }).isVisible(), 'y grabar vídeo')
+
+// Con cámara de mentira: el vídeo se graba dentro de la app, a calidad reducida
+await p.getByRole('button', { name: /🎬 Vídeo/ }).click()
+await p.locator('[data-grabador-empezar]:not([disabled])').waitFor({ timeout: 10000 })
+ok(await p.locator('[data-grabador-sistema]').isVisible(), 'la cámara del sistema sigue a mano como alternativa')
+await p.locator('[data-grabador-empezar]').click()
+await p.locator('[data-grabador-estado]').waitFor()
+await p.waitForTimeout(2500)
+await p.locator('[data-grabador-parar]').click()
+await p.locator('[data-grabador-video]').waitFor({ state: 'detached', timeout: 10000 })
+const videoGrabado = await p.evaluate(async () => {
+  const { db } = await import('/src/db/localDb.ts')
+  const e = (await db.evidencias.toArray()).find((x) => x.tipo === 'video')
+  return e ? { bytes: e.blob.size, mime: e.mime, duracion: e.duracion_ms } : null
+})
+ok(videoGrabado?.bytes > 0, 'el vídeo queda guardado como evidencia', JSON.stringify(videoGrabado))
+ok(videoGrabado && videoGrabado.bytes < 2 * 1024 * 1024, 'y pesa poco: unos segundos no llegan a 2 MB')
+ok(/^video\/(mp4|webm)$/.test(videoGrabado?.mime ?? ''), 'en un formato que se reproduce', videoGrabado?.mime)
 
 await p.locator('button.cal-8').first().click()
 await p.waitForTimeout(1000)
@@ -476,6 +508,9 @@ ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y a
 ok(backup.calificaciones.length > 0, 'incluye las calificaciones', `${backup.calificaciones.length}`)
 ok(backup.grupos.every(g => g.updated_at), 'todos los registros llevan sello de sincronización')
 ok(backup.grupos[0].id > 1000000, 'los ids son del rango de este dispositivo', `id=${backup.grupos[0].id}`)
+
+console.log('\n16. El currículo no sale del aparato')
+ok(curriculoAlServidor.length === 0, 'ninguna petición a /api/curriculum en toda la sesión', curriculoAlServidor.slice(0, 3).join(' '))
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}`)
 if (erroresConsola.length) {

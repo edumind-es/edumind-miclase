@@ -1,0 +1,480 @@
+{
+  "meta": {
+    "comunidad": "Murcia",
+    "etapa": "secundaria",
+    "asignatura": "comunicacion-audiovisual",
+    "asignatura_nombre": "Comunicación Audiovisual",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Murcia · Secundaria · Comunicación Audiovisual · Toda la etapa.xlsx",
+    "generado": "2026-11-01",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender los aspectos esenciales de las distintas manifestaciones de la expresión audiovisual, observando y reflexionando conscientemente sobre la importancia de su legado histórico como una riqueza universal, para involucrarse, de forma activa, democrática y libre en la promoción y conservación del patrimonio audiovisual global.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Analizar los mensajes recibidos a través de diversas producciones audiovisuales, reconociendo los contextos diferentes en los que se producen y valorando la libertad de expresión como base fundamental en su creación, para encontrar, de manera abierta y respetuosa, diferencias y similitudes con su propia identidad cultural e implicarse en la defensa de los valores democráticos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CD4",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Analizar producciones audiovisuales, desarrollando una percepción crítica, evaluando la información visual y sonora que recibe y buscando enfoques novedosos, para integrarlas en su caudal artístico personal y generar una actitud proactiva hacia el medio audiovisual.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA2",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Comprender las cualidades plásticas, estéticas y semánticas de diferentes producciones audiovisuales, incluyendo las características de sus lenguajes y elementos técnicos en la valoración de su resultado final, para dar lugar a una recepción artística completa que combine emoción y comprensión de las dificultades y retos afrontados.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA2",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Utilizar la creación audiovisual como un medio para expresar ideas, opiniones y sentimientos de forma creativa y personal, empleando su propia presencia en la imagen como recurso comunicativo en algunos casos, para implicarse personalmente en diversas clases de producciones audiovisuales, incluyendo las individuales.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CPSAA1",
+        "CC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Incorporar en el proceso creativo la aceptación, tanto de sí mismo como del otro, y la voluntad de crecimiento, aumentando de ese modo la autoconfianza y la empatía, para asimilar que las creaciones significativas se suelen alimentar de un conocimiento personal consciente.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar el audiovisual como un medio con el que expresar ideas, opiniones y sentimientos de forma creativa y crítica, haciendo hincapié en el rigor de los procedimientos, para hacer suyas las defensas de la libertad de expresión y los derechos humanos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CP1",
+        "CD1",
+        "CPSAA1",
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Comunicar públicamente producciones audiovisuales, evaluando tanto el proceso conjunto de producción como el resultado final, para reflexionar sobre las reacciones de sus espectadores de forma abierta y respetuosa.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD4",
+        "CPSAA4",
+        "CPSAA5",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Apreciar el origen del medio el audiovisual como forma de conocimiento y comprensión del mundo, reflexionando con iniciativa propia sobre los aspectos esenciales de estas formas de expresión y la función que cumplen en la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Defender la importancia del patrimonio cinematográfico y audiovisual como legado universal para el ser humano, estableciendo criterios personales acerca de su promoción y conservación y argumentándolos de forma activa, comprometida y respetuosa.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Observar críticamente los contextos en los que se han desarrollado las diferentes corrientes cinematográficas, valorando la creación generada en libertad e identificando sin prejuicios las intencionalidades de sus mensajes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Destacar tanto las diferencias como los puntos en común encontrados entre movimientos cinematográficos de diferentes momentos, sociedades y culturas, relacionándolos de forma razonada e integradora con su propia identidad cultural y audiovisual y comprendiendo las interrelaciones e influencias compartidas.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Explorar, con curiosidad y respeto, diferentes formas de narración audiovisual, descubriendo las respuestas alternativas que ofrecen y comprendiendo las múltiples posibilidades de resolución que estos medios pueden generar ante un mismo interrogante.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Disfrutar del lenguaje audiovisual, a través del análisis crítico y el debate constructivo en torno a diversas producciones, entendiendo los cambios que se han producido a lo largo de la historia del medio.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar los lenguajes y elementos técnicos de diferentes producciones audiovisuales, comprobando hasta qué punto se rigen por el uso de unas reglas y códigos propios y valorando de forma abierta la posible flexibilidad de esas normas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Profundizar la recepción activa y emocional del lenguaje audiovisual y de las conexiones entre sus elementos técnicos, visuales y sonoros, valorando los retos procedimentales, creativos, y estéticos que supone toda producción de esta clase.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer el lenguaje audiovisual como un medio para manifestar su singularidad, afianzar el conocimiento de sí mismo y generar autoconfianza, a través de la experimentación y la innovación en el proceso de la producción audiovisual.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Realizar producciones creativas que representen sus ideas, opiniones y sentimientos a partir de un tema o motivo previos, empleando la expresión audiovisual como una herramienta de exploración del entorno.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Hacer propuestas diferentes en la resolución de diversos proyectos creativos, buscando referencias audiovisuales de su interés, exponiendo perspectivas originales y valorando tanto el proceso expresivo individual, como el colectivo y compartido.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Desarrollar propuestas de trabajo audiovisual con una intención expresiva y comunicativa personal y creativa, integrando en su ejecución la autocrítica y la necesidad de comunicación y comprensión del otro.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Plantear propuestas diferentes en la planificación de producciones audiovisuales, privilegiando una mirada humanista e integradora sobre los problemas planteados.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Elaborar producciones audiovisuales mediante procesos de trabajo en equipo inclusivos y participativos, incorporando en su ejecución tanto las experiencias personales como el respeto y la comprensión del otro.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.3",
+      "objetivo_id": "CE7",
+      "descripcion": "Aprender las posibilidades de los recursos multimedia como plataformas de divulgación de las ideas y modos de expresión artística.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Exponer el resultado final de una producción audiovisual, compartiendo el desarrollo de su elaboración, las dificultades encontradas, los progresos realizados y una valoración de los logros alcanzados.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Analizar la recepción de las producciones audiovisuales presentadas de manera abierta y respetuosa, considerando tanto las opiniones positivas como las negativas y extrayendo de ello un aprendizaje para el crecimiento artístico.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. El mundo audiovisual. Origen y elementos configuradores"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. El proceso creativo"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Análisis y crítica cinematográfica"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Los recursos multimedia"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": " Antecedentes y origen del cine. Etapas y movimientos cinematográficos. Géneros cinematográficos y audiovisuales.  Elementos y recursos de la narrativa y el lenguaje audiovisual. Unidades de la narración audiovisual: planos, escenas y secuencias. Los movimientos de cámara y su capacidad comunicativa.  El espacio: composición, campo/contracampo. descripción del espacio, plano/contraplano,  El tiempo: tiempo real, tiempo condensado (elipsis), tiempo alargado o distendido, tiempo acelerado, tiempos simultáneos, flash-back, flash forward.  La fotografía cinematográfica: el color. Paletas de color en producciones audiovisuales y su carga narrativa y dramática. La luz, su relación con la narrativa y capacidad dramática. Diferentes aproximaciones a la fotografía cinematográfica: directores de fotografía.  Estructuras narrativas: cine y series.  El montaje. Función. Tipos de montaje.  El equipo de trabajo y las herramientas. El equipo humano. Herramientas del cine: cámaras, micrófonos, focos, programas de edición, etc. El smartphone como cámara de cine y equipo de edición.  Otros productos audiovisuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": " Desarrollo y fases del proceso creativo audiovisual. Planteamiento del proyecto e investigación. Criterios de selección de información aplicados al desarrollo del proyecto audiovisual propio.  El guion: guion literario y guion técnico. Storyboard, story-reel y otros métodos de documentación técnica.  Rodaje y dinámica de trabajo del equipo humano. La labor de dirección en la orientación del proyecto audiovisual.  Edición, postproducción y efectos especiales.  Difusión en diversas plataformas y participación en concursos y festivales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": " Grandes cineastas del ámbito regional, nacional e internacional.  Análisis de cortometrajes, largometrajes y series. Género, contenido, mensaje, y valores audiovisuales.  Crítica cinematográfica y respeto por las obras artísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": " Características del lenguaje multimedia: elementos multimedia, navegación, interactividad y capacidad de respuesta.  Creación de productos multimedia.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -17,10 +17,12 @@ edumind_miclase/
 │   ├── src/plugins/auth.js  ← auth dual local + Authentik OIDC
 │   ├── src/routes/auth.js
 │   ├── src/routes/sync.js   ← buzón E2E: solo ve tabla, id, fecha y ciphertext
+│   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
 │   ├── src/db/       ← localDb.ts (esquema Dexie v7) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
+│   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
 │   │                   sync.ts (E2E + fusión a tres bandas) · ids.ts (rangos por dispositivo)
 │   │                   transporte.ts (interfaz) · transporteFichero.ts (paquete
@@ -40,8 +42,11 @@ edumind_miclase/
 │   │                   esquema de URL en App/App/Info.plist; plugins propios en
 │   │                   App/CapApp-SPM/Sources/CapApp-SPM/ (ImpresoraPlugin, MiClaseViewController)
 │   └── android/      ← proyecto Gradle (permisos en app/src/main/AndroidManifest.xml)
-├── curriculum/       ← currículum por CCAA
-├── scripts/          ← parse_curriculum.py · generar_iconos.py (todos los iconos)
+│   ├── src/curriculo/ ← ÚNICA puerta al currículo: fuente.ts (puro) + index.ts (carga y reserva)
+│   └── public/curriculo/ ← el currículo empaquetado (generado en cada build; no se versiona)
+├── curriculum/       ← currículum por CCAA; _estatal/ = descriptores y conexiones de los RD
+├── scripts/          ← parse_curriculum.py · extraer_estatal.py · generar_iconos.py (todos los iconos)
+│                       empaquetar_curriculo.mjs (curriculum/ → frontend/public/curriculo/)
 ├── PRIVACIDAD.md     ← qué datos se tratan y qué ve el servidor
 └── start-dev.sh      ← arranca backend (:3270) + frontend (:5173) juntos
 
@@ -91,11 +96,50 @@ edumind_miclase/
   `miclase.buzon.cerrado` para que `diagnostico()` de la copia no cuente el
   buzón. Un servidor sin la ruta (404) cuenta como abierto. No se toca
   `routes/auth.js`. Decisión de Luis (oct 2026): el buzón es un añadido, la
-  app es local; se cierra en producción cuando sus aparatos tengan la copia
-  en carpeta y el enlace directo (DESPLIEGUE.md, «Cerrar el buzón»).
+  app es local. **Cerrado en producción desde el 1/11/2026**, vaciado antes
+  sobre una copia (DESPLIEGUE.md, «Cerrar el buzón»).
 - **Cada transporte lleva sus propios cursores.** Lo ya subido al buzón no es lo
   ya pasado a la tablet: compartir cursor daría por enviado por un camino lo que
   se envió por el otro. El buzón conserva los nombres de clave de siempre.
+- **Por QR y por paquete los datos van siempre enteros** (`TABLAS_DATOS`,
+  `kDesde: null`), y quien recibe descarta lo que ya tiene. El cursor es de cada
+  camino, no de cada aparato: lo que recibió el Mac mini se daba por enviado y no
+  le llegaba al MacBook, y lo recibido de un tercero, con su fecha, quedaba
+  detrás del cursor. Quitarlo exige que nada viejo pise lo nuevo: ver la regla
+  siguiente. **Las evidencias no**: el iPad de Luis ocupa 812 MB, y montar eso en
+  un paquete agotaría su memoria. Por QR se pregunta al otro cuáles le faltan
+  (`inventarioDelOtro`); en un paquete van las posteriores al anterior (el cursor
+  `sync_push_desde:carpeta` ya solo cuenta evidencias) y el docente puede pedir
+  todas (`todasLasEvidencias`, con `confirm`). El buzón y la copia en carpeta
+  siguen por cursor, y lo recibido baja el de la copia (`incluirEnLaCopia`): si
+  no, las notas del iPad llegaban al Mac pero no a su carpeta.
+- **Una evidencia borrada no guarda su contenido.** `eliminarEvidencia` y
+  `sinContenidoSiBorrada` dejan un blob vacío (la fila sigue: el borrado tiene
+  que viajar) y `aSobre` la manda sin él. Lo borrado antes se vacía con
+  `liberarEvidenciasBorradas`, que el desglose ofrece con `confirm`.
+- **Qué ocupa cada cosa lo dice `db/almacen.ts`** (puro) en
+  `AlmacenamientoLocal` (`[data-almacen-desglose]`). La copia de seguridad sale
+  por defecto **sin evidencias** (`exportarDatos(…, { sinEvidencias })`, con
+  `sin_evidencias: true` como primer campo; `esCopiaSinEvidencias`) e
+  `importarDatos` conserva entonces las del aparato: si las borrase, restaurar
+  una copia ligera se llevaría todos los vídeos. Las copias descargadas y los
+  paquetes enviados cuentan para el aviso (`registrarCopiaEnFichero`).
+- **El vídeo se graba en la app a calidad reducida** (`GrabadorVideo`: 720p,
+  1 Mbps, unos 7,5 MB por minuto), porque la cámara del sistema pasaba del tope
+  de sincronización (`LIMITE_EVIDENCIA_SINC`) en segundos. La cámara del sistema
+  sigue como alternativa dentro del grabador y si no hay `MediaRecorder`. En
+  `e2e.test.mjs` se prueba con cámara de mentira de Chromium; en Safari real, no.
+  Comprimir los vídeos ya guardados está pendiente (necesita una librería).
+- **Nada viejo pisa una nota.** `fusionarTresBandas` no aplica lo anterior a la
+  base (`obsoleto`): «solo lo cambió el remoto» no distingue una edición de una
+  versión vieja, y un Mac atrasado devolvía el 9 del iPad a su 5, con el sello
+  del 9. Y en `calificaciones` una nota editada gana al borrado
+  (`notaGanaAlBorrado`): esos borrados los hace casi siempre
+  `reconciliarDuplicados`, y la nota nueva quedaba en una fila retirada. El
+  recibo del enlace directo no es terreno común (`aceptados: []`): dejaba la
+  base igual a lo local. Se prueba en `sync-varios-aparatos.test.mjs`, con tres
+  aparatos. Nació de que las notas de Lingua galega del iPad no llegaban a los
+  Macs (nov 2026).
 - **Antes de pasar nada por el enlace directo se comparan las contraseñas**
   (`compararContrasenaConElOtro`, por la sal). Dos aparatos con contraseñas
   creadas por separado no pueden abrir nada del otro, y sin la comprobación
@@ -702,6 +746,101 @@ edumind_miclase/
   cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
   el endpoint de programación y los proveedores: si cambia alguno, se
   actualiza allí con fecha.
+- **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
+  nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
+  docente los enciende en Alumnado (`AjustesDatosSensibles`,
+  `[data-datos-sensibles-toggle]`, `[data-sensible="neae"|"evidencias"]`,
+  con `confirm`). La primera resolución (`resolverDatosSensibles`, en `Layout`
+  de `App.tsx`) los deja encendidos si el aparato ya tenía alumnado con NEAE
+  o evidencias, para que actualizar no esconda nada; desde ahí manda la
+  elección, guardada en `miclase.sensibles` (preferencia del aparato, no se
+  sincroniza). Apagar solo esconde: el sello (`verNeae()` en cada pantalla y
+  en `informes/documentos.ts`), la casilla de la ficha, la galería, la
+  captura (`CapturaEvidencia` devuelve null con `verEvidencias()` falso) y
+  las evidencias de los informes. Guardar una ficha con NEAE escondido
+  conserva el indicador. Las pruebas que capturen evidencias las encienden
+  antes (`e2e.test.mjs` escribe `miclase.sensibles` y lanza
+  `miclase:sensibles`). Motivo: art. 9 RGPD y arts. 17.4 y 31.5 del
+  anteproyecto de Lei de educación dixital.
+- **El currículo viaja dentro de la app, y las pantallas lo piden a
+  `src/curriculo/`**, nunca a `/api/curriculum` (`e2e.test.mjs` exige cero
+  peticiones en toda la sesión). `scripts/empaquetar_curriculo.mjs` lee
+  `curriculum/` en cada build y cada arranque de dev —lo lanza el plugin
+  `miclase-curriculo` de `vite.config.ts`, no un «prebuild» de npm, porque
+  `desplegar.sh` y las pruebas llaman a `vite` directamente; a mano,
+  `npm run curriculo`— y escribe en `frontend/public/curriculo/`
+  (gitignored): `indice.json` (comunidades → etapas → áreas → cursos, con
+  la comunidad escrita como la escribe cada JSON: `MADRID`, `CyL`),
+  `descriptores/<etapa>.json` (texto estatal) y un paquete de criterios por
+  comunidad y etapa (`criterios/<carpeta>-<etapa>.json`: por área y curso,
+  los criterios y la conexión de cada competencia específica, UNA vez). Las
+  conexiones las calcula el MISMO `conexiones.js` que usa el seed, en Node;
+  el frontend no lo importa. `fuente.ts` (puro) compone exactamente lo que
+  da el servidor, con su normalización del curso («4» → «4º»), y
+  `curriculo-vs-servidor.test.ts` lo compara campo a campo para cada
+  comunidad y etapa; `curriculo-empaquetado.test.ts` es la prueba pura. El
+  service worker precachea índice, descriptores y los 15 paquetes de
+  criterios (6 MB en el aparato, 0,75 MB por la red una vez): sin red, con
+  cualquier comunidad, se crea la clase, se listan áreas y cursos y se
+  califica. Los saberes van aparte y no se precachean (nadie los pide). El
+  servidor (`routes/curriculum.js`, intacto) es solo RESERVA: `index.ts` lo
+  llama por `api()` si la comunidad no está en el índice o un paquete no
+  llega. Una comunidad nueva es su carpeta en `curriculum/` y regenerar;
+  el selector de clases la lee del índice (`comunidades()`) y su nombre
+  largo es una línea en `curriculo/nombres.ts`. Decisión de Luis (nov
+  2026): precachear todas, no bajar a demanda.
+- **Las competencias clave salen de la competencia específica de cada
+  criterio**, y cada conexión dice de dónde sale. Formato del currículo, que
+  cualquier comunidad nueva tiene que cumplir para tenerlas sin tocar nada:
+  el JSON de `curriculum/<ccaa>/<etapa>/<materia>_<curso>.json` (lo que
+  escribe `parse_curriculum.py` desde la matriz de iDoceo) lleva
+  `objetivos[]` (las competencias específicas: Tipo 2, `id` y `descripcion`)
+  con `descriptores_ids` = la columna «Enlaces» tal cual («CCL1, STEM2…»), y
+  `criterios[].objetivo_id` (Tipo 3, «Enlaces»). Nada más: el texto de los
+  descriptores y la reserva salen de `curriculum/_estatal/{primaria,
+  secundaria}.json` (`scripts/extraer_estatal.py`, desde las matrices de los
+  RD 157/2022 y 217/2022: los 34 descriptores del Anexo I y la conexión
+  estatal de cada competencia específica por materia). `seed.js` pasa cada
+  competencia específica por `conexionDeObjetivo` (`backend/src/db/conexiones.js`,
+  puro) y guarda `c_objetivos` (con `conexion_origen`) y `c_conexiones`
+  (`tipo` 'descriptor' o 'competencia'). El origen es `comunidad` (la matriz
+  trae descriptores), `competencia` (solo nombra CCL, CP…: Valencia en
+  Primaria), `estatal` (no trae nada y se toma la del RD para la competencia
+  específica del mismo texto: mismo número con parecido ≥ 0,5, o cualquiera
+  con ≥ 0,75; Madrid en Primaria) o `ninguna`. Los códigos se normalizan
+  (`leerCodigo`: espacios, minúsculas, `CMCCTE` = STEM). Un criterio sin
+  `objetivo_id` lo toma de su código (CE2.3 → CE2). El texto del descriptor
+  es siempre el estatal (el Anexo I es enseñanza mínima; el de algunas
+  matrices llega roto). Las carpetas que empiezan por `_` no son
+  comunidades. `pruebas/conexiones.test.mjs` exige a cada comunidad y etapa
+  de `curriculum/` un 85 % de competencias específicas con descriptor (90 %
+  con algo en Valencia Primaria), en total o contando solo las materias que
+  el RD tiene (las optativas propias sin «Enlaces» no pueden casar con el
+  estatal: Extremadura ESO da 84 % y 90 %; decisión de Luis, nov 2026): una
+  comunidad nueva sin «Enlaces» falla ahí. `/api/curriculum/criterios` añade a cada criterio `descriptores`,
+  `competencias_clave` y `conexion_origen` (campos nuevos: nadie más los
+  necesita), y `/api/curriculum/descriptores` da el catálogo de la etapa. Es
+  dato público del servidor: no hay esquema Dexie nuevo. Tras cambiar el
+  currículo o el schema, `npm run seed` en producción.
+- **El nivel por descriptor y por competencia clave se calcula en
+  `db/competenciasClave.ts`** (puro, `pruebas/competencias-clave.test.ts`),
+  sobre las notas de criterio de `calcularNotaArea`, sin volver a ponderar
+  instrumentos. Reglas decididas por Luis (nov 2026): un descriptor es, en
+  cada área, la media de los criterios que conectan con él ponderada por el
+  peso de la programación, y después la media simple de las áreas (cada área
+  cuenta igual); una competencia clave es la media simple de sus
+  descriptores con datos, más UNA entrada con lo conectado solo a la
+  competencia (`directa`); lo que no tiene datos no cuenta como cero. La
+  final usa la final de cada criterio, con la regla del área. Escala
+  `NIVELES_DESARROLLO`: 1 Inicial (< 5) · 2 En desarrollo (5–6,9) ·
+  3 Adquirido (7–8,9) · 4 Consolidado (≥ 9). La conexión estatal cuenta
+  igual y se marca (†) en el informe. El informe
+  (`informes/competenciasClave.ts`, Lámina; tarjeta «Competencias clave» de
+  Informes, `[data-competencias-alcance]`: resumen del grupo, una lámina por
+  alumno o un alumno) lleva el rastro de cada descriptor (área, nota del área
+  y criterios) y lista los criterios con nota que no conectan. El «perfil
+  por competencia específica» de `perfilCompetencial` sigue igual en el
+  informe de evaluación.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
@@ -750,6 +889,7 @@ edumind_miclase/
 - Backend solo: `npm run dev:backend` (puerto 3270)
 - Frontend solo: `npm run dev:frontend` (puerto 5173)
 - Seed DB: `npm run seed`
+- Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar
@@ -789,6 +929,8 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No compilar a mano sobre `frontend/dist`: usar `./desplegar.sh`
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
+- No hacer `fetch` de `/api/curriculum` desde una pantalla: todo pasa por
+  `src/curriculo/`, que lee el currículo empaquetado y deja el servidor de reserva
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
   `updated_at` en los registros existentes. Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del

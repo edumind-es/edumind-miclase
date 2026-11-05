@@ -149,7 +149,7 @@ export default function CopiaCarpeta({ onCambio, desbloqueado }: { onCambio?: ()
           ? <>Elige una carpeta dentro de iCloud Drive, Dropbox o OneDrive y la copia sale del ordenador sin que hagas nada.</>
           : app
             ? <>Se guarda en la carpeta «MiClase copia» de la app, que ves en Archivos y entra en la copia de iCloud del aparato.</>
-            : <>Este navegador no permite escribir en una carpeta (Safari no lo admite): usa Chrome o Edge en el ordenador, la app instalada en el iPad, o el fichero por AirDrop de arriba.</>}
+            : <>Este navegador no permite escribir en una carpeta (Safari no lo admite, tampoco con el icono añadido a la pantalla de inicio). En el iPad, haz copias a mano: el fichero por AirDrop de arriba o la copia de seguridad de Informes. En el ordenador sí funciona con Chrome o Edge. La copia automática en el iPad solo existe en la app MiClase compilada con Xcode, que guarda sus datos aparte.</>}
       </p>
 
       {estado && (
