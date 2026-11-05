@@ -31,6 +31,8 @@ import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
 import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario } from '@/db/localDb'
 import { claveUnidad } from '@/db/migracionUnidades'
 import { verNeae, verEvidencias } from '@/db/datosSensibles'
+import type { ConexionDeCriterio } from '@/db/competenciasClave'
+import ChipsCompetencias from './ChipsCompetencias'
 
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 
@@ -53,6 +55,8 @@ type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<s
 interface Props {
   alumno: Alumno
   criterio: { id: string; descripcion: string }
+  /** Descriptores y competencias clave del criterio, si el currículo los trae */
+  conexion?: ConexionDeCriterio
   instrumentos: CeldaInstrumento[]
   grupo: Grupo
   asig: Asignatura
@@ -84,7 +88,7 @@ interface Props {
 }
 
 export default function CeldaEvaluacion({
-  alumno, criterio, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
+  alumno, criterio, conexion, instrumentos, grupo, asig, trimestre, unidadId, unidadNombre,
   onGuardado, onCerrar, onAnterior, onSiguiente, posicion, hermanosDe, alumnoIds,
   enfoque = 'criterio', onElegirCriterio,
 }: Props) {
@@ -956,6 +960,7 @@ export default function CeldaEvaluacion({
               <div style={{ fontSize: 13, color: 'var(--gris-900)', lineHeight: 1.5 }}>
                 <strong style={{ color: 'var(--azul-700)' }}>{criterio.id}</strong> — {criterio.descripcion}
               </div>
+              <ChipsCompetencias criterio={conexion} />
             </div>
           ) : (
             <div style={{ background: 'var(--azul-100)', borderRadius: 9, padding: '12px 14px', marginBottom: 14 }}>
@@ -965,6 +970,7 @@ export default function CeldaEvaluacion({
               <div style={{ fontSize: 13.5, color: 'var(--gris-900)', lineHeight: 1.5 }}>
                 {criterio.descripcion}
               </div>
+              <ChipsCompetencias criterio={conexion} />
             </div>
           )}
 

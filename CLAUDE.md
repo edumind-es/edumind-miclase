@@ -811,6 +811,19 @@ edumind_miclase/
   y criterios) y lista los criterios con nota que no conectan. El «perfil
   por competencia específica» de `perfilCompetencial` sigue igual en el
   informe de evaluación.
+- **Las competencias clave se ven donde se evalúa, no solo en su informe.**
+  Cada criterio las enseña en la cabecera de la matriz por criterio
+  (`[data-criterio-competencias]`), en «Más» del panel de la casilla y en
+  Programación (`ChipsCompetencias`, con los campos que ya trae
+  `/api/curriculum/criterios`). Seguimiento lleva la pestaña «Competencias
+  clave» (`CompetenciasClaveGrupo`, `[data-competencias-clave]`), de la clase
+  entera y no del área elegida, con `tablaDeCompetencias` (puro). El informe
+  individual lleva `bloqueCompetenciasClave`. El editor de examen avisa
+  (`[data-aviso-reparto]`) cuando varios criterios reciben la misma nota; nada
+  cambia sin pulsar. El informe de la prueba añade descriptores por pregunta y
+  acierto por competencia (`competenciasDeLaPrueba`). El service worker pide
+  el currículo primero a la red (`NetworkFirst`, 4 s): con la caché delante,
+  lo sembrado de nuevo no llegaba hasta la segunda apertura.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un

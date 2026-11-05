@@ -32,14 +32,16 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {
-            // El currículo es público y prácticamente inmutable durante el
-            // curso: se cachea a lo grande para poder evaluar sin cobertura
-            // en el gimnasio, el patio o una salida.
+            // El currículo es público y se cachea a lo grande para poder evaluar
+            // sin cobertura en el gimnasio, el patio o una salida. Primero la red
+            // (y a los 4 s, la caché): con la caché delante, lo sembrado de nuevo
+            // en el servidor no llegaba hasta la segunda apertura.
             urlPattern: ({ url, sameOrigin }) =>
               sameOrigin && url.pathname.startsWith('/api/curriculum/'),
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'curriculo',
+              networkTimeoutSeconds: 4,
               expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 120 },
               cacheableResponse: { statuses: [200] },
             },

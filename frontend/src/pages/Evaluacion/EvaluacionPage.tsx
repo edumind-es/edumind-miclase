@@ -44,8 +44,9 @@ import ResumenCurso, { type PeticionExplicacion } from '@/components/ResumenCurs
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 import { verNeae } from '@/db/datosSensibles'
+import type { ConexionDeCriterio } from '@/db/competenciasClave'
 
-type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number }
+type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number } & ConexionDeCriterio
 
 /** Lo que hace falta para pintar el criterio ampliado donde toca. */
 type CriterioAmpliado = {
@@ -893,6 +894,12 @@ export default function EvaluacionPage() {
                             )}
                             <div className="criterio-th-id">{cr.id}</div>
                             <div className="criterio-th-desc">{cr.descripcion}</div>
+                            {!!cr.competencias_clave?.length && (
+                              <div className="criterio-th-comp" data-criterio-competencias={cr.id}
+                                title={cr.descriptores?.join(' ') || undefined}>
+                                {cr.competencias_clave.join(' · ')}
+                              </div>
+                            )}
                             <div className="criterio-th-instr">
                               {instrs.length === 0
                                 ? <span className="aviso" title="Sin instrumento asignado en la programación">⚠</span>
@@ -1036,6 +1043,11 @@ export default function EvaluacionPage() {
             style={{ left: izquierda, top: ampliado.ancla.bottom + 6, width: ANCHO }}>
             <div className="criterio-ampliado-id">{ampliado.criterio.id}</div>
             <div className="criterio-ampliado-desc">{ampliado.criterio.descripcion}</div>
+            {!!ampliado.criterio.descriptores?.length && (
+              <div data-criterio-ampliado-competencias style={{ marginTop: 4, fontSize: 12, fontWeight: 700 }}>
+                {ampliado.criterio.descriptores.join(' · ')}
+              </div>
+            )}
           </div>
         )
       })()}
@@ -1085,6 +1097,7 @@ export default function EvaluacionPage() {
           <CeldaEvaluacion
             alumno={al}
             criterio={celda.criterio}
+            conexion={criterios.find(c => c.id === celda.criterio.id)}
             instrumentos={instrs}
             grupo={matriz.grupo}
             asig={matriz.asig}
@@ -1172,6 +1185,8 @@ export default function EvaluacionPage() {
           unidadId={unidadId}
           unidadNombre={unidadActual?.nombre}
           criterios={informeEn.criterios}
+          grupo={matriz.grupo}
+          asig={matriz.asig}
           grupoNombre={matriz.grupo.nombre}
           areaNombre={matriz.asig.nombre_display}
           onCerrar={() => setInformeEn(null)}

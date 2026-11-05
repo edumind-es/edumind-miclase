@@ -13,6 +13,8 @@ import { pesosAPartesIguales } from '@/db/calculo'
 import { sugerirInstrumentos, BLOOM, DOK } from '@/ia/taxonomias'
 import { api } from '@/api'
 import ImportarProens from './ImportarProens'
+import ChipsCompetencias from './ChipsCompetencias'
+import type { ConexionDeCriterio } from '@/db/competenciasClave'
 
 const TIPOS_UNIDAD = [
   { value: 'unidad',    label: 'Unidad Didáctica', short: 'UD'   },
@@ -33,7 +35,7 @@ function tipoShort(tipo: string) {
 }
 
 interface InstrumentoLite { id: number; nombre: string; tipo: string; peso: number }
-interface CurrCriterio { id: string; descripcion: string; peso: number }
+interface CurrCriterio extends ConexionDeCriterio { id: string; descripcion: string; peso: number }
 
 interface Props {
   asignaturaId: number
@@ -373,6 +375,7 @@ export default function ProgramacionPanel({
                                 <span style={{ fontWeight: 700, fontSize: 11.5, color, marginRight: 6 }}>{cr.id}</span>
                                 <span style={{ fontSize: 11.5, color: 'var(--gris-600)', lineHeight: 1.45 }}>{cr.descripcion}</span>
                               </div>
+                              <ChipsCompetencias criterio={cr} />
                               {enUnidad?.minimo && (
                                 <div style={{ fontSize: 11, color: '#166534', marginTop: 3, lineHeight: 1.4 }} title="Mínimo de consecución de la programación">
                                   <strong>Mínimo:</strong> {enUnidad.minimo}

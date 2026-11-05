@@ -8,7 +8,7 @@
  * cuando no hay aspectos; que la lectura diga lo que dicen los números; y
  * que el documento y el gráfico se compongan sin librerías.
  */
-import { informeDePrueba, radialSVG } from '../frontend/src/db/informePrueba'
+import { competenciasDeLaPrueba, informeDePrueba, radialSVG } from '../frontend/src/db/informePrueba'
 import { normalizarPrueba, notaDePrueba, ACIERTO, FALLO, EN_BLANCO, preguntasIguales } from '../frontend/src/db/prueba'
 import { documentoInformePrueba } from '../frontend/src/informes/informePrueba'
 import { pruebaDeFilas, pruebaAMarkdown, pruebaDeJson, pruebaAJson, pruebaDeExamenMarkdown, examenAMarkdown } from '../frontend/src/ia/pruebaImportar'
@@ -116,6 +116,32 @@ console.log('\n5. El aspecto viaja con el examen')
   ok(/Aspecto: Ríos/.test(examenAMarkdown(examen, { conClave: true })) && !/Aspecto/.test(examenAMarkdown(examen)), 'con la clave sale; para el alumnado, no')
   ok(normalizarPrueba({ preguntas: [{ id: 'p1', enunciado: '', max: 1, aspecto: '  Ríos   de  Galicia ' }] }).preguntas[0].aspecto === 'Ríos de Galicia', 'normalizar limpia espacios')
   ok(preguntasIguales(2, 2).every(p => p.aspecto === undefined), 'las preguntas generadas nacen sin aspecto')
+}
+
+console.log('\n6. Competencias clave de cada pregunta')
+{
+  const def = normalizarPrueba({
+    titulo: 'Competencias', tipo: 'puntos', reparto: 'criterios',
+    preguntas: [
+      { id: 'p1', enunciado: 'Uno', max: 3, criterio_id: 'CE1' },
+      { id: 'p2', enunciado: 'Dos', max: 1, criterio_id: 'CE2' },
+      { id: 'p3', enunciado: 'Tres', max: 1, criterio_id: null },
+    ],
+  })
+  const inf = informeDePrueba(def, [{ alumno_id: 1, nombre: 'Ana', respuestas: { p1: 3, p2: 0, p3: 1 } }], ['CE1', 'CE2'])
+  const conexiones = new Map([
+    ['CE1', { descriptores: ['CCL1'], competencias: ['CCL'], origen: 'comunidad' as const }],
+    ['CE2', { descriptores: ['STEM2'], competencias: ['STEM'], origen: 'comunidad' as const }],
+  ])
+  const r = competenciasDeLaPrueba(inf, conexiones)
+  ok(r.porPregunta.get(1)!.descriptores.join() === 'CCL1', 'una pregunta trabaja lo de su criterio')
+  ok(r.porPregunta.get(3)!.competencias.join() === 'CCL,STEM', 'la de «Todos», lo de todos los criterios del examen')
+  ok(r.porCompetencia.map(c => c.id).join() === 'CCL,STEM', 'en el orden del Perfil de salida')
+  ok(r.porCompetencia[0].pctAcierto === 100, 'CCL: 3/3 y 1/1', String(r.porCompetencia[0].pctAcierto))
+  ok(r.porCompetencia[1].pctAcierto === 50, 'STEM: 0/1 y 1/1, ponderado por lo que vale', String(r.porCompetencia[1].pctAcierto))
+  const html = documentoInformePrueba(inf, def, { grupo: '6ºA', area: 'X', conexiones })
+  ok(html.includes('data-prueba-competencia="STEM"') && html.includes('STEM2'), 'el documento lo enseña por pregunta y por competencia')
+  ok(!documentoInformePrueba(inf, def, { grupo: '6ºA', area: 'X' }).includes('competencia clave'), 'sin conexiones no hay bloque')
 }
 
 console.log(fallos ? `\n${fallos} fallo(s)` : '\nTodo correcto')

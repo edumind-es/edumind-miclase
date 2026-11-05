@@ -12,6 +12,7 @@
  * frases. Nada sale del aparato. La lectura es heurística —reglas sobre los
  * porcentajes—, no una IA: cada frase se puede comprobar en la tabla.
  */
+import { COMPETENCIAS_CLAVE } from './competenciasClave'
 import { notaDePrueba, puntosDePregunta, ACIERTO, FALLO, EN_BLANCO, type PruebaDef } from './prueba'
 
 export type RespuestasAlumno = {
@@ -251,4 +252,41 @@ export function radialSVG(ejes: EstadisticaGrupo[], opciones: { lado?: number; t
     + anillos + radios
     + `<polygon points="${datos}" fill="${relleno}" fill-opacity="0.25" stroke="${relleno}" stroke-width="1.8"/>`
     + puntos + etiquetas + '</svg>'
+}
+
+/** Lo que el currículo dice de un criterio; basta con esto de `ConexionCriterio`. */
+type ConexionDePregunta = { descriptores: string[]; competencias: string[] }
+
+export type CompetenciasDeLaPrueba = {
+  /** Número de pregunta → descriptores y competencias clave que trabaja */
+  porPregunta: Map<number, ConexionDePregunta>
+  /** Índice de acierto por competencia, ponderado por lo que vale cada pregunta */
+  porCompetencia: { id: string; preguntas: number[]; pctAcierto: number }[]
+}
+
+/**
+ * Qué competencias clave trabaja cada pregunta, por su criterio. Una pregunta
+ * de «Todos» trabaja las de todos los criterios del examen.
+ */
+export function competenciasDeLaPrueba(
+  inf: InformePrueba,
+  conexiones: Map<string, ConexionDePregunta>
+): CompetenciasDeLaPrueba {
+  const delExamen = inf.porCriterio.map(c => c.criterio_id)
+  const porPregunta = new Map<number, ConexionDePregunta>()
+  for (const p of inf.preguntas) {
+    const propias = (p.criterio_id ? [p.criterio_id] : delExamen).flatMap(c => conexiones.get(c) ?? [])
+    porPregunta.set(p.numero, {
+      descriptores: [...new Set(propias.flatMap(c => c.descriptores))],
+      competencias: [...new Set(propias.flatMap(c => c.competencias))],
+    })
+  }
+  const porCompetencia = COMPETENCIAS_CLAVE.flatMap(id => {
+    const ps = inf.preguntas.filter(p => porPregunta.get(p.numero)!.competencias.includes(id))
+    if (!ps.length) return []
+    const peso = ps.reduce((t, p) => t + p.max, 0)
+    const pctAcierto = peso > 0 ? Math.round((ps.reduce((t, p) => t + p.pctAcierto * p.max, 0) / peso) * 10) / 10 : 0
+    return [{ id, preguntas: ps.map(p => p.numero), pctAcierto }]
+  })
+  return { porPregunta, porCompetencia }
 }

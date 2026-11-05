@@ -9,11 +9,12 @@ import {
 } from './lamina'
 import { calificativo, parsearPesosTrimestres, perfilCompetencial } from '@/db/calculo'
 import {
-  notasDeAlumno, observacionesDeAlumno,
+  competenciasDeAlumno, notasDeAlumno, observacionesDeAlumno,
   type DatosGrupo, type EvidenciaInforme,
 } from './datos'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
+import { bloqueCompetenciasClave } from './competenciasClave'
 
 const TRIM = [1, 2, 3]
 
@@ -130,6 +131,8 @@ export function informeIndividual(
       </tr></thead><tbody>${filas}</tbody></table>`
   }).filter(Boolean).join('')
 
+  const bloqueClave = bloqueCompetenciasClave(competenciasDeAlumno(datos, alumno.id!), trimestre)
+
   // ── 03 · Observaciones
   const bloqueObs = observaciones.length
     ? observaciones.map(o => `<div class="observacion">
@@ -204,6 +207,7 @@ export function informeIndividual(
       // Las secciones se numeran según las que realmente aparezcan
       const partes: [string, string][] = [['Resultados por área', bloqueAreas]]
       if (bloquePerfil) partes.push(['Perfil por competencia específica', bloquePerfil])
+      if (bloqueClave) partes.push(['Competencias clave', bloqueClave])
       if (incluirCriterios && bloqueCriterios) partes.push(['Detalle por criterio de evaluación', bloqueCriterios])
       partes.push(['Observaciones del docente', bloqueObs])
       partes.push([`Evidencias de aprendizaje${evidencias.length ? ` (${evidencias.length})` : ''}`, bloqueEvid])

@@ -238,6 +238,8 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
           unidadId={informe.fila.prueba.unidad_id}
           unidadNombre={informe.fila.unidad?.nombre}
           criterios={informe.col.criterios}
+          grupo={informe.fila.grupo}
+          asig={informe.fila.asig}
           grupoNombre={informe.fila.grupo.nombre}
           areaNombre={informe.fila.asig.nombre_display}
           onCerrar={() => setInforme(null)}

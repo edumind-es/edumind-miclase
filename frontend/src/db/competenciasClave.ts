@@ -67,6 +67,9 @@ export type ConexionCriterio = {
   origen: OrigenConexion
 }
 
+/** Los campos de `/api/curriculum/criterios` que dicen con qué conecta un criterio. */
+export type ConexionDeCriterio = { descriptores?: string[]; competencias_clave?: string[]; conexion_origen?: string }
+
 export type Descriptor = { id: string; competencia_id: string; descripcion: string }
 
 /** La competencia clave de un descriptor: CPSAA3 → CPSAA. */
@@ -343,5 +346,36 @@ export function resumenDelGrupo(
   return {
     descriptores: juntar(descs, ordenDesc),
     competencias: juntar(comps, [...COMPETENCIAS_CLAVE]),
+  }
+}
+
+/** Una fila de la tabla de competencias: nota en cada periodo. */
+export type FilaCompetencias = NotasPeriodo & { id: string; competencia_id: string }
+
+/**
+ * Tabla por periodos para una pantalla: con varios perfiles, la media del
+ * grupo con la regla de `resumenDelGrupo`; con uno, las notas de ese alumno.
+ */
+export function tablaDeCompetencias(
+  perfiles: PerfilCompetenciasClave[]
+): { competencias: FilaCompetencias[]; descriptores: FilaCompetencias[] } {
+  const resumenes = PERIODOS.map(p => [p, resumenDelGrupo(perfiles, p)] as const)
+  const filas = (que: 'competencias' | 'descriptores', competenciaDe: (id: string) => string) => {
+    const ids = [...new Set(resumenes.flatMap(([, r]) => r[que].filter(x => x.conDatos > 0).map(x => x.id)))]
+    const notas = ids.map(id => {
+      const de = (p: Periodo) => resumenes.find(([q]) => q === p)![1][que].find(x => x.id === id)?.media ?? null
+      return {
+        id, competencia_id: competenciaDe(id),
+        trimestres: { 1: de(1), 2: de(2), 3: de(3) }, final: de('final'),
+      }
+    })
+    const orden = perfiles.flatMap(x => x[que].map(y => y.id))
+    return notas.sort((a, b) =>
+      COMPETENCIAS_CLAVE.indexOf(a.competencia_id as never) - COMPETENCIAS_CLAVE.indexOf(b.competencia_id as never) ||
+      orden.indexOf(a.id) - orden.indexOf(b.id))
+  }
+  return {
+    competencias: filas('competencias', id => id),
+    descriptores: filas('descriptores', id => competenciaDeDescriptor(id) ?? ''),
   }
 }
