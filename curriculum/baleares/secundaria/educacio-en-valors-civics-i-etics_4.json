@@ -1,0 +1,516 @@
+{
+  "meta": {
+    "comunidad": "Baleares",
+    "etapa": "secundaria",
+    "asignatura": "educacio-en-valors-civics-i-etics",
+    "asignatura_nombre": "Educació en Valors Cívics i Ètics",
+    "ciclo_origen": "Quart curs",
+    "fuente": "Illes Balears · Secundaria · Educació en Valors Cívics i Ètics · Quart curs.xlsx",
+    "generado": "2026-11-08",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Inquirir i investigar tot el que fa referència a la identitat humana i a qüestions ètiques relatives al propi projecte vital, analitzant críticament informació fiable i generant una actitud reflexiva per promoure l’autoconeixement i l’elaboració de plantejaments i judicis morals de manera autònoma i raonada.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Actuar i interactuar d’acord amb normes i valors cívics i ètics, a partir del reconeixement fonamentat de la seva importància per regular la vida comunitària i l’aplicació efectiva i 4 d’agost de 2025 justificada en diferents contexts, per promoure una convivència pacífica, respectuosa, democràtica i compromesa amb el bé comú.",
+      "descriptores_ids": [
+        "CCL5",
+        "CD3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Entendre la natura interconnectada i interecodependent de les activitats humanes, mitjançant la identificació i anàlisi de problemes ecosocials de rellevància per promoure hàbits i actituds èticament compromesos amb l’assoliment de formes de vida sostenibles.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Mostrar una adequada estima de si mateix i de l’entorn, reconèixer i valorar les emocions i els sentiments propis i aliens per assolir una actitud empàtica i acurada envers els altres i la natura.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA2",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Construir i expressar un concepte ajustat de si mateix, reconèixer les múltiples dimensions de la seva naturalesa i personalitat, així com de la seva dimensió cívica i moral a partir de la recerca i el diàleg sobre diverses concepcions de la naturalesa humana.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Identificar, gestionar i comunicar idees, emocions, afectes i desitjos amb comprensió i empatia cap a les altres persones, demostrant autoestima i compartint un concepte adequat del que han de ser les relacions amb altres persones, inclòs l'àmbit afectiu-sexual.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Desenvolupar i demostrar autonomia moral a través de la pràctica de la deliberació racional, l'ús de conceptes ètics i el diàleg respectuós amb els altres, entorn diferents valors, diferents maneres de vida, diferents problemes relacionats amb l'exercici dels drets individuals, de l'ús responsable i segur de les xarxes, de les conductes addictives i de l'assetjament escolar.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Promoure i demostrar una convivència pacífica, respectuosa, democràtica i compromesa amb el bé comú, a partir de la recerca sobre la naturalesa social i política de l'ésser humà i l'ús i comprensió crítica dels conceptes de llei, poder, sobirania, justícia, Estat, democràcia, memòria democràtica, dignitat i drets humans.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Fomentar l'exercici de la ciutadania activa i democràtica a través del coneixement del moviment associatiu i la participació respectuosa, dialogant i constructiva en activitats de grup que impliquin prendre decisions col·lectives, planificar accions coordinades i resoldre problemes aplicant procediments i principis cívics, ètics i democràtics explícits.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a generar un compromís actiu amb el bé comú a través de l'anàlisi i la presa raonada i dialogant de posició sobre qüestions ètiques d'actualitat com la lluita contra la desigualtat i la pobresa, el dret al treball, la salut, l'educació i la justícia, així com sobre els fins i límits ètics de la recerca científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.4",
+      "objetivo_id": "CE2",
+      "descripcion": "Prendre consciència de la lluita per una efectiva igualtat de gènere i del problema de la violència i explotació sobre les dones, a través de l'anàlisi de les diverses ones i corrents del feminisme i de les mesures de prevenció de la desigualtat, la violència i la discriminació per raó de gènere i orientació sexual, mostrant igualment coneixement sobre els drets LGTBIQ+ i reconeixent la necessitat de respectar-los.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.5",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir activament al benestar social adoptant una posició pròpia, explícita, informada i èticament fonamentada, sobre el valor i pertinència dels drets humans, el respecte per la diversitat cultural, la consideració dels béns públics globals i la percepció del valor social dels impostos.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.6",
+      "objetivo_id": "CE2",
+      "descripcion": "Contribuir a la consecució d’un món més just i pacífic a través de l’anàlisi i reconeixement de la història democràtica del nostre país i de les funcions de l'Estat de dret i les seves institucions, els organismes internacionals, les associacions civils, i els cossos i forces de seguretat de l'Estat en el seu esforç per aconseguir la pau i la seguretat integral, atendre les víctimes de la violència i promoure la solidaritat i la cooperació entre les persones i els pobles.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Descriure les relacions històriques d'interconnexió, interdependència i dependència ecològica entre les nostres vides i l'entorn a partir de l'anàlisi de les causes i conseqüències dels problemes ecològics i socials més greus que ens afecten.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Valorar diferents plantejaments científics, polítics i ètics amb els quals afrontar l'emergència climàtica i la crisi mediambiental a través de l'exposició i el debat argumental al seu voltant.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Promoure estils de vida èticament compromesos amb l'assoliment d'un desenvolupament sostenible, contribuint per si mateix i en el seu entorn a la prevenció dels residus, la gestió sostenible dels recursos, la mobilitat segura, sostenible i saludable, el comerç just, el consum responsable, la cura del patrimoni natural, el respecte per la diversitat cultural, i la cura i protecció dels animals.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Desenvolupar una actitud de gestió equilibrada de les emocions, d'estima i cura de si mateix i dels altres, identificant, analitzant i expressant de manera assertiva les pròpies emocions i sentiments, i reconeixent i valorant els dels altres en diferents contexts i entorn d'activitats creatives i de reflexió individual o dialogada sobre qüestions ètiques i cíviques.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "Bloc A. Autoconeixement I Autonomia Moral"
+    },
+    {
+      "id": "B2",
+      "titulo": "Bloc B. Societat, Justícia I Democràcia"
+    },
+    {
+      "id": "B3",
+      "titulo": "Bloc C. Sostenibilitat I Ètica Ambiental"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "La recerca ètica i la resolució de problemes complexos. El pensament crític i filosòfic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La naturalesa humana i la identitat personal. Dignitat, llibertat i moralitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "L'educació de les emocions i els sentiments. L'autoestima personal. La igualtat i el respecte mutu en les relacions amb altres persones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "L’educació afectiva i sexual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Desitjos i raons. La voluntat i el judici moral. Autonomia i responsabilitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "L'ètica com a guia de les nostres accions. La reflexió entorn del que és valuós i els valors: universalisme i pluralisme moral. Normes, virtuts i sentiments morals. Ètiques de la felicitat, ètiques del deure i ètiques de la virtut.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "El conflicte entre legitimitat i legalitat. L'objecció de consciència. Els drets individuals i el debat entorn de la llibertat d'expressió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "El problema de la desinformació. La protecció de dades i el dret a la intimitat. El ciberassetjament i les situacions de violència a les xarxes. Les conductes additives.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Les virtuts del diàleg i les normes d'argumentació. La resolució pacífica de conflictes. L'empatia amb els altres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La naturalesa i origen de la societat: competència i cooperació, egoisme i altruisme. Les estructures socials i els grups de pertinença.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La política: llei, poder, sobirania i justícia. Formes d'estat i tipus de govern. L'Estat de dret i els valors constitucionals. La democràcia: principis, procediments i institucions. La memòria democràtica. La guerra, el terrorisme i altres formes de violència política.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Les diferents generacions de drets humans. La seva constitució històrica i la seva rellevància ètica. Els drets de la infància.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Associacionisme i voluntariat. La ciutadania i la participació democràtica. Els codis deontològics. Les ètiques aplicades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La desigualtat econòmica i la lluita contra la pobresa. Globalització econòmica i béns públics globals. El comerç just. El dret al treball, la salut, l'educació i la justícia. El valor social dels impostos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "La igualtat de gènere i les diverses ones i corrents del feminisme. La prevenció de l'explotació i la violència contra nenes i dones. La corresponsabilitat en les tasques domèstiques i de cures.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "L’interculturalisme. La inclusió social i el respecte per la diversitat i les identitats culturals i de gènere. Els drets LGTBIQ+. Diferència entre la noció de pluralitat i la de diversitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Fins i límits ètics de la recerca científica. La bioètica. El desafiament de la intel·ligència artificial. Les propostes transhumanistes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Accions individuals i col·lectives a favor de la pau. La contribució de l'Estat i els organismes internacionals a la pau, la seguretat integral i la cooperació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "L’atenció a les víctimes de la violència. El dret internacional i la ciutadania global. Les forces armades i la defensa al servei de la pau. El paper de les ONG i de les ONGD.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Les conseqüències socials, econòmiques i ecològiques de la turistificació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Les tecnologies de la comunicació: avantatges i problemes. Intimitat i privacitat. El cervell humà: la tecnologia insubstituïble. Problemes ètics de la intel·ligència artificial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Interdependència, interconnexió i ecodependència entre les nostres formes de vida i l'entorn. El local i el global. Consideració crítica de les diverses cosmovisions sobre la relació humana amb la naturalesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Els límits del planeta i l’esgotament dels recursos. La petjada ecològica de les accions humanes. L'emergència climàtica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Diversos plantejaments ètics, científics i polítics entorn dels problemes ecosocials. L'ètica ambiental. L'ètica de les cures i l’ecofeminisme. Els Objectius de desenvolupament sostenible. El decreixement. L'economia circular.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "El compromís actiu amb la protecció dels animals i el medi ambient. Els drets dels animals i de la naturalesa. La perspectiva biocèntrica.",
+      "criterios_ids": []
+    }
+  ]
+}

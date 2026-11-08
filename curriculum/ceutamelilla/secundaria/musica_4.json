@@ -1,0 +1,492 @@
+{
+  "meta": {
+    "comunidad": "CeutaMelilla",
+    "etapa": "secundaria",
+    "asignatura": "musica",
+    "asignatura_nombre": "Música",
+    "ciclo_origen": "Cuarto curso",
+    "fuente": "Ceuta y Melilla · Secundaria · Música · Cuarto curso.xlsx",
+    "generado": "2026-11-08",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad. 28 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. (CP) distintas lenguas, orales o signadas, de forma comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre mantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e respetar la diversidad lingüística y cultural de democrática. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social. ciencia, tecnología e ingeniería (STEM) en ciencia, tecnología e ingeniería entraña la comprensión del mundo utilizando matemáticos, la tecnología y los de forma comprometida, responsable y y aplicar la perspectiva y el diversos problemas en diferentes contextos. y explicación del entorno natural y y metodologías, incluidas la observación y la y extraer conclusiones basadas en mundo natural y el contexto social. comprende la aplicación de los conocimientos nuestra sociedad de acuerdo con un marco de seguridad, responsabilidad y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. 29 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. digital (CD) saludable, sostenible, crítico y responsable para el trabajo y para la participación en la datos, la comunicación y la colaboración, la digitales (incluida la programación), la las competencias relacionadas con la ciudadanía digital, la privacidad, la propiedad computacional y crítico. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. aprender a aprender (CPSAA) a aprender implica la capacidad de aceptarse y promover un crecimiento eficazmente; colaborar con otros de el aprendizaje a lo largo de la vida. a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir al y de las demás personas, desarrollando a quienes lo rodean a través de la vida orientada al futuro; así como expresar integrador y de apoyo. 30 DEL ESTADO operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. (CC) alumnos y alumnas puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y políticas, mundiales y el compromiso activo con la mundial. Incluye la alfabetización cívica, la de una cultura democrática fundada en el acerca de los grandes problemas éticos vida sostenible acorde con los Objetivos de 2030. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. (CE) un enfoque vital dirigido a actuar conocimientos específicos necesarios para Aporta estrategias que permiten adaptar la entrenar el pensamiento para analizar y utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos a aprender, a arriesgar y a afrontar la basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas planteadas a la acción 31 DEL ESTADO sostenibles de valor social, cultural y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. expresión culturales (CCEC) culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de también un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia en un mundo caracterizado por la diversidad, y otras manifestaciones culturales pueden forma. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II Secundaria Obligatoria GEOLOGÍA etapa de Enseñanza Secundaria Obligatoria del Medio Natural, Social y Cultural de de la curiosidad y la actitud crítica y del alumnado de manera que permitan a adoptar hábitos que ayuden a mantener y 32"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Analizar obras de diferentes épocas y culturas, identificando sus principales rasgos estilísticos y estableciendo relaciones con su contexto, para valorar el patrimonio musical y dancístico como fuente de disfrute y enriquecimiento personal.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CP3",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CCEC1",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explorar las posibilidades expresivas de diferentes técnicas musicales y dancísticas, a través de actividades de improvisación, para incorporarlas al repertorio personal de recursos y desarrollar el criterio de selección de las técnicas más adecuadas a la intención expresiva.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Interpretar piezas musicales y dancísticas, gestionando adecuadamente las emociones y empleando diversas estrategias y técnicas vocales, corporales o instrumentales, para ampliar las posibilidades de expresión personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "CD2",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Crear propuestas artístico-musicales, empleando la voz, el cuerpo, instrumentos musicales y herramientas tecnológicas, para potenciar la creatividad e identificar oportunidades de desarrollo personal, social, académico y profesional.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD2",
+        "CPSAA3",
+        "CC1",
+        "CE1",
+        "CE3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analizar obras musicales y dancísticas de diferentes épocas y culturas, identificando sus rasgos estilísticos, explicando su relación con el contexto y evidenciando una actitud de apertura, interés y respeto en la escucha o el visionado de las mismas.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Valorar críticamente los hábitos, los gustos y los referentes musicales y dancísticos de diferentes épocas y culturas, reflexionando sobre su evolución y sobre su relación con los del presente.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Participar, con iniciativa, confianza y creatividad, en la exploración de técnicas musicales y dancísticas de mayor complejidad, por medio de improvisaciones libres y pautadas, individuales o grupales, en las que se empleen la voz, el cuerpo, instrumentos musicales o herramientas tecnológicas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Elaborar piezas musicales o dancísticas estructuradas, a partir de actividades de improvisación, seleccionando las técnicas del repertorio personal de recursos más adecuadas a la intención expresiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Leer partituras sencillas, identificando los elementos básicos del lenguaje musical y analizando de forma guiada las estructuras de las piezas, con o sin apoyo de la audición.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Emplear diferentes técnicas de interpretación vocal, corporal o instrumental, aplicando estrategias de memorización y valorando los ensayos como espacios de escucha y aprendizaje.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar con corrección y expresividad piezas musicales y dancísticas, individuales y grupales, dentro y fuera del aula, gestionando la ansiedad y el miedo escénico, y manteniendo la concentración.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Planificar y desarrollar, con creatividad, propuestas artístico-musicales, tanto individuales como colaborativas, seleccionando, de entre los disponibles, los medios musicales y dancísticos más oportunos, así como las herramientas analógicas o digitales más adecuadas.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Participar activamente en la planificación y en la ejecución de propuestas artístico- musicales colaborativas, asumiendo diferentes funciones, valorando las aportaciones del resto de integrantes del grupo e identificando diversas oportunidades de desarrollo personal, social, académico y profesional.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Escucha y percepción"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Interpretación, improvisación y creación escénica"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Contextos y culturas"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El silencio, el sonido, el ruido y la escucha activa. La audición como fuente de conocimiento y enriquecimiento intercultural. Sensibilización y actitud crítica ante la polución sonora y el consumo indiscriminado de música.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "La audición y visionado como forma de comunicación en la vida cotidiana, los medios audiovisuales y los espectáculos musicales y dancísticos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Obras musicales y dancísticas: análisis descriptivo de sus características más relevantes. Géneros musicales y dancísticos: evolución y diversidad. Medios y soportes de registro, conservación y difusión de las obras musicales y dancísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Voces e instrumentos. Evolución y agrupaciones. Relevancia en los distintos periodos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Compositores y compositoras, artistas e intérpretes internacionales, nacionales, regionales y locales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Conciertos, actuaciones musicales y manifestaciones artístico-musicales en vivo y registradas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Mitos, estereotipos y roles de género trasmitidos a través de la música y la danza.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Herramientas digitales para la recepción musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de búsqueda, selección y reelaboración de información fiable, pertinente y de calidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Actitud de respeto y valoración en la recepción musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La partitura: lectura y escritura musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Elementos del lenguaje musical. Tonalidad: modulación, funciones armónicas, progresiones armónicas. Formas musicales complejas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Principales géneros musicales y escénicos del patrimonio cultural propio y de otras culturas. Músicas y danzas de diferentes culturas y de fusión: patrones rítmicos, melódicos, armónicos y otros elementos característicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Repertorio vocal, instrumental o corporal individual o grupal de distintos tipos de música del patrimonio musical histórico, actual y de otras culturas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas para la interpretación: técnicas vocales, instrumentales y corporales, técnicas de estudio y de control de emociones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Técnicas de improvisación guiada y libre: melodías y ritmos vocales, instrumentales o corporales. Utilización de diferentes técnicas, recursos y procedimientos en la improvisación y creación de piezas musicales y dancísticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Proyectos musicales y audiovisuales: empleo de la voz, el cuerpo, los instrumentos musicales, los medios y las aplicaciones tecnológicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Valores y hábitos de consumo musical responsable en las plataformas digitales y las redes sociales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Recursos para la creación de productos musicales y audiovisuales. Herramientas digitales para la creación musical. Secuenciadores, editores de partituras y aplicaciones informáticas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Actitudes de respeto y colaboración en la participación activa en actividades musicales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Historia de la música y la danza en España: periodos, características, géneros, voces, instrumentos, agrupaciones y otros aspectos relevantes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Tradiciones musicales y dancísticas de otras culturas del mundo: funciones, pervivencia e influencias en otros estilos musicales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Músicas populares, urbanas y contemporáneas: conexiones e influencias entre los diversos géneros.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "El sonido y la música en los medios audiovisuales y las tecnologías digitales. La música al servicio de otras artes y lenguajes. Orientaciones metodológicas y para la evaluación La música, como arte de expresión universal, está presente en todos los aspectos de las culturas y las sociedades humanas. La realidad actual nos muestra que las manifestaciones musicales constituyen un elemento de valor incuestionable en la vida de las personas. En la actualidad, vivimos en contacto permanente con la música, sin duda una de las artes más poderosamente masivas de nuestro tiempo, y el desarrollo tecnológico ha modificado considerablemente los referentes musicales de las sociedades actuales, posibilitando el acceso sin límites a toda la producción musical mundial a través de los medios de comunicación e internet. Desde esta perspectiva, la materia de Música pretende establecer los cauces necesarios para fomentar en el alumnado el desarrollo de la percepción, la sensibilidad estética, la expresión creativa y la reflexión crítica, mediante la adquisición de competencias específicas que le permitan el desarrollo de un grado de autonomía que haga posible su participación activa e informada en las actividades vinculadas con la audición, la interpretación y la creación musical. Desde la materia de Música se pretende, en definitiva, proporcionar una formación básica para que el alumnado pueda desenvolverse adecuadamente en las diversas situaciones y actividades musicales de las que sea partícipe en su vida cotidiana. Se trata de proporcionarle una educación basada en la exploración, valoración y análisis reflexivo de las realidades sonoras que lo rodean, intentando favorecer la conexión con la realidad que vive fuera del centro escolar, y favoreciendo el desarrollo de las competencias que le permitan disfrutar y participar de las diversas experiencias musicales, bien sea desde la audiencia, la interpretación o la creación. Este planteamiento ha de determinar significativamente las sugerencias y orientaciones sobre la forma en que debe enseñarse y evaluarse la materia, no sin antes realizar algunas consideraciones sobre el modo en que la materia puede dar respuesta a otras exigencias de la etapa. En este sentido, es necesario contemplar las contribuciones que, desde la materia de Música, deben hacerse a la consecución de las competencias clave recogidas en el Perfil de salida al término de la enseñanza obligatoria, así como las actitudes que han de orientar el proyecto vital, profesional y social del alumnado en relación con los retos del siglo XXI. Aprendizajes y experiencias previas El proceso de enseñanza y aprendizaje en el aula deberá partir de los aprendizajes y las experiencias previas del alumnado, haciendo un diagnóstico de las competencias previamente adquiridas como punto de partida en la construcción de nuevos aprendizajes significativos. En este sentido, la contextualización de las actuaciones del proceso de enseñanza y aprendizaje es fundamental para que resulte eficaz y significativo para el alumnado. Es muy importante el planteamiento de situaciones de aprendizaje motivantes, que remitan a sus experiencias personales, sociales y familiares, así como al propio entorno escolar o a cuestiones de actualidad, con referencia a contextos locales o globales reconocibles y que se sitúen en la zona de desarrollo próximo del alumnado. Ello supone que las estrategias metodológicas empleadas incorporen elementos como la expresión y la participación activa del alumnado, así como la interacción, la cooperación y la integración de los aprendizajes en la vida del centro mediante la creación de situaciones de aprendizaje. La evaluación inicial permitirá la selección y secuenciación coherente y adecuada de los conocimientos, destrezas y actitudes imprescindibles para que el alumnado responda con eficacia a los desempeños requeridos en las competencias específicas de la materia, como las técnicas y estrategias relacionadas con la audición, la interpretación y la creación, así como la aceptación y cumplimiento de las normas de respeto y comportamiento en la recepción y en la participación en actividades musicales. La selección de contenidos deberá, asimismo, acompañarse de una reflexión sobre su grado de dificultad, con la finalidad de establecer su secuenciación, partiendo de lo más simple hacia lo más complejo. La percepción, la expresión y la creación musical La educación musical se articula en torno a dos ejes fundamentales, percepción y expresión, vinculados a su vez con la adquisición de las competencias específicas de la materia. La percepción musical hace referencia a todos los aspectos relacionados con la recepción activa de las manifestaciones musicales y dancísticas, empleando adecuadamente destrezas como la discriminación auditiva y visual o la memoria comprensiva de la música, en el transcurso de las actividades de interpretación y creación musical, así como en la audición y visionado de obras en vivo o grabadas. Así pues, el aprendizaje estará centrado en la movilización de los conocimientos, destrezas y actitudes vinculados con la escucha y el visionado, como el lenguaje musical, el control en la práctica musical y el conocimiento y valoración de los distintos tipos de música del patrimonio propio y de otras culturas. La expresión musical alude a la adquisición y aplicación de los conocimientos, destrezas y actitudes vinculados con la interpretación y la creación musical. La interpretación se centra en tres ámbitos estrechamente interrelacionados: la expresión vocal, la expresión instrumental y la expresión corporal y la danza. La creación musical remite a la exploración de los elementos y técnicas propias de la música y la danza mediante la improvisación y la elaboración de propuestas musicales y dancísticas de forma tanto individual como colectiva. En todos estos ámbitos, el papel del profesorado es decisivo, puesto que ha de constituir el modelo que ha de seguir el alumnado, posibilitando el aprendizaje por imitación del modelo vocal, instrumental o corporal, que constituirá el punto de partida de la actividad práctica, sin necesidad de que el aprendizaje tenga que estar necesariamente asociado a la lectura musical. No obstante, los modelos aportados por el profesor o profesora no deben condicionar de un modo absoluto el proceso de enseñanza, puesto que la metodología también debe basarse en un enfoque creativo que impulse al alumnado hacia la búsqueda y la experimentación de sus capacidades expresivas sin miedo al error y valorando los procesos de experimentación y creación. Por otro lado, es conveniente tener en cuenta que el lenguaje musical no ha de tratarse de un modo aislado, ya que está íntimamente vinculado con la adquisición de todas las competencias específicas de la materia, relacionadas con la recepción, la expresión y la creación musical y dancística. De igual modo, la elección del repertorio para las actividades de interpretación o los contenidos relacionados con los saberes básicos del bloque de «Contextos y culturas» no ser abordados desde una perspectiva puramente histórica o acumulativa, sino empleados como elementos constitutivos de ejes temáticos que permitan la construcción de aprendizajes transversales en los que estén presentes aspectos relacionados con la escucha y recepción de obras musicales y dancísticas, el análisis de los aspectos técnicos y expresivos del lenguaje musical, las conexiones entre la música, las ideas y emociones y su funcionalidad social y cultural. Interrelación entre las competencias específicas El enfoque competencial de la materia de Música debe contemplarse desde la comprensión de las relaciones entre sus competencias específicas, así como su contribución a la adquisición de las competencias clave que determinan el Perfil de salida del alumnado al término de la enseñanza básica. Así pues, conviene resaltar la interconexión entre las distintas competencias específicas de la materia, en las que las tres primeras están referidas a ámbitos específicos de aprendizaje, aunque interconectados: la recepción activa y el análisis de las manifestaciones musicales y dancísticas, la expresión musical y dancística mediante la exploración y la improvisación, y la interpretación musical. A su vez, la cuarta, referida a la creación de propuestas artístico-musicales, se relaciona transversalmente con las otras tres. Esta interrelación entre competencias específicas implica la necesidad de concebir el trabajo como un todo y no como algo serial o atomizado, puesto que los conocimientos, destrezas y actitudes pueden relacionarse con las diversas competencias específicas de la materia sin que se establezca una relación unívoca entre un saber básico determinado y una competencia específica concreta. Así, por ejemplo, los conocimientos, destrezas y actitudes relativos a los elementos que conforman el lenguaje musical están ligados tanto a la competencia específica relacionada con el análisis y valoración de obras del patrimonio musical y dancístico, como a las competencias relativas a la expresión musical mediante la improvisación o la interpretación, y ambas se vinculan con la competencia específica sobre creación, planificación y realización de propuestas artístico-musicales. A su vez, estas competencias específicas de la materia están íntimamente relacionadas con la consecución de las competencias clave que conforman el Perfil competencial del alumnado al término de la enseñanza básica. La dimensión práctica de la materia El enfoque metodológico orientado a la práctica supone facilitar que el alumnado pueda llegar a convertirse en agente activo implicado en su propio proceso de aprendizaje. Implica, además, considerarlo como usuarios de la música, de modo que se centre en aprender a emplear la música en lugar de aprender sobre la música, promoviendo el aprendizaje a partir de un uso práctico. Tomando en consideración la dimensión eminentemente práctica de la materia de Música, la metodología empleada en su enseñanza debe estar basada en la práctica como rasgo de acción característico. La práctica debe preceder a todo intento de fundamentación teórica, aunque esto no significa necesariamente que debamos eludir esta última. El alumnado debe llegar a la reflexión teórica como consecuencia del descubrimiento y la experimentación de los elementos constitutivos del lenguaje musical. Este proceso ha de llevarse a cabo mediante un acercamiento intuitivo inicial y reflexivo en un segundo momento. Las propuestas didácticas encaminadas a la experimentación sonora, la búsqueda de la expresión de ideas y sentimientos por medio del uso de la voz, los instrumentos o el propio cuerpo mediante la improvisación, son muy adecuadas para arbitrar estrategias metodológicas en esta materia. De este modo, la intervención didáctica ha de estar orientada hacia la práctica que permita la construcción de nuevos aprendizajes funcionales y significativos. En este sentido, es necesario que tanto la selección de los contenidos como de las actividades se realice con el fin de favorecer la conexión con la realidad que vive el alumnado tanto dentro como fuera del centro educativo. Así pues, en este proceso, la práctica cumple una doble función, permitiendo la adquisición y movilización de conocimientos, destrezas y actitudes disciplinares, al mismo tiempo que constituye una poderosa vía de acceso a la comprensión y disfrute de la música. Recursos y estrategias para la diversidad y la adaptabilidad Uno de los principios metodológicos que se han de tener en cuenta en el proceso de enseñanza de la materia es la aplicación de estrategias que promuevan la educación inclusiva. Por ello, la didáctica elegida ha de caracterizarse por la variedad metodológica y su articulación en torno al Diseño Universal para el Aprendizaje mediante la implementación de estrategias diversas de reconocimiento y representación de los saberes a través del empleo de los diversos lenguajes (verbal, gráfico, audiovisual, plástico, etc.). En el caso de la materia de Música, además de los anteriormente mencionados, es importante elaborar una propuesta que atienda a proveer formas de representación de los distintos elementos curriculares a través del uso del lenguaje musical y del movimiento corporal. Se trata, igualmente, de diversificar las actividades y los recursos didácticos que han de ser variados y adaptados al alumnado, puesto que el objetivo es el logro de una atención personalizada y adaptada a las diferentes necesidades, ritmos y modos de aprendizaje del alumnado, para lo cual es necesario flexibilizar y adaptar las estrategias didácticas y la propia organización de la materia, sus espacios y tiempos. Asimismo, es importante la creación de contextos que permitan al alumnado estar en contacto directo con la música y la danza. Para ello, las situaciones de aprendizaje resultan una propuesta didáctica idónea. Las situaciones de aprendizaje favorecerán la creación de contextos de exploración, indagación, experimentación y expresión musicales y dancísticos que pueden estar basados en aspectos cotidianos próximos de la vida personal y social de los alumnos y alumnas y relacionados con sus necesidades e intereses. El enfoque metodológico anteriormente descrito debe tener también en cuenta la necesidad de utilizar una gran diversidad de materiales didácticos y estrategias variadas en función de las competencias que se han de abordar. De igual modo, se ha de contemplar la necesidad de combinar los distintos tipos agrupaciones en el aula y fuera de ella, desde el trabajo individual, el pequeño y gran grupo, hasta otros agrupamientos flexibles que favorezcan los aprendizajes colaborativos y entre iguales y el desarrollo de todas las competencias clave del Perfil de salida. Por último, merece especial mención el uso de las tecnologías de la información y la comunicación, cuyos recursos y estrategias constituyen elementos fundamentales para el trabajo de la materia, debido a la cantidad y variedad de posibilidades que ofrecen para la realización de las tareas de audición y visionado, búsqueda de información, interpretación, creación, etc. En este sentido, la integración de los recursos y herramientas digitales sigue la línea marcada por los principios del Diseño Universal para el Aprendizaje, que hace posible la multiplicidad en las representaciones artísticas de la materia, facilitando al alumnado una amplia variedad de formas de expresión mediante el empleo de tecnologías analógicas o digitales para la búsqueda de fuentes de información fiables y variadas, la creación sonora y su registro, la producción de archivos de vídeo y audio, y la planificación y ejecución de producciones musicales y dancísticas. Bajo esta perspectiva metodológica, es interesante resaltar las aportaciones del aprendizaje mixto al desarrollo del proceso educativo, facilitando el acceso, mediante los recursos y herramientas digitales y no digitales, a prácticas educativas y manifestaciones culturales y artísticas producidas en otros entornos alejados del centro educativo. Así, el acceso en línea a bibliotecas y centros de documentación, museos, teatros, conciertos y espectáculos dancísticos, así como a clases virtuales, es posible siguiendo esta línea metodológica. Asimismo, la creación de este espacio virtual amplía considerablemente las posibilidades en el diseño de actividades y tareas, haciendo que el trabajo, tanto individual como grupal, adquiera una perspectiva más amplia, favoreciendo en gran medida la comunicación entre los miembros del equipo y ampliando sus potencialidades mediante el empleo de los recursos que estas tecnologías proporcionan. Así pues, la complementariedad de la enseñanza presencial con la virtual, siguiendo el modelo de aprendizaje mixto, supone la creación de nuevos espacios para la actividad educativa y articula el proceso de enseñanza y aprendizaje a distancia con la participación de profesorado y alumnado, posibilitando su interacción síncrona o asíncrona. Espacios y recursos materiales en el aula La metodología, las estrategias y las técnicas didácticas empleadas en la materia de Música hacen necesaria la reflexión sobre los espacios, los recursos materiales y la organización del trabajo en el aula. El aula de Música debe ser un lugar específicamente dedicado a la realización del trabajo propio de la materia, con espacios y recursos suficientes para facilitar el buen desarrollo de las actividades musicales y dancísticas. Así, es deseable que se disponga de un espacio con un buen acondicionamiento acústico que impida en lo posible las interferencias producidas por los ruidos externos y, a su vez, aísle en lo posible al resto de aulas y otros espacios del nivel de sonido producido durante las actividades musicales. Es recomendable también que el mobiliario del aula sea apilable para posibilitar la disposición de un espacio diáfano, imprescindible en las actividades de movimiento y danza, así como para la distribución de las distintas agrupaciones. El aula estará dotada, en la medida de lo posible, de una variedad suficiente de instrumentos musicales de diversas familias, tanto acústicos como electrónicos, así como de estanterías y armarios para su apropiado almacenamiento y localización. De igual modo, sería deseable la existencia de los medios y dispositivos tecnológicos adecuados para el desarrollo de las distintas actividades (equipo de sonido, ordenador, proyector, pizarra digital, etc.). Asimismo, una pequeña biblioteca y fonoteca especializada a disposición del alumnado sería de gran utilidad. Por último, es fundamental fomentar en el alumnado actitudes y hábitos para el cuidado y el mantenimiento de los materiales y recursos del aula como parte de los aprendizajes actitudinales contemplados en la materia. Evaluación del proceso de aprendizaje La evaluación debe contemplarse como un elemento esencial e indisoluble de los procesos de enseñanza y aprendizaje, que permite tanto el seguimiento de estos como el control del nivel de adquisición de las competencias específicas de la materia. La evaluación no debe ser entendida como un simple instrumento para medir resultados, sino que debe ayudar a detectar las posibles dificultades manifestadas durante los aprendizajes, de forma que se puedan establecer las medidas de refuerzo necesarias para garantizar la adquisición de las competencias específicas. En la evaluación de los aprendizajes del alumnado, los criterios de evaluación son el elemento curricular central, pues al estar diseñados para valorar los productos, las conductas y los procesos de creación musicales y dancísticos observables, permiten comprobar si se han adquirido las competencias específicas de la materia. De igual modo, a la hora de diseñar situaciones de aprendizaje, el planteamiento didáctico ha de tener en cuenta elementos que estén en consonancia con los criterios de evaluación, lo que ayudará, a su vez, a definir los productos finales que el alumnado ha de elaborar al término de las actividades planteadas en el aula. En cualquier caso, ha de tenerse en consideración que los criterios de evaluación propuestos en este currículo suponen un nivel de concreción de los elementos curriculares, sobre el que cada centro y cada departamento deberá hacer su propia contextualización que, a su vez, alcanzará su nivel de concreción más ajustado en las programaciones de aula, en función de la realidad y situación concreta. La evaluación inicial ha de constituir una herramienta de diagnóstico que recoja información necesaria para valorar los aprendizajes previos del alumnado, adquiridos tanto dentro como fuera del entorno escolar, de modo que los nuevos aprendizajes que se planteen sean realmente significativos. Al mismo tiempo, ayudará al alumnado a tomar conciencia de su punto de partida y lo informará sobre los saberes básicos que debe adquirir y poner en práctica para alcanzar las competencias específicas previstas. A partir de los aprendizajes previos, los alumnos y alumnas irán construyendo y consolidando nuevos aprendizajes significativos que han de ser objeto de una evaluación continua, lo que permitirá al profesorado detectar las dificultades, sus posibles causas y, en su caso, rediseñar el proceso de enseñanza, manteniendo en todo momento al alumnado informado sobre el mismo. Asimismo, ha de servir al profesorado como herramienta de control y mejora de otros elementos que intervienen en la enseñanza como las actividades y tareas, los recursos utilizados y las estrategias empleadas. En todo caso, es de destacar que en la evaluación es necesaria la diferenciación entre los procesos de aprendizaje y los productos finales. En el ámbito de la materia de Música es especialmente importante tener en cuenta esta diferenciación, pues podemos tener alumnos y alumnas que no posean ni facilidad ni familiaridad con la música, pero que mediante su esfuerzo y espíritu de superación hayan realizado un proceso de aprendizaje muy rico a pesar de que el producto final no lo sea tanto en comparación con otros alumnos o alumnas que hayan cursado estudios en escuelas de música o en el conservatorio. La evaluación de los procesos frente al simple resultado es precisamente uno de los aspectos que pueden contribuir en la materia de Música a la valoración del nivel de avance del alumnado, así como a determinar el grado alcanzado en la adquisición de las competencias específicas. Las propuestas didácticas podrán emplear los diferentes tipos de evaluación según su adecuación a las características de los procesos educativos y en función de la naturaleza de los contenidos trabajados. Así, se empleará la heteroevaluación, realizada por el profesorado sobre el alumnado; la autoevaluación, que contempla la evaluación del propio alumnado, de modo que puedan ser partícipes de su proceso formativo y asuman progresivamente responsabilidades en él. Por último, podrá llevarse a cabo la coevaluación, que implica la evaluación entre iguales, fomentando, además, valores como el respeto por la expresión de los demás y la empatía. En este sentido, la integración de los recursos y herramientas digitales abre nuevas posibilidades y enriquece tanto el trabajo evaluador del profesor o profesora como la autoevaluación y la coevaluación. Ello es posible, por ejemplo, mediante el empleo de formularios de autoevaluación que facilitan al alumnado comentarios de retroalimentación, de modo que pueda revisar sus propias entregas y reflexionar sobre los comentarios de evaluación. Asimismo, mediante el uso de herramientas colaborativas como foros, paneles o repositorios digitales de materiales educativos, el alumnado puede compartir sus propias reflexiones sobre los trabajos de los demás durante las actividades de coevaluación. Todo ello proporciona al profesorado una visión más amplia y profunda del proceso de evaluación, al mismo tiempo que incrementa en el alumnado la percepción respecto a su propio aprendizaje. No obstante, cualquier actividad de enseñanza puede servir para comprobar los progresos del alumnado siempre y cuando se cuente con algún tipo de procedimiento, técnica e instrumento de evaluación que permita al personal docente valorar las conductas y productos observables y en qué medida ha adquirido las competencias específicas. Así, los tipos de evaluación que se pueden realizar en la materia de Música pueden tener diferente naturaleza, dependiendo de lo que se pretenda evaluar: la improvisación, la interpretación, la creación, la elaboración de esquemas, musicogramas a partir de la audición, coreografías, mapas conceptuales, trabajos escritos, presentaciones orales, etc. Por otra parte, también habrá que valorar si estas actividades deben ser individuales o grupales, dependiendo del criterio empleado en su evaluación. Por su parte, los instrumentos de evaluación han de permitir la identificación de los logros obtenidos por el alumnado y su progresión en el proceso educativo. Estas herramientas deben ser variadas, accesibles y adecuadas a las circunstancias en que se produzca la evaluación. Son de utilidad las rúbricas de evaluación, las listas de control, los portafolios, los trabajos, los diarios de aprendizaje y las escalas de observación sistemática, que pueden facilitar la recogida de información en las diferentes fases del proceso educativo. En la evaluación de la materia de Música, es de destacar la conveniencia del empleo, además de documentos escritos, de grabaciones en audio y vídeo, así como archivos informáticos que recojan el trabajo con editores de partituras y secuenciadores. En definitiva, la evaluación debe estar presente en todas la actividades y realizaciones del alumnado, desde los trabajos de indagación y análisis mediante el empleo de herramientas analógicas y digitales o las actividades musicales y dancísticas de improvisación e interpretación, hasta la creación de producciones artísticas. Con ello, el alumnado percibirá que todos los trabajos y actividades son valorados y el profesorado contará con una mayor variedad de información en la tarea evaluadora. Evaluación del proceso de enseñanza La evaluación de la materia de Música deberá, en todo caso, tener en cuenta a todos los participantes en el proceso de enseñanza y aprendizaje. Por ello deberá evaluarse la propia actividad pedagógica y didáctica que se desarrolla en el aula mediante una reflexión sobre las tareas, los recursos y los diferentes agrupamientos empleados en las actividades planteadas durante las situaciones de aprendizaje, así como las técnicas, herramientas e instrumentos que se empleen en ellas. De igual modo, es necesaria la valoración de las actuaciones del profesorado en relación con las pautas metodológicas y de evaluación, con la finalidad de permitir el ajuste de su diseño y aplicación, contemplando elementos importantes como las producciones y los resultados obtenidos, el nivel de motivación del alumnado y la adecuación y fluidez de la comunicación e interacción en el aula. En este sentido, la evaluación de la práctica docente ha de permitir la mejora de las propuestas metodológicas en la materia de Música, de modo que se puedan realizar los ajustes adecuados a las necesidades de cada grupo o a cada alumno o alumna, con la finalidad de que puedan adquirir las competencias específicas de la materia. SEGUNDA LENGUA EXTRANJERA La rápida evolución de las sociedades actuales y sus múltiples interconexiones exigen el desarrollo de aquellas competencias que ayuden a los individuos a practicar una ciudadanía independiente, activa y comprometida con la realidad contemporánea, cada vez más global, intercultural y plurilingüe. Tal y como señala el Marco de referencia para una cultura democrática, en las actuales sociedades, culturalmente diversas, los procesos democráticos requieren del diálogo intercultural. Por lo tanto, la comunicación en distintas lenguas resulta clave en el desarrollo de esa cultura democrática. En la idea de un Espacio Europeo de Educación, la comunicación en más de una lengua evita que la educación y la formación se vean obstaculizadas por las fronteras y favorece la internacionalización y la movilidad, además de permitir el descubrimiento de otras culturas ampliando las perspectivas del alumnado. El plurilingüismo hace referencia a la presencia simultánea de dos o más lenguas en la competencia comunicativa de un individuo y a la interrelación que se establece entre ellas. Los conocimientos y experiencias lingüísticas de cada individuo, adquiridos bien en su entorno o bien en la escuela, no se organizan en compartimentos estancos, sino que se interrelacionan y contribuyen a desarrollar y ampliar la competencia comunicativa de los sujetos. En este sentido, el Consejo de Europa indica que el objetivo del aprendizaje de lenguas en la actualidad no debe ser el dominio de una, dos o más lenguas consideradas de forma aislada, sino el enriquecimiento del repertorio lingüístico individual y el desarrollo del perfil plurilingüe e intercultural compuesto por distintos niveles de competencia en distintas lenguas que van cambiando en función de los intereses y necesidades de cada momento. Esta es precisamente la finalidad de incluir el aprendizaje de una segunda lengua extranjera en la etapa de la Educación Secundaria Obligatoria. La oferta de la materia de Segunda Lengua Extranjera contribuye de forma directa a la mejora de las competencias lingüísticas, plurilingües e interculturales del alumnado, ayuda a desarrollar las capacidades vinculadas con el lenguaje y la comunicación y favorece el enriquecimiento de su repertorio lingüístico. Además, incluye una dimensión intercultural que engloba los aspectos históricos y culturales que permiten al alumnado conocer, valorar y respetar la diversidad lingüística y cultural. Ambas dimensiones, la lingüística y la intercultural, contribuyen a que el alumnado pueda ejercer una ciudadanía independiente, activa y comprometida con una sociedad democrática. Los conocimientos, destrezas y actitudes que implica esta materia ayudan al enriquecimiento de su repertorio plurilingüe e intercultural. En consecuencia, contribuyen a su preparación para una mejor integración y participación en una variedad de contextos y situaciones comunicativas que deben suponer un estímulo para su desarrollo y mejores oportunidades en los ámbitos personal, social, educativo y profesional. El Marco Común Europeo de Referencia para las Lenguas (MCER) es pieza clave para determinar los distintos niveles de competencia que el alumnado adquiere en las diferentes actividades de la lengua, y sirve también de apoyo en el proceso de aprendizaje de la lengua extranjera. Asimismo, sienta las bases para la definición de las competencias comunicativas, plurilingües e interculturales, que constituyen la base del currículo de lenguas extranjeras. Por tanto, el MCER, que sirve de referente para el desarrollo y la nivelación de los distintos elementos curriculares de la materia de Lengua Extranjera, lo será también para la de Segunda Lengua Extranjera. En consonancia con el enfoque orientado a la acción que plantea el MCER, que contribuye de manera significativa al diseño de metodologías eclécticas, el carácter competencial de este currículo invita al profesorado a crear tareas interdisciplinares, contextualizadas, significativas y relevantes, y a desarrollar situaciones de aprendizaje donde se considere al alumnado como agente social progresivamente autónomo y gradualmente responsable de su propio proceso de aprendizaje. Esto implica tener en cuenta sus repertorios, intereses y emociones, así como sus circunstancias específicas y las de su entorno, con el fin de sentar las bases para el aprendizaje a lo largo de toda la vida. La materia de Segunda Lengua Extranjera en la etapa de la Educación Secundaria Obligatoria es una materia optativa ofertada en los tres primeros cursos. En cuarto curso, se puede cursar bien como optativa bien como una de las materias de opción. Por este motivo, el currículo debe ser lo suficientemente flexible como para ajustarse a la diversidad de niveles que puede presentar el alumnado. Para contribuir a esa flexibilidad, se tomará como referencia el currículo general de la materia de Lengua Extranjera, que deberá adecuarse a las características de cada alumno o alumna. Especificaciones sobre las competencias específicas, los Saberes básicos y los criterios de evaluación Las enseñanzas de una segunda lengua extranjera deben ir dirigidas a la consecución de las mismas competencias específicas establecidas para la primera, con la necesaria adecuación del nivel a las características del alumnado. Así, esta materia está diseñada a partir de las seis competencias específicas planteadas en el currículo de Lengua Extranjera, que recogen aspectos relacionados con las actividades comunicativas de comprensión, producción, interacción y mediación, así como con el plurilingüismo y la interculturalidad. Los criterios de evaluación determinan el grado de adquisición de las competencias específicas por parte del alumnado, por lo que se presentan vinculados a ellas. Su adecuada aplicación depende de los niveles de partida del alumnado. La evaluación debe remitir fundamentalmente a los logros a partir de la situación de partida de cada alumno o alumna. Teniendo esto en cuenta, los criterios de evaluación de la materia de Lengua Extranjera deben utilizarse como referente tanto para la detección del punto de partida, como para la evaluación del nivel final, ayudando así a establecer el grado de avance experimentado por el alumnado de forma individualizada. Por último, los saberes básicos aúnan los conocimientos (saber), las destrezas (saber hacer) y las actitudes (saber ser) necesarios para la adq",
+      "criterios_ids": []
+    }
+  ]
+}

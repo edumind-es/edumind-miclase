@@ -1,0 +1,824 @@
+{
+  "meta": {
+    "comunidad": "Baleares",
+    "etapa": "secundaria",
+    "asignatura": "biologia-i-geologia",
+    "asignatura_nombre": "Biologia i Geologia",
+    "ciclo_origen": "Quart curs",
+    "fuente": "Illes Balears · Secundaria · Biologia i Geologia · Quart curs.xlsx",
+    "generado": "2026-11-08",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar i transmetre informació i dades científiques, argumentant sobre ells i utilitzant diferents formats, per analitzar conceptes i processos de les ciències biològiques i geològiques.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL5",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Identificar, localitzar i seleccionar informació, contrastant-ne la veracitat, organitzant-la i avaluant-la críticament per resoldre preguntes relacionades amb les ciències biològiques i geològiques.",
+      "descriptores_ids": [
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CD3",
+        "CD4",
+        "CD5",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Planificar i desenvolupar projectes de recerca, seguint els passos de les metodologies científiques i cooperant quan sigui necessari per indagar en aspectes relacionats amb les ciències geològiques i biològiques.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilitzar el raonament i el pensament computacional, analitzant críticament les respostes i solucions i reformulant el procediment, si fos necessari, per resoldre problemes o donar explicació a processos de la vida quotidiana relacionats amb la biologia i la geologia.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CPSAA5",
+        "CE1",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analitzar els efectes de determinades accions sobre el medi ambient i la salut, basant-se en els fonaments de les ciències biològiques i de la Terra, per promoure i adoptar hàbits que evitin o minimitzin els impactes mediambientals negatius, siguin compatibles amb un desenvolupament sostenible i permetin mantenir i millorar la salut individual i col·lectiva.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA2",
+        "CC4",
+        "CE1",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Analitzar els elements d’un paisatge concret valorant-los com a patrimoni natural i utilitzant coneixements sobre geologia i ciències de la Terra per explicar la seva història geològica, proposar accions encaminades a la seva protecció i identificar possibles riscs naturals.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "STEM5",
+        "CD1",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Analitzar conceptes i processos biològics i geològics interpretant informació en diferents formats (models, gràfics, taules, diagrames, fórmules, esquemes, símbols, pàgines web, etc.), mantenint una actitud crítica i obtenint-ne conclusions fonamentades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Transmetre opinions pròpies fonamentades i informació sobre biologia i geologia de forma clara i rigorosa, facilitant-ne la comprensió i anàlisi mitjançant l’ús de la terminologia i el format adequats (models, gràfics, taules, vídeos, informes, diagrames, fórmules, esquemes, símbols, continguts digitals, etc.).",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Analitzar i explicar fenòmens biològics i geològics representant-los mitjançant models i diagrames, utilitzant, quan sigui necessari, els passos del disseny d’enginyeria (identificació del problema, exploració, disseny, creació, avaluació i millora).",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Resoldre qüestions i aprofundir en aspectes biològics i geològics localitzant, seleccionant, organitzant i analitzant críticament la informació de diferents fonts i citant-les amb respecte per la propietat intel·lectual.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Contrastar la veracitat de la informació sobre temes biològics i geològics o treballs científics, utilitzant fonts fiables i adoptant una actitud crítica i escèptica cap a informacions sense una base científica com pseudociències, teories conspiratòries, creences sense fonamentació, faules, etc.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Valorar la contribució de la ciència a la societat i la labor dels científics, destacant el paper de la dona i entenent la investigació com una tasca col·lectiva i interdisciplinar en constant evolució influïda per el context polític i els recursos econòmics.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Plantejar preguntes i hipòtesis que puguin ser respostes o contrastades mitjançant mètodes científics i intentar realitzar prediccions sobre fenòmens biològics o geològics.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Dissenyar l'experimentació, la presa de dades i l'anàlisi de fenòmens biològics i geològics de manera que permetin respondre a preguntes concretes i contrastar una hipòtesi plantejada.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Realitzar experiments i prendre dades quantitatives o qualitatives sobre fenòmens biològics i geològics utilitzant els instruments, eines o tècniques adequats amb correcció.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Interpretar i analitzar els resultats obtinguts en un projecte de recerca utilitzant, quan sigui necessari, eines matemàtiques i tecnològiques per obtenir conclusions raonades i fonamentades o valorar la impossibilitat de fer-ho.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.5",
+      "objetivo_id": "CE3",
+      "descripcion": "Cooperar i col·laborar en les diferents fases d’un projecte científic per treballar amb major eficiència, valorant la importància de la cooperació en la recerca, respectant la diversitat i la igualtat de gènere, i afavorint la inclusió.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Resoldre problemes o donar explicació a processos biològics o geològics utilitzant coneixements, dades i informació proporcionats pel docent, el raonament lògic, el pensament computacional o recursos digitals.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Analitzar críticament la solució a un problema sobre fenòmens biològics i geològics.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Identificar els possibles riscs naturals potenciats per determinades accions humanes sobre una zona geogràfica concreta, tenint en compte les seves característiques litològiques, relleu, vegetació i factors socioeconòmics.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Deduir i explicar la història geològica d’un relleu identificant els seus elements més rellevants a partir de talls, mapes o altres sistemes d’informació geològica i utilitzant el raonament, els principis geològics bàsics (horitzontalitat, superposició, actualisme…) i les teories geològiques més rellevants.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "› Salut I Malaltia"
+    },
+    {
+      "id": "B2",
+      "titulo": "› Projecte Científic"
+    },
+    {
+      "id": "B3",
+      "titulo": "› Geologia"
+    },
+    {
+      "id": "B4",
+      "titulo": "› La Cèl.Lula"
+    },
+    {
+      "id": "B5",
+      "titulo": "› Genètica I Evolució"
+    },
+    {
+      "id": "B6",
+      "titulo": "› La Terra A L’Univers"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Investigar conceptes i processos biològics i geològics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Interpretar informació relacionada amb la biologia i geologia presentada en diferents formats científics (models, gràfics, taules, diagrames, fórmules, esquemes, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Mantenir una actitud crítica i obtenir conclusions formant opinions pròpies fonamentades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Comunicar de forma raonada en llenguatge oral i/o escrit, opinions pròpies fonamentades i informació sobre processos biològics i geològics de manera clara i comprensible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar la terminologia i formats adequats (models, gràfics, taules, vídeos, informes, diagrames, fórmules, esquemes, símbols, continguts digitals, etc.) en la transmissió d’informació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Investigar i explicar fenòmens biològics i geològics representant-los mitjançant models o diagrames.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar, en cas necessari, les etapes de disseny en l’àmbit de l’enginyeria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Localitzar i citar fonts de manera adequada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Examinar la qualitat de la informació a partir dels coneixements propis de la matèria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Aprofundir en el coneixement de la biologia i la geologia seleccionant diferents fonts d’informació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Resoldre qüestions relacionades amb la biologia i la geologia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Identificar informació científica sobre temes relacionats amb la biologia i la geologia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Distingir la informació científica fonamentada d’altres com dades pseudocientífiques, faules, teories conspiratòries o creences infundades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Mantenir una actitud escèptica davant de la informació rebuda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Valorar les aportacions de la ciència a la societat i la tasca dels científics, independentment de la seva ètnia, sexe o cultura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer i destacar el paper de les dones en la ciència al llarg de la història.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Percebre la ciència i la investigació científica com una tasca col·lectiva, interdisciplinar i en constant evolució influïda pel context polític i els recursos econòmics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Plantejar preguntes i hipòtesis sobre fenòmens biològics o geològics que puguin ser respostes o contrastades utilitzant mètodes científics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Realitzar prediccions sobre fenòmens biològics i geològics i comprovar-ne la adequació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Planificar experiments o simulacions per explicar fenòmens biològics o geològics i respondre preguntes concretes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Recollir i organitzar les dades obtingudes durant el procés d’experimentació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "Contrastar una hipòtesi evitant biaixos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "Realitzar experiments que permetin entendre fenòmens biològics i geològics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar els instruments, eines i tècniques adequats amb correcció.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "Recollir i organitzar correctament les dades, tant qualitatives com quantitatives, obtingudes durant l’experiment, de forma correcta i amb el format adequat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.26",
+      "bloque_id": "B1",
+      "descripcion": "Examinar els resultats obtinguts en un projecte de recerca.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.27",
+      "bloque_id": "B1",
+      "descripcion": "Seleccionar i utilitzar les eines d’anàlisi adequades en funció del tipus de projecte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.28",
+      "bloque_id": "B1",
+      "descripcion": "Establir conclusions fonamentades en els conceptes propis de la matèria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.29",
+      "bloque_id": "B1",
+      "descripcion": "Deduir la impossibilitat d’extreure’n conclusions i valorar la modificació del procediment d’experimentació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.30",
+      "bloque_id": "B1",
+      "descripcion": "Treballar en equips col·laboratius en un projecte científic per aconseguir una major eficiència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.31",
+      "bloque_id": "B1",
+      "descripcion": "Valorar la importància de la cooperació per aconseguir millors resultats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.32",
+      "bloque_id": "B1",
+      "descripcion": "Respectar la diversitat i la igualtat de gènere.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.33",
+      "bloque_id": "B1",
+      "descripcion": "Afavorir activament la inclusió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.34",
+      "bloque_id": "B1",
+      "descripcion": "Examinar críticament si la solució obtinguda a un problema és l’adequada i/o l’esperada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.35",
+      "bloque_id": "B1",
+      "descripcion": "Proposar, de forma fonamentada, esmenes o variacions als procediments o conclusions si la solució no és viable o si apareixen noves dades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Hipòtesis, preguntes i conjectures: plantejament amb perspectiva científica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Estratègies per a la cerca d'informació, la col·laboració i la comunicació de processos, resultats o idees científiques: eines digitals i formats d’ús freqüent en ciència (presentació, gràfica, vídeo, pòster, informe…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Fonts fidedignes d'informació científica: reconeixement i utilització.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Controls experimentals (positius i negatius): disseny i importància per a l’obtenció de resultats científics objectius i fiables.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Resposta a qüestions científiques mitjançant l’experimentació i el treball de camp: utilització dels instruments i espais necessaris (laboratori, aules, entorn…) de forma adequada i precisa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Modelatge per a la representació i comprensió de processos o elements de la naturalesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Mètodes d'observació i de presa de dades de fenòmens naturals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Mètodes d'anàlisis de resultats. Diferenciació entre correlació i causalitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "La tasca científica i els científics: contribució a les ciències biològiques i geològiques i la importància social. El paper de la dona en la ciència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "L'evolució històrica del saber científic: la ciència com a tasca col·lectiva, interdisciplinar i en contínua construcció.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Relleu i paisatge: diferències, importància com a recursos i factors que intervenen en la seva formació i modelatge. Exemples característics de les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Estructura i dinàmica de la geosfera. Mètodes d'estudi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Els efectes globals de la dinàmica de la geosfera des de la perspectiva de la tectònica de plaques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Processos geològics externs i interns: diferències i relació amb els riscs naturals. Mesures de prevenció i mapes de riscs.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Els talls geològics: interpretació i traçat de la història geològica que reflecteixen, mitjançant l’aplicació dels principis de l'estudi de la història de la Terra (horitzontalitat, superposició, intersecció, successió faunística…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Confecció de perfils topogràfics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Models d’organització cel·lular: cèl·lules procariotes i eucariotes. Cèl·lula animal i cèl·lula vegetal. Estructura i funció dels orgànuls cel·lulars.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Fases del cicle cel·lular.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "La funció biològica de la mitosi, la meiosi i les seves fases.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Destreses d’observació de les distintes fases de la mitosi al microscopi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Model simplificat de l'estructura de l'ADN i de l'ARN i relació amb la seva funció i síntesi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Estratègies d’extracció d’ADN d’una cèl·lula eucariota.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Etapes de l'expressió gènica, característiques del codi genètic i resolució de problemes relacionats amb aquestes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Relació entre les mutacions, la replicació de l'ADN, el càncer, l'evolució i la biodiversitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "El procés evolutiu de les característiques d'una espècie determinada a la llum de la teoria neodarwinista i d'altres teories amb rellevància històrica (lamarckisme i darwinisme).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Fenotip i genotip: definició i diferències.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Estratègies de resolució de problemes senzills d'herència genètica de caràcters amb relació de dominància i recessivitat amb un o dos gens.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Estratègies de resolució de problemes senzills d'herència del sexe i d'herència genètica de caràcters amb relació de codominància, dominància incompleta, al·lelisme múltiple i lligada al sexe amb un o dos gens.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Origen de l'univers i del sistema solar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Components del sistema solar: estructura i característiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Hipòtesi sobre l'origen de la vida en la Terra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Principals investigacions en el camp de l'astrobiologia.",
+      "criterios_ids": []
+    }
+  ]
+}

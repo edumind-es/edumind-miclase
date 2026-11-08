@@ -1,0 +1,540 @@
+{
+  "meta": {
+    "comunidad": "CeutaMelilla",
+    "etapa": "secundaria",
+    "asignatura": "educacion-plastica-visual-y-audiovisual",
+    "asignatura_nombre": "Educación Plástica, Visual y Audiovisual",
+    "ciclo_origen": "Tercer curso",
+    "fuente": "Ceuta y Melilla · Secundaria · Educación Plástica, Visual y Audiovisual · Tercer curso.xlsx",
+    "generado": "2026-11-08",
+    "curso": "3º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad. 28 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. (CP) distintas lenguas, orales o signadas, de forma comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre mantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e respetar la diversidad lingüística y cultural de democrática. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social. ciencia, tecnología e ingeniería (STEM) en ciencia, tecnología e ingeniería entraña la comprensión del mundo utilizando matemáticos, la tecnología y los de forma comprometida, responsable y y aplicar la perspectiva y el diversos problemas en diferentes contextos. y explicación del entorno natural y y metodologías, incluidas la observación y la y extraer conclusiones basadas en mundo natural y el contexto social. comprende la aplicación de los conocimientos nuestra sociedad de acuerdo con un marco de seguridad, responsabilidad y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. 29 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. digital (CD) saludable, sostenible, crítico y responsable para el trabajo y para la participación en la datos, la comunicación y la colaboración, la digitales (incluida la programación), la las competencias relacionadas con la ciudadanía digital, la privacidad, la propiedad computacional y crítico. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. aprender a aprender (CPSAA) a aprender implica la capacidad de aceptarse y promover un crecimiento eficazmente; colaborar con otros de el aprendizaje a lo largo de la vida. a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir al y de las demás personas, desarrollando a quienes lo rodean a través de la vida orientada al futuro; así como expresar integrador y de apoyo. 30 DEL ESTADO operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. (CC) alumnos y alumnas puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y políticas, mundiales y el compromiso activo con la mundial. Incluye la alfabetización cívica, la de una cultura democrática fundada en el acerca de los grandes problemas éticos vida sostenible acorde con los Objetivos de 2030. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. (CE) un enfoque vital dirigido a actuar conocimientos específicos necesarios para Aporta estrategias que permiten adaptar la entrenar el pensamiento para analizar y utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos a aprender, a arriesgar y a afrontar la basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas planteadas a la acción 31 DEL ESTADO sostenibles de valor social, cultural y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. expresión culturales (CCEC) culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de también un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia en un mundo caracterizado por la diversidad, y otras manifestaciones culturales pueden forma. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II Secundaria Obligatoria GEOLOGÍA etapa de Enseñanza Secundaria Obligatoria del Medio Natural, Social y Cultural de de la curiosidad y la actitud crítica y del alumnado de manera que permitan a adoptar hábitos que ayuden a mantener y 32"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprender la importancia que algunos ejemplos seleccionados de las distintas manifestaciones culturales y artísticas han tenido en el desarrollo del ser humano, mostrando interés por el patrimonio como parte de la propia cultura, para entender cómo se convierten en el testimonio de los valores y convicciones de cada persona y de la sociedad en su conjunto, y para reconocer la necesidad de su protección y conservación.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Explicar las producciones plásticas, visuales y audiovisuales propias, comparándolas con las de sus iguales y con algunas de las que conforman el patrimonio cultural y artístico, justificando las opiniones y teniendo en cuenta el progreso desde la intención hasta la realización, para valorar el intercambio, las experiencias compartidas y el diálogo intercultural, así como para superar estereotipos.",
+      "descriptores_ids": [
+        "CCL1",
+        "CPSAA1",
+        "CPSAA3",
+        "CC1",
+        "CC3",
+        "CCEC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Analizar diferentes propuestas plásticas, visuales y audiovisuales, mostrando respeto y desarrollando la capacidad de observación e interiorización de la experiencia y del disfrute estético, para enriquecer la cultura artística individual y alimentar el imaginario.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD1",
+        "CPSAA4",
+        "CC1",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Explorar las técnicas, los lenguajes y las intenciones de diferentes producciones culturales y artísticas, analizando, de forma abierta y respetuosa, tanto el proceso como el producto final, su recepción y su contexto, para descubrir las diversas posibilidades que ofrecen como fuente generadora de ideas y respuestas.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CC3",
+        "CCEC2"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Realizar producciones artísticas individuales o colectivas con creatividad e imaginación, seleccionando y aplicando herramientas, técnicas y soportes en función de la intencionalidad, para expresar la visión del mundo, las emociones y los sentimientos propios, así como para mejorar la capacidad de comunicación y desarrollar la reflexión crítica y la autoconfianza.",
+      "descriptores_ids": [
+        "CCL2",
+        "CPSAA1",
+        "CPSAA3",
+        "CPSAA4",
+        "CC3",
+        "CCEC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Apropiarse de las referencias culturales y artísticas del entorno, identificando sus singularidades, para enriquecer las creaciones propias y desarrollar la identidad personal, cultural y social.",
+      "descriptores_ids": [
+        "CCL2",
+        "CD1",
+        "CPSAA3",
+        "CC1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Aplicar las principales técnicas, recursos y convenciones de los lenguajes artísticos, incorporando, de forma creativa, las posibilidades que ofrecen las diversas tecnologías, para integrarlos y enriquecer el diseño y la realización de un proyecto artístico.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM3",
+        "CD1",
+        "CD5",
+        "CC1",
+        "CC3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Compartir producciones y manifestaciones artísticas, adaptando el proyecto a la intención y a las características del público destinatario, para valorar distintas oportunidades de desarrollo personal.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM3",
+        "CD3",
+        "CPSAA3",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconocer los factores históricos y sociales que rodean las producciones plásticas, visuales y audiovisuales más relevantes, así como su función y finalidad, describiendo sus particularidades y su papel como transmisoras de valores y convicciones, con interés y respeto, desde una perspectiva de género.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Razonar sobre la importancia de la conservación del patrimonio cultural y artístico a través del análisis guiado de sus manifestaciones, valorándolo como fuente de enriquecimiento social y personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Explicar, de forma razonada, la importancia del proceso que media entre la realidad, el imaginario y la producción, superando estereotipos y mostrando un comportamiento respetuoso con la diversidad cultural.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Analizar diversas producciones artísticas, incluidas las propias y las de sus iguales, desarrollando con interés una mirada estética crítica y valorando la diversidad de las expresiones culturales.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar y explicar propuestas plásticas, visuales y audiovisuales de diversos tipos y épocas, analizándolas con curiosidad y respeto desde una perspectiva de género, e incorporándolas a su cultura personal y su imaginario propio.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Argumentar el disfrute producido por la recepción del arte en todas sus formas y vertientes, compartiendo con respeto impresiones y emociones y expresando la opinión personal de forma abierta.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar los rasgos particulares de diversas técnicas y lenguajes artísticos, así como sus distintos procesos y resultados en función de los contextos sociales, históricos, geográficos y tecnológicos, buscando y analizando la información con interés y eficacia.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Analizar de forma guiada las especificidades de los lenguajes de diferentes producciones culturales y artísticas, estableciendo conexiones entre ellas e incorporándolas creativamente en las producciones propias.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Expresar sentimientos, ideas y opiniones en diferentes producciones plásticas, visuales y audiovisuales, a través de la experimentación con diversas herramientas, técnicas y soportes, desarrollando la capacidad de comunicación y la reflexión crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Realizar diferentes tipos de producciones artísticas individuales o colectivas, justificando el proceso creativo, mostrando iniciativa y autoconfianza, integrando racionalidad, empatía y sensibilidad, y seleccionando las técnicas y los soportes adecuados al propósito.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Explicar la pertenencia de las manifestaciones artísticas a un contexto cultural concreto, a través del análisis de los aspectos formales y de los factores sociales que determinan diversas producciones culturales y artísticas contemporáneas.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Utilizar creativamente referencias culturales y artísticas del entorno en la elaboración de producciones propias, mostrando una visión personal.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Comprender las convenciones de la representación de la tridimensionalidad, aplicando con interés los usos de la perspectiva en sus propias producciones.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Utilizar con creatividad los recursos y convenciones del lenguaje visual, seleccionando de manera justificada los más adecuados de entre los que conforman el repertorio personal, para el diseño y la producción de mensajes propios.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Organizar y realizar un proyecto artístico, con creatividad y de forma consciente, ajustándose al objetivo propuesto, experimentando con distintas técnicas visuales o audiovisuales en la generación de mensajes propios, y mostrando iniciativa en el empleo de lenguajes, materiales, soportes y herramientas.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Explicar los diferentes usos y funciones de las producciones y manifestaciones artísticas, argumentando de forma individual o colectiva sus conclusiones acerca de las oportunidades que pueden generar, con una actitud abierta y con interés por conocer su importancia en la sociedad.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Desarrollar producciones y manifestaciones artísticas con una intención previa, de forma individual o colectiva, organizando y desarrollando las diferentes etapas y considerando las características del público destinatario.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.3",
+      "objetivo_id": "CE8",
+      "descripcion": "Explicar razonadamente los procesos de elaboración y el resultado final de producciones y manifestaciones artísticas, realizadas de forma individual o colectiva, reconociendo los errores, buscando las soluciones y las estrategias más adecuadas para mejorarlas, y valorando las oportunidades de desarrollo personal que ofrecen.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Patrimonio artístico y cultural"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Elementos formales de la imagen y del lenguaje visual. La expresión gráfica"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Expresión artística y gráfico-plástica: técnicas y procedimientos"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Imagen y comunicación visual y audiovisual"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Manifestaciones artísticas mixtas y alternativas. Los géneros artísticos en el arte contemporáneo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Manifestaciones culturales y artísticas más importantes, incluidas las contemporáneas y las pertenecientes al patrimonio local: aspectos formales y relación con el contexto histórico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Las formas geométricas en el arte y en el entorno. Patrimonio arquitectónico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "La percepción visual y la sintaxis de la imagen. Ilusiones ópticas. Arte óptico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "La composición. Conceptos de equilibrio, proporción y ritmo aplicados a la organización de formas en el plano y en el espacio. Proporción áurea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "La luz como valor expresivo y representativo de formas y volúmenes. El claroscuro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Simbología del color. Aplicaciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Perspectiva cónica. Representación de la tridimensionalidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Factores y etapas del proceso creativo: elección de materiales y técnicas, realización de bocetos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas básicas de expresión gráfico-plástica en dos dimensiones. Técnicas secas y húmedas. Su uso en el arte y sus características expresivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Técnicas básicas de expresión gráfico-plástica en tres dimensiones. Su uso en el arte y sus características expresivas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Diseño gráfico, de producto y de moda. Proyectos y publicidad asociada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Imágenes visuales y audiovisuales: características, lectura y análisis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Imagen fija y en movimiento: origen y evolución. Introducción a las diferentes características del cómic, la fotografía, el cine, la animación y los formatos digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Técnicas expresivas con soporte digital. Orientaciones metodológicas y para la evaluación La materia de Educación Plástica, Visual y Audiovisual abarca tanto la práctica de los procesos de creación como el análisis de diferentes manifestaciones culturales y artísticas, proponiendo así al alumnado tanto una experimentación plástica como una experiencia estética. Por ello, para esta materia, se hacen necesarias una metodología y una evaluación específicas, que partan de los principios de la enseñanza competencial y del aprendizaje activo y que deberán garantizar la activación de conocimientos, destrezas y actitudes de manera integrada a través de situaciones de aprendizaje variadas y con diversos grados de complejidad. Así pues, las propuestas didácticas que se diseñen deben adaptarse y regularse en función de los dos niveles en los que se imparte la materia, en 1.º y 3.º, ya que la evolución y la madurez del alumnado deben tenerse muy en cuenta durante esta etapa para el proceso de enseñanza-aprendizaje. Organización de tiempos y espacios Un enfoque de la educación por competencias llevado al aula precisa de un cambio en cuanto a la organización del espacio de trabajo, que debe tener consecuencias en la metodología aplicada. En esta nueva disposición, es conveniente que el aula donde se imparta Educación Plástica, Visual y Audiovisual cumpla con una serie de requisitos derivados del currículo de la materia. En primer lugar, es importante que el espacio sea accesible, bien iluminado y cómodo, y que su mobiliario se adapte a diferentes configuraciones, según las necesidades de trabajo. Además, ha de ser un espacio que permita atender una parte experimental, pero también una actividad expositiva y reflexiva en torno a las producciones del alumnado, y que facilite la interacción y la participación de los alumnos y las alumnas en los procesos de trabajo, evitando la exclusión. Igualmente, resulta necesario fomentar tanto el trabajo individual como el grupal, de modo que el espacio debe posibilitar sistemas rotatorios en la actividad. En lo que respecta a los recursos disponibles, es interesante impulsar el reciclaje y trabajar sobre el uso adecuado de los materiales atendiendo a su toxicidad. El aula de Educación Plástica, Visual y Audiovisual se plantea, en definitiva, como un espacio dinámico, sostenible y transformable según las necesidades de cada actividad o proyecto, un lugar que estimule la creatividad y la exploración con diferentes técnicas y materiales, y en el que se impulse el trabajo con medios digitales. El trabajo que se desarrolle en esta materia debe proyectarse fuera del aula hacia el propio centro educativo, e incluso considerar otros ámbitos del entorno más próximo, ya sea urbano, natural, museístico o profesional. Este aspecto se conseguirá a través de unas situaciones de aprendizaje que incluyan la experimentación plástica, la experiencia expositiva y la exploración de manifestaciones culturales y artísticas de interés para el alumnado, de forma directa si están disponibles en un contexto más cercano y de forma más globalizada a través de entornos digitales. La distribución de los tiempos es tan importante como la organización y la elección del espacio dentro de un proceso de enseñanza-aprendizaje competencial, activo y cooperativo. Así pues, el profesorado, en su labor de guía de toda propuesta de trabajo o proyecto que se plantee, establecerá previamente las necesidades materiales y de organización del aula, y, además, determinará unos tiempos y unos recursos, teniendo en cuenta los diferentes ritmos de aprendizaje, por lo que es necesario un cierto margen de flexibilidad. Organización de actividades y propuestas didácticas Las propuestas didácticas de esta materia deben responder a unas pautas flexibles y permeables, que favorezcan el desarrollo de la creatividad y del pensamiento divergente, con un grado de complejidad adaptable que permita al alumnado superarse y exteriorizar sus conclusiones personales. Han de ser también motivadoras, y para ello no solamente deben ser innovadoras, sino que además deberán vincularse con los intereses del alumnado, al mismo tiempo que despierten su curiosidad por nuevas referencias y ámbitos artísticos. El Diseño Universal para el Aprendizaje debe ser el eje en torno al cual se organicen las propuestas didácticas de la materia. Con este fin, se implementarán estrategias diferentes que se ajusten a la diversidad del alumnado, tanto en la presentación de las actividades como en los procedimientos de resolución de las mismas, utilizando distintos lenguajes (verbal, textual, gráfico, plástico o audiovisual) y mediante el uso de los materiales, técnicas y recursos propios de la materia, incluyendo las herramientas digitales. El enfoque competencial de la materia de Educación Plástica, Visual y Audiovisual, a través de las competencias específicas, que han de trabajarse de forma conjunta e interrelacionada, implica establecer un desarrollo coherente de los aprendizajes que se espera que adquiera el alumnado, introduciendo los aspectos técnicos y teóricos a medida que la práctica los vaya requiriendo. Es necesario que el alumnado perciba un orden en las actividades y tareas que se propongan, no solo dentro del mismo curso, sino también entre los distintos niveles en los que se imparte la materia, así como con la materia de Expresión Artística de 4.º No deben plantearse, pues, actividades aisladas, sino interconectadas, de manera que se observe una lógica y una continuidad dentro de esta materia y con la de Expresión Artística. Estas actividades, además, han de convertirse en experiencias para el alumnado, para lo que es importante establecer un método de trabajo que no solo desarrolle habilidades técnicas, sino que sirva también como una vía para pensar, entender y transformar el entorno, adquiriendo nuevas competencias en el proceso. Por ello, se propondrán de forma conjunta actividades de producción y actividades de observación, análisis y sensibilización a partir de diferentes manifestaciones culturales y artísticas. De esta forma, se fomenta la participación estética, ampliando el diálogo con las producciones artísticas más allá del análisis, retomándolas, transformándolas y utilizando diferentes técnicas y medios de expresión. Uno de los objetivos de Educación Plástica, Visual y Audiovisual es integrar en el aula perspectivas de análisis y dinámicas de trabajo relacionadas con el momento que viven los alumnos y alumnas. Por lo tanto, es esencial incorporar en las propuestas didácticas las manifestaciones artísticas contemporáneas, que permiten hacer de la enseñanza de esta materia un proceso integrador de diferentes disciplinas. Del mismo modo, se hace imprescindible analizar la presencia de mujeres artistas en el arte, además de aplicar la perspectiva de género en la aproximación a las diversas propuestas que se seleccionen, ya que el alumnado de esta etapa debe abordar una reflexión crítica de la historia y la evolución del arte. Por todo lo expuesto, las situaciones de aprendizaje resultan una propuesta didáctica idónea, puesto que permiten recrear contextos cercanos al alumnado. Estarán formadas por tareas y actividades articuladas con el fin de lograr unos propósitos educativos que contribuyan a la adquisición de las competencias específicas de la materia y, en consecuencia, a las competencias clave del Perfil de salida del alumnado al término de la enseñanza básica. Aprendizaje activo basado en la práctica artística A la hora de abordar el desarrollo del currículo de la materia, tendrán que realizarse propuestas didácticas que busquen el equilibrio entre la dimensión productiva y la reflexiva y crítica. Para ello, se deben utilizar metodologías activas que se basen en una serie de principios que doten de protagonismo al alumnado promoviendo un aprendizaje autónomo a la vez que cooperativo; que sean combinables entre ellas; que fomenten la utilización de soportes digitales; que propicien la colaboración con otros agentes del entorno; que favorezcan la comunicación entre el alumnado y el profesorado; y que proporcionen un aprendizaje competencial contextualizado e integrado. En definitiva, metodologías en las que el papel del profesorado sea el de actuar como guía o tutor o tutora, y en las que el alumnado autogestione su propio aprendizaje, obtenga progresivamente más independencia y asuma responsabilidades crecientes en la realización de diferentes tareas. Muchas de las metodologías activas más utilizadas se basan en procedimientos propios de la actividad artística, por lo que son las más adecuadas en esta materia y resultan fácilmente aplicables. Entre ellas puede destacarse el pensamiento visual o visual thinking, como herramienta de comunicación basada en el uso del lenguaje gráfico, que favorece el desarrollo de la creatividad y dota de sentido al uso de los elementos propios del lenguaje visual y su organización en la narración de una historia, en la representación de ideas o en la creación de señales y símbolos. Otra metodología interesante, que utiliza las técnicas de creatividad y de desarrollo de ideas propias de los diseñadores de producto, es el pensamiento de diseño o design thinking, que favorece la generación de empatía a través del análisis de las necesidades del otro, promueve a su vez una actitud de curiosidad, y considera el error, no como un fracaso, sino como una oportunidad de aprendizaje. En su proceso, resulta imprescindible el trabajo en equipo y el desarrollo de técnicas de contenido visual y plástico. Por otro lado, la gamificación aprovecha el trabajo de estudio ya realizado por la industria de los videojuegos para favorecer la motivación del alumnado, llevando al aula las dinámicas de juego, de fidelización y de recompensa, por lo que puede ser utilizada en esta materia como método de análisis del desarrollo narrativo y visual de los videojuegos más cercanos al alumnado. Además, el modelo de clase invertida puede ser utilizado para trabajar cualquier aspecto de la materia, introduciendo el visionado autónomo de vídeos, presentaciones o enlaces web facilitados por el profesorado, para después realizar en el aula la parte más experimental o la más reflexiva, compartiendo opiniones y sensaciones. Finalmente, una de las metodologías activas más versátil y que posibilita la incorporación de otras prácticas mencionadas anteriormente es el aprendizaje basado en proyectos. Este posibilita la incorporación de diferentes competencias específicas, técnicas y materiales, y, además, permite vincular la materia con las diferentes profesiones derivadas de la práctica artística y creativa, otorgando sentido práctico a lo que se propone en el aula. De la metodología de aprendizaje por proyectos parte el aprendizaje-servicio, que logra conectar con el compromiso social, para lo que vincula el aprendizaje de conocimientos, destrezas y actitudes con la presentación de una propuesta de intervención real en el entorno del alumnado. Evaluación del proceso de aprendizaje La evaluación del aprendizaje del alumnado ha de ser coherente con el modelo de educación competencial del currículo de la materia, por lo que debe centrarse en la adquisición de las competencias específicas, valorable a partir de los criterios de evaluación derivados de ellas. Los instrumentos de evaluación han de ser variados y adaptables a cada propuesta didáctica y a los diferentes ritmos de aprendizaje, de acuerdo con los principios del Diseño Universal para el Aprendizaje, y deben ser útiles en el análisis objetivo de todo el proceso de enseñanza-aprendizaje. Con el fin de llevar a cabo un sistema de evaluación formativo, reflexivo y compartido, ha de realizarse un diseño planificado de los instrumentos, incluyendo un tiempo dedicado al mismo en el planteamiento inicial de las actividades. El profesorado debe promover entre el alumnado la integración de la evaluación como un proceso de diálogo donde el objetivo sea el progreso del aprendizaje. En este sentido, es conveniente realizar una evaluación inicial que aporte información sobre los aprendizajes previos, adquiridos en la Educación Primaria o asimilados de manera informal en el propio contexto visual y audiovisual del alumnado. Esta evaluación inicial servirá de punto de partida para todas las propuestas didácticas que se desarrollen en la materia. Durante el proceso de evaluación se debe transmitir al alumnado, de forma clara y precisa, toda la información posible al respecto, de manera que se facilite una retroalimentación continua. A modo de ejemplo, al inicio de cada actividad, tarea o proyecto, se pueden facilitar al alumnado plantillas o rúbricas de coevaluación y autoevaluación, de manera que pueda conocer aquello que se va a evaluar y que es necesario cumplir a lo largo del proceso. En las actividades o proyectos grupales se pueden utilizar plantillas o rúbricas de evaluación de grupo, que sirven para evaluar los logros y errores del trabajo realizado. A su vez, es interesante comunicar a la clase información sobre la evolución del grupo, de modo que el alumnado pueda hacer una valoración constructiva de sus posibilidades y motivar la necesidad de cambio o el fortalecimiento de sus aciertos dentro del proceso de aprendizaje. Además, estas plantillas pueden formar parte de un diario de trabajo, en el que el alumnado responda a las cuestiones planteadas por el profesorado sobre el trabajo realizado y lo aprendido al finalizar cada actividad o proyecto, incluyendo reflexiones personales, y donde se incorpore una respuesta del profesorado ofreciendo opciones de mejora. De esta forma, el proceso de evaluación sirve para recabar información acerca de los aspectos cognitivos, técnicos y metacognitivos desarrollados. Evaluación del proceso de enseñanza La evaluación en su conjunto debe referirse también al análisis de la práctica docente, que abarca las actividades y los recursos propuestos, la metodología aplicada y los tiempos asignados. Debe formar parte del proceso de enseñanza-aprendizaje, de modo que no solo apunte a los resultados finales, sino que sea un instrumento de información y mejora tanto del trabajo del alumnado como de la labor docente. En una evaluación eficaz de la enseñanza, es imprescindible que se aporten opciones de mejora a partir de un análisis objetivo y que este permita revisar el grado de adecuación de las actividades propuestas al perfil del alumnado, su adaptabilidad y su funcionalidad en cuanto a la adquisición de las competencias planteadas. Así pues, la autoevaluación del profesorado en diferentes momentos del proceso de enseñanza de la materia será fundamental para contribuir a su mejora. Por otro lado, las exposiciones y presentaciones abiertas al público de las actividades y de los proyectos llevados a cabo en la materia son, además de un motor de motivación del alumnado, una posibilidad de evaluación del resultado de todo el proceso de enseñanza- aprendizaje por agentes externos a la materia, desde la que el profesorado puede plantearse reflexiones y formular conclusiones sobre las propuestas didácticas planteadas.",
+      "criterios_ids": []
+    }
+  ]
+}

@@ -1,0 +1,2303 @@
+{
+  "meta": {
+    "comunidad": "Baleares",
+    "etapa": "secundaria",
+    "asignatura": "geografia-i-historia",
+    "asignatura_nombre": "Geografia i Història",
+    "ciclo_origen": "Segon curs",
+    "fuente": "Illes Balears · Secundaria · Geografia i Història · Segon curs.xlsx",
+    "generado": "2026-11-08",
+    "curso": "2º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Cercar, seleccionar, tractar i organitzar informació sobre temes rellevants del present i del passat, usant críticament fonts històriques i geogràfiques, per adquirir coneixements, elaborar i expressar continguts en diversos formats.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Indagar, argumentar i elaborar productes propis sobre problemes geogràfics, històrics i socials que resultin rellevants actualment, des del local al global, per desenvolupar un pensament crític, respectuós amb les diferències, que contribueixi a la construcció de la pròpia identitat i a enriquir el patrimoni comú.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CC1",
+        "CC3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Conèixer els principals desafiaments als quals s’han enfrontat diferents societats al llarg del temps, identificant les causes i conseqüències dels canvis produïts i els problemes als quals s’enfronten en l’actualitat, mitjançant el desenvolupament de projectes de recerca i l’ús de fonts fiables, per realitzar propostes que contribueixin al desenvolupament sostenible.",
+      "descriptores_ids": [
+        "STEM3",
+        "STEM4",
+        "STEM5",
+        "CPSAA3",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Identificar i analitzar els elements del paisatge i la seva articulació en sistemes complexos naturals, rurals i urbans, com també la seva evolució en el temps, interpretant les 4 d’agost de 2025 causes de les transformacions i valorant el grau d’equilibri existent en els diferents ecosistemes, per promoure’n la conservació, millora i ús sostenible.",
+      "descriptores_ids": [
+        "CPSAA2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Analitzar de manera crítica plantejaments històrics i geogràfics explicant la construcció dels sistemes democràtics i els principis constitucionals que regeixen la vida en comunitat, com també assumint els deures i drets propis del nostre marc de convivència, per promoure la participació ciutadana i la cohesió social.",
+      "descriptores_ids": [
+        "CCL5",
+        "CC1",
+        "CC2",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprendre els processos geogràfics, històrics i culturals que han conformat la realitat multicultural en què vivim, coneixent i difonent la història i la cultura de les minories ètniques presents al nostre país i valorant l’aportació dels moviments en defensa de la igualtat i la inclusió, per tal de reduir els estereotips, evitar qualsevol tipus de discriminació i violència, i reconèixer la riquesa de la diversitat.",
+      "descriptores_ids": [
+        "CCL5",
+        "CPSAA3",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Identificar els fonaments que sostenen les diverses identitats propies i les dels altres, a través del coneixement i la valoració del patrimoni material i immaterial que compartim per conservar-lo i respectar els sentiments de pertinença, com també per afavorir processos que contribueixin a la cohesió o solidaritat territorial amb vista als valors de l’europeisme i la Declaració Universal dels Drets Humans.",
+      "descriptores_ids": [
+        "CP3",
+        "CPSAA1",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Prendre consciència del paper dels cicles demogràfics, el cicle vital, les formes de vida i les relacions intergeneracionals i de dependència en la societat actual i la seva evolució al llarg del temps, analitzant-les de manera crítica, per promoure alternatives saludables, sostenibles, enriquidores i respectuoses amb la dignitat humana i el compromís amb la societat i l’entorn.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CPSAA2",
+        "CPSAA5",
+        "CC1",
+        "CC2",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Conèixer i valorar la importància de la seguretat integral ciutadana en la cultura de convivència nacional i internacional, reconèixer la contribució de l’Estat, les seves institucions i altres entitats socials a la ciutadania global, a la pau, a la cooperació internacional i al desenvolupament, per promoure la consecució d’un món més segur, solidari, sostenible i just.",
+      "descriptores_ids": [
+        "CCL2",
+        "CC1",
+        "CC2",
+        "CC3",
+        "CC4",
+        "CE1",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Elaborar continguts propis en diferents formats, mitjançant aplicacions i estratègies de recollida i representació de dades més complexes, usant i contrastant críticament fonts fiables, tant analògiques com digitals, del present i de la història contemporània, identificant la desinformació i la manipulació.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Establir connexions i relacions entre els coneixements i informacions adquirits, elaborant síntesis interpretatives i explicatives, mitjançant informes, estudis o dossiers informatius, que reflecteixin un domini i consolidació dels continguts tractats.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Transferir adequadament la informació i el coneixement per mitjà de narracions, pòsters, presentacions, exposicions orals, mitjans audiovisuals i altres productes.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Generar productes originals i creatius mitjançant la reelaboració de coneixements previs a través d'eines de recerca que permetin explicar problemes presents i passats de la humanitat a distintes escales temporals i espacials, del local al global, utilitzant conceptes, situacions i dades rellevants.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Produir i expressar judicis i arguments personals i criteris de forma oberta i respectuosa, fent patent la pròpia identitat i enriquint el patrimoni comú en el context del món actual, els seus reptes i els seus conflictes, des d'una perspectiva sistèmica i global.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Realitzar propostes que contribueixin a l'assoliment dels Objectius de Desenvolupament Sostenible, aplicant mètodes i projectes de recerca, incidint en l'ús de mapes i altres representacions gràfiques, així com de mitjans accessibles d'interpretació d'imatges.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Entendre i afrontar, des d'un enfocament ecosocial, problemes i desafiaments passats, actuals o futurs de les societats contemporànies tenint en compte les seves relacions d'interdependència i ecodependència.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilitzar seqüències cronològiques complexes en les que identificar, comparar i relacionar fets i processos en diferents períodes i llocs històrics (simultaneïtat, durada, causalitat) utilitzant termes i conceptes específics de l’àmbit de la història i la geografia.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.4",
+      "objetivo_id": "CE3",
+      "descripcion": "Analitzar processos de canvi històric i comparar casos de la història i la geografia a través de l’ús de fonts d’informacions diverses, tenint en compte transformacions de curta i llarga durada (conjuntura i estructura), les continuïtats i permanències en diferents períodes i llocs.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Identificar els elements de l'entorn i comprendre el seu funcionament com un sistema complex per mitjà de l'anàlisi multicausal de les seves relacions naturals i humanes, presents i passades, valorant-ne el grau de conservació i d'equilibri dinàmic.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Idear i adoptar, quan sigui possible, comportaments i accions que contribueixin a la conservació i millora de l'entorn natural, rural i urbà, a través del respecte a tots els éssers vius, mostrant comportaments orientats a l'assoliment d'un desenvolupament sostenible d'aquests entorns, i defensant l'accés universal, just i equitatiu als recursos que ens ofereix el planeta.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Conèixer, valorar i exercir responsabilitats, drets i deures i actuar en favor del seu desenvolupament i afirmació a través del coneixement del nostre ordenament jurídic i constitucional, de la comprensió i posada en valor de la nostra memòria democràtica i dels aspectes fonamentals que la conformen, de la contribució dels homes i dones a aquesta, i la defensa dels nostres valors constitucionals.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconèixer moviments i causes que generin una consciència solidària, promoguin la cohesió social, i treballin per a l'eliminació de la desigualtat, especialment la motivada per qüestió de gènere, i per al ple desenvolupament de la ciutadania, mitjançant la mobilització de coneixements i estratègies de participació, treball en equip, mediació i resolució pacífica de conflictes.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Rebutjar actituds discriminatòries i reconèixer la riquesa de la diversitat, a partir de l'anàlisi de la relació entre els aspectes geogràfics, històrics, ecosocials i culturals que han conformat la societat globalitzada i multicultural actual, i del coneixement de l'aportació dels moviments en defensa dels drets de les minories i en favor de la inclusivitat i la igualtat real, especialment de les dones.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Contribuir al benestar individual i col·lectiu a través del disseny, exposició i posada en pràctica d'iniciatives orientades a promoure un compromís actiu amb els valors comuns, la millora de l'entorn i el servei a la comunitat.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Reconèixer els trets que van conformant la identitat pròpia i dels altres, la riquesa de les identitats múltiples en relació amb diferents escales espacials, a través de la investigació i l'anàlisi dels seus fonaments geogràfics, històrics, artístics, ideològics i lingüístics, i el reconeixement de les seves expressions culturals.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Conèixer i contribuir a conservar el patrimoni material i immaterial comú, respectant els sentiments de pertinença i adoptant compromisos amb principis i accions orientades a la cohesió i la solidaritat territorial de la comunitat política, els valors de l'europeisme i de la Declaració Universal dels Drets Humans.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Adoptar un paper actiu i compromès amb l'entorn, d'acord amb aptituds, aspiracions, interessos i valors propis, a partir de l'anàlisi crítica de la realitat econòmica, de la distribució i gestió del treball, i l'adopció d'hàbits responsables, saludables, sostenibles i respectuosos amb la dignitat humana i la d’altres d’éssers vius, així com de la reflexió ètica davant els usos de la tecnologia i la gestió del temps lliure.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconèixer les iniciatives de la societat civil, reflectides en associacions i entitats socials, adoptant actituds de participació i transformació en l'àmbit local i comunitari, especialment a l'àmbit de les relacions intergeneracionals.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Interpretar i explicar de manera argumentada la connexió d'Espanya amb els grans processos històrics de l'època contemporània, valorant el que han suposat per a la vostra evolució i assenyalant les aportacions dels seus habitants al llarg de la història, així com les aportacions de l'Estat i les seves institucions a la cultura europea i mundial.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Contribuir a la consecució d'un món més segur, just, solidari i sostenible, a través de l'anàlisi dels principals conflictes del present i el reconeixement de les institucions de l’Estat i de les associacions civils que garanteixen la seguretat integral i la convivència social, així com els compromisos internacionals del nostre país en favor de la pau, la seguretat, la cooperació, la sostenibilitat, els valors democràtics i els Objectius de Desenvolupament Sostenible.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "› Geografia Física"
+    },
+    {
+      "id": "B2",
+      "titulo": "› Història: Prehistòria I Edat Antiga"
+    },
+    {
+      "id": "B3",
+      "titulo": "› Primeres Ciutats I Imperis Agraris"
+    },
+    {
+      "id": "B4",
+      "titulo": "› L’Antiguitat Clàssica"
+    },
+    {
+      "id": "B5",
+      "titulo": "› Sabers Bàsics Transversals"
+    },
+    {
+      "id": "B6",
+      "titulo": "› Geografia Política"
+    },
+    {
+      "id": "B7",
+      "titulo": "› Geografia De La Població"
+    },
+    {
+      "id": "B8",
+      "titulo": "› Antiguitat Tardana I Alta Edat Mitjana"
+    },
+    {
+      "id": "B9",
+      "titulo": "› Bizanci I L’Islam"
+    },
+    {
+      "id": "B10",
+      "titulo": "› Humanisme, Renaixament I Reforma Luterana"
+    },
+    {
+      "id": "B11",
+      "titulo": "› Els Descobriments"
+    },
+    {
+      "id": "B12",
+      "titulo": "› Monarquies Autoritàries I Absolutes"
+    },
+    {
+      "id": "B13",
+      "titulo": "› Geografia Econòmica"
+    },
+    {
+      "id": "B14",
+      "titulo": "› El Sistema Polític Espanyol"
+    },
+    {
+      "id": "B15",
+      "titulo": "› La Unió Europea I Les Seves Competències"
+    },
+    {
+      "id": "B16",
+      "titulo": "› Altres Organismes Internacionals"
+    },
+    {
+      "id": "B17",
+      "titulo": "› Francesa"
+    },
+    {
+      "id": "B18",
+      "titulo": "› L’Imperialisme"
+    },
+    {
+      "id": "B19",
+      "titulo": "› La Primera Guerra Mundial I La Revolució Russa"
+    },
+    {
+      "id": "B20",
+      "titulo": "› L’Europa D’Entreguerres"
+    },
+    {
+      "id": "B21",
+      "titulo": "› La Segona Guerra Mundial"
+    },
+    {
+      "id": "B22",
+      "titulo": "› Nou Ordre Mundial"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Introducció als objectius i estratègies de les ciències socials i a l’ús dels seus procediments, termes i conceptes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Representació de l'espai, orientació i escales. Pols, hemisferi, equador, tròpics, mapa (diferència amb planell), meridià, paral·lel, fusos horaris, projeccions i coordenades geogràfiques (longitud i latitud).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Conceptes lligats als continents i mars: continent, serralada, altiplà, planura, península, istme, riu, mar i oceà, illa, arxipèlag, golf, cap, estret.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Els continents: unitats estructurals i elements més rellevants de cada continent.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "La Península Ibèrica, l’arxipèlag balear i l’arxipèlag canari: unitats estructurals i elements més rellevants de cada continent.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "L’atmosfera. Elements que composen el clima.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Elements i factors que condicionen el clima.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Els climes del planeta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Interpretació de gràfics (climogrames) i mapes del temps.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "L'impacte de les activitats humanes, riscos i catàstrofes climàtiques i els efectes del canvi climàtic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "El temps i el clima de les Illes Balears. El clima mediterrani.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "L’estructura de la Terra i la teoria de la deriva dels continents.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Formes i processos de modificació de la superfície terrestre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "El relleu terrestre i les aigües del planeta. Elements i formes del relleu.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Principals unitats de relleu dels continents i zones bioclimàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "El relleu d’Espanya i les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "L’alteració del medi natural (sòls, aigües, vegetació…). Relació entre l'ésser humà i el medi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Els espais naturals i la conservació del patrimoni natural. El cas de les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Conceptes d’història i prehistòria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Objecte d’estudi de la prehistòria: procés d’hominització (evolució física de l’ésser humà), la seva organització social i cultura material.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Conceptes de selecció natural i adaptació al medi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Concepte d’evolucionisme.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Exemples de l’evolució humana: australopithecus, homo habilis, homo erectus. Grans migracions humanes i expansió pels continents.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "La importància d’Àfrica com origen de l’ésser humà actual. El cas europeu: neandertal versus homo sapiens.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Les etapes de la prehistòria: paleolític, mesolític i neolític. Cronologia, trets definidors i importància del Creixent Fèrtil.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Les manifestacions principals de l’art prehistòric. L’art rupestre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "De la tribu als primers assentaments durant la prehistòria. Els primers poblats neolítics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "El naixement de la societat i el naixement de les primeres cultures.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "L'aparició dels primers cabdills durant la prehistòria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "La prehistòria a les Illes Balears. La cultura talaiòtica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "L'evolució dels sistemes econòmics i els models d'organització social a la prehistòria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "El sorgiment de les civilitzacions i la influència dels condicionants geogràfics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Concepte i geografia de Mesopotàmia. La importància dels rius.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Les primeres ciutats de Mesopotàmia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "La societat mesopotàmica. Cabdills i reis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "L’aparició de l’escriptura.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Sumer i la importància de les ciutats-estat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Aportació cultural de Sumer: tipus d’escriptura i primers codis legals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Hammurabi i la seva època.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Les manifestacions principals de l’art mesopotàmic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "La religió politeista de Mesopotàmia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Trets geogràfics, polítics i econòmics i estructura social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "La importància de la religió. La casta sacerdotal i els faraons.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Les manifestacions principals de l’art egipci.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "L’escriptura jeroglífica. Característiques bàsiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Fenicis, grecs i cartaginesos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Trets geogràfics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Concepte de polis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Esparta i Atenes. La societat grega. L’aristocràcia i la democràcia a la Grècia clàssica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "L’esclavitud a l’antiga Grècia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Les colònies gregues.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Les guerres Mèdiques. L’hoplita com a base de l’exèrcit.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "L’imperi d’Alexandre Magne i la seva desintegració.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "L’art grec (arquitectura i escultura de l’època clàssica).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Trets fonamentals de la cultura i la religió greca.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "El naixement de Roma. Les etapes polítiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "La societat a Roma. Patricis, plebeus i esclaus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.13",
+      "bloque_id": "B4",
+      "descripcion": "Les etapes polítiques: monarquia, república i imperi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.14",
+      "bloque_id": "B4",
+      "descripcion": "La creació de l’imperi romà. Trets fonamentals de l’expansió romana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.15",
+      "bloque_id": "B4",
+      "descripcion": "La religió politeista a Roma. El culte a l’emperador.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.16",
+      "bloque_id": "B4",
+      "descripcion": "El cristianisme. Origen i persecució.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.17",
+      "bloque_id": "B4",
+      "descripcion": "El concepte de romanització i la seva transcendència (llengües, dret, ciutats).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.18",
+      "bloque_id": "B4",
+      "descripcion": "Art romà.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.19",
+      "bloque_id": "B4",
+      "descripcion": "La Península Ibèrica i les Balears abans de la conquesta romana i la romanització.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.20",
+      "bloque_id": "B4",
+      "descripcion": "Les aportacions de les cultures clàssiques a la cultura europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Utilització de recursos digitals i interpretació i elaboració de mapes, esquemes, imatges i representacions gràfiques. Tecnologies de la Informació Geogràfica (*TIG). Cartografia digital i atles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Mètodes i instruments de recollida de dades meteorològiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Maneig i utilització de dispositius, aplicacions informàtiques, plataformes digitals i ús segur de les xarxes de comunicació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Cerca, tractament de la informació i elaboració de coneixement.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Ús dels procediments, termes i conceptes característics de la geografia, la història i l’art.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "El paper de la dona a les societats actuals: accés al treball i al poder.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Situacions discriminatòries de les nenes i de les dones en el món.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Mètodes bàsics de recerca per a la construcció del coneixement de la geografia i la història. Metodologies del pensament geogràfic i del pensament històric.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Les fonts històriques i arqueològiques com a base per a la construcció del coneixement històric. Objectes i artefactes com a font per a la història i el llegat immaterial (tipus de fonts històriques). El significat dels arxius, biblioteques i museus i del llegat històric i cultural com a patrimoni col·lectiu.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Temps històric: construcció i interpretació de línies de temps a través de la linealitat, cronologia, simultaneïtat, durada i distinció de períodes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "L'evolució dels sistemes econòmics i els models d'organització social a l'antiguitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Les persones invisibilitzades de la història: dones, esclaus i estrangers. Marginació, segregació, control i submissió en la història de la humanitat. Personatges femenins en la història. La resistència a l'opressió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "Dignitat humana i drets universals. Convenció sobre els Drets del Nen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.14",
+      "bloque_id": "B5",
+      "descripcion": "Alteritat: respecte i acceptació de l'altre. Comportaments no discriminatoris i contraris a qualsevol actitud segregadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.15",
+      "bloque_id": "B5",
+      "descripcion": "Convivència cívica i cultura democràtica. Incorporació i implicació en la societat civil. Participació en projectes comunitaris.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.16",
+      "bloque_id": "B5",
+      "descripcion": "Igualtat de gènere. Manifestacions i conductes no sexistes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.17",
+      "bloque_id": "B5",
+      "descripcion": "Interès davant els reptes i problemes d'actualitat en l'entorn local i global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.18",
+      "bloque_id": "B5",
+      "descripcion": "Les xarxes socials. Seguretat i prevenció davant els riscs i perills de l'ús de les tecnologies de la informació i de la comunicació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.19",
+      "bloque_id": "B5",
+      "descripcion": "Consciència ambiental. Respecte, protecció i cura dels éssers vius i del planeta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.20",
+      "bloque_id": "B5",
+      "descripcion": "Conservació i defensa del patrimoni històric, artístic i cultural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.21",
+      "bloque_id": "B5",
+      "descripcion": "Solidaritat, empatia i accions de suport a col·lectius en situacions de pobresa, vulnerabilitat i exclusió social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.22",
+      "bloque_id": "B5",
+      "descripcion": "Identificació i gestió de les emocions i la seva repercussió en comportaments individuals i col·lectius.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.23",
+      "bloque_id": "B5",
+      "descripcion": "Cicles vitals, ús del temps lliure i hàbits de consum. Diferències i canvis en les formes de vida en les societats actuals i en les del passat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.24",
+      "bloque_id": "B5",
+      "descripcion": "La contribució de l’Estat i les seves institucions a la pau, a la seguretat íntegra ciutadana i a la convivència social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.25",
+      "bloque_id": "B5",
+      "descripcion": "Seguretat viària i mobilitat segura, saludable i sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.26",
+      "bloque_id": "B5",
+      "descripcion": "L’evolució dels sistemes econòmics i els models d'organització social a l’edat mitjana i moderna.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.27",
+      "bloque_id": "B5",
+      "descripcion": "Elaborar continguts en diferents formats, mitjançant estratègies de recollida i representació variades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.28",
+      "bloque_id": "B5",
+      "descripcion": "Contrastar les fonts, analògiques i digitals, per identificar la desinformació i la manipulació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.29",
+      "bloque_id": "B5",
+      "descripcion": "Relacionar els coneixements adquirits amb resums interpretatius i explicatius.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.30",
+      "bloque_id": "B5",
+      "descripcion": "Consolidar els continguts tractats amb l’elaboració d’informes, estudis o dossiers.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.31",
+      "bloque_id": "B5",
+      "descripcion": "Transferir adequadament la informació i el coneixement utilitzant diferents formats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.32",
+      "bloque_id": "B5",
+      "descripcion": "Utilitzar conceptes, situacions i dades rellevants per explicar problemes presents de la humanitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.33",
+      "bloque_id": "B5",
+      "descripcion": "Plasmar coneixements adquirits generant nous materials originals per explicar els problemes presents de la humanitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.34",
+      "bloque_id": "B5",
+      "descripcion": "Reelaborar coneixements adquirits generant nous materials originals per explicar els problemes de la societat a l’edat contemporània.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.35",
+      "bloque_id": "B5",
+      "descripcion": "Expressar judicis, arguments i criteris personals de manera respectuosa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.36",
+      "bloque_id": "B5",
+      "descripcion": "Construir una identitat pròpia i respectar la resta d’identitats del món actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.37",
+      "bloque_id": "B5",
+      "descripcion": "Aplicar mètodes i projectes de recerca per realitzar propostes que contribueixen a assolir els ODS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.38",
+      "bloque_id": "B5",
+      "descripcion": "Utilitzar mapes i representacions gràfiques per fer propostes que duguin a la consecució dels ODS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.39",
+      "bloque_id": "B5",
+      "descripcion": "Mantindre un enfocament ecosocial per a la resolució de problemes i desafiaments passats, actuals i futurs de les societats contemporànies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.40",
+      "bloque_id": "B5",
+      "descripcion": "Entendre i valorar les relacions d’interdependència i ecodependència a les societats contemporànies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.41",
+      "bloque_id": "B5",
+      "descripcion": "Comparar i relacionar fets i processos en diferents períodes i llocs utilitzant termes i conceptes geogràfics i històrics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.42",
+      "bloque_id": "B5",
+      "descripcion": "Analitzar processos de canvi amb diverses fonts i observar les transformacions i les permanències des d’una perspectiva geogràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.43",
+      "bloque_id": "B5",
+      "descripcion": "processos de canvi.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.44",
+      "bloque_id": "B5",
+      "descripcion": "Comprendre a través de l’anàlisi multicausal l’entorn, el seu funcionament i les relacions naturals i humanes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.45",
+      "bloque_id": "B5",
+      "descripcion": "Contribuir a la conservació i millora de l’entorn natural, rural i urbà des d’una perspectiva adient per assolir un desenvolupament sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.46",
+      "bloque_id": "B5",
+      "descripcion": "Defensar l’accés universal, just i equitatiu als recursos que ens ofereix el planeta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.47",
+      "bloque_id": "B5",
+      "descripcion": "Conèixer, valorar i exercir responsabilitats, drets i deures que emanen del nostre ordenament jurídic i constitucional i actuar en favor del seu desenvolupament.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.48",
+      "bloque_id": "B5",
+      "descripcion": "Comprendre i posar en valor la nostra memòria democràtica i els seus valors, així com la contribució dels homes i de les dones a aquesta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.49",
+      "bloque_id": "B5",
+      "descripcion": "Reconèixer moviments i causes que generin consciència solidària, cohesió social i cerquin eliminar desigualtats, en especial les de gènere.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.50",
+      "bloque_id": "B5",
+      "descripcion": "Promoure i realitzar les estratègies de participació, treball en equip, mediació i resolució pacífica de conflictes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.51",
+      "bloque_id": "B5",
+      "descripcion": "Rebutjar actituds discriminatòries a partir de l'anàlisi de la relació entre els aspectes geogràfics, històrics, ecosocials i culturals que han conformat la societat globalitzada i multicultural actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.52",
+      "bloque_id": "B5",
+      "descripcion": "Conèixer l'aportació dels moviments en defensa dels drets de les minories i en favor de la inclusivitat i la igualtat real, especialment de les dones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.53",
+      "bloque_id": "B5",
+      "descripcion": "Dissenyar, exposar i posar en pràctica iniciatives que promoguin la millora de l’entorn i el servei a la comunitat per contribuir al benestar individual i col·lectiu.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.54",
+      "bloque_id": "B5",
+      "descripcion": "Reconèixer trets de la identitat pròpia i dels altres, a través de la recerca i l’anàlisi dels seus fonaments geogràfics, històrics, artístics, ideològics i lingüístics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.55",
+      "bloque_id": "B5",
+      "descripcion": "Adoptar compromisos amb els principis i valors de l’europeisme i la Declaració Universal dels Drets Humans.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.56",
+      "bloque_id": "B5",
+      "descripcion": "Respectar, conèixer i contribuir a la conservació del patrimoni material i immaterial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.57",
+      "bloque_id": "B5",
+      "descripcion": "Adoptar un paper actiu i compromès amb l’entorn a partir de l’anàlisi crítica de la realitat econòmica, de la distribució i gestió del treball.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.58",
+      "bloque_id": "B5",
+      "descripcion": "Adquirir hàbits responsables, saludables, sostenibles i respectuosos amb la dignitat humana i altres éssers vius.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.59",
+      "bloque_id": "B5",
+      "descripcion": "Assolir una reflexió ètica davant els usos de la tecnologia i la gestió del temps lliure.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.60",
+      "bloque_id": "B5",
+      "descripcion": "Reconèixer les iniciatives de les associacions i entitats socials civils.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.61",
+      "bloque_id": "B5",
+      "descripcion": "Adoptar actituds proactives per a la participació i transformació en l’àmbit local i comunitari i a través de les relacions intergeneracionals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.62",
+      "bloque_id": "B5",
+      "descripcion": "Interpretar i explicar la connexió d’ Espanya amb els grans processos històrics de l’època contemporània.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.63",
+      "bloque_id": "B5",
+      "descripcion": "Valorar les aportacions que les persones de l’estat espanyol han fet al llarg de la història, així com les de l’Estat, les seves institucions i les Illes Balears a la cultura europea i mundial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.64",
+      "bloque_id": "B5",
+      "descripcion": "Analitzar els principals conflictes del món actual per contribuir a un món més segur, solidari i sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.65",
+      "bloque_id": "B5",
+      "descripcion": "Reconèixer les institucions de l’Estat i les associacions civils que garanteixen la seguretat integral i la convivència socials.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.66",
+      "bloque_id": "B5",
+      "descripcion": "Conèixer els compromisos internacionals del nostre país en favor de la pau, la seguretat, la cooperació, la sostenibilitat, els valors democràtics i els Objectius de Desenvolupament Sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.67",
+      "bloque_id": "B5",
+      "descripcion": "La recerca en Ciències Socials, l’estudi multicausal i l’anàlisi comparada de l’espai natural, rural i urbà, la seva evolució i els reptes del futur. Anàlisi i interpretació de conceptes espacials: localització, escala, connexió i proximitat espacial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.68",
+      "bloque_id": "B5",
+      "descripcion": "Mètodes de recerca en l’àmbit de la Geografia. Metodologies del pensament geogràfic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.69",
+      "bloque_id": "B5",
+      "descripcion": "Objectius de Desenvolupament Sostenible. Emergència climàtica i sostenibilitat. Relació entre factors naturals i antròpics en la Terra. Globalització, moviments migratoris i",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.70",
+      "bloque_id": "B5",
+      "descripcion": "Cultura mediàtica. Tècniques i mètodes de les ciències socials: anàlisi de texts, interpretació i elaboració de mapes, esquemes i síntesis, representació de gràfics i interpretació d’imatges a través de mitjans digitals accessibles. Tecnologies de la informació geogràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.71",
+      "bloque_id": "B5",
+      "descripcion": "Desigualtat i injustícia en el context de les Illes Balears i en el context global. Solidaritat, cohesió social i cooperació per al desenvolupament.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.72",
+      "bloque_id": "B5",
+      "descripcion": "La transformació humana del territori i la distribució desigual dels recursos i del treball. Evolució dels sistemes econòmics, dels cicles demogràfics, de les maneres de vida i dels models d'organització social.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.73",
+      "bloque_id": "B5",
+      "descripcion": "Les transformacions científiques i tecnològiques. Dimensió ètica de la ciència i la tecnologia. Canvis culturals i moviments socials. Els mitjans de comunicació i les xarxes socials.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.74",
+      "bloque_id": "B5",
+      "descripcion": "Implicació en la defensa i protecció del medi ambient. Acció i posició davant l'emergència climàtica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.75",
+      "bloque_id": "B5",
+      "descripcion": "Servei a la comunitat. La corresponsabilitat en les cures. Les relacions intergeneracionals. La responsabilitat col·lectiva i individual. L’associacionisme i el voluntariat. Entorns i xarxes socials.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.76",
+      "bloque_id": "B5",
+      "descripcion": "Ús específic del lèxic relatiu als àmbits històric i artístic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.77",
+      "bloque_id": "B5",
+      "descripcion": "Les fonts històriques com a base per a la construcció del coneixement sobre el passat contemporani. Contrast entre interpretacions d'historiadors.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.78",
+      "bloque_id": "B5",
+      "descripcion": "Consciència històrica. Elaboració de judicis propis i argumentats davant problemes d'actualitat contextualitzats històricament. Defensa i exposició crítica dels mateixos a través de presentacions i debats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.79",
+      "bloque_id": "B5",
+      "descripcion": "Interpretació del sistema capitalista des dels seus orígens fins a l’actualitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.80",
+      "bloque_id": "B5",
+      "descripcion": "L’acció dels moviments feministes i sufragistes en la lluita per la igualtat de gènere. Dones rellevants de la història contemporània.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.81",
+      "bloque_id": "B5",
+      "descripcion": "El naixement de les noves expressions artístiques i culturals contemporànies i la seva relació amb les arts clàssiques. La diversitat cultural en el món actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.82",
+      "bloque_id": "B5",
+      "descripcion": "Respecte i conservació del patrimoni material i immaterial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.83",
+      "bloque_id": "B5",
+      "descripcion": "Cohesió social i integració. Mesures i accions en favor de la igualtat i de la plena inclusió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Localització dels països de cada continent. Coneixement de les capitals i principals ciutats d’Europa, Amèrica i Nord d’Àfrica i dels països més rellevants d’Àsia, Oceania i la resta d’Àfrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "La ciutadania europea. Els drets humans i els ciutadans arreu del món.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.1",
+      "bloque_id": "B7",
+      "descripcion": "Fonts i taxes demogràfiques i piràmides de població.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.2",
+      "bloque_id": "B7",
+      "descripcion": "Zones més poblades i despoblades del planeta i dinàmiques a escala mundial. Causes de la distribució.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.3",
+      "bloque_id": "B7",
+      "descripcion": "Conceptes de natalitat i mortalitat. La seva distribució actual al món. El moviment natural de la població.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.4",
+      "bloque_id": "B7",
+      "descripcion": "Les migracions a la història.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.5",
+      "bloque_id": "B7",
+      "descripcion": "Els moviments migratoris actuals i les seves causes. Europa, Espanya i les Illes Balears com a receptors d’immigrants. Distribució, dinàmica i estructura de la població espanyola i balear.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.6",
+      "bloque_id": "B7",
+      "descripcion": "Ciutats i món rural. Sostenibilitat. Les macrociutats als països desenvolupats i la despoblació rural a alguns països desenvolupats. El cas de l’Espanya buida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.7",
+      "bloque_id": "B7",
+      "descripcion": "La ciutat i el procés d’urbanització. Els plànols urbans. La xarxa urbana espanyola i balear. La pressió demogràfica a les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.8",
+      "bloque_id": "B7",
+      "descripcion": "Desafiaments demogràfics del segle XXI (l’envelliment de la població occidental, explosió demogràfica al Tercer Món, la relació entre recursos i creixement demogràfic, els moviments migratoris actuals i les seves causes etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.9",
+      "bloque_id": "B7",
+      "descripcion": "La globalització econòmica i social. La diversitat social i cultural. Multiculturalitat al món. Àrees i conflictes culturals. Desigualtats regionals. Línies d'acció per a un repartiment just. La qüestió del mínim vital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.10",
+      "bloque_id": "B7",
+      "descripcion": "Conflictes geopolítics actuals. Els refugiats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.11",
+      "bloque_id": "B7",
+      "descripcion": "El paper de la dona a les societats actuals: accés al treball i al poder. Situacions discriminatòries de les dones i de les nenes en el món.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B7.12",
+      "bloque_id": "B7",
+      "descripcion": "ODS i Agenda 2030 (inclusió, sostenibilitat, participació ciutadana i cooperació global).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.1",
+      "bloque_id": "B8",
+      "descripcion": "Crisi i caiguda de l’Imperi Romà. Les invasions. Característiques dels pobles germànics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.2",
+      "bloque_id": "B8",
+      "descripcion": "Localització dels principals regnes germànics i els seus trets primordials.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.3",
+      "bloque_id": "B8",
+      "descripcion": "L’imperi Carolingi i la seva disgregació. El Tractat de Verdum.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B8.4",
+      "bloque_id": "B8",
+      "descripcion": "El feudalisme com a sistema econòmic i polític. El paper de l’Església. Serf i esclaus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.1",
+      "bloque_id": "B9",
+      "descripcion": "Naixement de l’Imperi Bizantí. Visigots, vàndals i bizantins a Espanya i les Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.2",
+      "bloque_id": "B9",
+      "descripcion": "Principals manifestacions de l’art bizantí.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.3",
+      "bloque_id": "B9",
+      "descripcion": "Justinià i l’intent de renovar l’imperi romà.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.4",
+      "bloque_id": "B9",
+      "descripcion": "La Península Aràbiga abans de Mahoma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.5",
+      "bloque_id": "B9",
+      "descripcion": "Mahoma i els preceptes principals de l’Islam. La formació de l’Islam.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.6",
+      "bloque_id": "B9",
+      "descripcion": "Expansió de l’Islam. La seva presència a la Península Ibèrica i a les Balears. Conceptes d’Al- andalus i d’Illes Orientals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.7",
+      "bloque_id": "B9",
+      "descripcion": "La ciutat musulmana. Principals manifestacions de l’art andalusí.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.8",
+      "bloque_id": "B9",
+      "descripcion": "La cultura i la ciència. La influència de les civilitzacions jueva i islàmica en la cultura europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.9",
+      "bloque_id": "B9",
+      "descripcion": "Creixement agrari i urbà en els segles XII i XIII.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.10",
+      "bloque_id": "B9",
+      "descripcion": "La societat estamental. Les ciutats medievals de l’edat mitjana plena (segle XII). Municipis i gremis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.11",
+      "bloque_id": "B9",
+      "descripcion": "El renaixement del comerç i principals nuclis mercantils i els seus fluxos principals (Hansa, Flandes, Gènova, València, Barcelona, Mallorca).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.12",
+      "bloque_id": "B9",
+      "descripcion": "L’enfortiment de les monarquies. Les corts medievals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.13",
+      "bloque_id": "B9",
+      "descripcion": "L’expansió cristiana i la conquesta catalana de les Balears. El Regne de Mallorca.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.14",
+      "bloque_id": "B9",
+      "descripcion": "Les croades i la Guerra dels Cent Anys.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.15",
+      "bloque_id": "B9",
+      "descripcion": "La crisi baixmedieval. La Pesta Negra i el seu impacte.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.16",
+      "bloque_id": "B9",
+      "descripcion": "La persecució dels jueus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B9.17",
+      "bloque_id": "B9",
+      "descripcion": "Trets fonamentals de l’art romànic i gòtic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.1",
+      "bloque_id": "B10",
+      "descripcion": "Concepte d’humanisme i renaixement.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.2",
+      "bloque_id": "B10",
+      "descripcion": "L’art a l’època del Renaixement: Miquel Àngel, Da Vinci, Rafael.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.3",
+      "bloque_id": "B10",
+      "descripcion": "Luter i la Reforma. Principis fonamentals de la reforma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.4",
+      "bloque_id": "B10",
+      "descripcion": "Importància de la reforma a Alemanya i implicacions político-socials: prínceps alemanys i intents de reforçar la figura de l’Emperador.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B10.5",
+      "bloque_id": "B10",
+      "descripcion": "Reacció de l’Església Catòlica. La contrareforma.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.1",
+      "bloque_id": "B11",
+      "descripcion": "Causes dels grans descobriments geogràfics. Noves rutes comercials. Talassocràcies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.2",
+      "bloque_id": "B11",
+      "descripcion": "L’expansió portuguesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.3",
+      "bloque_id": "B11",
+      "descripcion": "Les cultures precolombines a Amèrica. Localització i trets principals de maies, asteques i inques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.4",
+      "bloque_id": "B11",
+      "descripcion": "La creació de l’Imperi Hispànic. La conquesta d’Amèrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.5",
+      "bloque_id": "B11",
+      "descripcion": "Tractat de Tordesillas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B11.6",
+      "bloque_id": "B11",
+      "descripcion": "Impacte dels Descobriments d’Amèrica a Europa i d’Europa sobre Amèrica. Societat i economia colonial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.1",
+      "bloque_id": "B12",
+      "descripcion": "Concepte de monarquia autoritària: formal respecte a les corts, als furs i lleis per part de la Corona i ampliació de fet del seu poder.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.2",
+      "bloque_id": "B12",
+      "descripcion": "Els Reis Catòlics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.3",
+      "bloque_id": "B12",
+      "descripcion": "Identificació d’exemples de monarquia autoritària: Enric VIII, Carles I a Castella.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.4",
+      "bloque_id": "B12",
+      "descripcion": "Comunitats a Castella i Germanies a València i Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.5",
+      "bloque_id": "B12",
+      "descripcion": "Concepte d’absolutisme. Identificació de l’exemple de Lluís XIV.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.6",
+      "bloque_id": "B12",
+      "descripcion": "Religió i política a l’època de Carles I. Els terços.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.7",
+      "bloque_id": "B12",
+      "descripcion": "Europa i la mediterrània a l’època de Felip II.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.8",
+      "bloque_id": "B12",
+      "descripcion": "Un gran conflicte europeu: la Guerra dels Trenta anys i les seves conseqüències. De l’hegemonia hispànica a la francesa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.9",
+      "bloque_id": "B12",
+      "descripcion": "El concepte d’Il·lustració i trets fonamentals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.10",
+      "bloque_id": "B12",
+      "descripcion": "Racionalisme i empirisme.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.11",
+      "bloque_id": "B12",
+      "descripcion": "Autors més transcendents de la Il·lustració.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.12",
+      "bloque_id": "B12",
+      "descripcion": "Concepte de Despotisme Il·lustrat i mesures concretes que es desenvoluparen.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.13",
+      "bloque_id": "B12",
+      "descripcion": "El cas espanyol.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.14",
+      "bloque_id": "B12",
+      "descripcion": "L’absolutisme a partir de Felip V.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B12.15",
+      "bloque_id": "B12",
+      "descripcion": "Carles III i les reformes: comerç amb Amèrica, integració de mercat…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.1",
+      "bloque_id": "B13",
+      "descripcion": "Definició.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.2",
+      "bloque_id": "B13",
+      "descripcion": "Problemàtica del sector primari a Europa, Espanya i les Illes Balears: envelliment dels treballadors agrícoles, competència extra europea, ús de productes químics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.3",
+      "bloque_id": "B13",
+      "descripcion": "Agricultura i ramaderia als altres continents: agricultura tradicional i d’exportació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.4",
+      "bloque_id": "B13",
+      "descripcion": "La pesca i els problemes de la sobreexplotació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.5",
+      "bloque_id": "B13",
+      "descripcion": "Protecció del medi natural.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.6",
+      "bloque_id": "B13",
+      "descripcion": "Carbó i petroli: el seu paper històric i problemes actuals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.7",
+      "bloque_id": "B13",
+      "descripcion": "Energies renovables.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.8",
+      "bloque_id": "B13",
+      "descripcion": "Localització de les principals reserves de petroli i minerals al món.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.9",
+      "bloque_id": "B13",
+      "descripcion": "Tipus d’indústria: industria pesant i industria de béns de consum.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.10",
+      "bloque_id": "B13",
+      "descripcion": "Europa: de la Revolució Industrial a la desindustrialització.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.11",
+      "bloque_id": "B13",
+      "descripcion": "La industria a altres continents. El cas de la Xina i la Índia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.12",
+      "bloque_id": "B13",
+      "descripcion": "Tipus d’indústria: indústria pesant i indústria de béns de consum.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.13",
+      "bloque_id": "B13",
+      "descripcion": "La indústria a altres continents. El cas de Xina i la Índia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.14",
+      "bloque_id": "B13",
+      "descripcion": "Les activitats del sector terciari.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.15",
+      "bloque_id": "B13",
+      "descripcion": "El comerç mundial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.16",
+      "bloque_id": "B13",
+      "descripcion": "El comerç a Espanya i a les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.17",
+      "bloque_id": "B13",
+      "descripcion": "El transport terrestre, naval i aeri. El cas d’Espanya i les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.18",
+      "bloque_id": "B13",
+      "descripcion": "El turisme: impactes positius i negatius. El cas de les Illes Balears. La balearització.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.19",
+      "bloque_id": "B13",
+      "descripcion": "El repte del turisme sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.20",
+      "bloque_id": "B13",
+      "descripcion": "Altres serveis: educació, cultura, sanitat. La importància dels serveis públics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.21",
+      "bloque_id": "B13",
+      "descripcion": "Cerca, tractament de la informació, ús de dades en entorns digitals i avaluació de la fiabilitat de les fonts. El problema de la desinformació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.22",
+      "bloque_id": "B13",
+      "descripcion": "Ocupació i treball en la societat de la informació, aprenentatge permanent i al llarg de tota la vida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B13.23",
+      "bloque_id": "B13",
+      "descripcion": "Ciutadania ètica digital. Nous comportaments en la societat de la informació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B14.1",
+      "bloque_id": "B14",
+      "descripcion": "El legislatiu (Congrés de Diputats i Senat). El Govern central.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B14.2",
+      "bloque_id": "B14",
+      "descripcion": "El mapa autonòmic espanyol. Principals competències espanyoles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B14.3",
+      "bloque_id": "B14",
+      "descripcion": "La llei com a contracte social. De la Constitució de 1812 a la Constitució de 1978. Ordenament normatiu autonòmic, constitucional i supranacional com a garantista del desenvolupament de drets i llibertats per a l'exercici de la ciutadania.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.1",
+      "bloque_id": "B15",
+      "descripcion": "Concepte polític i econòmic de la Unió Europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.2",
+      "bloque_id": "B15",
+      "descripcion": "Membres de la Unió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.3",
+      "bloque_id": "B15",
+      "descripcion": "Parlament europeu i Comissaris europeus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.4",
+      "bloque_id": "B15",
+      "descripcion": "Influència de les decisions de la unió europea a Espanya i Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.5",
+      "bloque_id": "B15",
+      "descripcion": "Valors de l’europeisme. Fórmules de participació en programes educatius europeus.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B15.6",
+      "bloque_id": "B15",
+      "descripcion": "Ideologies, nacionalismes i moviments supranacionals. Ciutadania europea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B16.1",
+      "bloque_id": "B16",
+      "descripcion": "Institucions de l’estat i de l’àmbit autonòmic de les Illes Balears que garanteixen la seguretat integral i la convivència social. Els compromisos internacionals del nostre país en favor de la pau, la seguretat i la cooperació internacional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B16.2",
+      "bloque_id": "B16",
+      "descripcion": "Dignitat humana i drets universals. Declaració Universal dels Drets Humans.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B16.3",
+      "bloque_id": "B16",
+      "descripcion": "ONU, UNESCO, Organització Mundial de la Salut, UNICEF.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B16.4",
+      "bloque_id": "B16",
+      "descripcion": "Organismes regionals d’Hispanoamèrica, Àsia, Àfrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.1",
+      "bloque_id": "B17",
+      "descripcion": "Trets de la societat de l’Antic Règim: la desigualtat legal, el concepte d’estament i d’absolutisme.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.2",
+      "bloque_id": "B17",
+      "descripcion": "Causes de la revolta nord-americana i trets fonamentals del sistema adoptat als Estats Units d’Amèrica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.3",
+      "bloque_id": "B17",
+      "descripcion": "Causes de la Revolució Francesa. La derogació de la monarquia i la divisió entre els revolucionaris (jacobins i girondins).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.4",
+      "bloque_id": "B17",
+      "descripcion": "L’herència de la revolució: igualtat legal, divisió de poders, sobirania nacional, fi de les restes de feudalisme, llibertat d’indústria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.5",
+      "bloque_id": "B17",
+      "descripcion": "L’imperi napoleònic i el seu fracàs.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.6",
+      "bloque_id": "B17",
+      "descripcion": "L’origen britànic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.7",
+      "bloque_id": "B17",
+      "descripcion": "Principals innovacions. El ferrocarril i la integració de mercats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.8",
+      "bloque_id": "B17",
+      "descripcion": "Conseqüències socials de la industrialització: la proletarització. Els moviments obrers. El marxisme: la doctrina de la lluita de classes i la seva transcendència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.9",
+      "bloque_id": "B17",
+      "descripcion": "La dona durant la Revolució Industrial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B17.10",
+      "bloque_id": "B17",
+      "descripcion": "La tardana industrialització a Espanya: proteccionisme, indústria pesant al País Basc i cotó a Catalunya.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B18.1",
+      "bloque_id": "B18",
+      "descripcion": "Imperialisme i industrialització. La necessitat de matèries primeres i mercats protegits.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B18.2",
+      "bloque_id": "B18",
+      "descripcion": "Principals imperis colonials i les seves colònies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B18.3",
+      "bloque_id": "B18",
+      "descripcion": "El comerç colonial i conseqüències del colonialisme per als països africans i asiàtics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B18.4",
+      "bloque_id": "B18",
+      "descripcion": "El peculiar cas espanyol i la pèrdua de les darreres colònies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B19.1",
+      "bloque_id": "B19",
+      "descripcion": "Causes de la Primera Guerra Mundial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B19.2",
+      "bloque_id": "B19",
+      "descripcion": "Bàndols i intervenció nord-americana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B19.3",
+      "bloque_id": "B19",
+      "descripcion": "Els tractats de pau i el nou mapa europeu.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B19.4",
+      "bloque_id": "B19",
+      "descripcion": "Les conseqüències de la guerra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B19.5",
+      "bloque_id": "B19",
+      "descripcion": "Rússia. Del tsarisme a la URSS.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.1",
+      "bloque_id": "B20",
+      "descripcion": "Dels feliços anys vint a la crisi del vint-i-nou.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.2",
+      "bloque_id": "B20",
+      "descripcion": "La fi del liberalisme econòmic. La solució de Keynes i New Deal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.3",
+      "bloque_id": "B20",
+      "descripcion": "La crisi de la democràcia parlamentària. Trets fonamentals del feixisme i el nazisme.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.4",
+      "bloque_id": "B20",
+      "descripcion": "Trets fonamentals de l’evolució espanyola (1900-1939).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.5",
+      "bloque_id": "B20",
+      "descripcion": "L’art i les noves formes artístiques. La importància del cinema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B20.6",
+      "bloque_id": "B20",
+      "descripcion": "La dona i la lluita pel vot femení.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B21.1",
+      "bloque_id": "B21",
+      "descripcion": "L’inici de la Segona Guerra Mundial.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B21.2",
+      "bloque_id": "B21",
+      "descripcion": "Un punt essencial: l’entrada nord-americana a la guerra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B21.3",
+      "bloque_id": "B21",
+      "descripcion": "Derrota de les potències de l’eix i formació dels blocs a Europa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B21.4",
+      "bloque_id": "B21",
+      "descripcion": "L’Holocaust.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B21.5",
+      "bloque_id": "B21",
+      "descripcion": "Estudi crític i comparatiu dels conflictes i violències de la primera meitat del segle XX.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.1",
+      "bloque_id": "B22",
+      "descripcion": "Les relacions internacionals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.2",
+      "bloque_id": "B22",
+      "descripcion": "Concepte de guerra freda. L’OTAN.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.3",
+      "bloque_id": "B22",
+      "descripcion": "Reivindicació de les colònies i descolonització.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.4",
+      "bloque_id": "B22",
+      "descripcion": "Espanya i el seu procés de democratització. El reconeixement de la diversitat cultural i lingüística.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.5",
+      "bloque_id": "B22",
+      "descripcion": "El fi del bloc soviètic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.6",
+      "bloque_id": "B22",
+      "descripcion": "Proteccionisme i lliurecanvisme.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.7",
+      "bloque_id": "B22",
+      "descripcion": "Trets bàsics del comerç internacional. Del comerç de l’època colonial al món global.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.8",
+      "bloque_id": "B22",
+      "descripcion": "La problemàtica recursos-població als països menys desenvolupats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.9",
+      "bloque_id": "B22",
+      "descripcion": "Els conflictes. Trets bàsics del conflicte palestino-israelià. El nou paper de Rússia i la Xina.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.10",
+      "bloque_id": "B22",
+      "descripcion": "La memòria democràtica. Experiències històriques doloroses del passat recent i reconeixement i reparació a les víctimes de la violència. El principi de Justícia Universal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.11",
+      "bloque_id": "B22",
+      "descripcion": "Desenvolupament sostenible ambiental i social: un desafiament.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.12",
+      "bloque_id": "B22",
+      "descripcion": "La revolució tecnològica i de les formes de comunicació: avantatges i perills.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.13",
+      "bloque_id": "B22",
+      "descripcion": "La dona en el món actual i els seus desafiaments. Diversitat i igualtat de gènere. Actituds i comportaments sexistes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.14",
+      "bloque_id": "B22",
+      "descripcion": "Migracions i multiculturalitat a Europa i situació a altres continents. Societats i cultures. El cas d’Espanya, transformació i aspectes polítics, econòmics, socials i culturals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.15",
+      "bloque_id": "B22",
+      "descripcion": "Les formacions identitàries: ideologies, nacionalismes i moviments supranacionals. Ciutadania europea i cosmopolita.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.16",
+      "bloque_id": "B22",
+      "descripcion": "Drets humans avui arreu del món. El Tribunal Internacional de la Haya i els crims contra la humanitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B22.17",
+      "bloque_id": "B22",
+      "descripcion": "Compromís cívic i participació ciutadana. Mediació i gestió pacífica de conflictes i suport a les víctimes de la violència i del terrorisme.",
+      "criterios_ids": []
+    }
+  ]
+}
