@@ -800,7 +800,10 @@ edumind_miclase/
   peticiones en toda la sesión). `scripts/empaquetar_curriculo.mjs` lee
   `curriculum/` en cada build y cada arranque de dev —lo lanza el plugin
   `miclase-curriculo` de `vite.config.ts`, no un «prebuild» de npm, porque
-  `desplegar.sh` y las pruebas llaman a `vite` directamente; a mano,
+  `desplegar.sh` y las pruebas llaman a `vite` directamente; en el hook
+  `config`, no en `buildStart`, porque el servidor de dev lee la lista de
+  `public/` antes de `buildStart` y en un clon limpio (el CI) el índice
+  caía al index.html de la SPA; a mano,
   `npm run curriculo`— y escribe en `frontend/public/curriculo/`
   (gitignored): `indice.json` (comunidades → etapas → áreas → cursos, con
   la comunidad escrita como la escribe cada JSON: `MADRID`, `CyL`),

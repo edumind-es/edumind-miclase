@@ -11,14 +11,21 @@ import { escribirPaquetes } from '../scripts/empaquetar_curriculo.mjs'
  * servidor de desarrollo se regenera `public/curriculo/` desde `curriculum/`
  * (scripts/empaquetar_curriculo.mjs). Va aquí y no en un «prebuild» de npm
  * porque desplegar.sh y las pruebas llaman a `vite` directamente.
+ *
+ * En el hook `config`, no en `buildStart`: el servidor de desarrollo lee la
+ * lista de ficheros de `public/` nada más resolver la configuración, antes de
+ * `buildStart`, y lo que se escribe después no está en esa lista: la petición
+ * de `/curriculo/indice.json` caía al index.html de la SPA y la app tiraba del
+ * servidor. En local no se notaba porque la carpeta ya existía de la vez
+ * anterior; en un clon limpio (el CI) fallaba.
  */
 function curriculoEmpaquetado(): Plugin {
   return {
     name: 'miclase-curriculo',
-    buildStart() {
+    config() {
       const r = escribirPaquetes()
-      this.info(`currículo empaquetado: ${r.comunidades} comunidades, ${r.paquetes} paquetes, ${(r.bytes / 1024 / 1024).toFixed(1)} MB`)
-      for (const a of r.avisos) this.warn(`currículo: ${a}`)
+      console.info(`currículo empaquetado: ${r.comunidades} comunidades, ${r.paquetes} paquetes, ${(r.bytes / 1024 / 1024).toFixed(1)} MB`)
+      for (const a of r.avisos) console.warn(`currículo: ⚠ ${a}`)
     },
   }
 }
