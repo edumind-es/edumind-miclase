@@ -135,6 +135,9 @@ Política (noviembre 2026; configuración en `.github/dependabot.yml`):
 - **Llegar a producción**: fusionar no despliega. Tras fusionar, en el
   servidor: `npm ci` en raíz, `frontend/` y `backend/` (paso 2 de arriba) y
   `./desplegar.sh`, que reinicia el backend con `sudo` si cambió `backend/`.
+  Si subió `playwright`, antes `npx playwright install chromium`: cada
+  versión trae su Chromium y sin él `npm test` (y por tanto el despliegue)
+  falla en todas las suites de interfaz.
 - Node: el servidor y el CI usan Node 22. Si una dependencia exigiera otra
   versión mayor, se decide aparte: no se sube Node del sistema de paso.
 
