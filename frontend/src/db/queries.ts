@@ -3060,6 +3060,22 @@ export async function asignarAsiento(grupo_id: number, alumno_id: number, fila: 
   })
 }
 
+/**
+ * Guarda el plano dibujado con AulaMap (`claseParaGuardar` de
+ * `db/planoAulaMap.ts`). Solo escribe si cambia: AulaMap guarda tras cada
+ * gesto y un registro reescrito sin cambios viajaría en cada sync.
+ */
+export async function guardarPlanoAulaMap(grupo_id: number, json: string): Promise<boolean> {
+  const plano = vivos(await db.planos.where('grupo_id').equals(grupo_id).toArray())[0]
+  if (!plano) {
+    await db.planos.add(nuevo({ grupo_id, ...PLANO_DEFAULT, aulamap: json }))
+    return true
+  }
+  if (plano.aulamap === json) return false
+  await db.planos.update(plano.id!, tocado({ aulamap: json }))
+  return true
+}
+
 export async function quitarAsiento(grupo_id: number, alumno_id: number): Promise<void> {
   const t = sello()
   await db.asientos.where('[grupo_id+alumno_id]').equals([grupo_id, alumno_id])

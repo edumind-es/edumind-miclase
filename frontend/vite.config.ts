@@ -28,7 +28,8 @@ export default defineConfig({
         // Cualquier ruta de la SPA debe abrir sin red: el docente entra en
         // /evaluacion desde el acceso directo del móvil, no por la portada
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api\//],
+        // /aulamap/ es otra página (AulaMap en su iframe), no la SPA
+        navigateFallbackDenylist: [/^\/api\//, /^\/aulamap\//],
         cleanupOutdatedCaches: true,
         runtimeCaching: [
           {

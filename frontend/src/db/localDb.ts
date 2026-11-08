@@ -524,6 +524,9 @@ export interface Plano extends Sincronizable {
   grupo_id: number
   filas: number
   cols: number
+  // Plano dibujado con AulaMap (db/planoAulaMap.ts): JSON de la clase de
+  // AulaMap sin nombres de alumnado. Sin índice: no cambia el esquema.
+  aulamap?: string | null
 }
 
 // Asiento de un alumno dentro del plano de su grupo

@@ -1,176 +1,179 @@
 /**
- * Plano de clase del grupo: cuadrícula de asientos táctil.
- * - Modo edición: toca un asiento vacío y elige alumno; toca uno ocupado para liberarlo.
- * - Modo normal: tocar un alumno abre su panel de evaluación rápida.
+ * Plano de clase del grupo, dibujado con AulaMap
+ * (https://aulamap.github.io), de Juan José de Haro (jjdeharo), AGPL v3.
+ *
+ * AulaMap vive copiado en `public/aulamap/` y se abre en un iframe del MISMO
+ * origen: no se carga nada de fuera ni sale nada del aparato. La ventana deja
+ * en `window.MiClaseAulaMap` el plano del grupo y cómo guardarlo, y el puente
+ * de AulaMap (`public/aulamap/miclase-puente.js`) lo usa en vez de
+ * localStorage. La traducción entre los dos vive en `db/planoAulaMap.ts`.
+ *
+ * - Vista: solo el plano; tocar a un alumno abre su evaluación rápida.
+ * - Editar el aula: AulaMap entero (mesas, mobiliario, alumnado, equipos).
  * Complementa los QR de mesa: mismo destino (/escanear), dos caminos.
  */
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPlano, redimensionarPlano, asignarAsiento, quitarAsiento } from '@/db/queries'
-import type { Alumno, Asiento } from '@/db/localDb'
-import { verNeae } from '@/db/datosSensibles'
+import { getPlano, guardarPlanoAulaMap, type PlanoDetalle } from '@/db/queries'
+import type { Alumno } from '@/db/localDb'
+import {
+  claseParaAulaMap, claseParaGuardar, alumnoDeIdAulaMap, resumenPlano,
+  type ClaseAulaMap,
+} from '@/db/planoAulaMap'
 
 interface Props {
   grupoId: number
+  nombreGrupo?: string
   alumnos: Alumno[]
   modoAnon: boolean
 }
 
-export default function PlanoClase({ grupoId, alumnos, modoAnon }: Props) {
+type Modo = 'vista' | 'editar'
+
+// Lo que el puente de AulaMap busca en la ventana de MiClase.
+interface AnfitrionAulaMap {
+  modo: Modo
+  cargar: () => ClaseAulaMap
+  guardar: (clase: ClaseAulaMap) => void
+  abrirAlumno: (idAulaMap: string) => void
+}
+declare global {
+  interface Window { MiClaseAulaMap?: AnfitrionAulaMap }
+}
+
+export const URL_AULAMAP = 'https://aulamap.github.io'
+export const URL_AUTOR_AULAMAP = 'https://github.com/jjdeharo'
+const URL_FUENTE = 'https://github.com/edumind-es/edumind-miclase/tree/main/frontend/public/aulamap'
+const ESPERA_GUARDADO = 400
+
+export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAnon }: Props) {
   const navigate = useNavigate()
   const [visible, setVisible] = useState(false)
-  const [filas, setFilas] = useState(5)
-  const [cols, setCols] = useState(6)
-  const [asientos, setAsientos] = useState<Asiento[]>([])
-  const [editando, setEditando] = useState(false)
-  const [celdaSel, setCeldaSel] = useState<{ fila: number; col: number } | null>(null)
+  const [modo, setModo] = useState<Modo>('vista')
+  const [detalle, setDetalle] = useState<PlanoDetalle | null>(null)
+  const [estado, setEstado] = useState('')
+  const pendiente = useRef<string | null>(null)
+  const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const cargar = async () => {
-    const { plano, asientos } = await getPlano(grupoId)
-    setFilas(plano.filas)
-    setCols(plano.cols)
-    setAsientos(asientos)
-  }
+  const alumnosPlano = useMemo(() => alumnos
+    .filter(a => a.id != null && !a.deleted_at)
+    .map(a => ({
+      id: a.id!,
+      nombre: modoAnon ? (a.codigo_cifrado || '—') : `${a.apellidos || ''}, ${a.nombre || ''}`.replace(/^, /, ''),
+    })), [alumnos, modoAnon])
 
-  useEffect(() => { if (visible) cargar() }, [visible, grupoId])
+  const cargar = useCallback(async () => {
+    setDetalle(await getPlano(grupoId))
+  }, [grupoId])
 
-  const alumnoEn = (fila: number, col: number): Alumno | undefined => {
-    const asiento = asientos.find(a => a.fila === fila && a.col === col)
-    return asiento ? alumnos.find(al => al.id === asiento.alumno_id) : undefined
-  }
+  useEffect(() => { if (visible) cargar() }, [visible, cargar])
 
-  const sinAsiento = alumnos.filter(al => !asientos.some(a => a.alumno_id === al.id))
-
-  const tocarCelda = async (fila: number, col: number) => {
-    const ocupante = alumnoEn(fila, col)
-    if (!editando) {
-      if (ocupante) navigate(`/escanear?alumno=${ocupante.id}`)
-      return
+  // Guardar lo pendiente ya (al cambiar de modo, de grupo o al salir).
+  const volcar = useCallback(async () => {
+    if (temporizador.current) { clearTimeout(temporizador.current); temporizador.current = null }
+    const json = pendiente.current
+    pendiente.current = null
+    if (json == null) return
+    try {
+      await guardarPlanoAulaMap(grupoId, json)
+      setEstado('Plano guardado en este aparato.')
+    } catch (e) {
+      setEstado(`No se pudo guardar el plano: ${e instanceof Error ? e.message : String(e)}`)
     }
-    if (ocupante) {
-      await quitarAsiento(grupoId, ocupante.id!)
-      await cargar()
-    } else {
-      setCeldaSel({ fila, col })
+  }, [grupoId])
+
+  // La clase que AulaMap va a enseñar: la guardada o, si no hay, la que
+  // sale de la cuadrícula de siempre. Con el alumnado vivo del grupo.
+  const clase = useMemo(() => detalle && claseParaAulaMap({
+    grupoId, nombreGrupo,
+    guardado: detalle.plano.aulamap,
+    alumnos: alumnosPlano,
+    filas: detalle.plano.filas, cols: detalle.plano.cols,
+    asientos: detalle.asientos,
+  }), [detalle, grupoId, nombreGrupo, alumnosPlano])
+
+  // El anfitrión tiene que estar puesto ANTES de que el iframe cargue.
+  useLayoutEffect(() => {
+    if (!visible || !clase) return
+    window.MiClaseAulaMap = {
+      modo,
+      cargar: () => clase,
+      guardar: (c) => {
+        pendiente.current = claseParaGuardar(c)
+        if (temporizador.current) clearTimeout(temporizador.current)
+        temporizador.current = setTimeout(() => { void volcar() }, ESPERA_GUARDADO)
+      },
+      abrirAlumno: (idAulaMap) => {
+        const id = alumnoDeIdAulaMap(idAulaMap)
+        if (id != null) navigate(`/escanear?alumno=${id}`)
+      },
     }
+    return () => {
+      void volcar()
+      delete window.MiClaseAulaMap
+    }
+  }, [visible, clase, modo, navigate, volcar])
+
+  const cambiarModo = async (nuevo: Modo) => {
+    await volcar()
+    await cargar() // la vista enseña lo recién guardado
+    setModo(nuevo)
   }
 
-  const sentarAlumno = async (alumnoId: number) => {
-    if (!celdaSel) return
-    await asignarAsiento(grupoId, alumnoId, celdaSel.fila, celdaSel.col)
-    setCeldaSel(null)
-    await cargar()
-  }
-
-  const cambiarTamano = async (f: number, c: number) => {
-    const nf = Math.min(10, Math.max(2, f))
-    const nc = Math.min(10, Math.max(2, c))
-    await redimensionarPlano(grupoId, nf, nc)
-    await cargar()
-  }
-
-  const etiqueta = (al: Alumno) =>
-    modoAnon ? (al.codigo_cifrado || '—') : `${al.nombre} ${al.apellidos.split(' ')[0]?.[0] || ''}.`
+  const { puestos, sentados } = resumenPlano(clase)
+  const nSentados = new Set(sentados).size
+  const sinSitio = alumnosPlano.length - nSentados
 
   return (
-    <div className="card" style={{ marginBottom: 20 }}>
+    <div className="card" style={{ marginBottom: 20 }} data-plano-clase>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
         <h2 style={{ fontSize: 16, fontWeight: 600 }}>🪑 Plano de clase</h2>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          {visible && (
-            <>
-              <button className={editando ? 'btn-primary' : 'btn-secondary'} style={{ fontSize: 13 }}
-                onClick={() => { setEditando(e => !e); setCeldaSel(null) }}>
-                {editando ? '✓ Terminar edición' : '✏️ Editar asientos'}
-              </button>
-              {editando && (
-                <span style={{ fontSize: 12, color: 'var(--gris-600)' }}>
-                  {filas}×{cols}
-                  <button className="btn-secondary" style={{ fontSize: 12, padding: '2px 8px', marginLeft: 6 }} onClick={() => cambiarTamano(filas, cols + 1)}>+col</button>
-                  <button className="btn-secondary" style={{ fontSize: 12, padding: '2px 8px', marginLeft: 4 }} onClick={() => cambiarTamano(filas, cols - 1)}>−col</button>
-                  <button className="btn-secondary" style={{ fontSize: 12, padding: '2px 8px', marginLeft: 4 }} onClick={() => cambiarTamano(filas + 1, cols)}>+fila</button>
-                  <button className="btn-secondary" style={{ fontSize: 12, padding: '2px 8px', marginLeft: 4 }} onClick={() => cambiarTamano(filas - 1, cols)}>−fila</button>
-                </span>
-              )}
-            </>
+          {visible && detalle && (
+            <button className={modo === 'editar' ? 'btn-primary' : 'btn-secondary'} style={{ fontSize: 13 }}
+              data-plano-modo={modo === 'editar' ? 'vista' : 'editar'}
+              onClick={() => cambiarModo(modo === 'editar' ? 'vista' : 'editar')}>
+              {modo === 'editar' ? '✓ Terminar' : '✏️ Editar el aula'}
+            </button>
           )}
-          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setVisible(v => !v)}>
+          <button className="btn-secondary" style={{ fontSize: 13 }} data-plano-mostrar
+            onClick={async () => { if (visible) { await volcar(); setModo('vista') } setVisible(v => !v) }}>
             {visible ? 'Ocultar' : 'Mostrar plano'}
           </button>
         </div>
       </div>
 
-      {visible && (
+      {/* Cita del autor: AulaMap es de Juan José de Haro (licencia AGPL v3). */}
+      <p data-credito-aulamap style={{ fontSize: 12, color: 'var(--gris-600)', margin: '6px 0 0', lineHeight: 1.5 }}>
+        Plano basado en <a href={URL_AULAMAP} target="_blank" rel="noopener noreferrer">AulaMap</a>,
+        {' '}de Juan José de Haro (<a href={URL_AUTOR_AULAMAP} target="_blank" rel="noopener noreferrer">jjdeharo</a>).
+        {' '}Licencia <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL v3</a>
+        {' '}· <a href={URL_FUENTE} target="_blank" rel="noopener noreferrer">código fuente</a>.
+      </p>
+
+      {visible && detalle && (
         <>
-          <div style={{ fontSize: 12, color: 'var(--gris-600)', margin: '10px 0' }}>
-            {editando
-              ? 'Toca un asiento vacío para sentar a un alumno; toca uno ocupado para liberarlo.'
-              : 'Toca a un alumno para abrir su evaluación rápida.'}
+          <div style={{ fontSize: 12, color: 'var(--gris-600)', margin: '10px 0' }} data-plano-ayuda>
+            {modo === 'editar'
+              ? 'Coloca mesas y mobiliario en la pestaña «Aula» y arrastra a cada alumno a su mesa desde «Alumnado». Se guarda solo, en este aparato.'
+              : `${puestos} puestos · ${nSentados} sentados${sinSitio > 0 ? ` · ${sinSitio} sin sitio` : ''}. ${nSentados
+                ? 'Toca a un alumno para abrir su evaluación rápida.'
+                : 'Pulsa «Editar el aula» para colocar las mesas y sentar al alumnado.'}`}
           </div>
 
-          {/* Pizarra como referencia de orientación */}
-          <div style={{
-            textAlign: 'center', fontSize: 11, color: 'var(--gris-600)', background: 'var(--gris-100)',
-            borderRadius: 6, padding: '4px 0', marginBottom: 10, letterSpacing: 2,
-          }}>
-            PIZARRA / DOCENTE
-          </div>
+          <iframe
+            key={`${grupoId}-${modo}`}
+            title="Plano de clase (AulaMap)"
+            src={`${import.meta.env.BASE_URL}aulamap/index.html`}
+            data-aulamap={modo}
+            style={{
+              width: '100%', height: modo === 'editar' ? 760 : 520,
+              border: '1px solid var(--gris-300)', borderRadius: 10, background: 'white',
+            }}
+          />
 
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 8 }}>
-            {Array.from({ length: filas * cols }, (_, i) => {
-              const fila = Math.floor(i / cols)
-              const col = i % cols
-              const al = alumnoEn(fila, col)
-              const esSel = celdaSel?.fila === fila && celdaSel?.col === col
-              return (
-                <button key={i} onClick={() => tocarCelda(fila, col)}
-                  style={{
-                    minHeight: 56, borderRadius: 10, cursor: 'pointer', padding: '4px 6px',
-                    fontSize: 12, fontWeight: 600, lineHeight: 1.25,
-                    border: esSel ? '2px dashed var(--azul-700)'
-                      : al ? '2px solid var(--azul-300)' : '2px dashed var(--gris-300)',
-                    background: al ? 'var(--azul-100)' : 'var(--gris-100)',
-                    color: al ? 'var(--azul-900)' : 'var(--gris-300)',
-                    fontFamily: modoAnon && al ? 'monospace' : undefined,
-                  }}>
-                  {al ? etiqueta(al) : (editando ? '+' : '')}
-                  {al?.neae && verNeae() ? <div style={{ fontSize: 9, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</div> : null}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Selector de alumno para el asiento elegido */}
-          {editando && celdaSel && (
-            <div style={{ marginTop: 12, padding: 12, background: 'var(--azul-100)', borderRadius: 10 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--azul-700)', marginBottom: 8 }}>
-                Sentar en fila {celdaSel.fila + 1}, columna {celdaSel.col + 1}:
-              </div>
-              {sinAsiento.length === 0 ? (
-                <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>Todo el alumnado tiene asiento ya.</div>
-              ) : (
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {sinAsiento.map(al => (
-                    <button key={al.id} onClick={() => sentarAlumno(al.id!)}
-                      style={{
-                        padding: '8px 12px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                        border: '1px solid var(--azul-300)', background: 'white', color: 'var(--azul-900)', minHeight: 40,
-                      }}>
-                      {modoAnon ? al.codigo_cifrado : `${al.apellidos}, ${al.nombre}`}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <button className="btn-secondary" style={{ fontSize: 12, marginTop: 8 }} onClick={() => setCeldaSel(null)}>
-                Cancelar
-              </button>
-            </div>
-          )}
-
-          {sinAsiento.length > 0 && !editando && (
-            <div style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 10 }}>
-              Sin asiento: {sinAsiento.length} alumno{sinAsiento.length !== 1 ? 's' : ''} — usa «Editar asientos».
-            </div>
+          {estado && (
+            <div style={{ fontSize: 12, color: 'var(--gris-600)', marginTop: 6 }} data-plano-estado>{estado}</div>
           )}
         </>
       )}

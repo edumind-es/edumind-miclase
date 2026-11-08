@@ -26,7 +26,9 @@ nota + foto**.
 - **Evaluación rápida con QR**: hoja imprimible de códigos por clase (solo
   códigos anónimos, nunca nombres), escáner con la cámara y panel táctil con
   criterios, rúbricas y teclado de notas.
-- **Plano de clase**: toque en el alumno → evaluación rápida.
+- **Plano de clase** con [AulaMap](https://aulamap.github.io), de Juan José de
+  Haro (jjdeharo): mesas y mobiliario en centímetros reales, alumnado
+  arrastrado a su mesa y equipos; toque en el alumno → evaluación rápida.
 - **Evidencias**: foto, audio con cronómetro y vídeo, con galería por alumno.
 - **Motor de cálculo real**: peso de instrumento → nota de criterio → peso de
   criterio → nota de área → pesos de trimestre → nota final, con escala

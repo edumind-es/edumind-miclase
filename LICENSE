@@ -12,5 +12,10 @@ Full license texts:
 - AGPL-3.0-or-later: see LICENSE-AGPL-3.0-or-later.txt
 - EUPL-1.2: see LICENSE-EUPL-1.2.txt
 
+Exception: frontend/public/aulamap/ is AulaMap, (c) 2026 Juan José de Haro,
+bundled with his permission. That folder is licensed under the GNU AGPL v3
+only (text in frontend/public/aulamap/LICENSE); the EUPL-1.2 option does not
+apply to it. See NOTICE.
+
 Trademarks, logos and brand assets are not licensed under the software
 license. See TRADEMARKS.md.

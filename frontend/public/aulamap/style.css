@@ -1,0 +1,394 @@
+/* Colores de la interfaz. Todo el tema vive en estas variables: el modo
+   oscuro solo las redefine. El plano del aula se dibuja desde app.js leyendo
+   --floor, --grid y --wall, para que también siga el tema. */
+:root {
+  --bg: #f4f2ee;
+  --panel: #ffffff;
+  --field: #ffffff;
+  --ink: #23262b;
+  --muted: #6b7078;
+  --line: #d9d5cc;
+  --line-soft: #efece6;
+  --accent: #2f6f5e;
+  --accent-soft: #e3efe9;
+  --on-accent: #ffffff;
+  --danger: #a33a2f;
+  --danger-soft: #f8e6e3;
+  --disabled: #b5b1aa;
+  --shadow: rgba(0, 0, 0, .18);
+  --canvas-bg: #e9e6df;   /* mesa sobre la que se apoya el plano */
+  --floor: #f3f0ea;       /* suelo del aula */
+  --grid: #e4e0d6;        /* cuadrícula del suelo */
+  --wall: #55504a;        /* paredes */
+  --radius: 8px;
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+}
+
+/* Modo oscuro: se oscurece la interfaz, pero el plano sigue siendo una hoja
+   clara, como en cualquier editor de planos, para que se lea igual de bien y
+   se imprima tal cual. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171a;
+    --panel: #1b1f23;
+    --field: #22272c;
+    --ink: #e6e3dd;
+    --muted: #9aa1a9;
+    --line: #333a41;
+    --line-soft: #2a2f35;
+    --accent: #6fbfa3;
+    --accent-soft: #1f3630;
+    --on-accent: #10211c;
+    --danger: #e59182;
+    --danger-soft: #3a2320;
+    --disabled: #5b6169;
+    --shadow: rgba(0, 0, 0, .55);
+    --canvas-bg: #0f1113;
+    --floor: #e6e2da;
+    --grid: #d5d0c4;
+    --wall: #46423c;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #14171a;
+  --panel: #1b1f23;
+  --field: #22272c;
+  --ink: #e6e3dd;
+  --muted: #9aa1a9;
+  --line: #333a41;
+  --line-soft: #2a2f35;
+  --accent: #6fbfa3;
+  --accent-soft: #1f3630;
+  --on-accent: #10211c;
+  --danger: #e59182;
+  --danger-soft: #3a2320;
+  --disabled: #5b6169;
+  --shadow: rgba(0, 0, 0, .55);
+  --canvas-bg: #0f1113;
+  --floor: #e6e2da;
+  --grid: #d5d0c4;
+  --wall: #46423c;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); font-size: 14px; }
+[hidden] { display: none !important; }
+
+#app { display: flex; flex-direction: column; height: 100vh; }
+
+/* Barra superior */
+.topbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px;
+  padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+}
+.topbar h1 { font-size: 18px; margin: 0; color: var(--accent); }
+/* Enlace a la presentación: visible desde el primer momento, junto al título. */
+.btn.about { text-decoration: none; background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.class-picker, .topbar-actions, .topbar-settings { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.topbar-actions { margin-left: auto; }
+.topbar-settings { gap: 4px; }
+.mini-select { font-size: 12px; padding: 5px 4px; color: var(--muted); max-width: 150px; }
+.mini-select:hover { color: var(--ink); border-color: var(--accent); }
+.class-picker select { min-width: 150px; }
+
+.btn {
+  font: inherit; padding: 6px 11px; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--field); color: var(--ink); cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn .ico { width: 15px; height: 15px; flex: none; }
+.btn:hover { background: var(--accent-soft); border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: default; background: var(--field); border-color: var(--line); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.primary:hover { filter: brightness(1.1); }
+.btn.danger { color: var(--danger); }
+.btn.danger:hover { background: var(--danger-soft); border-color: var(--danger); }
+.btn.icon { min-width: 34px; font-size: 16px; padding: 4px 8px; }
+.btn.wide { width: 100%; margin-top: 6px; }
+
+select, input[type=text], input[type=number], textarea {
+  font: inherit; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; background: var(--field); color: var(--ink);
+}
+textarea { width: 100%; resize: vertical; }
+
+/* Distribución */
+.layout { flex: 1; display: grid; grid-template-columns: 300px 1fr 230px; min-height: 0; }
+
+.layout.no-props { grid-template-columns: 300px 1fr; }
+.sidebar, .props { background: var(--panel); overflow-y: auto; padding: 12px; }
+.sidebar { border-right: 1px solid var(--line); }
+.props { border-left: 1px solid var(--line); }
+.with-help { display: flex; align-items: center; gap: 6px; }
+.help {
+  font: inherit; font-size: 11px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--field); color: var(--muted); cursor: pointer; padding: 0; line-height: 1;
+}
+.help:hover, .help[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.tip {
+  position: fixed; z-index: 1000; max-width: 320px; padding: 10px 12px; border-radius: 8px;
+  background: var(--panel); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 4px 14px var(--shadow);
+  font-size: 14px; line-height: 1.45;
+}
+.tip[hidden] { display: none; }
+.sidebar h2, .props h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 16px 0 6px; }
+.props h2 { margin-top: 4px; }
+
+.tabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; background: var(--bg); padding: 4px; border-radius: var(--radius); }
+.tab { font: inherit; border: 0; background: transparent; padding: 7px; border-radius: 6px; cursor: pointer; color: var(--muted); }
+.tab.active { background: var(--field); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px var(--shadow); }
+
+.palette { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.palette button {
+  font: inherit; font-size: 12px; display: flex; align-items: center; gap: 6px; text-align: left;
+  padding: 5px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--field); cursor: pointer; line-height: 1.15;
+}
+.palette button:hover { border-color: var(--accent); background: var(--accent-soft); }
+.palette svg { flex: none; width: 26px; height: 20px; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.field-row label, .stack { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.stack { margin-top: 10px; }
+.field-row input { width: 100%; }
+
+.check { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.hint { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
+.btn-grid .btn { white-space: normal; font-size: 12px; }
+
+/* Lista de alumnado */
+.student-list { list-style: none; margin: 0; padding: 0; min-height: 60px; border-radius: 6px; }
+.student-list.drop-target { outline: 2px dashed var(--accent); background: var(--accent-soft); }
+.student-list li {
+  display: flex; align-items: center; gap: 4px; padding: 2px 0; border-bottom: 1px solid var(--line-soft);
+}
+.student-list .handle { cursor: grab; color: var(--muted); padding: 4px; user-select: none; touch-action: none; }
+.student-list li.seated .handle { visibility: hidden; }
+.student-list li.seated input { color: var(--muted); }
+.student-list input { flex: 1; min-width: 0; border-color: transparent; background: transparent; }
+.student-list input:focus { border-color: var(--line); background: var(--field); }
+.student-list .seat-mark { color: var(--accent); width: 14px; text-align: center; }
+.student-list .del { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+.student-list .del:hover { color: var(--danger); }
+.student-list .empty { color: var(--muted); font-size: 12px; border: 0; padding: 8px 0; }
+
+/* Equipos: tipología y número de equipo en cada fila */
+.type-pick { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; flex: none; }
+.type-pick button {
+  font: inherit; font-size: 11px; font-weight: 600; width: 18px; padding: 3px 0; border: 0; background: var(--field);
+  color: var(--muted); cursor: pointer; line-height: 1;
+}
+.type-pick button + button { border-left: 1px solid var(--line); }
+.type-pick button:hover { background: var(--accent-soft); }
+.type-pick button.on { background: var(--accent); color: var(--on-accent); }
+.team-list .name { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 4px 0; }
+.student-list .team-pick {
+  flex: none; width: 40px; padding: 2px 0; font-size: 12px; font-weight: 700; text-align: center; border-radius: 6px; color: var(--muted);
+}
+.shapes-row { margin: 10px 0; }
+.shapes-row h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 6px; }
+.shapes-options { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.shapes-options button {
+  font: inherit; font-size: 12px; display: flex; align-items: center; gap: 8px; text-align: left;
+  padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--field); cursor: pointer; color: var(--ink);
+}
+.shapes-options button:hover { border-color: var(--accent); }
+.shapes-options button.on { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.shapes-options svg { flex: none; width: 40px; height: 30px; }
+.incompat-list, .incompat-students { list-style: none; margin: 6px 0; padding: 0; }
+.incompat-list li { display: flex; align-items: center; gap: 6px; padding: 3px 0; border-bottom: 1px solid var(--line-soft); font-size: 13px; }
+.incompat-list li span { flex: 1; }
+.incompat-list .del { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+.incompat-list .del:hover { color: var(--danger); }
+.incompat-list .empty { color: var(--muted); font-size: 12px; border: 0; }
+.incompat-students { max-height: 40vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px; padding: 4px 8px; }
+.incompat-students label { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 13px; }
+
+#drag-ghost {
+  position: fixed; z-index: 1000; pointer-events: none; padding: 4px 9px; border-radius: 6px;
+  background: var(--accent); color: var(--on-accent); font-size: 13px; transform: translate(-50%, -120%); box-shadow: 0 3px 8px var(--shadow);
+}
+
+/* Menú del botón derecho */
+.context-menu {
+  position: fixed; z-index: 1100; min-width: 220px; padding: 5px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 8px 24px var(--shadow);
+}
+.context-menu button {
+  font: inherit; display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 6px 10px; border: 0; border-radius: 5px; background: none; color: var(--ink); text-align: left; cursor: pointer;
+}
+.context-menu button > span { flex: 1; }
+.context-menu button > .ico { width: 15px; height: 15px; flex: none; color: var(--muted); }
+.context-menu button:disabled > .ico { opacity: .6; }
+.context-menu button.danger > .ico { color: var(--danger); }
+.context-menu button:hover:not(:disabled) { background: var(--accent-soft); }
+.context-menu button:disabled { color: var(--disabled); cursor: default; }
+.context-menu button.danger { color: var(--danger); }
+.context-menu button.danger:hover { background: var(--danger-soft); }
+.context-menu kbd { font: inherit; font-size: 12px; color: var(--muted); }
+.context-menu .has-sub { position: relative; }
+.context-menu .submenu {
+  position: absolute; left: calc(100% - 4px); top: -5px; z-index: 1; display: none;
+  min-width: 210px; padding: 5px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 8px 24px var(--shadow);
+}
+.context-menu.flip .submenu { left: auto; right: calc(100% - 4px); }
+.context-menu .has-sub:hover > .submenu { display: block; }
+.context-menu .has-sub.disabled:hover > .submenu { display: none; }
+.context-menu .has-sub:hover > button:not(:disabled) { background: var(--accent-soft); }
+.context-menu hr { border: 0; border-top: 1px solid var(--line-soft); margin: 4px 2px; }
+@media print { .context-menu { display: none !important; } }
+
+/* Lienzo */
+.canvas-wrap { position: relative; min-width: 0; min-height: 0; display: flex; }
+.canvas { flex: 1; overflow: auto; background: var(--canvas-bg); }
+#room-svg { display: block; margin: 0 auto; touch-action: none; user-select: none; }
+.zoom-bar { position: absolute; right: 14px; bottom: 14px; z-index: 5; display: flex; gap: 4px; }
+
+/* Tamaño del aula y colocación del plano, sobre el propio lienzo */
+/* En columna: las pantallas son más anchas que altas, así que a los lados del
+   plano es donde sobra sitio. */
+.room-bar {
+  position: absolute; left: 14px; top: 14px; z-index: 5;
+  display: flex; flex-direction: column; gap: 7px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 7px 8px;
+}
+.room-bar h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0; }
+.room-bar label { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: var(--muted); }
+.room-bar input { width: 74px; }
+.room-size, .room-view { display: flex; flex-direction: column; gap: 7px; }
+.room-size[hidden] { display: none; }
+.room-view .check { flex-direction: row; align-items: center; gap: 6px; margin: 0; font-size: 12px; color: var(--ink); white-space: nowrap; }
+.room-view input[type=checkbox] { width: auto; margin: 0; }
+.room-view label[hidden] { display: none; }
+.room-clear { font-size: 12px; padding: 4px 8px; }
+.room-clear[hidden] { display: none; }
+.room-view select { width: 100%; max-width: 170px; font-size: 12px; padding: 3px 5px; }
+.room-bar-sep { height: 1px; background: var(--line); }
+.room-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.room-tools .btn { min-width: 0; padding: 4px 0; }
+.seat-count {
+  position: absolute; left: 14px; bottom: 16px; z-index: 5; margin: 0;
+  font-size: 12px; color: var(--muted); background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 5px 10px;
+}
+.seat-count:empty { display: none; }
+
+#room-svg .obj { cursor: move; }
+#room-svg.students-mode .obj { cursor: default; }
+#room-svg.students-mode .seat { cursor: pointer; }
+#room-svg .seat.drop-hover { fill: #cfe6dc; }
+#room-svg text { pointer-events: none; }
+#room-svg .handle { cursor: grab; }
+#room-svg { cursor: grab; }
+#room-svg.select-cursor { cursor: default; }
+.canvas.panning, .canvas.panning #room-svg, .canvas.panning #room-svg * { cursor: grabbing !important; }
+#room-svg [data-wall=left], #room-svg [data-wall=right] { cursor: ew-resize; }
+#room-svg [data-wall=top], #room-svg [data-wall=bottom] { cursor: ns-resize; }
+
+/* Propiedades */
+.props-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.props-grid label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.props-grid label.full { grid-column: 1 / -1; }
+.props-grid input { width: 100%; }
+.props-actions { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+.align-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.align-grid .btn { min-width: 0; padding: 5px 0; }
+.align-grid .ico { width: 16px; height: 16px; }
+.align-grid .btn:disabled .ico { opacity: .5; }
+.props-type { font-weight: 600; margin: 0 0 10px; }
+
+.footer { font-size: 11px; color: var(--muted); text-align: center; padding: 5px; background: var(--panel); border-top: 1px solid var(--line); }
+.footer a { color: var(--muted); }
+
+/* Diálogos */
+dialog {
+  border: 0; border-radius: 12px; padding: 0; box-shadow: 0 10px 40px var(--shadow);
+  width: min(440px, calc(100vw - 32px)); background: var(--panel); color: var(--ink);
+}
+dialog::backdrop { background: rgba(10, 12, 14, .5); }
+.dialog-form { padding: 18px 20px; }
+.dialog-form h2 { margin: 0 0 6px; font-size: 17px; }
+.dialog-form .field-row { margin-top: 10px; }
+.dialog-form select, .dialog-form input[type=text], .dialog-form input[type=number] { width: 100%; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+/* Compartir por enlace */
+.share-classes { list-style: none; margin: 10px 0 0; padding: 0; max-height: 180px; overflow-y: auto; border: 1px solid var(--line); border-radius: 6px; }
+.share-classes li { border-bottom: 1px solid var(--line-soft); }
+.share-classes li:last-child { border-bottom: 0; }
+.share-classes label { display: flex; align-items: center; gap: 8px; padding: 6px 9px; cursor: pointer; }
+.share-classes label:hover { background: var(--accent-soft); }
+#share-url { font-size: 12px; word-break: break-all; color: var(--muted); }
+#share-info { margin: 6px 0 0; }
+#share-info.warn { color: var(--danger); }
+
+#print-area { display: none; }
+
+@media (max-width: 900px) {
+  #app { height: auto; min-height: 100vh; }
+  .layout, .layout.no-props { grid-template-columns: 1fr; }
+  .canvas-wrap { height: 62vh; order: -1; }
+  /* En el móvil el plano es estrecho: la barra va en horizontal y encima del
+     lienzo, no flotando, para no taparlo. */
+  .canvas-wrap { flex-direction: column; }
+  .room-bar {
+    position: static; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px;
+    border-width: 0 0 1px; border-radius: 0;
+  }
+  .room-bar label { flex-direction: row; align-items: center; gap: 5px; }
+  .room-bar input { width: 58px; }
+  .room-bar-sep { width: 1px; height: auto; align-self: stretch; }
+  .room-tools { display: flex; }
+  .room-size, .room-view { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .room-view label { flex-direction: row; align-items: center; gap: 5px; }
+  .sidebar, .props { border: 0; border-top: 1px solid var(--line); }
+  /* Las pestañas y su contenido van encima del plano: debajo quedaban fuera de
+     la pantalla. El contenido tiene altura limitada y se desplaza por dentro
+     para que el plano siga a la vista. */
+  .sidebar { display: contents; }
+  .sidebar > .tabs { order: -3; margin: 8px 12px; }
+  .sidebar > .panel {
+    order: -2; background: var(--panel); padding: 0 12px 10px;
+    max-height: 32vh; overflow-y: auto; border-bottom: 1px solid var(--line);
+  }
+  .sidebar > .panel > h2:first-child { margin-top: 4px; }
+  .sidebar > .panel[hidden] { display: none; }
+  .topbar-actions { margin-left: 0; }
+}
+
+/* Impresión: solo el plano.
+   El aspecto del bloque va fuera de @media print para que la app pueda medir
+   antes de imprimir cuánto ocupan el título, la fecha y la lista, y darle al
+   plano el alto que sobra. En pantalla el bloque está oculto. */
+@page { size: A4 portrait; margin: 10mm; }   /* lo cambia la app al imprimir */
+
+#print-area { display: none; break-inside: avoid; color: #23262b; }
+#print-area h1 { font-size: 16pt; margin: 0 0 2mm; }
+#print-area .print-date { font-size: 10pt; color: #444; margin: 0 0 3mm; }
+#print-area .unseated { font-size: 10pt; margin-top: 3mm; }
+#print-area .print-teams { list-style: none; margin: 3mm 0 0; padding: 0; font-size: 10pt; columns: 2; column-gap: 8mm; }
+#print-area .print-teams li { break-inside: avoid; margin: 0 0 1.5mm; }
+#print-area .print-teams .dot {
+  display: inline-block; width: 5mm; height: 5mm; line-height: 5mm; border-radius: 50%; color: #fff; font-weight: 700;
+  font-size: 8pt; text-align: center; margin-right: 2mm; print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+/* El alto máximo lo pone la app: depende del papel, de los márgenes y de lo
+   que ocupe el texto. */
+#print-area svg { width: 100%; height: auto; display: block; break-inside: avoid; }
+
+@media print {
+  /* En papel el plano va siempre sobre blanco, sea cual sea el tema. */
+  :root { --floor: #ffffff; --grid: #ffffff; --wall: #55504a; }
+  body { background: #fff; }
+  #app, dialog, #drag-ghost { display: none !important; }
+  /* Nada de estirar el bloque al alto de la hoja: Firefox cuenta el 100vh de
+     otra manera y colaba una página en blanco. Lo que limita el plano es el
+     alto que le calcula la app justo antes de imprimir. */
+  #print-area { display: block; }
+}
