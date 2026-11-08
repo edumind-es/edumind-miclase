@@ -881,7 +881,11 @@ edumind_miclase/
   de clases, exportar, importar, compartir y la edición de la lista
   (`miclase-puente.css`). Imprimir es el `window.print()` de AulaMap: en la
   app nativa no imprime todavía. `plano-aulamap-ui.test.mjs` comprueba la
-  cita, que ninguna petición sale del origen y AulaMap suelto.
+  cita, que ninguna petición sale del origen y AulaMap suelto. El permiso se
+  dio con MiClase en GitHub y en el servidor (nov 2026, sin app en tiendas):
+  **antes de publicar en la App Store o en Google Play, confirmarlo con el
+  autor**, porque las condiciones de la App Store chocan con la AGPL de
+  código ajeno.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
