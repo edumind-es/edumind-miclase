@@ -178,6 +178,9 @@ async function principal() {
     const tutorias = join(scratch, 'tutorias.mjs')
     await paquete('pruebas/tutorias.test.ts', tutorias, ['--platform=node', '--format=esm'])
     await suite('tutorías: modelos, acuerdos y acta', 'node', [tutorias])
+    const planificacion = join(scratch, 'planificacion-semanal.mjs')
+    await paquete('pruebas/planificacion-semanal.test.ts', planificacion, ['--platform=node', '--format=esm'])
+    await suite('planificación semanal: volcado de un .md', 'node', [planificacion])
 
     const migracionUnidades = join(scratch, 'migracion-unidades.mjs')
     await paquete('pruebas/migracion-unidades.test.ts', migracionUnidades, ['--platform=node', '--format=esm'])
@@ -308,6 +311,7 @@ async function principal() {
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('medidas de atención a la diversidad desde la interfaz', 'node', ['pruebas/medidas-ui.test.mjs'], entorno)
     await suite('seguimiento de tutorías desde la interfaz', 'node', ['pruebas/tutorias-ui.test.mjs'], entorno)
+    await suite('planificación semanal y calendario desde la interfaz', 'node', ['pruebas/planificacion-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('planilla de corrección desde la interfaz', 'node', ['pruebas/planilla-ui.test.mjs'], entorno)
     const hojaDemoUi = join(scratch, 'hoja-demo-ui.cjs')

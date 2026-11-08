@@ -135,7 +135,7 @@ try {
   await p.getByRole('button', { name: 'Cerrar' }).click()
 
   const prog = await programacion()
-  ok(prog.version === 90, 'la base está en la versión 9 del esquema', `idb v${prog.version}`)
+  ok(prog.version === 100, 'la base está en la versión 10 del esquema', `idb v${prog.version}`)
   // Una unidad con un criterio evaluado por una familia y otro por otra
   // distinta (en la programación de PROENS cada criterio lleva una familia).
   let eleccion = null

@@ -308,6 +308,12 @@ dispositivo y lo recibe ese tercero.
   datos de menores. Borrar una tutoría la marca como borrada (para que el
   borrado llegue a los demás aparatos) y deja de verse; los modelos de tutoría
   no llevan datos de nadie.
+- La **planificación semanal y el calendario** (noviembre de 2026) viven
+  también solo en el aparato, como el resto del cuaderno: sesiones previstas
+  por clase y eventos. No llevan datos de alumnado. El fichero .md que se
+  vuelca se lee en el aparato y no sale de él; para comprobar los códigos de
+  criterio se piden al servidor los criterios del área, que son dato público
+  del currículo.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

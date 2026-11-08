@@ -20,7 +20,7 @@ edumind_miclase/
 │   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v9) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v10) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
@@ -32,6 +32,8 @@ edumind_miclase/
 │   ├── src/programacion/ ← proens.ts: lector de programaciones de PROENS (Xunta) → unidades,
 │   │                   criterios con mínimo e instrumento. Puro; se prueba con pruebas/fixtures/
 │   │                   pdfTexto.ts (puro) + pdfNavegador.ts: el PDF → texto con columnas en el aparato (pdf.js)
+│   ├── src/planificacion/ ← semanal.ts: lector del .md de la programación semanal (puro) ·
+│   │                   casar.ts: área, unidad y criterios de la clase (puro) · exportar.ts: .md y lámina
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts · actaTutoria.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
@@ -946,6 +948,33 @@ edumind_miclase/
 - **`iosScheme` no se fija en `capacitor.config.ts`.** iOS no admite http/https
   como esquema propio y Capacitor lo ignora: el origen real es
   `capacitor://localhost`, y cambiarlo tras publicar vaciaría IndexedDB.
+- **La planificación es una previsión, no un registro de aula** (esquema v10,
+  tablas `planificacion` y `eventos`; entrada «Planificación» del menú, con
+  vistas Semana y Mes en `pages/Planificacion/`). Una sesión planificada es de
+  la clase activa y de un día y una franja (`fecha`, `franja`, `hora_inicio`,
+  `hora_fin`); no toca notas, diario ni asistencia. Área y unidad se enlazan
+  si casan (`asignatura_id`, `unidad_id`) pero el texto tal cual se guarda
+  siempre (`area`, `unidad_texto`), y los criterios van en `criterios_json`
+  como `{ codigo, criterio_id }`: el «CA6.5» del .md y el «CE6.5» del
+  currículo si existe (`codigoCurriculo`), o null. Lo que no casa se guarda y
+  se dice antes, nunca se descarta. El volcado lee el .md de Luis
+  (`planificacion/semanal.ts`, puro, fixture
+  `pruebas/fixtures/planificacion_semanal_6A.md`, castellano y gallego): una
+  sesión por franja de la «Vista rápida», con su título y su ■, y el detalle
+  de un bloque de varias franjas copiado en cada una (`bloque`); sin tabla,
+  el bloque es la sesión. Casar es aparte (`casar.ts`, puro): área por
+  `claveArea` (gallego, castellano y slug del currículo), unidad por título y
+  luego por número escrito en el nombre, **nunca por orden**. Volcar otra vez
+  la misma semana no duplica: `volcarSemana` devuelve null si hay algo y no
+  se pidió `sustituir`, y sustituir retira con borrado lógico las sesiones de
+  esas fechas y los eventos `origen: 'volcado'`, no los escritos a mano. Los
+  eventos son de la clase o de todas (`grupo_id = TODAS_LAS_CLASES`, 0); la
+  nota en cursiva de un día del .md es un evento `tipo: 'nota'`. Lo
+  planificado con ■ en un área de la clase lleva al Calificador por URL
+  (`/evaluacion?grupo_id&asignatura_id&unidad_id`). Imprimir va por
+  `imprimir` (Lámina) y exportar el .md por `descargarFichero`; el .md
+  exportado se vuelve a leer igual (`planificacion-semanal.test.ts`).
+  Borrar una clase retira su planificación y sus eventos.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
@@ -996,7 +1025,7 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No tocar `backend/.env` sin confirmación
 - No asumir que está desplegado en producción sin comprobarlo primero
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes. Una tabla nueva va además en
+  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación). Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
   (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)

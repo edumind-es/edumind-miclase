@@ -96,11 +96,12 @@ const tras = await p.evaluate(async () => {
   return r
 })
 
-ok(tras.version === 90, 'la base pasa a la versión 9 (Dexie numera internamente ×10)', `idb v${tras.version}`)
+ok(tras.version === 100, 'la base pasa a la versión 10 (Dexie numera internamente ×10)', `idb v${tras.version}`)
 ok(tras.tablas.includes('criterio_instrumentos'), 'aparece la tabla criterio_instrumentos')
 ok(tras.tablas.includes('diario'), 'aparece la tabla del diario de evaluación')
 ok(tras.tablas.includes('medidas'), 'aparece la tabla de medidas de atención a la diversidad')
 ok(tras.tablas.includes('tutorias') && tras.tablas.includes('modelos_tutoria'), 'aparecen las tablas de tutorías y de sus modelos')
+ok(tras.tablas.includes('planificacion') && tras.tablas.includes('eventos'), 'aparecen las tablas de planificación y calendario')
 ok(tras.tablas.includes('meta'), 'aparece la tabla meta')
 ok(tras.tablas.includes('sync_base'), 'aparece la tabla de fusión a tres bandas')
 
