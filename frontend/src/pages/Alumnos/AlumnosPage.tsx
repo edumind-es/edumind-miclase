@@ -8,6 +8,7 @@ import {
 import EvidenciasGaleria from '@/components/EvidenciasGaleria'
 import AjustesDatosSensibles from '@/components/AjustesDatosSensibles'
 import MedidasAlumno from '@/components/MedidasAlumno'
+import HistorialTutorias from '@/components/HistorialTutorias'
 import { useDatosSensibles } from '@/db/datosSensibles'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
@@ -475,6 +476,9 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
         {medidasAbiertas && grupo && (
           <MedidasAlumno alumno={alumno} grupo={grupo} onCerrar={() => setMedidasAbiertas(false)} />
         )}
+
+        {/* Historial de tutorías: datos de tutoría, no de NEAE; van siempre a la vista */}
+        <HistorialTutorias alumnoId={alumno.id!} grupoId={grupoId} />
 
         <label htmlFor="ed-obs" style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
         <textarea id="ed-obs" value={form.observaciones} rows={3}
