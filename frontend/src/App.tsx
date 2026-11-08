@@ -9,6 +9,7 @@ import EvaluacionPage from '@/pages/Evaluacion/EvaluacionPage'
 import SeguimientoPage from '@/pages/Seguimiento/SeguimientoPage'
 import InformesPage from '@/pages/Informes/InformesPage'
 import SesionesPage from '@/pages/Sesiones/SesionesPage'
+import TutoriasPage from '@/pages/Tutorias/TutoriasPage'
 import EscanearPage from '@/pages/Escanear/EscanearPage'
 import SincronizarPage from '@/pages/Sincronizar/SincronizarPage'
 import CallbackPage from '@/pages/Auth/CallbackPage'
@@ -33,6 +34,7 @@ const NAV = [
       { to: '/escanear',    label: 'QR y cámara', icon: '📷' },
       { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
       { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
+      { to: '/tutorias',    label: 'Tutorías',    icon: '🤝' },
       { to: '/informes',    label: 'Informes',    icon: '📄' },
     ],
   },
@@ -52,15 +54,15 @@ const K_PLEGADO = 'miclase_sidebar_plegado'
 // de contexto. El escáner y la sincronización no: el escáner deduce el alumno
 // del propio código y la sincronización es de todo el dispositivo. La
 // configuración de la clase tampoco, porque ya lleva su propia cabecera.
-const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/informes']
+const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes']
 
 // El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
 // Informes lleva su propio «Periodo», que además ofrece el curso completo.
-const SIN_TRIMESTRE = ['/alumnos', '/informes']
+const SIN_TRIMESTRE = ['/alumnos', '/informes', '/tutorias']
 // El área no pinta nada donde se trabaja con la clase entera. En el
 // calificador tampoco: allí manda su fila de pestañas de área, que es más
 // visible y no cabe duplicarla en un desplegable.
-const SIN_AREA = ['/alumnos', '/sesiones', '/evaluacion', '/informes']
+const SIN_AREA = ['/alumnos', '/sesiones', '/evaluacion', '/informes', '/tutorias']
 
 function usarBarra(pathname: string) {
   const raiz = '/' + (pathname.split('/')[1] ?? '')
@@ -203,6 +205,7 @@ function Layout() {
           <Route path="/escanear"      element={<EscanearPage />} />
           <Route path="/sesiones/*"    element={<SesionesPage />} />
           <Route path="/seguimiento"   element={<SeguimientoPage />} />
+          <Route path="/tutorias"      element={<TutoriasPage />} />
           <Route path="/informes"      element={<InformesPage />} />
           <Route path="/sincronizar"   element={<SincronizarPage />} />
           <Route path="/auth/callback" element={<CallbackPage />} />

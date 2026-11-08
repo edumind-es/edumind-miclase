@@ -17,10 +17,11 @@ import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
-  GrupoAlumno, UnidadCriterio, Medida,
+  GrupoAlumno, UnidadCriterio, Medida, Tutoria, ModeloTutoria, AcuerdoTutoria,
 } from './localDb'
 import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 import { medidaDe } from './medidas'
+import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
 
@@ -188,7 +189,7 @@ export async function eliminarGrupo(id: number): Promise<void> {
   await db.transaction('rw',
     [db.grupos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.diario, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
-     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos],
+     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.tutorias],
     async () => {
       const marcar = { deleted_at: t, updated_at: t }
 
@@ -229,6 +230,8 @@ export async function eliminarGrupo(id: number): Promise<void> {
 
       await db.planos.where('grupo_id').equals(id).modify(marcar)
       await db.asientos.where('grupo_id').equals(id).modify(marcar)
+      // Las tutorías son de la clase; los modelos no, y se quedan.
+      await db.tutorias.where('grupo_id').equals(id).modify(marcar)
       await db.grupo_alumnos.where('grupo_id').equals(id).modify(marcar)
       await db.grupos.update(id, marcar)
     }
@@ -377,6 +380,81 @@ export async function eliminarMedida(id: number): Promise<void> {
 }
 
 // Búsqueda por código de anonimización (lo que contiene el QR de la mesa)
+// ─── TUTORÍAS ─────────────────────────────────────────────────────────────────
+// Qué se guarda y cómo se lee lo decide `db/tutorias.ts` (puro); aquí solo
+// se escribe, siempre con `nuevo()`/`tocado()` y borrado lógico.
+
+/** Las tutorías vivas de una clase. Filtrar y ordenar: `filtrarTutorias`. */
+export async function getTutorias(grupo_id: number): Promise<Tutoria[]> {
+  return vivos(await db.tutorias.where('grupo_id').equals(grupo_id).toArray())
+}
+
+/** El historial de un alumno, de todas sus clases (índice multiEntry `*alumnos`). */
+export async function getTutoriasDeAlumno(alumno_id: number): Promise<Tutoria[]> {
+  return vivos(await db.tutorias.where('alumnos').equals(alumno_id).toArray())
+}
+
+export async function getTutoria(id: number): Promise<Tutoria | undefined> {
+  const t = await db.tutorias.get(id)
+  return t && !t.deleted_at ? t : undefined
+}
+
+/** Alta o modificación de una tutoría. Devuelve su id. */
+export async function guardarTutoria(datos: Omit<Tutoria, 'id' | 'updated_at' | 'deleted_at' | 'created_at'> & { id?: number }): Promise<number> {
+  const { id, ...resto } = normalizarTutoria(datos)
+  if (id) {
+    await db.tutorias.update(id, tocado(resto))
+    return id
+  }
+  const reg = nuevo({ ...resto, created_at: sello() })
+  await db.tutorias.add(reg)
+  return reg.id
+}
+
+/** Borrado lógico: el borrado tiene que viajar a los demás aparatos. */
+export async function eliminarTutoria(id: number): Promise<void> {
+  const t = sello()
+  await db.tutorias.update(id, { deleted_at: t, updated_at: t })
+}
+
+/**
+ * Revisa un acuerdo desde fuera de su tutoría (lista de pendientes o la
+ * tutoría de seguimiento): escribe en la fila de la tutoría que lo tomó.
+ */
+export async function revisarAcuerdo(tutoria_id: number, clave: string, cambio: Partial<AcuerdoTutoria>): Promise<void> {
+  await db.transaction('rw', db.tutorias, async () => {
+    const t = await db.tutorias.get(tutoria_id)
+    if (!t || t.deleted_at) throw new Error('La tutoría de ese acuerdo ya no existe')
+    await db.tutorias.update(tutoria_id, tocado({ acuerdos: conAcuerdoCambiado(t.acuerdos ?? [], clave, cambio) }))
+  })
+}
+
+/** Los modelos propios del docente (los de serie están en `MODELOS_DE_SERIE`). */
+export async function getModelosTutoria(): Promise<ModeloTutoria[]> {
+  return vivos(await db.modelos_tutoria.toArray())
+}
+
+export async function guardarModeloTutoria(datos: Omit<ModeloTutoria, 'id' | 'updated_at' | 'deleted_at' | 'created_at'> & { id?: number }): Promise<number> {
+  const { id, ...resto } = normalizarModelo(datos)
+  const campos = {
+    nombre: resto.nombre, tipo: resto.tipo, modalidad: resto.modalidad,
+    apartados: resto.apartados, orden_dia: resto.orden_dia, con_seguimiento: resto.con_seguimiento,
+  }
+  if (id) {
+    await db.modelos_tutoria.update(id, tocado(campos))
+    return id
+  }
+  const reg = nuevo({ ...campos, created_at: sello() })
+  await db.modelos_tutoria.add(reg)
+  return reg.id
+}
+
+/** Borrar un modelo no toca las tutorías hechas con él: llevan su copia. */
+export async function eliminarModeloTutoria(id: number): Promise<void> {
+  const t = sello()
+  await db.modelos_tutoria.update(id, { deleted_at: t, updated_at: t })
+}
+
 export async function getAlumnoPorCodigo(codigo: string): Promise<Alumno | undefined> {
   const a = await db.alumnos.where('codigo_cifrado').equals(codigo.toUpperCase().trim()).first()
   return a && !a.deleted_at ? a : undefined
@@ -3699,7 +3777,8 @@ export async function exportarDatos(
     base.tables.some(t => t.name === nombre) ? base.table(nombre).toArray() : Promise.resolve([])
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
-         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas] = await Promise.all([
+         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas,
+         tutorias, modelos_tutoria] = await Promise.all([
     leer<Grupo>('grupos'),
     leer<Alumno>('alumnos'),
     leer<GrupoAlumno>('grupo_alumnos'),
@@ -3717,6 +3796,8 @@ export async function exportarDatos(
     leer<Asiento>('asientos'),
     leer<RegistroDiario>('diario'),
     leer<Medida>('medidas'),
+    leer<Tutoria>('tutorias'),
+    leer<ModeloTutoria>('modelos_tutoria'),
   ])
 
   // Serializar los blobs de evidencias a base64. En la copia ligera no van: con
@@ -3735,6 +3816,7 @@ export async function exportarDatos(
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
     criterio_instrumentos, rubricas,
     evidencias: evidenciasSerial, planos, asientos, diario, medidas,
+    tutorias, modelos_tutoria,
   }, null, 2)
 }
 
@@ -3776,7 +3858,7 @@ export async function importarDatos(json: string): Promise<void> {
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.diario,
-     db.medidas,
+     db.medidas, db.tutorias, db.modelos_tutoria,
      // La restauración también toca el estado de sincronización: ver abajo.
      db.sync_base, db.meta],
     async () => {
@@ -3788,6 +3870,7 @@ export async function importarDatos(json: string): Promise<void> {
         // Una copia sin evidencias no puede dejar el aparato sin las suyas.
         ...(data.sin_evidencias ? [] : [db.evidencias.clear()]),
         db.planos.clear(), db.asientos.clear(), db.diario.clear(), db.medidas.clear(),
+        db.tutorias.clear(), db.modelos_tutoria.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))
@@ -3807,6 +3890,9 @@ export async function importarDatos(json: string): Promise<void> {
       await db.diario.bulkAdd(sellar(data.diario || []))
       // Las copias anteriores a la v8 no traen medidas.
       await db.medidas.bulkAdd(sellar(data.medidas || []))
+      // Las anteriores a la v9 no traen tutorías ni modelos.
+      await db.tutorias.bulkAdd(sellar(data.tutorias || []))
+      await db.modelos_tutoria.bulkAdd(sellar(data.modelos_tutoria || []))
 
       // Los ids siguen existiendo pero su contenido es otro. Si no se
       // reinicia, la base de fusión apunta a versiones que ya no tienen nada

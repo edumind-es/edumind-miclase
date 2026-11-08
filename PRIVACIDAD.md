@@ -11,7 +11,7 @@ ciertos. Todo lo que se afirma aquí es comprobable en el código fuente
 (AGPL-3.0-or-later / EUPL-1.2) y buena parte está cubierto por pruebas
 automáticas en `pruebas/`.
 
-Última revisión: 1 de noviembre de 2026.
+Última revisión: 8 de noviembre de 2026 (seguimiento de tutorías).
 
 ---
 
@@ -47,6 +47,7 @@ aplicación insiste con las copias de seguridad.
 | Calificaciones por criterio, instrumento y trimestre | Evaluación competencial |
 | Evidencias: fotografías, audio y vídeo de producciones | Justificar la calificación |
 | Asistencia | Control de faltas |
+| Tutorías: fecha, tipo, alumnado, asistentes y su relación (madre, orientadora…), temas tratados, acuerdos y su seguimiento, próxima cita | Registro de las tutorías y sus actas |
 | Fecha de nacimiento *(campo opcional, no se pide en la interfaz)* | — |
 
 **Ninguno de estos datos se transmite a EDUmind en claro, en ninguna
@@ -285,6 +286,22 @@ dispositivo y lo recibe ese tercero.
   nota que le corresponde. Los criterios de otro curso que una adaptación pueda
   usar se piden al servidor como dato público del currículo; el nombre del
   alumno nunca va en esa petición.
+- Las **tutorías** (8 de noviembre de 2026) guardan lo que se habla con las
+  familias, el alumno o el equipo docente: nombres de los asistentes, temas y
+  acuerdos. Son datos personales de menores y de terceros (las familias) y
+  viven donde todo lo demás: en el dispositivo, en la copia de seguridad y,
+  si se sincroniza, cifrados de extremo a extremo. **No van tras el interruptor
+  de datos sensibles**: registrar las entrevistas con las familias es tarea
+  ordinaria de la tutoría, no un dato de categoría especial por sí mismo, y
+  esconderlas por defecto dejaría al tutor sin su registro. A cambio, el
+  formulario recuerda que se anote solo lo necesario y que se eviten
+  diagnósticos o datos de salud que no hagan falta (minimización, art. 5.1.c
+  RGPD); si aun así se anotan, pasan a ser de categoría especial y la
+  responsabilidad es la del resto del cuaderno. El acta se imprime o se guarda
+  como fichero desde el propio dispositivo y lleva un aviso de que contiene
+  datos de menores. Borrar una tutoría la marca como borrada (para que el
+  borrado llegue a los demás aparatos) y deja de verse; los modelos de tutoría
+  no llevan datos de nadie.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

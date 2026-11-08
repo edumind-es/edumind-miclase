@@ -20,7 +20,7 @@ edumind_miclase/
 │   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v7) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v9) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
@@ -33,7 +33,7 @@ edumind_miclase/
 │   │                   criterios con mínimo e instrumento. Puro; se prueba con pruebas/fixtures/
 │   │                   pdfTexto.ts (puro) + pdfNavegador.ts: el PDF → texto con columnas en el aparato (pdf.js)
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
-│   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
+│   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts · actaTutoria.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
 │   ├── src/nativo/   ← impresora.ts: plugin Impresora (PDF/AirPrint en iOS; iframe en web)
 │   ├── src/utils/compartir.ts ← descargarFichero(): la ÚNICA salida de ficheros (web: descarga; nativo: hoja de compartir)
@@ -776,6 +776,32 @@ edumind_miclase/
   y siguen abriéndose. Una base v7 no pasa por la puerta de migración
   (`VERSION_PUERTA`): solo gana una tabla vacía. Tras desplegar hay que
   reiniciar el backend: `medidas` está en su lista blanca.
+- **Las tutorías son de la clase; sus modelos, del docente** (esquema v9,
+  tablas `tutorias` y `modelos_tutoria`; `db/tutorias.ts`, puro;
+  `pruebas/tutorias.test.ts` y `tutorias-ui.test.mjs`). Una tutoría lleva
+  `grupo_id` y nombra a su alumnado en `alumnos`, un array con índice
+  multiEntry (`*alumnos`): la ficha del alumno (`HistorialTutorias`, en
+  `EditarAlumno`) lee su historial de todas sus clases con
+  `getTutoriasDeAlumno`. Una de grupo va sin alumnado. Asistentes, orden del
+  día, apartados y acuerdos van como arrays de verdad, no `*_json`: la fusión
+  los compara como JSON (`iguales`), así que dos aparatos que tocan acuerdos
+  distintos de la misma tutoría a la vez se quedan con la lista del más
+  reciente. **Los apartados se COPIAN del modelo al crear la tutoría**
+  (`tutoriaDesdeModelo`): cambiar o borrar un modelo no reescribe actas. Los
+  tres modelos de serie (`MODELOS_DE_SERIE`: con la familia, entrevista
+  inicial, seguimiento de acuerdos) viven en el código y no en la tabla,
+  porque sembrarlos en cada aparato los triplicaría al sincronizar; se
+  duplican para editarlos. Un acuerdo se revisa en SU tutoría
+  (`revisarAcuerdo`, que vuelve a sellarla) aunque se marque desde la lista de
+  pendientes o desde otra tutoría; la que lo revisa lo anota en `revisados`
+  para su acta. Borrar una clase se lleva sus tutorías (`eliminarGrupo`);
+  quitar a un alumno de la clase, no. La pantalla es `/tutorias`
+  (`TutoriasPage`, `?alumno=` filtra, `?abrir=` abre) y el acta
+  (`informes/actaTutoria.ts`, Lámina, con firma por asistente y del tutor)
+  sale por `imprimir`/`descargarHTML`. No van tras el interruptor de datos
+  sensibles (decisión razonada en PRIVACIDAD.md): el formulario pide
+  minimización (`[data-aviso-tutoria]`). Tras desplegar, reiniciar el
+  backend: las dos tablas están en su lista blanca.
 - **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
   nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
   docente los enciende en Alumnado (`AjustesDatosSensibles`,

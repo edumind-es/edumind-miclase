@@ -4,7 +4,7 @@ import {
 } from './migracionUnidades'
 
 /** Versión actual del esquema Dexie. La copia de seguridad la lleva también. */
-export const VERSION_ESQUEMA = 8
+export const VERSION_ESQUEMA = 9
 
 /**
  * Campos comunes de sincronización.
@@ -163,6 +163,83 @@ export interface Medida extends Sincronizable {
   criterios_json?: string | null
   /** adaptación: '4º' si los sustitutos vienen de otro curso del currículo. */
   curso_referencia?: string | null
+  created_at?: string
+}
+
+/** Con quién es la tutoría. 'grupo' es la de toda la clase y puede ir sin alumno. */
+export type TipoTutoria = 'familia' | 'alumno' | 'equipo' | 'grupo'
+export type ModalidadTutoria = 'presencial' | 'telefono' | 'videollamada'
+/** Estado de un acuerdo: se revisa en las tutorías siguientes. */
+export type EstadoAcuerdo = 'pendiente' | 'cumplido' | 'no_cumplido'
+
+/** Quién estuvo: texto libre y su papel (madre, padre, orientadora…). */
+export interface AsistenteTutoria { nombre: string; rol: string }
+/** Un apartado de texto del acta (temas tratados, situación, observaciones…). */
+export interface ApartadoTutoria { clave: string; titulo: string; texto: string }
+/** Un punto del orden del día y si se llegó a tratar. */
+export interface PuntoOrdenDia { texto: string; tratado: boolean }
+export interface AcuerdoTutoria {
+  /** Clave estable dentro de la tutoría, para marcarlo desde otra. */
+  clave: string
+  texto: string
+  responsable?: string
+  /** 'AAAA-MM-DD' o vacío. */
+  fecha_prevista?: string | null
+  estado: EstadoAcuerdo
+  /** Día en que se revisó (cumplido o no). */
+  fecha_revision?: string | null
+  nota_revision?: string | null
+}
+
+/**
+ * Una tutoría (esquema v9). Es de la clase (`grupo_id`) y nombra a sus
+ * alumnos en `alumnos`, un array con índice multiEntry: así la ficha de un
+ * alumno encuentra su historial sin recorrer la tabla. Los apartados son una
+ * COPIA del modelo al crearla: cambiar el modelo después no reescribe actas.
+ * Las listas van como arrays de verdad (la fusión los compara como JSON).
+ */
+export interface Tutoria extends Sincronizable {
+  id?: number
+  grupo_id: number
+  /** Fecha y hora local, 'AAAA-MM-DDTHH:mm' (ordena como texto). */
+  fecha: string
+  tipo: TipoTutoria
+  modalidad: ModalidadTutoria
+  alumnos: number[]
+  asistentes: AsistenteTutoria[]
+  /** 'serie:familia' o 'propio:<id>'; solo informativo. */
+  modelo_clave?: string | null
+  modelo_nombre?: string | null
+  orden_dia: PuntoOrdenDia[]
+  apartados: ApartadoTutoria[]
+  acuerdos: AcuerdoTutoria[]
+  /** Próxima cita prevista, 'AAAA-MM-DDTHH:mm' o vacío. */
+  proxima_cita?: string | null
+  proxima_cita_nota?: string | null
+  /** Copiado del modelo: el editor abre a la vista los acuerdos pendientes de antes. */
+  con_seguimiento?: boolean
+  /** Acuerdos de tutorías anteriores revisados en esta, para el acta. */
+  revisados?: { tutoria_id: number; clave: string }[]
+  created_at?: string
+}
+
+/**
+ * Un modelo de tutoría propio del docente (esquema v9). No cuelga de ninguna
+ * clase: sirve para todas y sobrevive al borrado de una. Los modelos de serie
+ * viven en el código (`MODELOS_DE_SERIE`, `db/tutorias.ts`), no en la tabla:
+ * sembrarlos en cada aparato los duplicaría al sincronizar.
+ */
+export interface ModeloTutoria extends Sincronizable {
+  id?: number
+  nombre: string
+  tipo: TipoTutoria
+  modalidad: ModalidadTutoria
+  /** Apartados de texto en su orden, con el texto de partida. */
+  apartados: ApartadoTutoria[]
+  /** Puntos del orden del día. */
+  orden_dia: string[]
+  /** Si el acta trae la revisión de los acuerdos pendientes del alumnado. */
+  con_seguimiento: boolean
   created_at?: string
 }
 
@@ -498,6 +575,8 @@ export class MiClaseDB extends Dexie {
   meta!: Table<Meta>
   sync_base!: Table<SyncBase>
   medidas!: Table<Medida>
+  tutorias!: Table<Tutoria>
+  modelos_tutoria!: Table<ModeloTutoria>
 
   /**
    * `hasta` limita las versiones declaradas. La app usa la última; la puerta
@@ -628,6 +707,23 @@ export class MiClaseDB extends Dexie {
         if (r.deleted_at === undefined) r.deleted_at = null
       })
     })
+
+    // v9 — seguimiento de tutorías y sus modelos. Dos tablas nuevas y
+    // vacías: no tocan ninguna fila existente, así que no pasan por la
+    // puerta de migración. `*alumnos` es multiEntry: el historial de un
+    // alumno sale del índice. El sello es el de siempre (idempotente).
+    if (hasta >= 9) this.version(9).stores({
+      tutorias:        '++id, grupo_id, fecha, *alumnos, updated_at',
+      modelos_tutoria: '++id, updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      for (const t of ['tutorias', 'modelos_tutoria']) {
+        await tx.table(t).toCollection().modify(r => {
+          if (!r.updated_at) r.updated_at = r.created_at || sello
+          if (r.deleted_at === undefined) r.deleted_at = null
+        })
+      }
+    })
   }
 }
 
@@ -645,6 +741,7 @@ export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos', 'medidas',
+  'tutorias', 'modelos_tutoria',
 ] as const
 
 export type TablaSinc = typeof TABLAS_SINC[number]
