@@ -1,0 +1,739 @@
+{
+  "meta": {
+    "comunidad": "LaRioja",
+    "etapa": "primaria",
+    "asignatura": "musica-y-danza",
+    "asignatura_nombre": "Música y Danza",
+    "ciclo_origen": "Primer ciclo",
+    "fuente": "La Rioja · Primaria · Música y Danza · Primer ciclo.xlsx",
+    "generado": "2026-11-08",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Expresa hechos, conceptos, pensamientos, opiniones o sentimientos de forma oral, escrita, signada o multimodal, con claridad y adecuación a diferentes contextos cotidianos de su entorno personal, social y educativo, y participa en interacciones comunicativas con actitud cooperativa y respetuosa, tanto para intercambiar información y crear conocimiento como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora textos orales, escritos, signados o multimodales sencillos de los ámbitos personal, social y educativo, con acompañamiento puntual, para participar activamente en contextos cotidianos y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta, con el debido acompañamiento, información sencilla procedente de dos o más fuentes, evaluando su fiabilidad y utilidad en función de los objetivos de lectura, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee obras diversas adecuadas a su progreso madurativo, seleccionando aquellas que mejor se ajustan a sus gustos e intereses; reconoce el patrimonio literario como fuente de disfrute y aprendizaje individual y colectivo; y moviliza su experiencia personal y lectora para construir y compartir su interpretación de las obras y para crear textos de intención literaria a partir de modelos sencillos."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la gestión dialogada de los conflictos y la igualdad de derechos de todas las personas, detectando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa, al menos, una lengua, además de la lengua o lenguas familiares, para responder a necesidades comunicativas sencillas y predecibles, de manera adecuada tanto a su desarrollo e intereses como a situaciones y contextos cotidianos de los ámbitos personal, social y educativo."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, reconoce la diversidad de perfiles lingüísticos y experimenta estrategias que, de manera guiada, le permiten realizar transferencias sencillas entre distintas lenguas para comunicarse en contextos cotidianos y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce y respeta la diversidad lingüística y cultural presente en su entorno, reconociendo y comprendiendo su valor como factor de diálogo, para mejorar la convivencia. Competencia matemática y competencia La competencia matemática y compe (competencia STEM por sus siglas en inglés los métodos científicos, el pensamiento y re métodos de la ingeniería para transformar el e sostenible. La competencia matemática permite razonamiento matemáticos con el fin de resolv La competencia en ciencia conlleva la co social, utilizando un conjunto de conocimiento experimentación, con el fin de plantear pr pruebas para poder interpretar y transformar e La competencia en tecnología e ingeniería y metodologías propios de las ciencias para las necesidades o deseos de las personas sostenibilidad."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza, de manera guiada, algunos métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea algunas estrategias para resolver problemas reflexionando sobre las soluciones obtenidas."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar algunos de los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, utilizando herramientas e instrumentos adecuados, planteándose preguntas y realizando experimentos sencillos de forma guiada."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Realiza, de forma guiada, proyectos, diseñando, fabricando y evaluando diferentes prototipos o modelos, adaptándose ante la incertidumbre, para generar en equipo un producto creativo con un objetivo concreto, procurando la participación de todo el grupo y resolviendo pacíficamente los conflictos que puedan surgir."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de algunos métodos y resultados científicos, matemáticos y tecnológicos de forma clara y veraz, utilizando la terminología científica apropiada, en diferentes formatos (dibujos, diagramas, gráficos, símbolos…) y aprovechando de forma crítica, ética y responsable la cultura digital para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Participa en acciones fundamentadas científicamente para promover la salud y preservar el medio ambiente y los seres vivos, aplicando principios de ética y seguridad y practicando el consumo responsable. Competenci La competencia digital implica el uso segu de las tecnologías digitales para el aprendiza sociedad, así como la interacción con estas."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas guiadas en internet y hace uso de estrategias sencillas para el tratamiento digital de la información (palabras clave, selección de información relevante, organización de datos...) con una actitud crítica sobre los contenidos obtenidos."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Crea, integra y reelabora contenidos digitales en distintos formatos (texto, tabla, imagen, audio, vídeo, programa informático...) mediante el uso de diferentes herramientas digitales para expresar ideas, sentimientos y conocimientos, respetando la propiedad intelectual y los derechos de autor de los contenidos que reutiliza."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Participa en actividades o proyectos escolares mediante el uso de herramientas o plataformas virtuales para construir nuevo conocimiento, comunicarse, trabajar cooperativamente, y compartir datos y contenidos en entornos digitales restringidos y supervisados de manera segura, con una actitud abierta y responsable ante su uso."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Conoce los riesgos y adopta, con la orientación del docente, medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y se inicia en la adopción de hábitos de uso crítico, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Se inicia en el desarrollo de soluciones digitales sencillas y sostenibles (reutilización de materiales tecnológicos, programación informática por bloques, robótica educativa…) para resolver problemas concretos o retos propuestos de manera creativa, solicitando ayuda en caso necesario."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Es consciente de las propias emociones, ideas y comportamientos personales y emplea estrategias para gestionarlas en situaciones de tensión o conflicto, adaptándose a los cambios y armonizándolos para alcanzar sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Conoce los riesgos más relevantes y los principales activos para la salud, adopta estilos de vida saludables para su bienestar físico y mental, y detecta y busca apoyo ante situaciones violentas o discriminatorias."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce y respeta las emociones y experiencias de las demás personas, participa activamente en el trabajo en grupo, asume las responsabilidades individuales asignadas y emplea estrategias cooperativas dirigidas a la consecución de objetivos compartidos."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Reconoce el valor del esfuerzo y la dedicación personal para la mejora de su aprendizaje y adopta posturas críticas en procesos de reflexión guiados."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a corto plazo, utiliza estrategias de aprendizaje autorregulado y participa en procesos de auto y coevaluación, reconociendo sus limitaciones y sabiendo buscar ayuda en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Entiende los procesos históricos y sociales más relevantes relativos a su propia identidad y cultura, reflexiona sobre las normas de convivencia, y las aplica de manera constructiva, dialogante e inclusiva en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Participa en actividades comunitarias, en la toma de decisiones y en la resolución de los conflictos de forma dialogada y respetuosa con los procedimientos democráticos, los principios y valores de la Unión Europea y la Constitución española, los derechos humanos y de la infancia, el valor de la diversidad, y el logro de la igualdad de género, la cohesión social y los Objetivos de Desarrollo Sostenible."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Reflexiona y dialoga sobre valores y problemas éticos de actualidad, comprendiendo la necesidad de respetar diferentes culturas y creencias, de cuidar el entorno, de rechazar prejuicios y estereotipos, y de oponerse a cualquier forma de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas entre las acciones humanas y el entorno, y se inicia en la adopción de estilos de vida sostenibles, para contribuir a la conservación de la biodiversidad desde una perspectiva tanto local como global. Competencia em La competencia emprendedora implica d sobre oportunidades e ideas, utilizando los generar resultados de valor para otras person mirada para detectar necesidades y oportunid evaluar el entorno, y crear y replantear idea pensamiento estratégico y la reflexión ética, creativos y de innovación; y despertar la disp incertidumbre. Asimismo, implica tomar d conocimiento y colaborar de manera ágil co habilidades de comunicación y de negociació mediante la planificación y gestión de proy económico-financiero."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Reconoce necesidades y retos que afrontar y elabora ideas originales, utilizando destrezas creativas y tomando conciencia de las consecuencias y efectos que las ideas pudieran generar en el entorno, para proponer soluciones valiosas que respondan a las necesidades detectadas."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Identifica fortalezas y debilidades propias utilizando estrategias de autoconocimiento y se inicia en el conocimiento de elementos económicos y financieros básicos, aplicándolos a situaciones y problemas de la vida cotidiana, para detectar aquellos recursos que puedan llevar las ideas originales y valiosas a la acción."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Crea ideas y soluciones originales, planifica tareas, coopera con otros en equipo, valorando el proceso realizado y el resultado obtenido, para llevar a cabo una iniciativa emprendedora, considerando la experiencia como una oportunidad para aprender. Competencia en conciencia y La competencia en conciencia y expresió modo en que las ideas, las opiniones, los se comunican de forma creativa en distintas cu manifestaciones artísticas y culturales. Implica el desarrollo y la expresión de las ideas prop papel que se desempeña en la sociedad."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y aprecia los aspectos fundamentales del patrimonio cultural y artístico, comprendiendo las diferencias entre distintas culturas y la necesidad de respetarlas."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Reconoce y se interesa por las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, identificando los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones de forma creativa y con una actitud abierta e inclusiva, empleando distintos lenguajes artísticos y culturales, integrando su propio cuerpo, interactuando con el entorno y desarrollando sus capacidades afectivas."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Experimenta de forma creativa con diferentes medios y soportes, y diversas técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para elaborar propuestas artísticas y culturales. ANE Áreas de Edu Conocimiento del Medio Los retos del siglo XXI demandan que herramientas para que el alumnado pueda éxito. El área de Conocimiento del Medio N ámbito con el objetivo de que niños y niñas l respetuosas con el mundo en el que viven y p éticos y sostenibles fundados en valores dem En una sociedad cada vez más diversa formas de sentir, de pensar y de actuar."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Escuchar de forma sensible el mundo sonoro valorando el silencio, la variedad de paisajes sonoros y las manifestaciones musicales de diferentes culturas, épocas y estilos para identificar y expresar sentimientos, así como interiorizar hábitos de comportamiento que contribuyan al respeto y al cuidado del entorno, y al bienestar personal.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Cantar y utilizar de forma desinhibida la voz, tanto grupal como individualmente, entonando e interpretando con cierta calidad vocal obras de dificultad creciente, para conocer y disfrutar de las posibilidades de nuestro aparato fonador como instrumento de expresión, de cohesión grupal y de bienestar emocional.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Tocar instrumentos rítmicos y melódicos tanto de oído cómo a partir de grafías no convencionales y convencionales demostrando técnica instrumental, habilidades improvisadoras e interpretativas y capacidad de sentir y seguir el pulso para desarrollar el espíritu de mejora, el sentimiento de cohesión orquestal y la autoconfianza solista.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Bailar y responder a diferentes ritmos, formas y estilos musicales a través de la interpretación del movimiento bailado empleando la creación libre y guiada como medio de expresión, coordinando habilidades motrices, secuencias coreográficas y el movimiento intencionado en el espacio individual y grupal, así como desarrollando una forma y estilo propio, tanto para comunicar inter e intrapersonalmente las creaciones propias y ajenas como para valorarlas como producción de cultura, aportación de placer, enriquecimiento personal y transformación social.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Utilizar el lenguaje de comprensión y expresión que ofrece la música reconociendo sus signos y su gramática para escuchar, cantar, tocar y bailar usando la terminología técnica adecuada.",
+      "descriptores_ids": []
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Mostrar una sensibilidad acústica dominando el silencio; ubicando, discriminando y secuenciando sonidos circundantes, así como sonorizando creativamente otros lenguajes.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Expresar su familiarización con las obras e instrumentos trabajados ajustando su respuesta a las músicas escuchadas cantando, tocando, bailando y representando gráficamente cada contexto musical. 2. Competencia específica 2",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Cantar con interés mostrando una evolución en el cuidado de la voz, así como en el ritmo, la afinación y la expresión desinhibida, con actitud de respeto hacia los demás. 3. Competencia específica 3",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Ejecutar rítmica y melódicamente obras instrumentales, de manera individual y grupal, valorando la expresividad y su adecuación al ritmo, así como el cuidado de los instrumentos y el disfrute por su práctica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Explorar con curiosidad procesos de creación, composición e improvisación como medio para expresar ideas, sentimientos y emociones, mostrando confianza y autorreflexión. 4. Competencia específica 4",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Ejecutar, de forma espontánea, movimientos corporales diferenciando parámetros con relación al espacio, al tiempo y a las cualidades sonoras.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Improvisar y memorizar movimientos coreografiados utilizando diferentes ritmos y músicas, confiando en la actuación propia y respetando la de los demás. 5. Competencia específica 5",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconocer y aplicar los elementos y signos básicos del lenguaje musical en la práctica de las otras cuatro competencias: escuchar, cantar, tocar y bailar.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A) Escucha activa"
+    },
+    {
+      "id": "B2",
+      "titulo": "B) Canto"
+    },
+    {
+      "id": "B3",
+      "titulo": "C) Ejecución instrumental"
+    },
+    {
+      "id": "B4",
+      "titulo": "D) Danza"
+    },
+    {
+      "id": "B5",
+      "titulo": "E) Conceptos musicales"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "El silencio como elemento y condición indispensables para mantener la atención durante la audición y la práctica musical. Juegos de manipulación, movimiento y comunicación sin sonido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento sin control visual de ruidos y sonidos del entorno natural: continuosrepetitivosúnicos, cercanos-lejanos, fuertes-suaves, agradables-desagradables, naturales-humanos-tecnológicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Ubicación de la fuente sonora y orientación corporal a la fuente sonora en movimiento.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Secuenciación de series de sonidos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Discriminación tímbrica de sonidos superpuestos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Emparejamiento de sonidos de igual intensidad o duración.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Creación del paisaje sonoro de pequeñas escenas mímicas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Conocimiento y vivencia a través de la escucha activa, la interpretación musical y la expresión coreográfica de obras musicales, compositores y coreógrafos - incorporando la contribución de las mujeresde diferentes épocas, culturas, estilos - subrayando el repertorio infantily folklores, incluyendo el folklore riojano.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de melodías trabajadas previamente a través de la escucha de breves fragmentos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Introducción a los diferentes instrumentos musicales orquestales y propios del folklore riojano: castañuelas, gaita de bota, dulzaina y tamboril, gaita navarra y tambor…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento auditivo y visual de agrupaciones instrumentales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Discriminación de la duración rítmica mediante dictados representados con elementos no convencionales (palillos, hueveras…) y grafía convencional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Desarrollo del oído interno a través del tanteo con un instrumento de sonidos y melodías sin referencia visual, de los dictados melódicos y de la fononimia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Reconocimiento de la estructura de una obra a través de su representación gráfica en musicogramas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Escucha con imaginación y expresión de las emociones y vivencias evocada s por una obra musical mediante la visualización, titulación, ilustración, redacción, verbalización y movilización.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Calentamiento corporal a través del movimiento y la dramatización haciendo hincapié en la movilización de los grupos musculares que intervienen durante el canto.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Descubrimiento del propio aparato fonador mediante juegos vocales que incorporen el gesto y el movimiento corporal facilitador de la técnica vocal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Sensibilización sobre la importancia de la respiración, el cuidado de la voz, la corrección postural y una actitud adecuada a la hora de cantar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Exploración comunicativa y creativa de las posibilidades de la voz: hablar, cantar, susurrar, declamar, tararear, silbar, boca cerrada… experimentando sus límites y la propia amplitud de registro vocal.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Interpretación memorizada de un repertorio sencillo de canciones a una sola voz, sobre todo del folklore infantil universal, fomentando el folklore riojano, mediante el",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "77 - canto el eco y el canto grupal, con acompañamiento instrumental dentro del ámbito de una sexta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Presentación y vivenciación por parte del alumnado del rol de director y de cómo sus gestos básicos determinan la sonoridad del grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Aproximación a las cualidades expresivas del canto incluyendo cambios de dinámicas y de tempo, tanto de forma gradual como repentina.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Improvisación cantada de diálogos musicales con pregunta-respuesta y melodías tarareadas o cantadas en ronda.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Recitado prosódico de palabras ajustando su acentuación al pulso establecido.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Exploración, improvisación e interpretación rítmica en secuencias de 4 pulsos con timbres corporales: palmadas (aguda, grave…), dedos (roce, pitos…), cara (labios, mofletes…) pectorales, muslos, nalgas y pies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Lectura con sílabas rítmico-prosódicas de figuraciones de dificultad progresiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Acompañamiento con percusión corporal, pequeña percusión y cotidiáfonos (vasos, mesas, anillas de cuadernos, cubos, bolsas, periódicos, abanicos…) de músicas o canciones a diferentes tempos, sintiendo el pulso con el cuerpo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Conservación de la pulsación en imitaciones en eco y ostinatos rítmicos interpretados en dos grupos y posteriormente en pareja, en diferentes situaciones: a la vez, repartiéndose los pulsos… sin y con metrónomo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Acentuación de tiempos fuertes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Trabajo del silencio a través del aprendizaje de un patrón rítmico de 4 pulsos con diferentes sonidos de percusión corporal, omitiendo diferentes sonidos en cada interpretación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Experimentación física y espacial: el equilibrio, la independencia de mano y la combinación de pies y manos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Práctica de uno o varios instrumentos melódicos a elección del docente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Experimentación y descubrimiento de las técnicas propias de los instrumentos practicados: notas sueltas, notas simultáneas, clúster, glissando…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Improvisación libre o guiada, partiendo de la pentatónica, de las posibilidades rítmicas, melódicas y armónicas de instrumentos reales y digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Utilización de los instrumentos como medio de expresión para comunicarse a través de diálogos, secundar ecos, acompañar canciones e interpretar partituras escritas con grafías no convencionales y convencionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.12",
+      "bloque_id": "B3",
+      "descripcion": "Interpretación de repertorio de diferentes estilos, culturas y épocas: canciones infantiles, tradicionales -incidiendo en el folklore riojanoclásicas y contemporáneas.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.13",
+      "bloque_id": "B3",
+      "descripcion": "Construcción asistida de instrumentos con materiales del entorno (cotidiáfonos), exploración de sus posibilidades sonoras y su posterior ejecución en grupo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.14",
+      "bloque_id": "B3",
+      "descripcion": "Interpretación melódica con dispositivos digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Ejercicios en el suelo para reconocer las primeras sensaciones: tensión, relajación, elevación, estiramiento, apoyo, empuje, sujeción, peso, flexibilidad articular y elasticidad muscular.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Ejercicios para comenzar el estudio del cambio de peso, la coordinación, bilateralidad y las habilidades dancísticas básicas: saltos, giros, rodadas…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "78 -",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Utilización del cuerpo y el movimiento como medio de comunicación, expresión y diversión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Respuesta motriz al silencio, a las cualidades del sonido: agudo/grave, fuerte/piano, rápido/lento, diferentes timbres y duraciones rítmicas, compases, y al pulso musical, si lo hubiere.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Respuesta mímico-gestual y rítmico-motriz a canciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "La danza como herramienta para vivenciar las figuraciones rítmicas a través de frases coreográficas y con formas sencillas: binaria (AB)…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Experimentación danzada libre, impulsada por cambios en las direcciones, partes del cuerpo que se movilizan, partes del cuerpo que inician el movimiento, velocidades de movimiento…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Conocimiento de propuestas de diferentes culturas a través del movimiento corporal en el espacio con diferentes estructuras, tanto individuales como grupales, buscado mediante la experimentación y la improvisación.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Creación y memorización de pequeñas estructuras coreográficas a través de la experimentación apoyada en diferentes ritmos tantos internos como externos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Reconocimiento e interpretación de danzas a través del movimiento bailado abarcando a lo largo de toda la etapa la mayor parte de géneros posible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Ejecución de alguna danza tradicional riojana sencilla de oficios y palos sin cruces.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Figuras, silencios y células rítmicas: redonda, blanca, negra, doble corchea, y silencios de redonda, blanca y negra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Partes de una figura musical: cabeza, plica y corchete.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Pulso, acento e iniciación al concepto de compás. Línea divisoria, doble barra y doble barra final.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Signos de repetición: puntos de repetición.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Tempo: adagio, andante y allegro.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "El pentagrama y la clave de sol. Las líneas adicionales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Presentación del nombre de las notas de la escala de do en orden ascendente y descendente.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Melodía ascendente, descendente y unísono.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Ubicación en el pentagrama, en clave de sol, de la escala pentatónica: do, re, mi, sol y la.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Los matices de intensidad (f, mf y p).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "Diferencia entre cuerpo sonoro e instrumento musical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Clasificación de los instrumentos: familias de cuerda, viento y percusión (instrumentos Orff).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "Organología: partes básicas y funcionamiento de los instrumentos trabajados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.14",
+      "bloque_id": "B5",
+      "descripcion": "Las diferentes baquetas como elemento tímbrico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.15",
+      "bloque_id": "B5",
+      "descripcion": "Clasificación de la voz: masculina, femenina e infantil.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.16",
+      "bloque_id": "B5",
+      "descripcion": "79 -",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.17",
+      "bloque_id": "B5",
+      "descripcion": "Formas musicales: estrofa y estribillo.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.18",
+      "bloque_id": "B5",
+      "descripcion": "El ostinato rítmico.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.19",
+      "bloque_id": "B5",
+      "descripcion": "Práctica de la escritura de todos los signos musicales trabajados. SEGUNDO CICLO: MÚSICA Y DANZA",
+      "criterios_ids": []
+    }
+  ]
+}

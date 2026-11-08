@@ -77,6 +77,10 @@ DECRETOS = {
     ('MURCIA', 'primaria'):        'MURCIA/PRIMARIA/2022-5907.pdf',
     ('MURCIA', 'secundaria'):      'MURCIA/SECUNDARIA/2022-6346.pdf',
     # Ceuta y Melilla: currículo del Ministerio; referencia, las matrices de los RD
+    ('LA RIOJA', 'primaria'):      'LA RIOJA/PRIMARIA/8506.pdf',
+    ('LA RIOJA', 'secundaria'):    'LA RIOJA/SECUNDARIA/8507.pdf',   # Decreto 42/2022 (8967.pdf es su modificación de 2025)
+    ('NAVARRA', 'primaria'):       'NAVARRA/PRIMARIA/CURRICULO Educacion Primaria CAST.pdf',
+    ('NAVARRA', 'secundaria'):     'NAVARRA/SECUNDARIA/CURRICULO ESO CAST.pdf',
     ('BALEARS', 'primaria'):       'BALEARS/PRIMARIA/8702.pdf',
     ('BALEARS', 'secundaria'):     'BALEARS/SECUNDARIA/8703.pdf',
     ('ceuta_melilla', 'primaria'):   'REALES DECRETOS/PRIMARIA/MATRICES/XLSX',
@@ -105,6 +109,28 @@ def encabezado_curso(linea: str):
 CURSO_MATEMATICAS_AB = ['4º']
 
 
+# Pie de página («- 105 -», «Pág. 20521») y cabecera de boletín entre dos trozos
+# de un mismo criterio que salta de página.
+PIE_DE_PAGINA = re.compile(r'^(?:-\s*\d+\s*-|\d+\s*/\s*\d+|p[áa]g(?:ina)?\.?\s*\d+.*|https?://\S+)$', re.I)
+# Palabras con las que una frase no puede acabar: tras ellas el criterio sigue
+# en la página siguiente aunque esta empiece por mayúscula («de / Física i Química»).
+NO_CIERRA = {'de', 'del', 'dels', 'la', 'las', 'les', 'el', 'els', 'los', 'lo', 'i', 'y', 'e', 'o', 'u',
+             'a', 'al', 'amb', 'con', 'per', 'para', 'por', 'en', 'que', 'com', 'como', 'un', 'una', 'su', 'sus'}
+CABECERA_DE_PAGINA = re.compile(r'\b(?:BOC|BOR|BON|BOIB|BORM|DOE|BOE|CVE)\b|boc\.cantabria|www\.|\bN[úÚ]M\.')
+
+# Señales de un texto mezclado de dos columnas o con lo que seguía pegado: un
+# infinitivo en mayúscula tras una palabra en minúscula («els Explorar»), una
+# viñeta o un código de criterio a media frase, un pie de página o el
+# encabezado del bloque siguiente.
+MEZCLA = re.compile(r"[a-zà-úç’',] (?:- )?[A-ZÀ-ÚÇ][a-zà-úç]+(?:r|ar|er|ir)\b|\s-\s+[A-ZÀ-Úa-zà-ú]"
+                    r"|[a-zà-ú,] \d+\.\d+\.\s|- \d+ -|DESCRIPTORES DE CONTENIDO|Saberes [Bb]ásicos")
+
+# Decretos con los cursos o ciclos en columnas paralelas (Navarra): -layout las
+# entrelaza y un criterio auténtico no aparece seguido. Ahí se acepta si no
+# tiene ninguna señal de mezcla (Navarra: 0 de 400; Baleares: 223 de 354).
+COLUMNAS_PARALELAS = {'NAVARRA'}
+
+
 class Decreto:
     """Texto de un decreto (pdftotext -layout) para localizar criterios."""
 
@@ -120,6 +146,10 @@ class Decreto:
                 self.plano.append(ch)
                 self.linea_de.append(i)
         self.plano = ''.join(self.plano)
+
+    def contiene(self, descripcion: str) -> bool:
+        """Si el comienzo del criterio está tal cual en el decreto."""
+        return re.sub(r'[\s\-]+', '', descripcion.lower())[:50] in self.plano
 
     def encabezado_antes(self, descripcion: str, desde: int = 0, codigo: str = '',
                          preferidos=None, etapa: str = 'secundaria'):
@@ -168,12 +198,28 @@ class Decreto:
         pos = self.plano.find(texto)
         if pos < 0:
             return None
-        trozos = []
-        for j in range(self.linea_de[pos], min(self.linea_de[pos] + 40, len(self.lineas))):
+        trozos, j = [], self.linea_de[pos]
+        fin = min(j + 60, len(self.lineas))
+        while j < fin:
             linea = self.lineas[j].strip()
-            if trozos and (not linea or re.match(r'^(?:[-–•·]\s|CA\s*\d|CE\s*\d|criterio\s|\d+\.\d+\.?\s)', linea, re.I)):
+            if trozos and (not linea or PIE_DE_PAGINA.match(linea) or CABECERA_DE_PAGINA.search(linea)):
+                # Línea en blanco o pie de página: el criterio sigue solo si,
+                # pasados blancos, pies y cabeceras, continúa en minúscula
+                # (saltó de página a media frase).
+                k = j
+                while k < fin and (not self.lineas[k].strip() or PIE_DE_PAGINA.match(self.lineas[k].strip())
+                                   or CABECERA_DE_PAGINA.search(self.lineas[k])):
+                    k += 1
+                ultima = (trozos[-1].split() or [''])[-1].lower()
+                if (k < fin and not trozos[-1].endswith('.')
+                        and (re.match(r'^[a-zà-úç(]', self.lineas[k].strip()) or ultima in NO_CIERRA)):
+                    j = k
+                    continue
+                break
+            if trozos and re.match(r'^(?:[-–•·]\s|CA\s*\d|CE\s*\d|criterio\s|\d+\.\d+\.?\s)', linea, re.I):
                 break
             trozos.append(linea)
+            j += 1
         literal = ' '.join(trozos)
         literal = re.sub(r'^(?:CA\s*|criterio\.?\s*)?\d+\.\d+\.?\s*', '', literal, flags=re.I)
         literal = re.sub(r'(\w)- (\w)', r'\1\2', literal)   # palabra partida al final de línea
@@ -413,6 +459,58 @@ def leer_nombres_madre(carpeta: str, etapa: str) -> dict:
     return nombres
 
 
+# Comunidades y etapas cuya matriz no dice bien qué materia es cada fichero
+# («[REVISAR] Materia 05», «Materia (L10689)», y en Navarra nombres cambiados:
+# «Lengua Castellana y Literatura» trae las competencias de Biología). Se
+# identifica por el texto de sus competencias específicas frente a las del RD.
+IDENTIFICAR_POR_CONTENIDO = {('NAVARRA', 'secundaria'), ('LA RIOJA', 'secundaria')}
+UMBRAL_IDENTIDAD, MARGEN_IDENTIDAD = 0.7, 0.4
+
+# Nombre oficial de cada materia del RD (slug de curriculum/_estatal)
+NOMBRE_RD = {
+    'ambito-de-ciencias-aplicadas': 'Ámbito de Ciencias Aplicadas',
+    'ambito-de-comunicacion-y-ciencias-sociales': 'Ámbito de Comunicación y Ciencias Sociales',
+    'biologia-y-geologia': 'Biología y Geología', 'digitalizacion': 'Digitalización',
+    'economia-y-emprendimiento': 'Economía y Emprendimiento',
+    'educacion-en-valores-civicos-y-eticos': 'Educación en Valores Cívicos y Éticos',
+    'educacion-fisica': 'Educación Física',
+    'educacion-plastica-visual-y-audiovisual': 'Educación Plástica, Visual y Audiovisual',
+    'expresion-artistica': 'Expresión Artística', 'fisica-y-quimica': 'Física y Química',
+    'formacion-y-orientacion-personal-y-profesional': 'Formación y Orientación Personal y Profesional',
+    'geografia-e-historia': 'Geografía e Historia', 'latin': 'Latín',
+    'lengua-castellana-y-literatura': 'Lengua Castellana y Literatura',
+    'lengua-extranjera': 'Lengua Extranjera', 'matematicas': 'Matemáticas', 'musica': 'Música',
+    'tecnologia': 'Tecnología', 'tecnologia-y-digitalizacion': 'Tecnología y Digitalización',
+}
+
+_PALABRAS_RD = {}
+
+
+def _palabras(texto: str) -> set:
+    return set(re.findall(r'[a-záéíóúñü]{4,}', texto.lower()))
+
+
+def identificar_materia(objetivos: list, etapa: str):
+    """(materia, parecido, parecido de la segunda): media, sobre las
+    competencias específicas del fichero, del mejor Jaccard de palabras con las
+    de cada materia del RD."""
+    if etapa not in _PALABRAS_RD:
+        est = json.loads((OUT_ROOT / '_estatal' / f'{etapa}.json').read_text(encoding='utf-8'))
+        tabla = {}
+        for c in est['competencias_especificas']:
+            tabla.setdefault(c['materia'], []).append(_palabras(c['descripcion']))
+        _PALABRAS_RD[etapa] = tabla
+    notas = []
+    for materia, ces in _PALABRAS_RD[etapa].items():
+        parecidos = []
+        for o in objetivos:
+            a = _palabras(o['descripcion'])
+            parecidos.append(max((len(a & c) / len(a | c) if a | c else 0) for c in ces))
+        notas.append((sum(parecidos) / len(parecidos) if parecidos else 0, materia))
+    notas.sort(reverse=True)
+    return notas[0][1], notas[0][0], notas[1][0]
+
+
 def etapa_de(ruta: Path) -> str:
     up = str(ruta).upper()
     if 'INFANTIL' in up:
@@ -467,17 +565,43 @@ def main():
             pendientes.append((p.name, 'nombre sin el esquema Comunidad · Etapa · Área · Ciclo'))
             continue
         area, ciclo = nombre_area(partes[2]), partes[3]
-        if 'revisar' in p.stem.lower():
+        por_contenido = (carpeta, etapa) in IDENTIFICAR_POR_CONTENIDO
+        if 'revisar' in p.stem.lower() and not por_contenido:
             pendientes.append((p.name, 'marcado [REVISAR] en origen: área o curso sin confirmar'))
             continue
         cursos = cursos_de_ciclo(ciclo, etapa)
-        if not cursos:
+        if not cursos and not (por_contenido and (carpeta, etapa) in DECRETOS):
             pendientes.append((p.name, f'curso no recuperable («{ciclo}»)'))
             continue
         datos = parse_xlsx(p, comunidad, etapa)
         if not datos['criterios']:
             pendientes.append((p.name, 'sin criterios (Tipo 3) en origen'))
             continue
+        if por_contenido:
+            materia, parecido, segunda = identificar_materia(datos['objetivos'], etapa)
+            if parecido >= UMBRAL_IDENTIDAD and parecido - segunda >= MARGEN_IDENTIDAD:
+                nombre = NOMBRE_RD[materia]
+                # La lengua propia calca la estructura de Lengua Castellana: la
+                # distingue el propio texto (Navarra: «euskera»).
+                texto = ' '.join(x['descripcion'] for x in datos['objetivos'] + datos['criterios']
+                                 + datos['saberes']).lower()
+                if (materia == 'lengua-castellana-y-literatura' and re.search(r'euskera|lengua vasca', texto)
+                        and not re.search(r'castellan|español', texto)):
+                    nombre = 'Lengua Vasca y Literatura'
+                if slug(area) != slug(nombre):
+                    avisos.append(f'«{area}» ({ciclo}) es {nombre} por sus competencias '
+                                  f'específicas (parecido {parecido:.2f}, siguiente {segunda:.2f})')
+                n_rd = len(_PALABRAS_RD[etapa][materia])
+                if len(datos['objetivos']) < n_rd:
+                    avisos.append(f'{nombre} ({ciclo}): trae {len(datos["objetivos"])} de las {n_rd} '
+                                  'competencias específicas de la materia: incompleta en origen')
+                area = nombre
+            elif 'revisar' in p.stem.lower() or re.search(r'\bmateria\b', area, re.I):
+                pendientes.append((p.name, f'materia sin nombre que no casa con ninguna del RD (lo más '
+                                   f'parecido, {materia}, a {parecido:.2f}): optativa propia sin identificar'))
+                continue
+            area = re.sub(r'^\[revisar\]\s*', '', area, flags=re.I)
+            ciclo = re.sub(r'\s*\[revisar\]', '', ciclo, flags=re.I)
         # «CE112 Pautas.» o «CE999 A.1.2.1.» son saberes colados al extraer: un
         # número de tres cifras, que ni un ámbito alcanza (los de Murcia llegan
         # a CE29), y ningún criterio que cuelgue de ella.
@@ -564,8 +688,8 @@ def main():
             # possibilitats…»): por debajo del 90 % el fichero no se importa.
             limpios = []
             for c in candidatos:
-                fuera = [x['id'] for x in c[5]['criterios']
-                         if re.sub(r'[\s\-]+', '', x['descripcion'].lower())[:50] not in decreto.plano]
+                fuera = [x['id'] for x in c[5]['criterios'] if not decreto.contiene(x['descripcion'])
+                         and (carpeta not in COLUMNAS_PARALELAS or MEZCLA.search(x['descripcion']))]
                 total = len(c[5]['criterios'])
                 if (total - len(fuera)) / total < 0.9:
                     pendientes.append((c[4].name, f'solo {total - len(fuera)} de {total} criterios están tal cual '
@@ -582,13 +706,16 @@ def main():
             # Un fichero que ya dice su curso y trae una sola tanda no se toca:
             # el mismo criterio puede repetirse literal en varios cursos del
             # decreto y casaría con el primero.
-            if not varias and ciclo.lower() != 'toda la etapa':
+            if not varias and ciclo.lower() != 'toda la etapa' and cursos:
                 repartidos.append((asig, area, ciclo, cursos, p, datos))
                 continue
             tandas = repartir_tandas(datos, decreto, etapa,
-                                     None if ciclo.lower() == 'toda la etapa' else cursos)
+                                     None if ciclo.lower() == 'toda la etapa' or not cursos else cursos)
             if not tandas:
-                if varias:
+                if not cursos:
+                    pendientes.append((p.name, f'curso no recuperable («{ciclo}») y el decreto '
+                                       'no lo dice: criterios no localizados bajo un encabezado de curso'))
+                elif varias:
                     pendientes.append((p.name, 'varias tandas de criterios con los mismos códigos '
                                        'y el decreto no dice de qué curso es cada una'))
                 else:
@@ -623,7 +750,7 @@ def main():
         recortados = 0
         if recortador:
             for c in datos['criterios']:
-                if len(c['descripcion']) > 700 or carpeta in RECORTAR_SIEMPRE:
+                if len(c['descripcion']) > 700 or carpeta in RECORTAR_SIEMPRE or MEZCLA.search(c['descripcion']):
                     literal = recortador.criterio_literal(c['descripcion'], c['id'])
                     if literal and len(literal) < len(c['descripcion']):
                         c['descripcion'] = literal
@@ -657,6 +784,7 @@ def main():
     #   cursos): «Primer curso» antes que «Primer y tercer curso».
     candidatos.sort(key=lambda c: (len(c[3]), c[4].name))
     salida = {}
+    en_conflicto = set()
     for asig, area, ciclo, cursos, p, datos in candidatos:
         for curso in cursos:
             clave = (asig, curso)
@@ -668,6 +796,14 @@ def main():
             comunes = ids0 & {c['id'] for c in datos['criterios']}
             if comunes:
                 igual = datos0['criterios'] == datos['criterios']
+                if not igual and (carpeta, etapa) in IDENTIFICAR_POR_CONTENIDO:
+                    # Materia deducida por contenido: dos ficheros distintos para
+                    # la misma materia y curso (La Rioja: dos Lengua Extranjera,
+                    # primera y segunda) no se resuelven quedándose con uno.
+                    en_conflicto.add(clave)
+                    pendientes.append((p.name, f'{curso}: choca con {p0.name}, misma materia por contenido y '
+                                       'criterios distintos (¿primera y segunda lengua?): no se importa ninguno'))
+                    continue
                 pendientes.append((p.name, f'{curso}: ya cubierto por {p0.name}'
                                    + (' (mismos criterios)' if igual else ' (criterios DISTINTOS: revisar)')))
                 continue
@@ -676,6 +812,9 @@ def main():
             salida[clave] = (area0, p0, f'{ciclo0} + {ciclo}', junto)
             avisos.append(f'{area} {curso}: fundidos «{ciclo0}» y «{ciclo}» (criterios complementarios)'
                           + (f'; ids repetidos con otro texto, manda el primero: {"; ".join(choques)}' if choques else ''))
+
+    for clave in en_conflicto:
+        salida.pop(clave, None)
 
     out_dir = OUT_ROOT / dir_slug / etapa
     escritos = existentes = 0

@@ -28,6 +28,8 @@ const COMUNIDADES = [
   { value: 'CeutaMelilla', label: 'Ceuta y Melilla' },
   { value: 'Cantabria', label: 'Cantabria' },
   { value: 'Baleares',  label: 'Illes Balears' },
+  { value: 'LaRioja',   label: 'La Rioja' },
+  { value: 'Navarra',   label: 'Comunidad Foral de Navarra' },
 ]
 
 export default function GruposPage() {

@@ -288,3 +288,74 @@ Pendiente:
   Gènere, Introducció a les tècniques experimentals, Llatí, Llengua Castellana, Llengua
   Catalana, Taller de Finances, Tecnologia i Digitalització y Tecnologia.
 - Tres ficheros [REVISAR] sin área clara («àrea 09», «àrea 23», Cultura Clàssica).
+
+## La Rioja (`LaRioja`)
+
+Decretos: Decreto 41/2022 (`PRIMARIA/8506.pdf`) y Decreto 42/2022
+(`SECUNDARIA/8507.pdf`). **Ojo:** `SECUNDARIA/8967.pdf` es el Decreto 30/2025, que
+modifica el currículo de la ESO; no se ha cruzado con él.
+
+### Primaria — importada
+9 áreas, 46 JSON. 84 % con descriptor (98 % en las materias del RD). No conectan
+Dramatización y Teatro (optativa propia) ni parte de Educación Plástica y Visual y de
+Música y Danza, que en La Rioja son áreas separadas y en el RD forman Educación
+Artística.
+
+Hecho al importar: criterios que arrastraban lo que seguía en el decreto (número de
+página «- 48 -», «3. Competencia específica 3», «DESCRIPTORES DE CONTENIDO…»),
+recortados al texto literal del decreto.
+
+Pendiente: Educación Plástica y Visual 3.º-6.º sin saberes.
+
+### Secundaria — importada en parte
+6 materias, 15 JSON, 98 % con descriptor. Casi todos los ficheros se llaman
+«[Revisar] Materia (L…)»: la materia se identifica por el texto de sus competencias
+específicas frente a las del RD (parecido ≥ 0,7 y 0,4 por encima de la siguiente).
+Importadas: Biología y Geología 4.º, Educación Física 1.º-4.º, Educación Plástica 1.º
+y 3.º, Lengua Castellana 1.º-4.º, Matemáticas 1.º-2.º (**trae 5 de las 10
+competencias específicas**) y Tecnología y Digitalización 1.º-2.º.
+
+Pendiente:
+- **Curso «Configuración N»** que el decreto tampoco dice (criterio no localizado
+  bajo un encabezado de curso): Tecnología, Digitalización, Valores Cívicos, Latín,
+  Economía y Emprendimiento, FOPP, Biología (dos ficheros), Lengua Castellana (otro),
+  Expresión Artística.
+- **Sin identificar** (no casan con ninguna materia del RD: optativas propias o, en
+  Geografía e Historia, quizá el texto de la modificación de 2025): L10689 (parecido
+  0,33 con Música), L12169, L13254, L13836, L14303, L15319 (0,36 con Biología), L15625,
+  L16473 (0,30 con Física y Química), L17314, L3874 (0,33 con Geografía e Historia) y
+  Taller de Plástica, Visual y Audiovisual.
+- **Dos Lengua Extranjera** con criterios distintos (L12416 nombra el francés; L6906 el
+  inglés y la «segunda lengua»): no se sabe cuál es la primera; no se importa ninguna.
+- Física y Química y Música («Cursos Segundo y Tercero») y Matemáticas 1.º-3.º (L5711)
+  traen varias tandas que el decreto no reparte.
+- Biología «Configuración 2» choca con «Configuración 1» en 1.º.
+
+## Navarra (`Navarra`)
+
+Decretos Forales 67/2022 (Primaria) y 71/2022 (ESO), en castellano. Las matrices no
+traen «Enlaces»: la conexión sale toda de la reserva estatal (100 % en las dos etapas).
+
+### Primaria — importada
+9 áreas, 50 JSON, con Lengua Vasca y Literatura. El decreto pone los tres ciclos en
+columnas paralelas: un criterio que no aparece seguido en el texto se acepta si no
+tiene ninguna señal de mezcla de columnas (`COLUMNAS_PARALELAS`; Navarra: 0 de 400
+criterios con señales, frente a 223 de 354 en Baleares).
+
+Pendiente: Valores Cívicos y Éticos 5.º-6.º sin saberes.
+
+### Secundaria — importada
+20 materias, 71 JSON. Los nombres de la matriz no son fiables y se identifican por
+contenido: «Lengua Castellana y Literatura» es Biología y Geología, «Conocimientos,
+destrezas y actitudes» es **Lengua Vasca y Literatura** (por su texto: nombra el
+euskera), «Situaciones de aprendizaje» es el Ámbito de Ciencias Aplicadas,
+«Tipologías corporales predominantes» es Educación Plástica, y las «Materia NN»
+son Educación Física, Geografía e Historia, Matemáticas, Lengua Castellana, Lengua
+Extranjera, Latín, Música, Tecnología, etc. (cada caso, con su parecido, en los avisos
+del conversor).
+
+Pendiente:
+- **Sin identificar** (optativas propias): Materia 02, 10, 19, 20 y 22.
+- **Sin curso en el decreto**, en los cuatro cursos: diez materias que el fichero da
+  como «Toda la etapa» (Digitalización, Economía, Valores Cívicos, FOPP, Latín,
+  Tecnología, Tecnología y Digitalización, Expresión Artística y los dos Ámbitos).
