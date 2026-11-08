@@ -719,6 +719,14 @@ export default function PruebaEditor({
                   <span><strong>Se reparte por criterios</strong>: cada pregunta dice cuál evalúa y cada criterio recibe la nota de las suyas. Una pregunta de «Todos» cuenta para cada criterio del examen.</span>
                 </label>
               </div>
+              {def.reparto === 'unica' && criteriosActivos.length > 1 && (
+                <div data-aviso-reparto style={{ marginTop: 8, padding: '9px 13px', borderRadius: 8, fontSize: 12, lineHeight: 1.45, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+                  Con una sola nota, los {criteriosActivos.length} criterios de este examen y sus competencias clave reciben lo mismo. Para que cada pregunta cuente en su criterio, reparte por criterios.
+                  <button type="button" className="btn-secondary" data-aviso-reparto-activar onClick={() => setReparto('criterios')} style={{ marginLeft: 8, fontSize: 12 }}>
+                    Repartir por criterios
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Generador: el punto de partida habitual es «10 preguntas de un punto». */}

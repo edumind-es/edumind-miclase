@@ -43,8 +43,12 @@ import ResumenCurso, { type PeticionExplicacion } from '@/components/ResumenCurs
 import type { Alumno } from '@/db/localDb'
 import { trimestreActual } from '@/db/calculo'
 import { verNeae } from '@/db/datosSensibles'
+import type { ConexionDeCriterio } from '@/db/competenciasClave'
+import { estadoCasilla } from '@/db/medidasVista'
+import SelloMedida from '@/components/SelloMedida'
+import MedidasAlumno from '@/components/MedidasAlumno'
 
-type Criterio = { id: string; descripcion: string; objetivo_id?: string | null; peso?: number }
+type Criterio = { id: string; descripcion: string; objetivo_id?: string | null; peso?: number } & ConexionDeCriterio
 
 /** Lo que hace falta para pintar el criterio ampliado donde toca. */
 type CriterioAmpliado = {
@@ -155,6 +159,8 @@ export default function EvaluacionPage() {
   const [cargando, setCargando] = useState(false)
   const [errorCurriculo, setErrorCurriculo] = useState(false)
   const [managerAbierto, setManagerAbierto] = useState(false)
+  /** Alumno cuyas medidas de atención a la diversidad se editan (desde el sello de la fila). */
+  const [medidasDe, setMedidasDe] = useState<Alumno | null>(null)
   const [refresco, setRefresco] = useState(0)
   /**
    * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
@@ -779,6 +785,7 @@ export default function EvaluacionPage() {
               <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }} data-resumen-cargando>Calculando el curso…</div>
             ) : resumen ? (
               <ResumenCurso
+                onMedidas={al => setMedidasDe(al)}
                 datos={resumen}
                 criterios={columnas}
                 vista={vista}
@@ -797,6 +804,7 @@ export default function EvaluacionPage() {
                 </div>
               ) : (
                 <MatrizInstrumentos
+                  onMedidas={al => setMedidasDe(al)}
                   matriz={matriz}
                   columnas={columnasInstr}
                   alumnos={alumnos}
@@ -887,6 +895,12 @@ export default function EvaluacionPage() {
                             )}
                             <div className="criterio-th-id">{cr.id}</div>
                             <div className="criterio-th-desc">{cr.descripcion}</div>
+                            {!!cr.competencias_clave?.length && (
+                              <div className="criterio-th-comp" data-criterio-competencias={cr.id}
+                                title={cr.descriptores?.join(' ') || undefined}>
+                                {cr.competencias_clave.join(' · ')}
+                              </div>
+                            )}
                             <div className="criterio-th-instr">
                               {instrs.length === 0
                                 ? <span className="aviso" title="Sin instrumento asignado en la programación">⚠</span>
@@ -913,12 +927,16 @@ export default function EvaluacionPage() {
                         <td className="col-alumno">
                           {al.apellidos}, {al.nombre}
                           {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+                          <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={() => setMedidasDe(al)} />
                         </td>
                         {competencias.flatMap(g => g.plegada ? [tdPlegado(al, g)] : g.criterios.map(cr => {
                           const instrs = matriz.porCriterio.get(cr.id) ?? []
                           const valor = notaCelda(al.id!, cr.id, instrs)
                           const nEvid = matriz.evidencias.get(`${al.id}:${cr.id}`) ?? 0
                           const sinInstr = instrs.length === 0
+                          // Con una medida: criterio excluido o sustituido, o
+                          // ningún instrumento que cuente para este alumno.
+                          const medida = estadoCasilla(matriz.instrumentos, matriz.medidas.get(al.id!), cr.id, instrs.map(i => i.instrumento_id), trimestre)
                           // Registros del diario del primer instrumento que los tenga
                           const diario = instrs.map(i => matriz.diario[`${al.id}:${cr.id}:${i.instrumento_id}`]).find(Boolean)
 
@@ -937,11 +955,13 @@ export default function EvaluacionPage() {
                             )}
                             <td className="celda">
                               <button
-                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}`}
+                                className={`celda-btn ${sinInstr ? 'sin-instrumento' : claseNota(valor)}${medida.noCuenta ? ' no-cuenta' : ''}${medida.adaptado ? ' adaptado' : ''}`}
+                                data-no-cuenta={medida.noCuenta ? '' : undefined}
+                                data-criterio-adaptado={medida.adaptado ? '' : undefined}
                                 onClick={() => sinInstr ? setCelda({ alumnoIdx: idx, criterio: cr }) : abrirPorCriterio(idx, cr)}
                                 title={sinInstr
                                   ? `${cr.id} — sin instrumento asignado. Pulsa para saber cómo arreglarlo.`
-                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}\nSe evalúa con: ${cabecerasDe(instrs).map(c => c.hijos.length ? `${c.nombre} (${c.hijos.map(h => h.nombre).join(', ')})` : c.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}`}
+                                  : `${al.apellidos}, ${al.nombre} · ${cr.id}${medida.adaptado ? ` (adaptado: ${medida.adaptado.descripcion})` : ''}\nSe evalúa con: ${cabecerasDe(instrs).map(c => c.hijos.length ? `${c.nombre} (${c.hijos.map(h => h.nombre).join(', ')})` : c.nombre).join(', ')}${valor != null ? `\nNota: ${valor}` : '\nSin calificar'}${medida.noCuenta ? `\n${medida.noCuenta}` : ''}`}
                               >
                                 {sinInstr ? (
                                   <span>sin instr.</span>
@@ -1030,6 +1050,11 @@ export default function EvaluacionPage() {
             style={{ left: izquierda, top: ampliado.ancla.bottom + 6, width: ANCHO }}>
             <div className="criterio-ampliado-id">{ampliado.criterio.id}</div>
             <div className="criterio-ampliado-desc">{ampliado.criterio.descripcion}</div>
+            {!!ampliado.criterio.descriptores?.length && (
+              <div data-criterio-ampliado-competencias style={{ marginTop: 4, fontSize: 12, fontWeight: 700 }}>
+                {ampliado.criterio.descriptores.join(' · ')}
+              </div>
+            )}
           </div>
         )
       })()}
@@ -1079,12 +1104,15 @@ export default function EvaluacionPage() {
           <CeldaEvaluacion
             alumno={al}
             criterio={celda.criterio}
+            conexion={criterios.find(c => c.id === celda.criterio.id)}
             instrumentos={instrs}
             grupo={matriz.grupo}
             asig={matriz.asig}
             trimestre={trimestre}
             unidadId={unidadId}
             unidadNombre={unidadActual?.nombre}
+            instrumentosArea={matriz.instrumentos}
+            medidas={matriz.medidas.get(al.id!)}
             posicion={`${celda.alumnoIdx + 1}/${alumnos.length}`}
             onGuardado={() => setRefresco(r => r + 1)}
             onCerrar={() => setCelda(null)}
@@ -1107,6 +1135,11 @@ export default function EvaluacionPage() {
         )
       })()}
 
+      {medidasDe && matriz && (
+        <MedidasAlumno alumno={medidasDe} grupo={matriz.grupo} asignaturaId={asignaturaId}
+          onCerrar={() => setMedidasDe(null)} onCambio={() => setRefresco(r => r + 1)} />
+      )}
+
       {explicar && resumen && resumen.alumnos[explicar.alumnoIdx] && (
         <ExplicacionNota
           alumno={resumen.alumnos[explicar.alumnoIdx]}
@@ -1114,6 +1147,7 @@ export default function EvaluacionPage() {
           trimestre={explicar.trimestre}
           instrumentos={resumen.instrumentos}
           unidades={resumen.unidades}
+          medidas={resumen.medidas.get(resumen.alumnos[explicar.alumnoIdx].id!)}
           criterio={explicar.criterio}
           instrumento={explicar.instrumento}
           onCerrar={() => setExplicar(null)}
@@ -1166,6 +1200,8 @@ export default function EvaluacionPage() {
           unidadId={unidadId}
           unidadNombre={unidadActual?.nombre}
           criterios={informeEn.criterios}
+          grupo={matriz.grupo}
+          asig={matriz.asig}
           grupoNombre={matriz.grupo.nombre}
           areaNombre={matriz.asig.nombre_display}
           onCerrar={() => setInformeEn(null)}

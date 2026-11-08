@@ -35,6 +35,8 @@ suites y lo mata todo al terminar.
 | `taxonomias.test.ts` | la sugerencia de instrumentos: sobre todo, que se calle cuando el verbo no dice el nivel | — |
 | `prueba-escrita.test.ts` | nota de un examen por tipo, reparto por criterios, importación y exportación | — |
 | `informe-prueba.test.ts` | informe de una prueba corregida: aciertos por pregunta, ejes por aspecto o criterio, lectura heurística, radial SVG y documento | — |
+| `medidas.test.ts` | medidas de atención a la diversidad: el refuerzo cambia pesos solo en sus trimestres, excluye instrumentos, los propios pesan 0 para el resto; la adaptación retira o sustituye criterios; sin medidas, el cálculo de siempre | — |
+| `medidas-ui.test.mjs` | refuerzo desde la ficha (NEAE encendido): sello en el calificador, casilla que no cuenta, «Todo el curso» distinto solo para ese alumno, explicación; con NEAE apagado ni sello ni editor, misma nota | backend + navegador |
 | `proens.test.ts` | lectura de una programación de PROENS: unidades, trimestres, mínimos, instrumentos por celda combinada | — |
 | `proens-api.test.mjs` | `/api/programacion/texto`: el PDF vuelve como texto con columnas; lo que no es PDF se rechaza | backend |
 | `proens-ui.test.mjs` | importar el PDF gemelo desde el panel de programación: vista previa, aplicar, lo guardado en IndexedDB, repetir sin duplicar | backend + navegador |

@@ -64,14 +64,11 @@ function rastro(d: NotaDescriptor, periodo: number | null): string {
   }).join(' · ')
 }
 
-function laminaAlumno(al: AlumnoCompetencias, ctx: ContextoCompetencias): string {
-  const { perfil, } = al
-  const p = ctx.periodo
-  const textoDe = new Map(ctx.catalogo.map(d => [d.id, d.descripcion]))
+/** Tabla de competencias clave de un alumno; vacía si no hay nada en el periodo. */
+function tablaCompetenciasClave(perfil: PerfilCompetenciasClave, p: number | null): string {
   const competencias = perfil.competencias.filter(c => notaEnPeriodo(c, p) != null)
   const descriptores = perfil.descriptores.filter(d => notaEnPeriodo(d, p) != null)
-
-  const tablaCompetencias = competencias.length
+  return competencias.length
     ? `<table><thead><tr>
         <th>Competencia clave</th><th class="n">Nota</th><th class="n">Nivel</th><th></th>
       </tr></thead><tbody>${competencias.map(c => {
@@ -85,7 +82,23 @@ function laminaAlumno(al: AlumnoCompetencias, ctx: ContextoCompetencias): string
           <td style="width:28mm">${barraNota(v)}</td>
         </tr>`
       }).join('')}</tbody></table>`
-    : `<p class="vacio">Todavía no hay notas de criterio conectadas con las competencias clave.</p>`
+    : ''
+}
+
+/** El bloque del informe individual: la tabla y cómo leerla. Vacío si no hay datos. */
+export function bloqueCompetenciasClave(perfil: PerfilCompetenciasClave, periodo: number | null): string {
+  const tabla = tablaCompetenciasClave(perfil, periodo)
+  return tabla && `${tabla}<p class="sub">${leyenda()}</p>`
+}
+
+function laminaAlumno(al: AlumnoCompetencias, ctx: ContextoCompetencias): string {
+  const { perfil, } = al
+  const p = ctx.periodo
+  const textoDe = new Map(ctx.catalogo.map(d => [d.id, d.descripcion]))
+  const descriptores = perfil.descriptores.filter(d => notaEnPeriodo(d, p) != null)
+
+  const tablaCompetencias = tablaCompetenciasClave(perfil, p)
+    || `<p class="vacio">Todavía no hay notas de criterio conectadas con las competencias clave.</p>`
 
   const bloqueDescriptores = COMPETENCIAS_CLAVE.map(id => {
     const propios = descriptores.filter(d => d.competencia_id === id)
@@ -119,7 +132,7 @@ function laminaAlumno(al: AlumnoCompetencias, ctx: ContextoCompetencias): string
     <h1 class="display">${esc(al.apellidos)},<br>${esc(al.nombre)}</h1>
     <p class="subtitulo">${esc(ctx.titulo)}</p>
     <div class="metas">
-      <span>Competencias con evidencias <b>${competencias.length} de 8</b></span>
+      <span>Competencias con evidencias <b>${perfil.competencias.filter(c => notaEnPeriodo(c, p) != null).length} de 8</b></span>
       <span>Descriptores con evidencias <b>${descriptores.length}</b></span>
     </div>
     ${seccion('01', 'Nivel por competencia clave', tablaCompetencias)}

@@ -147,7 +147,7 @@ export default function InformesPage() {
     if (!datos) throw new Error('Sin datos')
     if (!alumnos.length) throw new Error('La clase no tiene alumnado.')
     if (!datos.descriptores.length) {
-      throw new Error('No se pudieron leer los descriptores operativos del servidor: el informe de competencias clave necesita conexión.')
+      throw new Error('No se pudieron leer los descriptores operativos del currículo: el informe de competencias clave los necesita.')
     }
     const elegidos = competenciasSel === 'grupo' || competenciasSel === 'todos'
       ? alumnos

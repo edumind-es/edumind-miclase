@@ -59,8 +59,19 @@ edumind_miclase/
   físico es invisible para el merge y reaparecería en el siguiente sync. Toda
   lectura debe filtrar con `vivos()`.
 - **Las notas se ponderan en `calculo.ts`**, no en las pantallas. Peso de
-  instrumento → nota de criterio → peso de criterio → nota de área → pesos de
-  trimestre → nota final. Un trimestre sin datos no cuenta como cero.
+  instrumento → nota de criterio; después la nota del área según
+  `Asignatura.regla_area` (sin índice; `REGLAS_AREA`, `normalizarReglaArea`):
+  **por instrumento** (por defecto: cada familia vale la media de sus
+  criterios con nota y el área pondera las familias por su peso, el 80/20 de
+  PROENS; `NotaArea.instrumentos` lo desglosa) o **por criterio** (media de
+  los criterios por su peso, con el instrumento pesando solo dentro de cada
+  criterio). Luego pesos de trimestre → nota final. La regla se elige en la
+  pestaña «Nota final» (`[data-regla-area]`) y `ExplicacionNota` la nombra.
+  Por criterio era lo único que había: con 5 criterios de examen y 20 de
+  tabla, los 15 que solo evalúa la tabla entraban enteros y el 80/20 no se
+  cumplía; Luis lo vio en el iPad (nov 2026) y decidió el cambio. La nota de
+  cada criterio y las competencias clave no dependen de la regla. Un
+  trimestre sin datos no cuenta como cero, ni un instrumento sin nota.
 - **Cambiar la programación no borra calificaciones.** Retirar un instrumento de
   un criterio conserva las notas ya puestas.
 - **Toda llamada al API pasa por `api()` de `src/api.ts`.** Una ruta relativa
@@ -746,6 +757,28 @@ edumind_miclase/
   cero y al volver a guardar se perdía. `PRIVACIDAD.md` describe la CSP real,
   el endpoint de programación y los proveedores: si cambia alguno, se
   actualiza allí con fecha.
+- **La medida ajusta el cálculo del alumno, no la programación.** Tabla
+  `medidas` (esquema v8; `db/medidas.ts`, puro; `pruebas/medidas.test.ts`):
+  una fila viva por alumno, área y tipo (`adaptacion` | `refuerzo`), con
+  vigencia por trimestres. El refuerzo guarda `pesos_json` (instrumento →
+  peso; 0 = no cuenta) y manda sobre el peso de la clase y sobre el reparto
+  del criterio; un instrumento `solo_medidas` (`crearInstrumentoPropio`) es
+  un instrumento normal del área que pesa 0 para quien no lo incluya. La
+  adaptación guarda `criterios_json` (criterio de la clase → null = no
+  cuenta | sustituto con código, texto y curso): **la nota del criterio
+  adaptado vive en la casilla del criterio de la clase al que sustituye**,
+  porque el `criterio_id` («CE1.1») se repite en todos los cursos y crear
+  otro rompería claves, vínculos y programación. `calcularNotaArea` recibe
+  `{ medidas }` como último parámetro y los cuatro llamadores lo pasan
+  (`getResumenCurso`, `ExplicacionNota`, `informes/datos.ts`, Seguimiento);
+  `getMatrizEvaluacion` devuelve `medidas` por alumno. Es dato de NEAE: el
+  sello ACI/RE (`SelloMedida`, `[data-sello-medida]`), la franja del panel
+  (`[data-medida-aviso]`), el editor (`MedidasAlumno`, desde la ficha y desde
+  el sello) y los informes miran `verNeae()`; **la nota se calcula con la
+  medida en todo caso**. Las casillas que no cuentan salen `[data-no-cuenta]`
+  y siguen abriéndose. Una base v7 no pasa por la puerta de migración
+  (`VERSION_PUERTA`): solo gana una tabla vacía. Tras desplegar hay que
+  reiniciar el backend: `medidas` está en su lista blanca.
 - **NEAE y evidencias vienen apagados** (`db/datosSensibles.ts`): un aparato
   nuevo no ofrece marcar NEAE ni capturar foto, audio o vídeo hasta que el
   docente los enciende en Alumnado (`AjustesDatosSensibles`,
@@ -788,7 +821,12 @@ edumind_miclase/
   llega. Una comunidad nueva es su carpeta en `curriculum/` y regenerar;
   el selector de clases la lee del índice (`comunidades()`) y su nombre
   largo es una línea en `curriculo/nombres.ts`. Decisión de Luis (nov
-  2026): precachear todas, no bajar a demanda.
+  2026): precachear todas, no bajar a demanda. Cada criterio del paquete
+  trae también `descriptores`, `competencias_clave` y `conexion_origen`, y
+  `descriptores()` da el catálogo de la etapa: las competencias clave
+  (`ChipsCompetencias`, `CompetenciasClaveGrupo`, informes) y la adaptación
+  curricular (`MedidaAdaptacion`, cursos y criterios de otro curso) leen de
+  ahí y funcionan sin red igual que el calificador.
 - **Las competencias clave salen de la competencia específica de cada
   criterio**, y cada conexión dice de dónde sale. Formato del currículo, que
   cualquier comunidad nueva tiene que cumplir para tenerlas sin tocar nada:
@@ -841,6 +879,19 @@ edumind_miclase/
   y criterios) y lista los criterios con nota que no conectan. El «perfil
   por competencia específica» de `perfilCompetencial` sigue igual en el
   informe de evaluación.
+- **Las competencias clave se ven donde se evalúa, no solo en su informe.**
+  Cada criterio las enseña en la cabecera de la matriz por criterio
+  (`[data-criterio-competencias]`), en «Más» del panel de la casilla y en
+  Programación (`ChipsCompetencias`, con los campos que ya trae
+  `/api/curriculum/criterios`). Seguimiento lleva la pestaña «Competencias
+  clave» (`CompetenciasClaveGrupo`, `[data-competencias-clave]`), de la clase
+  entera y no del área elegida, con `tablaDeCompetencias` (puro). El informe
+  individual lleva `bloqueCompetenciasClave`. El editor de examen avisa
+  (`[data-aviso-reparto]`) cuando varios criterios reciben la misma nota; nada
+  cambia sin pulsar. El informe de la prueba añade descriptores por pregunta y
+  acierto por competencia (`competenciasDeLaPrueba`). El service worker pide
+  el currículo primero a la red (`NetworkFirst`, 4 s): con la caché delante,
+  lo sembrado de nuevo no llegaba hasta la segunda apertura.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
@@ -935,5 +986,5 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
   `updated_at` en los registros existentes. Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
-  (`migracion.test.mjs`, `e2e.test.mjs`)
+  (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)
 - No probar la sincronización contra la BD de producción: usar una copia

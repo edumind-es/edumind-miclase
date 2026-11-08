@@ -13,7 +13,8 @@ import {
   notaEnPeriodo, type AreaCompetencial, type ConexionCriterio,
 } from '../frontend/src/db/competenciasClave'
 import { calcularNotaArea } from '../frontend/src/db/calculo'
-import { documentoCompetenciasAlumnos, documentoCompetenciasGrupo } from '../frontend/src/informes/competenciasClave'
+import { bloqueCompetenciasClave, documentoCompetenciasAlumnos, documentoCompetenciasGrupo } from '../frontend/src/informes/competenciasClave'
+import { tablaDeCompetencias } from '../frontend/src/db/competenciasClave'
 
 let fallos = 0
 const ok = (cond: boolean, msg: string, extra = '') => {
@@ -151,6 +152,19 @@ ok(docAl.includes('CE9.1'), 'y nombra los criterios con nota que no conectan')
 const docGr = documentoCompetenciasGrupo(alumnos, contexto)
 ok(docGr.includes('Pérez, Ana') && docGr.includes('Souto, Brais'), 'el resumen del grupo lleva a cada alumno')
 ok(docGr.includes('CPSAA3'), 'y los descriptores con datos')
+
+console.log('\n11. Tabla de Seguimiento y bloque del informe individual')
+const delGrupo = tablaDeCompetencias([perfil, tri, val, est])
+const fila = delGrupo.competencias.find(c => c.id === 'CPSAA')!
+ok(fila.final === g.media, 'con varios perfiles, la media de resumenDelGrupo', `${fila.final} · ${g.media}`)
+const deUno = tablaDeCompetencias([perfil])
+const suya = perfil.competencias.find(c => c.id === 'CPSAA')!
+ok(deUno.competencias.find(c => c.id === 'CPSAA')?.final === suya.final, 'con uno, las notas de ese alumno')
+ok(delGrupo.descriptores.every(d => d.competencia_id), 'cada descriptor sabe su competencia')
+ok(tablaDeCompetencias([]).competencias.length === 0, 'sin alumnado no hay filas')
+const bloque = bloqueCompetenciasClave(perfil, null)
+ok(bloque.includes('data-competencia="CPSAA"') && bloque.includes('Adquirido'), 'el informe individual lleva el nivel por competencia')
+ok(bloqueCompetenciasClave({ descriptores: [], competencias: [], sinConexion: [], usaEstatal: false }, null) === '', 'sin datos no hay bloque')
 
 console.log(fallos ? `\n${fallos} fallo(s)` : '\nTodo correcto')
 process.exit(fallos ? 1 : 0)

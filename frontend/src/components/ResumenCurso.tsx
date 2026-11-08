@@ -17,9 +17,11 @@ import { Fragment, useState, type ReactNode } from 'react'
 import type { ResumenCurso as DatosResumen } from '@/db/queries'
 import { agruparPorCompetencia, mediaDe } from '@/db/cobertura'
 import { familiasDelCurso, mediaEnCriterios, criteriosDelCurso, TRIMESTRES_CURSO, type Criterio, type FamiliaCurso } from '@/db/resumenCurso'
+import { normalizarReglaArea } from '@/db/calculo'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
+import SelloMedida from './SelloMedida'
 
 /** Lo que pide una casilla al pulsarla: qué nota y de qué trimestre (null = la final). */
 export type PeticionExplicacion = {
@@ -40,6 +42,8 @@ interface Props {
   onExplicar: (p: PeticionExplicacion) => void
   /** Un criterio sin instrumento en ningún trimestre: se explica cómo arreglarlo, como en una unidad. */
   onSinInstrumento: (criterio: Criterio) => void
+  /** Pulsar el sello ACI/RE de un alumno abre sus medidas. */
+  onMedidas?: (alumno: Alumno) => void
 }
 
 type Columna = number | 'final'
@@ -60,7 +64,7 @@ function Etiquetas({ columnas }: { columnas: Columna[] }) {
   )
 }
 
-export default function ResumenCurso({ datos, criterios, vista, plegadas, alternarPlegada, onExplicar, onSinInstrumento }: Props) {
+export default function ResumenCurso({ datos, criterios, vista, plegadas, alternarPlegada, onExplicar, onSinInstrumento, onMedidas }: Props) {
   const { alumnos, notas, porTrimestre } = datos
   /** Familias con los hijos a la vista (no se recuerda: es un vistazo). */
   const [desplegadas, setDesplegadas] = useState<Set<number>>(new Set())
@@ -99,6 +103,7 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
     <td className="col-alumno">
       {nombre(al)}
       {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
+      <SelloMedida medidas={datos.medidas.get(al.id!)} onClick={onMedidas ? () => onMedidas(al) : undefined} />
     </td>
   )
 
@@ -106,7 +111,9 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
   const thArea = (
     <th scope="col" className="criterio-th area-th grupo-fin" colSpan={CON_FINAL.length} data-area-th>
       <div className="criterio-th-id">Nota del área</div>
-      <div className="criterio-th-desc">media de los criterios, ponderada por su peso; la final, con la regla del área</div>
+      <div className="criterio-th-desc">{normalizarReglaArea(datos.asig.regla_area) === 'instrumento'
+        ? 'media de los instrumentos, ponderada por su peso; la final, con la regla del área'
+        : 'media de los criterios, ponderada por su peso; la final, con la regla del área'}</div>
       <Etiquetas columnas={CON_FINAL} />
     </th>
   )

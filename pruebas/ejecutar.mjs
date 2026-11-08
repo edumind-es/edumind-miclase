@@ -175,6 +175,10 @@ async function principal() {
     await paquete('pruebas/informe-prueba.test.ts', informePrueba, ['--platform=node', '--format=esm'])
     await suite('informe de una prueba corregida', 'node', [informePrueba])
 
+    const medidas = join(scratch, 'medidas.mjs')
+    await paquete('pruebas/medidas.test.ts', medidas, ['--platform=node', '--format=esm'])
+    await suite('medidas: adaptación curricular y refuerzo en el cálculo', 'node', [medidas])
+
     const migracionUnidades = join(scratch, 'migracion-unidades.mjs')
     await paquete('pruebas/migracion-unidades.test.ts', migracionUnidades, ['--platform=node', '--format=esm'])
     await suite('unidades estancas: colocar notas antiguas', 'node', [migracionUnidades])
@@ -301,6 +305,7 @@ async function principal() {
     await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
+    await suite('medidas de atención a la diversidad desde la interfaz', 'node', ['pruebas/medidas-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('planilla de corrección desde la interfaz', 'node', ['pruebas/planilla-ui.test.mjs'], entorno)
     const hojaDemoUi = join(scratch, 'hoja-demo-ui.cjs')

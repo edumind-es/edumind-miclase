@@ -11,7 +11,8 @@
  * HTML. Imprimir y guardar van por `imprimir` y `descargarHTML` de `lamina`.
  */
 import { documento, hoja, cabecera, pie, seccion, esc, nota, tinta } from './lamina'
-import { radialSVG, type InformePrueba, type EstadisticaPregunta } from '../db/informePrueba'
+import { competenciasDeLaPrueba, radialSVG, type InformePrueba, type EstadisticaPregunta } from '../db/informePrueba'
+import { NOMBRES_COMPETENCIA, type ConexionCriterio } from '../db/competenciasClave'
 import { TIPOS_PRUEBA, type PruebaDef } from '../db/prueba'
 
 export type ContextoInforme = {
@@ -20,6 +21,8 @@ export type ContextoInforme = {
   unidad?: string | null
   /** Descripción de cada criterio, del currículo, si se tiene. */
   descripciones?: Map<string, string>
+  /** Descriptores y competencias clave de cada criterio, si se tienen. */
+  conexiones?: Map<string, ConexionCriterio>
 }
 
 function metas(pares: [string, string][]): string {
@@ -33,14 +36,14 @@ function barraPct(p: number): string {
   return `<div class="barra"><div class="pista"><div class="relleno" style="width:${Math.max(0, Math.min(100, p))}%;background:${tintaPct(p)}"></div></div></div>`
 }
 
-function filaPregunta(p: EstadisticaPregunta, esTest: boolean): string {
+function filaPregunta(p: EstadisticaPregunta, esTest: boolean, descriptores: string[] = []): string {
   const detalle = esTest
     ? `${p.aciertos} · ${p.fallos} · ${p.enBlanco}${p.sinAnotar ? ` (+${p.sinAnotar} sin anotar)` : ''}`
     : `${nota(p.media, 2)} / ${nota(p.max, 2)}`
   return `<tr>
     <td class="n" style="width:9mm">${p.numero}</td>
     <td>${esc(p.enunciado || `Pregunta ${p.numero}`)}${p.aspecto ? ` <span class="sello" style="font-size:6.5pt;margin-left:2mm">${esc(p.aspecto)}</span>` : ''}</td>
-    <td class="criterio-id">${esc(p.criterio_id ?? 'Todos')}</td>
+    <td class="criterio-id">${esc(p.criterio_id ?? 'Todos')}${descriptores.length ? `<br><span style="font-family:var(--lm-mono);font-size:6.5pt;font-weight:400">${esc(descriptores.join(' '))}</span>` : ''}</td>
     <td style="font-family:var(--lm-mono);font-size:8pt;white-space:nowrap">${detalle}</td>
     <td class="n" style="color:${tintaPct(p.pctAcierto)}">${nota(p.pctAcierto, 0)} %</td>
     <td style="width:26mm">${barraPct(p.pctAcierto)}</td>
@@ -81,10 +84,12 @@ export function documentoInformePrueba(inf: InformePrueba, def: PruebaDef, ctx: 
       </div>`
     : ''
 
+  const competencias = ctx.conexiones ? competenciasDeLaPrueba(inf, ctx.conexiones) : null
+
   // ── 03 · Pregunta a pregunta, de más fallada a más acertada
   const tablaPreguntas = `<table>
     <thead><tr><th class="n" style="width:9mm">N.º</th><th>Pregunta</th><th>Criterio</th><th>${esTest ? 'Aciertos · fallos · en blanco' : 'Media / vale'}</th><th class="n">Acierto</th><th></th></tr></thead>
-    <tbody>${inf.porDificultad.map(p => filaPregunta(p, esTest)).join('')}</tbody>
+    <tbody>${inf.porDificultad.map(p => filaPregunta(p, esTest, competencias?.porPregunta.get(p.numero)?.descriptores)).join('')}</tbody>
   </table>`
 
   // ── 04 · Por criterio
@@ -100,6 +105,19 @@ export function documentoInformePrueba(inf: InformePrueba, def: PruebaDef, ctx: 
     </table>`
     : `<p class="vacio">El instrumento no evalúa ningún criterio en esta unidad.</p>`
 
+  // ── 05 · Por competencia clave
+  const tablaCompetencias = competencias?.porCompetencia.length
+    ? `<table>
+      <thead><tr><th>Competencia clave</th><th>Preguntas</th><th class="n">Acierto</th><th></th></tr></thead>
+      <tbody>${competencias.porCompetencia.map(c => `<tr data-prueba-competencia="${esc(c.id)}">
+        <td><b>${esc(c.id)}</b> · ${esc(NOMBRES_COMPETENCIA[c.id] ?? '')}</td>
+        <td style="font-family:var(--lm-mono);font-size:8pt">${c.preguntas.join(', ')}</td>
+        <td class="n" style="color:${tintaPct(c.pctAcierto)}">${nota(c.pctAcierto, 0)} %</td>
+        <td style="width:26mm">${barraPct(c.pctAcierto)}</td>
+      </tr>`).join('')}</tbody>
+    </table>`
+    : ''
+
   const cuerpo1 = `
     ${cabecera('Informe de la prueba')}
     <div class="kicker">Prueba escrita · ${esc(tipo)}</div>
@@ -113,6 +131,7 @@ export function documentoInformePrueba(inf: InformePrueba, def: PruebaDef, ctx: 
     ${cabecera('Informe de la prueba · detalle')}
     ${seccion('03', 'Pregunta a pregunta, de más fallada a más acertada', tablaPreguntas)}
     ${seccion('04', 'Nota media por criterio', tablaCriterios)}
+    ${tablaCompetencias ? seccion('05', 'Acierto por competencia clave', tablaCompetencias) : ''}
     ${pie()}
   `
   return documento(`Informe · ${def.titulo}`, [hoja(cuerpo1), hoja(cuerpo2)])

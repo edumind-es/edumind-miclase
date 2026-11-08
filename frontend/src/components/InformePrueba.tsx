@@ -10,7 +10,11 @@
  */
 import { useEffect, useState } from 'react'
 import { getPrueba, respuestasDeExamen } from '@/db/queries'
-import { informeDePrueba, radialSVG, type InformePrueba as Informe } from '@/db/informePrueba'
+import { competenciasDeLaPrueba, informeDePrueba, radialSVG, type InformePrueba as Informe } from '@/db/informePrueba'
+import type { ConexionCriterio } from '@/db/competenciasClave'
+import type { Asignatura, Grupo } from '@/db/localDb'
+import { curriculoDeArea } from '@/informes/datos'
+import { useAppStore } from '@/store/useAppStore'
 import type { PruebaDef } from '@/db/prueba'
 import { documentoInformePrueba } from '@/informes/informePrueba'
 import { imprimir, descargarHTML } from '@/informes/lamina'
@@ -22,17 +26,22 @@ interface Props {
   unidadNombre?: string | null
   /** Criterios que el instrumento evalúa aquí, con su descripción si se tiene. */
   criterios: { id: string; descripcion: string }[]
+  /** Clase y área del examen: de su currículo salen las competencias clave. */
+  grupo?: Grupo
+  asig?: Asignatura
   grupoNombre: string
   areaNombre: string
   onCerrar: () => void
 }
 
-export default function InformePrueba({ instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, grupoNombre, areaNombre, onCerrar }: Props) {
+export default function InformePrueba({ instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, grupo, asig, grupoNombre, areaNombre, onCerrar }: Props) {
   const [def, setDef] = useState<PruebaDef | null>(null)
   const [informe, setInforme] = useState<Informe | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
   const [ocupado, setOcupado] = useState(false)
+  const [conexiones, setConexiones] = useState<Map<string, ConexionCriterio>>()
+  const headers = useAppStore(s => s._headers)
 
   useEffect(() => {
     let vigente = true
@@ -47,7 +56,15 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
     return () => { vigente = false }
   }, [instrumentoId, unidadId, instrumentoNombre, unidadNombre, criterios])
 
-  const ctx = { grupo: grupoNombre, area: areaNombre, unidad: unidadNombre, descripciones: new Map(criterios.map(c => [c.id, c.descripcion])) }
+  // Sin conexión el informe sale igual, sin el bloque de competencias clave
+  useEffect(() => {
+    if (!grupo || !asig) return
+    let vigente = true
+    curriculoDeArea(grupo, asig, headers).then(c => { if (vigente) setConexiones(c.conexiones) })
+    return () => { vigente = false }
+  }, [grupo, asig, headers])
+
+  const ctx = { grupo: grupoNombre, area: areaNombre, unidad: unidadNombre, descripciones: new Map(criterios.map(c => [c.id, c.descripcion])), conexiones }
   const nombreFichero = `informe-${(def?.titulo ?? instrumentoNombre).replace(/\s+/g, '-').toLowerCase()}.html`
 
   const aImprimir = async () => {
@@ -108,6 +125,17 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
                   </div>
                 </div>
               )}
+              {informe.alumnos > 0 && conexiones && (() => {
+                const { porCompetencia } = competenciasDeLaPrueba(informe, conexiones)
+                return porCompetencia.length > 0 && (
+                  <div data-informe-competencias style={{ marginTop: 12, fontSize: 12 }}>
+                    <div style={{ fontWeight: 700, color: 'var(--azul-900)', marginBottom: 4 }}>Acierto por competencia clave</div>
+                    {porCompetencia.map(c => (
+                      <span key={c.id} style={{ display: 'inline-block', marginRight: 12 }}><strong>{c.id}</strong> {c.pctAcierto} %</span>
+                    ))}
+                  </div>
+                )
+              })()}
               {!def.preguntas.some(p => p.aspecto) && informe.alumnos > 0 && (
                 <p style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 10 }}>
                   Los ejes salen por criterio. Si pones un <strong>aspecto</strong> a cada pregunta en el editor del examen («Ríos», «Cálculo»…), el informe dirá qué aspectos fallan.

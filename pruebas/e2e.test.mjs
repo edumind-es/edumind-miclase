@@ -356,6 +356,7 @@ const abrirMas = async () => {
 
 // El instrumento todavía no tiene rúbrica: el botón ofrece crearla (en «Más → Ajustes»)
 await abrirMas()
+ok(await panel.locator('[data-chips-competencias]').isVisible(), 'el panel de la casilla dice con qué descriptores conecta el criterio')
 await panel.getByRole('button', { name: /Crear rúbrica/ }).click()
 await p.waitForTimeout(800)
 const editor = p.getByRole('dialog', { name: /^Rúbrica de / })
@@ -445,6 +446,12 @@ ok(await p.getByRole('button', { name: /Por competencia/ }).isVisible(), 'hay vi
 await p.getByRole('button', { name: /Por competencia/ }).click()
 await p.waitForTimeout(1200)
 await foto('15b-seguimiento-competencias')
+await p.getByRole('button', { name: /Competencias clave/ }).click()
+await p.locator('[data-competencias-clave]').waitFor({ timeout: 10000 })
+ok(await p.locator('[data-competencia]').count() > 0, 'Seguimiento enseña las competencias clave de la clase con sus notas', `${await p.locator('[data-competencia]').count()} competencias`)
+await p.locator('[data-competencia]').first().click()
+ok(await p.locator('[data-descriptor]').count() > 0, 'y al desplegar una, sus descriptores operativos')
+await foto('15c-seguimiento-competencias-clave')
 await p.getByRole('button', { name: /Por alumno/ }).click()
 await p.waitForTimeout(900)
 await foto('15-seguimiento-alumnado')
@@ -500,8 +507,9 @@ const fBackup = await descargaBackup
 const rutaBackup = process.env.SCRATCH + '/backup.json'
 await fBackup.saveAs(rutaBackup)
 const backup = JSON.parse(readFileSync(rutaBackup, 'utf8'))
-ok(backup.version === 7, 'el backup es de la versión 7, la del esquema actual (unidades estancas)')
+ok(backup.version === 8, 'el backup es de la versión 8, la del esquema actual (medidas)')
 ok(Array.isArray(backup.diario), 'incluye la tabla del diario de evaluación')
+ok(Array.isArray(backup.medidas), 'incluye la tabla de medidas de atención a la diversidad')
 ok(Array.isArray(backup.criterio_instrumentos) && backup.criterio_instrumentos.length > 0,
    'incluye las asignaciones criterio↔instrumento', `${backup.criterio_instrumentos.length} vínculos`)
 ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y alumnado')

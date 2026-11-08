@@ -10,12 +10,13 @@ import { Link } from 'react-router-dom'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades } from '@/db/queries'
+import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades, getMedidasDeAsignatura } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { calcularNotaArea, calificativo, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
+import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
+import CompetenciasClaveGrupo from '@/components/CompetenciasClaveGrupo'
 
 type FilaAlumno = {
   alumno: Alumno
@@ -31,7 +32,7 @@ export default function SeguimientoPage() {
   const [datosCompetencias, setDatosCompetencias] = useState<any[]>([])
   const [filas, setFilas] = useState<FilaAlumno[]>([])
   const [cargando, setCargando] = useState(false)
-  const [vista, setVista] = useState<'criterios' | 'competencias' | 'alumnado'>('criterios')
+  const [vista, setVista] = useState<'criterios' | 'competencias' | 'clave' | 'alumnado'>('criterios')
 
   useEffect(() => {
     if (!asignaturaId || !grupoId) { setDatosCriterios([]); setFilas([]); return }
@@ -42,7 +43,8 @@ export default function SeguimientoPage() {
       getCalificacionesPorGrupo(grupoId),
       getInstrumentos(asignaturaId),
       getUnidades(asignaturaId),
-    ]).then(([rows, { alumnos, calificaciones, asignaturas: asigsDet }, instrumentos, unidades]) => {
+      getMedidasDeAsignatura(asignaturaId),
+    ]).then(([rows, { alumnos, calificaciones, asignaturas: asigsDet }, instrumentos, unidades, medidas]) => {
       // Gráfica por criterio
       const mapa: Record<string, any> = {}
       for (const r of rows) {
@@ -71,7 +73,8 @@ export default function SeguimientoPage() {
           c => c.alumno_id === al.id && instrIds.has(c.instrumento_id))
         const n = calcularNotaArea(
           asignaturaId, propias, instrumentos as Instrumento[],
-          asig?.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(asig?.regla_final))
+          asig?.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(asig?.regla_final),
+          normalizarReglaArea(asig?.regla_area), { medidas: medidas.get(al.id!) })
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
           const e = acumulado.get(comp.numero) ??
@@ -147,21 +150,25 @@ export default function SeguimientoPage() {
             <Tarjeta titulo="Criterios con datos" valor={String(datosCriterios.length)} color="var(--gris-600)" />
           </div>
 
-          <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
-            {(['criterios', 'competencias', 'alumnado'] as const).map(v => (
+          <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
+            {(['criterios', 'competencias', 'clave', 'alumnado'] as const).map(v => (
               <button key={v} onClick={() => setVista(v)}
                 className={`tab-unidad${vista === v ? ' activa' : ''}`}
                 style={{ fontSize: 13 }}>
                 {v === 'criterios' ? '📊 Por criterio'
-                  : v === 'competencias' ? '🎯 Por competencia'
+                  : v === 'competencias' ? '🎯 Por competencia específica'
+                  : v === 'clave' ? '🔑 Competencias clave'
                   : '👥 Por alumno'}
               </button>
             ))}
           </div>
 
-          {cargando && <p style={{ color: 'var(--gris-600)' }}>Calculando…</p>}
+          {/* Mira todas las áreas de la clase: no depende de la que haya elegida */}
+          {vista === 'clave' && grupoId && <CompetenciasClaveGrupo grupoId={grupoId} />}
 
-          {!cargando && datosCriterios.length === 0 && (
+          {cargando && vista !== 'clave' && <p style={{ color: 'var(--gris-600)' }}>Calculando…</p>}
+
+          {!cargando && vista !== 'clave' && datosCriterios.length === 0 && (
             <div className="card" style={{ padding: 32, color: 'var(--gris-600)' }}>
               Todavía no hay calificaciones en esta área.{' '}
               <Link to="/evaluacion" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>

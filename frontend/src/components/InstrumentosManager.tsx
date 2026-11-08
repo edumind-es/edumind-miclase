@@ -166,7 +166,8 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
     }
   }
 
-  const total = instrumentos.reduce((s, i) => s + (i.peso || 0), 0)
+  // Los instrumentos propios del alumnado con medida no entran en el 100 % de la clase.
+  const total = instrumentos.filter(i => !i.solo_medidas).reduce((s, i) => s + (i.peso || 0), 0)
   const totalOk = total === 100
 
   return (
@@ -269,6 +270,11 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                         style={{ width: 58, fontSize: 13, fontWeight: 700, textAlign: 'center', padding: '5px 2px' }} />
                       <span style={{ fontSize: 12, color: 'var(--gris-600)' }}>%</span>
                     </div>
+                    <label data-solo-medidas title="Solo cuenta para el alumnado cuya medida de refuerzo lo incluya; para el resto pesa 0 y su casilla sale apagada"
+                      style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11.5, color: ins.solo_medidas ? 'var(--azul-700)' : 'var(--gris-600)', whiteSpace: 'nowrap' }}>
+                      <input type="checkbox" checked={!!ins.solo_medidas} onChange={e => cambiar(ins.id!, { solo_medidas: e.target.checked ? 1 : 0 })} />
+                      solo con medida
+                    </label>
                     <button onClick={() => borrar(ins)} title="Eliminar instrumento" aria-label="Eliminar"
                       style={{ background: 'none', border: 'none', color: 'var(--rojo-500)', cursor: 'pointer', fontSize: 16, padding: '0 2px', lineHeight: 1 }}>
                       ×

@@ -60,12 +60,15 @@ export default defineConfig({
           {
             // Lo del currículo que no va en el precaché (los saberes) y el
             // servidor de reserva: se guardan al pedirlos, por si vuelven a
-            // hacer falta sin cobertura.
+            // hacer falta sin cobertura. Primero la red (y a los 4 s, la
+            // caché): con la caché delante, lo sembrado de nuevo en el
+            // servidor no llegaba hasta la segunda apertura.
             urlPattern: ({ url, sameOrigin }) =>
               sameOrigin && (url.pathname.startsWith('/curriculo/saberes/') || url.pathname.startsWith('/api/curriculum/')),
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'curriculo',
+              networkTimeoutSeconds: 4,
               expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 120 },
               cacheableResponse: { statuses: [200] },
             },

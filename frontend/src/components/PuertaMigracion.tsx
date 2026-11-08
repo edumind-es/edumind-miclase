@@ -19,7 +19,7 @@
  * Una base nueva (sin nada) pasa de largo: no hay nada que copiar.
  */
 import { useEffect, useState, type ReactNode } from 'react'
-import { MiClaseDB, VERSION_ESQUEMA } from '@/db/localDb'
+import { MiClaseDB, VERSION_PUERTA } from '@/db/localDb'
 import { exportarDatos } from '@/db/queries'
 import { cifrarExport, descargarBlob } from '@/auth/crypto'
 
@@ -56,7 +56,9 @@ export default function PuertaMigracion({ children, alAbrir }: { children: React
     let vigente = true
     versionInstalada().then(v => {
       if (!vigente) return
-      const necesita = v > 0 && v < VERSION_ESQUEMA * 10
+      // Solo las versiones que tocan filas piden copia: una base que solo gana
+      // tablas vacías (v7 → v8, medidas) abre directa.
+      const necesita = v > 0 && v < VERSION_PUERTA * 10
       setFase(necesita ? { nombre: 'puerta', instalada: v } : { nombre: 'lista' })
     }).catch(() => { if (vigente) setFase({ nombre: 'lista' }) })
     return () => { vigente = false }
