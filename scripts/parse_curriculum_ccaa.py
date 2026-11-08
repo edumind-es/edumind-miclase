@@ -62,6 +62,10 @@ CORRECCIONES = {
     # RD 217/2022, Biología y Geología 1.º-3.º: «hábitos sostenibles» es 5.2 y
     # «hábitos saludables» es 5.3; la matriz de Asturias pone 5.2 a los dos.
     ('ASTURIAS', 'biologia-y-geologia', 'CE5.2', 'Proponer y adoptar hábitos saludables'): 'CE5.3',
+    # Decreto 66/2022 de Cantabria, Primaria, primer ciclo: la matriz repite el
+    # código del criterio siguiente.
+    ('CANTABRIA', 'educacion-artistica', 'CE2.2', 'Explorar manifestaciones culturales y artísticas'): 'CE1.2',
+    ('CANTABRIA', 'matematicas', 'CE6.2', 'Reconocer las matemáticas presentes en la vida cotidiana'): 'CE5.2',
 }
 
 # Decretos para repartir por curso las matrices que traen varias tandas de
@@ -268,10 +272,13 @@ def repartir_tandas(datos: dict, decreto: 'Decreto', etapa: str, preferidos=None
     return [tuple(t) for t in tandas]
 
 
+# Nombre del ciclo de Primaria (catalán y castellano)
+CICLOS = {'inicial': 1, 'mitjà': 2, 'mitja': 2, 'mitj': 2, 'superior': 3}
+
 ORDINALES = {
     'primer': 1, 'primero': 1, '1r': 1, '1er': 1, 'inicial': 1,
     'segundo': 2, 'segon': 2, '2n': 2, '2o': 2,
-    'tercer': 3, 'tercero': 3, '3r': 3,
+    'tercer': 3, 'tercero': 3, '3r': 3, '3er': 3,
     'cuarto': 4, 'quart': 4, '4t': 4,
     'quinto': 5, 'sexto': 6,
 }
@@ -298,8 +305,15 @@ def cursos_de_ciclo(ciclo: str, etapa: str):
     if c == 'toda la etapa':
         return list(CURSOS[etapa])
     if etapa == 'primaria' and ('ciclo' in c or 'cicle' in c):
-        palabras = re.findall(r'[a-z0-9]+', c)
-        n = next((ORDINALES[p] for p in palabras if p in ORDINALES), None)
+        # Con los dos cursos escritos mandan ellos: «Cicle mitjà 3r 4t»,
+        # «Cicle superior 5 6», «Cicle inicial (1r-2n)».
+        explicitos = [int(n) for n in re.findall(r'\b([1-6])(?:r|n|t|º)?\b', c)]
+        if len(explicitos) == 2 and explicitos[1] == explicitos[0] + 1 and explicitos[0] % 2:
+            return [f'{explicitos[0]}º', f'{explicitos[1]}º']
+        palabras = re.findall(r'[a-zà-ú0-9]+', c)
+        n = next((CICLOS[p] for p in palabras if p in CICLOS), None)
+        if n is None:
+            n = next((ORDINALES[p] for p in palabras if p in ORDINALES and ORDINALES[p] <= 3), None)
         if n is None:
             n = next((int(p) for p in palabras if p.isdigit() and 1 <= int(p) <= 3), None)
         if n is None:
@@ -343,6 +357,29 @@ def fundir(a: dict, b: dict) -> dict:
         return [int(n) for n in re.findall(r'\d+', c['id'])]
     out['criterios'].sort(key=orden)
     return out
+
+
+# Comunidades cuyo nombre de área en el fichero perdió los acentos o va
+# abreviado («Educacio Fisica», «Coneixement Medi»): el bueno es el título de su
+# matriz madre («Matriu curricular — Educació Física»).
+NOMBRES_DE_MADRE = {'CATALUNYA'}
+
+
+def leer_nombres_madre(carpeta: str, etapa: str) -> dict:
+    """slug del fichero madre («Matriu_07-educacio-fisica» → educacio-fisica)
+    → título de su primera hoja, tras la raya."""
+    import openpyxl
+    nombres = {}
+    for f in (ORIGEN / carpeta).rglob('*.xlsx'):
+        if f.parent.name == 'iDoceo' or etapa_de(f) != etapa or '_TEST' in str(f):
+            continue
+        wb = openpyxl.load_workbook(f, read_only=True)
+        celda = next(wb[wb.sheetnames[0]].iter_rows(max_row=1, values_only=True))[0]
+        wb.close()
+        if celda and '—' in str(celda):
+            clave = slug(re.sub(r'^(?:matriu|matriz)?[_\s-]*\d+[_\s-]*', '', f.stem, flags=re.I))
+            nombres[clave] = str(celda).split('—', 1)[1].strip()
+    return nombres
 
 
 def etapa_de(ruta: Path) -> str:
@@ -389,6 +426,7 @@ def main():
         and not p.name.startswith('~$') and etapa_de(p) == etapa
     )
 
+    nombres_madre = leer_nombres_madre(carpeta, etapa) if carpeta in NOMBRES_DE_MADRE else {}
     pendientes = []
     avisos = []       # importado, pero con algo que conviene saber
     candidatos = []   # (asignatura, nombre, cursos, ruta, datos)
@@ -421,12 +459,32 @@ def main():
             datos['objetivos'] = [o for o in datos['objetivos'] if o not in basura]
             avisos.append(f'{area} ({ciclo}): descartadas competencias específicas que no lo son: '
                           + '; '.join(f"{o['id']} «{o['descripcion'][:30]}»" for o in basura))
+        # «1.1» a secas cuando las competencias específicas son «CE1»…: el
+        # código se completa y, si falta, la competencia sale de él.
+        con_ce = any(o['id'].startswith('CE') for o in datos['objetivos'])
+        for c in datos['criterios']:
+            if con_ce and re.fullmatch(r'\d+\.\d+', c['id']):
+                c['id'] = 'CE' + c['id']
+            if not c.get('objetivo_id') and re.fullmatch(r'CE\d+\.\d+', c['id']):
+                c['objetivo_id'] = c['id'].split('.')[0]
         for c in datos['criterios']:
             for (carp, asig_c, cod, inicio), nuevo in CORRECCIONES.items():
                 if (carp == carpeta and asig_c == slug(area) and c['id'] == cod
                         and c['descripcion'].startswith(inicio)):
                     c['id'] = nuevo
+                    c['objetivo_id'] = nuevo.split('.')[0]
                     avisos.append(f'{area} ({ciclo}): {cod} «{inicio}…» corregido a {nuevo} (errata del origen)')
+        area = nombres_madre.get(slug(area), area)
+        # Criterio con el párrafo explicativo de su competencia pegado
+        # («Aquesta competència específica aborda…»): no hay corte seguro.
+        fundidos = [c['id'] for c in datos['criterios'] if len(c['descripcion']) > 700]
+        if len(fundidos) >= 3:
+            pendientes.append((p.name, f'{len(fundidos)} criterios con más de 700 caracteres: llevan '
+                               'pegado el texto explicativo de la competencia específica'))
+            continue
+        if fundidos:
+            avisos.append(f'{area} ({ciclo}): criterio con texto de más de 700 caracteres, '
+                          f'revisar: {", ".join(fundidos)}')
         candidatos.append((slug(area), area, ciclo, cursos, p, datos))
 
     # «Toda la etapa» suele ser la unión de los ciclos: solo se usa si el área
@@ -439,6 +497,20 @@ def main():
         else:
             quedan.append(c)
     candidatos = quedan
+
+    # Sin decreto ni matriz de referencia, un fichero con varias tandas de
+    # criterios con los mismos códigos no se puede repartir: al cargar solo
+    # quedaría una de cada código. Queda pendiente entero.
+    if (carpeta, etapa) not in DECRETOS:
+        quedan = []
+        for c in candidatos:
+            ids = [x['id'] for x in c[5]['criterios']]
+            if ids.count(ids[0]) > 1:
+                pendientes.append((c[4].name, f'{ids.count(ids[0])} tandas de criterios con los mismos '
+                                   'códigos y sin decreto con el que repartirlas por curso'))
+            else:
+                quedan.append(c)
+        candidatos = quedan
 
     # Con decreto, los cursos los dice el encabezado que el decreto pone encima
     # de cada tanda de criterios, no el nombre del fichero.
