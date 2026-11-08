@@ -30,8 +30,8 @@ const fixtures = join(process.cwd(), 'pruebas/fixtures')
 const n = (s: unknown) => String(s ?? '').replace(/\s+/g, ' ').trim()
 
 async function leerConPdfjs(fichero: string) {
-  const doc = await pdfjs.getDocument({ data: new Uint8Array(readFileSync(join(fixtures, fichero))), isEvalSupported: false, verbosity: 0 }).promise
-  try { return parsearProens(await textoDeDocumento(doc)) } finally { doc.destroy() }
+  const tarea = pdfjs.getDocument({ data: new Uint8Array(readFileSync(join(fixtures, fichero))), verbosity: 0 })
+  try { return parsearProens(await textoDeDocumento(await tarea.promise)) } finally { await tarea.destroy() }
 }
 
 async function comparar(pdf: string, txt: string, excepciones: Record<string, (a: string, b: string) => boolean> = {}) {
