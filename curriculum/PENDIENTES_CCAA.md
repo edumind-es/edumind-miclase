@@ -22,28 +22,44 @@ Reglas de importación:
 - El nombre legible de cada área sale de `meta.asignatura_nombre` y el conversor lo
   vuelca en `frontend/src/components/nombresAreas.ts` (generado).
 
-## Estado (1 de noviembre de 2026)
+## Estado (8 de noviembre de 2026)
 
 | Comunidad | Primaria | ESO | Descriptores (P / ESO) |
 |---|---|---|---|
-| Asturias | 10 áreas, 60 JSON | 26 áreas (+ Mat. A/B), 98 JSON | 95 % / 88 % |
-| Extremadura | 7 áreas, 38 JSON | 25 áreas (+ Mat. A/B), 62 JSON | 93 % / 84 % (90 % en materias del RD) |
-| Murcia | 13 áreas, 74 JSON | 34 áreas (+ Mat. A/B), 123 JSON | 99 % / 97 % |
+| Asturias | 10 áreas, 60 JSON | 28 áreas (con Mat. A/B), 98 JSON | 95 % / 88 % |
+| Extremadura | 7 áreas, 38 JSON | 27 áreas, 62 JSON | 93 % / 83 % (90 % en materias del RD) |
+| Murcia | 13 áreas, 74 JSON | 36 áreas, 123 JSON | 99 % / 97 % |
+| Ceuta y Melilla | 6 áreas, 36 JSON | 21 áreas, 69 JSON | 100 % / 100 % |
+| Cantabria | 7 áreas, 42 JSON | — (matriz recortada) | 100 % / — |
+| Illes Balears | — (columnas mezcladas) | 8 áreas, 10 JSON | — / 100 % |
+| La Rioja | 9 áreas, 46 JSON | 6 áreas, 15 JSON | 84 % (98 % RD) / 98 % |
+| Navarra | 9 áreas, 50 JSON | 20 áreas, 71 JSON | 100 % / 100 % |
+| Catalunya | — | — | sin «Enllaços»: 0 % |
+| Andalucía | — | — | — |
 
-Sin hacer todavía, en este orden propuesto:
-1. **Ceuta y Melilla**: limpia en el inventario (7 áreas en Primaria, 22 en ESO; 8
-   ficheros de ESO vacíos que se descartan; Infantil no, la app no tiene esa etapa).
-2. **Andalucía**: la matriz no sirve tal cual (EF 1.º de Primaria trae 3 criterios; los
-   saberes son solo códigos como «EFI.1.A.1»; en ESO casi todas las áreas mezclan
-   cursos). Hay que sacarla de la Orden: en la carpeta están ya el texto
-   (`BOJA23-104-…pdf.txt`, `Decreto101-2023EducacionPrimaria.pdf.txt`) y unos JSON
-   intermedios (`_and_pri*.json`, `_and_sec.json`).
-3. **Cantabria** (ESO sin ningún saber, 11 [REVISAR]), **Catalunya** y **Baleares**
-   (en catalán; Baleares ESO con 17 de 35 ficheros sin criterios).
-4. **La Rioja** y **Navarra** ESO: la mayoría de áreas sin nombre («Materia (L10689)»,
-   «Materia 05») y cursos «Configuración N». Primaria de las dos sí está bien.
+Cada comunidad tiene abajo lo que se hizo y lo que quedó. Lo más importante que
+falta, por orden de valor:
+1. **Andalucía entera** (ver su apartado): extractor propio de las tablas del BOJA.
+2. **Catalunya**: una fuente de conexiones competencia específica → descriptores.
+3. **Cantabria ESO, Baleares Primaria y Ceuta y Melilla** (Conocimiento del Medio,
+   Biología, EF, Geografía e Historia): sacar los criterios del decreto u Orden,
+   porque la matriz está recortada, mezclada o sin curso.
+4. **Saberes** de las áreas repartidas por tandas (Extremadura, Murcia, Ceuta y
+   Melilla) y criterios que el decreto trae y la matriz no.
 5. **Etapas que faltan en las 7 de antes** (Aragón, Canarias y CyL ESO; CLM Primaria;
    Valencia ESO): sin decidir si se añaden.
+
+Cómo se comprueba la calidad, comunidad a comunidad (conversor):
+- Con decreto en PDF, cada criterio tiene que estar tal cual en él (el 90 % del
+  fichero, o el fichero no entra); lo que la matriz pegó detrás se recorta al texto
+  literal del decreto.
+- Las tandas de criterios con los mismos códigos se reparten por el encabezado de
+  curso del decreto (o, en Ceuta y Melilla, por las matrices de los RD).
+- Erratas solo corregidas contra la norma (`CORRECCIONES`).
+- Donde el nombre del fichero no es fiable, la materia se identifica por el texto de
+  sus competencias específicas frente a las del RD.
+- Lo importado antes se regenera en una carpeta aparte tras cada cambio del conversor
+  y se compara campo a campo: solo cambia lo que se quiere cambiar.
 
 Para cada comunidad: añadir sus decretos a `DECRETOS` si están en la carpeta, vista
 previa, revisar avisos y pendientes, `--apply`, añadirla a `COMUNIDADES` de
@@ -359,3 +375,26 @@ Pendiente:
 - **Sin curso en el decreto**, en los cuatro cursos: diez materias que el fichero da
   como «Toda la etapa» (Digitalización, Economía, Valores Cívicos, FOPP, Latín,
   Tecnología, Tecnología y Digitalización, Expresión Artística y los dos Ámbitos).
+
+## Andalucía — sin importar
+
+- **La matriz de iDoceo no sirve**: EF de 1.º de Primaria trae 3 criterios, los
+  saberes son solo códigos («EFI.1.A.1») y en ESO casi todas las áreas mezclan cursos.
+- **Los JSON intermedios de la carpeta** (`PRIMARIA/_and_pri3.json`, el más completo,
+  con Valores Cívicos; `SECUNDARIA/_and_sec.json`), sacados del BOJA, tampoco bastan:
+  - En Primaria el curso se deduce bien del código (cada ciclo empieza en «1.1.a»;
+    «a» es el primer curso del ciclo y «b» el segundo, como confirman los pocos
+    criterios que sí lo traen), y los 619 criterios están en la Orden. Pero **104
+    están cortados** a media frase («…comprendiendo y»): las celdas de la tabla del
+    BOJA saltan de página y la extracción se quedó con la primera parte.
+  - En ESO **ningún criterio trae curso**, 182 de 705 están cortados y 55 no aparecen
+    en la Orden.
+  - Ninguno trae el texto de los saberes, solo sus códigos.
+- **Lo que sí está en la Orden** (`BOJA23-104-…pdf.txt`): la conexión de cada
+  competencia específica con sus descriptores («Esta competencia específica se conecta
+  con los siguientes descriptores del Perfil de salida: CCL1, CCL2…»), así que una
+  extracción buena tendría las competencias clave completas.
+- **Plan**: un extractor de las tablas de la Orden de Primaria (Orden de 30 de mayo de
+  2023) y de ESO que reconstruya cada celda a través del salto de página y lea el
+  curso de la cabecera de la tabla; validarlo contra los criterios que sí están
+  enteros en `_and_pri3.json`.
