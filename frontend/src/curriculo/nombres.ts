@@ -15,6 +15,11 @@ const NOMBRES: Record<string, string> = {
   Asturias: 'Principado de Asturias',
   Extremadura: 'Extremadura',
   Murcia: 'Región de Murcia',
+  Cantabria: 'Cantabria',
+  Baleares: 'Illes Balears',
+  LaRioja: 'La Rioja',
+  Navarra: 'Navarra',
+  CeutaMelilla: 'Ceuta y Melilla',
 }
 
 export function nombreDeComunidad(valor: string): string {
