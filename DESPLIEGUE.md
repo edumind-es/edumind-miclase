@@ -120,10 +120,11 @@ Política (noviembre 2026; configuración en `.github/dependabot.yml`):
 - **Menores y parches**: Dependabot abre un PR al mes con todas las de los
   tres `package.json` (raíz, frontend y backend), una semana después de cada
   publicación. Si `pruebas` pasa en el CI, se fusiona solo
-  (`dependabot-automerge.yml`). Nadie tiene que revisarlo. *Ojo*: mientras
-  la protección de main exija «rama al día con main», el PR se queda
-  esperando (`BEHIND`) en cuanto main avanza; basta con pulsar «Update
-  branch» o comentar `@dependabot rebase`.
+  (`dependabot-automerge.yml`). Nadie tiene que revisarlo. Por eso la
+  protección de main exige el check `pruebas` pero **no** «rama al día con
+  main» (quitado el 8/11/2026): con esa casilla el PR se quedaba esperando
+  (`BEHIND`) en cuanto main avanzaba y nunca llegaba a fusionarse. No la
+  vuelvas a marcar sin cambiar esto.
 - **Mayores**: un PR por paquete (Capacitor y React van en bloque), dos
   semanas después de publicarse. Lo revisa una persona: leer los cambios
   incompatibles, `npm test` en verde y, si toca Capacitor, compilar en el
