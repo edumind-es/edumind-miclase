@@ -185,8 +185,8 @@ try {
   ok(r.p1 === 1 && r.p6 === -1 && r.p7 === 0 && r.p8 === 1, 'las respuestas guardadas son acierto, fallo o en blanco, como a mano', JSON.stringify(r))
   ok(d1.notas[1].length === 0, 'Bruno sigue sin nota')
 
-  console.log('\n5. «Evaluar con QR y cámara»: el examen está a la vista y se corrige desde ahí')
-  await p.getByRole('link', { name: /QR y cámara/ }).click()
+  console.log('\n5. «Exámenes y pruebas de evaluación»: el examen está a la vista y se corrige desde ahí')
+  await p.getByRole('link', { name: /Exámenes y pruebas/ }).click()
   const tarjeta = p.locator('[data-examenes-hoja]')
   await tarjeta.locator('[data-examen]').first().waitFor({ timeout: 8000 })
   ok(await tarjeta.locator('[data-examen]').count() === 1 && await tarjeta.locator('[data-examen][data-con-clave]').count() === 1, 'la pantalla lista el examen, con clave')

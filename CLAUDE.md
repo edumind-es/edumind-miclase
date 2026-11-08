@@ -562,7 +562,7 @@ edumind_miclase/
   genera las hojas (una página por alumno) y el examen del alumnado;
   `ImprimirTest` las imprime desde la columna del examen («🖨 Imprimir test»,
   solo con clave completa y plegado tras `[data-cabeceras-toggle]`).
-- **«Evaluar con QR y cámara» es una cámara para dos códigos** (`EscanearPage`):
+- **«Exámenes y pruebas de evaluación» es una cámara para dos códigos** (`EscanearPage`):
   el QR de mesa abre la evaluación rápida del alumno y el QR de una hoja de
   respuestas (`leerPayloadHoja`) abre el corrector de ese examen, resolviendo
   clase, área, unidad e instrumento desde el id del examen
@@ -603,7 +603,7 @@ edumind_miclase/
   destino, los criterios de las preguntas son los que ESE instrumento evalúa
   en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
   abre el editor directo con `[data-editar-examen]` (plegado tras
-  `[data-cabeceras-toggle]`), además de «Editar» en «Evaluar con QR y cámara».
+  `[data-cabeceras-toggle]`), además de «Editar» en «Exámenes y pruebas de evaluación».
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras
@@ -641,7 +641,7 @@ edumind_miclase/
   menos de tres ejes). El documento (`informes/informePrueba.ts`, Lámina) no
   lleva nombres de alumnos y sale por `imprimir`/`descargarHTML`. Se abre
   desde la cabecera de la columna (`[data-informe-abrir]`, plegado) y desde
-  «Evaluar con QR y cámara» (`[data-examen-informe]`), en `InformePrueba`.
+  «Exámenes y pruebas de evaluación» (`[data-examen-informe]`), en `InformePrueba`.
 - **Una nota puesta no se pierde nunca por un recálculo.** La que cambia —o la
   que se queda sin nota— deja su valor como fantasma en
   `Calificacion.valor_anterior`: a la vista (columna duplicada y

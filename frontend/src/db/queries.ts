@@ -2234,7 +2234,7 @@ function aPrueba(r: Rubrica): PruebaGuardada | null {
 
 /**
  * Un examen con todo lo que lo sitúa: instrumento, área, clase y unidad. Es
- * lo que necesita la pantalla «Evaluar con QR y cámara» para abrir el
+ * lo que necesita la pantalla «Exámenes y pruebas de evaluación» para abrir el
  * corrector de una hoja cuyo QR solo trae el id del examen, y para listar
  * los exámenes de todas las clases sin pasar por el Calificador.
  */

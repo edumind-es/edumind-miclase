@@ -3,7 +3,7 @@
  * Lámina para imprimir o guardar.
  *
  * Se abre desde la cabecera de la columna del examen y desde la lista de
- * «Evaluar con QR y cámara». Todo se calcula en el aparato
+ * «Exámenes y pruebas de evaluación». Todo se calcula en el aparato
  * (`db/informePrueba.ts`) con las respuestas que ya guarda cada nota; no
  * sale nada del dispositivo. El documento va por `imprimir` (iframe en web,
  * plugin Impresora en nativo) y por `descargarHTML`, como los demás informes.

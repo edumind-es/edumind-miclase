@@ -1,5 +1,5 @@
 /**
- * Los exámenes con hoja de respuestas, desde «Evaluar con QR y cámara».
+ * Los exámenes con hoja de respuestas, desde «Exámenes y pruebas de evaluación».
  *
  * El corrector por cámara vivía solo en la cabecera de la columna del
  * examen, cuatro clics dentro del Calificador, y Luis creyó que no existía.

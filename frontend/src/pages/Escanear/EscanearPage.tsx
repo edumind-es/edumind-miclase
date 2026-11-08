@@ -1,5 +1,5 @@
 /**
- * «Evaluar con QR y cámara»: una cámara, dos códigos.
+ * «Exámenes y pruebas de evaluación»: una cámara, dos códigos.
  *
  * El QR de mesa abre el panel de evaluación rápida del alumno; el QR de una
  * hoja de respuestas (`MCT1|examen|alumno|…`, `leerPayloadHoja`) abre el
@@ -191,7 +191,7 @@ export default function EscanearPage() {
 
   return (
     <>
-      <h1 className="page-title">Evaluar con QR y cámara</h1>
+      <h1 className="page-title">Exámenes y pruebas de evaluación</h1>
       <p style={{ color: 'var(--gris-600)', fontSize: 14, marginBottom: 20, maxWidth: 720 }}>
         Apunta la cámara al código QR de la mesa del alumno para abrir su panel de
         evaluación al instante, o al QR de una hoja de respuestas para corregir ese
