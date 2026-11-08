@@ -25,6 +25,7 @@ const COMUNIDADES = [
   { value: 'Asturias',  label: 'Principado de Asturias' },
   { value: 'Extremadura', label: 'Extremadura' },
   { value: 'Murcia',    label: 'Región de Murcia' },
+  { value: 'CeutaMelilla', label: 'Ceuta y Melilla' },
 ]
 
 export default function GruposPage() {

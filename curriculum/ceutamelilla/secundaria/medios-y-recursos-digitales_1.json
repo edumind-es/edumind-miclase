@@ -1,0 +1,514 @@
+{
+  "meta": {
+    "comunidad": "CeutaMelilla",
+    "etapa": "secundaria",
+    "asignatura": "medios-y-recursos-digitales",
+    "asignatura_nombre": "Medios y Recursos Digitales",
+    "ciclo_origen": "Toda la etapa",
+    "fuente": "Ceuta y Melilla · Secundaria · Medios y Recursos Digitales · Toda la etapa.xlsx",
+    "generado": "2026-11-08",
+    "curso": "1º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad. 28 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación. (CP) distintas lenguas, orales o signadas, de forma comunicación. Esta competencia supone individuales y aprovechar las experiencias mediar y hacer transferencias entre mantener y adquirir destrezas en la lengua o Integra, asimismo, dimensiones históricas e respetar la diversidad lingüística y cultural de democrática. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social. ciencia, tecnología e ingeniería (STEM) en ciencia, tecnología e ingeniería entraña la comprensión del mundo utilizando matemáticos, la tecnología y los de forma comprometida, responsable y y aplicar la perspectiva y el diversos problemas en diferentes contextos. y explicación del entorno natural y y metodologías, incluidas la observación y la y extraer conclusiones basadas en mundo natural y el contexto social. comprende la aplicación de los conocimientos nuestra sociedad de acuerdo con un marco de seguridad, responsabilidad y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia. 29 DEL ESTADO Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable. digital (CD) saludable, sostenible, crítico y responsable para el trabajo y para la participación en la datos, la comunicación y la colaboración, la digitales (incluida la programación), la las competencias relacionadas con la ciudadanía digital, la privacidad, la propiedad computacional y crítico. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando la más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la importancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético. aprender a aprender (CPSAA) a aprender implica la capacidad de aceptarse y promover un crecimiento eficazmente; colaborar con otros de el aprendizaje a lo largo de la vida. a la incertidumbre y a la complejidad; los procesos metacognitivos; identificar estrategias para abordarlas; contribuir al y de las demás personas, desarrollando a quienes lo rodean a través de la vida orientada al futuro; así como expresar integrador y de apoyo. 30 DEL ESTADO operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento. (CC) alumnos y alumnas puedan ejercer una en la vida social y cívica, basándose en la sociales, económicas, jurídicas y políticas, mundiales y el compromiso activo con la mundial. Incluye la alfabetización cívica, la de una cultura democrática fundada en el acerca de los grandes problemas éticos vida sostenible acorde con los Objetivos de 2030. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la igualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable. (CE) un enfoque vital dirigido a actuar conocimientos específicos necesarios para Aporta estrategias que permiten adaptar la entrenar el pensamiento para analizar y utilizando la imaginación, la creatividad, el crítica y constructiva dentro de los procesos a aprender, a arriesgar y a afrontar la basadas en la información y el otras personas, con motivación, empatía y para llevar las ideas planteadas a la acción 31 DEL ESTADO sostenibles de valor social, cultural y operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender. expresión culturales (CCEC) culturales supone comprender y respetar el y las emociones se expresan y se y por medio de una amplia gama de también un compromiso con la comprensión, y del sentido del lugar que se ocupa o del requiere la comprensión de la propia en un mundo caracterizado por la diversidad, y otras manifestaciones culturales pueden forma. operativos Al completar la enseñanza básica, el alumno o la alumna…"
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento. II Secundaria Obligatoria GEOLOGÍA etapa de Enseñanza Secundaria Obligatoria del Medio Natural, Social y Cultural de de la curiosidad y la actitud crítica y del alumnado de manera que permitan a adoptar hábitos que ayuden a mantener y 32"
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Realizar búsquedas en internet, haciendo uso de estrategias sencillas, como la selección de fuentes fiables, el análisis crítico de la información y la organización eficaz de los datos, para dar respuesta a actividades de aprendizaje o a tareas de investigación.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "CD1",
+        "CD2",
+        "CPSAA4",
+        "CC3"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Interactuar, colaborar y compartir información en entornos virtuales seguros, mediante el uso de herramientas digitales, aplicando las normas de etiqueta digital, para desarrollar proyectos colaborativos con una actitud responsable y siendo consciente de la propia reputación digital.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CD2",
+        "CD3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC3",
+        "CE1"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Crear, integrar y editar diferentes contenidos digitales, de forma individual y colectiva, mediante el uso de herramientas digitales, mostrando una actitud de respeto por la propiedad intelectual y las licencias de uso, para expresar ideas, sentimientos y conocimientos en diferentes situaciones de aprendizaje.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL2",
+        "CCL3",
+        "CD2",
+        "CPSAA1",
+        "CC1",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Conocer los riesgos asociados a un uso inadecuado y poco seguro de las tecnologías digitales, aplicando pautas sencillas de protección y diferentes medidas preventivas en el uso de dispositivos y entornos digitales, para minimizar dichos riesgos y proteger los dispositivos, los datos personales, el medioambiente y el bienestar digital.",
+      "descriptores_ids": [
+        "STEM5",
+        "CD4",
+        "CD5",
+        "CPSAA2",
+        "CC1"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Diseñar y desarrollar proyectos de programación, mediante la aplicación de algoritmos sencillos y el uso de herramientas de programación por bloques, empleando los fundamentos del pensamiento computacional, para crear soluciones digitales a problemas o retos concretos.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD5",
+        "CPSAA1",
+        "CPSAA5",
+        "CE1",
+        "CE3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Responder a las necesidades de información de actividades de aprendizaje o tareas de investigación, utilizando diferentes buscadores y herramientas sencillas de filtrado de información en la realización de consultas selectivas de datos o contenidos digitales, de manera autónoma.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Evaluar de forma crítica datos e informaciones recabadas de fuentes fiables, contrastando y seleccionando los más adecuados, atendiendo a criterios de validez, calidad, actualidad y confiabilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Archivar, organizar y recuperar datos, información y contenido digital, de manera segura y estructurada, en diferentes sistemas de almacenamiento, tanto en dispositivos personales como en espacios virtuales.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Desarrollar actividades o proyectos cooperativos y colaborativos, utilizando herramientas digitales en entornos virtuales de aprendizaje seguros, compartiendo datos, información y contenidos, en distintos formatos, interactuando y construyendo nuevo conocimiento.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Aplicar las normas de comportamiento en la red (etiqueta digital), participando de manera correcta y cívica en entornos virtuales de aprendizaje, valorando las emociones propias y ajenas.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprender cómo se construye la identidad digital, analizando los beneficios y riesgos asociados a la actividad personal y social en entornos digitales, actuando de manera reflexiva y con responsabilidad.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Crear y editar contenidos digitales, de manera individual y grupal, mediante el uso de diversas herramientas digitales, configurando y eligiendo las más adecuadas según el propósito, la tarea y el contexto, con criterio técnico y sentido estético.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Identificar las diferentes licencias de uso de los contenidos digitales, realizando una correcta utilización e integración de los mismos en la reelaboración de contenidos, respetando la propiedad intelectual y las condiciones de uso.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Proteger los dispositivos y los datos, aplicando medidas preventivas básicas (copias de seguridad, contraseñas robustas, uso de antivirus, configuración de cookies, etc.), de manera proactiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Salvaguardar la privacidad personal y la de terceros, conociendo los posibles riesgos al compartir datos e información en entornos digitales (publicación de imágenes, etiquetado, geolocalización, uso de redes inalámbricas públicas, etc.) y desarrollando prácticas seguras, con una actitud consciente, responsable y reflexiva.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.3",
+      "objetivo_id": "CE4",
+      "descripcion": "Preservar el bienestar digital individual y colectivo, tanto físico como mental, adoptando hábitos de uso cívico, sostenible y saludable de la tecnología y gestionando situaciones inadecuadas y de violencia en la red, solicitando o prestando ayuda en caso necesario.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Resolver problemas concretos o retos de programación propuestos, utilizando sentencias o bloques secuenciales, condicionales y repetitivos, haciendo uso de variables numéricas y de texto, así como distintas formas de entrada y salida de datos, de manera creativa.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Depurar programas y modificar algoritmos de acuerdo con principios básicos del pensamiento computacional, introduciendo mejoras y aprendiendo del error, con una actitud de superación y perseverancia.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.3",
+      "objetivo_id": "CE5",
+      "descripcion": "Incorporar partes de programas ya existentes a sus propias creaciones digitales, respetando la propiedad intelectual al crear o mezclar programas.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.4",
+      "objetivo_id": "CE5",
+      "descripcion": "Desarrollar programas para interactuar, mediante el uso de sensores, actuadores y placas controladoras, en montaje físico o simulado, con una actitud emprendedora.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "A. Alfabetización informacional y datos"
+    },
+    {
+      "id": "B2",
+      "titulo": "B. Comunicación y colaboración en línea"
+    },
+    {
+      "id": "B3",
+      "titulo": "C. Creación de contenidos digitales"
+    },
+    {
+      "id": "B4",
+      "titulo": "D. Seguridad y bienestar digital"
+    },
+    {
+      "id": "B5",
+      "titulo": "E. Pensamiento computacional y programación"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de búsqueda de información y datos en internet seguras y eficientes. Filtros avanzados (\"\", *, -, filetype, site, cache, define, translate, etc.). Operadores lógicos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de análisis, evaluación y selección crítica de la información y los datos. Criterios de utilidad, calidad, vigencia y fiabilidad.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estrategias de almacenamiento, organización y recuperación de información y datos en entornos estructurados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Herramientas y plataformas digitales supervisadas y seguras de comunicación y colaboración en línea.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Estrategias de comunicación adaptadas a la audiencia y al entorno digital.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Etiqueta digital: reglas básicas de cortesía y respeto en la red. Lenguaje inclusivo y no sexista en la comunicación en entornos virtuales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Identidad y huella digital. Sentido crítico y cívico en la compartición de datos e información en entornos digitales. Beneficios y riesgos asociados.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Contenidos digitales. Tipos de archivo y formatos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Herramientas digitales de creación, edición y reelaboración de contenidos digitales en diversos formatos (texto, imagen, audio, vídeo, etc.). Selección, aplicación y configuración en actividades de aprendizaje.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Respeto de la propiedad intelectual y de las licencias de uso de contenidos digitales.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Seguridad de dispositivos y protección de datos personales. Amenazas y riesgos (suplantación de identidad, robo de credenciales, etc.). Medidas preventivas y prácticas seguras (contraseñas robustas, gestor de contraseñas, navegación en modo incógnito, configuración de cookies, autenticación en dos pasos –Two Factor Authentication, 2FA–, borrado de historiales de navegación, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Riesgos para el bienestar personal. Hábitos de uso saludable de las tecnologías digitales (higiene postural, rutinas oculares, control del tiempo de conexión, etiqueta digital, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Gestión de situaciones de violencia y riesgo en la red (ciberacoso, grooming, sexting, acceso a contenidos inadecuados, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Impacto del empleo de la tecnología sobre el medioambiente. Hábitos de uso responsable y sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Flujogramas. Pseudocódigo. Fundamentos. Ejemplos de algoritmos sencillos. Árboles de decisión.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Acciones elementales en el diseño de algoritmos: asignación, control de la ejecución (bucles, sentencias condicionales), interacción (entrada y salida de datos, llamadas a funciones).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Depuración, seguimiento de la ejecución y manejo del error. Ejecución paso a paso.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Elementos básicos de programación: variables y funciones.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Herramientas y dispositivos que emplean la programación por bloques. Aplicaciones prácticas a proyectos sencillos de programación. Orientaciones metodológicas y para la evaluación La actual sociedad se encuentra inmersa en un proceso de tecnificación creciente donde es habitual observar la aparición de nuevas herramientas digitales que vienen a modernizar otras herramientas que van quedando obsoletas o a satisfacer nuevas necesidades que son producto del continuo proceso de transformación de la sociedad. La materia Medios y Recursos Digitales aborda el desarrollo de la competencia digital del alumnado, partiendo del nivel competencial adquirido en la etapa de Educación Primaria. Allí, la competencia digital aparece como elemento instrumental para la construcción de nuevos aprendizajes, desarrollando, por ejemplo, la alfabetización informacional en los procesos de investigación y búsqueda de información, el trabajo cooperativo y colaborativo apoyado y potenciado por el empleo de herramientas digitales, la creación de contenido digital a través de diversas aplicaciones y en diversos formatos, o aspectos relacionados con la seguridad de dispositivos, datos y la propia salud, así como aspectos relacionados con la propiedad intelectual, la resolución de problemas y el pensamiento computacional. A este respecto, la presencia transversalizada en las diferentes áreas de la etapa anterior se presenta, a través de esta materia, con un tratamiento más sistemático y completo, de forma integrada y contextualizada a través de situaciones de aprendizaje, pretendiendo, en definitiva, reforzar la competencia digital del alumnado, al tiempo que se contribuye al aprendizaje integrado del resto de las competencias clave presentes en el Perfil de salida. Competencia digital y situaciones de aprendizaje Las competencias específicas de la materia están estrechamente relacionadas con las diferentes áreas competenciales del Marco Europeo de Competencia Digital para la Ciudadanía, así como con los criterios de evaluación y los bloques de saberes asociados. Sin embargo, esta estrecha relación no implica la reproducción completa de las áreas competenciales del marco, entre otros motivos, porque el desarrollo de la competencia digital en la etapa de Educación Secundaria Obligatoria está también transversalizado a lo largo de las demás materias, e incluso con tratamientos más específicos a través de Tecnología y Digitalización, en segundo y tercero, o Digitalización, en cuarto curso. Todo ello no obsta para que su presentación didáctica deba ser integrada, planteando situaciones de aprendizaje que requieran que el alumnado movilice los saberes de la materia para adquirir más de una competencia específica al mismo tiempo. En este sentido, las situaciones de aprendizaje deben permitir al alumnado desarrollar su alfabetización mediática, su capacidad creadora y de trabajo en equipo en entornos digitales de manera segura y eficiente. Para ello, se hace necesario plantear actividades que impliquen la aplicación de estrategias de búsqueda efectiva de información y datos en la red, así como de evaluación crítica de la información, para combatir la manipulación y la desinformación en medios digitales. Al mismo tiempo, las situaciones de aprendizaje deben posibilitar en el alumnado el desarrollo de capacidades relacionadas con la creación y la programación digital, tanto de manera individual como de manera colectiva, mediante el uso de un abanico diverso de herramientas digitales, que le permitan transitar desde la posición de mero consumidor hasta la de creador de contenidos digitales. Asimismo, el tratamiento de la seguridad y el bienestar digital puede plantearse al alumnado a través de la resolución de situaciones o casos reales donde se vean comprometidas la privacidad y el bienestar propio o colectivo, que invite a la reflexión crítica sobre los posibles riesgos, a conocer e implementar prácticas seguras y protocolos de actuación. De manera adicional conviene contemplar aspectos relacionados con el cuidado del medio ambiente y la sostenibilidad, como puedan ser la reutilización de materiales tecnológicos o la implementación de medidas para el ahorro energético y uso eficiente de la tecnología. Espacios presenciales y virtuales de trabajo individual y en equipo En esta materia se profundiza sobre el Entorno Personal de Aprendizaje (Personal Learning Environment, PLE), ya introducido en la etapa anterior, como estructura para el aprendizaje permanente en entornos digitales, contribuyendo tanto a la creación de redes como al uso de herramientas para la construcción de conocimiento de manera individual y compartida. Este proceso se ve potenciado por cuanto el entorno digital difumina tanto la barrera espacial del aprendizaje (puede ocurrir más allá del aula) como la temporal (puede ocurrir fuera del horario lectivo). Unir esta ausencia de límites a la enorme oferta de contenidos digitales para el aprendizaje supone una oportunidad que, bien dirigida y empleada, puede tener un impacto muy positivo sobre la continuidad del proceso de aprendizaje, así como sobre su adhesión y autogestión. A este respecto, se requiere del alumnado el uso y la interacción con herramientas digitales con fines diversos. Estas herramientas pueden intervenir directamente sobre la forma en que se desarrollan tanto el aprendizaje como la interacción del alumnado. De hecho, los entornos virtuales de aprendizaje potencian el trabajo grupal, resultando conveniente que, en este nivel, se realice de forma eminentemente cooperativa, permitiendo el intercambio de opiniones a través de foros, el de ficheros a través de mensajería o incluso el trabajo simultáneo de varios alumnos o alumnas sobre un mismo producto digital (documentos compartidos, tableros colaborativos, etc.). De algún modo, el espacio virtual en el que se sumerge el alumnado está cubriendo parte de las necesidades que típicamente son propias del espacio físico, lo cual permite que ambos, espacio físico y espacio virtual, coexistan y se complementen en una relación de equilibrio estable, saludable y formativo. El espacio virtual facilita la formación de comunidades conectadas que, compartiendo un mismo objetivo, pueden contribuir a la creación de sinergias que faciliten el aprendizaje individual y colectivo. La interacción entre individuos puede verse potenciada en el espacio virtual a través de elementos que contribuyan al aumento de la motivación del alumnado hacia el aprendizaje, como puede ocurrir con el empleo de avatares, individuales o colectivos, o el reconocimiento de determinados hitos de aprendizaje a través de insignias digitales. Estos aspectos, aunque accesorios, pueden contribuir a enriquecer el proceso de enseñanza-aprendizaje y, en cualquier caso, requieren de un análisis profundo para su integración adecuada y fructífera en este proceso. Las herramientas digitales que se presenten en la materia son a la vez saberes e instrumentos de aprendizaje, por lo que será necesario tanto el trabajo individual con las mismas, para familiarizarse con su empleo, como el trabajo grupal, para producir creaciones digitales que resulten fruto del consenso y de la contribución de un grupo. La omnipresencia de los dispositivos en la actual sociedad puede facilitar este proceso de aprendizaje ubicuo en entornos conectados. Rol docente: propiciador y guía Las situaciones de aprendizaje, contextualizadas y cercanas, permiten al alumnado desarrollar las capacidades necesarias que le permitan conseguir los logros propuestos por las mismas. Pretenden propiciar así aprendizajes funcionales, transferibles y significativos. En este sentido, conviene resaltar los dos roles del profesorado que resultan fundamentales para que puedan ser aprovechadas de manera óptima por el alumnado: como propiciador y como guía del aprendizaje. Propiciador, por cuanto diseña las actividades con antelación, de manera que su resolución propicie un desarrollo competencial, al tiempo que presenten una gradación de complejidad que, junto con la información y las orientaciones convenientes, permitan al alumnado construir soluciones partiendo de su nivel competencial anterior. Una vez presentados, el profesorado debe asumir un rol de guía, que puede manifestarse a través de la formulación de preguntas al alumnado que inviten a la reflexión, así como a través de comentarios de retroalimentación continua que faciliten la autogestión del aprendizaje. Se trata de acompañar el proceso cognitivo del alumnado para indicarle hacia dónde debe dirigirse cuando pretende alcanzar los niveles requeridos de comprensión y desarrollo conceptual necesarios. Atención a la diversidad La aplicación en el aula de planteamientos metodológicos diversos promueve una enseñanza versátil en la medida en que se adapta el proceso de enseñanza a la variedad presente, tanto en la naturaleza de competencias y saberes que pretenden abordarse, como de capacidades y necesidades del alumnado. En este sentido, se promoverán metodologías coherentes con los principios del Diseño Universal para el Aprendizaje, de manera que se combinen múltiples formas de representación de los distintos elementos curriculares, se facilite una amplia variedad de formas de acción y de expresión del aprendizaje en torno a cómo hacer uso de los conocimientos, destrezas y actitudes involucrados, y se posibiliten diversas formas de participar y de implicar al alumnado en su propio proceso de aprendizaje, contribuyendo a la consecución de una educación más personalizada. Es interesante a este respecto tener presente que las propias herramientas digitales, que constituyen un objeto de aprendizaje en sí mismo, disponen de funcionalidades que facilitan la accesibilidad de los contenidos que muestran, contribuyendo así a eliminar posibles barreras de acceso que se pudieran presentar entre el alumnado y garantizando un acceso igualitario a los mismos. Evaluación La evaluación en el proceso de enseñanza-aprendizaje debe ser entendida de manera integral, más como un componente del mismo, presente a lo largo de todo el proceso, que como un hito separado y finalista. Así, la evaluación diagnóstica permite la situación de las correspondientes necesidades formativas del alumnado al inicio de su proceso de aprendizaje. Resulta crucial conocer el punto de partida del alumnado para poder abordar un diseño del proceso de enseñanza en el que se promuevan la construcción de aprendizajes sobre los ya existentes, otorgando un rol activo al alumnado y garantizando que los modelos sintéticos y concepciones del alumnado estén libres de error y alineados con el sentido con el que se presentan. El carácter formativo de la evaluación constituye un aspecto nuclear del proceso de enseñanza-aprendizaje: permite, por una parte, adecuar la propia práctica docente y, por otra, orientar hacia la mejora del aprendizaje del alumnado mediante actividades de interacción entre los distintos actores del proceso en las que la evocación es uno de los factores necesarios e imprescindibles para la construcción de nuevos aprendizajes. La fuerte presencia que diversas herramientas digitales tienen en la materia influye en su proceso de evaluación, aportando una mayor variedad y flexibilidad, tanto den las técnicas como en los instrumentos. Esta riqueza viene a sumarse a la de aquellos elementos que no requieren de la intervención de tecnologías digitales y que constituyen también, como no puede ser de otro modo, un eje principal en el proceso de evaluación, como son las labores de observación directa y retroalimentación, tanto sobre las técnicas empleadas por el alumnado como sobre sus conductas y producciones. A este respecto, los Entornos Virtuales de Aprendizaje (EVA) ofrecen herramientas de análisis y métricas que facilitan al profesorado una visión integral del proceso de aprendizaje del alumnado. Asimismo, es importante disponer de una variedad de técnicas e instrumentos de evaluación que enriquezcan el proceso de evaluación. En cuanto a las técnicas, puede citarse la observación directa, el análisis de las producciones y la interacción con el alumnado de manera sistemática para ofrecer retroalimentación, ya sea de manera síncrona o asíncrona. Respecto a los instrumentos específicos de evaluación, el empleo de cuestionarios y las listas de comprobación o cotejo constituyen algunos ejemplos pertinentes para la evaluación de la materia. En cualquier caso, deberán ser diversos, accesibles y adaptados para permitir la evaluación de las diferentes situaciones de aprendizaje diseñadas, así como de los productos generados a lo largo de las mismas. Es importante promover actividades relacionadas con la autoevaluación y la coevaluación. La autoevaluación constituye una oportunidad muy valiosa para implementar estrategias metacognitivas, que el alumnado puede desarrollar al reflexionar sobre los objetivos de las actividades que se le plantean, sobre el nivel de adquisición de los mismos, así como sobre las estrategias de aprendizaje que ha empleado en contextos particulares. Tanto autoevaluación como coevaluación requieren de la evocación de aprendizajes –en el primer caso, de forma autónoma y, en el segundo, de forma asistida–, en la que la interacción entre el alumnado potencia estrategias de análisis crítico que contribuyen a formar aprendizajes significativos. En esta materia, la presencia de una diversidad de herramientas digitales ofrecerá nuevas formas y matices a estos procesos, que se verán potenciados por recursos como redes sociales educativas o entornos conectados específicos que promueven la creación de comunidades de aprendizaje. Por último, es importante apuntar que la evaluación del proceso de enseñanza y de la propia práctica docente debe ser continua y no puntual, para permitir así las modificaciones oportunas que inviten a ajustarlos al tiempo que se van desplegando y valorando, entre otros aspectos, los distintos ritmos de aprendizaje según las características del alumnado y del grupo-clase. Es conveniente que esta evaluación haga uso de técnicas tanto cualitativas como cuantitativas para ofrecer el máximo de información al respecto, donde podrá participar, como un elemento más, la retroalimentación que el propio alumnado pueda ofrecer en relación con la percepción del proceso de enseñanza. Asimismo, algunos de los aspectos de carácter didáctico relevantes a tener en cuenta en la evaluación de la práctica docente serían: el nivel de cumplimiento global de la programación; la adecuación de las situaciones de aprendizaje para la adquisición de las competencias específicas; la idoneidad de las estrategias metodológicas y de los recursos empleados; la pertinencia de la organización de los espacios, de los tiempos y de los agrupamientos del alumnado; el ambiente y clima de participación y trabajo generado en el aula; así como la implementación de los criterios, técnicas e instrumentos de evaluación y la eficacia de las medidas de individualización de la enseñanza. En este sentido y de forma complementaria, es necesario también evaluar otros aspectos de la función docente, como pueden ser aquellos asociados con la coordinación docente, la función de orientación y tutoría del alumnado, cuando proceda, y la atención ofrecida a las familias o los tutores o tutoras legales.",
+      "criterios_ids": []
+    }
+  ]
+}

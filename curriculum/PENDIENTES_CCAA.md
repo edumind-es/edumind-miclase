@@ -184,3 +184,41 @@ Pendiente:
   Comunicación Audiovisual, Cultura Clásica, Digitalización, Digitalización Creativa,
   Economía y Emprendimiento, Valores Cívicos y Éticos, Emprendimiento Personal y Social,
   Expresión Artística, FOPP, Latín, Tecnología y los seis Proyectos de Investigación.
+
+## Ceuta y Melilla (`CeutaMelilla`)
+
+Currículo del Ministerio. No hay decreto en la carpeta: la referencia para repartir
+las tandas son las matrices de los Reales Decretos
+(`REALES DECRETOS/{PRIMARIA,SECUNDARIA}/MATRICES/XLSX`, `MatrizReferencia` en el
+conversor), casando cada tanda por código y texto exactos con su fila «Curso / ciclo».
+Descriptores: 100 % en las dos etapas (las matrices traen «Enlaces»).
+Infantil no se importa: la app no tiene esa etapa.
+
+### Primaria — importada
+6 áreas, 36 JSON. Educación Artística, Educación Física, Lengua Castellana, Lengua
+Extranjera y Matemáticas traían los tres ciclos en un fichero «Toda la etapa»;
+repartidos por el RD 157/2022.
+
+Pendiente:
+- **Conocimiento del Medio Natural, Social y Cultural, sin importar**: sus tres tandas
+  no son las del RD (texto propio de Ceuta y Melilla) y nada dice de qué ciclo es cada
+  una. Hace falta la Orden del Ministerio para Ceuta y Melilla.
+- **Sin saberes** las cinco áreas repartidas: una sola lista para los tres ciclos.
+
+### Secundaria — importada
+20 áreas (con Matemáticas A y B), 69 JSON.
+
+Pendiente:
+- **Sin importar, por la misma razón** (tandas con texto propio, curso a curso, que no
+  casan con el RD 217/2022 y no dicen su curso): **Biología y Geología** (tres
+  tandas en «Primer curso»), **Educación Física** (cuatro tandas: por los verbos,
+  «Diseñar», «Establecer», «Planificar», «Autorregular», serían 1.º a 4.º, pero no
+  se puede comprobar), **Geografía e Historia** (cuatro tandas) y **Física y Química
+  de 3.º**. Hace falta la Orden del Ministerio para la ESO de Ceuta y Melilla.
+- Ocho ficheros «Toda la etapa» vacíos (sin criterios): Biología, Plástica, Física y
+  Química, Lengua Castellana, Lengua Extranjera, Matemáticas, Música y Tecnología y
+  Digitalización. Las que tienen ficheros por curso entran por ellos.
+- **Sin saberes**: Matemáticas 1.º-3.º, 4.º A y 4.º B.
+- **Sin curso en la referencia**, en los cuatro cursos: Cultura Clásica,
+  Digitalización, Valores Cívicos y Éticos, Introducción a la Filosofía, Medios y
+  Recursos Digitales y Tecnología.

@@ -72,6 +72,9 @@ DECRETOS = {
     ('EXTREMADURA', 'secundaria'): 'EXTREMADURA/SECUNDARIA/22040165C.pdf',
     ('MURCIA', 'primaria'):        'MURCIA/PRIMARIA/2022-5907.pdf',
     ('MURCIA', 'secundaria'):      'MURCIA/SECUNDARIA/2022-6346.pdf',
+    # Ceuta y Melilla: currículo del Ministerio; referencia, las matrices de los RD
+    ('ceuta_melilla', 'primaria'):   'REALES DECRETOS/PRIMARIA/MATRICES/XLSX',
+    ('ceuta_melilla', 'secundaria'): 'REALES DECRETOS/SECUNDARIA/MATRICES/XLSX',
 }
 
 # Encabezado de curso en el texto del decreto: «Primero y segundo de ESO»,
@@ -151,6 +154,11 @@ class Decreto:
         return None, None, None
 
 
+    def codigos_de_tanda(self, pos: int, hasta):
+        """Códigos de criterio del decreto en el tramo de la tanda que empieza
+        en `pos` (hasta la siguiente tanda o el siguiente apartado)."""
+        return self.codigos_en_tramo(max(pos - 30, 0), pos + 40000 if hasta is None else hasta)
+
     def codigos_en_tramo(self, desde: int, hasta: int) -> set:
         """Códigos «Criterio X.Y» del decreto entre dos posiciones del texto
         corrido, cortando en el siguiente apartado (saberes, competencias,
@@ -177,6 +185,63 @@ class Decreto:
         return codigos
 
 
+class MatrizReferencia:
+    """Matrices con el curso en cada fila (hoja «Criterios de evaluación»:
+    curso o ciclo, competencia, código, texto), con la misma interfaz que
+    Decreto. Ceuta y Melilla siguen el currículo del Ministerio, así que su
+    referencia son las matrices de los Reales Decretos."""
+
+    def __init__(self, carpeta: Path):
+        import openpyxl
+        self.filas = []   # (etiqueta, código CE, texto plano)
+        self.materia = []  # nº de fichero de cada fila: cada materia es un fichero
+        for n, f in enumerate(sorted(carpeta.glob('*.xlsx'))):
+            wb = openpyxl.load_workbook(f, read_only=True, data_only=True)
+            if 'Criterios de evaluación' not in wb.sheetnames:
+                continue
+            for r in wb['Criterios de evaluación'].iter_rows(min_row=2, values_only=True):
+                if len(r) >= 4 and r[2] and r[3]:
+                    codigo = 'CE' + str(r[2]).strip().rstrip('.')
+                    self.filas.append((str(r[0] or '').strip(), codigo,
+                                       re.sub(r'[\s\-]+', '', str(r[3]).lower())))
+                    self.materia.append(n)
+            wb.close()
+        self.fin = 0
+
+    def encabezado_antes(self, descripcion: str, desde: int = 0, codigo: str = '',
+                         preferidos=None, etapa: str = 'secundaria'):
+        texto = re.sub(r'[\s\-]+', '', descripcion.lower())[:60]
+        primero = None
+        for i in range(desde, len(self.filas)):
+            etiqueta, cod, plano = self.filas[i]
+            if cod != codigo or not plano.startswith(texto):
+                continue
+            hallado = (*self._curso(etiqueta, etapa), i)
+            if primero is None:
+                primero = hallado
+            if not preferidos or (hallado[2] and set(hallado[2]) & set(preferidos)):
+                break
+        else:
+            hallado = primero
+        if hallado is None:
+            self.fin = desde
+            return None, None, None, -1
+        self.fin = hallado[3] + 1
+        return hallado
+
+    @staticmethod
+    def _curso(etiqueta: str, etapa: str):
+        # «Cuarto curso · MATEMÁTICAS A», «Cursos de primero a tercero», «Primer ciclo»
+        m = re.search(r'matemáticas\s+([ab])\b', etiqueta, re.IGNORECASE)
+        base = re.split(r'\s*·\s*', etiqueta)[0]
+        cursos = cursos_de_ciclo(base, etapa) if base else None
+        return etiqueta, (m.group(1).upper() if m else None), cursos
+
+    def codigos_de_tanda(self, pos: int, hasta):
+        etiqueta, materia = self.filas[pos][0], self.materia[pos]
+        return {f[1] for f, m in zip(self.filas, self.materia) if f[0] == etiqueta and m == materia}
+
+
 def repartir_tandas(datos: dict, decreto: 'Decreto', etapa: str, preferidos=None):
     """Parte los criterios en tandas (cada vez que vuelve el primer código) y da
     a cada una los cursos del encabezado que el decreto le pone encima.
@@ -196,8 +261,8 @@ def repartir_tandas(datos: dict, decreto: 'Decreto', etapa: str, preferidos=None
         desde = decreto.fin   # tras la coincidencia entera: si no, casa otra vez con ella
     # Lo que el decreto trae en el tramo de cada tanda y la matriz no
     for i, t in enumerate(tandas):
-        hasta = tandas[i + 1][4] if i + 1 < len(tandas) else t[4] + 40000
-        en_decreto = decreto.codigos_en_tramo(max(t[4] - 30, 0), hasta)
+        hasta = tandas[i + 1][4] if i + 1 < len(tandas) else None
+        en_decreto = decreto.codigos_de_tanda(t[4], hasta)
         t[4] = sorted(en_decreto - {c['id'] for c in t[3]},
                       key=lambda x: [int(n) for n in re.findall(r'\d+', x)])
     return [tuple(t) for t in tandas]
@@ -378,7 +443,8 @@ def main():
     # Con decreto, los cursos los dice el encabezado que el decreto pone encima
     # de cada tanda de criterios, no el nombre del fichero.
     if (carpeta, etapa) in DECRETOS:
-        decreto = Decreto(ORIGEN / DECRETOS[(carpeta, etapa)])
+        fuente = ORIGEN / DECRETOS[(carpeta, etapa)]
+        decreto = MatrizReferencia(fuente) if fuente.is_dir() else Decreto(fuente)
         repartidos = []
         for asig, area, ciclo, cursos, p, datos in candidatos:
             ids = [c['id'] for c in datos['criterios']]
