@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<!-- AulaMap © 2026 Juan José de Haro (jjdeharo), AGPL v3. Modificado para EDUmind MiClase (2026-11-08): ver LEEME-MICLASE.md -->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plano de clase</title>
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="favicon.ico" sizes="16x16 32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <!-- MiClase: el script del tema va en un fichero aparte por la CSP (modificación MiClase) -->
+  <script src="tema-inicial.js"></script>
+  <link rel="stylesheet" href="miclase-puente.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <h1 data-i18n="app_title">Plano de clase</h1>
+      <a id="link-about" class="btn about" href="presentacion.html" data-i18n-title="about_title"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 7.2v4"/><circle cx="8" cy="4.9" r=".5" fill="currentColor"/></svg><span data-i18n="about_link">Qué es AulaMap</span></a>
+      <div class="class-picker">
+        <label for="class-select" data-i18n="class_label">Clase</label>
+        <select id="class-select"></select>
+        <button id="btn-class-new" class="btn"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.2" y="3.2" width="11.6" height="9.6" rx="1.4"/><path d="M8 5.8v4.4M5.8 8h4.4"/></svg><span data-i18n="class_new">Nueva clase</span></button>
+        <button id="btn-class-rename" class="btn"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.9 2.7 2.4 2.4-7.6 7.6-3.2.8.8-3.2z"/><path d="m9.4 4.2 2.4 2.4"/></svg><span data-i18n="class_rename">Cambiar nombre</span></button>
+        <button id="btn-class-delete" class="btn danger"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.2 4.4h9.6M6.4 4.4V2.8h3.2v1.6M4.8 4.4l.7 9h5l.7-9"/></svg><span data-i18n="class_delete">Eliminar clase</span></button>
+      </div>
+      <div class="topbar-actions">
+        <button id="btn-undo" class="btn icon" data-i18n-title="undo" title="Deshacer">↶</button>
+        <button id="btn-redo" class="btn icon" data-i18n-title="redo" title="Rehacer">↷</button>
+        <button id="btn-export" class="btn" data-i18n-title="export_title"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v7.5"/><path d="M5 6.5 8 9.5l3-3"/><path d="M2.5 12.5h11"/></svg><span data-i18n="export">Exportar</span></button>
+        <button id="btn-import" class="btn" data-i18n-title="import_title"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 9.5V2"/><path d="M5 5 8 2l3 3"/><path d="M2.5 12.5h11"/></svg><span data-i18n="import">Importar</span></button>
+        <input id="import-file" type="file" accept=".json,application/json" hidden>
+        <button id="btn-share" class="btn" data-i18n-title="share_title"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="3.5" r="1.7"/><circle cx="4" cy="8" r="1.7"/><circle cx="12" cy="12.5" r="1.7"/><path d="M5.5 7.1 10.5 4.4"/><path d="M5.5 8.9l5 2.7"/></svg><span data-i18n="share">Compartir</span></button>
+        <button id="btn-print" class="btn primary" data-i18n-title="print"><svg class="ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5V2.5h7v4"/><path d="M4.5 12h-1a1 1 0 0 1-1-1V7.5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1V11a1 1 0 0 1-1 1h-1"/><path d="M4.5 9.5h7v4h-7z"/></svg><span data-i18n="print">Imprimir</span></button>
+      </div>
+      <div class="topbar-settings">
+        <select id="lang-select" class="mini-select" data-i18n-title="language" data-i18n-aria="language" title="Idioma">
+          <option value="auto" data-i18n="lang_auto">Automático</option>
+          <option value="es">Español</option>
+          <option value="ca">Català</option>
+          <option value="gl">Galego</option>
+          <option value="eu">Euskara</option>
+          <option value="pt">Português</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="en">English</option>
+        </select>
+        <select id="theme-select" class="mini-select" data-i18n-title="theme" data-i18n-aria="theme" title="Apariencia">
+          <option value="system" data-i18n="theme_system">Sistema</option>
+          <option value="light" data-i18n="theme_light">Claro</option>
+          <option value="dark" data-i18n="theme_dark">Oscuro</option>
+        </select>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-mode="room" role="tab" data-i18n="tab_room">Aula</button>
+          <button class="tab" data-mode="students" role="tab" data-i18n="tab_students">Alumnado</button>
+          <button class="tab" data-mode="teams" role="tab" data-i18n="tab_teams">Equipos (opcional)</button>
+        </div>
+
+        <section id="panel-room" class="panel">
+          <h2 class="with-help"><span data-i18n="add_desks">Mesas (opcional)</span>
+            <button type="button" id="btn-desks-help" class="help" data-i18n-aria="desks_help_title">?</button></h2>
+          <div class="palette" id="palette-desks"></div>
+          <button id="btn-block" class="btn wide" data-i18n="desk_block" data-i18n-title="desk_block_title">Bloque de mesas…</button>
+
+          <h2 data-i18n="add_furniture">Mobiliario</h2>
+          <div class="palette" id="palette-furniture"></div>
+
+          <p class="hint" data-i18n="hint_room"></p>
+        </section>
+
+        <section id="panel-students" class="panel" hidden>
+          <h2 data-i18n="students_add">Añadir alumnado</h2>
+          <textarea id="students-paste" rows="5" data-i18n-placeholder="students_paste_placeholder"></textarea>
+          <button id="btn-students-add" class="btn wide" data-i18n="students_add_btn">Añadir a la lista</button>
+
+          <div class="btn-grid">
+            <button id="btn-clear-seats" class="btn" data-i18n="students_clear_seats" data-i18n-title="students_clear_title">Levantar a todos</button>
+            <button id="btn-sort" class="btn" data-i18n="students_sort">Ordenar</button>
+            <button id="btn-delete-students" class="btn danger" data-i18n="students_delete_all">Borrar lista</button>
+          </div>
+
+          <h2 id="students-count"></h2>
+          <ul id="student-list" class="student-list"></ul>
+          <p class="hint" data-i18n="hint_students"></p>
+        </section>
+
+        <section id="panel-teams" class="panel" hidden>
+          <h2 data-i18n="teams_title">Equipos</h2>
+          <div class="field-row">
+            <label><span data-i18n="teams_size">Alumnos por equipo</span><input id="team-size" type="number" min="2" max="12" value="4"></label>
+            <label><span data-i18n="teams_kind">Tipo de equipos</span>
+              <select id="team-kind">
+                <option value="heterogeneos" data-i18n="teams_kind_hetero">Heterogéneos</option>
+                <option value="homogeneos" data-i18n="teams_kind_homo">Homogéneos</option>
+                <option value="esporadicos" data-i18n="teams_kind_random">Temporales</option>
+              </select></label>
+          </div>
+          <label class="stack"><span data-i18n="teams_leftovers">Si no salen justos</span>
+            <select id="team-leftovers">
+              <option value="agregar" data-i18n="teams_leftovers_spread">Se reparten entre los equipos</option>
+              <option value="grupoNuevo" data-i18n="teams_leftovers_new">Forman un equipo más pequeño</option>
+            </select></label>
+          <div class="btn-grid">
+            <button id="btn-teams-make" class="btn primary" data-i18n="teams_make" data-i18n-title="teams_make_title">Formar equipos</button>
+            <button id="btn-teams-seat" class="btn" data-i18n="teams_seat" data-i18n-title="teams_seat_title">Sentar por equipos</button>
+            <button id="btn-incompat" class="btn"></button>
+            <button id="btn-teams-clear" class="btn" data-i18n="teams_clear" data-i18n-title="teams_clear_title">Quitar equipos</button>
+          </div>
+          <button id="btn-shapes" class="btn wide" data-i18n="shapes_button" data-i18n-title="shapes_button_title">Formas de mesa para los equipos…</button>
+          <button id="btn-teams-room" class="btn wide" data-i18n="teams_room" data-i18n-title="teams_room_title">Montar el aula para los equipos</button>
+          <p class="hint" id="hint-teams"></p>
+
+          <h2 id="teams-count"></h2>
+          <ul id="team-list" class="student-list team-list"></ul>
+        </section>
+      </aside>
+
+      <section class="canvas-wrap">
+        <div class="room-bar" id="room-bar" role="group" data-i18n-aria="tab_room">
+          <div class="room-size" id="room-size">
+            <h2 data-i18n="tab_room">Aula</h2>
+            <label><span data-i18n="room_width">Ancho (m)</span>
+              <input id="room-w" type="number" min="2" max="40" step="0.1"></label>
+            <label><span data-i18n="room_depth">Fondo (m)</span>
+              <input id="room-h" type="number" min="2" max="40" step="0.1"></label>
+            <span class="room-bar-sep" aria-hidden="true"></span>
+            <div class="room-tools" id="room-tools"></div>
+            <button id="btn-room-clear" class="btn danger room-clear" data-i18n="room_clear" data-i18n-title="room_clear_title" hidden>Quitar las mesas</button>
+            <span class="room-bar-sep" aria-hidden="true"></span>
+          </div>
+          <div class="room-view">
+            <h2 data-i18n="view_title">Vista</h2>
+            <label class="check"><input id="show-people" type="checkbox" checked> <span data-i18n="view_people">Alumnado en su silla</span></label>
+            <label class="check"><input id="show-teams" type="checkbox" checked> <span data-i18n="view_teams">Equipos</span></label>
+            <label class="check"><input id="show-types" type="checkbox" checked> <span data-i18n="view_types">Tipología</span></label>
+            <label><span data-i18n="name_format">Nombre que se muestra</span>
+              <select id="name-format" class="name-format"></select></label>
+          </div>
+        </div>
+        <div class="zoom-bar">
+          <button id="btn-zoom-out" class="btn icon" data-i18n-title="zoom_out" title="Alejar">−</button>
+          <button id="btn-zoom-fit" class="btn icon" data-i18n-title="zoom_fit" title="Ajustar">⤢</button>
+          <button id="btn-zoom-in" class="btn icon" data-i18n-title="zoom_in" title="Acercar">+</button>
+        </div>
+        <p id="seat-count" class="seat-count"></p>
+        <div id="canvas" class="canvas">
+          <svg id="room-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+      </section>
+
+      <aside id="props" class="props">
+        <h2 data-i18n="props_title">Propiedades</h2>
+        <div id="props-body"></div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      © 2026 <a href="https://bilateria.org" target="_blank" rel="noopener">Juan José de Haro</a> ·
+      <span data-i18n="footer_code">Código bajo licencia</span>
+      <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">AGPL v3</a> ·
+      <span data-i18n="footer_content">contenidos bajo</span>
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" data-i18n-href="link_cc" target="_blank" rel="noopener">CC BY-SA 4.0</a>
+    </footer>
+  </div>
+
+  <!-- Diálogos -->
+  <dialog id="dlg-block">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="block_title">Bloque de mesas</h2>
+      <label class="stack"><span data-i18n="block_type">Tipo de mesa</span>
+        <select id="block-type"></select></label>
+      <div class="field-row">
+        <label><span data-i18n="block_rows">Filas</span><input id="block-rows" type="number" min="1" max="20" value="5"></label>
+        <label><span data-i18n="block_cols">Columnas</span><input id="block-cols" type="number" min="1" max="20" value="6"></label>
+      </div>
+      <div class="field-row">
+        <label><span data-i18n="block_gap_x">Separación entre columnas (cm)</span><input id="block-gap-x" type="number" min="0" max="500" value="40"></label>
+        <label><span data-i18n="block_gap_y">Separación entre filas (cm)</span><input id="block-gap-y" type="number" min="0" max="500" value="60"></label>
+      </div>
+      <label class="stack"><span data-i18n="block_angle">Giro del bloque (°)</span>
+        <input id="block-angle" type="number" min="-180" max="180" step="5" value="0"></label>
+      <p class="hint" data-i18n="block_angle_help"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" data-i18n="cancel">Cancelar</button>
+        <button value="ok" class="btn primary" data-i18n="block_create">Crear</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-shapes">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="shapes_title">Formas por defecto</h2>
+      <p class="hint" data-i18n="shapes_help"></p>
+      <div id="shapes-list"></div>
+      <div class="dialog-actions">
+        <button value="ok" class="btn primary" data-i18n="close">Cerrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-class">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="new_class_title">Nueva clase</h2>
+      <label class="stack"><span data-i18n="new_class_name">Nombre</span>
+        <input id="new-class-name" type="text" required></label>
+      <label class="stack"><span data-i18n="new_class_base">Plano</span>
+        <select id="new-class-base"></select></label>
+      <p class="hint" data-i18n="new_class_copy_help"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" formnovalidate data-i18n="cancel">Cancelar</button>
+        <button value="ok" class="btn primary" data-i18n="new_class_create">Crear clase</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-rename">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="class_rename">Cambiar nombre</h2>
+      <label class="stack"><span data-i18n="prompt_class_name">Nombre de la clase</span>
+        <input id="rename-input" type="text" required></label>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" formnovalidate data-i18n="cancel">Cancelar</button>
+        <button value="ok" class="btn primary" data-i18n="accept">Aceptar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-share">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="share_dialog_title">Compartir por enlace</h2>
+      <p class="hint" data-i18n="share_help"></p>
+      <ul id="share-classes" class="share-classes"></ul>
+      <label class="check"><input id="share-no-students" type="checkbox"> <span data-i18n="share_without_students"></span></label>
+      <label class="stack"><span data-i18n="share_link">Enlace</span>
+        <textarea id="share-url" rows="3" readonly></textarea></label>
+      <p id="share-info" class="hint"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" data-i18n="close">Cerrar</button>
+        <button type="button" id="btn-share-copy" class="btn primary" data-i18n="share_copy">Copiar enlace</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-receive">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="receive_title">Clases compartidas</h2>
+      <p id="receive-text"></p>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" data-i18n="cancel">Cancelar</button>
+        <button value="ok" class="btn primary" data-i18n="receive_add">Añadirlas</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-incompat">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="incompat_title">Alumnado que no debe coincidir</h2>
+      <p class="hint" data-i18n="incompat_help"></p>
+      <ul id="incompat-list" class="incompat-list"></ul>
+      <p class="hint" data-i18n="incompat_pick"></p>
+      <ul id="incompat-students" class="incompat-students"></ul>
+      <div class="dialog-actions">
+        <button type="button" id="btn-incompat-add" class="btn" disabled data-i18n="incompat_add">Añadir</button>
+        <button value="ok" class="btn primary" data-i18n="close">Cerrar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-print">
+    <form method="dialog" class="dialog-form">
+      <h2 data-i18n="print_title">Imprimir</h2>
+      <label class="stack"><span data-i18n="print_heading">Título</span>
+        <input id="print-heading" type="text"></label>
+      <label class="stack"><span data-i18n="print_margin">Márgenes (mm)</span>
+        <input id="print-margin" type="number" min="0" max="30" step="1" value="10"></label>
+      <label class="stack"><span data-i18n="print_paper">Papel</span>
+        <select id="print-paper">
+          <option value="portrait" data-i18n="print_paper_portrait"></option>
+          <option value="landscape" data-i18n="print_paper_landscape"></option>
+        </select></label>
+      <label class="check"><input id="print-date" type="checkbox" checked> <span data-i18n="print_show_date"></span></label>
+      <label class="check"><input id="print-unseated" type="checkbox"> <span data-i18n="print_show_unseated"></span></label>
+      <label class="check"><input id="print-teams" type="checkbox"> <span data-i18n="print_show_teams"></span></label>
+      <div class="dialog-actions">
+        <button value="cancel" class="btn" data-i18n="cancel">Cancelar</button>
+        <button value="ok" class="btn primary" data-i18n="print_go">Imprimir</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="print-area"></div>
+  <div id="desks-tip" class="tip" role="tooltip" data-i18n="desks_help" hidden></div>
+  <div id="drag-ghost" hidden></div>
+  <div id="context-menu" class="context-menu" role="menu" hidden></div>
+
+  <script src="locales/es.js"></script>
+  <script src="locales/ca.js"></script>
+  <script src="locales/gl.js"></script>
+  <script src="locales/eu.js"></script>
+  <script src="locales/pt.js"></script>
+  <script src="locales/fr.js"></script>
+  <script src="locales/de.js"></script>
+  <script src="locales/en.js"></script>
+  <script src="i18n.js"></script>
+  <script src="theme.js"></script>
+  <script src="team-engine.js"></script>
+  <!-- MiClase: puente con el plano de MiClase; va antes de app.js (modificación MiClase) -->
+  <script src="miclase-puente.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

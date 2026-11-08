@@ -96,9 +96,15 @@ y solo se usan si el docente pulsa expresamente el botón de descargarlo.
 
 - **IndexedDB** (base `miclase_db`): el cuaderno completo. Quince tablas con
   clases, alumnado, calificaciones, programación, instrumentos, rúbricas,
-  evidencias, asistencia y plano de aula.
-- **localStorage**: solo preferencias de interfaz y el rango de identificadores
-  del dispositivo. Ningún dato personal.
+  evidencias, asistencia y plano de aula. El plano dibujado con AulaMap (de
+  Juan José de Haro, copiado dentro de la app en `aulamap/`) se guarda en el
+  registro del plano del grupo, sin nombres del alumnado: solo sus
+  identificadores internos, su equipo y su tipología A·B·C si el docente la
+  marca. AulaMap se abre desde la propia app, no carga nada de fuera ni llama
+  a ningún servidor (añadido el 08/11/2026).
+- **localStorage**: solo preferencias de interfaz (también el idioma y el tema
+  de AulaMap) y el rango de identificadores del dispositivo. Ningún dato
+  personal.
 - **sessionStorage**: el testigo de sesión mientras dura, si se ha iniciado
   sesión. Se borra al cerrar el navegador.
 

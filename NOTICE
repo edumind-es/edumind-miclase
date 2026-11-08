@@ -20,3 +20,16 @@ Third-party fonts bundled in frontend/public/fonts/ (used by the printed
 
 The OFL requires the license notice to travel with the font files; it does
 not affect the license of this application.
+
+Third-party software bundled in frontend/public/aulamap/ (the classroom plan):
+
+  - AulaMap         (c) 2026 Juan José de Haro (jjdeharo)
+                    https://aulamap.github.io
+                    https://github.com/aulamap/aulamap.github.io
+                    Code under GNU AGPL v3, content under CC BY-SA 4.0.
+
+AulaMap is integrated with its author's permission (8 November 2026), on
+the condition that this part keeps the AGPL licence and that AulaMap is
+credited with its link. That folder, including MiClase's changes to it, is
+licensed under AGPL v3 ONLY: the EUPL-1.2 option of this project does not
+apply to it. Changes are listed in frontend/public/aulamap/LEEME-MICLASE.md.

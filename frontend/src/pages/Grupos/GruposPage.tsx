@@ -498,7 +498,7 @@ function PlanoYQR({ grupo, modoAnon }: { grupo: any; modoAnon: boolean }) {
         </div>
       </div>
 
-      <PlanoClase grupoId={grupo.id} alumnos={grupo.alumnos || []} modoAnon={modoAnon} />
+      <PlanoClase grupoId={grupo.id} nombreGrupo={grupo.nombre} alumnos={grupo.alumnos || []} modoAnon={modoAnon} />
     </>
   )
 }

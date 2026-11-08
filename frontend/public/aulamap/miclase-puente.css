@@ -1,0 +1,34 @@
+/* AulaMap dentro de EDUmind MiClase (añadido por MiClase, 2026-11-08; AGPL v3).
+   Solo actúa con la clase .miclase que pone miclase-puente.js. */
+
+/* Una clase de AulaMap = un grupo de MiClase: no se crean ni se borran
+   clases aquí. Las copias y el compartir son los de MiClase. */
+.miclase #link-about,
+.miclase .class-picker,
+.miclase #btn-export,
+.miclase #btn-import,
+.miclase #btn-share { display: none !important; }
+
+/* La lista del alumnado viene de MiClase y se cambia allí. */
+.miclase #panel-students > h2:first-child,
+.miclase #students-paste,
+.miclase #btn-students-add,
+.miclase #btn-delete-students,
+.miclase #student-list .del { display: none !important; }
+.miclase #student-list input { pointer-events: none; }
+.miclase #panel-students::before {
+  content: "La lista del alumnado viene de MiClase: se cambia en «Mis clases» → Alumnado.";
+  display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px;
+}
+
+/* Vista: solo el plano. Tocar a un alumno abre su evaluación. */
+.miclase-vista .topbar,
+.miclase-vista .sidebar,
+.miclase-vista .props,
+.miclase-vista .room-bar,
+.miclase-vista .zoom-bar,
+.miclase-vista .footer { display: none !important; }
+.miclase-vista .layout,
+.miclase-vista .layout.no-props { grid-template-columns: 1fr !important; }
+.miclase-vista .canvas-wrap { height: 100vh !important; }
+.miclase-vista [data-seat] { cursor: pointer; }

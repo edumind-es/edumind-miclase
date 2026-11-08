@@ -35,6 +35,7 @@ edumind_miclase/
 │   ├── src/api.ts    ← resuelve la URL del API (relativa en web, absoluta en nativo)
 │   ├── src/informes/ ← lamina.ts (canon EDUmind) · datos.ts · documentos.ts
 │   ├── public/fonts/ ← Outfit e IBM Plex Mono (OFL-1.1) para los informes
+│   ├── public/aulamap/ ← AulaMap (© Juan José de Haro, AGPL v3 SOLO, con su permiso): el plano de clase
 │   ├── src/nativo/   ← impresora.ts: plugin Impresora (PDF/AirPrint en iOS; iframe en web)
 │   ├── src/utils/compartir.ts ← descargarFichero(): la ÚNICA salida de ficheros (web: descarga; nativo: hoja de compartir)
 │   ├── capacitor.config.ts
@@ -857,6 +858,30 @@ edumind_miclase/
   acierto por competencia (`competenciasDeLaPrueba`). El service worker pide
   el currículo primero a la red (`NetworkFirst`, 4 s): con la caché delante,
   lo sembrado de nuevo no llegaba hasta la segunda apertura.
+- **El plano de clase es AulaMap, de Juan José de Haro (jjdeharo), y se le
+  cita.** Copia en `frontend/public/aulamap/` (commit y cambios en
+  `LEEME-MICLASE.md`), integrada con permiso de su autor (8/11/2026) a
+  condición de que esa carpeta siga en **AGPL v3 solo** —la opción EUPL de
+  MiClase no la cubre: `LICENSE` y `NOTICE` lo dicen— y de que AulaMap salga
+  en los créditos con su enlace. La línea «Plano basado en AulaMap, de Juan
+  José de Haro (jjdeharo)» con enlaces (`[data-credito-aulamap]`) va siempre
+  a la vista en `PlanoClase.tsx`; no se quita. AulaMap se abre en un iframe
+  del MISMO origen: `PlanoClase` deja en `window.MiClaseAulaMap` la clase y
+  cómo guardarla, y `miclase-puente.js` la pasa a `app.js`, que solo lleva
+  dos ganchos (`loadState`/`saveState`): dentro de MiClase nunca escribe en
+  `localStorage`. La traducción es pura (`db/planoAulaMap.ts`,
+  `plano-aulamap.test.ts`): un grupo = una clase de AulaMap; el alumnado lo
+  manda MiClase (id `a<id>`; bajas se levantan, altas entran sin sentar) y lo
+  guardado en `Plano.aulamap` (sin índice, sin esquema nuevo) **no lleva
+  nombres**, que se ponen al abrir —el modo anónimo pone el código—.
+  `guardarPlanoAulaMap` solo escribe si cambia. Un grupo sin plano de AulaMap
+  estrena uno con la cuadrícula vieja (`filas`×`cols` y `asientos`, que ya
+  no se escriben). En vista, tocar a un alumno abre `/escanear?alumno=`; los
+  QR de mesa no dependen del plano. Dentro de MiClase se esconden el selector
+  de clases, exportar, importar, compartir y la edición de la lista
+  (`miclase-puente.css`). Imprimir es el `window.print()` de AulaMap: en la
+  app nativa no imprime todavía. `plano-aulamap-ui.test.mjs` comprueba la
+  cita, que ninguna petición sale del origen y AulaMap suelto.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
