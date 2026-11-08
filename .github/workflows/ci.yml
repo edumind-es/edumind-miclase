@@ -24,17 +24,27 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # La misma versión mayor que el servidor (Node 22). pdf.js 6 exige
+      # ≥ 22.13 para la prueba que lo carga en Node.
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+            backend/package-lock.json
 
       # Tres package.json distintos: raíz (pruebas), frontend y backend.
       # No hay workspaces, así que se instalan uno a uno.
+      # Solo `npm ci`: si el package-lock no cuadra con el package.json, el CI
+      # tiene que fallar. Caer a `npm install` probaba otras versiones que
+      # las fijadas y lo daba por bueno.
       - name: Instalar dependencias
         run: |
-          npm ci || npm install
-          npm --prefix frontend ci || npm --prefix frontend install
-          npm --prefix backend ci || npm --prefix backend install
+          npm ci
+          npm --prefix frontend ci
+          npm --prefix backend ci
 
       # El lector de PROENS pasa el PDF por pdftotext (poppler). El runner de
       # ubuntu-latest no lo trae de serie, a diferencia del servidor.
@@ -61,3 +71,24 @@ jobs:
           name: capturas
           path: /tmp/miclase-pruebas-*/tiros/
           if-no-files-found: ignore
+
+  # Avisos de seguridad de lo que llega a producción: el backend que corre en
+  # el servidor y lo que el frontend mete en la app. Las herramientas de
+  # compilación (--omit=dev) no salen del ordenador que compila.
+  #
+  # Va aparte y NO es un check obligatorio de main: un aviso nuevo en una
+  # librería no debe bloquear el trabajo de nadie, pero se ve en rojo en
+  # cada PR hasta que se arregla. Solo cuentan los altos y críticos.
+  auditoria:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: npm audit (dependencias de producción)
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm --prefix frontend audit --omit=dev --audit-level=high
+          npm --prefix backend audit --omit=dev --audit-level=high

@@ -1,70 +1,59 @@
-# Dependabot: un PR al mes por ecosistema, con todo agrupado.
+# Dependabot: política de dependencias de MiClase (resumen en DESPLIEGUE.md,
+# «Dependencias»).
 #
-# Las actualizaciones de SEGURIDAD no dependen de esta programación: llegan por
-# su propio canal en cuanto se publica el aviso. Bajar la cadencia aquí no
-# retrasa ningún parche.
+# - Un PR al mes con TODAS las menores y parches de los tres package.json
+#   (raíz, frontend y backend). Si el CI pasa, se fusiona solo
+#   (dependabot-automerge.yml).
+# - Cada versión MAYOR llega en su propio PR y la revisa una persona. Antes
+#   iban agrupadas y una que rompía (pdf.js 4 → 6) frenaba a la otra
+#   (vite-plugin-pwa 2), que no rompía nada.
+# - `cooldown`: una versión no se propone hasta pasados unos días desde su
+#   publicación. Las versiones maliciosas o rotas suelen retirarse en ese
+#   plazo.
 #
-# Antes esto abría hasta 5 PR por ecosistema cada semana y las versiones
-# mayores iban sueltas: 49 PR abiertos a la vez en la organización, y un correo
-# por cada uno.
+# Las actualizaciones de SEGURIDAD no dependen de nada de esto: llegan por su
+# propio canal en cuanto se publica el aviso, sin esperar al mes ni al cooldown.
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/"
+    directories: ["/", "/frontend", "/backend"]
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 2
+      timezone: "Europe/Madrid"
+    # El de menores cuenta como uno; el resto, mayores sueltas.
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+      semver-patch-days: 3
     commit-message:
       prefix: "chore(deps)"
     groups:
       menores-y-parches:
         update-types: ["minor", "patch"]
-      mayores:
-        # Agrupadas también, pero aparte: son las que rompen y se revisan
-        # con calma. Si una necesita atención propia, se saca de aquí.
+      # Los paquetes de Capacitor tienen que ir en la misma versión mayor o
+      # el proyecto nativo no compila. Una mayor de Capacitor se prueba
+      # además en el Mac (DESPLIEGUE.md, «Compilar en el Mac»).
+      capacitor-mayor:
+        patterns: ["@capacitor/*"]
         update-types: ["major"]
-
-  - package-ecosystem: "npm"
-    directory: "/frontend"
-    schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 2
-    commit-message:
-      prefix: "chore(deps)"
-    groups:
-      menores-y-parches:
-        update-types: ["minor", "patch"]
-      mayores:
-        # Agrupadas también, pero aparte: son las que rompen y se revisan
-        # con calma. Si una necesita atención propia, se saca de aquí.
+      react-mayor:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
         update-types: ["major"]
-
-  - package-ecosystem: "npm"
-    directory: "/backend"
-    schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 2
-    commit-message:
-      prefix: "chore(deps)"
-    groups:
-      menores-y-parches:
-        update-types: ["minor", "patch"]
-      mayores:
-        # Agrupadas también, pero aparte: son las que rompen y se revisan
-        # con calma. Si una necesita atención propia, se saca de aquí.
-        update-types: ["major"]
+    # ignore: aquí se aparca una mayor que no se puede adoptar todavía,
+    # SIEMPRE con el motivo al lado y la fecha. Ahora no hay ninguna.
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+      timezone: "Europe/Madrid"
     open-pull-requests-limit: 2
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: "chore(ci)"
     groups:
-      menores-y-parches:
-        update-types: ["minor", "patch"]
-      mayores:
-        # Agrupadas también, pero aparte: son las que rompen y se revisan
-        # con calma. Si una necesita atención propia, se saca de aquí.
-        update-types: ["major"]
+      # Las acciones del CI cambian poco y casi nunca rompen: un solo PR.
+      acciones:
+        patterns: ["*"]

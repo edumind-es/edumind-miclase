@@ -19,9 +19,11 @@ cd /var/www/edumind_miclase
 # 1. Traer los cambios a main (ejemplo: rama de trabajo de Claude)
 git merge claude/fervent-lederberg-85adfe
 
-# 2. Dependencias — solo si cambió algún package.json
-(cd backend && npm install)
-(cd frontend && npm install)
+# 2. Dependencias — solo si cambió algún package-lock.json
+#    `npm ci`, no `npm install`: instala exactamente lo que probó el CI.
+npm ci
+(cd backend && npm ci)
+(cd frontend && npm ci)
 
 # 3. Currículo — solo si cambiaron los JSON de curriculum/ o el schema
 npm run seed
@@ -110,6 +112,35 @@ Para saltárselo puntualmente: `--no-verify` en git, `--sin-pruebas` al desplega
 `.github/workflows/ci.yml` corre exactamente lo mismo, y está listo para
 cuando el repositorio suba a GitHub. **No despliega**: el despliegue es
 siempre una decisión manual.
+
+## Dependencias
+
+Política (noviembre 2026; configuración en `.github/dependabot.yml`):
+
+- **Menores y parches**: Dependabot abre un PR al mes con todas las de los
+  tres `package.json` (raíz, frontend y backend), una semana después de cada
+  publicación. Si `pruebas` pasa en el CI, se fusiona solo
+  (`dependabot-automerge.yml`). Nadie tiene que revisarlo. Por eso la
+  protección de main exige el check `pruebas` pero **no** «rama al día con
+  main» (quitado el 8/11/2026): con esa casilla el PR se quedaba esperando
+  (`BEHIND`) en cuanto main avanzaba y nunca llegaba a fusionarse. No la
+  vuelvas a marcar sin cambiar esto.
+- **Mayores**: un PR por paquete (Capacitor y React van en bloque), dos
+  semanas después de publicarse. Lo revisa una persona: leer los cambios
+  incompatibles, `npm test` en verde y, si toca Capacitor, compilar en el
+  Mac. La que no se pueda adoptar se aparca con un `ignore` en
+  `dependabot.yml` **con el motivo y la fecha**, y se cierra el PR.
+- **Seguridad**: los avisos de GitHub llegan al momento, sin esperar al mes.
+  El trabajo `auditoria` del CI pasa `npm audit` sobre lo que llega a
+  producción (avisos altos y críticos); no bloquea, pero se ve en rojo.
+- **Llegar a producción**: fusionar no despliega. Tras fusionar, en el
+  servidor: `npm ci` en raíz, `frontend/` y `backend/` (paso 2 de arriba) y
+  `./desplegar.sh`, que reinicia el backend con `sudo` si cambió `backend/`.
+  Si subió `playwright`, antes `npx playwright install chromium`: cada
+  versión trae su Chromium y sin él `npm test` (y por tanto el despliegue)
+  falla en todas las suites de interfaz.
+- Node: el servidor y el CI usan Node 22. Si una dependencia exigiera otra
+  versión mayor, se decide aparte: no se sube Node del sistema de paso.
 
 ## Desplegar
 

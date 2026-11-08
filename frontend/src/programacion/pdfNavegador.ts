@@ -15,10 +15,13 @@ export async function textoDePdf(datos: ArrayBuffer): Promise<string> {
     import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'),
   ])
   pdfjs.GlobalWorkerOptions.workerSrc = urlWorker
-  const doc = await pdfjs.getDocument({ data: new Uint8Array(datos), isEvalSupported: false }).promise
+  // Desde pdf.js 6 se libera la tarea de carga, no el documento (que ya no
+  // tiene `destroy`): así se cierra también el worker. `isEvalSupported`
+  // desapareció en la v6 porque pdf.js ya no genera código con eval.
+  const tarea = pdfjs.getDocument({ data: new Uint8Array(datos) })
   try {
-    return await textoDeDocumento(doc)
+    return await textoDeDocumento(await tarea.promise)
   } finally {
-    doc.destroy()
+    await tarea.destroy()
   }
 }

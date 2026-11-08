@@ -80,7 +80,7 @@ export default defineConfig({
     }),
   ],
   resolve: {
-    alias: { '@': resolve(__dirname, 'src') },
+    alias: { '@': resolve(import.meta.dirname, 'src') },
   },
   optimizeDeps: {
     exclude: ['@mlc-ai/web-llm'],
@@ -109,7 +109,7 @@ export default defineConfig({
       // `?url` (devuelve el fichero en crudo) y el worker de pdf.js llegaba sin
       // URL: «Invalid workerSrc type». Se permite la ruta real; en el checkout
       // principal ya está dentro de la raíz y no cambia nada.
-      allow: [searchForWorkspaceRoot(process.cwd()), realpathSync(resolve(__dirname, 'node_modules'))],
+      allow: [searchForWorkspaceRoot(process.cwd()), realpathSync(resolve(import.meta.dirname, 'node_modules'))],
     },
     proxy: {
       // VITE_API_TARGET permite apuntar a un backend de pruebas sin tocar
