@@ -1,0 +1,1945 @@
+{
+  "meta": {
+    "comunidad": "Baleares",
+    "etapa": "secundaria",
+    "asignatura": "matematiques",
+    "asignatura_nombre": "Matemàtiques",
+    "ciclo_origen": "Quart curs",
+    "fuente": "Illes Balears · Secundaria · Matemàtiques · Quart curs.xlsx",
+    "generado": "2026-11-08",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Interpretar, modelitzar i resoldre problemes de la vida quotidiana i propis de les matemàtiques, aplicant diferents estratègies i formes de raonament, per explorar diferents maneres de conducta i obtenir possibles solucions.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "STEM4",
+        "CD2",
+        "CPSAA5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Analitzar les solucions d’un problema usant diferents tècniques i eines, avaluant les respostes obtingudes, per verificar-ne la validesa i idoneïtat des d’un punt de vista matemàtic i la repercussió global.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD2",
+        "CPSAA4",
+        "CC3",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Formular i comprovar conjectures senzilles o plantejar problemes de manera autònoma, reconeixent el valor del raonament i l’argumentació, per generar nou coneixement.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilitzar els principis del pensament computacional organitzant dades, descomponent en parts, reconeixent patrons, interpretant, modificant i creant algorismes per modelitzar situacions i resoldre problemes de manera eficaç.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CD5",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Reconèixer i utilitzar connexions entre els diferents elements matemàtics interconnectant conceptes i procediments per desenvolupar una visió de les matemàtiques com un tot integrat.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM3",
+        "CD2",
+        "CD3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Identificar les matemàtiques implicades en altres matèries i en situacions reals, susceptibles de ser tractades en termes matemàtics, interrelacionant conceptes i procediments per aplicar-les en situacions diverses.",
+      "descriptores_ids": [
+        "STEM1",
+        "STEM2",
+        "CD3",
+        "CD5",
+        "CC4",
+        "CE2",
+        "CE3",
+        "CCEC1"
+      ]
+    },
+    {
+      "id": "CE7",
+      "descripcion": "Representar, de manera individual i col·lectiva, conceptes, procediments, informació i resultats matemàtics usant diferents tecnologies, per visualitzar idees i estructurar processos matemàtics.",
+      "descriptores_ids": [
+        "STEM3",
+        "CD1",
+        "CD2",
+        "CD5",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE8",
+      "descripcion": "Comunicar de manera individual i col·lectiva conceptes, procediments i arguments matemàtics usant llenguatge oral, escrit o gràfic, utilitzant la terminologia matemàtica apropiada, per donar significat i coherència a les idees matemàtiques.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "CP1",
+        "STEM2",
+        "STEM4",
+        "CD2",
+        "CD3",
+        "CE3",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE9",
+      "descripcion": "Desenvolupar destreses personals, identificant i gestionant emocions, posant en pràctica estratègies d’acceptació de l’error com a part del procés d’aprenentatge i adaptant-se davant situacions d’incertesa, per millorar la perseverança en la consecució d’objectius i el gaudi en l’aprenentatge de les matemàtiques.",
+      "descriptores_ids": [
+        "STEM5",
+        "CPSAA1",
+        "CPSAA4",
+        "CPSAA5",
+        "CE2",
+        "CE3"
+      ]
+    },
+    {
+      "id": "CE10",
+      "descripcion": "Desenvolupar destreses socials reconeixent i respectant les emocions i experiències dels altres, participant activament i reflexivament en projectes en equips heterogenis amb rols assignats per construir una identitat positiva com a estudiant de matemàtiques, fomentar el benestar personal i grupal, i crear relacions saludables.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "CPSAA1",
+        "CPSAA3",
+        "CC2",
+        "CC3"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Reformular de manera verbal i gràfica problemes matemàtics, interpretant les dades, les relacions entre elles i les preguntes plantejades.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Seleccionar eines i estratègies elaborades en la resolució de problemes, valorant-ne la eficàcia i idoneïtat.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Obtenir totes les possibles solucions matemàtiques d’un problema mobilitzant els coneixements i utilitzant les eines tecnològiques necessàries.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Comprovar la correcció matemàtica de les solucions d’un problema.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Seleccionar les solucions òptimes d’un problema valorant tant la correcció matemàtica com les seves implicacions des de diferents perspectives (de gènere, de sostenibilitat, de consum responsable…).",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Formular, comprovar i investigar conjectures de forma guiada estudiant patrons, propietats i relacions.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Crear variants d’un problema donat, modificant-ne alguna de les dades i observant la relació entre els diferents resultats obtinguts.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Emprar eines tecnològiques adequades en la investigació i comprovació de conjectures o problemes.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Reconèixer i investigar patrons, organitzar dades i descompondre un problema en parts més simples facilitant-ne la interpretació i el tractament computacional.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Modelitzar situacions i resoldre problemes de manera eficaç interpretant, modificant i creant algorismes senzills. Identificar les passes per resoldre un problema de manera estructurada. Modelitzar situacions mitjançant la creació d’algorismes. Resoldre problemes de manera eficaç interpretant i modificant algorismes coneguts. CE 5 Reconèixer i utilitzar connexions entre els diferents elements matemàtics interconnectant conceptes i procediments per desenvolupar una visió de les matemàtiques com un tot integrat.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Reconèixer les relacions entre els coneixements i experiències matemàtiques, formant un tot coherent.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Analitzar i posar en pràctica connexions entre diferents processos matemàtics, tot aplicant coneixements i experiències prèvies.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Proposar situacions susceptibles de ser formulades i resoltes mitjançant eines i estratègies matemàtiques, establint i aplicant connexions entre el món real i les matemàtiques, fent servir els processos inherents a la recerca científica i matemàtica: inferir, mesurar, comunicar, classificar i predir.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "Analitzar i aplicar connexions coherents entre les matemàtiques i altres matèries realitzant una anàlisi crítica.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.3",
+      "objetivo_id": "CE6",
+      "descripcion": "Valorar l’aportació de les matemàtiques al progrés de la humanitat i la seva contribució a la superació dels reptes que demanda la societat actual.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.4",
+      "objetivo_id": "CE6",
+      "descripcion": "Comprendre la realitat de les Illes Balears a partir de l’estudi de problemes matemàtics contextualitzats.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.1",
+      "objetivo_id": "CE7",
+      "descripcion": "Representar matemàticament la informació més rellevant d’un problema, conceptes, procediments i resultats matemàtics visualitzant idees i estructurant processos matemàtics.",
+      "peso": 1
+    },
+    {
+      "id": "CE7.2",
+      "objetivo_id": "CE7",
+      "descripcion": "Seleccionar entre diferents eines, incloses les digitals, i formes de representació (pictòrica, gràfica, verbal o simbòlica) valorant-ne la utilitat per compartir informació.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.1",
+      "objetivo_id": "CE8",
+      "descripcion": "Comunicar idees, conclusions, conjectures i raonaments matemàtics, utilitzant diferents mitjans, inclosos els digitals, amb coherència, claredat i terminologia apropiada.",
+      "peso": 1
+    },
+    {
+      "id": "CE8.2",
+      "objetivo_id": "CE8",
+      "descripcion": "Reconèixer i emprar el llenguatge matemàtic present en la vida quotidiana comunicant-lo amb precisió i rigor.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.1",
+      "objetivo_id": "CE9",
+      "descripcion": "Gestionar les emocions pròpies i desenvolupar l’autoconcepte matemàtic com a eina generadora d’expectatives positives davant nous reptes matemàtics.",
+      "peso": 1
+    },
+    {
+      "id": "CE9.2",
+      "objetivo_id": "CE9",
+      "descripcion": "Mostrar una actitud positiva i perseverant en fer front a les diferents situacions d’aprenentatge de les matemàtiques, acceptant la crítica raonada.",
+      "peso": 1
+    },
+    {
+      "id": "CE10.1",
+      "objetivo_id": "CE10",
+      "descripcion": "Col·laborar activament i construir relacions treballant en les matemàtiques en equips heterogenis, respectant diferents opinions, comunicant-se de manera efectiva, pensant de manera crítica, creativa i realitzant judicis informats.",
+      "peso": 1
+    },
+    {
+      "id": "CE10.2",
+      "objetivo_id": "CE10",
+      "descripcion": "Participar en el repartiment de tasques de l’equip, aportant valor, afavorint la inclusió, l’escolta activa, responsabilitzant-se del rol assignat i de la pròpia contribució a l’equip.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "› Sentit Socioafectiu"
+    },
+    {
+      "id": "B2",
+      "titulo": "› Sentit Numèric"
+    },
+    {
+      "id": "B3",
+      "titulo": "› Sentit De La Mesura"
+    },
+    {
+      "id": "B4",
+      "titulo": "› Sentit Espacial"
+    },
+    {
+      "id": "B5",
+      "titulo": "› Sentit Algebraic"
+    },
+    {
+      "id": "B6",
+      "titulo": "› Sentit Estocàstic"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Estratègies de foment de la curiositat, la iniciativa, la perseverança i la resiliència en l’aprenentatge de les matemàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Gestió emocional: emocions que intervenen en l’aprenentatge de les matemàtiques. Autoconsciència i autoregulació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Estratègies de foment de la flexibilitat cognitiva: apertura a canvis d’estratègia, identificació i transformació de l’error en oportunitat d’aprenentatge.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Selecció i desenvolupament de tècniques cooperatives per a l’optimització del treball en equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Selecció i desenvolupament de tècniques cooperatives per a compartir i construir coneixement matemàtic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Ús de conductes empàtiques i estratègies per a la gestió i resolució de conflictes que puguin sorgir dins d’un equip de treball.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Actituds inclusives i acceptació de la diversitat present a l’aula i en la societat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "La contribució de les matemàtiques al desenvolupament dels diferents àmbits del coneixement humà des d’una perspectiva de gènere.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Analitzar i seleccionar la informació rellevant en els enunciats dels problemes matemàtics independentment de si es presenten en format numèric, gràfic, algebraic o textual i comprendre les qüestions plantejades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Organitzar les dades i les relacions entre elles amb les estratègies adequades (simplificar el problema, elaborar taules, construir gràfics, esquemes, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Reformular el problema mitjançant diferents representacions (verbal, algebraica, gràfica, geomètrica, etc.) per facilitar-ne la comprensió i resolució.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i interpretar les relacions existents entre les dades inicials en la resolució de problemes matemàtics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i justificar possibles restriccions entre les dades i variables del problema tenint en compte les condicions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Expressar la relació entre les dades i els conceptes matemàtics associats mitjançant models algebraics, funcions, taules o diagrames.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Seleccionar i aplicar estratègies apropiades per a la resolució de problemes, com l’estimació, l’assaig i error, la simplificació, l’ús de patrons i l’analogia amb altres problemes coneguts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar models matemàtics senzills (equacions, sistemes, taules, gràfics, esquemes) per representar la situació problemàtica de manera comprensible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar operacions, fórmules i algorismes adequats a la naturalesa del problema (aritmètica, algebraica, geomètrica, estadística, probabilística, etc.), assegurant-se que es fan servir de manera correcta i eficient.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer les dades generades durant el procés de resolució per ajustar o modificar l’estratègia, si cal, i així avançar cap a una solució coherent.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Valorar l’eficàcia i la idoneïtat de les diferents estratègies de resolució d’un mateix problema observant la rapidesa, la simplicitat, la precisió, l’eficàcia i avaluar si seria necessari plantejar una alternativa més senzilla o intuïtiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Obtenir la solució o les solucions d’un problema aplicant els coneixements adquirits de",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Interpretar els resultats dins el context del problema, comprovant si tenen sentit des d’un",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "Expressar la resposta de manera clara i justificada, assegurant que respongui a les",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar correctament eines tecnològiques bàsiques com la calculadora científica, fulls de",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "Explicar amb claredat el procés de resolució, fent servir un llenguatge precís però",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "Revisar els càlculs i procediments utilitzats per detectar possibles errors operatius o conceptuals, assegurant la coherència del procés seguit.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.26",
+      "bloque_id": "B1",
+      "descripcion": "Verificar la solució mitjançant mètodes alternatius senzills, com l’ús d’operacions inverses, proves numèriques o comparació amb exemples similars.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.27",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar eines tecnològiques bàsiques (calculadora científica, fulls de càlcul, aplicacions interactives) per comprovar resultats de manera eficient.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.28",
+      "bloque_id": "B1",
+      "descripcion": "Localitzar, explicar i corregir errors detectats en els càlculs, ajustant l’estratègia si és necessari.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.29",
+      "bloque_id": "B1",
+      "descripcion": "Justificar la correcció de la solució amb un llenguatge clar i comprensible, adequat al context del problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.30",
+      "bloque_id": "B1",
+      "descripcion": "Comprovar la validesa i correcció matemàtica de les solucions trobades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.31",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar mètodes de comprovació matemàtica (per exemple: substitució de valors, mètodes",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.32",
+      "bloque_id": "B1",
+      "descripcion": "Descartar les solucions que no encaixen a les condicions i restriccions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.33",
+      "bloque_id": "B1",
+      "descripcion": "Avaluar, si és el cas, les solucions des de la perspectiva escaient (de gènere, de",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.34",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i analitzar patrons, regularitats, propietats i relacions en les situacions plantejades, mitjançant l’observació, l’anàlisi de dades, la indagació, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.35",
+      "bloque_id": "B1",
+      "descripcion": "Formular conjectures de forma guiada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.36",
+      "bloque_id": "B1",
+      "descripcion": "Verificar conjectures provant-les amb diferents exemples, ajustant-les si cal, o refutar-les mitjançant contraexemples.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.37",
+      "bloque_id": "B1",
+      "descripcion": "Plantejar variants de problemes ja resolts, modificant-ne alguna de les dades o condicions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.38",
+      "bloque_id": "B1",
+      "descripcion": "Descobrir l’efecte d’aquestes modificacions en la resolució del problema i la relació entre els",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.39",
+      "bloque_id": "B1",
+      "descripcion": "Emprar eines tecnològiques de manera eficient per facilitar els càlculs en la resolució de",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.40",
+      "bloque_id": "B1",
+      "descripcion": "Consultar, esporàdicament, recursos en línia per trobar problemes similars o relacionats o",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.41",
+      "bloque_id": "B1",
+      "descripcion": "Investigar, identificar i descriure patrons a partir d’exemples concrets.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.42",
+      "bloque_id": "B1",
+      "descripcion": "Organitzar les dades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.43",
+      "bloque_id": "B1",
+      "descripcion": "Descompondre un problema en parts més simples facilitant-ne la interpretació i la implementació i resolució mitjançant algorismes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.44",
+      "bloque_id": "B1",
+      "descripcion": "Identificar les passes per resoldre un problema de manera estructurada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.45",
+      "bloque_id": "B1",
+      "descripcion": "Modelitzar situacions mitjançant la creació d’algorismes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.46",
+      "bloque_id": "B1",
+      "descripcion": "Resoldre problemes de manera eficaç interpretant i modificant algorismes coneguts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.47",
+      "bloque_id": "B1",
+      "descripcion": "Descobrir la relació entre diferents coneixements i experiències matemàtiques (per exemple, la relació i la coherència de l’equació algebraica d’una funció i el seu gràfic).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.48",
+      "bloque_id": "B1",
+      "descripcion": "Consolidar l’aprenentatge de coneixements matemàtics i les relacions entre ells formant un tot coherent.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.49",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i analitzar connexions entre diferents coneixements i processos matemàtics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.50",
+      "bloque_id": "B1",
+      "descripcion": "Emprar els coneixements i processos matemàtics fruit d’experiències prèvies de manera",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.51",
+      "bloque_id": "B1",
+      "descripcion": "Proposar situacions reals a les quals es poden aplicar els coneixements i estratègies matemàtics que es treballen a l’aula (per exemple, plantejar casos reals que es puguin resoldre amb un sistema d’equacions concret).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.52",
+      "bloque_id": "B1",
+      "descripcion": "Mesurar magnituds en elements del món real (quantitats, àrees, volums, distàncies, temperatures…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.53",
+      "bloque_id": "B1",
+      "descripcion": "Fer estimacions, prediccions i classificacions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.54",
+      "bloque_id": "B1",
+      "descripcion": "Comunicar correctament i rigorosament les diferents accions i resultats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.55",
+      "bloque_id": "B1",
+      "descripcion": "Identificar situacions d’altres matèries que es poden interpretar i modelitzar",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.56",
+      "bloque_id": "B1",
+      "descripcion": "Enriquir els coneixements matemàtics amb coneixements d’altres matèries (per exemple,",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.57",
+      "bloque_id": "B1",
+      "descripcion": "Resoldre problemes interdisciplinaris fent, si escau, una anàlisi crítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.58",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer l’aportació de les matemàtiques al progrés de la humanitat i de la ciència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.59",
+      "bloque_id": "B1",
+      "descripcion": "Emprar els coneixements i eines matemàtiques per entendre els reptes actuals de la",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.60",
+      "bloque_id": "B1",
+      "descripcion": "Ser conscient de les limitacions de la ciència i de les matemàtiques a l’hora de resoldre tots",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.61",
+      "bloque_id": "B1",
+      "descripcion": "Conèixer els elements científics i matemàtics propis de la història i cultura de les illes",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.62",
+      "bloque_id": "B1",
+      "descripcion": "Interpretar la realitat geogràfica, mediambiental, demogràfica, social i econòmica usant",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.63",
+      "bloque_id": "B1",
+      "descripcion": "Resoldre problemes matemàtics contextualitzats a les Illes Balears.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.64",
+      "bloque_id": "B1",
+      "descripcion": "Destriar la informació rellevant i la irrellevant de l’enunciat d’un problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.65",
+      "bloque_id": "B1",
+      "descripcion": "Representar i resumir la informació i conceptes rellevants mitjançant gràfics, diagrames o altres tipus de representacions matemàtiques per facilitar-ne la comprensió.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.66",
+      "bloque_id": "B1",
+      "descripcion": "Visualitzar idees i plantejar procediments i processos de manera estructurada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.67",
+      "bloque_id": "B1",
+      "descripcion": "Organitzar i estructurar els processos matemàtics de manera coherent per facilitar la resolució de problemes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.68",
+      "bloque_id": "B1",
+      "descripcion": "Presentar els resultats de manera clara.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.69",
+      "bloque_id": "B1",
+      "descripcion": "Triar les eines més adequades per a la representació de la informació (per exemple: llapis i",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.70",
+      "bloque_id": "B1",
+      "descripcion": "Valorar i seleccionar les diferents formes de representació (pictòrica, gràfica, verbal o",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.71",
+      "bloque_id": "B1",
+      "descripcion": "Fer un ús justificat de les eines digitals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.72",
+      "bloque_id": "B1",
+      "descripcion": "Conèixer la terminologia corresponent als diferents camps de les matemàtiques i dominar els diferents conceptes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.73",
+      "bloque_id": "B1",
+      "descripcion": "Comunicar oralment i per escrit informació (idees, conclusions, conjectures, raonaments…) emprant el llenguatge matemàtic amb claredat, adequació, coherència, cohesió i correcció lingüística.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.74",
+      "bloque_id": "B1",
+      "descripcion": "Quan siguin necessaris i permetin enriquir la comunicació, emprar els mitjans digitals de manera justificada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.75",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer el llenguatge matemàtic present en el món real i en la vida quotidiana (per",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.76",
+      "bloque_id": "B1",
+      "descripcion": "Valorar els usos del llenguatge matemàtic a la vida quotidiana, detectar manca de rigor en",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.77",
+      "bloque_id": "B1",
+      "descripcion": "Emprar el llenguatge matemàtic per descriure i analitzar amb precisió i rigor diferents fets",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.78",
+      "bloque_id": "B1",
+      "descripcion": "Reconduir les emocions que puguin afectar negativament l’aprenentatge de les matemàtiques (peresa, inseguretat, frustració…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.79",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer les fortaleses i febleses personals a l’hora d’encarar reptes matemàtics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.80",
+      "bloque_id": "B1",
+      "descripcion": "Adquirir progressivament confiança per reforçar les fortaleses i superar les febleses.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.81",
+      "bloque_id": "B1",
+      "descripcion": "Mostrar una actitud positiva i perseverant en l’aprenentatge de les matemàtiques i en la",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.82",
+      "bloque_id": "B1",
+      "descripcion": "Acceptar i agrair la crítica raonada i transformar-la en una oportunitat d’aprenentatge.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.83",
+      "bloque_id": "B1",
+      "descripcion": "Col·laborar activament en equips heterogenis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.84",
+      "bloque_id": "B1",
+      "descripcion": "Fer aportacions creatives.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.85",
+      "bloque_id": "B1",
+      "descripcion": "Comunicar les aportacions i opinions de manera clara i efectiva.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.86",
+      "bloque_id": "B1",
+      "descripcion": "Valorar amb respecte les opinions i aportacions de la resta de membres de l’equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.87",
+      "bloque_id": "B1",
+      "descripcion": "Emetre judicis crítics i informats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.88",
+      "bloque_id": "B1",
+      "descripcion": "Participar en el repartiment de tasques en els treballs en equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.89",
+      "bloque_id": "B1",
+      "descripcion": "Fer aportacions valuoses que contribueixin a la realització exitosa de la feina de l’equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.90",
+      "bloque_id": "B1",
+      "descripcion": "Responsabilitzar-se del rol assignat en cada moment.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.91",
+      "bloque_id": "B1",
+      "descripcion": "Escoltar activament les aportacions dels altres membres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.92",
+      "bloque_id": "B1",
+      "descripcion": "Afavorir la participació i inclusió de tots els membres de l’equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.93",
+      "bloque_id": "B1",
+      "descripcion": "Autoregulació de les emocions que intervenen en l’aprenentatge de les matemàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.94",
+      "bloque_id": "B1",
+      "descripcion": "Identificació de les emocions com a eina de motivació per a la superació personal en l’aprenentatge de les matemàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.95",
+      "bloque_id": "B1",
+      "descripcion": "Recerca de les estratègies personals de foment de la curiositat, perseverança i resiliència en l’aprenentatge de les matemàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.96",
+      "bloque_id": "B1",
+      "descripcion": "Transformació de l’error en una oportunitat d’aprenentatge significatiu.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.97",
+      "bloque_id": "B1",
+      "descripcion": "Assumpció de responsabilitats i participació activa en els treballs en grup.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.98",
+      "bloque_id": "B1",
+      "descripcion": "Optimització del treball en equip mitjançant la distribució adequada de les responsabilitats atenent als punts forts i dèbils de cadascun dels membres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.99",
+      "bloque_id": "B1",
+      "descripcion": "Gestió de conflictes en el treball en equip.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.100",
+      "bloque_id": "B1",
+      "descripcion": "Inclusió i acceptació de la diversitat present en l’aula i en la societat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.101",
+      "bloque_id": "B1",
+      "descripcion": "Coneixement i valoració d’homes i dones que van contribuir notòriament a les matemàtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.102",
+      "bloque_id": "B1",
+      "descripcion": "Comparar, seleccionar i aplicar diferents estratègies per a la resolució de problemes",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.103",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar models matemàtics diversos (equacions, sistemes, taules, regressions,",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.104",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar amb precisió operacions, procediments i algorismes propis de l’aritmètica, l’àlgebra,",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.105",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer i interpretar les dades generades durant el procés de resolució per revisar,",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.106",
+      "bloque_id": "B1",
+      "descripcion": "Avaluar i valorar l’eficàcia i la idoneïtat de les diferents estratègies de resolució d’un mateix",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.107",
+      "bloque_id": "B1",
+      "descripcion": "Determinar totes les possibles solucions d’un problema, aplicant els coneixements adquirits i assegurant-se que no es deixen opcions sense considerar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.108",
+      "bloque_id": "B1",
+      "descripcion": "Analitzar i interpretar els resultats obtinguts, relacionant-los amb els conceptes matemàtics associats i el seu significat teòric i comprovant si tenen sentit des d’un punt de vista pràctica i, si fos el cas, concloure que el problema no té solució.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.109",
+      "bloque_id": "B1",
+      "descripcion": "Redactar respostes precises i justificades matemàticament, emprant una notació rigorosa i argumentant cada pas del procés.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.110",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar eines tecnològiques diverses (calculadores, fulls de càlcul, programari de càlcul simbòlic, geometria dinàmica) per, en cas necessari, modelitzar, calcular i representar els resultats de manera eficient.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.111",
+      "bloque_id": "B1",
+      "descripcion": "Explicar i argumentar amb claredat el procés de resolució, fent servir una notació matemàtica rigorosa i un llenguatge tècnic apropiat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.112",
+      "bloque_id": "B1",
+      "descripcion": "Revisar detalladament els càlculs, demostrant la validesa dels resultats amb justificacions",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.113",
+      "bloque_id": "B1",
+      "descripcion": "Comparar i validar la solució mitjançant diferents mètodes (resolució algebraica, verificació",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.114",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar, en cas necessari, eines tecnològiques avançades (fulls de càlcul amb funcions",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.115",
+      "bloque_id": "B1",
+      "descripcion": "Detectar i corregir errors mitjançant una anàlisi crítica, explicant per què s’han produït i",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.116",
+      "bloque_id": "B1",
+      "descripcion": "Argumentar la correcció de la solució amb un raonament lògic estructurat, emprant",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.117",
+      "bloque_id": "B1",
+      "descripcion": "Descartar les solucions que no encaixen en les condicions i restriccions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.118",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i analitzar patrons i regularitats, propietats i relacions en les situacions",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.119",
+      "bloque_id": "B1",
+      "descripcion": "Formular conjectures.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.120",
+      "bloque_id": "B1",
+      "descripcion": "Plantejar variants de problemes ja resolts, modificant alguna de les seves dades o",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.121",
+      "bloque_id": "B1",
+      "descripcion": "Identificar les generalitats i les particularitats de problemes similars.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.122",
+      "bloque_id": "B1",
+      "descripcion": "De manera puntual, consultar recursos en línia per trobar problemes similars o relacionats",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.123",
+      "bloque_id": "B1",
+      "descripcion": "Identificar i descriure patrons a partir d’exemples concrets.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.124",
+      "bloque_id": "B1",
+      "descripcion": "Generalitzar amb regles o fórmules els patrons identificats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.125",
+      "bloque_id": "B1",
+      "descripcion": "Proporcionar models o algoritmes que reflecteixen les situacions problematitzades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.126",
+      "bloque_id": "B1",
+      "descripcion": "Resoldre problemes interdisciplinaris fent-ne, si escau, una anàlisi crítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.127",
+      "bloque_id": "B1",
+      "descripcion": "Consolidar progressivament confiança per reforçar les fortaleses i superar les febleses.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Resolució de situacions i problemes de la vida quotidiana en els quals sigui convenient l’ús d’estratègies per al recompte sistemàtic (diagrama en arbre, tècniques de combinatòria, etc.).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Reconeixement dels diferents conjunts de nombres: naturals, enters, racionals, irracionals i reals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Els conjunts numèrics com a forma de respondre a diferents necessitats: comptar, mesurar, comparar, etc.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Expressió de quantitats i resolució de problemes mitjançant l’ús dels nombres reals amb la precisió requerida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Expressió de nombres en notació científica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Realització d’estimacions en diversos contexts analitzant i acotant l’error comès.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Ús de les propietats de les operacions aritmètiques i de la jerarquia d'operacions per a la realització de càlculs aritmètics combinats, incloent l’ús d’eines digitals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.8",
+      "bloque_id": "B2",
+      "descripcion": "Potències d’exponent enter. Relació inversa amb els radicals. Propietats, càlculs bàsics i aplicacions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.9",
+      "bloque_id": "B2",
+      "descripcion": "Deducció i ús de les propietats de les potències. Càlculs bàsics i aplicacions. Ús de la calculadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.10",
+      "bloque_id": "B2",
+      "descripcion": "Operacions amb nombres reals en la resolució de situacions contextualitzades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.11",
+      "bloque_id": "B2",
+      "descripcion": "Alguns nombres irracionals en situacions de la vida quotidiana. La importància del nombre pi i de la proporció àuria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.12",
+      "bloque_id": "B2",
+      "descripcion": "Patrons i regularitats numèriques en les quals intervinguin nombres reals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.13",
+      "bloque_id": "B2",
+      "descripcion": "Ordre en la recta numèrica. Representació de nombres sobre ella mateixa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.14",
+      "bloque_id": "B2",
+      "descripcion": "Intervals i semirectes: expressions en forma d'interval i en forma de desigualtat. Representació a la recta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.15",
+      "bloque_id": "B2",
+      "descripcion": "Estudi del significat de diferents tipus d’intervals: oberts, tancats i mixtes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.16",
+      "bloque_id": "B2",
+      "descripcion": "Operacions amb intervals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.17",
+      "bloque_id": "B2",
+      "descripcion": "Identificació, formulació i resolució de problemes on intervenen magnituds directa i inversament proporcionals. Anàlisi dels mètodes de resolució.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.18",
+      "bloque_id": "B2",
+      "descripcion": "Consolidació d’estratègies i mètodes de resolució de problemes relacionats amb augments i disminucions percentuals, interessos i taxes en contexts financers.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.19",
+      "bloque_id": "B2",
+      "descripcion": "Préstecs a tipus d’interès fixe: simulació de casos senzills.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.20",
+      "bloque_id": "B2",
+      "descripcion": "Realització d’estimacions i aproximacions. Càlcul de l’error absolut i relatiu. Anàlisi de la fita d’error.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.21",
+      "bloque_id": "B2",
+      "descripcion": "Determinació de la precisió requerida en diferents contexts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.22",
+      "bloque_id": "B2",
+      "descripcion": "Interpretació de potències d'exponent enter o fraccionari.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.23",
+      "bloque_id": "B2",
+      "descripcion": "Representacions diferents d’una mateixa quantitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.24",
+      "bloque_id": "B2",
+      "descripcion": "Definició de potències, radicals i logaritmes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.25",
+      "bloque_id": "B2",
+      "descripcion": "Relacions inverses de les operacions. Relació entre potències, radicals i logaritmes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.26",
+      "bloque_id": "B2",
+      "descripcion": "Ús de les operacions entre potències i radicals per la simplificació d’expressions, racionalització i extracció de factors del radical.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.27",
+      "bloque_id": "B2",
+      "descripcion": "Ús de les propietats dels logaritmes per obtenir expressions equivalents.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.28",
+      "bloque_id": "B2",
+      "descripcion": "Resolució de problemes utilitzant les operacions amb nombres reals amb la precisió requerida.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.29",
+      "bloque_id": "B2",
+      "descripcion": "Ús d’eines digitals per a trobar la quantitat o expressió equivalent d’operacions amb potències, radicals i logaritmes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.30",
+      "bloque_id": "B2",
+      "descripcion": "Relacions entre els conjunts numèrics (naturals, enters, racionals i reals) i propietats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.31",
+      "bloque_id": "B2",
+      "descripcion": "Representació dels nombres en la recta real.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "El pendent i la seva relació amb un angle en situacions senzilles: deducció i aplicació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Definició i càlcul de les taxes de variació absoluta, relativa i mitjana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estudi gràfic del creixement i decreixement de funcions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Formulació i resolució de problemes de la vida quotidiana on intervenen les diferents taxes de variació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Visualització i identificació del comportament d’una funció mitjançant eines tecnològiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Unitats de mesura dels angles: sistema sexagesimal i radians. Canvi d’unitats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Raons trigonomètriques d’un angle agut i generalització a la circumferència goniomètrica a partir d’un angle qualsevol.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.8",
+      "bloque_id": "B3",
+      "descripcion": "Relacions entre les raons trigonomètriques. Fórmula fonamental de la trigonometria.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.9",
+      "bloque_id": "B3",
+      "descripcion": "Resolució de triangles rectangles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.10",
+      "bloque_id": "B3",
+      "descripcion": "Descomposició d’un triangle qualsevol en dos triangles rectangles per a l’aplicació de les raons trigonomètriques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.11",
+      "bloque_id": "B3",
+      "descripcion": "Aplicació dels diferents mètodes de resolució de triangles (raons trigonomètriques, raó de semblança, Teorema de Pitàgores, Teorema de l’altura...) per a la resolució de problemes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Propietats geomètriques d’objectes matemàtics i de la vida quotidiana: investigació i representació amb programes de geometria dinàmica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Models geomètrics: representació i explicació de relacions numèriques i algebraiques en figures semblants. Raó de semblança entre longituds, àrees i volums.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Modelització d'elements geomètrics amb eines tecnològiques com a programes de geometria dinàmica, realitat augmentada i altres recursos.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.4",
+      "bloque_id": "B4",
+      "descripcion": "Elaboració i comprovació de conjectures geomètriques amb eines tecnològiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.5",
+      "bloque_id": "B4",
+      "descripcion": "Ús de la trigonometria per a resoldre àrees i volums de figures geomètriques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.6",
+      "bloque_id": "B4",
+      "descripcion": "Definició, propietats i operacions amb vectors.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.7",
+      "bloque_id": "B4",
+      "descripcion": "Obtenció de les coordenades dels punts mitjà i simètric mitjançant vectors.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.8",
+      "bloque_id": "B4",
+      "descripcion": "Obtenció de l’equació d’una recta (vectorial, paramètrica, contínua, implícita i explícita).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.9",
+      "bloque_id": "B4",
+      "descripcion": "Pendent d’una recta i de la seva perpendicular.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.10",
+      "bloque_id": "B4",
+      "descripcion": "Estudi de les posicions relatives de dues rectes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.11",
+      "bloque_id": "B4",
+      "descripcion": "Equació punt-pendent d’una recta.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.12",
+      "bloque_id": "B4",
+      "descripcion": "Obtenció de l’expressió analítica d’una circumferència donat el seu centre i el seu radi. Representació gràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.13",
+      "bloque_id": "B4",
+      "descripcion": "Ús d’aplicacions per a la representació de punts, vectors i rectes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.14",
+      "bloque_id": "B4",
+      "descripcion": "Ús de les eines que ofereix la geometria analítica i la raó de semblança per modelitzar moviments i transformacions en el pla com translacions, simetries i homotècies.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.15",
+      "bloque_id": "B4",
+      "descripcion": "Ús d’eines tecnològiques per realitzar transformacions elementals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Patrons, pautes i regularitats: observació, generalització i terme general.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Maneig del llenguatge algebraic i les funcions per a la modelització i resolució de problemes reals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Estratègies de deducció i anàlisi de conclusions raonables d’una situació de la vida quotidiana una vegada modelitzada.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Identificació de variables en diferents problemes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Característiques del canvi en la representació gràfica de relacions lineals i quadràtiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.6",
+      "bloque_id": "B5",
+      "descripcion": "Ús del llenguatge algebraic per representar relacions funcionals en diferents contexts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.7",
+      "bloque_id": "B5",
+      "descripcion": "Relacions lineals, quadràtiques i de proporcionalitat inversa en situacions de la vida quotidiana o matemàticament rellevants: expressió mitjançant àlgebra simbòlica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.8",
+      "bloque_id": "B5",
+      "descripcion": "Formes equivalents d’expressions algebraiques en la resolució d’equacions lineals i quadràtiques, i sistemes d’equacions i inequacions lineals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.9",
+      "bloque_id": "B5",
+      "descripcion": "Equacions i inequacions de primer i segon grau. Resolució analítica i gràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.10",
+      "bloque_id": "B5",
+      "descripcion": "Sistemes d’equacions i inequacions lineals. Resolució analítica i gràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.11",
+      "bloque_id": "B5",
+      "descripcion": "Resolució de problemes mitjançant l’ús d’equacions i inequacions en situacions contextualitzades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.12",
+      "bloque_id": "B5",
+      "descripcion": "Equacions, sistemes d’equacions i inequacions: resolució mitjançant l'ús de la tecnologia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.13",
+      "bloque_id": "B5",
+      "descripcion": "Expressions algebraiques de funcions que relacionen les variables que intervenen en situacions de la vida quotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.14",
+      "bloque_id": "B5",
+      "descripcion": "Funcions definides a trossos (lineals i quadràtiques).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.15",
+      "bloque_id": "B5",
+      "descripcion": "Representació gràfica de funcions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.16",
+      "bloque_id": "B5",
+      "descripcion": "Propietats de les funcions: domini, recorregut, intersecció amb els eixos, monotonia, extrems, continuïtat, punts de discontinuïtat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.17",
+      "bloque_id": "B5",
+      "descripcion": "Interpretació de les propietats obtingudes o observades a la gràfica dins el context de la situació o problema a resoldre.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.18",
+      "bloque_id": "B5",
+      "descripcion": "Creació, modificació i interpretació d’algorismes senzills per a la resolució de problemes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.19",
+      "bloque_id": "B5",
+      "descripcion": "Resolució de problemes senzills mitjançant la descomposició en parts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.20",
+      "bloque_id": "B5",
+      "descripcion": "Confecció i ús de programari (per exemple: fulls de càlculs, geometria dinàmica,..) per a la resolució de problemes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.21",
+      "bloque_id": "B5",
+      "descripcion": "Ús de dades variables i constants en els fulls de càlcul (per exemple, preu base i IVA).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.22",
+      "bloque_id": "B5",
+      "descripcion": "Maneig del llenguatge algebraic i les funcions (lineals, quadràtiques, exponencial, logarítmica i de proporcionalitat inversa) per a la modelització i resolució de problemes reals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.23",
+      "bloque_id": "B5",
+      "descripcion": "Relació entre dues variables mitjançant taules, gràfics i expressions algebraiques en problemes contextualitzats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.24",
+      "bloque_id": "B5",
+      "descripcion": "Operacions de polinomis. Regla de Ruffini. Identitats notables.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.25",
+      "bloque_id": "B5",
+      "descripcion": "Teorema del Residu i Teorema del Factor.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.26",
+      "bloque_id": "B5",
+      "descripcion": "Arrels i factorització de polinomis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.27",
+      "bloque_id": "B5",
+      "descripcion": "Operacions i simplificació de fraccions algebraiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.28",
+      "bloque_id": "B5",
+      "descripcion": "Equacions de grau superior a dos. Resolució i interpretació gràfica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.29",
+      "bloque_id": "B5",
+      "descripcion": "Resolució d’equacions biquadrades, amb radicals i amb fraccions algebraiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.30",
+      "bloque_id": "B5",
+      "descripcion": "Resolució d’equacions exponencials i logarítmiques senzilles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.31",
+      "bloque_id": "B5",
+      "descripcion": "Resolució de sistemes d’equacions no lineals senzilles.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.32",
+      "bloque_id": "B5",
+      "descripcion": "Ús de la tecnologia per resoldre equacions i sistemes d’equacions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.33",
+      "bloque_id": "B5",
+      "descripcion": "Expressions algebraiques de funcions (lineals, quadràtiques, radicals, exponencial, logarítmica y de proporcionalitat inversa) que relacionen les variables que intervenen en situacions de la vida quotidiana.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.34",
+      "bloque_id": "B5",
+      "descripcion": "Funcions definides a trossos (lineals i quadràtiques). Valor absolut.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.1",
+      "bloque_id": "B6",
+      "descripcion": "Estratègies de recollida i organització de dades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.2",
+      "bloque_id": "B6",
+      "descripcion": "Identificació i anàlisi inicial de les dades analitzades. Tipus de variables.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.3",
+      "bloque_id": "B6",
+      "descripcion": "Construcció de taules de freqüència amb dades aïllades i amb dades agrupades en intervals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.4",
+      "bloque_id": "B6",
+      "descripcion": "Elaboració de taules de contingència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.5",
+      "bloque_id": "B6",
+      "descripcion": "Elaboració i interpretació de gràfics estadístics d’una variable.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.6",
+      "bloque_id": "B6",
+      "descripcion": "Paràmetres de posició: mediana, percentils i quartils. Elaboració i interpretació de diagrames de caixes i bigotis.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.7",
+      "bloque_id": "B6",
+      "descripcion": "Paràmetres de centralització: mitjana aritmètica, moda i mediana. Paràmetres de dispersió: variància, desviació típica i coeficient de variació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.8",
+      "bloque_id": "B6",
+      "descripcion": "Distribucions bidimensionals.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.9",
+      "bloque_id": "B6",
+      "descripcion": "Núvol de punts. Coeficient de correlació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.10",
+      "bloque_id": "B6",
+      "descripcion": "Recta de regressió. Valoració de la pertinença d’estimacions a partir de la recta de regressió, tenint present el núvol de punts i el coeficient de correlació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.11",
+      "bloque_id": "B6",
+      "descripcion": "Ús de programari per a l’obtenció de la recta de regressió i coeficient de correlació d’una distribució bidimensional.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.12",
+      "bloque_id": "B6",
+      "descripcion": "Esdeveniments aleatoris. Espai mostral. Experiments simples i compostos. Experiments regulars i irregulars. Experiments amb repetició i sense repetició.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.13",
+      "bloque_id": "B6",
+      "descripcion": "Operacions amb esdeveniments. Diagrames de Venn.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.14",
+      "bloque_id": "B6",
+      "descripcion": "Càlcul de probabilitats. Llei de Laplace. Llei dels grans nombres.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.15",
+      "bloque_id": "B6",
+      "descripcion": "Tècniques de recompte. Diagrames d’arbre i taules de contingència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.16",
+      "bloque_id": "B6",
+      "descripcion": "Diferents etapes del disseny d'estudis estadístics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.17",
+      "bloque_id": "B6",
+      "descripcion": "Consulta de fonts de dades institucionals per a l’obtenció de dades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.18",
+      "bloque_id": "B6",
+      "descripcion": "Anàlisi de la utilitat de les conclusions d’un estudi estadístic tot valorant la representativitat de la mostra.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B6.19",
+      "bloque_id": "B6",
+      "descripcion": "Ús d’eines tecnològiques per a la realització de les anàlisis, càlculs i gràfics.",
+      "criterios_ids": []
+    }
+  ]
+}

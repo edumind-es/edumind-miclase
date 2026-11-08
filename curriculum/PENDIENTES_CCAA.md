@@ -222,3 +222,69 @@ Pendiente:
 - **Sin curso en la referencia**, en los cuatro cursos: Cultura Clásica,
   Digitalización, Valores Cívicos y Éticos, Introducción a la Filosofía, Medios y
   Recursos Digitales y Tecnología.
+
+## Cantabria (`Cantabria`)
+
+### Primaria — importada
+7 áreas, 42 JSON, 100 % con descriptor. Dos erratas del origen corregidas contra el
+Decreto 66/2022 (`PRIMARIA/Cantabria_Primaria.pdf`): en el primer ciclo, Educación
+Artística «Explorar manifestaciones culturales y artísticas…» es 1.2 (no 2.2) y
+Matemáticas «Reconocer las matemáticas presentes en la vida cotidiana…» es 5.2 (no 6.2).
+
+### Secundaria — sin importar
+La matriz de iDoceo está recortada: Lengua Castellana trae 5 criterios por tramo,
+Biología 2 o 3, ningún área trae saberes, hay áreas duplicadas con número
+(«Lengua Extranjera (16)», «Tecnología (19)») y 11 ficheros [REVISAR]. Importarla
+dejaría un currículo engañosamente incompleto. El decreto bueno es
+`SECUNDARIA/Cantabria_Secundaria.pdf` (Decreto 73/2022, mismo formato que Murcia:
+«Cursos primero y segundo», «Criterios de evaluación», «1.1. …» y, en cada
+competencia, «se conecta con los siguientes descriptores: …»). **Ojo:**
+`SECUNDARIA/2022-6239.pdf` no es el currículo, es la Orden EDU/42/2022 de
+implantación del Bachillerato. Hace falta sacar la ESO de Cantabria del decreto.
+
+## Catalunya — sin importar
+
+El conversor la lee (nombres desde la matriz madre, ciclos en catalán), pero:
+- **Ninguna competencia específica trae «Enllaços»**, ni en la matriz ni en la madre,
+  y el Decret 175/2022 (`PRIMARIA/1928585.pdf.txt`) solo nombra los descriptores en
+  el Anexo 1, sin vincularlos a cada competencia. Al estar en catalán, la reserva
+  estatal no puede casarlas por parecido: 0 % conectado, muy por debajo del 85 % de
+  `conexiones.test.mjs`. Hace falta una tabla de conexiones (a mano o desde otra
+  fuente oficial) antes de poder importarla.
+- Además, en ESO hay ficheros con criterios de otras materias mezclados (Cultura
+  Clàssica con criterios de Tecnologia, Educació Física con criterios de Música), y
+  Tecnologia, Filosofia y Valors llevan pegado al criterio el texto explicativo de la
+  competencia («Aquesta competència específica aborda…»).
+- No hay decreto de ESO en la carpeta.
+
+## Illes Balears (`Baleares`)
+
+Decretos: `PRIMARIA/8702.pdf` y `SECUNDARIA/8703.pdf`. Cada criterio de la matriz se
+busca tal cual en el decreto: si menos del 90 % aparece, el fichero no se importa.
+
+### Primaria — sin importar
+Solo 114 de 354 criterios aparecen tal cual en el decreto: la matriz mezcló las dos
+columnas de las tablas del decreto («Identificar els Explorar les possibilitats de la
+pròpia motricitat a través desplaçaments actius com a del joc…»). Hay que sacarla
+del decreto.
+
+### Secundaria — importada en parte
+10 ficheros, 100 % con descriptor: Biologia i Geologia 4.º, Educació Plàstica 2.º,
+Valors 4.º, Física i Química 4.º, Geografia i Història 2.º, Introducció a la
+Filosofia 3.º, Matemàtiques 4.º y Música 1.º, 3.º y 4.º.
+
+Hecho al importar:
+- Cada criterio llevaba pegadas las «aclariments orientatius» del decreto (las
+  viñetas que siguen a «CA 1.1 …»): recortados al texto literal del decreto.
+- Competencias específicas repetidas (una copia con «Enllaços» y otra sin ellos):
+  se queda la que trae enlaces.
+
+Pendiente:
+- **Llengua Estrangera y Segona Llengua Estrangera (1.º a 4.º)**: ninguna competencia
+  trae «Enllaços» y en catalán no casan con el RD. Criterio CE6.1 de 1.º y 2.º, además,
+  sin recortar (más de 700 caracteres).
+- **Sin criterios en origen**: Cooperació i Serveis a la Comunitat, Digitalització,
+  Economia i Emprenedoria, Educació Física, Expressió Artística, FOPP, Igualtat de
+  Gènere, Introducció a les tècniques experimentals, Llatí, Llengua Castellana, Llengua
+  Catalana, Taller de Finances, Tecnologia i Digitalització y Tecnologia.
+- Tres ficheros [REVISAR] sin área clara («àrea 09», «àrea 23», Cultura Clàssica).

@@ -27,6 +27,7 @@ const COMUNIDADES = [
   { value: 'Murcia',    label: 'Región de Murcia' },
   { value: 'CeutaMelilla', label: 'Ceuta y Melilla' },
   { value: 'Cantabria', label: 'Cantabria' },
+  { value: 'Baleares',  label: 'Illes Balears' },
 ]
 
 export default function GruposPage() {

@@ -6,7 +6,7 @@
     "asignatura_nombre": "Matemáticas B",
     "ciclo_origen": "Cuarto Curso ESO",
     "fuente": "Extremadura · Secundaria · Matemáticas · Toda la etapa.xlsx",
-    "generado": "2026-11-01",
+    "generado": "2026-11-08",
     "curso": "4º"
   },
   "competencias": [
@@ -264,11 +264,6 @@
     {
       "id": "CE10",
       "descripcion": "Desarrollar destrezas sociales reconociendo y respetando las emociones y experiencias de los demás, participando activa y reflexivamente en proyectos en equipos heterogéneos con funciones asignadas, para construir una identidad positiva como estudiante de matemáticas, fomentar el bienestar personal y grupal y crear relaciones saludables.",
-      "descriptores_ids": []
-    },
-    {
-      "id": "CE3",
-      "descripcion": "Inferencia E.3.3.1.",
       "descriptores_ids": []
     }
   ],

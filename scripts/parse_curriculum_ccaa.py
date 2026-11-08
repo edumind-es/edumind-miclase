@@ -77,6 +77,8 @@ DECRETOS = {
     ('MURCIA', 'primaria'):        'MURCIA/PRIMARIA/2022-5907.pdf',
     ('MURCIA', 'secundaria'):      'MURCIA/SECUNDARIA/2022-6346.pdf',
     # Ceuta y Melilla: currículo del Ministerio; referencia, las matrices de los RD
+    ('BALEARS', 'primaria'):       'BALEARS/PRIMARIA/8702.pdf',
+    ('BALEARS', 'secundaria'):     'BALEARS/SECUNDARIA/8703.pdf',
     ('ceuta_melilla', 'primaria'):   'REALES DECRETOS/PRIMARIA/MATRICES/XLSX',
     ('ceuta_melilla', 'secundaria'): 'REALES DECRETOS/SECUNDARIA/MATRICES/XLSX',
 }
@@ -157,6 +159,27 @@ class Decreto:
                 return etiqueta, m.group(1), cursos
         return None, None, None
 
+
+    def criterio_literal(self, descripcion: str, codigo: str):
+        """El texto del criterio tal como lo escribe el decreto: desde su
+        código hasta la primera viñeta, el siguiente criterio o competencia, o
+        una línea en blanco. None si no se encuentra."""
+        texto = re.sub(r'[\s\-]+', '', descripcion.lower())[:50]
+        pos = self.plano.find(texto)
+        if pos < 0:
+            return None
+        trozos = []
+        for j in range(self.linea_de[pos], min(self.linea_de[pos] + 40, len(self.lineas))):
+            linea = self.lineas[j].strip()
+            if trozos and (not linea or re.match(r'^(?:[-–•·]\s|CA\s*\d|CE\s*\d|criterio\s|\d+\.\d+\.?\s)', linea, re.I)):
+                break
+            trozos.append(linea)
+        literal = ' '.join(trozos)
+        literal = re.sub(r'^(?:CA\s*|criterio\.?\s*)?\d+\.\d+\.?\s*', '', literal, flags=re.I)
+        literal = re.sub(r'(\w)- (\w)', r'\1\2', literal)   # palabra partida al final de línea
+        literal = re.sub(r'\s+', ' ', literal).strip()
+        # Solo vale si el comienzo coincide con el de la matriz
+        return literal if re.sub(r'[\s\-]+', '', literal.lower()).startswith(texto) else None
 
     def codigos_de_tanda(self, pos: int, hasta):
         """Códigos de criterio del decreto en el tramo de la tanda que empieza
@@ -359,6 +382,14 @@ def fundir(a: dict, b: dict) -> dict:
     return out
 
 
+# Matrices en catalán: sin «Enllaços» no hay conexión posible con los
+# descriptores (la reserva estatal casa por parecido de texto en castellano).
+EN_CATALAN = {'BALEARS', 'CATALUNYA'}
+
+# Comunidades cuyo decreto pone aclaraciones tras cada criterio («CA 1.1 …» y
+# viñetas) que la matriz pegó al criterio: se recortan todos al texto literal.
+RECORTAR_SIEMPRE = {'BALEARS'}
+
 # Comunidades cuyo nombre de área en el fichero perdió los acentos o va
 # abreviado («Educacio Fisica», «Coneixement Medi»): el bueno es el título de su
 # matriz madre («Matriu curricular — Educació Física»).
@@ -459,6 +490,21 @@ def main():
             datos['objetivos'] = [o for o in datos['objetivos'] if o not in basura]
             avisos.append(f'{area} ({ciclo}): descartadas competencias específicas que no lo son: '
                           + '; '.join(f"{o['id']} «{o['descripcion'][:30]}»" for o in basura))
+        # La misma competencia específica dos veces (Baleares: una copia con
+        # «Enllaços» y otra sin ellos; Extremadura: «CE3 Inferencia E.3.3.1.»,
+        # un saber colado): se queda la que trae enlaces o, si no, la más larga.
+        vistos = {}
+        for o in datos['objetivos']:
+            previa = vistos.get(o['id'])
+            if previa is None or (bool(o.get('descriptores_ids')), len(o['descripcion'])) > \
+                    (bool(previa.get('descriptores_ids')), len(previa['descripcion'])):
+                vistos[o['id']] = o
+        if len(vistos) < len(datos['objetivos']):
+            descartadas = [o for o in datos['objetivos'] if vistos[o['id']] is not o]
+            datos['objetivos'] = [o for o in datos['objetivos'] if vistos[o['id']] is o]
+            if any(not o.get('descriptores_ids') and len(o['descripcion']) < 60 for o in descartadas):
+                avisos.append(f'{area} ({ciclo}): competencia específica repetida descartada: '
+                              + '; '.join(f"{o['id']} «{o['descripcion'][:30]}»" for o in descartadas))
         # «1.1» a secas cuando las competencias específicas son «CE1»…: el
         # código se completa y, si falta, la competencia sale de él.
         con_ce = any(o['id'].startswith('CE') for o in datos['objetivos'])
@@ -475,16 +521,10 @@ def main():
                     c['objetivo_id'] = nuevo.split('.')[0]
                     avisos.append(f'{area} ({ciclo}): {cod} «{inicio}…» corregido a {nuevo} (errata del origen)')
         area = nombres_madre.get(slug(area), area)
-        # Criterio con el párrafo explicativo de su competencia pegado
-        # («Aquesta competència específica aborda…»): no hay corte seguro.
-        fundidos = [c['id'] for c in datos['criterios'] if len(c['descripcion']) > 700]
-        if len(fundidos) >= 3:
-            pendientes.append((p.name, f'{len(fundidos)} criterios con más de 700 caracteres: llevan '
-                               'pegado el texto explicativo de la competencia específica'))
+        if carpeta in EN_CATALAN and not any(o.get('descriptores_ids') for o in datos['objetivos']):
+            pendientes.append((p.name, 'ninguna competencia específica trae «Enllaços» y el texto en catalán '
+                               'no puede casar con el Real Decreto: sin conexión con los descriptores'))
             continue
-        if fundidos:
-            avisos.append(f'{area} ({ciclo}): criterio con texto de más de 700 caracteres, '
-                          f'revisar: {", ".join(fundidos)}')
         candidatos.append((slug(area), area, ciclo, cursos, p, datos))
 
     # «Toda la etapa» suele ser la unión de los ciclos: solo se usa si el área
@@ -514,9 +554,27 @@ def main():
 
     # Con decreto, los cursos los dice el encabezado que el decreto pone encima
     # de cada tanda de criterios, no el nombre del fichero.
+    decreto = None
     if (carpeta, etapa) in DECRETOS:
         fuente = ORIGEN / DECRETOS[(carpeta, etapa)]
         decreto = MatrizReferencia(fuente) if fuente.is_dir() else Decreto(fuente)
+        if isinstance(decreto, Decreto):
+            # Cada criterio tiene que estar tal cual en el decreto. Si no, la
+            # matriz mezcló columnas de una tabla («Identificar els Explorar les
+            # possibilitats…»): por debajo del 90 % el fichero no se importa.
+            limpios = []
+            for c in candidatos:
+                fuera = [x['id'] for x in c[5]['criterios']
+                         if re.sub(r'[\s\-]+', '', x['descripcion'].lower())[:50] not in decreto.plano]
+                total = len(c[5]['criterios'])
+                if (total - len(fuera)) / total < 0.9:
+                    pendientes.append((c[4].name, f'solo {total - len(fuera)} de {total} criterios están tal cual '
+                                       'en el decreto: texto con columnas mezcladas'))
+                    continue
+                if fuera:
+                    avisos.append(f'{c[1]} ({c[2]}): no están tal cual en el decreto, revisar: {", ".join(fuera)}')
+                limpios.append(c)
+            candidatos = limpios
         repartidos = []
         for asig, area, ciclo, cursos, p, datos in candidatos:
             ids = [c['id'] for c in datos['criterios']]
@@ -554,6 +612,35 @@ def main():
                 avisos.append(f'{area}: {len(tandas)} tandas repartidas por el decreto '
                               f'({"; ".join(t[0] for t in tandas)}); saberes sin curso, no se importan')
         candidatos = repartidos
+
+    # Criterio con texto explicativo pegado. Con decreto en PDF se recorta al
+    # texto literal del criterio (Baleares: «CA 1.1 …» seguido de aclaraciones
+    # en viñetas); sin corte seguro, tres o más dejan el fichero pendiente.
+    pdf = DECRETOS.get((carpeta, etapa))
+    recortador = decreto if pdf and pdf.endswith('.pdf') else None
+    quedan = []
+    for asig, area, ciclo, cursos, p, datos in candidatos:
+        recortados = 0
+        if recortador:
+            for c in datos['criterios']:
+                if len(c['descripcion']) > 700 or carpeta in RECORTAR_SIEMPRE:
+                    literal = recortador.criterio_literal(c['descripcion'], c['id'])
+                    if literal and len(literal) < len(c['descripcion']):
+                        c['descripcion'] = literal
+                        recortados += 1
+        if recortados:
+            avisos.append(f'{area} ({ciclo}): {recortados} criterios recortados al texto literal del decreto '
+                          '(llevaban pegadas las aclaraciones)')
+        fundidos = [c['id'] for c in datos['criterios'] if len(c['descripcion']) > 700]
+        if len(fundidos) >= 3:
+            pendientes.append((p.name, f'{len(fundidos)} criterios con más de 700 caracteres: llevan '
+                               'pegado el texto explicativo de la competencia específica'))
+            continue
+        if fundidos:
+            avisos.append(f'{area} ({ciclo}): criterio con texto de más de 700 caracteres, '
+                          f'revisar: {", ".join(fundidos)}')
+        quedan.append((asig, area, ciclo, cursos, p, datos))
+    candidatos = quedan
 
     # Matemáticas A y B de 4.º son materias distintas: el ciclo lo dice
     # («Cuarto curso matem ticas b»), así que van con su propio slug.

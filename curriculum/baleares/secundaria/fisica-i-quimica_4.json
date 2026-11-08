@@ -1,0 +1,745 @@
+{
+  "meta": {
+    "comunidad": "Baleares",
+    "etapa": "secundaria",
+    "asignatura": "fisica-i-quimica",
+    "asignatura_nombre": "Física i Química",
+    "ciclo_origen": "Quart curs",
+    "fuente": "Illes Balears · Secundaria · Física i Química · Quart curs.xlsx",
+    "generado": "2026-11-08",
+    "curso": "4º"
+  },
+  "competencias": [
+    {
+      "id": "CCL",
+      "titulo": "CCL · Competencia en comunicación lingüística"
+    },
+    {
+      "id": "CP",
+      "titulo": "CP · Competencia plurilingüe"
+    },
+    {
+      "id": "STEM",
+      "titulo": "STEM · Competencia matemática y en ciencia, tecnología e ingeniería"
+    },
+    {
+      "id": "CD",
+      "titulo": "CD · Competencia digital"
+    },
+    {
+      "id": "CPSAA",
+      "titulo": "CPSAA · Competencia personal, social y de aprender a aprender"
+    },
+    {
+      "id": "CC",
+      "titulo": "CC · Competencia ciudadana"
+    },
+    {
+      "id": "CE",
+      "titulo": "CE · Competencia emprendedora"
+    },
+    {
+      "id": "CCEC",
+      "titulo": "CCEC · Competencia en conciencia y expresión culturales"
+    }
+  ],
+  "descriptores": [
+    {
+      "id": "CCL1",
+      "competencia_id": "CCL",
+      "descripcion": "Se expresa de forma oral, escrita, signada o multimodal con coherencia, corrección y adecuación a los diferentes contextos sociales, y participa en interacciones comunicativas con actitud cooperativa y respetuosa tanto para intercambiar información, crear conocimiento y transmitir opiniones, como para construir vínculos personales."
+    },
+    {
+      "id": "CCL2",
+      "competencia_id": "CCL",
+      "descripcion": "Comprende, interpreta y valora con actitud crítica textos orales, escritos, signados o multimodales de los ámbitos personal, social, educativo y profesional para participar en diferentes contextos de manera activa e informada y para construir conocimiento."
+    },
+    {
+      "id": "CCL3",
+      "competencia_id": "CCL",
+      "descripcion": "Localiza, selecciona y contrasta de manera progresivamente autónoma información procedente de diferentes fuentes, evaluando su fiabilidad y pertinencia en función de los objetivos de lectura y evitando los riesgos de manipulación y desinformación, y la integra y transforma en conocimiento para comunicarla adoptando un punto de vista creativo, crítico y personal a la par que respetuoso con la propiedad intelectual."
+    },
+    {
+      "id": "CCL4",
+      "competencia_id": "CCL",
+      "descripcion": "Lee con autonomía obras diversas adecuadas a su edad, seleccionando las que mejor se ajustan a sus gustos e intereses; aprecia el patrimonio literario como cauce privilegiado de la experiencia individual y colectiva; y moviliza su propia experiencia biográfica y sus conocimientos literarios y culturales para construir y compartir su interpretación de las obras y para crear textos de intención literaria de progresiva complejidad."
+    },
+    {
+      "id": "CCL5",
+      "competencia_id": "CCL",
+      "descripcion": "Pone sus prácticas comunicativas al servicio de la convivencia democrática, la resolución dialogada de los conflictos y la igualdad de derechos de todas las personas, evitando los usos discriminatorios, así como los abusos de poder, para favorecer la utilización no solo eficaz sino también ética de los diferentes sistemas de comunicación."
+    },
+    {
+      "id": "CP1",
+      "competencia_id": "CP",
+      "descripcion": "Usa eficazmente una o más lenguas, además de la lengua o lenguas familiares, para responder a sus necesidades comunicativas, de manera apropiada y adecuada tanto a su desarrollo e intereses como a diferentes situaciones y contextos de los ámbitos personal, social, educativo y profesional."
+    },
+    {
+      "id": "CP2",
+      "competencia_id": "CP",
+      "descripcion": "A partir de sus experiencias, realiza transferencias entre distintas lenguas como estrategia para comunicarse y ampliar su repertorio lingüístico individual."
+    },
+    {
+      "id": "CP3",
+      "competencia_id": "CP",
+      "descripcion": "Conoce, valora y respeta la diversidad lingüística y cultural presente en la sociedad, integrándola en su desarrollo personal como factor de diálogo, para fomentar la cohesión social."
+    },
+    {
+      "id": "STEM1",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza métodos inductivos y deductivos propios del razonamiento matemático en situaciones conocidas, y selecciona y emplea diferentes estrategias para resolver problemas analizando críticamente las soluciones y reformulando el procedimiento, si fuera necesario."
+    },
+    {
+      "id": "STEM2",
+      "competencia_id": "STEM",
+      "descripcion": "Utiliza el pensamiento científico para entender y explicar los fenómenos que ocurren a su alrededor, confiando en el conocimiento como motor de desarrollo, planteándose preguntas y comprobando hipótesis mediante la experimentación y la indagación, utilizando herramientas e instrumentos adecuados, apreciando la importancia de la precisión y la veracidad y mostrando una actitud crítica acerca del alcance y las limitaciones de la ciencia."
+    },
+    {
+      "id": "STEM3",
+      "competencia_id": "STEM",
+      "descripcion": "Plantea y desarrolla proyectos diseñando, fabricando y evaluando diferentes prototipos o modelos para generar o utilizar productos que den solución a una necesidad o problema de forma creativa y en equipo, procurando la participación de todo el grupo, resolviendo pacíficamente los conflictos que puedan surgir, adaptándose ante la incertidumbre y valorando la importancia de la sostenibilidad."
+    },
+    {
+      "id": "STEM4",
+      "competencia_id": "STEM",
+      "descripcion": "Interpreta y transmite los elementos más relevantes de procesos, razonamientos, demostraciones, métodos y resultados científicos, matemáticos y tecnológicos de forma clara y precisa y en diferentes formatos (gráficos, tablas, diagramas, fórmulas, esquemas, símbolos...), aprovechando de forma crítica la cultura digital e incluyendo el lenguaje matemático-formal con ética y responsabilidad, para compartir y construir nuevos conocimientos."
+    },
+    {
+      "id": "STEM5",
+      "competencia_id": "STEM",
+      "descripcion": "Emprende acciones fundamentadas científicamente para promover la salud física, mental y social, y preservar el medio ambiente y los seres vivos; y aplica principios de ética y seguridad en la realización de proyectos para transformar su entorno próximo de forma sostenible, valorando su impacto global y practicando el consumo responsable."
+    },
+    {
+      "id": "CD1",
+      "competencia_id": "CD",
+      "descripcion": "Realiza búsquedas en internet atendiendo a criterios de validez, calidad, actualidad y fiabilidad, seleccionando los resultados de manera crítica y archivándolos, para recuperarlos, referenciarlos y reutilizarlos, respetando la propiedad intelectual."
+    },
+    {
+      "id": "CD2",
+      "competencia_id": "CD",
+      "descripcion": "Gestiona y utiliza su entorno personal digital de aprendizaje para construir conocimiento y crear contenidos digitales, mediante estrategias de tratamiento de la información y el uso de diferentes herramientas digitales, seleccionando y configurando a más adecuada en función de la tarea y de sus necesidades de aprendizaje permanente."
+    },
+    {
+      "id": "CD3",
+      "competencia_id": "CD",
+      "descripcion": "Se comunica, participa, colabora e interactúa compartiendo contenidos, datos e información mediante herramientas o plataformas virtuales, y gestiona de manera responsable sus acciones, presencia y visibilidad en la red, para ejercer una ciudadanía digital activa, cívica y reflexiva."
+    },
+    {
+      "id": "CD4",
+      "competencia_id": "CD",
+      "descripcion": "Identifica riesgos y adopta medidas preventivas al usar las tecnologías digitales para proteger los dispositivos, los datos personales, la salud y el medioambiente, y para tomar conciencia de la mportancia y necesidad de hacer un uso crítico, legal, seguro, saludable y sostenible de dichas tecnologías."
+    },
+    {
+      "id": "CD5",
+      "competencia_id": "CD",
+      "descripcion": "Desarrolla aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos propuestos, mostrando interés y curiosidad por la evolución de las tecnologías digitales y por su desarrollo sostenible y uso ético."
+    },
+    {
+      "id": "CPSAA1",
+      "competencia_id": "CPSAA",
+      "descripcion": "Regula y expresa sus emociones, fortaleciendo el optimismo, la resiliencia, la autoeficacia y la búsqueda de propósito y motivación hacia el aprendizaje, para gestionar los retos y cambios y armonizarlos con sus propios objetivos."
+    },
+    {
+      "id": "CPSAA2",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende los riesgos para la salud relacionados con factores sociales, consolida estilos de vida saludable a nivel físico y mental, reconoce conductas contrarias a la convivencia y aplica estrategias para abordarlas."
+    },
+    {
+      "id": "CPSAA3",
+      "competencia_id": "CPSAA",
+      "descripcion": "Comprende proactivamente las perspectivas y las experiencias de las demás personas y las incorpora a su aprendizaje, para participar en el trabajo en grupo, distribuyendo y aceptando tareas y responsabilidades de manera equitativa y empleando estrategias cooperativas."
+    },
+    {
+      "id": "CPSAA4",
+      "competencia_id": "CPSAA",
+      "descripcion": "Realiza autoevaluaciones sobre su proceso de aprendizaje, buscando fuentes fiables para validar, sustentar y contrastar la información y para obtener conclusiones relevantes."
+    },
+    {
+      "id": "CPSAA5",
+      "competencia_id": "CPSAA",
+      "descripcion": "Planea objetivos a medio plazo y desarrolla procesos metacognitivos de retroalimentación para aprender de sus errores en el proceso de construcción del conocimiento."
+    },
+    {
+      "id": "CC1",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y comprende ideas relativas a la dimensión social y ciudadana de su propia identidad, así como a los hechos culturales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en cualquier contexto."
+    },
+    {
+      "id": "CC2",
+      "competencia_id": "CC",
+      "descripcion": "Analiza y asume fundadamente los principios y valores que emanan del proceso de integración europea, la Constitución española y los derechos humanos y de la infancia, participando en actividades comunitarias, como la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad, y compromiso con la gualdad de género, la cohesión social, el desarrollo sostenible y el logro de la ciudadanía mundial."
+    },
+    {
+      "id": "CC3",
+      "competencia_id": "CC",
+      "descripcion": "Comprende y analiza problemas éticos fundamentales y de actualidad, considerando críticamente los valores propios y ajenos, y desarrollando juicios propios para afrontar la controversia moral con actitud dialogante, argumentativa, respetuosa y opuesta a cualquier tipo de discriminación o violencia."
+    },
+    {
+      "id": "CC4",
+      "competencia_id": "CC",
+      "descripcion": "Comprende las relaciones sistémicas de nterdependencia, ecodependencia e interconexión entre actuaciones locales y globales, y adopta, de forma consciente y motivada, un estilo de vida sostenible y ecosocialmente responsable."
+    },
+    {
+      "id": "CE1",
+      "competencia_id": "CE",
+      "descripcion": "Analiza necesidades y oportunidades y afronta retos con sentido crítico, haciendo balance de su sostenibilidad, valorando el impacto que puedan suponer en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, dirigidas a crear valor en el ámbito personal, social, educativo y profesional."
+    },
+    {
+      "id": "CE2",
+      "competencia_id": "CE",
+      "descripcion": "Evalúa las fortalezas y debilidades propias, haciendo uso de estrategias de autoconocimiento y autoeficacia, y comprende los elementos fundamentales de la economía y las finanzas, aplicando conocimientos económicos y financieros a actividades y situaciones concretas, utilizando destrezas que favorezcan el trabajo colaborativo y en equipo, para reunir y optimizar los recursos necesarios que lleven a la acción una experiencia emprendedora que genere valor."
+    },
+    {
+      "id": "CE3",
+      "competencia_id": "CE",
+      "descripcion": "Desarrolla el proceso de creación de ideas y soluciones valiosas y toma decisiones, de manera razonada, utilizando estrategias ágiles de planificación y gestión, y reflexiona sobre el proceso realizado y el resultado obtenido, para llevar a término el proceso de creación de prototipos innovadores y de valor, considerando la experiencia como una oportunidad para aprender."
+    },
+    {
+      "id": "CCEC1",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, aprecia críticamente y respeta el patrimonio cultural y artístico, implicándose en su conservación y valorando el enriquecimiento inherente a la diversidad cultural y artística."
+    },
+    {
+      "id": "CCEC2",
+      "competencia_id": "CCEC",
+      "descripcion": "Disfruta, reconoce y analiza con autonomía las especificidades e intencionalidades de las manifestaciones artísticas y culturales más destacadas del patrimonio, distinguiendo los medios y soportes, así como los lenguajes y elementos técnicos que las caracterizan."
+    },
+    {
+      "id": "CCEC3",
+      "competencia_id": "CCEC",
+      "descripcion": "Expresa ideas, opiniones, sentimientos y emociones por medio de producciones culturales y artísticas, integrando su propio cuerpo y desarrollando la autoestima, la creatividad y el sentido del lugar que ocupa en la sociedad, con una actitud empática, abierta y colaborativa."
+    },
+    {
+      "id": "CCEC4",
+      "competencia_id": "CCEC",
+      "descripcion": "Conoce, selecciona y utiliza con creatividad diversos medios y soportes, así como técnicas plásticas, visuales, audiovisuales, sonoras o corporales, para la creación de productos artísticos y culturales, tanto de forma individual como colaborativa, identificando oportunidades de desarrollo personal, social y laboral, así como de emprendimiento."
+    }
+  ],
+  "objetivos": [
+    {
+      "id": "CE1",
+      "descripcion": "Comprendre i relacionar els motius pels quals ocorren els principals fenòmens fisicoquímics de l’entorn, explicant-los en termes de les lleis i teories científiques adequades per resoldre problemes, amb la finalitat d’aplicar-les per millorar la realitat pròxima i la qualitat de vida humana.",
+      "descriptores_ids": [
+        "CCL1",
+        "STEM1",
+        "STEM2",
+        "STEM4",
+        "CPSAA4"
+      ]
+    },
+    {
+      "id": "CE2",
+      "descripcion": "Expressar les observacions realitzades pels alumnes en forma de preguntes, formulant hipòtesis per explicar-les i demostrant aquestes hipòtesis a través de l’experimentació científica, la indagació i la cerca d’evidències, per desenvolupar els raonaments propis del pensament científic i millorar les destreses en l’ús de les metodologies científiques.",
+      "descriptores_ids": [
+        "CCL1",
+        "CCL3",
+        "STEM1",
+        "STEM2",
+        "CD1",
+        "CPSAA4",
+        "CE1",
+        "CCEC3"
+      ]
+    },
+    {
+      "id": "CE3",
+      "descripcion": "Manejar amb desimboltura les regles i normes bàsiques de la física i la química en referència al llenguatge de la IUPAC, al llenguatge matemàtic, a l’ús d’unitats de mesura correctes, a l’ús segur del laboratori i a la interpretació i producció de dades i informació en diferents formats i fonts, per reconèixer el caràcter universal i transversal del llenguatge científic i la necessitat d’una comunicació fiable en recerca i ciència entre diferents països i cultures.",
+      "descriptores_ids": [
+        "STEM4",
+        "STEM5",
+        "CD3",
+        "CPSAA2",
+        "CC1",
+        "CCEC2",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE4",
+      "descripcion": "Utilitzar de manera crítica, eficient i segura plataformes digitals i recursos variats, tant per al treball individual com en equip, per fomentar la creativitat, el desenvolupament personal i l’aprenentatge individual i social, mitjançant la consulta d’informació, la creació de materials i la comunicació efectiva en els diferents entorns d’aprenentatge.",
+      "descriptores_ids": [
+        "CCL2",
+        "CCL3",
+        "STEM4",
+        "CD1",
+        "CD2",
+        "CPSAA3",
+        "CE3",
+        "CCEC4"
+      ]
+    },
+    {
+      "id": "CE5",
+      "descripcion": "Utilitzar les estratègies pròpies del treball col·laboratiu que permetin potenciar el creixement entre iguals com a base emprenedora d’una comunitat científica crítica, ètica i eficient, per comprendre la importància de la ciència en la millora de la societat, les aplicacions i repercussions dels avanços científics, la preservació de la salut i la conservació sostenible del medi ambient.",
+      "descriptores_ids": [
+        "CCL5",
+        "CP3",
+        "STEM3",
+        "STEM5",
+        "CD3",
+        "CPSAA3",
+        "CC3",
+        "CE2"
+      ]
+    },
+    {
+      "id": "CE6",
+      "descripcion": "Comprendre i valorar la ciència com una construcció col·lectiva en continu canvi i evolució, en la qual no sols participen les persones que s’hi dediquen, sinó que també requereix d’una interacció amb la resta de la societat, per obtenir resultats que repercuteixin en l’avançament tecnològic, econòmic, ambiental i social.",
+      "descriptores_ids": [
+        "STEM2",
+        "STEM5",
+        "CD4",
+        "CPSAA1",
+        "CPSAA4",
+        "CC4",
+        "CCEC1"
+      ]
+    }
+  ],
+  "criterios": [
+    {
+      "id": "CE1.1",
+      "objetivo_id": "CE1",
+      "descripcion": "Comprendre i explicar amb rigor els fenòmens fisicoquímics quotidians a partir dels principis, teories i lleis científiques adequades, expressant-los de manera argumentada, utilitzant diversitat de suports i mitjans de comunicació.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.2",
+      "objetivo_id": "CE1",
+      "descripcion": "Resoldre els problemes fisicoquímics que es plantegin mitjançant les lleis i teories científiques adequades, raonant els procediments utilitzats per trobar les solucions i expressant els resultats amb correcció i precisió.",
+      "peso": 1
+    },
+    {
+      "id": "CE1.3",
+      "objetivo_id": "CE1",
+      "descripcion": "Reconèixer i descriure situacions problemàtiques reals de caire científic i emprendre iniciatives col·laboratives en les quals la ciència, i en particular la física i la química, poden contribuir https://www.caib.es/eboibfront/pdf/ca/2025/103/1197479",
+      "peso": 1
+    },
+    {
+      "id": "CE2.1",
+      "objetivo_id": "CE2",
+      "descripcion": "Emprar les metodologies pròpies de la ciència en la identificació i descripció de fenòmens a partir de qüestions a les quals es pugui donar resposta a través de la indagació, la deducció, el treball experimental i el raonament logicomatemàtic, diferenciant-les d’aquelles pseudocientífiques que no admeten comprovació experimental.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.2",
+      "objetivo_id": "CE2",
+      "descripcion": "Predir, per a les qüestions plantejades, respostes que es puguin comprovar amb les eines i coneixements adquirits, tant de manera experimental com deductiva, aplicant el raonament logicomatemàtic en el procés de validació.",
+      "peso": 1
+    },
+    {
+      "id": "CE2.3",
+      "objetivo_id": "CE2",
+      "descripcion": "Aplicar les lleis i teories científiques més importants per validar hipòtesis de manera informada i coherent mitjançant el coneixement científic existent, dissenyant els procediments experimentals o deductius necessaris per resoldre-les i analitzant-ne els resultats críticament.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.1",
+      "objetivo_id": "CE3",
+      "descripcion": "Emprar fonts variades, fiables i segures per seleccionar, interpretar. organitzar i comunicar informació relativa a un procés fisicoquímic concret, relacionant entre si el que cadascuna d’elles conté, extraient en cada cas allò més rellevant per a la resolució d’un problema i rebutjant tot el que sigui irrellevant.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.2",
+      "objetivo_id": "CE3",
+      "descripcion": "Utilitzar adequadament les regles bàsiques de la física i la química, incloent l’ús d’unitats de mesura, les eines matemàtiques i les regles de nomenclatura, aconseguint una comunicació efectiva amb tota la comunitat científica.",
+      "peso": 1
+    },
+    {
+      "id": "CE3.3",
+      "objetivo_id": "CE3",
+      "descripcion": "Aplicar amb rigor les normes d’ús dels espais específics de la ciència, com el laboratori de https://www.caib.es/eboibfront/pdf/ca/2025/103/1197479",
+      "peso": 1
+    },
+    {
+      "id": "CE4.1",
+      "objetivo_id": "CE4",
+      "descripcion": "Utilitzar de manera eficient recursos variats, tradicionals i digitals, millorant l’aprenentatge autònom i la interacció amb altres membres de la comunitat educativa, de manera rigorosa i respectuosa i analitzant críticament les aportacions de cada participant.",
+      "peso": 1
+    },
+    {
+      "id": "CE4.2",
+      "objetivo_id": "CE4",
+      "descripcion": "Treballar de manera versàtil amb mitjans variats, tradicionals i digitals, en la consulta d’informació i la creació de continguts, seleccionant i emprant amb criteri les fonts i eines més fiables i rebutjant les menys adequades per a la millora de l’aprenentatge propi i col·lectiu.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.1",
+      "objetivo_id": "CE5",
+      "descripcion": "Establir interaccions constructives i coeducatives emprenent activitats de cooperació, com a manera de construir un mitjà de treball eficient en la ciència.",
+      "peso": 1
+    },
+    {
+      "id": "CE5.2",
+      "objetivo_id": "CE5",
+      "descripcion": "Emprendre, de manera autònoma i d’acord amb la metodologia adequada, projectes científics que involucrin els alumnes en la millora de la societat i que creïn valor per a l’individu i per a la comunitat.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.1",
+      "objetivo_id": "CE6",
+      "descripcion": "Reconèixer i valorar, a través de l’anàlisi històrica dels avançaments científics assolits pels homes i les dones de ciència, que la ciència és un procés en permanent construcció i que existeixen les repercussions mútues de la ciència actual amb la tecnologia, la societat i el medi ambient.",
+      "peso": 1
+    },
+    {
+      "id": "CE6.2",
+      "objetivo_id": "CE6",
+      "descripcion": "- Detectar les necessitats tecnològiques, ambientals, econòmiques i socials més importants de l’entorn.",
+      "peso": 1
+    }
+  ],
+  "bloques": [
+    {
+      "id": "B1",
+      "titulo": "› El Canvi"
+    },
+    {
+      "id": "B2",
+      "titulo": "› Les Destreses Científiques Bàsiques"
+    },
+    {
+      "id": "B3",
+      "titulo": "› La Matèria"
+    },
+    {
+      "id": "B4",
+      "titulo": "› L’Energia"
+    },
+    {
+      "id": "B5",
+      "titulo": "› La Interacció"
+    }
+  ],
+  "saberes": [
+    {
+      "id": "B1.1",
+      "bloque_id": "B1",
+      "descripcion": "Comprendre i relacionar els motius pels quals ocorren els principals fenòmen",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.2",
+      "bloque_id": "B1",
+      "descripcion": "Entendre i explicar fenòmens físics i químics quotidians de manera clara i utilitzant els principis, les teories i les lleis científiques adequades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.3",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar varietats de suports com gràfics, vídeos o presentacions, entre d’altres, i mitjans de comunicació per argumentar amb rigor els fenòmens fisicoquímics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.4",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar les lleis i teories pròpies per resoldre problemes fisicoquímics raonant els procediments emprats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.5",
+      "bloque_id": "B1",
+      "descripcion": "Expressar els resultats amb correcció i amb les unitats adequades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.6",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer i descriure problemes reals fisicoquímics i resoldre’ls de forma col·laborativa valorant les solucions que la física i la química poden aportar.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.7",
+      "bloque_id": "B1",
+      "descripcion": "Entendre l’impacte socioeconòmic i mediambiental de la ciència, i en particular de la física i la química, en la vida quotidiana i saber argumentar-ne la importància mitjançant una anàlisi crítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.8",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar les etapes del mètode científic per analitzar, identificar i descriure processos fisicoquímics.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.9",
+      "bloque_id": "B1",
+      "descripcion": "Interpretar la informació obtinguda tant per observació directa del món natural com la presentada en diferents formats: gràfics, taules, texts,…",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.10",
+      "bloque_id": "B1",
+      "descripcion": "Formular hipòtesis basades en observacions prèvies i coneixements adquirits.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.11",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar el raonament logicomatemàtic per a la comprovació experimental o deductiva de les hipòtesis plantejades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.12",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar les lleis i teories científiques més importants per validar hipòtesis de manera informada i coherent amb el coneixement científic existent.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.13",
+      "bloque_id": "B1",
+      "descripcion": "Dissenyar procediments experimentals o deductius necessaris per resoldre les hipòtesis analitzant-ne els resultats críticament.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.14",
+      "bloque_id": "B1",
+      "descripcion": "Manejar amb desimboltura les regles i normes bàsiques de la física i la química en",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.15",
+      "bloque_id": "B1",
+      "descripcion": "Seleccionar, interpretar i comunicar informació referent a un fenomen fisicoquímic emprant fonts fiables, variades i segures (articles científics, publicacions reconegudes…).",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.16",
+      "bloque_id": "B1",
+      "descripcion": "Extreure la informació rellevant necessària per a la resolució d’un problema.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.17",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar correctament les regles de nomenclatura de la IUPAC per formular i anomenar els composts aconseguint una bona comunicació amb tota la comunitat científica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.18",
+      "bloque_id": "B1",
+      "descripcion": "Utilitzar de manera adequada les eines matemàtiques, les unitats de mesura, especialment aquelles del Sistema Internacional, tant en la resolució de problemes com en la presentació de resultats.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.19",
+      "bloque_id": "B1",
+      "descripcion": "Aplicar de forma rigorosa les normes de seguretat del laboratori, assegurant la salut pròpia i la dels companys.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.20",
+      "bloque_id": "B1",
+      "descripcion": "Prendre mesures per minimitzar l’impacte ambiental de les pràctiques de laboratori, com ara utilitzar materials sostenibles quan sigui possible, gestionar correctament els residus perillosos, i aplicar mètodes que redueixin la contaminació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.21",
+      "bloque_id": "B1",
+      "descripcion": "Seleccionar i utilitzar de forma eficient recursos tradicionals i digitals, millorant l’aprenentatge autònom, en equip i la interacció amb altres membres de la comunitat educativa.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.22",
+      "bloque_id": "B1",
+      "descripcion": "Acceptar i respectar les aportacions de tothom, analitzant-les de forma rigorosa i crítica.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.23",
+      "bloque_id": "B1",
+      "descripcion": "Treballar de manera versàtil amb mitjans variats, tradicionals i digitals, en la consulta d’informació i la creació de continguts.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.24",
+      "bloque_id": "B1",
+      "descripcion": "Establir interaccions constructives i coeducatives emprenent activitats de cooperació.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.25",
+      "bloque_id": "B1",
+      "descripcion": "Emprar les estratègies del treball col·laboratiu com a manera de construir un mitjà de treball eficient en la ciència.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.26",
+      "bloque_id": "B1",
+      "descripcion": "Emprendre de manera autònoma projectes científics utilitzant la metodologia pròpia de les ciències.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.27",
+      "bloque_id": "B1",
+      "descripcion": "Analitzar l’impacte que aquestes iniciatives tenen en la millora de la societat, la salut o el medi ambient creant valor tant a nivell individual com per a la comunitat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.28",
+      "bloque_id": "B1",
+      "descripcion": "Reconèixer i valorar la importància dels avenços científics al llarg de la història, realitzats tant per dones com per homes, argumentant i sent conscient dels biaixos de gènere en ciències.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.29",
+      "bloque_id": "B1",
+      "descripcion": "Entendre la recerca científica com una tasca col·lectiva, interdisciplinària i en constant evolució valorant les repercussions i implicacions que té sobre la societat actual.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.30",
+      "bloque_id": "B1",
+      "descripcion": "Identificar les necessitats de la societat (tant tecnològiques, com econòmiques i ambientals) i reconèixer que la ciència, en particular la física i la química, pot millorar i solucionar, contribuint a la sostenibilitat ambiental.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.31",
+      "bloque_id": "B1",
+      "descripcion": "Equacions químiques: ajusts de reaccions químiques i realització de prediccions qualitatives i quantitatives basades en l’estequiometria, relacionant-les amb processos fisicoquímics de la indústria, el medi ambient i la societat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.32",
+      "bloque_id": "B1",
+      "descripcion": "Descripció qualitativa de reaccions químiques d’interès: reaccions de combustió, neutralització i redox, valorant les implicacions que tenen en la tecnologia, la societat o el medi ambient.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B1.33",
+      "bloque_id": "B1",
+      "descripcion": "Factors que influeixen en la velocitat de les reaccions químiques: comprensió de la teoria de col·lisions per explicar la reordenació dels àtoms i realització de prediccions en els processos químics i quotidians més importants.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.1",
+      "bloque_id": "B2",
+      "descripcion": "Treball experimental i projectes de recerca: estratègies en la resolució de problemes i tractament de l’error mitjançant la indagació, la deducció, la cerca d’evidències i el raonament logicomatemàtic, fent inferències vàlides en observacions i obtenint conclusions que vagin més enllà de les condicions experimentals per aplicar-les a nous escenaris.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.2",
+      "bloque_id": "B2",
+      "descripcion": "Experiments i projectes de recerca per resoldre problemes i comprendre els errors, utilitzant la investigació, la deducció i les proves. Raonaments logicomatemàtics per arribar a conclusions i aplicar el que s’ha après a noves situacions.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.3",
+      "bloque_id": "B2",
+      "descripcion": "Entorns d’aprenentatge: el laboratori o espais virtuals, fent servir materials, substàncies i eines tecnològiques adequades.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.4",
+      "bloque_id": "B2",
+      "descripcion": "Normes de seguretat: normes d’ús dels espais de ciència per protegir la salut pròpia i dels altres, la seguretat a les xarxes i el respecte pel medi ambient.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.5",
+      "bloque_id": "B2",
+      "descripcion": "Llenguatge científic: els sistemes d’unitats i els seus símbols, com també eines matemàtiques per a diferents situacions i l’ús de la calculadora.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.6",
+      "bloque_id": "B2",
+      "descripcion": "Interpretació i producció d’informació en diferents formats: recerca d’informació científica en diferents formats, desenvolupant un criteri propi sobre com la ciència pot millorar la societat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B2.7",
+      "bloque_id": "B2",
+      "descripcion": "Valoració de la ciència: reconèixer la importància de la cultura científica i el paper dels científics en els grans avenços de la física i la química per millorar la societat.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.1",
+      "bloque_id": "B3",
+      "descripcion": "Sistemes materials: resolució de problemes de dissolucions (percentatges de massa i volum, massa solut/volum dissolució, molaritat) i de gasos (llei general dels gasos, volum molar), entre altres sistemes materials significatius.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.2",
+      "bloque_id": "B3",
+      "descripcion": "Models atòmics: desenvolupament històric dels principals models establint la seva relació amb els avenços de la ciència i descripció de l’estructura de l’àtom, ions i isòtops.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.3",
+      "bloque_id": "B3",
+      "descripcion": "Estructura electrònica dels àtoms: configuració electrònica d’un àtom i la relació amb la seva posició a la taula periòdica i amb les seves propietats fisicoquímiques.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.4",
+      "bloque_id": "B3",
+      "descripcion": "Composts químics: formació, enllaç iònic i covalent (estructura de Lewis), propietats físiques i químiques i valoració de la seva utilitat i importància.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.5",
+      "bloque_id": "B3",
+      "descripcion": "Quantificació de la quantitat de matèria: càlcul de la quantitat de substància, nombre de mols de sistemes materials de diferent naturalesa manejant amb desimboltura les diferents formes de mesura i expressió en l’entorn científic.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.6",
+      "bloque_id": "B3",
+      "descripcion": "Nomenclatura inorgànica: denominació de substàncies simples, ions i composts químics binaris i ternaris (hidròxids, oxoàcids i oxosals) d’acord amb les normes de la IUPAC.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B3.7",
+      "bloque_id": "B3",
+      "descripcion": "Introducció a la nomenclatura orgànica: denominació de composts orgànics senzills a partir de les normes de la IUPAC.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.1",
+      "bloque_id": "B4",
+      "descripcion": "Energia: formulació i comprovació d’hipòtesis sobre diferents formes i aplicacions de l’energia, basant-se en les seves propietats i el principi de conservació de l’energia mecànica. Utilització d’aquestes idees per resoldre problemes en situacions quotidianes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.2",
+      "bloque_id": "B4",
+      "descripcion": "Transferència d’energia: el treball i la calor com a transferència d’energia entre sistemes relacionats amb forces o diferències de temperatura. La llum i el so com a ones que transfereixen energia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B4.3",
+      "bloque_id": "B4",
+      "descripcion": "Energia en el nostre món: estimació de l’energia que es consumeix en la vida diària mitjançant la recerca d’informació, l’experimentació i el raonament, entendre la importància de l’energia a la societat, com es produeix i la necessitat de fer-ne un ús responsable i sostenible.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.1",
+      "bloque_id": "B5",
+      "descripcion": "Moviment i forces: predicció i comprovació mitjançant experiments i càlculs numèrics sobre les equacions i gràfiques que descriuen el moviment d’objectes (MRU, MRUA, MCU), relacionant-ho amb situacions del dia a dia.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.2",
+      "bloque_id": "B5",
+      "descripcion": "Força: la força com un agent que causa canvis en els cossos, principi fonamental de la Física i com s’aplica en altres camps com el disseny, l’enginyeria, la salut o l’esport.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.3",
+      "bloque_id": "B5",
+      "descripcion": "Caràcter vectorial de les forces: operacions bàsiques amb vectors per fer càlculs amb forces i aplicar-ho a problemes on els objectes estan sotmesos a diverses forces, destacant-ne la importància en situacions quotidianes.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.4",
+      "bloque_id": "B5",
+      "descripcion": "Principals tipus de forces: forces comunes com el pes, la normal, el fregament, la tensió o l’empenta, i com aquestes actuen en diferents situacions i escenaris.",
+      "criterios_ids": []
+    },
+    {
+      "id": "B5.5",
+      "bloque_id": "B5",
+      "descripcion": "Llei de la gravitació universal: atracció entre els cossos de l’univers i el concepte de pes.",
+      "criterios_ids": []
+    }
+  ]
+}
