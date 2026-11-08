@@ -285,6 +285,12 @@ dispositivo y lo recibe ese tercero.
   nota que le corresponde. Los criterios de otro curso que una adaptación pueda
   usar se piden al servidor como dato público del currículo; el nombre del
   alumno nunca va en esa petición.
+- La **planificación semanal y el calendario** (noviembre de 2026) viven
+  también solo en el aparato, como el resto del cuaderno: sesiones previstas
+  por clase y eventos. No llevan datos de alumnado. El fichero .md que se
+  vuelca se lee en el aparato y no sale de él; para comprobar los códigos de
+  criterio se piden al servidor los criterios del área, que son dato público
+  del currículo.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

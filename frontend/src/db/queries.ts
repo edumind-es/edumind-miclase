@@ -1,4 +1,4 @@
-import { db, TABLAS_SINC, INSTRUMENTO_BANCO, VERSION_ESQUEMA, type MiClaseDB } from './localDb'
+import { db, TABLAS_SINC, INSTRUMENTO_BANCO, VERSION_ESQUEMA, TODAS_LAS_CLASES, type MiClaseDB } from './localDb'
 import { SIN_UNIDAD, asignarUnidades, prepararContexto, unidadParaFila, anotar, resumenVacio, criteriosDeRegistro, type ResumenMigracion } from './migracionUnidades'
 import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
@@ -17,7 +17,7 @@ import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
-  GrupoAlumno, UnidadCriterio, Medida,
+  GrupoAlumno, UnidadCriterio, Medida, SesionPlan, EventoCalendario,
 } from './localDb'
 import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 import { medidaDe } from './medidas'
@@ -188,9 +188,12 @@ export async function eliminarGrupo(id: number): Promise<void> {
   await db.transaction('rw',
     [db.grupos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.diario, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
-     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos],
+     db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos,
+     db.planificacion, db.eventos],
     async () => {
       const marcar = { deleted_at: t, updated_at: t }
+      await db.planificacion.where('grupo_id').equals(id).modify(marcar)
+      await db.eventos.where('grupo_id').equals(id).modify(marcar)
 
       const asigs = await db.asignaturas.where('grupo_id').equals(id).toArray()
       for (const a of asigs) {
@@ -3699,7 +3702,8 @@ export async function exportarDatos(
     base.tables.some(t => t.name === nombre) ? base.table(nombre).toArray() : Promise.resolve([])
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
-         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas] = await Promise.all([
+         criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas,
+         planificacion, eventos] = await Promise.all([
     leer<Grupo>('grupos'),
     leer<Alumno>('alumnos'),
     leer<GrupoAlumno>('grupo_alumnos'),
@@ -3717,6 +3721,8 @@ export async function exportarDatos(
     leer<Asiento>('asientos'),
     leer<RegistroDiario>('diario'),
     leer<Medida>('medidas'),
+    leer<SesionPlan>('planificacion'),
+    leer<EventoCalendario>('eventos'),
   ])
 
   // Serializar los blobs de evidencias a base64. En la copia ligera no van: con
@@ -3735,6 +3741,7 @@ export async function exportarDatos(
     calificaciones, sesiones, asistencia, unidades, unidad_criterios,
     criterio_instrumentos, rubricas,
     evidencias: evidenciasSerial, planos, asientos, diario, medidas,
+    planificacion, eventos,
   }, null, 2)
 }
 
@@ -3776,7 +3783,7 @@ export async function importarDatos(json: string): Promise<void> {
     [db.grupos, db.alumnos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.diario,
-     db.medidas,
+     db.medidas, db.planificacion, db.eventos,
      // La restauración también toca el estado de sincronización: ver abajo.
      db.sync_base, db.meta],
     async () => {
@@ -3788,6 +3795,7 @@ export async function importarDatos(json: string): Promise<void> {
         // Una copia sin evidencias no puede dejar el aparato sin las suyas.
         ...(data.sin_evidencias ? [] : [db.evidencias.clear()]),
         db.planos.clear(), db.asientos.clear(), db.diario.clear(), db.medidas.clear(),
+        db.planificacion.clear(), db.eventos.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))
@@ -3807,6 +3815,9 @@ export async function importarDatos(json: string): Promise<void> {
       await db.diario.bulkAdd(sellar(data.diario || []))
       // Las copias anteriores a la v8 no traen medidas.
       await db.medidas.bulkAdd(sellar(data.medidas || []))
+      // Ni las anteriores a la v9 planificación ni calendario.
+      await db.planificacion.bulkAdd(sellar(data.planificacion || []))
+      await db.eventos.bulkAdd(sellar(data.eventos || []))
 
       // Los ids siguen existiendo pero su contenido es otro. Si no se
       // reinicia, la base de fusión apunta a versiones que ya no tienen nada
@@ -3816,4 +3827,108 @@ export async function importarDatos(json: string): Promise<void> {
       await reiniciarEstadoDeSincronizacion()
     }
   )
+}
+
+// ─── Planificación semanal y calendario (esquema v9) ─────────────────────────
+//
+// Las sesiones planificadas son de la clase; los eventos, de la clase o de
+// todas (`TODAS_LAS_CLASES`). Qué casa con qué al volcar un .md lo decide
+// `planificacion/casar.ts`; aquí solo se guarda.
+
+/** Sesiones planificadas de la clase entre dos fechas (incluidas), por día y hora. */
+export async function getPlanificacion(grupo_id: number, desde: string, hasta: string): Promise<SesionPlan[]> {
+  const filas = vivos(await db.planificacion.where('[grupo_id+fecha]')
+    .between([grupo_id, desde], [grupo_id, hasta], true, true).toArray())
+  const min = (h: string) => { const [a, b] = h.split(':').map(Number); return a * 60 + (b || 0) }
+  return filas.sort((a, b) => a.fecha.localeCompare(b.fecha) || min(a.hora_inicio) - min(b.hora_inicio) || a.id! - b.id!)
+}
+
+export async function getSesionPlan(id: number): Promise<SesionPlan | undefined> {
+  const s = await db.planificacion.get(id)
+  return s && !s.deleted_at ? s : undefined
+}
+
+type DatosSesionPlan = Omit<SesionPlan, 'id' | 'updated_at' | 'deleted_at' | 'created_at'>
+
+/** Crea (sin `id`) o modifica una sesión planificada. Mover es cambiar fecha y horas. */
+export async function guardarSesionPlan(datos: DatosSesionPlan, id?: number): Promise<number> {
+  if (id) {
+    await db.planificacion.update(id, tocado({ ...datos }))
+    return id
+  }
+  const reg = nuevo({ ...datos, origen: datos.origen ?? 'manual', created_at: now() })
+  await db.planificacion.add(reg)
+  return reg.id
+}
+
+export async function eliminarSesionPlan(id: number): Promise<void> {
+  const t = sello()
+  await db.planificacion.update(id, { deleted_at: t, updated_at: t })
+}
+
+/**
+ * Eventos de la clase y de todas las clases que tocan el intervalo (un evento
+ * de varios días entra si se solapa).
+ */
+export async function getEventos(grupo_id: number, desde: string, hasta: string): Promise<EventoCalendario[]> {
+  const todos = vivos(await db.eventos.where('grupo_id').anyOf([grupo_id, TODAS_LAS_CLASES]).toArray())
+  return todos
+    .filter(e => e.fecha <= hasta && (e.fecha_fin || e.fecha) >= desde)
+    .sort((a, b) => a.fecha.localeCompare(b.fecha) || (a.hora ?? '').localeCompare(b.hora ?? '') || a.id! - b.id!)
+}
+
+type DatosEvento = Omit<EventoCalendario, 'id' | 'updated_at' | 'deleted_at' | 'created_at'>
+
+export async function guardarEvento(datos: DatosEvento, id?: number): Promise<number> {
+  if (id) {
+    await db.eventos.update(id, tocado({ ...datos }))
+    return id
+  }
+  const reg = nuevo({ ...datos, origen: datos.origen ?? 'manual', created_at: now() })
+  await db.eventos.add(reg)
+  return reg.id
+}
+
+export async function eliminarEvento(id: number): Promise<void> {
+  const t = sello()
+  await db.eventos.update(id, { deleted_at: t, updated_at: t })
+}
+
+/**
+ * Vuelca una semana leída de un .md. Con `sustituir`, antes retira (borrado
+ * lógico) las sesiones de la clase en esas fechas y los eventos que vinieron
+ * de un volcado anterior; los eventos escritos a mano se quedan. Sin
+ * `sustituir` y con algo ya planificado, no hace nada: volcar dos veces la
+ * misma semana no puede duplicarla sin que el docente lo haya decidido.
+ */
+export async function volcarSemana(
+  grupo_id: number,
+  sesiones: Omit<DatosSesionPlan, 'grupo_id'>[],
+  notas: { fecha: string; texto: string }[],
+  opciones: { desde: string; hasta: string; sustituir: boolean },
+): Promise<{ creadas: number; retiradas: number; eventos: number } | null> {
+  const { desde, hasta } = opciones
+  return db.transaction('rw', db.planificacion, db.eventos, async () => {
+    const previas = vivos(await db.planificacion.where('[grupo_id+fecha]')
+      .between([grupo_id, desde], [grupo_id, hasta], true, true).toArray())
+    if (previas.length && !opciones.sustituir) return null
+    const t = sello()
+    for (const p of previas) await db.planificacion.update(p.id!, { deleted_at: t, updated_at: t })
+    const eventosPrevios = vivos(await db.eventos.where('grupo_id').equals(grupo_id).toArray())
+      .filter(e => e.origen === 'volcado' && e.fecha >= desde && e.fecha <= hasta)
+    for (const e of eventosPrevios) await db.eventos.update(e.id!, { deleted_at: t, updated_at: t })
+
+    const creado = now()
+    await db.planificacion.bulkAdd(sesiones.map(s => nuevo({ ...s, grupo_id, origen: 'volcado' as const, created_at: creado })))
+    await db.eventos.bulkAdd(notas.map(n => nuevo({
+      grupo_id, fecha: n.fecha, tipo: 'nota' as const, titulo: n.texto, origen: 'volcado' as const, created_at: creado,
+    })))
+    return { creadas: sesiones.length, retiradas: previas.length, eventos: notas.length }
+  })
+}
+
+/** ¿Hay algo planificado ya en esas fechas? Para preguntar antes de volcar. */
+export async function contarPlanificado(grupo_id: number, desde: string, hasta: string): Promise<number> {
+  return vivos(await db.planificacion.where('[grupo_id+fecha]')
+    .between([grupo_id, desde], [grupo_id, hasta], true, true).toArray()).length
 }

@@ -4,7 +4,7 @@ import {
 } from './migracionUnidades'
 
 /** Versión actual del esquema Dexie. La copia de seguridad la lleva también. */
-export const VERSION_ESQUEMA = 8
+export const VERSION_ESQUEMA = 9
 
 /**
  * Campos comunes de sincronización.
@@ -441,6 +441,83 @@ export interface RegistroDiario extends Sincronizable {
   comunidad: string
 }
 
+/**
+ * Sesión planificada de una clase (esquema v9): lo que el docente prevé hacer
+ * en una franja de un día. Llega por volcado de un .md
+ * (`planificacion/semanal.ts`) o se escribe a mano. Es una previsión, no un
+ * registro de aula: no toca notas ni asistencia. El área y la unidad se
+ * enlazan si casan (`asignatura_id`, `unidad_id`), pero el texto tal cual se
+ * conserva siempre (`area`, `unidad_texto`) para que lo que no casa no se
+ * pierda. Sin índice salvo grupo y fecha.
+ */
+export type TipoSesionPlan = 'clase' | 'especialista' | 'centro'
+
+export interface FaseSecuencia {
+  fase: string
+  minutos: number | null
+  texto: string
+}
+
+/** Criterio anclado: el código tal como venía y, si casó, el del currículo. */
+export interface CriterioAnclado {
+  codigo: string
+  criterio_id: string | null
+}
+
+export interface SesionPlan extends Sincronizable {
+  id?: number
+  grupo_id: number
+  /** YYYY-MM-DD, día local. */
+  fecha: string
+  /** «1ª», «2ª»… si venía; null en una sesión suelta. */
+  franja?: string | null
+  /** «9:00». */
+  hora_inicio: string
+  hora_fin: string
+  /** El área tal como venía escrita. */
+  area: string
+  asignatura_id?: number | null
+  unidad_id?: number | null
+  /** «UD3 · El poder de las palabras». */
+  unidad_texto?: string | null
+  titulo: string
+  tipo: TipoSesionPlan
+  /** 1 si lleva ■: hay algo que calificar. */
+  evaluable: number
+  objetivo?: string | null
+  /** JSON: FaseSecuencia[]. */
+  secuencia_json?: string | null
+  recursos?: string | null
+  evaluacion?: string | null
+  /** JSON: CriterioAnclado[]. */
+  criterios_json?: string | null
+  /** «9:00-10:40» cuando la sesión es parte de un bloque de varias franjas. */
+  bloque?: string | null
+  origen?: 'volcado' | 'manual' | null
+  created_at?: string
+}
+
+/** Grupo de un evento que vale para todas las clases del docente. */
+export const TODAS_LAS_CLASES = 0
+
+export type TipoEvento = 'festivo' | 'centro' | 'evaluacion' | 'reunion' | 'nota' | 'otro'
+
+/** Evento del calendario (esquema v9): festivos, actividades, evaluaciones, reuniones. */
+export interface EventoCalendario extends Sincronizable {
+  id?: number
+  /** Clase a la que pertenece, o `TODAS_LAS_CLASES` (0). */
+  grupo_id: number
+  fecha: string
+  /** Último día, incluido, si dura varios. */
+  fecha_fin?: string | null
+  hora?: string | null
+  tipo: TipoEvento
+  titulo: string
+  notas?: string | null
+  origen?: 'volcado' | 'manual' | null
+  created_at?: string
+}
+
 // Plano de clase: dimensiones de la cuadrícula por grupo
 export interface Plano extends Sincronizable {
   id?: number
@@ -498,6 +575,8 @@ export class MiClaseDB extends Dexie {
   meta!: Table<Meta>
   sync_base!: Table<SyncBase>
   medidas!: Table<Medida>
+  planificacion!: Table<SesionPlan>
+  eventos!: Table<EventoCalendario>
 
   /**
    * `hasta` limita las versiones declaradas. La app usa la última; la puerta
@@ -628,6 +707,21 @@ export class MiClaseDB extends Dexie {
         if (r.deleted_at === undefined) r.deleted_at = null
       })
     })
+
+    // v9 — planificación semanal y calendario. Dos tablas nuevas y vacías:
+    // tampoco tocan filas existentes, así que la puerta no pide copia.
+    if (hasta >= 9) this.version(9).stores({
+      planificacion: '++id, grupo_id, fecha, [grupo_id+fecha], updated_at',
+      eventos:       '++id, grupo_id, fecha, updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      for (const t of ['planificacion', 'eventos']) {
+        await tx.table(t).toCollection().modify(r => {
+          if (!r.updated_at) r.updated_at = r.created_at || sello
+          if (r.deleted_at === undefined) r.deleted_at = null
+        })
+      }
+    })
   }
 }
 
@@ -645,6 +739,7 @@ export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos', 'medidas',
+  'planificacion', 'eventos',
 ] as const
 
 export type TablaSinc = typeof TABLAS_SINC[number]
