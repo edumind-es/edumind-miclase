@@ -16,7 +16,7 @@ import {
   type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
 } from '@/db/competenciasClave'
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion, Medida } from '@/db/localDb'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 
 export type AreaInforme = {
   asig: Asignatura
@@ -48,20 +48,17 @@ export type DatosGrupo = {
 type Cabeceras = () => Record<string, string>
 
 /**
- * Criterios del área en el currículo del servidor: su descripción y su
- * conexión con las competencias clave (vacío sin conexión).
+ * Criterios del área en el currículo (empaquetado en la app; el servidor, de
+ * reserva): su descripción y su conexión con las competencias clave (vacío si
+ * no hay de dónde leer). El currículo es público: las cabeceras de sesión ya
+ * no hacen falta y se aceptan solo para no cambiar a quien llama.
  */
 export async function curriculoDeArea(
-  grupo: Grupo, asig: Asignatura, headers: Cabeceras
+  grupo: Grupo, asig: Asignatura, _headers?: Cabeceras
 ): Promise<{ descripciones: Map<string, string>; conexiones: Map<string, ConexionCriterio> }> {
-  const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-  const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}` +
-              `&curso=${cursoNorm}&etapa=${grupo.etapa}` +
-              `&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
   try {
-    const lista = await fetch(api(url), { headers: headers() }).then(r => r.ok ? r.json() : [])
+    const lista = await curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
     const descripciones = new Map<string, string>()
-    if (!Array.isArray(lista)) return { descripciones, conexiones: new Map() }
     for (const c of lista) descripciones.set(c.id, c.descripcion)
     return { descripciones, conexiones: conexionesDeCriterios(lista) }
   } catch {
@@ -69,19 +66,17 @@ export async function curriculoDeArea(
   }
 }
 
-/** Descripciones de los criterios del área, del currículo del servidor (vacío sin conexión). */
+/** Descripciones de los criterios del área, del currículo (vacío si no hay de dónde leer). */
 export async function criteriosDeArea(
-  grupo: Grupo, asig: Asignatura, headers: Cabeceras
+  grupo: Grupo, asig: Asignatura, headers?: Cabeceras
 ): Promise<Map<string, string>> {
   return (await curriculoDeArea(grupo, asig, headers)).descripciones
 }
 
-/** Descriptores operativos de la etapa de la clase (vacío sin conexión). */
-export async function descriptoresDeEtapa(grupo: Grupo, headers: Cabeceras): Promise<Descriptor[]> {
-  const url = `/api/curriculum/descriptores?etapa=${grupo.etapa}&comunidad=${encodeURIComponent(grupo.comunidad)}`
+/** Descriptores operativos de la etapa de la clase (vacío si no hay de dónde leer). */
+export async function descriptoresDeEtapa(grupo: Grupo, _headers?: Cabeceras): Promise<Descriptor[]> {
   try {
-    const r = await fetch(api(url), { headers: headers() }).then(r => r.ok ? r.json() : null)
-    return Array.isArray(r?.descriptores) ? r.descriptores : []
+    return (await curriculo.descriptores(grupo.etapa, grupo.comunidad)).descriptores
   } catch {
     return []
   }

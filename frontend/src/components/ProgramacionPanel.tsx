@@ -7,11 +7,10 @@ import {
   asignarInstrumentoAUnidad, borrarProgramacion,
   type UnidadConCriterios,
 } from '@/db/queries'
-import { useAppStore } from '@/store/useAppStore'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import { pesosAPartesIguales } from '@/db/calculo'
 import { sugerirInstrumentos, BLOOM, DOK } from '@/ia/taxonomias'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 import ImportarProens from './ImportarProens'
 import ChipsCompetencias from './ChipsCompetencias'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
@@ -54,7 +53,6 @@ export default function ProgramacionPanel({
   instrumentos, onIrAInstrumentos, onCambio,
 }: Props) {
   const navigate = useNavigate()
-  const headers = useAppStore(s => s._headers)
 
   const [unidades, setUnidades] = useState<UnidadConCriterios[]>([])
   const [criteriosCurr, setCriteriosCurr] = useState<CurrCriterio[]>([])
@@ -72,12 +70,9 @@ export default function ProgramacionPanel({
   const [criteriosAbiertos, setCriteriosAbiertos] = useState<number | null>(null)
 
   const cargar = async () => {
-    const crits = await fetch(
-      api(`/api/curriculum/criterios?asignatura=${encodeURIComponent(asignaturaNombre)}&curso=${grupoCurso}&etapa=${grupoEtapa}&comunidad=${encodeURIComponent(grupoComunidad)}`),
-      { headers: headers() }
-    ).then(r => r.json()).catch(() => [])
-
-    const currArr: CurrCriterio[] = Array.isArray(crits) ? crits : []
+    const currArr: CurrCriterio[] = await curriculo
+      .criterios(asignaturaNombre, grupoCurso, grupoEtapa, grupoComunidad)
+      .catch(() => [])
     setCriteriosCurr(currArr)
     setUnidades(await getUnidades(asignaturaId, currArr))
     onCambio?.()

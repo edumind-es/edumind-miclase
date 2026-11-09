@@ -6,15 +6,15 @@
  * No crea criterios nuevos: la nota del criterio adaptado se guarda en la
  * casilla del criterio de la clase al que sustituye, y aquí solo se guarda
  * el texto (`Medida.criterios_json`) y el curso de referencia. Los criterios
- * de otro curso se piden al servidor (`/api/curriculum/cursos` y
- * `/criterios`), que es dato público; nada del alumno sale del aparato.
+ * de otro curso salen del currículo empaquetado en la app (`@/curriculo`:
+ * `cursos` y `criterios`, con el servidor de reserva); nada del alumno sale
+ * del aparato.
  */
 import { useEffect, useMemo, useState } from 'react'
 import type { Alumno, Asignatura, Grupo, Medida } from '@/db/localDb'
 import { getUnidades, guardarMedida, eliminarMedida } from '@/db/queries'
 import { parsearCriterios, trimestresDeMedida, type CriteriosAdaptados, type Sustituto } from '@/db/medidas'
-import { useAppStore } from '@/store/useAppStore'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 
 type Props = {
   alumno: Alumno
@@ -26,13 +26,9 @@ type Props = {
 
 type Criterio = { id: string; descripcion: string }
 const ORDINAL: Record<number, string> = { 1: '1T', 2: '2T', 3: '3T' }
-
-function normalizarCurso(c: string): string {
-  return String(c).replace('º', '').replace('ª', '').trim() + 'º'
-}
+const { normalizarCurso } = curriculo
 
 export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, onCambio }: Props) {
-  const headers = useAppStore(s => s._headers)
   const comunidad = asignatura.comunidad || grupo.comunidad
   const cursoClase = normalizarCurso(grupo.curso)
 
@@ -47,13 +43,8 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
   const [estado, setEstado] = useState('')
   const [errorCurriculo, setErrorCurriculo] = useState(false)
 
-  const pedir = async <T,>(url: string): Promise<T> => {
-    const r = await fetch(api(url), { headers: headers() })
-    if (!r.ok) throw new Error(String(r.status))
-    return r.json()
-  }
-  const urlCriterios = (c: string) =>
-    `/api/curriculum/criterios?asignatura=${encodeURIComponent(asignatura.nombre)}&curso=${encodeURIComponent(c)}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(comunidad)}`
+  const criteriosDe = (c: string): Promise<Criterio[]> =>
+    curriculo.criterios(asignatura.nombre, c, grupo.etapa, comunidad)
 
   // Criterios programados del área (unión de las unidades) y sus textos.
   useEffect(() => {
@@ -64,12 +55,12 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
       for (const u of us) for (const c of u.criterios) ids.add(c.criterio_id)
       setProgramados([...ids].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })))
     })
-    pedir<Criterio[]>(urlCriterios(cursoClase))
+    criteriosDe(cursoClase)
       .then(all => { if (vigente) { setDeClase(new Map((Array.isArray(all) ? all : []).map(c => [c.id, c.descripcion]))); setErrorCurriculo(false) } })
       .catch(() => { if (vigente) setErrorCurriculo(true) })
-    pedir<{ curso: string }[]>(`/api/curriculum/cursos?asignatura=${encodeURIComponent(asignatura.nombre)}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(comunidad)}`)
+    curriculo.cursos(asignatura.nombre, grupo.etapa, comunidad)
       .then(lista => { if (vigente) setCursos((Array.isArray(lista) ? lista : []).map(x => normalizarCurso(x.curso)).filter(c => c !== cursoClase)) })
-      .catch(() => { /* sin servidor no hay otros cursos: queda el texto libre */ })
+      .catch(() => { /* sin currículo no hay otros cursos: queda el texto libre */ })
     return () => { vigente = false }
   }, [asignatura.id])
 
@@ -84,7 +75,7 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
   useEffect(() => {
     if (!curso) { setDeOtro([]); return }
     let vigente = true
-    pedir<Criterio[]>(urlCriterios(curso))
+    criteriosDe(curso)
       .then(all => { if (vigente) setDeOtro(Array.isArray(all) ? all : []) })
       .catch(() => { if (vigente) setDeOtro([]) })
     return () => { vigente = false }

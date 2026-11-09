@@ -20,7 +20,7 @@ import {
 import CorregirPrueba from './CorregirPrueba'
 import { notaDeRubrica, nivelANota, calificativo } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 import type { Alumno, Grupo, Asignatura, Instrumento } from '@/db/localDb'
 import InstrumentosManager from './InstrumentosManager'
 import CapturaEvidencia, { type EvidenciaCapturada } from './CapturaEvidencia'
@@ -153,12 +153,8 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   // 5) Criterios del currículo, filtrados por la unidad activa
   useEffect(() => {
     if (!asig || !grupo) { setCriterios([]); return }
-    const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-    const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
-    fetch(api(url))
-      .then(r => { if (!r.ok) throw new Error(); return r.json() })
-      .then((all: Criterio[]) => {
-        const lista = Array.isArray(all) ? all : []
+    curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
+      .then((lista: Criterio[]) => {
         if (unidadId) {
           const u = unidades.find(u => u.id === unidadId)
           const ids = new Set((u?.criterios || []).map(c => c.criterio_id))

@@ -1,7 +1,8 @@
 /**
  * Con qué conecta un criterio: sus descriptores operativos o, si la comunidad
- * solo nombra la competencia clave, esa competencia. Lo dice el currículo del
- * servidor (`/api/curriculum/criterios`); sin conexión no se pinta nada.
+ * solo nombra la competencia clave, esa competencia. Lo dice el currículo
+ * empaquetado en la app (`@/curriculo`, campos `descriptores`,
+ * `competencias_clave` y `conexion_origen`); sin ellos no se pinta nada.
  */
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 

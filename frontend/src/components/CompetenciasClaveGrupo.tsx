@@ -60,7 +60,7 @@ export default function CompetenciasClaveGrupo({ grupoId }: { grupoId: number })
   if (error) return <div className="card" style={{ padding: 24, color: 'var(--rojo-500)' }}>No se han podido reunir las notas de la clase.</div>
   if (!datos) return <p style={{ color: 'var(--gris-600)' }}>Calculando…</p>
   if (!datos.descriptores.length) {
-    return <div className="card" style={{ padding: 24, color: 'var(--gris-600)' }}>No se han podido leer los descriptores operativos del servidor: esta vista necesita haberlos descargado con conexión.</div>
+    return <div className="card" style={{ padding: 24, color: 'var(--gris-600)' }}>No se han podido leer los descriptores operativos del currículo: sin ellos esta vista no puede calcular nada.</div>
   }
 
   const textoDe = new Map(datos.descriptores.map(d => [d.id, d.descripcion]))

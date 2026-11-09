@@ -21,11 +21,10 @@ import {
 import { calificativo } from '@/db/calculo'
 import { agruparPorCompetencia, calcularCobertura, mediaDe } from '@/db/cobertura'
 import { miniTendencia } from '@/db/diario'
-import { useAppStore } from '@/store/useAppStore'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { abreviatura } from '@/ia/instrumentosConfig'
-import { api } from '@/api'
+import * as curriculo from '@/curriculo'
 import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import PruebaEditor from '@/components/PruebaEditor'
@@ -49,7 +48,7 @@ import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
-type Criterio = { id: string; descripcion: string; objetivo_id?: string; peso?: number } & ConexionDeCriterio
+type Criterio = { id: string; descripcion: string; objetivo_id?: string | null; peso?: number } & ConexionDeCriterio
 
 /** Lo que hace falta para pintar el criterio ampliado donde toca. */
 type CriterioAmpliado = {
@@ -144,7 +143,6 @@ function claseNota(v: number | null | undefined) {
 
 export default function EvaluacionPage() {
   const [params] = useSearchParams()
-  const headers = useAppStore(s => s._headers)
 
   // La clase, el área y el trimestre son del contexto: la barra de arriba y
   // las pestañas de área de esta pantalla mueven lo mismo.
@@ -297,17 +295,13 @@ export default function EvaluacionPage() {
     })
   }, [asignaturaId, unidadParam])
 
-  // Criterios del currículo (servidor) — cacheados por área/curso
+  // Criterios del currículo (empaquetado en la app; el servidor, de reserva)
   useEffect(() => {
     const asig = asignaturas.find(a => a.id === asignaturaId)
     if (!asig || !grupo) { setCriterios([]); return }
 
-    const cursoNorm = String(grupo.curso).replace('º', '').replace('ª', '') + 'º'
-    const url = `/api/curriculum/criterios?asignatura=${encodeURIComponent(asig.nombre)}&curso=${cursoNorm}&etapa=${grupo.etapa}&comunidad=${encodeURIComponent(asig.comunidad || grupo.comunidad)}`
-
-    fetch(api(url), { headers: headers() })
-      .then(r => { if (!r.ok) throw new Error(); return r.json() })
-      .then((all: Criterio[]) => { setCriterios(Array.isArray(all) ? all : []); setErrorCurriculo(false) })
+    curriculo.criterios(asig.nombre, grupo.curso, grupo.etapa, asig.comunidad || grupo.comunidad)
+      .then((all: Criterio[]) => { setCriterios(all); setErrorCurriculo(false) })
       .catch(() => { setCriterios([]); setErrorCurriculo(true) })
   }, [asignaturaId, asignaturas, grupo])
 

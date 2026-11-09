@@ -10,6 +10,7 @@
     "test:rapido": "node pruebas/ejecutar.mjs --rapido",
     "test:prod": "node pruebas/ejecutar.mjs --produccion",
     "seed": "cd backend && npm run seed",
+    "curriculo": "node scripts/empaquetar_curriculo.mjs",
     "build": "cd frontend && npm run build",
     "nativo:sync": "npm run build && cd frontend && npx cap sync",
     "nativo:ios": "npm run nativo:sync && cd frontend && npx cap open ios",

@@ -24,6 +24,10 @@ const p = await ctx.newPage()
 const erroresConsola = []
 p.on('console', m => { if (m.type() === 'error') erroresConsola.push(m.text()) })
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
+// El currículo viaja dentro de la app (src/curriculo/): calificar no puede
+// pedirle nada al servidor, o la PWA dejaría de funcionar sin red.
+const curriculoAlServidor = []
+p.on('request', r => { if (r.url().includes('/api/curriculum/')) curriculoAlServidor.push(r.url()) })
 
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: false })
 
@@ -514,6 +518,9 @@ ok(backup.grupos.length === 1 && backup.alumnos.length === 4, 'incluye clase y a
 ok(backup.calificaciones.length > 0, 'incluye las calificaciones', `${backup.calificaciones.length}`)
 ok(backup.grupos.every(g => g.updated_at), 'todos los registros llevan sello de sincronización')
 ok(backup.grupos[0].id > 1000000, 'los ids son del rango de este dispositivo', `id=${backup.grupos[0].id}`)
+
+console.log('\n16. El currículo no sale del aparato')
+ok(curriculoAlServidor.length === 0, 'ninguna petición a /api/curriculum en toda la sesión', curriculoAlServidor.slice(0, 3).join(' '))
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}`)
 if (erroresConsola.length) {
