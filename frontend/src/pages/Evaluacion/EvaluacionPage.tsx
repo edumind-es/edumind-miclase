@@ -546,8 +546,8 @@ export default function EvaluacionPage() {
 
   return (
     <>
-      {/* Cabecera */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+      {/* Cabecera: la unidad y lo poco que no es la matriz, en una sola fila */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '14px 0', flexWrap: 'wrap', gap: 10 }}>
         {/* El título no ocupa fila: la barra de arriba ya dice clase y área, y lo
             que importa aquí es la unidad. Sigue en el documento para el lector de pantalla. */}
         <h1 className="page-title" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', margin: 0 }}>Calificador</h1>
