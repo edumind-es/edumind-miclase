@@ -800,7 +800,14 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .instr-th-criterio button:hover { opacity: 1; }
 .instr-th-criterio-anadir { font-size: 10.5px; max-width: 110px; margin-top: 3px; padding: 1px 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: inherit; cursor: pointer; }
 .instr-th-criterio-anadir option { color: var(--gris-900); }
-.matriz-instrumentos.cabeceras-compactas .instr-th-detalle { display: none; }
+.matriz-instrumentos.cabeceras-compactas .instr-th:not(.abierta) .instr-th-detalle { display: none; }
+/* «Más» de una columna: despliega lo suyo, sin abrir las demás. */
+.instr-th-mas {
+  display: block; width: 100%; margin-top: 4px; min-height: 44px; border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--radio-sm); background: transparent; color: var(--blanco); font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.instr-th-mas:hover, .instr-th-mas[aria-expanded="true"] { background: rgba(255,255,255,.18); }
+.instr-th-mas:disabled { opacity: .5; cursor: default; }
 .matriz-instrumentos.cabeceras-compactas thead th.instr-th { min-width: 150px; padding-bottom: 8px; }
 .cabeceras-toggle {
   display: block; margin-top: 6px; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radio-sm);

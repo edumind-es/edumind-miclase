@@ -157,6 +157,8 @@ try {
   await hoja.close()
 
   console.log('\n4. Corregir por cámara con esa foto')
+  // La cámara no es la acción principal de la columna: va tras su «Más».
+  { const mas = colExamen.locator('[data-columna-mas]'); if ((await mas.getAttribute('aria-expanded')) !== 'true') await mas.click() }
   await colExamen.locator('[data-escanear-abrir]').click()
   await escaner.waitFor({ timeout: 8000 })
   await escaner.locator('[data-escaner-fichero]').setInputFiles({ name: 'hoja.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })

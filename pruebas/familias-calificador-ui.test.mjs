@@ -54,6 +54,12 @@ const anadirHijo = async (bloque, nombre, tipo) => {
   await bloque.locator(`[data-hijo][data-nombre="${nombre}"]`).waitFor({ timeout: 5000 })
 }
 
+/** Abre el «Más» de una columna si está plegado: ahí van las acciones que no son la principal. */
+const abrirMasDeColumna = async (col) => {
+  const mas = col.locator('[data-columna-mas]')
+  if (await mas.count() && (await mas.getAttribute('aria-expanded')) !== 'true') await mas.click()
+}
+
 try {
   console.log('\n1. Clase con programación de PROENS y dos hijos en la táboa')
   await p.goto(BASE + '/grupos/nuevo', { waitUntil: 'networkidle' })
@@ -135,6 +141,8 @@ try {
   await foto('familias-cal-02-instrumentos')
 
   console.log('\n4. «Evaluar hoy» con Cuaderno escribe en el hijo')
+  // Sin herramienta, «Evaluar hoy» es la segunda opción: va tras el «Más» de la columna.
+  await abrirMasDeColumna(p.locator('[data-instr-th][data-nombre="Cuaderno"]'))
   await p.locator('[data-instr-th][data-nombre="Cuaderno"] [data-sesion-abrir]').click()
   const sesion = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesion.waitFor({ timeout: 5000 })
@@ -157,6 +165,7 @@ try {
   ok(await colCuaderno.locator('[data-herramienta-definir]').count() === 1, 'la cabecera de Cuaderno ofrece «Definir herramienta»')
   ok((await colCuaderno.locator('[data-herramienta-definir]').textContent()).includes('Definir herramienta'), 'como acción principal: no tiene herramienta')
   ok(await colCuaderno.locator('[data-sesion-abrir]').count() === 1, 'y «Evaluar hoy» sigue disponible como segunda opción')
+  await abrirMasDeColumna(colCuaderno)
   await colCuaderno.locator('[data-sesion-abrir]').click()
   const sesionSin = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesionSin.waitFor({ timeout: 5000 })
@@ -176,7 +185,7 @@ try {
   await editor.waitFor({ state: 'hidden', timeout: 5000 })
   await p.waitForTimeout(900)
   ok(await colCuaderno.locator('[data-herramienta-definir]').count() === 0, 'con la lista guardada, la cabecera ya no pide herramienta')
-  ok((await colCuaderno.locator('[data-sesion-abrir]').textContent()).includes('Calificar con la rúbrica'), 'y el botón pasa a «Calificar con la rúbrica»')
+  ok((await colCuaderno.locator('[data-sesion-abrir]').textContent()).includes('Calificar'), 'y el botón pasa a «Calificar con la rúbrica»')
   await colCuaderno.locator('[data-sesion-abrir]').click()
   const sesionLista = p.getByRole('dialog', { name: /^Calificar con la rúbrica: Cuaderno/ })
   await sesionLista.waitFor({ timeout: 8000 })

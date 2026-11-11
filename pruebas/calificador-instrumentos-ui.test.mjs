@@ -163,7 +163,7 @@ try {
   ok(idsCabecera.length >= 1, `«${nombreInstr}» cubre ${idsCabecera.length} criterio(s)`, idsCabecera.join(', '))
   // De observación: el diario es su herramienta y «Evaluar hoy» va primero,
   // pero la cabecera ofrece definir una rúbrica por si el docente la prefiere.
-  ok((await colDiario.locator('[data-herramienta-definir]').textContent()).includes('Definir rúbrica'), 'un instrumento de observación ofrece «Definir rúbrica» como segunda opción')
+  ok((await colDiario.locator('[data-herramienta-definir]').textContent()).includes('Definir una rúbrica'), 'un instrumento de observación ofrece «Definir rúbrica» como segunda opción')
   await colDiario.locator('[data-sesion-abrir]').click()
   const sesion = p.getByRole('dialog', { name: /^Evaluar hoy: / })
   await sesion.waitFor({ timeout: 5000 })
