@@ -15,6 +15,7 @@ import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, pesosDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
+import AnalisisAlumno from '@/components/AnalisisAlumno'
 import { verNeae } from '@/db/datosSensibles'
 import CompetenciasClaveGrupo from '@/components/CompetenciasClaveGrupo'
 
@@ -31,6 +32,8 @@ export default function SeguimientoPage() {
   const [datosCriterios, setDatosCriterios] = useState<any[]>([])
   const [datosCompetencias, setDatosCompetencias] = useState<any[]>([])
   const [filas, setFilas] = useState<FilaAlumno[]>([])
+  /** El alumno cuyo análisis frente al grupo está abierto. */
+  const [analisisDe, setAnalisisDe] = useState<Alumno | null>(null)
   const [cargando, setCargando] = useState(false)
   const [vista, setVista] = useState<'criterios' | 'competencias' | 'clave' | 'alumnado'>('criterios')
 
@@ -247,7 +250,11 @@ export default function SeguimientoPage() {
                     return (
                       <tr key={f.alumno.id} style={{ background: i % 2 ? 'var(--gris-100)' : 'white' }}>
                         <td style={{ padding: '9px 14px', fontWeight: 500 }}>
-                          {f.alumno.apellidos}, {f.alumno.nombre}
+                          <button type="button" data-analisis-abrir={f.alumno.id} onClick={() => setAnalisisDe(f.alumno)}
+                            title="Ver su análisis frente al grupo"
+                            style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', fontWeight: 500, color: 'var(--azul-700)', textDecoration: 'underline', cursor: 'pointer', textAlign: 'left' }}>
+                            {f.alumno.apellidos}, {f.alumno.nombre}
+                          </button>
                           {f.alumno.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                         </td>
                         {[1, 2, 3].map(t => (
@@ -276,6 +283,9 @@ export default function SeguimientoPage() {
             </div>
           )}
         </>
+      )}
+      {analisisDe && grupoId && (
+        <AnalisisAlumno alumno={analisisDe} grupoId={grupoId} asignaturaId={asignaturaId} onCerrar={() => setAnalisisDe(null)} />
       )}
     </>
   )

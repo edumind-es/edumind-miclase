@@ -171,6 +171,28 @@ try {
   ok(await minimo.getAttribute('aria-expanded') === 'true', 'al tocarlo se despliega entero')
   await foto('aterrizaje-04-minimo')
 
+  console.log('\n6. Análisis de un alumno frente al grupo, desde Seguimiento')
+  await panel.getByRole('button', { name: /Cerrar/ }).first().click().catch(() => {})
+  await p.keyboard.press('Escape').catch(() => {})
+  await p.getByRole('link', { name: 'Seguimiento', exact: true }).click()
+  await p.waitForTimeout(1200)
+  await p.getByRole('button', { name: /Por alumno/ }).click()
+  const abrirAnalisis = p.locator('[data-analisis-abrir]')
+  await abrirAnalisis.first().waitFor({ timeout: 8000 })
+  ok(await abrirAnalisis.count() === 3, 'cada alumno de la tabla abre su análisis')
+  await abrirAnalisis.first().click()
+  const analisis = p.locator('[data-analisis-alumno]')
+  await analisis.waitFor({ timeout: 8000 })
+  await analisis.locator('[data-analisis-grupo]').waitFor({ timeout: 8000 })
+  const textoGrupo = await analisis.locator('[data-analisis-grupo]').textContent()
+  // Abad 6, Bello 5, Casal 9 en la misma columna: mediana 6.
+  ok(/3 alumnos/.test(textoGrupo) && /mediana\s*6/.test(textoGrupo) && /moda/.test(textoGrupo), 'dice media, mediana y moda del grupo', textoGrupo.slice(0, 140))
+  ok(/Abad Ríos, Ana/.test(await analisis.textContent()) && await analisis.locator('[data-analisis-fila="area"]').count() === 1, 'con la nota del área de Ana frente al grupo')
+  ok(/no salen en el informe impreso/.test(textoGrupo), 'y avisa de que con tres notas el papel no dará las cifras del grupo')
+  ok(await analisis.locator('[data-analisis-imprimir]').isEnabled(), 'se puede imprimir el informe')
+  await foto('aterrizaje-05-analisis')
+  await analisis.getByRole('button', { name: 'Cerrar' }).click()
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('aterrizaje-error').catch(() => {})

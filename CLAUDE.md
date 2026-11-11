@@ -655,6 +655,26 @@ edumind_miclase/
   (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
   Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
   el informe de la prueba por unidad.
+- **El análisis de un alumno lo compara con su grupo y no calcula ninguna
+  nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
+  `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que
+  ya da `getResumenCurso` y de las respuestas de cada examen
+  (`examenesDeArea` en `queries.ts`): por área, por familia de instrumentos
+  y por criterio, la nota del alumno junto a media, mediana y moda del
+  grupo; sus puntos débiles (suspenso, o un punto o más bajo la mediana) y
+  fuertes; y en cada examen, las preguntas que él falló (< 50 %) y la
+  mayoría acertó (≥ 60 %), con `informeDePrueba`. Decisiones de Luis (nov
+  2026): la **moda va sobre el calificativo** (IN·SU·BI·NT·SB), no sobre la
+  nota, que con decimales no se repite; y la nota de un criterio
+  **adaptado (ACI) no entra** en la estadística del grupo de ese criterio ni
+  se compara ahí, siempre, con NEAE a la vista o no. La pantalla es
+  `AnalisisAlumno` (`[data-analisis-alumno]`), desde Seguimiento → «Por
+  alumno» (`[data-analisis-abrir]` en el nombre) y desde la ficha; es del
+  docente y enseña todas las cifras. El documento
+  (`informes/analisisAlumno.ts`, Lámina, por `imprimir`) lleva nombre y
+  **no da cifras del grupo con menos de `MINIMO_GRUPO` (5) notas**: de tres
+  se deducen las de los compañeros. El informe de una prueba sigue siendo
+  del grupo y sin nombres.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

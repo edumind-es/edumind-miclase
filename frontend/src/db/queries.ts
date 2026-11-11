@@ -11,6 +11,7 @@ import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { resumirEvidencias, type ResumenEvidencias } from './almacen'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
+import type { ExamenDeArea } from './analisisAlumno'
 import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
@@ -2536,6 +2537,29 @@ export async function guardarExamenDeAlumno(p: {
     tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu, nota: ru.nota })
   }
   return { ...r, criterios, tambien }
+}
+
+/**
+ * Los exámenes corregidos de un área, con lo que respondió cada alumno: lo
+ * que necesita el análisis de un alumno (`db/analisisAlumno.ts`). Un examen
+ * sin ninguna corrección no sale.
+ */
+export async function examenesDeArea(asignatura_id: number): Promise<ExamenDeArea[]> {
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const unidades = new Map(vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()).map(u => [u.id!, u.nombre]))
+  const salida: ExamenDeArea[] = []
+  for (const ins of instrumentos) {
+    for (const prueba of await getPruebasDeInstrumento(ins.id!)) {
+      const respuestas = await respuestasDeExamen(ins.id!, prueba.unidad_id, prueba.def)
+      if (!respuestas.length) continue
+      salida.push({
+        instrumento: ins.nombre, unidad_id: prueba.unidad_id,
+        unidad: prueba.unidad_id != null ? unidades.get(prueba.unidad_id) ?? null : null,
+        def: prueba.def, destinos: await criteriosQueEvalua(ins.id!, prueba.unidad_id), respuestas,
+      })
+    }
+  }
+  return salida
 }
 
 /** Una unidad vinculada en la que el examen también puso nota, y en qué criterios. */

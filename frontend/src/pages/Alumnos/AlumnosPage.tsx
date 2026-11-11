@@ -9,6 +9,7 @@ import EvidenciasGaleria from '@/components/EvidenciasGaleria'
 import AjustesDatosSensibles from '@/components/AjustesDatosSensibles'
 import MedidasAlumno from '@/components/MedidasAlumno'
 import HistorialTutorias from '@/components/HistorialTutorias'
+import AnalisisAlumno from '@/components/AnalisisAlumno'
 import { useDatosSensibles } from '@/db/datosSensibles'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
@@ -404,6 +405,7 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   const sensibles = useDatosSensibles()
   const { grupo } = useClaseActiva()
   const [medidasAbiertas, setMedidasAbiertas] = useState(false)
+  const [analisisAbierto, setAnalisisAbierto] = useState(false)
   const [form, setForm] = useState({
     nombre: alumno.nombre,
     apellidos: alumno.apellidos,
@@ -475,6 +477,15 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
         )}
         {medidasAbiertas && grupo && (
           <MedidasAlumno alumno={alumno} grupo={grupo} onCerrar={() => setMedidasAbiertas(false)} />
+        )}
+
+        {/* Análisis frente al grupo: sus notas junto a media, mediana y moda de la clase */}
+        <button type="button" className="btn-secondary" data-analisis-abrir onClick={() => setAnalisisAbierto(true)}
+          style={{ fontSize: 13, marginBottom: 12, marginLeft: 8 }}>
+          Análisis frente al grupo…
+        </button>
+        {analisisAbierto && (
+          <AnalisisAlumno alumno={alumno} grupoId={grupoId} onCerrar={() => setAnalisisAbierto(false)} />
         )}
 
         {/* Historial de tutorías: datos de tutoría, no de NEAE; van siempre a la vista */}
