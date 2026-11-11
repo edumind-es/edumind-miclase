@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Marca from '@/components/Marca'
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
 import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
@@ -108,7 +109,7 @@ function Layout() {
 
       <aside className="sidebar">
         <div className="sidebar-cabecera">
-          <div className="sidebar-logo">EDUmind <span>MiClase</span></div>
+          <div className="sidebar-logo"><Marca lado={26} /><span className="sidebar-logo-texto">EDUmind <span>MiClase</span></span></div>
           <button
             className="sidebar-toggle"
             onClick={() => setPlegado(p => !p)}

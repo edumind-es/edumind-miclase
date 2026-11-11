@@ -144,6 +144,11 @@ const html = documentoActaTutoria(t, {
 })
 ok(html.startsWith('<!doctype html>') && html.includes('lm-plate-top'), 'es un documento Lámina')
 {
+  // La cabecera lleva la marca (el corro de clase): cinco mundos y la clase en el centro.
+  const marca = html.match(/<svg class="marca"[^>]*>(.*?)<\/svg>/)
+  ok(!!marca && (marca[1].match(/<circle /g) || []).length === 6, 'la cabecera lleva la marca: seis círculos')
+}
+{
   // Al imprimir, papel blanco y franja fina: el fondo crudo tintaba la hoja entera.
   const impresion = html.slice(html.indexOf('@media print'), html.indexOf('@media screen'))
   ok(/\.hoja \{[^}]*background: #fff/.test(impresion) && /--lm-paper: #fff/.test(impresion), 'al imprimir la hoja va sobre blanco')

@@ -194,8 +194,12 @@ input:focus, select:focus, textarea:focus {
   font-weight: 700;
   letter-spacing: .5px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.sidebar-logo span { color: var(--azul-300); }
+.sidebar-logo svg { flex: none; }
+.sidebar-logo-texto span { color: var(--azul-300); }
 .layout.plegado .sidebar-logo { display: none; }
 .layout.plegado .sidebar-cabecera { padding: 18px 0; justify-content: center; }
 

@@ -2,10 +2,12 @@
 """
 Genera todos los iconos de EDUmind MiClase desde una única definición.
 
-El icono es la matriz del calificador: cinco columnas —una por cada uno de
-Los Cinco Mundos, que es la firma visual de EDUmind— por tres filas de
-celdas. La última celda queda sin rellenar: una matriz a medio evaluar, que
-es exactamente lo que hace la app.
+El icono es un corro de clase: cinco círculos —uno por cada uno de Los Cinco
+Mundos, que es la firma visual de EDUmind— alrededor de uno central de color
+papel, que es la clase. Lo eligió Luis en la auditoría de noviembre de 2026;
+antes era la matriz del calificador. La misma geometría está en
+`frontend/src/marca.ts` (el símbolo del menú y de los informes): si cambia
+aquí, cambia allí.
 
 Se dibuja a 4x y se reduce con LANCZOS porque PIL no suaviza los bordes de
 las formas; sin ese paso las esquinas redondeadas salen dentadas.
@@ -15,6 +17,7 @@ Uso:  python3 scripts/generar_iconos.py
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -28,7 +31,18 @@ ANDROID = RAIZ / "frontend/android/app/src/main/res"
 # Los Cinco Mundos en color pleno (canon Sistema Lámina v1.1)
 MUNDOS = ["#e8613f", "#e8a92e", "#6ea94a", "#3f7d99", "#2c5c66"]
 FONDO = "#0f2d4a"        # azul-900: el mismo del menú lateral de la app
-PAPEL = "#e9e6dd"        # papel de lámina, para el contorno de la celda vacía
+PAPEL = "#e9e6dd"        # papel de lámina: el círculo central, la clase
+# El mundo interior (#2c5c66) casi no se distingue sobre el azul del fondo:
+# en la marca sobre oscuro va aclarado. La barra del splash lleva el canon.
+MUNDOS_SOBRE_OSCURO = MUNDOS[:4] + ["#5b9aa6"]
+
+# Geometría del corro, en fracciones del lado del cuadrado que ocupa
+ANILLO = 0.38            # radio del corro
+RADIO_MUNDO = 0.12       # radio de cada círculo de color
+RADIO_CLASE = 0.105      # radio del círculo central
+# El pentágono es más alto por arriba que por abajo: se baja un poco para
+# que el dibujo quede centrado a la vista.
+BAJADA = 0.036
 
 SUPER = 4                # factor de supermuestreo
 
@@ -38,37 +52,24 @@ def _hex(c: str) -> tuple[int, int, int]:
     return tuple(int(c[i:i + 2], 16) for i in (0, 2, 4))
 
 
+def centros(cx: float, cy: float, lado: float) -> list[tuple[float, float]]:
+    """Los centros de los cinco círculos, empezando arriba y en sentido horario."""
+    cy = cy + lado * BAJADA
+    return [
+        (cx + lado * ANILLO * math.cos(math.radians(-90 + 72 * k)),
+         cy + lado * ANILLO * math.sin(math.radians(-90 + 72 * k)))
+        for k in range(5)
+    ]
+
+
 def dibujar_marca(d: ImageDraw.ImageDraw, cx: float, cy: float, lado: float) -> None:
-    """
-    Dibuja la matriz 5x3 centrada en (cx, cy) ocupando un cuadrado de `lado`.
-
-    La proporción es 5 columnas x 3 filas, así que el bloque es más ancho que
-    alto: se encaja dentro del cuadrado disponible sin deformarlo.
-    """
-    cols, filas = 5, 3
-    hueco = lado * 0.045
-    ancho_celda = (lado - hueco * (cols - 1)) / cols
-    # La altura de celda se iguala a la anchura para que las celdas sean
-    # cuadradas: es una matriz, no un gráfico de barras.
-    alto_celda = ancho_celda
-    alto_bloque = alto_celda * filas + hueco * (filas - 1)
-
-    x0 = cx - lado / 2
-    y0 = cy - alto_bloque / 2
-    radio = ancho_celda * 0.22
-    grosor = max(2, int(ancho_celda * 0.11))
-
-    for c in range(cols):
-        for f in range(filas):
-            x = x0 + c * (ancho_celda + hueco)
-            y = y0 + f * (alto_celda + hueco)
-            caja = [x, y, x + ancho_celda, y + alto_celda]
-
-            # La última celda queda sin evaluar: solo el contorno
-            if c == cols - 1 and f == filas - 1:
-                d.rounded_rectangle(caja, radius=radio, outline=_hex(PAPEL), width=grosor)
-            else:
-                d.rounded_rectangle(caja, radius=radio, fill=_hex(MUNDOS[c]))
+    """Dibuja el corro centrado en (cx, cy) ocupando un cuadrado de `lado`."""
+    r = lado * RADIO_MUNDO
+    for (x, y), color in zip(centros(cx, cy, lado), MUNDOS_SOBRE_OSCURO):
+        d.ellipse([x - r, y - r, x + r, y + r], fill=_hex(color))
+    rc = lado * RADIO_CLASE
+    yc = cy + lado * BAJADA
+    d.ellipse([cx - rc, yc - rc, cx + rc, yc + rc], fill=_hex(PAPEL))
 
 
 def lienzo(
@@ -141,30 +142,13 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" r
 def favicon_svg() -> str:
     """El favicon se escribe a mano en SVG: nítido a cualquier tamaño."""
     lado = 512 * 0.72
-    cols, filas = 5, 3
-    hueco = lado * 0.045
-    celda = (lado - hueco * (cols - 1)) / cols
-    alto_bloque = celda * filas + hueco * (filas - 1)
-    x0 = 256 - lado / 2
-    y0 = 256 - alto_bloque / 2
-    radio = celda * 0.22
-    grosor = celda * 0.11
-
-    lineas = []
-    for c in range(cols):
-        for f in range(filas):
-            x = round(x0 + c * (celda + hueco), 1)
-            y = round(y0 + f * (celda + hueco), 1)
-            w = round(celda, 1)
-            if c == cols - 1 and f == filas - 1:
-                lineas.append(
-                    f'    <rect x="{x + grosor / 2:.1f}" y="{y + grosor / 2:.1f}" '
-                    f'width="{w - grosor:.1f}" height="{w - grosor:.1f}" rx="{radio:.1f}" '
-                    f'fill="none" stroke="{PAPEL}" stroke-width="{grosor:.1f}"/>')
-            else:
-                lineas.append(
-                    f'    <rect x="{x}" y="{y}" width="{w}" height="{w}" '
-                    f'rx="{radio:.1f}" fill="{MUNDOS[c]}"/>')
+    r = lado * RADIO_MUNDO
+    lineas = [
+        f'    <circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{color}"/>'
+        for (x, y), color in zip(centros(256, 256, lado), MUNDOS_SOBRE_OSCURO)
+    ]
+    lineas.append(
+        f'    <circle cx="256" cy="{256 + lado * BAJADA:.1f}" r="{lado * RADIO_CLASE:.1f}" fill="{PAPEL}"/>')
     return FAVICON_SVG.format(fondo=FONDO, celdas="\n".join(lineas))
 
 

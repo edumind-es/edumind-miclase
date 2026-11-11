@@ -977,6 +977,15 @@ edumind_miclase/
   pisara.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
+  La marca es un **corro de clase**: cinco círculos (Los Cinco Mundos)
+  alrededor de uno central, la clase. La eligió Luis (nov 2026); antes era la
+  matriz 5×3 del calificador. La misma geometría vive en `frontend/src/marca.ts`
+  (puro), que da el símbolo del menú (`components/Marca.tsx`, `[data-marca]`)
+  y el de la cabecera de los informes (`marcaSVG` en `lamina.ts`): si cambia
+  en el script, cambia allí. Sobre fondo oscuro el mundo interior va aclarado
+  (`#5b9aa6`), porque el `#2c5c66` del canon se pierde sobre el azul; sobre
+  papel va el canon y el círculo central en tinta. El splash de Android sigue
+  siendo el de Capacitor.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
   `<a download>` no hace nada dentro de WKWebView: la copia de seguridad
   «se descargaba» en el iPad sin que saliera nada. En nativo la función abre

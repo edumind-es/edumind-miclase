@@ -13,6 +13,7 @@
  * abre la hoja del sistema (ver `nativo/impresora.ts`).
  */
 import { esNativo } from '@/api'
+import { marcaSVG } from '@/marca'
 import { esWebKit } from '@/nativo/webkit'
 import { Impresora } from '@/nativo/impresora'
 import { descargarFichero } from '@/utils/compartir'
@@ -113,6 +114,7 @@ body {
   color: var(--lm-ink-2); text-transform: uppercase;
 }
 .lm-plate-meta .fig { color: var(--lm-ink); font-weight: 600; }
+.lm-plate-meta .fig .marca { vertical-align: -3px; margin-right: 5px; }
 
 .kicker {
   font-weight: 600; font-size: 8.5pt; color: var(--lm-fisico-deep);
@@ -261,7 +263,7 @@ export function hoja(contenido: string): string {
 
 export function cabecera(figura: string): string {
   return `<div class="lm-plate-meta">
-    <span class="fig">EDUmind · MiClase</span>
+    <span class="fig">${marcaSVG(14, 'papel')}EDUmind · MiClase</span>
     <span>${esc(figura)}</span>
   </div>`
 }
