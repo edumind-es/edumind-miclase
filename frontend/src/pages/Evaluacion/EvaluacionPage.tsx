@@ -49,6 +49,7 @@ import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
+import { confirmar } from '@/utils/confirmar'
 type Criterio = { id: string; descripcion: string; objetivo_id?: string | null; peso?: number } & ConexionDeCriterio
 
 /** Lo que hace falta para pintar el criterio ampliado donde toca. */
@@ -379,7 +380,7 @@ export default function EvaluacionPage() {
       n.con_respuestas ? `${n.con_respuestas} con respuestas de examen` : '',
       n.diario ? `${n.diario} registro${n.diario !== 1 ? 's' : ''} del diario` : '',
     ].filter(Boolean).join(', ')
-    if (!confirm(`Vaciar «${col.ins.nombre}» solo en «${unidadActual.nombre}» (${trimestre}º trimestre):\n· ${partes}, de ${n.alumnos} alumno${n.alumnos !== 1 ? 's' : ''}.\n\nLas notas no se borran: quedan como nota anterior (fantasma), sin contar, y se recuperan desde la casilla o con «Deshacer». Las demás unidades y el instrumento no cambian.`)) return
+    if (!await confirmar({ texto: `Vaciar «${col.ins.nombre}» solo en «${unidadActual.nombre}» (${trimestre}º trimestre):\n· ${partes}, de ${n.alumnos} alumno${n.alumnos !== 1 ? 's' : ''}.\n\nLas notas no se borran: quedan como nota anterior (fantasma), sin contar, y se recuperan desde la casilla o con «Deshacer». Las demás unidades y el instrumento no cambian.`, aceptar: 'Vaciar la columna', peligro: true })) return
     const v = await vaciarColumna(col.ins.instrumento_id, unidadId, trimestre)
     setColumnaAviso({ texto: `Vaciada «${col.ins.nombre}» en «${unidadActual.nombre}»: ${partes}. Siguen como nota anterior en cada casilla.`, vaciado: v })
     setRefresco(r => r + 1)
@@ -839,7 +840,7 @@ export default function EvaluacionPage() {
                     setRefresco(r => r + 1)
                   } : undefined}
                   onQuitarCriterio={unidadId ? async (col, cr) => {
-                    if (!confirm(`«${col.ins.nombre}» dejará de evaluar ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».\n\nLas notas ya puestas se conservan (quedan sin columna hasta volver a asociarlo). Las demás unidades no cambian.`)) return
+                    if (!await confirmar({ texto: `«${col.ins.nombre}» dejará de evaluar ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».\n\nLas notas ya puestas se conservan (quedan sin columna hasta volver a asociarlo). Las demás unidades no cambian.`, aceptar: 'Quitar el criterio' })) return
                     try {
                       await quitarCriterioDeColumna(col.ins.instrumento_id, unidadId, cr)
                       setColumnaAviso({ texto: `«${col.ins.nombre}» ya no evalúa ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}». Las notas se conservan.` })

@@ -28,6 +28,7 @@ import AsistenteFamilia from './AsistenteFamilia'
 import ConvertirFamilia from './ConvertirFamilia'
 import { describeUso } from './InstrumentosManager'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   familia: Instrumento
   asignaturaNombre: string
@@ -123,7 +124,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
         lineas.push('', `«${c.familia_nueva.nombre}» pasará a evaluar también:`)
         for (const u of c.anadir) lineas.push(`· ${u.unidad_nombre}: ${u.criterios.join(', ')}`)
       }
-      if (!confirm(lineas.join('\n'))) return
+      if (!await confirmar({ texto: lineas.join('\n'), aceptar: 'Cambiar de instrumento' })) return
       await cambiarFamiliaDeHijo(h.id!, familia_id)
       cambiado()
     } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo cambiar de instrumento') }
@@ -184,7 +185,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
           choques.examenes ? `${choques.examenes} examen${choques.examenes !== 1 ? 'es' : ''} para la misma unidad` : '',
           choques.rubrica ? 'rúbrica propia' : '',
         ].filter(Boolean).join(' y ')
-        sustituir = confirm(`«${hijo.nombre}» ya tiene ${que}.\n\nAceptar: sustituirlo por lo de «${familia.nombre}».\nCancelar: conservar lo de la actividad (lo del instrumento se queda donde está).`)
+        sustituir = await confirmar({ titulo: `«${hijo.nombre}» ya tiene ${que}`, texto: `¿Sustituirlo por lo de «${familia.nombre}»? Si lo conservas, lo del instrumento se queda donde está.`, aceptar: 'Sustituir', cancelar: 'Conservar lo de la actividad' })
       }
       const r = await moverDatosDeFamiliaAHijo(familia.id!, hijo.id!, { sustituir, bloque })
       const partes = [
@@ -206,7 +207,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
    */
   const borrar = async (h: Instrumento) => {
     const u = usos[h.id!] ?? await usoDeInstrumento(h.id!)
-    if (!confirm([
+    if (!await confirmar([
       `Eliminar «${h.nombre}» (dentro de «${familia.nombre}») del área entera.`,
       '',
       `Se retira de TODAS las unidades (${describeUso(u)}). Las notas quedan guardadas en este aparato, pero sin columna: no se ven ni cuentan. No se puede deshacer desde la app.`,

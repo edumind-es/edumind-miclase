@@ -694,6 +694,22 @@ edumind_miclase/
   nota y «Deshacer» devuelve a cada criterio lo que tenía. No finge una
   herramienta: lo dice (`[data-sin-herramienta]`) y ofrece definirla. Con
   examen sigue abriéndose el corrector y con rúbrica o diario, su pasada.
+- **Rediseño del Calificador, fase 3: la app pregunta con su propio
+  diálogo** (nov 2026). `utils/confirmar.tsx`: `await confirmar(…)` y
+  `await avisar(…)` sustituyen a `confirm()` y `alert()` del navegador en
+  toda la app (no queda ninguno fuera de AulaMap, que es código ajeno). Con
+  una cadena, el primer párrafo es la pregunta; con un objeto se da el verbo
+  del botón (`aceptar`), el de cancelar y `peligro` para lo que borra. Se
+  monta solo por encima de cualquier diálogo (`[data-confirmar]`), Esc
+  cancela sin cerrar lo de debajo y devuelve el foco. **Un `confirm()` nuevo
+  es un error**: no deja poner el verbo y las pruebas no lo aceptan igual.
+  Como es asíncrono, quien pregunta es `async` y una casilla que pregunta al
+  marcarse cambia al aceptar, no al pulsar. Las pruebas llaman a
+  `aceptarConfirmaciones(p, alVer?)` de `pruebas/lib/entorno.mjs` ANTES de
+  navegar (acepta sola cada pregunta y entrega su texto) y a
+  `rechazarSiguienteConfirmacion(p)` para cancelar una. Pendiente de esta
+  fase: componentes comunes de botón, diálogo y pestañas, y retener el foco
+  dentro de los diálogos grandes.
 - **El análisis de un alumno lo compara con su grupo y no calcula ninguna
   nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
   `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que

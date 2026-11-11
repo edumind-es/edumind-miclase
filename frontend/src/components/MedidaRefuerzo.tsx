@@ -17,6 +17,7 @@ import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
 import { parsearPesos, trimestresDeMedida } from '@/db/medidas'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 
+import { confirmar } from '@/utils/confirmar'
 type Props = {
   alumno: Alumno
   asignatura: Asignatura
@@ -116,7 +117,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
 
   const quitar = async () => {
     if (!medida) return
-    if (!window.confirm(`¿Quitar el refuerzo de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelve a contar con los porcentajes de la clase.`)) return
+    if (!await confirmar(`¿Quitar el refuerzo de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelve a contar con los porcentajes de la clase.`)) return
     await eliminarMedida(medida.id!)
     setPesos(new Map())
     setEstado('Refuerzo retirado')

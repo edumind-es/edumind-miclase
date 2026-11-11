@@ -9,6 +9,7 @@ import { duracionLegible } from './MiniaturaEvidencia'
 import { descargarFichero } from '@/utils/compartir'
 import type { Alumno, Evidencia, TipoEvidencia } from '@/db/localDb'
 
+import { confirmar } from '@/utils/confirmar'
 const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
 const ETIQUETA: Record<string, string> = { foto: 'Fotos', audio: 'Audios', video: 'Vídeos' }
 const EXTENSION: Record<string, string> = { foto: 'jpg', audio: 'webm', video: 'mp4' }
@@ -54,7 +55,7 @@ export default function EvidenciasGaleria({ alumno, onClose }: Props) {
   }, [onClose, ampliada])
 
   const borrar = async (ev: EvConUrl) => {
-    if (!confirm('¿Eliminar esta evidencia? No se puede deshacer.')) return
+    if (!await confirmar('¿Eliminar esta evidencia? No se puede deshacer.')) return
     await eliminarEvidencia(ev.id!)
     URL.revokeObjectURL(ev.url)
     setEvidencias(prev => prev.filter(e => e.id !== ev.id))

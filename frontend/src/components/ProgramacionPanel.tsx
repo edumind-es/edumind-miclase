@@ -15,6 +15,7 @@ import ImportarProens from './ImportarProens'
 import ChipsCompetencias from './ChipsCompetencias'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 
+import { confirmar } from '@/utils/confirmar'
 const TIPOS_UNIDAD = [
   { value: 'unidad',    label: 'Unidad Didáctica', short: 'UD'   },
   { value: 'situacion', label: 'Situación de Aprendizaje', short: 'SA' },
@@ -96,7 +97,7 @@ export default function ProgramacionPanel({
   }
 
   const handleEliminar = async (id: number, nombre: string) => {
-    if (!confirm(`¿Eliminar «${nombre}»?\n\nSe desvincularán sus criterios e instrumentos. Las calificaciones ya registradas NO se borran.`)) return
+    if (!await confirmar(`¿Eliminar «${nombre}»?\n\nSe desvincularán sus criterios e instrumentos. Las calificaciones ya registradas NO se borran.`)) return
     await dbEliminarUnidad(id)
     if (editId === id) setEditId(null)
     if (criteriosAbiertos === id) setCriteriosAbiertos(null)
@@ -208,7 +209,7 @@ export default function ProgramacionPanel({
   }
 
   const handleBorrarTodo = async () => {
-    if (!confirm('¿Borrar TODA la programación de esta área?\n\nSe eliminarán las unidades, sus criterios y las asignaciones de instrumento.\nLas calificaciones ya registradas NO se borran.')) return
+    if (!await confirmar({ texto: '¿Borrar TODA la programación de esta área?\n\nSe eliminarán las unidades, sus criterios y las asignaciones de instrumento.\nLas calificaciones ya registradas NO se borran.', aceptar: 'Borrar la programación', peligro: true })) return
     await borrarProgramacion(asignaturaId)
     setMensaje('Programación borrada. Las calificaciones siguen intactas.')
     cargar()

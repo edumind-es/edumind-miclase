@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, unidadElegida } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, unidadElegida, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -30,7 +30,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1000 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Estado vivo en IndexedDB del primer alumno (por apellidos): notas y registros del diario. */

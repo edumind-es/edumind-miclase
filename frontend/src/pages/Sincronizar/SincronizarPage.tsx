@@ -22,6 +22,7 @@ import EmparejarDirecto from '@/components/EmparejarDirecto'
 import CompartirPaquete from '@/components/CompartirPaquete'
 import CopiaCarpeta from '@/components/CopiaCarpeta'
 
+import { confirmar } from '@/utils/confirmar'
 const K_AUTO = 'miclase_sync_auto'
 
 export default function SincronizarPage() {
@@ -162,26 +163,26 @@ export default function SincronizarPage() {
   }
 
   const bloquearDispositivo = async () => {
-    if (!confirm('¿Bloquear la sincronización en este dispositivo?\n\nTus datos locales no se tocan. Tendrás que volver a escribir la contraseña para sincronizar.')) return
+    if (!await confirmar('¿Bloquear la sincronización en este dispositivo?\n\nTus datos locales no se tocan. Tendrás que volver a escribir la contraseña para sincronizar.')) return
     await olvidarClave()
     await refrescar()
     setMsg({ tipo: 'info', texto: 'Sincronización bloqueada en este dispositivo.' })
   }
 
   const reenviar = async () => {
-    if (!confirm('¿Volver a enviar TODOS tus datos al buzón?\n\nÚtil si sospechas que algo no llegó. Puede tardar.')) return
+    if (!await confirmar('¿Volver a enviar TODOS tus datos al buzón?\n\nÚtil si sospechas que algo no llegó. Puede tardar.')) return
     await reenviarTodo()
     await hacerSync()
   }
 
   const volverABajar = async () => {
-    if (!confirm('¿Volver a bajar TODO el buzón a este dispositivo?\n\nÚtil si aquí falta algo que el buzón ya tiene (una clase, alumnado…). Lo que ya tengas igual se descarta; nada se borra. Puede tardar.')) return
+    if (!await confirmar('¿Volver a bajar TODO el buzón a este dispositivo?\n\nÚtil si aquí falta algo que el buzón ya tiene (una clase, alumnado…). Lo que ya tengas igual se descarta; nada se borra. Puede tardar.')) return
     await volverABajarTodo()
     await hacerSync()
   }
 
   const reiniciarTodo = async () => {
-    if (!confirm('⚠️ Esto BORRA el buzón del servidor y crea una contraseña nueva.\n\nLos demás dispositivos dejarán de sincronizar hasta que introduzcas la nueva contraseña en ellos.\nTus datos locales NO se borran.\n\n¿Continuar?')) return
+    if (!await confirmar('⚠️ Esto BORRA el buzón del servidor y crea una contraseña nueva.\n\nLos demás dispositivos dejarán de sincronizar hasta que introduzcas la nueva contraseña en ellos.\nTus datos locales NO se borran.\n\n¿Continuar?')) return
     if (password.length < 10 || password !== password2) {
       setMsg({ tipo: 'error', texto: 'Escribe abajo la contraseña nueva dos veces (mínimo 10 caracteres).' })
       return

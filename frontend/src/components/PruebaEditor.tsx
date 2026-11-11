@@ -34,6 +34,7 @@ import { descargarFichero } from '@/utils/compartir'
 import BancoPruebas from './BancoPruebas'
 import { AvisoContextoIA, AvisoBorradorIA } from './AvisoIA'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   instrumentoId: number
   instrumentoNombre: string
@@ -114,8 +115,8 @@ export default function PruebaEditor({
   const [bancoAbierto, setBancoAbierto] = useState(false)
   const [refrescoBanco, setRefrescoBanco] = useState(0)
 
-  const cerrar = () => {
-    if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
+  const cerrar = async () => {
+    if (sucio && !await confirmar({ texto: 'Tienes cambios sin guardar en este examen. Si sales ahora se pierden.\n\n¿Salir de todos modos?', aceptar: 'Salir sin guardar', cancelar: 'Seguir editando' })) return
     onCerrar()
   }
 
@@ -312,8 +313,8 @@ export default function PruebaEditor({
    * Las preguntas que nombran un criterio que este instrumento no evalúa
    * quedan en «Todos» (si el examen viene de otra área, ninguno casará).
    */
-  const cargarDelBanco = (origen: PruebaDeBanco) => {
-    if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
+  const cargarDelBanco = async (origen: PruebaDeBanco) => {
+    if (sucio && !await confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
     const conocidos = new Set(criteriosActivos.map(c => c.id))
     let sueltas = 0
     // La unidad de cada pregunta es de la clase de origen: aquí no vale.
@@ -365,12 +366,12 @@ export default function PruebaEditor({
     // Guardar sobre el examen de otro ámbito lo sustituye: se pregunta.
     const enDestino = idInstrumentoDestino === instrumentoId ? guardadas : await getPruebasDeInstrumento(idInstrumentoDestino)
     const yaHay = enDestino.find(p => p.unidad_id === unidadDestino)
-    if (yaHay && yaHay.id !== cargadaId && !confirm(
+    if (yaHay && yaHay.id !== cargadaId && !await confirmar(
       `Ya hay un examen ${unidadDestino == null ? `general de «${nombreInstrumento}»` : `de «${nombreInstrumento}» para ${nombreUnidad ? `«${nombreUnidad}»` : 'esa unidad'}`} («${yaHay.def.titulo}»).\n\n¿Sustituirlo por este?`)) return
     // Mover un examen ya corregido: las notas se quedan donde se pusieron.
     if (seMueve) {
       const corregidosOrigen = await contarCorregidosDeExamen(cargadaEn.instrumentoId, cargadaEn.unidadId, def)
-      if (corregidosOrigen > 0 && !confirm(
+      if (corregidosOrigen > 0 && !await confirmar(
         `Este examen ya está corregido para ${corregidosOrigen} alumno${corregidosOrigen !== 1 ? 's' : ''} donde estaba.\n\nAl moverlo, esas notas se quedan en su instrumento y unidad de origen (no se pierden ni se mueven) y en el nuevo sitio el examen empieza sin corregir.\n\n¿Mover el examen?`)) return
     }
     setGuardando(true)
@@ -389,7 +390,7 @@ export default function PruebaEditor({
       const corregidos = await contarCorregidosDeExamen(idInstrumentoDestino, unidadDestino, limpia)
       let recalculo = ''
       if (corregidos > 0) {
-        if (confirm(`Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`)) {
+        if (await confirmar({ texto: `Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`, aceptar: 'Recalcular las notas', cancelar: 'Dejarlas como están' })) {
           const hoy = new Date().toLocaleDateString('es-ES')
           const r = await recalcularNotasDeExamen(idInstrumentoDestino, unidadDestino, limpia,
             `Nota de «${limpia.titulo}» antes de cambiar el examen el ${hoy}`)
@@ -408,7 +409,7 @@ export default function PruebaEditor({
 
   const borrar = async () => {
     if (cargadaId == null) return
-    if (!confirm('¿Eliminar la definición de este examen?\n\nLas notas ya puestas se conservan, pero dejarán de poder corregirse por preguntas.')) return
+    if (!await confirmar({ texto: '¿Eliminar la definición de este examen?\n\nLas notas ya puestas se conservan, pero dejarán de poder corregirse por preguntas.', aceptar: 'Eliminar el examen', peligro: true })) return
     await eliminarPrueba(cargadaId)
     setGuardadas(await getPruebasDeInstrumento(instrumentoId))
     setDef(pruebaVacia(instrumentoNombre))
@@ -423,7 +424,7 @@ export default function PruebaEditor({
     const file = e.target.files?.[0]
     e.target.value = ''
     if (!file) return
-    if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
+    if (sucio && !await confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
     try {
       const { prueba, avisos } = await importarPrueba(file.name, await file.arrayBuffer())
       setDef(prueba)

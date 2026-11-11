@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta de rediseño del Calificador · EDUmind MiClase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== EDUmind-Lámina v1.0 — hoja base canónica ===== */
+:root{
+  --paper:#ece9e1; --paper-2:#e4e0d6; --card:#f4f2ec;
+  --ink:#17181a; --ink-2:#3d3f42; --ink-3:#5c5a55;
+  --rule:#17181a; --hair:#c9c4b8;
+  --m-emocional:#c05f3c; --m-social:#c19a2e; --m-fisico:#7ba24f;
+  --m-mental:#6c8fb3; --m-interior:#4a5f68;
+  --ok:#4f7a3f; --alert:#b03a2e;
+  --font-display:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-body:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0 !important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:400 16.5px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 288px;gap:52px;align-items:start}
+.aside{position:sticky;top:32px}
+
+.worlds-bar{display:grid;grid-template-columns:repeat(5,1fr);height:6px}
+.worlds-bar i:nth-child(1){background:var(--m-emocional)}
+.worlds-bar i:nth-child(2){background:var(--m-social)}
+.worlds-bar i:nth-child(3){background:var(--m-fisico)}
+.worlds-bar i:nth-child(4){background:var(--m-mental)}
+.worlds-bar i:nth-child(5){background:var(--m-interior)}
+
+.topbar{border-bottom:2px solid var(--rule);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
+.mono{font:400 11px/1.4 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3)}
+.mono-ink{color:var(--ink);font-weight:500}
+
+.eyebrow{font:500 13px/1 var(--font-mono);letter-spacing:.06em;color:var(--ink-2);margin:44px 0 14px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(2.9rem,7vw,5.2rem);margin:0 0 18px;max-width:14ch}
+h1 .light{font-weight:400}
+.lede{font-size:19px;line-height:1.45;color:var(--ink-2);max-width:46ch;margin:0 0 28px}
+
+.btn{display:inline-block;background:var(--ink);color:var(--paper);text-decoration:none;
+  font:500 12px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;
+  padding:17px 22px;border:2px solid var(--ink);cursor:pointer;transition:background .15s ease,color .15s ease}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn-block{display:block;width:100%;text-align:center}
+.stamp{display:inline-block;border:1px solid var(--alert);color:var(--alert);
+  font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.11em;padding:11px 14px;margin-left:10px}
+
+.metastrip{display:flex;flex-wrap:wrap;border-top:1px solid var(--hair);margin-top:34px}
+.metastrip span{font:400 13px/1 var(--font-mono);color:var(--ink-2);padding:14px 22px 14px 0;
+  border-right:1px solid var(--hair);margin-right:22px}
+.metastrip span:last-child{border-right:0}
+
+.sec{margin:74px 0}
+.sec-head{display:flex;align-items:flex-start;gap:22px;margin-bottom:26px}
+.sec-num{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:.9;
+  color:var(--m-mental);letter-spacing:-.03em}
+.sec-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:26px;
+  letter-spacing:-.02em;padding-top:12px;border-top:2px solid var(--rule);flex:1}
+.sec-lede{font-size:20px;line-height:1.45;font-weight:500;margin:0 0 26px;max-width:60ch}
+.sec p{max-width:68ch}
+
+.rules{list-style:none;margin:0 0 30px;padding:0}
+.rules li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--hair);
+  font-size:16px;line-height:1.5}
+.rules li .dash{color:var(--ink-3);flex:none}
+
+.blabel{font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;
+  color:var(--ink-3);margin:34px 0 12px}
+
+.spec{border-top:2px solid var(--rule);margin-top:26px}
+.spec div{padding:14px 0;border-bottom:1px solid var(--hair)}
+.spec dt{font:400 11px/1.3 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin-bottom:5px}
+.spec dd{margin:0;font-weight:600;font-size:16px}
+
+.note{background:var(--card);border-left:3px solid var(--c,var(--ink));padding:20px 22px;margin:26px 0}
+.note .tag{display:inline-block;border:1px solid var(--c,var(--ink));color:var(--ink);
+  font:400 10px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;padding:5px 8px;margin-bottom:10px}
+.note p{margin:0;color:var(--ink-2)}
+.note.alert{--c:var(--alert)}
+
+.panel{border:1px solid var(--hair);background:var(--card);padding:18px}
+.panel-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:14px}
+
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px}
+th{background:var(--ink);color:var(--paper);font:500 11px/1.3 var(--font-mono);
+  text-transform:uppercase;letter-spacing:.1em;text-align:left;padding:12px 14px}
+td{padding:13px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.num{font:500 15px/1.4 var(--font-mono);white-space:nowrap}
+
+footer{border-top:2px solid var(--rule);margin-top:90px;padding:34px 0 0}
+footer .tm{font-size:11.5px;line-height:1.6;color:var(--ink-3);max-width:70ch;margin:14px 0 34px}
+
+/* ── Ampliación de esta lámina: maquetas ─────────────────────────────── */
+.mock-par{display:grid;grid-template-columns:1fr;gap:14px;margin:22px 0 8px}
+.mock{border:1px solid var(--ink);background:var(--card)}
+.mock-cab{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--ink)}
+.mock-cab.hoy{background:var(--paper-2)}
+.mock-cab.prop{background:var(--ink)}
+.mock-cab.prop .mono{color:var(--paper)}
+.mock-cuerpo{padding:12px}
+.mk-fila{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;align-items:center}
+.mk{border:1px solid var(--ink-3);font:400 11px/1 var(--font-mono);padding:6px 7px;color:var(--ink-2);background:var(--paper)}
+.mk.pri{background:var(--ink);color:var(--paper);border-color:var(--ink);padding:11px 14px;font-size:12px}
+.mk.gr{padding:11px 14px;font-size:12px}
+.mk.act{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk.aviso{border-color:var(--alert);color:var(--alert);width:100%}
+.mk-matriz{display:grid;gap:3px;margin-top:6px}
+.mk-matriz span{border:1px solid var(--hair);background:var(--paper);height:22px;font:400 10px/20px var(--font-mono);text-align:center;color:var(--ink-2)}
+.mk-matriz span.c{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk-matriz span.n{text-align:left;padding-left:6px}
+.mk-nota{font:400 12px/1.45 var(--font-body);color:var(--ink-2);margin:8px 0 0}
+.mk-alumno{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--hair);padding:7px 0;font-size:13px}
+.mk-alumno.sel{border:2px solid var(--ink);padding:7px 8px;font-weight:600}
+.mk-niveles{display:flex;gap:4px}
+.mk-niveles span{border:1px solid var(--ink-3);font:500 11px/1 var(--font-mono);padding:8px 9px}
+.mk-niveles span.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.muestra{display:inline-block;width:64px;padding:8px 0;text-align:center;color:#fff;font:500 13px/1 var(--font-mono)}
+.fase{font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ink);padding:5px 8px;white-space:nowrap}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr;gap:34px}
+  .aside{position:static}
+  .sec{margin:52px 0}
+  .mock-par{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+@media print{
+  .aside,.topbar{position:static}
+  body{background:#fff}
+  .btn{display:none}
+  .mock,.sec-head,tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="mono mono-ink">EDUMIND · LÁMINA DE APLICACIÓN</span>
+    <span class="mono">FIG. XX — CALIFICADOR · REDISEÑO</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">Mundo mental · organización del trabajo docente</p>
+  <h1>Calificar<br><span class="light">sin buscar</span></h1>
+  <p class="lede">Propuesta de rediseño del Calificador de EDUmind MiClase para un docente que evalúa con prisa en un iPad. Seis cambios, con su maqueta, su coste y lo que obligan a tocar. Nada de lo que aquí se propone está implementado.</p>
+
+  <p><a class="btn" href="#s09">Ir a la viabilidad →</a>
+     <span class="stamp">Propuesta · sin implementar · 11·2026</span></p>
+
+  <div class="metastrip">
+    <span>Auditoría del 11·11·2026</span><span>9.400 líneas revisadas</span><span>6 propuestas</span><span>3 fases</span>
+  </div>
+
+  <div class="cols" style="margin-top:64px">
+
+    <div>
+
+      <section class="sec" id="s01">
+        <div class="sec-head"><span class="sec-num">01</span><h2>Qué pasa hoy</h2></div>
+        <p class="sec-lede">El Calificador hace mucho y lo enseña casi todo a la vez. Las cifras salen de leer el código, no de observar a docentes usándolo.</p>
+        <table>
+          <thead><tr><th>Lo que se ha contado</th><th>Hoy</th><th>Por qué estorba</th></tr></thead>
+          <tbody>
+            <tr><td>Controles antes de llegar a una casilla (5 áreas, 10 unidades)</td><td class="num">27</td><td>La matriz, que es lo que importa, queda debajo.</td></tr>
+            <tr><td>Pulsaciones para calificar a 25 alumnos en una columna</td><td class="num">≈ 50</td><td>Cada casilla abre un panel grande y no pasa sola al siguiente.</td></tr>
+            <tr><td>Acciones por columna de examen, visibles + plegadas</td><td class="num">3 + 6</td><td>Las plegadas van tras un «detalles» de 10,5 px.</td></tr>
+            <tr><td>Cosas escondidas tras un conmutador</td><td class="num">13</td><td>Cada uno se llama distinto: «detalles», «Más», «títulos», «plegar».</td></tr>
+            <tr><td>Preguntas con el diálogo nativo del navegador</td><td class="num">58</td><td>Párrafos largos con «Aceptar / Cancelar»; alguna se usa para elegir entre dos opciones.</td></tr>
+            <tr><td>Botones por debajo de 44 px de alto</td><td class="num">26–36 px</td><td>Pestaña de unidad, acciones de columna, flechas del panel, niveles de la rúbrica.</td></tr>
+            <tr><td>Avisos que pueden apilarse sobre la matriz</td><td class="num">7</td><td>En un iPad de 820 px de alto aparecen dos barras de desplazamiento.</td></tr>
+            <tr><td>Datos que solo se ven al pasar el ratón</td><td class="num">88</td><td>En un iPad no hay ratón: el criterio de la columna o la media no se pueden leer.</td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="--c:var(--m-mental)">
+          <span class="tag">Ya corregido en la auditoría</span>
+          <p>El Calificador abría siempre en «Todo el curso», que es de solo lectura. Desde el commit c9457c5 reabre la última unidad del área si es del trimestre en curso. Era el problema número uno de esta lista.</p>
+        </div>
+      </section>
+
+      <section class="sec" id="s02">
+        <div class="sec-head"><span class="sec-num">02</span><h2>Con qué criterio se rediseña</h2></div>
+        <ul class="rules">
+          <li><span class="dash">—</span> La matriz manda: todo lo que no sea calificar ocupa una sola línea encima de ella.</li>
+          <li><span class="dash">—</span> Una acción principal por sitio, a la vista y grande; el resto, en un único menú con nombre fijo.</li>
+          <li><span class="dash">—</span> Calificar una columna entera no exige abrir y cerrar nada entre un alumno y el siguiente.</li>
+          <li><span class="dash">—</span> Lo que se toca con el dedo mide 44 px como mínimo y lo que informa no depende del ratón.</li>
+          <li><span class="dash">—</span> Una palabra para cada cosa, la misma en todas las pantallas.</li>
+          <li><span class="dash">—</span> Se deshace antes que se pregunta: una pregunta solo cuando lo que se pierde no vuelve.</li>
+          <li><span class="dash">—</span> Ningún cambio toca el cálculo ni los datos: es la misma app con otra disposición.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s03">
+        <div class="sec-head"><span class="sec-num">03</span><h2>A · Una sola barra encima de la matriz</h2></div>
+        <p class="sec-lede">Clase, área, unidad y trimestre en una línea. Los avisos, en un contador. La matriz ocupa el resto de la pantalla.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">cinco franjas</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk">6ºA</span><span class="mk">1er trimestre</span><span class="mk">Configurar</span></div>
+              <div class="mk-fila"><span class="mk">Por criterio</span><span class="mk act">Por instrumento</span><span class="mk">Importar CSV</span><span class="mk">Instrumentos</span></div>
+              <div class="mk-fila"><span class="mk act">Sociales</span><span class="mk">Lengua</span><span class="mk">Mates</span><span class="mk">Galego</span><span class="mk">EF</span></div>
+              <div class="mk-fila"><span class="mk">Todo el curso</span><span class="mk act">UD1</span><span class="mk">UD2</span><span class="mk">UD3</span><span class="mk">UD4</span><span class="mk">UD5</span><span class="mk">títulos</span></div>
+              <div class="mk-fila"><span class="mk aviso">Aviso: familias sin criterio</span><span class="mk aviso">Aviso: datos escondidos</span></div>
+              <div class="mk-matriz" style="grid-template-columns:2fr repeat(4,1fr)"><span class="n">Abad</span><span>7</span><span>6</span><span></span><span></span><span class="n">Bello</span><span>5</span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">una franja</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr">6ºA · Sociales</span><span class="mk gr act">UD1 · O mundo que nos rodea</span><span class="mk gr">1T</span><span class="mk gr">2 avisos</span><span class="mk gr">Más</span></div>
+              <div class="mk-matriz" style="grid-template-columns:2fr repeat(4,1fr)">
+                <span class="n">Abad</span><span>7</span><span>6</span><span></span><span></span>
+                <span class="n">Bello</span><span>5</span><span></span><span></span><span></span>
+                <span class="n">Casal</span><span>9</span><span>8</span><span></span><span></span>
+                <span class="n">Dopico</span><span></span><span></span><span></span><span></span>
+                <span class="n">Estévez</span><span>6</span><span>7</span><span></span><span></span>
+                <span class="n">Fraga</span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="mk-nota">Área y unidad pasan de dos filas de pestañas a dos selectores grandes. «Por criterio / por instrumento», importar e instrumentos van al menú «Más». Los avisos se abren desde su contador.</p>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Unas 40 pruebas de interfaz pulsan la pestaña de unidad por su clase; hay que mantener un elemento con esa clase o cambiarlas todas.</li>
+          <li><span class="dash">—</span> Las pruebas que pulsan «Por criterio» y «Instrumentos» por su texto tendrían que abrir antes el menú.</li>
+          <li><span class="dash">—</span> Los avisos conservan sus selectores; solo cambia dónde se pintan.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s04">
+        <div class="sec-head"><span class="sec-num">04</span><h2>B · Calificar una columna de un tirón</h2></div>
+        <p class="sec-lede">Al entrar a calificar un instrumento, la lista de la clase queda a la vista y cada nota pasa sola al siguiente alumno.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">un panel por alumno</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk">subir</span><span class="mk">bajar</span><span class="mk">cerrar</span></div>
+              <div class="mk-alumno sel"><span>Abad Ríos, Ana</span><span class="mono">1 de 25</span></div>
+              <div class="mk-fila" style="margin-top:10px"><span class="mk">0</span><span class="mk">1</span><span class="mk">2</span><span class="mk">3</span><span class="mk">4</span><span class="mk">5</span><span class="mk">6</span><span class="mk act">7</span><span class="mk">8</span><span class="mk">9</span><span class="mk">10</span></div>
+              <p class="mk-nota">Poner la nota no avanza. Hay que pulsar «bajar», un botón de 28 px en la cabecera del panel, y la matriz queda tapada.</p>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">la clase en una lista</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-alumno"><span>Abad Ríos, Ana</span><span class="mk-niveles"><span>IN</span><span>SU</span><span>BI</span><span class="on">NT</span><span>SB</span></span></div>
+              <div class="mk-alumno sel"><span>Bello Souto, Bruno</span><span class="mk-niveles"><span>IN</span><span>SU</span><span>BI</span><span>NT</span><span>SB</span></span></div>
+              <div class="mk-alumno"><span>Casal Vidal, Carla</span><span class="mk-niveles"><span>IN</span><span>SU</span><span>BI</span><span>NT</span><span>SB</span></span></div>
+              <div class="mk-fila" style="margin-top:10px"><span class="mk gr">Nota exacta</span><span class="mk gr">Deshacer</span><span class="mk pri">Hecho · 1 de 25</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="mk-nota">Es la pantalla que ya existe para la rúbrica y el diario («Evaluar hoy»), extendida a la nota directa. Con examen definido, el corrector pregunta a pregunta se queda como está y gana el avance automático al terminar la última pregunta.</p>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> El panel de la casilla sigue existiendo y con su orden fijo: se abre al tocar una casilla suelta. Dieciséis pruebas lo buscan por su nombre.</li>
+          <li><span class="dash">—</span> La nota directa por columna guarda en todos los criterios del instrumento, como ya hace «Pegar columna»: no hay regla nueva de guardado.</li>
+          <li><span class="dash">—</span> Hay que decidir la escala rápida: cinco calificativos con nota fija, o los once números.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s05">
+        <div class="sec-head"><span class="sec-num">05</span><h2>C · Una acción por columna y un menú</h2></div>
+        <p class="sec-lede">Cada columna enseña su nombre y un único botón: «Calificar». Todo lo demás va en un menú que se abre desde abajo en el iPad.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">cabecera de un examen</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk">renombrar</span><span class="mk">Corregir</span><span class="mk">Cámara</span><span class="mk">detalles</span></div>
+              <div class="mk-fila"><span class="mk">Informe</span><span class="mk">Editar examen</span><span class="mk">Imprimir test</span><span class="mk">Pegar columna</span><span class="mk">Mover</span><span class="mk">Vaciar</span></div>
+              <div class="mk-fila"><span class="mk">CE1.1 quitar</span><span class="mk">CE1.2 quitar</span><span class="mk">+ criterio</span></div>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">nombre, botón y menú</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr" style="flex:1">Proba escrita · 80 %</span><span class="mk pri">Calificar</span><span class="mk gr">Más</span></div>
+              <p class="mk-nota" style="margin-top:12px"><b>Menú «Más» de la columna</b></p>
+              <div class="mk-alumno"><span>Corregir por cámara</span></div>
+              <div class="mk-alumno"><span>Editar o imprimir el examen</span></div>
+              <div class="mk-alumno"><span>Informe de la prueba</span></div>
+              <div class="mk-alumno"><span>Pegar notas de Excel</span></div>
+              <div class="mk-alumno"><span>Criterios que evalúa</span></div>
+              <div class="mk-alumno"><span>Mover o vaciar la columna</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="mk-nota">«Calificar» abre lo que toque según el instrumento: el corrector si hay examen, la rúbrica si la hay, o la lista de la propuesta B. Tocar el nombre de la columna enseña su ficha: tipo, peso y criterios, que hoy solo se leen con el ratón.</p>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Las pruebas despliegan hoy «detalles» antes de pulsar «Pegar columna», «Imprimir test», «Mover» y «Vaciar»: pasarían a abrir el menú. Los selectores de cada acción se conservan.</li>
+          <li><span class="dash">—</span> La lista de criterios de la columna se sigue leyendo de su atributo, no del texto: no cambia.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s06">
+        <div class="sec-head"><span class="sec-num">06</span><h2>D · Una palabra para cada cosa</h2></div>
+        <p class="sec-lede">Hoy el mismo objeto cambia de nombre según la pantalla. La propuesta fija cuatro palabras y las usa siempre.</p>
+        <table>
+          <thead><tr><th>Lo que es</th><th>Cómo se llama hoy</th><th>Propuesta</th></tr></thead>
+          <tbody>
+            <tr><td>Lo que trae la programación con su porcentaje (80 % / 20 %)</td><td>Familia, instrumento, «instrumento de primer nivel»</td><td><b>Bloque</b></td></tr>
+            <tr><td>Lo que el docente hace dentro: el examen de la UD3, speaking</td><td>Hijo, instrumento, columna</td><td><b>Actividad</b></td></tr>
+            <tr><td>Con qué se corrige: examen, rúbrica, lista, escala</td><td>Herramienta, rúbrica, tipo</td><td><b>Herramienta</b></td></tr>
+            <tr><td>El cruce de un alumno con una actividad</td><td>Casilla, celda</td><td><b>Casilla</b></td></tr>
+            <tr><td>Abrir la pantalla de calificar</td><td>Calificar, Evaluar hoy, Corregir, Evaluación rápida, Calificar con la rúbrica</td><td><b>Calificar</b></td></tr>
+            <tr><td>Enseñar lo que está escondido</td><td>detalles, Más, títulos, plegar, ver entero</td><td><b>Más</b></td></tr>
+            <tr><td>El botón que abre el gestor</td><td>«Instrumentos» abre «Qué evalúo»</td><td><b>Bloques y actividades</b></td></tr>
+          </tbody>
+        </table>
+        <div class="note alert">
+          <span class="tag">Decisión tuya</span>
+          <p>«Bloque» y «actividad» son una sugerencia. En PROENS la palabra oficial es «instrumento»; si prefieres conservarla para el nivel de arriba, el par sería «instrumento» y «actividad». Lo que no conviene es seguir con «familia» e «hijo» a la vista del docente.</p>
+        </div>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Solo textos; el código y los datos siguen llamándose igual por dentro.</li>
+          <li><span class="dash">—</span> Muchas pruebas buscan botones por su texto literal: habría que actualizarlas a la vez.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s07">
+        <div class="sec-head"><span class="sec-num">07</span><h2>E · Preguntar menos y con botones propios</h2></div>
+        <p class="sec-lede">Un diálogo de la app, con el verbo en el botón, sustituye a los 58 del navegador. Donde se puede, se deshace en vez de preguntar.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">diálogo del navegador</span></div>
+            <div class="mock-cuerpo">
+              <p class="mk-nota" style="margin-top:0">«Proba escrita» se retira de TODAS las unidades (7 unidades · 112 notas). Las notas quedan guardadas pero sin columna. ¿Continuar?</p>
+              <div class="mk-fila" style="margin-top:10px"><span class="mk">Cancelar</span><span class="mk">Aceptar</span></div>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">diálogo de la app</span></div>
+            <div class="mock-cuerpo">
+              <p class="mk-nota" style="margin-top:0"><b>¿Retirar «Proba escrita» de las 7 unidades?</b></p>
+              <p class="mk-nota">Sus 112 notas se conservan, pero dejan de tener columna.</p>
+              <div class="mk-fila" style="margin-top:10px"><span class="mk gr">No retirar</span><span class="mk gr">Solo de esta unidad</span><span class="mk pri">Retirar de las 7</span></div>
+            </div>
+          </div>
+        </div>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Veinte ficheros de prueba aceptan hoy los diálogos del navegador con una sola línea; habría que pulsar el botón del diálogo nuevo en cada caso.</li>
+          <li><span class="dash">—</span> Se puede hacer por pantallas: primero el Calificador (unas 26 preguntas), después el resto.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s08">
+        <div class="sec-head"><span class="sec-num">08</span><h2>F · Dedo y contraste</h2></div>
+        <p class="sec-lede">Dos reglas que se comprueban con una medida: 44 px de alto para lo que se toca y contraste 4,5:1 para lo que se lee.</p>
+        <p class="blabel">El semáforo de notas, texto blanco sobre el color · contraste calculado</p>
+        <table>
+          <thead><tr><th>Calificativo</th><th>Hoy</th><th>Contraste</th><th>Propuesta</th><th>Contraste</th></tr></thead>
+          <tbody>
+            <tr><td>Sobresaliente</td><td><span class="muestra" style="background:#1e7e43">9,5</span></td><td class="num">5,1</td><td><span class="muestra" style="background:#1e7e43">9,5</span></td><td class="num">5,1 · no cambia</td></tr>
+            <tr><td>Notable</td><td><span class="muestra" style="background:#3a9bd5">7,5</span></td><td class="num">3,1 · no llega</td><td><span class="muestra" style="background:#1f6fa5">7,5</span></td><td class="num">5,4</td></tr>
+            <tr><td>Bien</td><td><span class="muestra" style="background:#8a6db5">6,5</span></td><td class="num">4,3 · no llega</td><td><span class="muestra" style="background:#6f52a0">6,5</span></td><td class="num">6,2</td></tr>
+            <tr><td>Suficiente</td><td><span class="muestra" style="background:#e07b10">5,5</span></td><td class="num">3,0 · no llega</td><td><span class="muestra" style="background:#a85a00">5,5</span></td><td class="num">5,1</td></tr>
+            <tr><td>Insuficiente</td><td><span class="muestra" style="background:#d94040">3,0</span></td><td class="num">4,4 · no llega</td><td><span class="muestra" style="background:#c0302f">3,0</span></td><td class="num">5,7</td></tr>
+          </tbody>
+        </table>
+        <ul class="rules">
+          <li><span class="dash">—</span> Pestaña de unidad, acciones de columna, flechas del panel y niveles de la rúbrica suben a 44 px de alto.</li>
+          <li><span class="dash">—</span> El criterio de cada columna y la media del alumno dejan de depender del ratón: se leen al tocar el nombre o la casilla.</li>
+          <li><span class="dash">—</span> Los iconos dejan de repetirse con significados distintos; el nombre va siempre al lado.</li>
+          <li><span class="dash">—</span> Los diálogos retienen el foco y lo devuelven al cerrarse, para teclado y lector de pantalla.</li>
+        </ul>
+        <p class="blabel">Qué obliga a tocar</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Los colores del semáforo son cinco variables en una hoja; cambiarlas afecta a toda la app y a los informes en pantalla, no al cálculo.</li>
+          <li><span class="dash">—</span> Subir alturas hace la cabecera de la matriz más alta: va de la mano de las propuestas A y C, que le quitan filas.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s09">
+        <div class="sec-head"><span class="sec-num">09</span><h2>Viabilidad y orden</h2></div>
+        <p class="sec-lede">Ninguna propuesta toca el cálculo, el esquema de datos ni la sincronización. El coste está en la interfaz y, sobre todo, en las pruebas que la recorren.</p>
+        <table>
+          <thead><tr><th>Propuesta</th><th>Coste</th><th>Riesgo</th><th>Pruebas que cambian</th><th>Fase</th></tr></thead>
+          <tbody>
+            <tr><td>F · Contraste del semáforo</td><td>Pequeño</td><td>Bajo: solo color</td><td>Ninguna</td><td><span class="fase">1</span></td></tr>
+            <tr><td>F · Alturas de 44 px</td><td>Pequeño</td><td>Bajo: la cabecera crece</td><td>Ninguna prevista</td><td><span class="fase">1</span></td></tr>
+            <tr><td>D · Vocabulario</td><td>Pequeño a medio</td><td>Medio: toca muchas pruebas por texto</td><td>Las que buscan botones por su nombre</td><td><span class="fase">1</span></td></tr>
+            <tr><td>C · Una acción por columna y menú</td><td>Medio</td><td>Medio</td><td>Las que despliegan «detalles»</td><td><span class="fase">2</span></td></tr>
+            <tr><td>A · Una sola barra</td><td>Medio</td><td>Medio: 40 pruebas pulsan la pestaña de unidad</td><td>Las del Calificador</td><td><span class="fase">2</span></td></tr>
+            <tr><td>B · Calificar una columna de un tirón</td><td>Medio</td><td>Medio: pantalla nueva de entrada de notas</td><td>Se añaden; las del panel siguen</td><td><span class="fase">2</span></td></tr>
+            <tr><td>E · Diálogos propios y deshacer</td><td>Medio</td><td>Bajo en la app, alto en pruebas: 20 ficheros</td><td>Todas las que aceptan un diálogo</td><td><span class="fase">3</span></td></tr>
+            <tr><td>Componentes comunes (botón, diálogo, pestañas)</td><td>Grande</td><td>Bajo si se hace pantalla a pantalla</td><td>Pocas, si se conservan los selectores</td><td><span class="fase">3</span></td></tr>
+          </tbody>
+        </table>
+        <ul class="rules">
+          <li><span class="dash">—</span> Fase 1: se nota desde el primer día y casi no rompe nada. Una o dos sesiones de trabajo.</li>
+          <li><span class="dash">—</span> Fase 2: es el rediseño de verdad. Conviene hacer C, A y B en ese orden y probar cada una en el iPad antes de pasar a la siguiente.</li>
+          <li><span class="dash">—</span> Fase 3: limpieza de fondo. No cambia lo que el docente ve tanto como lo que cuesta mantener la app.</li>
+        </ul>
+        <div class="note alert">
+          <span class="tag">Límites de esta propuesta</span>
+          <p>Sale de leer el código y contar, no de ver a docentes usar la app. Las pruebas automáticas corren en un navegador de escritorio de 1500 × 1000 px: ninguna comprueba el tamaño de un iPad ni el uso con el dedo. Antes de la fase 2 convendría grabar a dos o tres docentes calificando una columna y añadir una prueba a tamaño de iPad.</p>
+        </div>
+      </section>
+
+      <section class="sec" id="s10">
+        <div class="sec-head"><span class="sec-num">10</span><h2>Lo que necesito que decidas</h2></div>
+        <ul class="rules">
+          <li><span class="dash">—</span> Si se empieza por la fase 1 completa o solo por contraste y alturas, dejando el vocabulario para después.</li>
+          <li><span class="dash">—</span> Las palabras: «bloque» y «actividad», «instrumento» y «actividad», u otras.</li>
+          <li><span class="dash">—</span> En la propuesta B, la escala rápida: cinco calificativos con nota fija o los once números.</li>
+          <li><span class="dash">—</span> Si área y unidad pasan a selectores (propuesta A) o prefieres conservar las pestañas de unidad, más grandes.</li>
+          <li><span class="dash">—</span> Si antes de la fase 2 se hace la observación con docentes.</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <aside class="aside">
+      <a class="btn btn-block" href="#s10">Ver las decisiones</a>
+
+      <div class="panel" style="margin-top:20px">
+        <div class="panel-head"><span class="mono">Los cinco mundos</span><span class="mono">1 / 5</span></div>
+        <svg viewBox="0 0 200 190" width="100%" height="128" role="img" aria-label="Uno de los cinco mundos activo: mental">
+          <polygon points="100,20 172,72 145,158 55,158 28,72" fill="none" stroke="#17181a" stroke-width="1"/>
+          <g stroke="#c9c4b8" stroke-width="1">
+            <line x1="100" y1="90" x2="100" y2="20"/><line x1="100" y1="90" x2="172" y2="72"/>
+            <line x1="100" y1="90" x2="145" y2="158"/><line x1="100" y1="90" x2="55" y2="158"/>
+            <line x1="100" y1="90" x2="28" y2="72"/>
+          </g>
+          <circle cx="100" cy="20"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="172" cy="72"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="145" cy="158" r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="55"  cy="158" r="5" fill="#6c8fb3"/>
+          <circle cx="28"  cy="72"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+        </svg>
+        <dl class="spec" style="margin-top:6px;border-top:0">
+          <div><dt>Mental</dt><dd style="font:400 12px/1 var(--font-mono);letter-spacing:.1em">ACTIVO</dd></div>
+        </dl>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Público</dt><dd>Autor de la app</dd></div>
+        <div><dt>Usuario final del rediseño</dt><dd>Docente de Primaria y ESO, en iPad</dd></div>
+        <div><dt>Estado</dt><dd>Propuesta. Nada implementado</dd></div>
+        <div><dt>Alcance</dt><dd>Calificador y sus diálogos</dd></div>
+        <div><dt>No toca</dt><dd>Cálculo, datos, sincronización</dd></div>
+        <div><dt>Fuente</dt><dd>Auditoría del 11·11·2026, rama de auditoría</dd></div>
+        <div><dt>Clave de lámina</dt><dd>FIG. XX: número por asignar en el registro</dd></div>
+      </dl>
+    </aside>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="mono mono-ink">EDUmind® · Luis Vilela Acuña</p>
+    <p class="tm">EDUmind® es una marca registrada en España (OEPM M4319166), titularidad de
+    Luis Vilela Acuña. EDUmind MiClase · propuesta de rediseño del Calificador · verificada contra el código el 11·11·2026.</p>
+  </div>
+  <div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+</footer>
+
+</body>
+</html>

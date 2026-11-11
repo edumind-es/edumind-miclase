@@ -138,3 +138,32 @@ export async function elegirUnidad(p, n) {
 export async function unidadElegida(p) {
   return p.locator('[data-unidad-select]').evaluate(s => s.selectedIndex)
 }
+
+/**
+ * Acepta las preguntas de la app: las del navegador (`confirm`, que ya casi
+ * no quedan) y el diálogo propio (`utils/confirmar.tsx`, `[data-confirmar]`).
+ * Hay que llamarla antes de la primera navegación. `alVer` recibe el texto de
+ * cada pregunta. Para rechazar la siguiente: `rechazarSiguienteConfirmacion(p)`.
+ */
+export async function aceptarConfirmaciones(p, alVer) {
+  p.on('dialog', d => { alVer?.(d.message()); d.accept() })
+  await p.exposeFunction('__confirmacionVista', t => { alVer?.(t) })
+  await p.addInitScript(() => {
+    const mirar = () => {
+      for (const d of document.querySelectorAll('[data-confirmar]:not([data-visto])')) {
+        d.setAttribute('data-visto', '')
+        const texto = [d.querySelector('[data-confirmar-titulo]')?.textContent, d.querySelector('[data-confirmar-texto]')?.textContent].filter(Boolean).join('\n\n')
+        window.__confirmacionVista?.(texto)
+        const rechazar = window.__rechazarSiguiente === true
+        window.__rechazarSiguiente = false
+        setTimeout(() => d.querySelector(rechazar ? '[data-confirmar-cancelar]' : '[data-confirmar-aceptar]')?.click(), 0)
+      }
+    }
+    new MutationObserver(mirar).observe(document, { childList: true, subtree: true })
+  })
+}
+
+/** La próxima pregunta de la app se cancela en vez de aceptarse. */
+export async function rechazarSiguienteConfirmacion(p) {
+  await p.evaluate(() => { window.__rechazarSiguiente = true })
+}

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { TODAS_LAS_CLASES, type EventoCalendario, type Grupo, type TipoEvento } from '@/db/localDb'
 import { eliminarEvento, guardarEvento } from '@/db/queries'
 
+import { confirmar } from '@/utils/confirmar'
 export const TIPOS_EVENTO: { valor: TipoEvento; etiqueta: string; icono: string }[] = [
   { valor: 'festivo',    etiqueta: 'Festivo',             icono: '🏖' },
   { valor: 'centro',     etiqueta: 'Actividad de centro', icono: '🏫' },
@@ -50,7 +51,7 @@ export default function EditarEvento({ grupo, evento, onCerrar, onGuardado }: Pr
   }
 
   const borrar = async () => {
-    if (!evento.id || !confirm(`¿Borrar «${evento.titulo}» del calendario?`)) return
+    if (!evento.id || !await confirmar(`¿Borrar «${evento.titulo}» del calendario?`)) return
     await eliminarEvento(evento.id)
     onGuardado()
   }

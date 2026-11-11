@@ -12,6 +12,7 @@ import AsignaturasPanel from '@/components/AsignaturasPanel'
 import PlanoClase from '@/components/PlanoClase'
 import { verNeae } from '@/db/datosSensibles'
 
+import { confirmar, avisar } from '@/utils/confirmar'
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
 const CURSOS_ESO = ['1','2','3','4']
@@ -307,7 +308,7 @@ function DatosClase({ grupo, onGuardado }: { grupo: any; onGuardado: () => Promi
   const guardar = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.nombre) return
-    if (cambiaCurriculo && !confirm(
+    if (cambiaCurriculo && !await confirmar(
       'Vas a cambiar el curso, la etapa o la comunidad.\n\n' +
       'Son los que deciden qué currículo LOMLOE se carga: la programación que ya tengas ' +
       'puede quedar apuntando a criterios que ya no existen. Las calificaciones no se borran.\n\n' +
@@ -322,7 +323,7 @@ function DatosClase({ grupo, onGuardado }: { grupo: any; onGuardado: () => Promi
   }
 
   const eliminar = async () => {
-    if (!confirm(`¿Eliminar la clase "${grupo.nombre}" y todos sus datos? Esta acción no se puede deshacer.`)) return
+    if (!await confirmar({ texto: `¿Eliminar la clase "${grupo.nombre}" y todos sus datos? Esta acción no se puede deshacer.`, aceptar: 'Eliminar la clase', peligro: true })) return
     await eliminarGrupo(grupo.id)
     await recargarGrupos()
     navigate('/grupos')
@@ -461,10 +462,10 @@ function PlanoYQR({ grupo, modoAnon }: { grupo: any; modoAnon: boolean }) {
   const [qrVisible, setQrVisible] = useState(false)
 
   const imprimir = async () => {
-    if (!grupo.alumnos?.length) { alert('Añade alumnado antes de imprimir los QR.'); return }
-    const conNombres = confirm('¿Incluir los nombres bajo cada QR?\n\nAceptar = con nombres · Cancelar = solo códigos (anónimo, recomendado)')
+    if (!grupo.alumnos?.length) { await avisar('Añade alumnado antes de imprimir los QR.'); return }
+    const conNombres = await confirmar({ texto: '¿Incluir los nombres bajo cada QR?\n\nSolo con códigos es anónimo, y es lo recomendado.', aceptar: 'Con nombres', cancelar: 'Solo códigos' })
     try { await imprimirHojaQR(grupo, grupo.alumnos, conNombres) }
-    catch (e: any) { alert(e.message) }
+    catch (e: any) { await avisar(e.message) }
   }
 
   return (

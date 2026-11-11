@@ -16,6 +16,7 @@ import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { descargarFichero } from '@/utils/compartir'
 import type { Alumno as DBAlumno } from '@/db/localDb'
 
+import { confirmar } from '@/utils/confirmar'
 // ─── Parser de importación masiva ───────────────────────────────────────────
 
 interface ParsedAlumno { nombre: string; apellidos: string }
@@ -435,7 +436,7 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   const quitar = async () => {
     // No borra al alumno: lo da de baja en esta clase. Sus notas y evidencias
     // siguen ahí, que es lo que hace falta si vuelve o si fue un error.
-    const ok = window.confirm(
+    const ok = await confirmar(
       `¿Quitar a ${form.nombre} ${form.apellidos} de esta clase?\n\n` +
       'Sus calificaciones y evidencias se conservan; deja de aparecer en las ' +
       'listas de esta clase. Puedes volver a añadirlo.')

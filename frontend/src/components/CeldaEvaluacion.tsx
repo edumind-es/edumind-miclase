@@ -36,6 +36,7 @@ import { verNeae, verEvidencias } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import ChipsCompetencias from './ChipsCompetencias'
 
+import { confirmar } from '@/utils/confirmar'
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 
 /** Los instrumentos de la casilla, agrupados por familia y en su orden. */
@@ -356,7 +357,7 @@ export default function CeldaEvaluacion({
   }
 
   const borrarEvidencia = async (id: number) => {
-    if (!confirm('¿Eliminar esta evidencia?')) return
+    if (!await confirmar({ texto: '¿Eliminar esta evidencia?', aceptar: 'Eliminar', peligro: true })) return
     await eliminarEvidencia(id)
     recargarEvidencias()
     onGuardado()
@@ -423,7 +424,7 @@ export default function CeldaEvaluacion({
   /** Quitar todas las marcas y la nota que salía de ellas (y las observaciones, si las hay). */
   const limpiarRubrica = async () => {
     if (registros.length > 0) {
-      if (!confirm(`¿Borrar las ${registros.length} observaciones con la rúbrica? La casilla se queda sin nota.`)) return
+      if (!await confirmar({ texto: `¿Borrar las ${registros.length} observaciones con la rúbrica? La casilla se queda sin nota.`, aceptar: 'Borrar las observaciones', peligro: true })) return
       setGuardando(true)
       try { for (const r of registros) await borrarRegistro(r.id!) } finally { setGuardando(false) }
       setRegistroRubrica(null); setOrigenActual(null); setMarcado({}); setValorActual(null)
@@ -435,7 +436,7 @@ export default function CeldaEvaluacion({
   }
 
   const borrarObservacionRubrica = async (id: number) => {
-    if (!confirm('¿Borrar esta observación? La nota se recalcula con las que queden.')) return
+    if (!await confirmar({ texto: '¿Borrar esta observación? La nota se recalcula con las que queden.', aceptar: 'Borrar', peligro: true })) return
     setGuardando(true)
     try { await borrarRegistro(id) } finally { setGuardando(false) }
     if (id === registroRubrica) setRegistroRubrica(null)
@@ -881,8 +882,8 @@ export default function CeldaEvaluacion({
               se avisa de que el diario deja de contar hasta el próximo registro. */}
           {calificaPorDiario && !manualAbierta && !calificaPorRubrica && (
             <div style={{ marginBottom: 12, fontSize: 12, color: 'var(--gris-600)' }}>
-              <button data-diario-manual onClick={() => {
-                  if (confirm('Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?')) setManualAbierta(true)
+              <button data-diario-manual onClick={async () => {
+                  if (await confirmar({ texto: 'Esta nota sale del diario. Si pones una a mano, el diario deja de contar hasta el próximo registro. ¿Seguir?', aceptar: 'Poner la nota a mano' })) setManualAbierta(true)
                 }}
                 style={{ background: 'none', border: 'none', color: 'var(--azul-700)', fontSize: 12, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
                 poner la nota a mano
@@ -956,7 +957,7 @@ export default function CeldaEvaluacion({
               <button className="btn-secondary" style={{ fontSize: 11.5 }} disabled={guardando}
                 title="Quitar la nota anterior. La nota que cuenta no se toca."
                 onClick={async () => {
-                  if (!confirm(`¿Descartar la nota anterior (${fantasma.valor})? Esta sí se pierde.`)) return
+                  if (!await confirmar({ texto: `¿Descartar la nota anterior (${fantasma.valor})? Esta sí se pierde.`, aceptar: 'Descartar', peligro: true })) return
                   await descartarNotaAnterior(fantasma.id)
                   setRecarga(n => n + 1); onGuardado()
                 }}>

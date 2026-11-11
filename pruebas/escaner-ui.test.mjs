@@ -13,7 +13,7 @@
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { createRequire } from 'node:module'
-import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const require = createRequire(import.meta.url)
 const { hojaDeMuestra } = require(process.env.HOJA_DEMO)
@@ -35,7 +35,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1000 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 const aparece = (loc) => loc.waitFor({ timeout: 8000 }).then(() => true, () => false)
 

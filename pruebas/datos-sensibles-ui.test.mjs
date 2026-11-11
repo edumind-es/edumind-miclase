@@ -3,7 +3,7 @@
  * que ya los usaba los conserva encendidos al actualizar, y apagarlos esconde
  * sin borrar nada. Ver frontend/src/db/datosSensibles.ts.
  */
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
@@ -22,7 +22,7 @@ async function aparato({ conNeae }) {
   const ctx = await navegador.newContext({ viewport: { width: 1300, height: 950 } })
   const p = await ctx.newPage()
   p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-  p.on('dialog', d => d.accept())
+  await aceptarConfirmaciones(p)
   await p.goto(BASE + '/', { waitUntil: 'networkidle' })
   // Lo de un aparato antes de esta versión: sin elección guardada
   await p.evaluate(async (conNeae) => {
@@ -55,8 +55,12 @@ try {
 
     console.log('\n2. Encenderlos desde la tarjeta')
     await p.locator('[data-datos-sensibles-toggle]').click()
-    await p.locator('[data-sensible="neae"]').check()
-    await p.locator('[data-sensible="evidencias"]').check()
+    // Encender pregunta antes (diálogo de la app): la casilla se marca al aceptar.
+    for (const clave of ['neae', 'evidencias']) {
+      await p.locator(`[data-sensible="${clave}"]`).click()
+      await p.locator(`[data-sensible="${clave}"]:checked`).waitFor({ timeout: 5000 })
+      await p.locator('[data-confirmar]').waitFor({ state: 'detached', timeout: 5000 })
+    }
     ok(JSON.stringify(await eleccion(p)) === JSON.stringify({ neae: true, evidencias: true }), 'la elección se guarda')
     ok(await p.getByRole('button', { name: /Evidencias de/ }).count() === 2, 'la galería vuelve en cada alumno')
     await p.getByRole('button', { name: /Editar Brais Outeiro/ }).click()

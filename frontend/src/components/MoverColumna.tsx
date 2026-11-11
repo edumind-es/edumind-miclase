@@ -14,6 +14,7 @@ import { moverColumna, type ResultadoMoverColumna } from '@/db/queries'
 import type { ColumnaInstrumento } from './MatrizInstrumentos'
 import type { Instrumento } from '@/db/localDb'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   origen: ColumnaInstrumento
   /** Instrumentos del área (familias e hijos), de donde sale el destino. */
@@ -62,7 +63,7 @@ export default function MoverColumna({ origen, instrumentos, columnas, unidadId,
     ]
     if (quedan) lineas.push(`· Se quedan en «${origen.ins.nombre}» ${quedan} que no encajan (se explica abajo).`)
     lineas.push('', 'Las demás unidades no cambian. El examen o la rúbrica definidos con el origen se quedan donde están.')
-    if (!confirm(lineas.join('\n'))) return
+    if (!await confirmar({ texto: lineas.join('\n'), aceptar: 'Mover las notas' })) return
     setMoviendo(true); setError(null)
     try {
       const r = await moverColumna(origen.ins.instrumento_id, destino.id!, unidadId, trimestre)

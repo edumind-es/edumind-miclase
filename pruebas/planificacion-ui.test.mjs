@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -28,7 +28,7 @@ const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 const dialogos = []
-p.on('dialog', d => { dialogos.push(d.message()); d.accept() })
+await aceptarConfirmaciones(p, t => dialogos.push(t))
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Filas de una tabla de IndexedDB (con las borradas, para contar). */

@@ -18,6 +18,7 @@ import { trimestreDeFecha } from '@/db/calculo'
 import { sumarDias } from './fechas'
 import * as curriculo from '@/curriculo'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   grupo: Grupo & { id?: number }
   asignaturas: Asignatura[]
@@ -144,7 +145,7 @@ export default function VolcarSemana({ grupo, asignaturas, lunes, horario, onCer
       const previas = await contarPlanificado(grupo.id!, desde, hasta)
       let sustituir = false
       if (previas) {
-        sustituir = confirm(`Esa semana ya tiene ${previas} sesión(es) planificada(s) en ${grupo.nombre}.\n\n` +
+        sustituir = await confirmar(`Esa semana ya tiene ${previas} sesión(es) planificada(s) en ${grupo.nombre}.\n\n` +
           '¿Sustituirlas por las del fichero? Los eventos que escribiste a mano se quedan.')
         if (!sustituir) { setTrabajando(false); return }
       }

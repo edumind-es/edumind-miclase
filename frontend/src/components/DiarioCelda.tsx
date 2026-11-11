@@ -15,6 +15,7 @@ import { calificativo } from '@/db/calculo'
 import type { Alumno, RegistroDiario } from '@/db/localDb'
 import { claveUnidad } from '@/db/migracionUnidades'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   alumno: Alumno
   instrumento: CeldaInstrumento
@@ -68,7 +69,7 @@ export default function DiarioCelda({
   }
 
   const borrar = async (r: RegistroDiario) => {
-    if (!confirm(`¿Borrar el registro del ${fechaCorta(r.fecha)} (nivel ${r.valor})? La nota se recalcula con los que queden.`)) return
+    if (!await confirmar({ texto: `¿Borrar el registro del ${fechaCorta(r.fecha)} (nivel ${r.valor})? La nota se recalcula con los que queden.`, aceptar: 'Borrar', peligro: true })) return
     setOcupado(true)
     try {
       await borrarRegistro(r.id!)

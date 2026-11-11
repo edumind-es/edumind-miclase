@@ -16,6 +16,7 @@ import { tamanoLegible, type ResumenEvidencias } from '@/db/almacen'
 import { enMB, LIMITE_EVIDENCIA_SINC } from '@/db/limites'
 import { verEvidencias } from '@/db/datosSensibles'
 
+import { confirmar } from '@/utils/confirmar'
 const ICONO: Record<string, string> = { foto: '📸', audio: '🎙', video: '🎬' }
 const NOMBRE: Record<string, [string, string]> = { foto: ['foto', 'fotos'], audio: ['audio', 'audios'], video: ['vídeo', 'vídeos'] }
 
@@ -28,7 +29,7 @@ function DesgloseEvidencias() {
   if (!r || (!r.total.n && !r.borradas.n)) return null
 
   const liberar = async () => {
-    if (!confirm(`Las ${r.borradas.n} evidencias que ya borraste aún guardan su contenido (${tamanoLegible(r.borradas.bytes)}). Se eliminará para siempre de este aparato.\n\n¿Seguir?`)) return
+    if (!await confirmar(`Las ${r.borradas.n} evidencias que ya borraste aún guardan su contenido (${tamanoLegible(r.borradas.bytes)}). Se eliminará para siempre de este aparato.\n\n¿Seguir?`)) return
     const bytes = await liberarEvidenciasBorradas()
     setAviso(`Liberados ${tamanoLegible(bytes)}. El navegador puede tardar en descontarlos de lo que ocupas.`)
     await mirar()

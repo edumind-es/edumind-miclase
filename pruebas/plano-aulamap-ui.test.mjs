@@ -10,7 +10,7 @@
  *  - AulaMap abierto suelto funciona como siempre.
  */
 import { mkdirSync } from 'node:fs'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
@@ -34,7 +34,7 @@ try {
   p.on('pageerror', e => errores.push('PAGEERROR: ' + e.message))
   p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource.*\/api\//.test(m.text())) errores.push('CONSOLA: ' + m.text()) })
   p.on('request', r => { const u = new URL(r.url()); if (/^https?:$/.test(u.protocol) && u.origin !== ORIGEN && !/^127\.0\.0\.1$|^localhost$/.test(u.hostname)) ajenas.push(r.url()) })
-  p.on('dialog', d => d.accept())
+  await aceptarConfirmaciones(p)
   await p.goto(BASE + '/', { waitUntil: 'networkidle' })
 
   const { grupo, alumnos } = await p.evaluate(async () => {

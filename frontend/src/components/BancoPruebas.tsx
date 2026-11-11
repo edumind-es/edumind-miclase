@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getBancoPruebas, guardarPruebaEnBanco, eliminarPruebaDelBanco, type PruebaDeBanco } from '@/db/queries'
 import { puntosTotales, TIPOS_PRUEBA, LETRAS } from '@/db/prueba'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   /** El instrumento que se está editando: su propio examen no se le ofrece. */
   instrumentoId: number
@@ -53,7 +54,7 @@ export default function BancoPruebas({ instrumentoId, onElegir, onCerrar, refres
   const quitar = async (r: PruebaDeBanco) => {
     if (r.bancoId == null) return
     const sigue = r.usos.length > 0
-    if (!confirm(sigue
+    if (!await confirmar(sigue
       ? `¿Quitar «${r.def.titulo}» del banco?\n\nLos instrumentos que lo usan lo conservan.`
       : `¿Quitar «${r.def.titulo}» del banco?\n\nNingún instrumento lo usa: se perderá.`)) return
     await eliminarPruebaDelBanco(r.bancoId)

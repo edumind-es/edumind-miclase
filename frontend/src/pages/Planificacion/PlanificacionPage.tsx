@@ -24,6 +24,7 @@ import { AvisoBorradorIA } from '@/components/AvisoIA'
 import EditarSesion from './EditarSesion'
 import EditarEvento, { iconoEvento } from './EditarEvento'
 
+import { confirmar } from '@/utils/confirmar'
 type Vista = 'semana' | 'mes'
 const CLAVE_VISTA = 'miclase.planificacion.vista'
 
@@ -118,7 +119,7 @@ export default function PlanificacionPage() {
   }
 
   const borrar = async (s: SesionPlan) => {
-    if (!confirm(`¿Borrar la sesión de ${s.area} del ${diaLargo(s.fecha)} (${s.hora_inicio})?`)) return
+    if (!await confirmar(`¿Borrar la sesión de ${s.area} del ${diaLargo(s.fecha)} (${s.hora_inicio})?`)) return
     await eliminarSesionPlan(s.id!)
     setDetalle(null)
     recargar()

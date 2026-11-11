@@ -5,6 +5,7 @@ import { api, esNativo, REDIRECT_NATIVO } from '@/api'
 import { useAppStore } from '@/store/useAppStore'
 import { buzonCerrado, consultarBuzon } from '@/db/buzon'
 
+import { avisar } from '@/utils/confirmar'
 interface AuthConfig {
   enabled: boolean
   authentik_url: string
@@ -156,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const iniciarLogin = async () => {
     if (!authConfig || !redirect) {
-      alert(motivoSinLogin ?? 'El login con EDUmind no está disponible ahora mismo.')
+      await avisar(motivoSinLogin ?? 'El login con EDUmind no está disponible ahora mismo.')
       return
     }
     const { verifier, challenge } = await generarPKCE()

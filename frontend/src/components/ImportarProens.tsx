@@ -11,6 +11,7 @@ import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import AsistenteFamilia from './AsistenteFamilia'
 
+import { confirmar } from '@/utils/confirmar'
 /**
  * Importar la programación didáctica oficial (PROENS) en un área.
  *
@@ -140,7 +141,7 @@ export default function ImportarProens({
           motivo = err?.message || 'el PDF no se ha podido abrir'
         }
         if (motivo) {
-          const enviar = confirm(
+          const enviar = await confirmar(
             `No se ha podido leer la programación en este aparato (${motivo}).\n\n`
             + 'Se puede probar en el servidor de EDUmind: el PDF viaja hasta él, se convierte a texto '
             + 'y se borra en el momento, sin guardarse. Si la programación lleva anexos con datos de '
