@@ -162,6 +162,8 @@ interface Props {
   onPegar: (col: ColumnaInstrumento) => void
   /** «Definir herramienta»: el instrumento no tiene rúbrica ni examen y no es de observación. */
   onDefinir: (col: ColumnaInstrumento) => void
+  /** «Calificar» sin herramienta: la nota directa de toda la clase (`SesionNota`). Solo dentro de una unidad. */
+  onNota?: (col: ColumnaInstrumento) => void
   /**
    * Renombrar el instrumento desde su cabecera, sin pasar por ⚙ Instrumentos.
    * Solo el nombre: tipo, peso y criterios siguen en el gestor, porque cambian
@@ -191,7 +193,7 @@ interface Props {
   onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -328,8 +330,18 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       {col.ins.tiene_prueba ? 'Calificar' : 'Definir el examen'}
                     </button>
                   ) : (<>
+                    {/* Sin examen ni rúbrica y sin ser de observación: «Calificar» abre la
+                        nota directa de toda la clase, que dice que no hay herramienta y
+                        ofrece definirla. Definirla desde aquí va en «Más». */}
+                    {sinHerramienta && onNota && (
+                      <button type="button" className="instr-th-accion" data-nota-abrir
+                        onClick={() => onNota(col)}
+                        title="Poner la nota a toda la clase, un alumno tras otro: cinco calificativos o la nota exacta">
+                        Calificar
+                      </button>
+                    )}
                     {sinHerramienta && (
-                      <button type="button" className="instr-th-accion" data-herramienta-definir
+                      <button type="button" className={`instr-th-accion${onNota ? ' secundaria instr-th-detalle' : ''}`} data-herramienta-definir
                         onClick={() => onDefinir(col)}
                         title="Elegir con qué se evalúa: rúbrica, lista de control o escala de estimación">
                         Definir herramienta

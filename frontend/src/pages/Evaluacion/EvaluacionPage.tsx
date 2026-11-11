@@ -30,6 +30,7 @@ import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import PruebaEditor from '@/components/PruebaEditor'
 import InformePrueba from '@/components/InformePrueba'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
+import SesionNota from '@/components/SesionNota'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
@@ -194,6 +195,8 @@ export default function EvaluacionPage() {
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
+  /** Columna sin herramienta que se está calificando con nota directa, toda la clase. */
+  const [notaEn, setNotaEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
   /** Columna cuyas notas de esta unidad se van a llevar a otro instrumento. */
   const [moverEn, setMoverEn] = useState<ColumnaInstrumento | null>(null)
@@ -820,6 +823,7 @@ export default function EvaluacionPage() {
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
+                  onNota={unidadId ? col => setNotaEn(col) : undefined}
                   onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
@@ -1171,6 +1175,21 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {notaEn && matriz && (
+        <SesionNota
+          columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
+          matriz={matriz}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setNotaEn(null)}
+          onDefinir={() => { const col = notaEn; setNotaEn(null); setDefinirEn(col) }}
         />
       )}
 

@@ -668,6 +668,32 @@ edumind_miclase/
   del panel, que ahora se llaman «Alumno anterior» y «Alumno siguiente»
   (`aria-label`). El orquestador de pruebas enseña más líneas de una suite
   fallida con `LINEAS=400`.
+- **Rediseño del Calificador, fase 2** (nov 2026). Sustituye a lo que otras
+  notas de este fichero dicen de pestañas y cabeceras: **(A) no hay filas de
+  pestañas.** El área se elige en la barra de la clase (`BarraClase`, que ya
+  no la esconde en `/evaluacion`) y la unidad en un selector
+  (`[data-unidad-select]`: la primera opción es «Todo el curso»); las clases
+  `.tab-area` y `.tab-unidad`, `[data-unidades-modo]` y `[data-unidad-actual]`
+  ya no existen. Las pruebas eligen unidad con `elegirUnidad(p, n)` de
+  `pruebas/lib/entorno.mjs` (0 = «Todo el curso») y leen la elegida con
+  `unidadElegida(p)`. Los avisos de la programación (criterios sin
+  instrumento, instrumentos sin criterio en la unidad, datos escondidos,
+  fuera de trimestre) van tras un contador, `[data-avisos-toggle]`, cerrado
+  al entrar; `[data-columna-aviso]` (lo que acaba de pasar con una columna)
+  sigue a la vista. **(C) una acción principal por columna** y un «Más»
+  propio (`[data-columna-mas]`) que despliega solo esa columna: cámara,
+  examen, informe, pegar, mover, vaciar, criterios y «Definir herramienta».
+  «Más en todas» es el `[data-cabeceras-toggle]` de siempre. Una prueba que
+  pulse una acción secundaria abre antes el «Más» de su columna. **(B)
+  «Calificar» en una columna sin examen ni rúbrica que no es de observación**
+  (`[data-nota-abrir]`) abre `SesionNota` (`[data-nota-directa]`): la clase
+  en una lista con cinco calificativos de nota fija —IN 3 · SU 5 · BI 6 ·
+  NT 7,5 · SB 9,5, decisión de Luis— y una casilla de nota exacta; cada
+  pulsación guarda en todos los criterios de la columna (`sinVinculos`, como
+  «Pegar columna») y pasa al siguiente; repetir el calificativo quita la
+  nota y «Deshacer» devuelve a cada criterio lo que tenía. No finge una
+  herramienta: lo dice (`[data-sin-herramienta]`) y ofrece definirla. Con
+  examen sigue abriéndose el corrector y con rúbrica o diario, su pasada.
 - **El análisis de un alumno lo compara con su grupo y no calcula ninguna
   nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
   `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que
