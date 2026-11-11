@@ -15,7 +15,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -93,7 +93,7 @@ const pegar = async (nombre, texto) => {
   await p.waitForTimeout(600)
 }
 const irAUnidad = async (pestana) => {
-  await p.locator('.tab-unidad').nth(pestana).click()
+  await elegirUnidad(p, pestana)
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
   await p.waitForTimeout(600)
 }

@@ -13,7 +13,7 @@
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { createRequire } from 'node:module'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const require = createRequire(import.meta.url)
 const { hojaDeMuestra } = require(process.env.HOJA_DEMO)
@@ -104,7 +104,7 @@ try {
   await p.waitForTimeout(1500)
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 8000 })
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const colExamen = p.locator('[data-instr-th][data-tipo="prueba-escrita"]').first()
   ok(await colExamen.count() === 1, 'hay columna de prueba escrita en la unidad')

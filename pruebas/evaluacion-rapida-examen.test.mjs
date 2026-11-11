@@ -11,7 +11,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -125,7 +125,7 @@ try {
   // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
   await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
 
   const ini = await bd()
@@ -208,7 +208,7 @@ try {
   // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
   await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   await abrirCelda(1, e2, ini.examen.nombre)
   ok(await aparece(panel.locator('[data-corregir-prueba]').getByText('3 de 3 anotadas · 6 / 10 puntos')), 'el examen sale corregido')

@@ -9,7 +9,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, unidadElegida } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -197,29 +197,28 @@ try {
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-resumen-curso]').isVisible(), 'la primera vez se abre en «Todo el curso»')
   const trimestreBarra = await p.getByLabel('Trimestre').inputValue()
-  const pestanas = p.locator('.tab-unidad')
-  const total = await pestanas.count()
+  const rotulos = await p.locator('[data-unidad-select] option').allTextContents()
   let delTrimestre = -1, deOtro = -1
-  for (let i = 1; i < total; i++) {
-    const esDelTrimestre = (await pestanas.nth(i).locator('.trim').textContent()).includes(`T${trimestreBarra}`)
+  for (let i = 1; i < rotulos.length; i++) {
+    const esDelTrimestre = rotulos[i].includes(`· T${trimestreBarra} ·`)
     if (esDelTrimestre && delTrimestre < 0) delTrimestre = i
     if (!esDelTrimestre && deOtro < 0) deOtro = i
   }
   ok(delTrimestre > 0 && deOtro > 0, 'hay unidades del trimestre de la barra y de otro', `${delTrimestre} · ${deOtro}`)
-  await pestanas.nth(delTrimestre).click()
+  await elegirUnidad(p, delTrimestre)
   await p.waitForTimeout(500)
   await p.goto(BASE + '/', { waitUntil: 'networkidle' })
   await p.goto(BASE + '/evaluacion', { waitUntil: 'networkidle' })
   await p.waitForTimeout(1200)
-  ok(await p.locator('.tab-unidad').nth(delTrimestre).getAttribute('aria-selected') === 'true',
+  ok(await unidadElegida(p) === delTrimestre,
     'al volver, se abre la unidad en la que se estaba')
-  await p.locator('.tab-unidad').nth(deOtro).click()
+  await elegirUnidad(p, deOtro)
   await p.waitForTimeout(500)
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-resumen-curso]').isVisible(), 'una unidad de otro trimestre no se reabre sola')
-  await p.locator('.tab-unidad').nth(delTrimestre).click()
-  await p.locator('.tab-unidad').first().click()
+  await elegirUnidad(p, delTrimestre)
+  await elegirUnidad(p, 0)
   await p.waitForTimeout(300)
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1200)

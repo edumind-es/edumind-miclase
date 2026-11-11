@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -154,7 +154,7 @@ try {
 
   const inicio = await bd()
   const [cA, cB, cC] = inicio.criterios
-  await p.locator('.tab-unidad').nth(inicio.pestana).click()
+  await elegirUnidad(p, inicio.pestana)
   await p.waitForTimeout(1200)
   ok(inicio.criterios.length >= 3, 'la prueba escrita evalúa varios criterios en la unidad', inicio.criterios.join(', '))
 
@@ -239,7 +239,7 @@ try {
   await cerrarPanel()
 
   console.log('\n5. «Todo el curso» no corrige: explica de dónde sale la nota del examen')
-  await p.locator('.tab-unidad').first().click()
+  await elegirUnidad(p, 0)
   await p.waitForTimeout(1200)
   {
     // La casilla de Ana en el criterio del examen: en el resumen del curso no
@@ -258,7 +258,7 @@ try {
     await p.keyboard.press('Escape')
     await ficha.waitFor({ state: 'hidden', timeout: 5000 })
   }
-  await p.locator('.tab-unidad').nth(inicio.pestana).click()
+  await elegirUnidad(p, inicio.pestana)
   await p.waitForTimeout(1200)
 
   console.log('\n6. Cambiar a test con penalización y nota única')
@@ -434,7 +434,7 @@ try {
     await foto('prueba-06-vinculado')
     await cerrarPanel()
     // Desde la otra unidad: la columna sabe que el examen es de la primera y abre corregido.
-    await p.locator('.tab-unidad').nth(inicio.otraPestana).click()
+    await elegirUnidad(p, inicio.otraPestana)
     await p.waitForTimeout(1200)
     await p.locator('[data-vista="instrumentos"]').click()
     await p.waitForTimeout(800)
@@ -451,7 +451,7 @@ try {
     ok(d.notas[0][cA]?.valor === 7.14 && Object.values(d.notasOtra[0]).every(n => n.respuestas === 4),
       `corregir desde la otra unidad cambia también la nota en la del examen (${cA} de Ana pasa a 7,14)`, JSON.stringify(d.notas[0][cA]))
     await cerrarPanel()
-    await p.locator('.tab-unidad').nth(inicio.pestana).click()
+    await elegirUnidad(p, inicio.pestana)
     await p.waitForTimeout(1200)
     await abrirCelda(1, cA)
   }

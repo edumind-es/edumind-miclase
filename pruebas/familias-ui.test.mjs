@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -107,7 +107,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const columnasAntes = await p.locator('th.criterio-th').count()
   await p.getByRole('button', { name: /⚙ Instrumentos/ }).click()

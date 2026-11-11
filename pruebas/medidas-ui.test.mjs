@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -154,7 +154,7 @@ try {
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-vista="criterios"]').click()
   await p.getByLabel('Trimestre').selectOption(String(T))
-  await p.locator('.tab-unidad').nth(unidad.pestana).click()
+  await elegirUnidad(p, unidad.pestana)
   await p.waitForTimeout(1200)
   const ana1 = await calificar(0, c1, [[famA, 4]])
   const ana2 = await calificar(0, c2, [[famB, 10]])
@@ -196,7 +196,7 @@ try {
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
   await p.getByLabel('Trimestre').selectOption(String(T))
-  await p.locator('.tab-unidad').nth(unidad.pestana).click()
+  await elegirUnidad(p, unidad.pestana)
   await p.waitForTimeout(1200)
   const filaAna = p.locator('tbody tr').first()
   ok(await filaAna.locator('[data-sello-medida="refuerzo"]').count() === 1, 'Ana lleva el sello RE', await filaAna.locator('[data-sello-medida]').allTextContents().then(x => x.join(',')))
@@ -224,7 +224,7 @@ try {
 
   console.log('\n5. «Todo el curso»: para Ana ' + c1 + ' no cuenta y el área sale solo de ' + c2)
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(0).click()
+  await elegirUnidad(p, 0)
   await p.locator('[data-matriz-resumen="criterios"]').waitFor({ timeout: 8000 })
   for (const ce of new Set([c1, c2].map(c => 'CE' + c.match(/(\d+)/)[1]))) {
     await p.locator(`[data-competencia-th="${ce}"]`).click()

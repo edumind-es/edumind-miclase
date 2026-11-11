@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -85,7 +85,7 @@ try {
   console.log('\n2. Primera vez en el Calificador: por instrumento y con la tarjeta')
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-instr-th]').count() >= 1, 'sin elección previa, abre por instrumento')
   ok(await p.locator('[data-vista="instrumentos"][aria-pressed="true"]').count() === 1, 'y el conmutador lo marca')
@@ -105,7 +105,7 @@ try {
   await p.waitForTimeout(1500)
   ok(await p.locator('[data-presentacion]').count() === 0, 'tras «Entendido» no vuelve a salir en este aparato')
   ok(await p.locator('[data-instr-th]').count() >= 1, 'y sigue por instrumento')
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
 
   console.log('\n3. Pegar una columna de Excel, por orden de lista')

@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -142,7 +142,7 @@ try {
   await p.waitForTimeout(1500)
   const cerrarPres = p.locator('button:has-text("Entendido"), button:has-text("Empezar")')
   if (await cerrarPres.count()) await cerrarPres.first().click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   await p.locator('table.matriz tbody tr').first().locator('td.celda button').first().click()
   await panel.waitFor({ timeout: 8000 })

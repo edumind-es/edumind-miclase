@@ -139,7 +139,7 @@ try {
   await p.waitForURL(/\/evaluacion/)
   await p.waitForTimeout(1500)
   ok(/unidad_id=99000001/.test(p.url()), 'el Calificador abre con la unidad', p.url())
-  ok(await p.locator('.tab-unidad').filter({ hasText: /El poder de las palabras|UD3/ }).first().count() === 1, 'la pestaña de la UD3 está')
+  ok(await p.locator('[data-unidad-select] option').filter({ hasText: /El poder de las palabras|UD3/ }).first().count() === 1, 'la UD3 está en el selector de unidad')
 
   console.log('\n5. Borrar, mover y crear a mano')
   await p.goto(BASE + '/planificacion?fecha=2026-11-11', { waitUntil: 'networkidle' })

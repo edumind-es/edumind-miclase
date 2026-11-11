@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, unidadElegida } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -96,7 +96,7 @@ try {
   // así que empieza por la de criterios y cierra la tarjeta de bienvenida.
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const nCriterios = await p.locator('th.criterio-th').count()
   ok(nCriterios >= 3, 'por criterio hay una columna por criterio de la unidad', `${nCriterios} columnas`)
@@ -111,27 +111,24 @@ try {
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1500)
   ok(await p.locator('[data-instr-th]').count() >= 1, 'la vista elegida se recuerda al recargar')
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   await foto('instrumentos-01-matriz')
 
-  console.log('\n2b. Pestañas de unidad por número y renombrar desde la cabecera')
-  // Por defecto las pestañas van por número («UD1 · T1»), con el título al
-  // pasar por encima y, debajo, el de la unidad abierta en una sola línea.
-  const pestana = p.locator('.tab-unidad').nth(1)
-  const rotulo = (await pestana.textContent()).trim()
-  const nombreUnidad = await pestana.getAttribute('data-unidad-nombre')
-  ok(/^UD\d+/.test(rotulo), 'la pestaña de unidad sale por número', rotulo)
-  ok((await pestana.getAttribute('title')).includes(nombreUnidad), 'el título de la unidad va en el tooltip')
-  ok((await p.locator('[data-unidad-actual]').textContent()).includes(nombreUnidad), 'y la unidad abierta se nombra debajo de las pestañas')
-  await p.locator('[data-unidades-modo]').click()
-  ok((await pestana.textContent()).includes(nombreUnidad), 'el conmutador vuelve a enseñar los títulos')
+  console.log('\n2b. La unidad se elige en un selector, con su número y su título')
+  // Un solo selector sustituye a las pestañas: cada opción dice «UDn · título · Tn».
+  const opcion = p.locator('[data-unidad-select] option').nth(1)
+  const rotulo = (await opcion.textContent()).trim()
+  const nombreUnidad = await opcion.getAttribute('data-unidad-nombre')
+  ok(/^UD\s*\d+/.test(rotulo) && rotulo.includes(nombreUnidad), 'cada unidad sale con su número y su título', rotulo)
+  ok((await p.locator('[data-unidad-select] option').first().textContent()).includes('Todo el curso'), 'y la primera opción es «Todo el curso»')
+  ok(await unidadElegida(p) === 1, 'el selector marca la unidad abierta')
+  ok(await p.locator('.tab-unidad, .tab-area').count() === 0, 'ya no hay filas de pestañas de área ni de unidad')
+  ok(await p.getByLabel('Área').count() === 1, 'el área se elige en la barra de la clase')
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1500)
-  ok((await p.locator('.tab-unidad').nth(1).textContent()).includes(nombreUnidad), 'la elección se recuerda al recargar')
-  await p.locator('[data-unidades-modo]').click()
-  ok(/^UD\d+/.test((await p.locator('.tab-unidad').nth(1).textContent()).trim()), 'y se vuelve a los números')
-  await p.locator('.tab-unidad').nth(1).click()
+  ok(await unidadElegida(p) === 1, 'al recargar se sigue en la misma unidad')
+  await elegirUnidad(p, 1)
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
 
   // Renombrar: el lápiz de la cabecera abre un campo en el sitio; Enter guarda.
@@ -381,7 +378,7 @@ try {
   await panel.waitFor({ state: 'hidden', timeout: 5000 })
 
   console.log('\n10. «Todo el curso» es un resumen de solo lectura que explica cada nota')
-  await p.locator('.tab-unidad').nth(0).click()
+  await elegirUnidad(p, 0)
   await p.locator('[data-resumen-curso]').waitFor({ timeout: 5000 })
   // La cabecera que cuenta es la del resumen, no la de la matriz que se deja:
   // se espera a que el resumen termine de calcularse.

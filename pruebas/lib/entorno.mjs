@@ -120,3 +120,21 @@ export async function esperarA(url, { intentos = 60, cada = 500, proceso = null 
   const cola = proceso ? `\n${proceso.nombre} dijo:\n${proceso.salida.slice(-15).join('')}` : ''
   throw new Error(`${url} no responde después de ${(intentos * cada) / 1000} s${cola}`)
 }
+
+/**
+ * Abre en el Calificador la unidad que ocupa la posición `n` del selector de
+ * unidad: la 0 es «Todo el curso» y las unidades empiezan en la 1, igual que
+ * cuando eran pestañas.
+ */
+export async function elegirUnidad(p, n) {
+  const selector = p.locator('[data-unidad-select]')
+  await selector.waitFor({ timeout: 10000 })
+  const valores = await selector.locator('option').evaluateAll(os => os.map(o => o.value))
+  if (n < 0 || n >= valores.length) throw new Error(`No hay unidad en la posición ${n}: el selector tiene ${valores.length} opciones`)
+  await selector.selectOption(valores[n])
+}
+
+/** La posición elegida en el selector de unidad (0 = «Todo el curso»). */
+export async function unidadElegida(p) {
+  return p.locator('[data-unidad-select]').evaluate(s => s.selectedIndex)
+}

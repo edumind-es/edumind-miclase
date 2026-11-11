@@ -1003,3 +1003,13 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 .instr-th-criterio button, .instr-th-lapiz { min-width: 32px; min-height: 32px; }
 /* El lápiz de renombrar solo se veía bien al pasar el ratón: en un iPad no hay ratón. */
 .instr-th-lapiz { opacity: .8; }
+
+/* ── Calificador: la unidad se elige en un selector (rediseño, fase 2 · A) ──
+   Antes eran dos filas de pestañas (áreas y unidades). El área está en la
+   barra de la clase; la unidad, aquí, grande y con su título entero. */
+.unidad-selector { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 260px; }
+.unidad-selector > span { font-size: 12px; font-weight: 700; color: var(--gris-600); letter-spacing: .04em; text-transform: uppercase; }
+.unidad-selector select {
+  min-height: 44px; min-width: 0; flex: 1; max-width: 520px; padding: 8px 12px; font-size: 15px; font-weight: 700;
+  color: var(--azul-900); border: 1.5px solid var(--azul-700); border-radius: var(--radio-sm); background: var(--blanco);
+}

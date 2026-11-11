@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -126,21 +126,21 @@ try {
   await p.locator('[data-vista="criterios"]').click()
   // El selector de la barra en el trimestre de las unidades, para calificar en él.
   await p.getByLabel('Trimestre').selectOption(String(T))
-  await p.locator('.tab-unidad').nth(udA.pestana).click()
+  await elegirUnidad(p, udA.pestana)
   await p.waitForTimeout(1200)
   const enA = await calificar(criterio, 8)
-  await p.locator('.tab-unidad').nth(udB.pestana).click()
+  await elegirUnidad(p, udB.pestana)
   await p.waitForTimeout(1200)
   const enB = await calificar(criterio, 6)
   ok(enB.startsWith('6'), `en ${udB.nombre} la casilla vale 6`, enB)
-  await p.locator('.tab-unidad').nth(udA.pestana).click()
+  await elegirUnidad(p, udA.pestana)
   await p.waitForTimeout(1200)
   const idxA = await p.locator('th.criterio-th .criterio-th-id').evaluateAll((els, id) => els.findIndex(x => x.textContent.trim() === id), criterio)
   const otraVezA = (await p.locator('tbody tr').first().locator('td.celda .celda-btn').nth(idxA).textContent()).trim()
   ok(enA.startsWith('8') && otraVezA.startsWith('8'), `y en ${udA.nombre} sigue valiendo 8: las unidades son estancas`, `${enA} / ${otraVezA}`)
 
   console.log('\n3. «Todo el curso» por criterio: 1T · 2T · 3T · Final, con la media de las unidades')
-  await p.locator('.tab-unidad').nth(0).click()
+  await elegirUnidad(p, 0)
   await p.locator('[data-resumen-curso]').waitFor({ timeout: 5000 })
   await p.locator('[data-matriz-resumen="criterios"]').waitFor({ timeout: 8000 })
   const banda = await p.locator('[data-resumen-curso]').textContent()
