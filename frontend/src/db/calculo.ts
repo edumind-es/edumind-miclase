@@ -17,7 +17,7 @@
  * Solo cuentan los trimestres con datos: si un área aún no tiene nada en el
  * 3er trimestre, la nota final es la de lo que sí hay, no un 0 encubierto.
  */
-import type { Calificacion, Instrumento, Medida, ReglaArea, ReglaFinal } from './localDb'
+import type { Calificacion, Instrumento, Medida, ReglaArea, ReglaFinal, ReglaUnidades } from './localDb'
 import { instrumentosParaAlumno, criteriosExcluidos, medidasVigentes, medidaDe, parsearPesos } from './medidas'
 
 export type NotaCriterio = {
@@ -162,6 +162,45 @@ export const REGLAS_AREA: { id: ReglaArea; nombre: string; descripcion: string }
   { id: 'criterio', nombre: 'Por criterio', descripcion: 'El área es la media de los criterios por su peso; el instrumento pesa solo dentro de cada criterio.' },
 ]
 
+/**
+ * Cómo cuentan las unidades de un trimestre. 'iguales' es lo de siempre y lo
+ * que vale sin declarar: cada unidad cuenta lo mismo. 'peso': cada unidad
+ * por el peso de la programación (el «% Peso» de PROENS: una unidad de 15
+ * cuenta más que una de 11). Lo eligió Luis en la auditoría de nov 2026:
+ * que se pueda decidir por área.
+ */
+export const REGLAS_UNIDADES: { id: ReglaUnidades; nombre: string; descripcion: string }[] = [
+  { id: 'iguales', nombre: 'Todas las unidades cuentan igual', descripcion: 'La nota de un instrumento en el trimestre es la media simple de sus unidades.' },
+  { id: 'peso', nombre: 'Por el peso de cada unidad', descripcion: 'La nota de un instrumento en el trimestre es la media de sus unidades ponderada por el peso que la programación da a cada una.' },
+]
+
+export function normalizarReglaUnidades(valor: unknown): ReglaUnidades {
+  return REGLAS_UNIDADES.some(r => r.id === valor) ? valor as ReglaUnidades : 'iguales'
+}
+
+/** Peso de cada unidad al fundir, y el que vale para una que no lo declara. */
+export type PesosUnidad = { porUnidad: Map<number, number>; defecto: number }
+
+/**
+ * Los pesos de unidad con los que funde `fundirUnidades`, o `undefined` si
+ * todas cuentan igual: la regla es 'iguales' o ninguna unidad declara peso.
+ * Una unidad sin peso (hecha a mano, sin PROENS) entra con la media de las
+ * que sí lo tienen: ni desaparece ni se come a las demás.
+ */
+export function pesosDeUnidades(
+  regla: unknown, unidades: { id?: number; peso?: number | null }[],
+): PesosUnidad | undefined {
+  if (normalizarReglaUnidades(regla) !== 'peso') return undefined
+  const porUnidad = new Map<number, number>()
+  for (const u of unidades) {
+    const peso = Number(u.peso)
+    if (u.id != null && Number.isFinite(peso) && peso > 0) porUnidad.set(u.id, peso)
+  }
+  if (!porUnidad.size) return undefined
+  const defecto = [...porUnidad.values()].reduce((s, p) => s + p, 0) / porUnidad.size
+  return { porUnidad, defecto }
+}
+
 /** Lo guardado puede venir vacío o de una versión futura: sin reconocer, 'instrumento'. */
 export function normalizarReglaArea(valor: unknown): ReglaArea {
   return REGLAS_AREA.some(r => r.id === valor) ? valor as ReglaArea : 'instrumento'
@@ -293,7 +332,9 @@ function pesoEnFamilia(ins: Instrumento | undefined): number {
  *
 /**
  * Funde en una las notas que el mismo alumno tiene en el mismo criterio con
- * el mismo instrumento en VARIAS unidades del trimestre: la media simple.
+ * el mismo instrumento en VARIAS unidades del trimestre: la media simple o,
+ * con `pesosUnidad` (la regla 'peso' del área, `pesosDeUnidades`), la media
+ * ponderada por el peso de cada unidad.
  *
  * Es la casilla de «Todo el curso» desde que las unidades son estancas: cada
  * unidad guarda su nota y el resumen del trimestre las promedia. Cada unidad
@@ -307,7 +348,9 @@ function pesoEnFamilia(ins: Instrumento | undefined): number {
  * una, y el 20/80 de la programación dejaría de cumplirse. Primero la media
  * de unidades, después el peso del instrumento y el de la familia.
  */
-export function fundirUnidades(cals: Calificacion[]): Calificacion[] {
+export function fundirUnidades(cals: Calificacion[], pesosUnidad?: PesosUnidad): Calificacion[] {
+  const pesoDe = (c: Calificacion) =>
+    pesosUnidad ? pesosUnidad.porUnidad.get(c.unidad_id) ?? pesosUnidad.defecto : 1
   const grupos = new Map<string, Calificacion[]>()
   for (const c of cals) {
     const k = `${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`
@@ -321,7 +364,9 @@ export function fundirUnidades(cals: Calificacion[]): Calificacion[] {
     void _id
     salida.push({
       ...base,
-      valor: conNota.length ? conNota.reduce((s, c) => s + c.valor!, 0) / conNota.length : null,
+      valor: conNota.length
+        ? conNota.reduce((s, c) => s + c.valor! * pesoDe(c), 0) / conNota.reduce((s, c) => s + pesoDe(c), 0)
+        : null,
       valor_anterior: null, anterior_motivo: null, observacion: null, origen: null,
       niveles_rubrica: null, virtual: true,
     })
@@ -394,7 +439,11 @@ function pesoDeclarado(
 }
 
 /** Ajustes propios de un alumno: sus medidas de atención a la diversidad. */
-export type OpcionesCalculo = { medidas?: Medida[] }
+export type OpcionesCalculo = {
+  medidas?: Medida[]
+  /** Pesos de unidad del área (`pesosDeUnidades`); sin ellos, cada unidad cuenta igual. */
+  pesosUnidad?: PesosUnidad
+}
 
 /**
  * Calcula las notas de un alumno en un área.
@@ -444,7 +493,7 @@ export function calcularNotaArea(
       // Un instrumento que no cuenta para este alumno no entra ni en la
       // fusión de su familia: con peso 0 un hijo contaría como 1.
       && !(ajustado && byId.has(c.instrumento_id) && byId.get(c.instrumento_id)!.peso <= 0))
-    conValor.push(...fundirHijosEnFamilias(fundirUnidades(deT), insT).filter(c => c.valor != null))
+    conValor.push(...fundirHijosEnFamilias(fundirUnidades(deT, opciones.pesosUnidad), insT).filter(c => c.valor != null))
   }
 
   // criterio → trimestre → aportaciones

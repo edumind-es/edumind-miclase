@@ -4,7 +4,7 @@ import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import {
   aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia,
-  calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosCriterioDeUnidades, pesosVinculoDeUnidades, type NotaArea,
+  calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosCriterioDeUnidades, pesosVinculoDeUnidades, pesosDeUnidades, type NotaArea, type PesosUnidad,
 } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
@@ -1884,7 +1884,7 @@ export async function getResumenPorCriterio(asignatura_id: number): Promise<
 
   // Como en el motor: primero la media de unidades, después el peso.
   const cals = fundirUnidades(sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.valor != null).toArray())))
+    .filter(c => c.valor != null).toArray())), await pesosUnidadDeArea(asignatura_id))
 
   const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
@@ -2086,6 +2086,16 @@ export async function vincularCriterio(
   } else {
     await db.unidad_criterios.add(nuevo({ unidad_id, criterio_id, peso, ...extra }))
   }
+}
+
+/**
+ * Los pesos de unidad del área para fundir sus notas (`pesosDeUnidades`), o
+ * `undefined` si el área cuenta todas las unidades igual, que es lo normal.
+ */
+export async function pesosUnidadDeArea(asignatura_id: number): Promise<PesosUnidad | undefined> {
+  const asig = await db.asignaturas.get(asignatura_id)
+  if (!asig || asig.regla_unidades !== 'peso') return undefined
+  return pesosDeUnidades(asig.regla_unidades, vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()))
 }
 
 /**
@@ -3618,7 +3628,7 @@ export async function getMatrizEvaluacion(
     ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
         .filter(c => c.trimestre === trimestre && (unidad_id == null || c.unidad_id === unidad_id)).toArray()))
     : []
-  const cals = unidad_id == null ? fundirUnidades(crudas) : crudas
+  const cals = unidad_id == null ? fundirUnidades(crudas, await pesosUnidadDeArea(asignatura_id)) : crudas
   // Las notas de los hijos se funden en la de su familia, con la misma
   // función que el cálculo del área: la casilla enseña el mismo número que el
   // boletín. Las de los hijos siguen disponibles por su propia clave.
@@ -3715,7 +3725,8 @@ export async function getResumenCurso(asignatura_id: number): Promise<ResumenCur
   for (const al of m1.alumnos) {
     notas.set(al.id!, calcularNotaArea(asignatura_id, porAlumno.get(al.id!) ?? [], m1.instrumentos,
       m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(m1.asig.regla_final),
-      normalizarReglaArea(m1.asig.regla_area), { medidas: m1.medidas.get(al.id!) }))
+      normalizarReglaArea(m1.asig.regla_area),
+      { medidas: m1.medidas.get(al.id!), pesosUnidad: pesosDeUnidades(m1.asig.regla_unidades, unidades) }))
   }
   return {
     grupo: m1.grupo, asig: m1.asig, alumnos: m1.alumnos, instrumentos: m1.instrumentos,

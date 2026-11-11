@@ -704,6 +704,22 @@ edumind_miclase/
   `localStorage`. Un aparato con la versión anterior que sincronice puede
   retirar notas que el nuevo ya distingue: hay que actualizar todos antes
   de volver a calificar, y así lo dicen la puerta y el aviso.
+- **Las unidades de un trimestre cuentan igual salvo que el área diga otra
+  cosa.** `Asignatura.regla_unidades` (sin índice; `REGLAS_UNIDADES`,
+  `normalizarReglaUnidades`): `iguales` (por defecto, lo de siempre) o `peso`,
+  que pondera cada unidad por `Unidad.peso`, el «% Peso» de PROENS.
+  `pesosDeUnidades(regla, unidades)` (`calculo.ts`, puro) da los pesos o
+  `undefined` si cuentan igual, y `fundirUnidades(cals, pesosUnidad)` hace la
+  media ponderada; una unidad sin peso entra con la media de las que lo
+  tienen, y sin ningún peso escrito todas cuentan igual. Lo pasan TODOS los
+  que funden: `calcularNotaArea` (`opciones.pesosUnidad`, desde
+  `getResumenCurso`, `ExplicacionNota`, `informes/datos.ts` y Seguimiento),
+  `getMatrizEvaluacion` y `getResumenPorCriterio` (`pesosUnidadDeArea`); si
+  uno no lo pasara, «Todo el curso» y el boletín discreparían. Se elige en
+  «Nota final» (`[data-regla-unidades]`), donde con `peso` se editan los
+  pesos de cada unidad (`[data-peso-unidad]`), y `ExplicacionNota` lo dice
+  (`[data-explicacion-unidades]`). La nota de cada unidad no cambia. Decisión
+  de Luis (auditoría de nov 2026): que se pueda elegir por área.
 - **La nota final del curso sale de una sola función**, `notaFinal` en
   `calculo.ts`, con la regla que declare el área (`Asignatura.regla_final`,
   sin índice: ponderada por `pesos_trimestres` —lo de siempre y el valor por

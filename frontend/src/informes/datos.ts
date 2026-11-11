@@ -10,7 +10,7 @@ import {
   getCalificacionesPorGrupo, getEvidenciasAlumno, getResumenAsistencia,
   getUnidades, getMedidasDeGrupo,
 } from '@/db/queries'
-import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
+import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, pesosDeUnidades, type NotaArea, type PesosVinculo, type PesosUnidad } from '@/db/calculo'
 import {
   conexionesDeCriterios, perfilCompetenciasClave,
   type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
@@ -32,6 +32,8 @@ export type AreaInforme = {
   pesosVinculo: PesosVinculo
   /** criterio_id → descriptores y competencias clave de su competencia específica */
   conexiones: Map<string, ConexionCriterio>
+  /** Pesos de unidad, si el área las pondera (`pesosDeUnidades`); sin ellos cuentan igual. */
+  pesosUnidad?: PesosUnidad
   /** criterio_id → mínimos de consecución que la programación declara, por unidad */
   minimos?: Map<string, MinimoDeUnidad[]>
 }
@@ -132,6 +134,7 @@ export async function reunirDatosGrupo(
     }
     areas.push({
       asig, instrumentos, descripciones, pesosCriterio, minimos,
+      pesosUnidad: pesosDeUnidades(asig.regla_unidades, unidades),
       pesosVinculo: pesosVinculoDeUnidades(unidades),
       conexiones,
     })
@@ -152,7 +155,7 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
         area.asig.id!, propias, area.instrumentos,
         area.asig.pesos_trimestres, area.pesosCriterio, area.pesosVinculo,
         normalizarReglaFinal(area.asig.regla_final), normalizarReglaArea(area.asig.regla_area),
-        { medidas: datos.medidas.get(`${alumnoId}:${area.asig.id}`) }
+        { medidas: datos.medidas.get(`${alumnoId}:${area.asig.id}`), pesosUnidad: area.pesosUnidad }
       ),
     }
   })

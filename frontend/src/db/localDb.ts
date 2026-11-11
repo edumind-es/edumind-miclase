@@ -69,6 +69,14 @@ export type ReglaFinal = 'ponderada' | 'continua' | 'maxima' | 'mediana'
  */
 export type ReglaArea = 'instrumento' | 'criterio'
 
+/**
+ * Cómo cuentan las unidades de un trimestre al fundir sus notas. 'iguales':
+ * cada unidad cuenta lo mismo (lo de siempre). 'peso': cada una por el peso
+ * que le da la programación (`Unidad.peso`, el «% Peso» de PROENS). Ver
+ * `REGLAS_UNIDADES` en `calculo.ts`.
+ */
+export type ReglaUnidades = 'iguales' | 'peso'
+
 export interface Asignatura extends Sincronizable {
   id?: number
   grupo_id: number
@@ -84,6 +92,11 @@ export interface Asignatura extends Sincronizable {
   regla_final?: ReglaFinal | null
   /** Regla de la nota del área (ver `ReglaArea`). Sin declarar vale 'instrumento'. Sin índice. */
   regla_area?: ReglaArea | null
+  /**
+   * Cómo cuentan las unidades de un trimestre (ver `ReglaUnidades`). Sin
+   * declarar vale 'iguales'. Sin índice.
+   */
+  regla_unidades?: ReglaUnidades | null
   orden?: number
   created_at?: string
 }
