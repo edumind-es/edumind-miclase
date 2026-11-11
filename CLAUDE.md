@@ -952,6 +952,29 @@ edumind_miclase/
   **antes de publicar en la App Store o en Google Play, confirmarlo con el
   autor**, porque las condiciones de la App Store chocan con la AGPL de
   código ajeno.
+- **En papel, la lámina va sobre blanco.** El `@media print` de
+  `informes/lamina.ts` pone `--lm-paper` y `.hoja` en blanco y deja la franja
+  de los Cinco Mundos en un filete de 1,5 mm: el fondo crudo a página
+  completa, forzado con `print-color-adjust`, tintaba cada hoja (una por
+  alumno en boletines e informes). «Guardar como PDF» y el PDF de iOS usan el
+  mismo medio, así que también salen en blanco; el papel de la lámina queda
+  para la pantalla y el `.html` descargado. Las hojas de respuestas llevan su
+  propio CSS y no cambian. Luis: los informes eran demasiado caros de imprimir.
+- **Tocar los instrumentos de un criterio no retira a los hijos de una
+  familia que sigue asignada.** `fijarInstrumentosDeCriterio` recibe familias
+  (la importación de PROENS y 📋 Programación no nombran hijos): un hijo
+  conserva su fila mientras su familia esté en la lista y se va con ella si
+  se retira. Antes reimportar la programación deshacía en silencio el reparto
+  de criterios de los hijos (`proens-ui.test.mjs`, paso 6).
+- **El Calificador reabre la última unidad del área**
+  (`miclase.calificador.unidad`, por área, en el aparato), pero solo si es
+  del trimestre de la barra: la casilla lleva el trimestre de la barra, y
+  reabrir en enero la unidad de diciembre invitaría a calificar en el
+  trimestre equivocado. Un `?unidad_id=` manda, y pulsar «Todo el curso» la
+  olvida. Sin unidad recordada se sigue abriendo en «Todo el curso». La carga
+  de la matriz descarta la respuesta que llega tarde (`vigente`): abrir
+  directamente en una unidad dejaba que la de todo el curso, más lenta, la
+  pisara.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un

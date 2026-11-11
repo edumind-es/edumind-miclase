@@ -146,6 +146,85 @@ try {
   })
   ok(n2.unidades === 7 && n2.ucs === 56 && n2.cis === 55 && n2.ins === 2, 'los mismos registros que antes', JSON.stringify(n2))
 
+  console.log('\n6. Reimportar conserva los criterios de un hijo de la familia')
+  // Un hijo de «Proba escrita» con un criterio de la primera unidad, escrito
+  // como lo dejaría el gestor. La importación solo nombra a la familia: antes
+  // retiraba la fila del hijo y su columna se quedaba sin criterios.
+  const hijo = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const todos = (tabla) => new Promise((res) => {
+      const tx = db.transaction(tabla, 'readonly').objectStore(tabla).getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    const familia = (await todos('instrumentos')).find(i => i.nombre === 'Proba escrita')
+    const fila = (await todos('criterio_instrumentos')).find(f => f.instrumento_id === familia.id)
+    const ahora = new Date().toISOString()
+    const poner = (tabla, reg) => new Promise((res, rej) => {
+      const tx = db.transaction(tabla, 'readwrite')
+      tx.objectStore(tabla).put(reg); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error)
+    })
+    await poner('instrumentos', { ...familia, id: 990001, nombre: 'Examen · UD1', familia_id: familia.id, peso: 1, updated_at: ahora })
+    await poner('criterio_instrumentos', { ...fila, id: 990002, instrumento_id: 990001, updated_at: ahora })
+    return { familia: familia.id, unidad_id: fila.unidad_id, criterio_id: fila.criterio_id }
+  })
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.waitForTimeout(900)
+  await p.getByRole('tab', { name: 'Áreas y evaluación' }).click()
+  await p.waitForTimeout(600)
+  await p.locator('span').filter({ hasText: /^Ciencias Sociales$/ }).first().click()
+  await p.waitForTimeout(900)
+  await p.getByRole('button', { name: /📋 Programación/ }).first().click()
+  await p.waitForTimeout(700)
+  await p.getByRole('button', { name: /Importar de PROENS/ }).click()
+  await p.waitForTimeout(300)
+  await p.locator('input[type="file"][accept*="pdf"]').setInputFiles(PDF)
+  await p.getByRole('button', { name: /Importar 7 unidades/ }).waitFor({ timeout: 20000 })
+  await p.getByRole('button', { name: /Importar 7 unidades/ }).click()
+  await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
+  const n3 = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const cis = await new Promise((res) => {
+      const tx = db.transaction('criterio_instrumentos', 'readonly').objectStore('criterio_instrumentos').getAll()
+      tx.onsuccess = () => res(tx.result)
+    })
+    return { delHijo: cis.find(f => f.id === 990002), vivos: cis.filter(f => !f.deleted_at).length }
+  })
+  ok(n3.delHijo && !n3.delHijo.deleted_at, 'la fila del hijo sigue viva tras reimportar', JSON.stringify(n3.delHijo))
+  ok(n3.vivos === 56, 'los 55 vínculos de las familias y el del hijo', String(n3.vivos))
+
+  console.log('\n7. El calificador recuerda la última unidad del área')
+  await p.goto(BASE + '/evaluacion', { waitUntil: 'networkidle' })
+  await p.waitForTimeout(1200)
+  ok(await p.locator('[data-resumen-curso]').isVisible(), 'la primera vez se abre en «Todo el curso»')
+  const trimestreBarra = await p.getByLabel('Trimestre').inputValue()
+  const pestanas = p.locator('.tab-unidad')
+  const total = await pestanas.count()
+  let delTrimestre = -1, deOtro = -1
+  for (let i = 1; i < total; i++) {
+    const esDelTrimestre = (await pestanas.nth(i).locator('.trim').textContent()).includes(`T${trimestreBarra}`)
+    if (esDelTrimestre && delTrimestre < 0) delTrimestre = i
+    if (!esDelTrimestre && deOtro < 0) deOtro = i
+  }
+  ok(delTrimestre > 0 && deOtro > 0, 'hay unidades del trimestre de la barra y de otro', `${delTrimestre} · ${deOtro}`)
+  await pestanas.nth(delTrimestre).click()
+  await p.waitForTimeout(500)
+  await p.goto(BASE + '/', { waitUntil: 'networkidle' })
+  await p.goto(BASE + '/evaluacion', { waitUntil: 'networkidle' })
+  await p.waitForTimeout(1200)
+  ok(await p.locator('.tab-unidad').nth(delTrimestre).getAttribute('aria-selected') === 'true',
+    'al volver, se abre la unidad en la que se estaba')
+  await p.locator('.tab-unidad').nth(deOtro).click()
+  await p.waitForTimeout(500)
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.waitForTimeout(1200)
+  ok(await p.locator('[data-resumen-curso]').isVisible(), 'una unidad de otro trimestre no se reabre sola')
+  await p.locator('.tab-unidad').nth(delTrimestre).click()
+  await p.locator('.tab-unidad').first().click()
+  await p.waitForTimeout(300)
+  await p.reload({ waitUntil: 'networkidle' })
+  await p.waitForTimeout(1200)
+  ok(await p.locator('[data-resumen-curso]').isVisible(), 'elegir «Todo el curso» olvida la unidad')
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('proens-error').catch(() => {})

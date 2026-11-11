@@ -1617,11 +1617,26 @@ export async function fijarInstrumentosDeCriterio(
   const actuales = await db.criterio_instrumentos
     .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).toArray()
 
+  // La programación habla de familias: quien llama (📋 Programación, la
+  // importación de PROENS) no nombra a los hijos. Un hijo cuya familia sigue
+  // asignada conserva su fila; si no, reimportar o tocar un instrumento
+  // deshacía en silencio el reparto «¿qué haces dentro?». Si la familia se
+  // retira, sus hijos se van con ella.
+  const pedidos = new Set(instrumento_ids)
+  const instrumentos = await db.instrumentos.bulkGet([...new Set(actuales.map(f => f.instrumento_id))])
+  const familiaDe = new Map<number, number>()
+  for (const i of instrumentos) {
+    if (i && !i.deleted_at && i.familia_id != null) familiaDe.set(i.id!, i.familia_id)
+  }
+
   for (const fila of actuales) {
-    const debeEstar = instrumento_ids.includes(fila.instrumento_id)
+    const debeEstar = pedidos.has(fila.instrumento_id)
     const esta = !fila.deleted_at
+    const hijoDeFamiliaAsignada = pedidos.has(familiaDe.get(fila.instrumento_id) ?? -1)
     if (debeEstar && !esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: null }))
-    if (!debeEstar && esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+    if (!debeEstar && esta && !hijoDeFamiliaAsignada) {
+      await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+    }
   }
 
   const conocidos = new Set(actuales.map(f => f.instrumento_id))

@@ -87,6 +87,27 @@ function unidadesConNombre(): boolean {
   try { return localStorage.getItem(CLAVE_UNIDADES) === 'nombres' } catch { return false }
 }
 /**
+ * La última unidad abierta en cada área. Sin esto se aterrizaba siempre en
+ * «Todo el curso», que es de solo lectura, y había que volver a buscar la
+ * unidad cada vez que se entraba a calificar. Se recuerda en el aparato: es
+ * comodidad, no dato. Elegir «Todo el curso» a propósito la olvida.
+ */
+const CLAVE_UNIDAD = 'miclase.calificador.unidad'
+function unidadRecordada(asignaturaId: number): number | null {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_UNIDAD) || '{}') as Record<string, number>
+    return typeof todo[asignaturaId] === 'number' ? todo[asignaturaId] : null
+  } catch { return null }
+}
+function recordarUnidad(asignaturaId: number, unidadId: number | null) {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_UNIDAD) || '{}') as Record<string, number>
+    if (unidadId === null) delete todo[asignaturaId]
+    else todo[asignaturaId] = unidadId
+    localStorage.setItem(CLAVE_UNIDAD, JSON.stringify(todo))
+  } catch { /* sin almacenamiento: se olvida y ya */ }
+}
+/**
  * El número de la unidad: el que lleve en el nombre («UD 3», «Unidade 3.»,
  * «3. Terror na cociña») y, si no lleva ninguno, su posición en la programación.
  */
@@ -291,7 +312,13 @@ export default function EvaluacionPage() {
     getUnidades(asignaturaId).then(us => {
       setUnidades(us)
       const pedida = unidadParam ? Number(unidadParam) : null
-      setUnidadId(pedida && us.some(u => u.id === pedida) ? pedida : null)
+      if (pedida && us.some(u => u.id === pedida)) { setUnidadId(pedida); return }
+      // Sin unidad en la URL, la última que se abrió en esta área, pero solo
+      // si es del trimestre de la barra: la casilla lleva el trimestre de la
+      // barra, y abrir en enero la unidad de diciembre invitaría a poner las
+      // notas nuevas en una unidad del trimestre pasado.
+      const recordada = us.find(u => u.id === unidadRecordada(asignaturaId))
+      setUnidadId(recordada && (!recordada.trimestre || recordada.trimestre === trimestre) ? recordada.id! : null)
     })
   }, [asignaturaId, unidadParam])
 
@@ -311,10 +338,15 @@ export default function EvaluacionPage() {
   useEffect(() => {
     if (!asignaturaId) { setMatriz(null); setResumen(null); return }
     setCargando(true)
+    let vigente = true
     const carga = resumenDelCurso
-      ? getResumenCurso(asignaturaId).then(r => { setResumen(r); setMatriz(r ? r.porTrimestre[trimestre] ?? r.porTrimestre[1] : null) })
-      : getMatrizEvaluacion(asignaturaId, unidadId, trimestre).then(m => { setResumen(null); setMatriz(m) })
-    carga.then(() => setCargando(false)).catch(() => setCargando(false))
+      ? getResumenCurso(asignaturaId).then(r => { if (!vigente) return; setResumen(r); setMatriz(r ? r.porTrimestre[trimestre] ?? r.porTrimestre[1] : null) })
+      : getMatrizEvaluacion(asignaturaId, unidadId, trimestre).then(m => { if (!vigente) return; setResumen(null); setMatriz(m) })
+    carga.then(() => { if (vigente) setCargando(false) }).catch(() => { if (vigente) setCargando(false) })
+    // Una carga que llega tarde no pisa a la siguiente: al abrir directamente
+    // en una unidad, la matriz de «todo el curso» (más lenta) llegaba después
+    // y la pantalla enseñaba una unidad con los datos de otra vista.
+    return () => { vigente = false }
   }, [asignaturaId, unidadId, trimestre, refresco, resumenDelCurso])
 
   // ── Derivados ─────────────────────────────────────────────────────────
@@ -329,6 +361,11 @@ export default function EvaluacionPage() {
 
   const alumnos: Alumno[] = matriz?.alumnos ?? []
   const unidadActual = unidades.find(u => u.id === unidadId)
+  /** Abrir una unidad (o «Todo el curso») desde las pestañas: se recuerda. */
+  const elegirUnidad = (id: number | null) => {
+    setUnidadId(id)
+    if (asignaturaId) recordarUnidad(asignaturaId, id)
+  }
   // Al cambiar de área vuelve a decidirse si toca presentarla.
   useEffect(() => { setPresentacionCerrada(false) }, [asignaturaId])
 
@@ -580,7 +617,7 @@ export default function EvaluacionPage() {
             <div className="tabs-unidad" role="tablist" aria-label="Unidades de la programación">
               <button role="tab" aria-selected={unidadId === null}
                 className={`tab-unidad${unidadId === null ? ' activa' : ''}`}
-                onClick={() => setUnidadId(null)}>
+                onClick={() => elegirUnidad(null)}>
                 Todo el curso
                 <span className="trim">{criterios.length} criterios</span>
               </button>
@@ -588,7 +625,7 @@ export default function EvaluacionPage() {
                 <button key={u.id} role="tab" aria-selected={u.id === unidadId}
                   className={`tab-unidad${u.id === unidadId ? ' activa' : ''}`}
                   data-unidad-nombre={u.nombre}
-                  onClick={() => setUnidadId(u.id!)}
+                  onClick={() => elegirUnidad(u.id!)}
                   title={nombresUnidad ? (u.descripcion || u.nombre) : `${u.nombre}${u.descripcion ? ` — ${u.descripcion}` : ''}`}>
                   {nombresUnidad ? u.nombre : `UD${numeroDeUnidad(u.nombre, i)}`}
                   <span className="trim">{u.trimestre ? `T${u.trimestre}` : ''}{nombresUnidad ? ` · ${u.criterios.length}` : ''}</span>

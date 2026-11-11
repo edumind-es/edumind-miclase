@@ -217,8 +217,15 @@ tr.destacada td { border-bottom: 2px solid var(--lm-rule-strong); font-weight: 6
 @page { size: A4; margin: 0; }
 
 @media print {
+  /* En papel, la lámina va sobre blanco: el fondo crudo a página completa
+     tintaba cada hoja entera (una por alumno en boletines e informes) y
+     además se forzaba con print-color-adjust. La franja de los Cinco Mundos
+     se queda como un filete fino: identidad sin gastar tinta. En pantalla y
+     en el .html descargado la lámina sigue igual. */
+  :root { --lm-paper: #fff; --lm-paper-2: #fff; }
   body { background: #fff; }
-  .hoja { margin: 0; box-shadow: none; }
+  .hoja { margin: 0; box-shadow: none; background: #fff; }
+  .lm-plate-top { height: 1.5mm; }
   .no-imprimir { display: none !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
