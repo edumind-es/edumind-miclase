@@ -39,6 +39,7 @@ suites y lo mata todo al terminar.
 | `planificacion-semanal.test.ts` | lector del .md de la programación semanal (castellano y gallego): fechas, franjas con su título y su ■, detalle de un bloque en cada franja, secuencia, criterios del anclaje, notas del día; casado de área, unidad y criterio; el .md exportado se relee igual | — |
 | `planificacion-ui.test.mjs` | volcar el .md en una clase con vista previa de lo que no casa, volcar otra vez sustituye sin duplicar, detalle, salto al Calificador en su unidad, borrar, mover y crear a mano, un evento, la vista de mes y exportar | backend + navegador |
 | `medidas-ui.test.mjs` | refuerzo desde la ficha (NEAE encendido): sello en el calificador, casilla que no cuenta, «Todo el curso» distinto solo para ese alumno, explicación; con NEAE apagado ni sello ni editor, misma nota | backend + navegador |
+| `informe-minimos.test.ts` | el mínimo de consecución de la programación en el informe individual: por unidad cuando difieren, sin repetir, solo los del trimestre pedido | — |
 | `proens.test.ts` | lectura de una programación de PROENS: unidades, trimestres, mínimos, instrumentos por celda combinada | — |
 | `proens-api.test.mjs` | `/api/programacion/texto`: el PDF vuelve como texto con columnas; lo que no es PDF se rechaza | backend |
 | `proens-ui.test.mjs` | importar el PDF gemelo desde el panel de programación: vista previa, aplicar, lo guardado en IndexedDB, repetir sin duplicar | backend + navegador |

@@ -179,6 +179,10 @@ async function principal() {
     await paquete('pruebas/medidas.test.ts', medidas, ['--platform=node', '--format=esm'])
     await suite('medidas: adaptación curricular y refuerzo en el cálculo', 'node', [medidas])
 
+    const informeMinimos = join(scratch, 'informe-minimos.mjs')
+    await paquete('pruebas/informe-minimos.test.ts', informeMinimos, ['--platform=node', '--format=esm'])
+    await suite('mínimos de consecución en el informe individual', 'node', [informeMinimos])
+
     const tutorias = join(scratch, 'tutorias.mjs')
     await paquete('pruebas/tutorias.test.ts', tutorias, ['--platform=node', '--format=esm'])
     await suite('tutorías: modelos, acuerdos y acta', 'node', [tutorias])

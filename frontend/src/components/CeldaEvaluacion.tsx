@@ -8,7 +8,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import {
-  getRubrica, getCalificacionUnica, saveCalificaciones,
+  getRubrica, getCalificacionUnica, saveCalificaciones, getMinimoDeCriterio,
   crearEvidencia, getEvidenciasAlumno, eliminarEvidencia,
   getPrueba, getPruebasDeInstrumento, guardarExamenDeAlumno, getRespuestasDeExamen,
   recuperarNotaAnterior, descartarNotaAnterior, getRegistrosDeCelda,
@@ -116,6 +116,9 @@ export default function CeldaEvaluacion({
   /** nombre del indicador → valor del nivel marcado. */
   const [marcado, setMarcado] = useState<Record<string, number>>({})
   const [valorActual, setValorActual] = useState<number | null>(null)
+  /** Mínimo de consecución del criterio en esta unidad, si la programación lo trae. */
+  const [minimo, setMinimo] = useState<string | null>(null)
+  const [minimoEntero, setMinimoEntero] = useState(false)
   const [observacion, setObservacion] = useState('')
   const [evidencias, setEvidencias] = useState<Evidencia[]>([])
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
@@ -260,6 +263,15 @@ export default function CeldaEvaluacion({
     })()
     return () => { vigente = false }
   }, [alumno.id, instrumentoId, criterio.id, trimestre, prueba, recarga])
+
+  // El mínimo se pide después de la nota: lo primero que tiene que llegar al
+  // panel es la nota, y esta consulta no debe ponerse por delante.
+  useEffect(() => {
+    let vigente = true
+    setMinimo(null); setMinimoEntero(false)
+    if (unidadId) getMinimoDeCriterio(unidadId, criterio.id).then(m => { if (vigente) setMinimo(m) }).catch(() => {})
+    return () => { vigente = false }
+  }, [unidadId, criterio.id])
 
   // Evidencias de este alumno en este criterio
   const recargarEvidencias = () => {
@@ -609,6 +621,19 @@ export default function CeldaEvaluacion({
                   {hermanos.length > 0 ? `y ${hermanos.length} más` : 'ver entero'}
                 </button>
               </div>
+              {/* El mínimo de consecución de la programación: con qué se da el
+                  criterio por conseguido. En dos líneas; al tocarlo, entero. */}
+              {minimo && (
+                <button type="button" data-minimo-criterio aria-expanded={minimoEntero} onClick={() => setMinimoEntero(v => !v)}
+                  title={minimoEntero ? 'Recoger' : 'Ver el mínimo entero'}
+                  style={{
+                    display: minimoEntero ? 'block' : '-webkit-box', WebkitLineClamp: minimoEntero ? undefined : 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                    width: '100%', textAlign: 'left', background: 'none', border: 'none', padding: 0, marginTop: 5, cursor: 'pointer',
+                    fontSize: 12.5, lineHeight: 1.35, color: 'var(--gris-600)',
+                  }}>
+                  <strong style={{ color: 'var(--azul-700)' }}>Mínimo:</strong> {minimo}
+                </button>
+              )}
               {/* Desde la vista por instrumento se dice a dónde va la nota, y se
                   puede cambiar: a todos es lo normal; a uno, la excepción. */}
               {enfoque === 'instrumento' && hermanos.length > 0 && !calificaPorPrueba && (

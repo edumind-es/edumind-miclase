@@ -150,6 +150,27 @@ try {
   const celda = p.locator('tbody tr').nth(2).locator('[data-celda-instr]').first()
   ok((await celda.textContent()).startsWith('9'), 'la matriz lo enseña', await celda.textContent())
 
+  console.log('\n5. El mínimo de consecución de PROENS se ve al calificar')
+  await celda.click()
+  const panel = p.getByRole('dialog', { name: /^Evaluar / })
+  await panel.waitFor({ timeout: 5000 })
+  const minimo = panel.locator('[data-minimo-criterio]')
+  await minimo.waitFor({ timeout: 5000 })
+  const textoMinimo = (await minimo.textContent()).trim()
+  ok(/^Mínimo: \S/.test(textoMinimo), 'el panel de la casilla enseña el mínimo del criterio', textoMinimo.slice(0, 70))
+  const guardado = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const ucs = await new Promise((res) => {
+      const tx = db.transaction('unidad_criterios', 'readonly').objectStore('unidad_criterios').getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    return ucs.map(u => (u.minimo || '').trim()).filter(Boolean)
+  })
+  ok(guardado.includes(textoMinimo.replace(/^Mínimo:\s*/, '')), 'y es uno de los que trae la programación')
+  await minimo.click()
+  ok(await minimo.getAttribute('aria-expanded') === 'true', 'al tocarlo se despliega entero')
+  await foto('aterrizaje-04-minimo')
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('aterrizaje-error').catch(() => {})

@@ -2088,6 +2088,17 @@ export async function vincularCriterio(
   }
 }
 
+/**
+ * El mínimo de consecución que la programación declara para un criterio en
+ * una unidad (lo trae PROENS), o null. Lo enseña el panel de la casilla: es
+ * la referencia para decidir si el criterio está conseguido.
+ */
+export async function getMinimoDeCriterio(unidad_id: number, criterio_id: string): Promise<string | null> {
+  const filas = vivos(await db.unidad_criterios
+    .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).toArray())
+  return filas.map(f => (f.minimo || '').trim()).find(Boolean) ?? null
+}
+
 /** Cambia solo el mínimo de consecución de un criterio en una unidad. */
 export async function fijarMinimoDeCriterio(
   unidad_id: number, criterio_id: string, minimo: string

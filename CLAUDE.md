@@ -952,6 +952,18 @@ edumind_miclase/
   **antes de publicar en la App Store o en Google Play, confirmarlo con el
   autor**, porque las condiciones de la App Store chocan con la AGPL de
   código ajeno.
+- **El mínimo de consecución se ve donde se califica y en el informe.**
+  `unidad_criterios.minimo` (lo trae PROENS) sale en la franja del instrumento
+  del panel de la casilla (`[data-minimo-criterio]`, dos líneas; al tocarlo,
+  entero), solo dentro de una unidad, con `getMinimoDeCriterio`. Se pide
+  DESPUÉS de la nota: por delante retrasaba lo primero que tiene que llegar
+  al panel. En el informe individual va bajo la descripción del criterio
+  (`lineaMinimos` en `informes/documentos.ts`, con `AreaInforme.minimos`): con
+  mínimos distintos en varias unidades, cada uno con el nombre de la suya; el
+  mismo texto, una vez; con trimestre, solo los de sus unidades; y no se
+  imprime en un criterio adaptado a la vista, porque no es el suyo. Boletines
+  y acta no lo llevan. Es texto: ninguna nota se compara con él. Antes solo
+  se veía en 📋 Programación (auditoría de nov 2026).
 - **En papel, la lámina va sobre blanco.** El `@media print` de
   `informes/lamina.ts` pone `--lm-paper` y `.hoja` en blanco y deja la franja
   de los Cinco Mundos en un filete de 1,5 mm: el fondo crudo a página

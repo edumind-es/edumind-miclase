@@ -10,7 +10,7 @@ import {
 import { calificativo, parsearPesosTrimestres, perfilCompetencial } from '@/db/calculo'
 import {
   competenciasDeAlumno, notasDeAlumno, observacionesDeAlumno,
-  type DatosGrupo, type EvidenciaInforme,
+  type DatosGrupo, type EvidenciaInforme, type MinimoDeUnidad,
 } from './datos'
 import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
@@ -70,6 +70,18 @@ function celdaNota(v: number | null | undefined, negrita = false): string {
 
 // ─── 1 · Informe individual ──────────────────────────────────────────────
 
+/**
+ * Los mínimos de consecución de un criterio para el informe: los de las
+ * unidades del trimestre pedido (o de todas), sin repetir el mismo texto.
+ * Con uno solo va sin el nombre de la unidad.
+ */
+function lineaMinimos(minimos: MinimoDeUnidad[] | undefined, trimestre: number | null): string {
+  const delPeriodo = (minimos ?? []).filter(m => trimestre == null || m.trimestre == null || m.trimestre === trimestre)
+  const unicos = delPeriodo.filter((m, i) => delPeriodo.findIndex(o => o.minimo === m.minimo) === i)
+  if (!unicos.length) return ''
+  return unicos.map(m => `<br><span class="minimo" style="font-size:7.5pt;color:var(--lm-ink-2)"><b>Mínimo${unicos.length > 1 ? ` (${esc(m.unidad)})` : ''}:</b> ${esc(m.minimo)}</span>`).join('')
+}
+
 export function informeIndividual(
   datos: DatosGrupo,
   alumno: Alumno,
@@ -117,10 +129,14 @@ export function informeIndividual(
       const valores = trimestre ? [c.trimestres[trimestre]] : TRIM.map(t => c.trimestres[t])
       const instrs = [...new Set(c.aportaciones.map(a => a.nombre))].join(', ')
       const adaptado = verNeae() ? criterioAdaptado(medidas, c.criterio_id, trimestre ?? TRIM.find(t => c.trimestres[t] != null) ?? 1) : null
+      // El mínimo de consecución es el del criterio de la clase: con el
+      // criterio adaptado a la vista no se imprime, porque no es el suyo.
+      const minimos = adaptado ? '' : lineaMinimos(area.minimos?.get(c.criterio_id), trimestre)
       return `<tr>
         <td class="criterio-id">${esc(c.criterio_id)}${adaptado ? ' <span class="sello">ACI</span>' : ''}</td>
         <td class="desc">${esc(adaptado ? `${adaptado.codigo !== c.criterio_id ? adaptado.codigo + ' · ' : ''}${adaptado.descripcion}${adaptado.curso ? ` (${adaptado.curso})` : ''}` : area.descripciones.get(c.criterio_id) || '—')}
           ${instrs ? `<br><span style="font-family:var(--lm-mono);font-size:6.5pt;color:var(--lm-ink-3)">${esc(instrs)}</span>` : ''}
+          ${minimos}
         </td>
         ${valores.map(v => celdaNota(v)).join('')}
         ${celdaNota(trimestre ? c.trimestres[trimestre] : c.final, true)}

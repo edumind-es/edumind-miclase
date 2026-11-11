@@ -18,6 +18,9 @@ import {
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion, Medida } from '@/db/localDb'
 import * as curriculo from '@/curriculo'
 
+/** El mínimo de consecución de un criterio en una unidad de la programación. */
+export type MinimoDeUnidad = { unidad: string; trimestre: number | null; minimo: string }
+
 export type AreaInforme = {
   asig: Asignatura
   instrumentos: Instrumento[]
@@ -29,6 +32,8 @@ export type AreaInforme = {
   pesosVinculo: PesosVinculo
   /** criterio_id → descriptores y competencias clave de su competencia específica */
   conexiones: Map<string, ConexionCriterio>
+  /** criterio_id → mínimos de consecución que la programación declara, por unidad */
+  minimos?: Map<string, MinimoDeUnidad[]>
 }
 
 export type DatosGrupo = {
@@ -116,8 +121,17 @@ export async function reunirDatosGrupo(
         pesosCriterio.set(c.criterio_id, Math.max(pesosCriterio.get(c.criterio_id) ?? 0, c.peso || 1))
       }
     }
+    // Mínimos de consecución de la programación, por criterio y unidad.
+    const minimos = new Map<string, MinimoDeUnidad[]>()
+    for (const u of unidades) {
+      for (const c of u.criterios) {
+        const texto = (c.minimo || '').trim()
+        if (!texto) continue
+        minimos.set(c.criterio_id, [...(minimos.get(c.criterio_id) ?? []), { unidad: u.nombre, trimestre: u.trimestre ?? null, minimo: texto }])
+      }
+    }
     areas.push({
-      asig, instrumentos, descripciones, pesosCriterio,
+      asig, instrumentos, descripciones, pesosCriterio, minimos,
       pesosVinculo: pesosVinculoDeUnidades(unidades),
       conexiones,
     })
