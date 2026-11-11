@@ -5,7 +5,7 @@
  */
 import type { EventoCalendario, SesionPlan } from '../db/localDb'
 import { criteriosDe, secuenciaDe } from './casar'
-import { minutosDe } from './semanal'
+import { minutosDe, MARCA_IA } from './semanal'
 import { documento, hoja, cabecera, pie, esc } from '../informes/lamina'
 
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
@@ -81,6 +81,8 @@ export function semanaAMarkdown(
   const conAlgo = new Set([...sesiones.map(s => s.fecha), ...eventos.map(e => e.fecha)])
   const dias = diasDeSemana(desde, hasta, conAlgo)
   const l: string[] = [`# Programación semanal · ${clase}`, '', tituloSemana(desde, hasta), '']
+  // Lo que salió de una IA lo sigue diciendo fuera de la app (AI Act, art. 50.2).
+  if (sesiones.some(s => s.generada_ia)) l.push(MARCA_IA, '')
 
   const franjas = franjasDe(sesiones.filter(s => s.franja))
   if (franjas.length) {

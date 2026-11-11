@@ -13,7 +13,8 @@
  * exporta la app se vuelve a leer igual.
  */
 import { readFileSync } from 'node:fs'
-import { leerSemana, claveArea, nombreArea, codigosCriterio } from '../frontend/src/planificacion/semanal'
+import { leerSemana, claveArea, nombreArea, codigosCriterio, MARCA_IA } from '../frontend/src/planificacion/semanal'
+import { generarPromptSemana, franjasDeTexto, franjasATexto } from '../frontend/src/ia/planificacionPrompt'
 import { casarArea, casarUnidad, prepararVolcado, codigoCurriculo, criteriosDe, secuenciaDe } from '../frontend/src/planificacion/casar'
 import { semanaAMarkdown, tituloSemana, semanaAHtml } from '../frontend/src/planificacion/exportar'
 import type { SesionPlan } from '../frontend/src/db/localDb'
@@ -157,6 +158,51 @@ ok(vuelta.sesiones.length === 25 && distintas.length === 0, 'el Markdown exporta
 ok(vuelta.notas.length === 1 && vuelta.clase === '6º A de Primaria', 'con la nota del día y la clase')
 const html = semanaAHtml('6º A', '2026-11-09', '2026-11-13', guardadas)
 ok(html.includes('Lengua Castellana') && html.includes('■') && !html.includes('undefined'), 'la lámina para imprimir')
+
+console.log('\nPrompt para pedir la semana a una IA')
+{
+  const datos = {
+    clase: '6º A', nivel: '6º de Primaria', desde: '2026-11-09', hasta: '2026-11-13',
+    franjas: franjasDeTexto('1ª 9:00-9:50\n2ª 9.50 – 10:40\nrecreo\n3ª 11:10-12:00'),
+    areas: [
+      { nombre: 'Lengua Castellana', unidades: [{ nombre: 'UD3 · El poder de las palabras', trimestre: 1, criterios: [{ id: 'CE2.1', descripcion: 'Comprender textos orales.' }, { id: 'CE6.5' }] }] },
+      { nombre: 'Matemáticas', unidades: [] },
+    ],
+    eventos: [{ fecha: '2026-11-12', titulo: 'Salida al museo' }, { fecha: '2026-12-01', titulo: 'De otra semana' }],
+    indicaciones: 'Repasar para el examen del viernes.',
+  }
+  ok(datos.franjas.length === 3 && datos.franjas[1].hora_inicio === '9:50' && datos.franjas[1].hora_fin === '10:40' && datos.franjas[0].franja === '1ª',
+    'el horario escrito a mano se lee franja a franja (punto o dos puntos, guion o raya)', JSON.stringify(datos.franjas))
+  ok(franjasATexto(datos.franjas).split('\n')[0] === '1ª 9:00-9:50', 'y se vuelve a escribir igual')
+  const prompt = generarPromptSemana(datos)
+  ok(prompt.includes('6º A') && prompt.includes('Semana del 9 al 13 de noviembre de 2026'), 'lleva la clase y la semana')
+  ok(prompt.includes('- 2ª 9:50-10:40') && prompt.includes('UD3 · El poder de las palabras') && prompt.includes('CE2.1: Comprender textos orales.') && prompt.includes('- CE6.5'),
+    'el horario, las unidades y los criterios de la programación')
+  ok(prompt.includes('Salida al museo') && !prompt.includes('De otra semana'), 'los eventos de esa semana, no los de otra')
+  ok(prompt.includes('Repasar para el examen del viernes.'), 'y las indicaciones del docente')
+  ok(prompt.includes('sin unidades en la programación'), 'un área sin unidades se dice, no se calla')
+  // La plantilla del prompt es un documento que el lector entiende tal cual.
+  const plantilla = prompt.slice(prompt.indexOf('# Programación semanal'))
+  const leida = leerSemana(plantilla, new Date(2026, 0, 1))
+  ok(leida.sesiones.length === 1 && leida.avisos.length === 0 && leida.desde === '2026-11-09', 'la plantilla de formato se lee sin avisos', leida.avisos.join(' | '))
+  ok(leida.sesiones[0].area === 'Lengua Castellana' && leida.sesiones[0].evaluable && leida.sesiones[0].criterios.join() === 'CE2.1,CE6.5' && leida.sesiones[0].secuencia.length === 3,
+    'con el área, el ■, los criterios y las tres fases en su sitio', JSON.stringify(leida.sesiones[0]).slice(0, 200))
+  ok(leida.generada_ia === true, 'y pide la marca de IA, que el lector reconoce')
+  // Un solo día, para la IA local.
+  const dia = generarPromptSemana({ ...datos, soloDia: '2026-11-11' })
+  const leidaDia = leerSemana(dia.slice(dia.indexOf('# Programación semanal')), new Date(2026, 0, 1))
+  ok(dia.includes('Día que se pide') && leidaDia.sesiones.length === 1 && leidaDia.sesiones[0].fecha === '2026-11-11', 'con «solo un día» la plantilla es de ese día', leidaDia.sesiones[0]?.fecha)
+  ok(!dia.includes('Salida al museo'), 'y solo lleva los eventos de ese día')
+}
+
+console.log('\nLa marca de IA de una planificación (AI Act, art. 50.2)')
+{
+  ok(s.generada_ia === false, 'un .md escrito a mano no la lleva')
+  const conMarca = semanaAMarkdown('6º A', '2026-11-09', '2026-11-13', guardadas.map((g, i) => i === 0 ? { ...g, generada_ia: true } : g))
+  ok(conMarca.includes(MARCA_IA) && !semanaAMarkdown('6º A', '2026-11-09', '2026-11-13', guardadas).includes(MARCA_IA), 'exportar la escribe solo si alguna sesión salió de una IA')
+  const releida = leerSemana(conMarca, new Date(2026, 0, 1))
+  ok(releida.generada_ia === true && releida.sesiones.length === 25 && releida.avisos.length === 0, 'y al volver a leer se reconoce, sin estorbar a las 25 sesiones', releida.avisos.join(' | '))
+}
 
 console.log(fallos ? `\n✗ ${fallos} fallo(s)` : '\n✓ todo bien')
 process.exit(fallos ? 1 : 0)

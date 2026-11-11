@@ -20,6 +20,7 @@ import { imprimir } from '@/informes/lamina'
 import { descargarFichero } from '@/utils/compartir'
 import { cuadriculaMes, deIso, hoyIso, lunesDe, mismoMes, nombreMes, sumarDias } from './fechas'
 import VolcarSemana from './VolcarSemana'
+import { AvisoBorradorIA } from '@/components/AvisoIA'
 import EditarSesion from './EditarSesion'
 import EditarEvento, { iconoEvento } from './EditarEvento'
 
@@ -276,7 +277,7 @@ export default function PlanificacionPage() {
           onCerrar={() => setEditarEvento(null)} onGuardado={() => { setEditarEvento(null); recargar() }} />
       )}
       {volcar && (
-        <VolcarSemana grupo={grupo} asignaturas={asignaturas} onCerrar={() => setVolcar(false)}
+        <VolcarSemana grupo={grupo} asignaturas={asignaturas} lunes={lunes} horario={franjas} onCerrar={() => setVolcar(false)}
           onGuardado={(desde, mensaje) => { setVolcar(false); setAviso(mensaje); cambiarVista('semana'); irA(desde); recargar() }} />
       )}
     </div>
@@ -288,6 +289,7 @@ function DetalleSesion({ sesion: s, onCerrar, onEditar, onBorrar }: {
 }) {
   const fases = secuenciaDe(s)
   const criterios = criteriosDe(s)
+  const avisoIA = s.generada_ia ? <div style={{ marginBottom: 10 }}><AvisoBorradorIA que="planificación" /></div> : null
   return (
     <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
       <div className="card plan-modal" role="dialog" aria-modal="true" aria-label={`Sesión de ${s.area}`} data-sesion-detalle>
@@ -309,6 +311,7 @@ function DetalleSesion({ sesion: s, onCerrar, onEditar, onBorrar }: {
           <button className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
         </div>
 
+        {avisoIA}
         {s.objetivo && <section className="plan-detalle-sec"><h3>Objetivo</h3><p>{s.objetivo}</p></section>}
         {fases.length > 0 && (
           <section className="plan-detalle-sec"><h3>Secuencia</h3>

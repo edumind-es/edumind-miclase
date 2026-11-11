@@ -584,6 +584,13 @@ export interface SesionPlan extends Sincronizable {
   /** «9:00-10:40» cuando la sesión es parte de un bloque de varias franjas. */
   bloque?: string | null
   origen?: 'volcado' | 'manual' | null
+  /**
+   * La sesión salió de una IA (una propuesta volcada), aunque el docente la
+   * haya retocado. Marca legible por máquina del AI Act (art. 50.2), como en
+   * rúbricas y exámenes: se conserva al editar y viaja en el .md exportado
+   * (`MARCA_IA` en `planificacion/semanal.ts`). Sin índice.
+   */
+  generada_ia?: boolean
   created_at?: string
 }
 

@@ -1074,6 +1074,24 @@ edumind_miclase/
 - **`iosScheme` no se fija en `capacitor.config.ts`.** iOS no admite http/https
   como esquema propio y Capacitor lo ignora: el origen real es
   `capacitor://localhost`, y cambiarlo tras publicar vaciaría IndexedDB.
+- **La semana se le puede pedir a una IA, y lo que vuelve queda marcado.**
+  `ia/planificacionPrompt.ts` (puro) monta el prompt con lo que ya sabe la
+  app —clase, semana, horario, áreas, unidades del trimestre con sus
+  criterios y los eventos de esos días; nunca alumnado— y la plantilla de
+  formato NO se escribe a mano: es lo que `semanaAMarkdown` exporta para una
+  sesión de ejemplo, así que el prompt y `leerSemana` no pueden separarse
+  (`planificacion-semanal.test.ts` lee la plantilla sin avisos). Vive en
+  «Volcar una semana» (`[data-ia-semana-toggle]`): «Copiar prompt» para una
+  IA externa (`[data-ia-semana-prompt]` lo enseña) y, con WebGPU, «Generar
+  el día» con la IA local —un solo día (`soloDia`): una semana no le cabe en
+  1200 tokens—. La respuesta entra por el cuadro de texto y la vista previa
+  de siempre. No hay horario guardado: sale de las franjas ya planificadas y
+  el docente lo corrige en el propio diálogo (`franjasDeTexto`). La marca es
+  `SesionPlan.generada_ia` (sin índice): la pone la casilla
+  `[data-volcar-de-ia]`, que se marca sola al copiar el prompt, al generar o
+  si el .md trae `MARCA_IA` (`<!-- generada-ia -->`); se conserva al editar,
+  se ve en el detalle (`AvisoBorradorIA`) y `semanaAMarkdown` la escribe.
+  Decisión de Luis (auditoría de nov 2026): las dos vías, externa y local.
 - **La planificación es una previsión, no un registro de aula** (esquema v10,
   tablas `planificacion` y `eventos`; entrada «Planificación» del menú, con
   vistas Semana y Mes en `pages/Planificacion/`). Una sesión planificada es de

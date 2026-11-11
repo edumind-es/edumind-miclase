@@ -217,8 +217,9 @@ alguno aparece.**
 
 ## 5. La IA opcional, y su única conexión con un tercero
 
-La aplicación incluye un asistente **opcional** para redactar rúbricas y
-exámenes con un
+La aplicación incluye un asistente **opcional** para redactar rúbricas,
+exámenes y, desde noviembre de 2026, una propuesta de planificación semanal
+(con el modelo local, de un solo día) con un
 modelo de lenguaje que se ejecuta **dentro del navegador**. Si el docente pulsa
 expresamente el botón de cargarlo, se descarga un modelo desde una red de
 distribución pública. Conviene ser preciso sobre qué implica:
@@ -235,12 +236,15 @@ distribución pública. Conviene ser preciso sobre qué implica:
   en su propio servidor; la aplicación sigue funcionando y la IA se queda sin
   cargar.
 - Lo que se le pide al modelo lleva área, nivel, criterios y el contexto que
-  escriba el docente; **nunca datos del alumnado**. La aplicación avisa de que
+  escriba el docente; en la planificación semanal, además, el nombre de la
+  clase («6º A»), el horario, las unidades de la programación y los títulos
+  de los eventos del calendario de esa semana; **nunca datos del alumnado**. La aplicación avisa de que
   no se escriban nombres en el contexto.
 - Lo que genera es un **borrador**: el docente lo revisa y lo guarda. La IA no
   califica ni decide nada sobre el alumnado; las notas se calculan con reglas
-  fijas de ponderación. Las rúbricas y exámenes generados quedan marcados como
-  tales (`generada_ia`), también al exportarlos.
+  fijas de ponderación. Las rúbricas, los exámenes y las sesiones de
+  planificación generados quedan marcados como tales (`generada_ia`), también
+  al exportarlos (en el `.md` de la semana, la línea `<!-- generada-ia -->`).
 
 Existe además la alternativa «copiar el prompt», que no conecta con nada: el
 docente pega el texto en la herramienta de IA que ya use, bajo su criterio. En
