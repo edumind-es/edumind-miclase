@@ -171,7 +171,7 @@ export default function SesionRubrica({
         onClick={onClick}
         title={`${n.nombre} (${nivelANota(n.valor, maxNivel)})${descriptor ? `: ${descriptor}` : ''}${activo ? ' · pulsar otra vez lo quita' : ''}`}
         style={{
-          minWidth: ancho, height: 36, padding: '0 8px', borderRadius: 8, cursor: 'pointer', fontWeight: 800, fontSize: 12.5,
+          minWidth: ancho, height: 44, padding: '0 8px', borderRadius: 8, cursor: 'pointer', fontWeight: 800, fontSize: 12.5,
           border: `2px solid ${activo ? 'var(--gris-900)' : parcial ? c.color : 'transparent'}`,
           background: activo ? c.color : parcial ? 'white' : c.color,
           color: activo ? 'white' : parcial ? c.color : 'white',
@@ -287,7 +287,7 @@ export default function SesionRubrica({
                   </div>
                   <button type="button" data-sesion-detalle aria-expanded={abierto} onClick={() => alternar(al.id!)}
                     title="Marcar cada indicador por separado" aria-label={`Por indicador: ${al.nombre}`}
-                    style={{ background: abierto ? 'var(--azul-100)' : 'none', border: '1px solid var(--gris-300)', borderRadius: 6, height: 30, padding: '0 8px', cursor: 'pointer', fontSize: 11, color: 'var(--azul-700)', whiteSpace: 'nowrap' }}>
+                    style={{ background: abierto ? 'var(--azul-100)' : 'none', border: '1px solid var(--gris-300)', borderRadius: 6, height: 44, padding: '0 10px', cursor: 'pointer', fontSize: 11, color: 'var(--azul-700)', whiteSpace: 'nowrap' }}>
                     {abierto ? '▾' : '▸'} por indicador
                   </button>
                   {abierto && (

@@ -604,8 +604,8 @@ export async function crearInstrumentoHijo(
   data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
 ): Promise<number> {
   const familia = await db.instrumentos.get(familia_id)
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (familia.familia_id != null) throw new Error('Un hijo no puede tener hijos: cuélgalo de la familia')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (familia.familia_id != null) throw new Error('Una actividad no puede tener actividades dentro: cuélgala del instrumento')
   const hermanos = await getHijos(familia_id)
   const reg = nuevo({
     asignatura_id: familia.asignatura_id, familia_id,
@@ -669,13 +669,13 @@ export async function fijarCriteriosDeHijo(
   unidad_id: number, hijo_id: number, criterios: string[]
 ): Promise<void> {
   const hijo = await db.instrumentos.get(hijo_id)
-  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es una actividad')
   const deFamilia = new Set(
     vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo.familia_id).toArray())
       .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
   const fuera = criterios.filter(c => !deFamilia.has(c))
   if (fuera.length) {
-    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} de la familia en esta unidad`)
+    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} del instrumento en esta unidad`)
   }
   const pedidos = new Set(criterios)
   const actuales = await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray()
@@ -790,8 +790,8 @@ export async function convertirFamiliaEnHijo(
   opciones: { nombre_hijo?: string; nombre_familia?: string | null; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoConversion> {
   const familia = await db.instrumentos.get(familia_id)
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (familia.familia_id != null) throw new Error('Solo se convierte una familia, no un hijo')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (familia.familia_id != null) throw new Error('Solo se convierte un instrumento, no una actividad')
 
   const nombreHijo = (opciones.nombre_hijo ?? familia.nombre).trim() || familia.nombre
   const nombreFamilia = opciones.nombre_familia?.trim() || null
@@ -852,13 +852,13 @@ export type CambioDeFamilia = {
  */
 export async function previsualizarCambioDeFamilia(hijo_id: number, familia_id: number): Promise<CambioDeFamilia> {
   const hijo = await db.instrumentos.get(hijo_id)
-  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es una actividad')
   const [actual, nueva] = await Promise.all([db.instrumentos.get(hijo.familia_id), db.instrumentos.get(familia_id)])
-  if (!actual || actual.deleted_at) throw new Error('La familia actual no existe')
-  if (!nueva || nueva.deleted_at) throw new Error('La familia de destino no existe')
-  if (nueva.familia_id != null) throw new Error('Un hijo no puede colgar de otro hijo: elige una familia')
-  if (nueva.asignatura_id !== hijo.asignatura_id) throw new Error('La familia es de otra área')
-  if (nueva.id === actual.id) throw new Error('Ya está en esa familia')
+  if (!actual || actual.deleted_at) throw new Error('El instrumento actual no existe')
+  if (!nueva || nueva.deleted_at) throw new Error('El instrumento de destino no existe')
+  if (nueva.familia_id != null) throw new Error('Una actividad no puede colgar de otra: elige un instrumento')
+  if (nueva.asignatura_id !== hijo.asignatura_id) throw new Error('El instrumento es de otra área')
+  if (nueva.id === actual.id) throw new Error('Ya está en ese instrumento')
 
   const [delHijo, deNueva, hermanos] = await Promise.all([
     db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray(),
@@ -971,8 +971,8 @@ export async function moverDatosDeFamiliaAHijo(
   familia_id: number, hijo_id: number, opciones: { sustituir?: boolean; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoMovimiento> {
   const [familia, hijo] = await Promise.all([db.instrumentos.get(familia_id), db.instrumentos.get(hijo_id)])
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (!hijo || hijo.deleted_at || hijo.familia_id !== familia_id) throw new Error('Ese instrumento no está dentro de la familia')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (!hijo || hijo.deleted_at || hijo.familia_id !== familia_id) throw new Error('Esa actividad no está dentro del instrumento')
   const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
 
   return db.transaction('rw',

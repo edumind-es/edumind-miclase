@@ -71,34 +71,34 @@ export default function ConvertirFamilia({ familia, datos, accion, capa, bloque,
         <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--gris-300)', borderTop: `4px solid ${cfg.color}` }}>
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-900)' }}>«{familia.nombre}» ya tiene {lista}</div>
           <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.55, marginTop: 4 }}>
-            En cuanto metas algo dentro, la familia pasa a ser solo el resumen de sus instrumentos: lo que ya
+            En cuanto metas algo dentro, el instrumento pasa a ser solo el resumen de sus actividades: lo que ya
             calificaste con ella seguiría contando, pero sin columna propia en el Calificador. Si lo conviertes
-            en un instrumento propio, tendrás dos columnas: una con lo de ahora y otra para {accion}.
+            en una actividad propia, tendrás dos columnas: una con lo de ahora y otra para {accion}.
           </div>
         </div>
 
         <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12, fontWeight: 600, color: 'var(--gris-600)' }}>
-            Nombre del instrumento que recoge lo de ahora
+            Nombre de la actividad que recoge lo de ahora
             <input data-convertir-nombre-hijo value={nombreHijo} onChange={e => setNombreHijo(e.target.value)}
               style={{ fontSize: 13, fontWeight: 600, padding: '6px 8px' }} />
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, cursor: 'pointer' }}>
             <input type="checkbox" data-convertir-renombrar checked={renombrar} onChange={e => setRenombrar(e.target.checked)} />
-            Renombrar la familia a
+            Renombrar el instrumento a
             <input data-convertir-nombre-familia value={nombreFamilia} disabled={!renombrar}
               onChange={e => setNombreFamilia(e.target.value)}
               style={{ flex: 1, fontSize: 12.5, fontWeight: 600, padding: '5px 8px', minWidth: 140 }} />
           </label>
           <div style={{ fontSize: 11.5, color: 'var(--gris-500)', lineHeight: 1.5 }}>
-            Las notas, el diario, el examen y la rúbrica pasan al instrumento nuevo tal cual: la nota del área no cambia.
-            El nuevo empieza con los mismos criterios que la familia; después puedes recortarlos.
+            Las notas, el diario, el examen y la rúbrica pasan a la actividad nueva tal cual: la nota del área no cambia.
+            La nueva empieza con los mismos criterios que el instrumento; después puedes recortarlos.
           </div>
           {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12 }}>{error}</div>}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="btn-secondary" onClick={onCancelar} disabled={trabajando} style={{ fontSize: 13 }}>Cancelar</button>
             <button data-convertir-omitir className="btn-secondary" onClick={() => onSeguir(false)} disabled={trabajando} style={{ fontSize: 13 }}
-              title="Seguir sin convertir: la familia solo resumirá y lo de ahora se funde sin columna">
+              title="Seguir sin convertir: el instrumento solo resumirá y lo de ahora se funde sin columna">
               Seguir sin convertir
             </button>
             <button data-convertir-aceptar className="btn-primary" onClick={convertir} disabled={trabajando || !nombreHijo.trim()} style={{ fontSize: 13 }}>

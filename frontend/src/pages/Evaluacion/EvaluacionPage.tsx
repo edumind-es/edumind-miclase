@@ -648,7 +648,7 @@ export default function EvaluacionPage() {
           {resumenDelCurso && (
             <div className="unidad-actual resumen-curso" data-resumen-curso>
               <span>
-                <strong>Todo el curso</strong> · solo lectura: los tres trimestres (1T · 2T · 3T) y la nota final, {vista === 'criterios' ? 'por criterio' : 'por familia de instrumentos'}.
+                <strong>Todo el curso</strong> · solo lectura: los tres trimestres (1T · 2T · 3T) y la nota final, {vista === 'criterios' ? 'por criterio' : 'por instrumento'}.
                 <span className="trim"> El trimestre de la barra no manda aquí. Pulsa una casilla para ver de dónde sale; para calificar, entra en una unidad.</span>
               </span>
               {vista === 'criterios' && competenciasDelArea.length > 0 && (
@@ -721,7 +721,7 @@ export default function EvaluacionPage() {
                     f.examenes ? `${f.examenes} examen${f.examenes !== 1 ? 'es' : ''}` : '',
                     f.calificaciones ? `${f.calificaciones} nota${f.calificaciones !== 1 ? 's' : ''}` : '',
                     f.diario ? `${f.diario} registro${f.diario !== 1 ? 's' : ''} del diario` : '',
-                  ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con instrumentos dentro, la familia solo resume.
+                  ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con actividades dentro, el instrumento solo resume.
                 </div>
               ))}
               Las notas siguen contando. Muévelo al instrumento que lo hizo desde{' '}
@@ -1034,7 +1034,7 @@ export default function EvaluacionPage() {
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
               <span>{resumen
-                ? `Todo el curso es un resumen: aquí no se califica. Cada ${vista === 'criterios' ? 'criterio' : 'familia'} lleva sus tres trimestres${vista === 'criterios' ? ' y la final' : ''}; la nota de un trimestre es la media de las unidades y después la ponderación por instrumento y familia. Pulsa una casilla para ver de dónde sale.`
+                ? `Todo el curso es un resumen: aquí no se califica. Cada ${vista === 'criterios' ? 'criterio' : 'instrumento'} lleva sus tres trimestres${vista === 'criterios' ? ' y la final' : ''}; la nota de un trimestre es la media de las unidades y después la ponderación por instrumento y familia. Pulsa una casilla para ver de dónde sale.`
                 : vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)

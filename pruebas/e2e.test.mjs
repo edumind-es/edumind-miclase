@@ -335,7 +335,7 @@ await p.waitForTimeout(800)
 
 ok(await p.locator('.celda-btn.cal-8').count() > 0, 'la casilla recibe la clase del semáforo')
 const fondoNota = await p.locator('.celda-btn.cal-8').first().evaluate(e => getComputedStyle(e).backgroundColor)
-ok(fondoNota === 'rgb(58, 155, 213)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
+ok(fondoNota === 'rgb(31, 111, 165)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
 await foto('12-matriz-con-nota')
 
 // ── 10b · Calificar sobre la rúbrica, indicador a indicador ─────────────

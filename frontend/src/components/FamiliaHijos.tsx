@@ -117,7 +117,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       const lineas = [
         `Mover «${h.nombre}» de «${c.familia_actual.nombre}» a «${c.familia_nueva.nombre}».`,
         '',
-        `Sus notas, diario, examen y rúbrica siguen siendo suyos: solo cambia con qué familia cuenta en el área (${c.familia_nueva.peso} %) y entra con el ${c.peso} % dentro de ella (el medio de sus nuevos hermanos; se puede ajustar después).`,
+        `Sus notas, diario, examen y rúbrica siguen siendo suyos: solo cambia con qué instrumento cuenta en el área (${c.familia_nueva.peso} %) y entra con el ${c.peso} % dentro de él (el medio de sus nuevas compañeras; se puede ajustar después).`,
       ]
       if (c.anadir.length) {
         lineas.push('', `«${c.familia_nueva.nombre}» pasará a evaluar también:`)
@@ -126,7 +126,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       if (!confirm(lineas.join('\n'))) return
       await cambiarFamiliaDeHijo(h.id!, familia_id)
       cambiado()
-    } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo cambiar de familia') }
+    } catch (e) { setError(e instanceof Error ? e.message : 'No se pudo cambiar de instrumento') }
   }
   const descripcion = (id: string) => criterios.find(c => c.id === id)?.descripcion ?? ''
 
@@ -184,7 +184,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
           choques.examenes ? `${choques.examenes} examen${choques.examenes !== 1 ? 'es' : ''} para la misma unidad` : '',
           choques.rubrica ? 'rúbrica propia' : '',
         ].filter(Boolean).join(' y ')
-        sustituir = confirm(`«${hijo.nombre}» ya tiene ${que}.\n\nAceptar: sustituirlo por lo de «${familia.nombre}».\nCancelar: conservar lo del hijo (lo de la familia se queda donde está).`)
+        sustituir = confirm(`«${hijo.nombre}» ya tiene ${que}.\n\nAceptar: sustituirlo por lo de «${familia.nombre}».\nCancelar: conservar lo de la actividad (lo del instrumento se queda donde está).`)
       }
       const r = await moverDatosDeFamiliaAHijo(familia.id!, hijo.id!, { sustituir, bloque })
       const partes = [
@@ -279,17 +279,17 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: hijos.length || nuevo ? 8 : 0 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-600)', letterSpacing: '.06em', textTransform: 'uppercase' }}>
-          Dentro de esta familia
+          Dentro de este instrumento
         </span>
         <span style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
           {hijos.length === 0
             ? <>Nada todavía: se califica directamente con «{familia.nombre}».</>
-            : <>{hijos.length} instrumento{hijos.length !== 1 ? 's' : ''} · se reparten el {familia.peso} % de la familia en el área: <span data-reparto-hijos>{porcentajes.map(v => `${v} %`).join(' · ')}</span>.</>}
+            : <>{hijos.length} actividad{hijos.length !== 1 ? 'es' : ''} · se reparten el {familia.peso} % del instrumento en el área: <span data-reparto-hijos>{porcentajes.map(v => `${v} %`).join(' · ')}</span>.</>}
         </span>
         <div style={{ flex: 1 }} />
         {hijos.length > 1 && !yaIguales && (
           <button data-hijos-igualar onClick={igualar} className="btn-secondary" style={{ fontSize: 11.5 }}
-            title="Que todos cuenten lo mismo dentro de la familia">
+            title="Que todas cuenten lo mismo dentro del instrumento">
             Igualar
           </button>
         )}
@@ -301,8 +301,8 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
         )}
         <button data-hijo-nuevo onClick={() => setNuevo({ nombre: '', tipo: 'observacion' })} className="btn-secondary" style={{ fontSize: 11.5 }}
           disabled={!!nuevo || totalFamilia === 0}
-          title={totalFamilia === 0 ? 'Asigna primero esta familia a algún criterio en la programación' : 'Añadir un instrumento dentro de esta familia'}>
-          + Añadir
+          title={totalFamilia === 0 ? 'Asigna primero este instrumento a algún criterio en la programación' : 'Añadir una actividad dentro de este instrumento'}>
+          + Actividad
         </button>
       </div>
 
@@ -316,7 +316,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
               diario: escondidos.reduce((n, b) => n + b.diario, 0),
               examenes: escondidos.reduce((n, b) => n + b.examenes, 0),
               rubricas: escondidos.reduce((n, b) => n + b.rubricas, 0),
-            })}</strong>, sin columna: con hijos dentro, la familia solo resume. Cada bloque va al instrumento que lo hizo de verdad; la fecha es la de anotación en este aparato.
+            })}</strong>, sin columna: con actividades dentro, el instrumento solo resume. Cada bloque va a la actividad que lo hizo de verdad; la fecha es la de anotación en este aparato.
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             {escondidos.map(b => {
@@ -336,7 +336,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                   </span>
                   <select data-mover-destino value={destinos[k] ?? ''} onChange={e => setDestinos(d => ({ ...d, [k]: e.target.value }))} style={{ fontSize: 12 }} disabled={moviendo != null}>
                     {hijos.map(h => <option key={h.id} value={String(h.id)}>{h.nombre}</option>)}
-                    <option value="nuevo">Un instrumento nuevo…</option>
+                    <option value="nuevo">Una actividad nueva…</option>
                   </select>
                   <button data-mover-aceptar className="btn-primary" style={{ fontSize: 12 }} onClick={() => mover(b)} disabled={moviendo != null || !destinos[k]}>
                     {moviendo === k ? 'Moviendo…' : 'Mover'}
@@ -384,8 +384,8 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                     {TIPOS_INSTRUMENTO.map(t => <option key={t.value} value={t.value}>{t.icon} {t.label}</option>)}
                   </select>
                   {familias.length > 1 && (
-                    <select data-hijo-familia value={String(familia.id)} aria-label="Familia"
-                      title="En qué familia cuenta este instrumento. Lo decides tú por cómo trabajas, no el tipo: un examen puede ir en el 20 % diario."
+                    <select data-hijo-familia value={String(familia.id)} aria-label="Instrumento"
+                      title="En qué instrumento cuenta esta actividad. Lo decides tú por cómo trabajas, no el tipo: un examen puede ir en el 20 % diario."
                       onChange={e => { const id = Number(e.target.value); if (id !== familia.id) cambiarFamilia(h, id) }}
                       style={{ fontSize: 11.5, padding: '4px 5px', maxWidth: 170 }}>
                       {familias.map(f => <option key={f.id} value={String(f.id)}>{f.nombre} · {f.peso} %</option>)}
@@ -402,7 +402,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                     <span style={{ fontWeight: 500 }} title="De la nota del área">· {Math.round((familia.peso * pct) / 100 * 10) / 10} % del área</span>
                   </label>
                   <button data-hijo-criterios onClick={() => setEditando(abierto ? null : h.id!)} aria-expanded={abierto}
-                    title="Qué criterios de la familia evalúa este instrumento, unidad por unidad"
+                    title="Qué criterios del instrumento evalúa esta actividad, unidad por unidad"
                     style={{ fontSize: 11, fontWeight: 600, padding: '4px 9px', borderRadius: 6, cursor: 'pointer', background: n === 0 ? '#fffbeb' : 'white', color: n === 0 ? '#92400e' : 'var(--gris-600)', border: `1px solid ${n === 0 ? '#fde68a' : 'var(--gris-300)'}` }}>
                     {n} de {totalFamilia} criterios {abierto ? '▴' : '▾'}
                   </button>
@@ -452,7 +452,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
 
       {nuevo && (
         <div data-hijo-form style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', background: 'var(--gris-100)', borderRadius: 8, padding: 8 }}>
-          <input value={nuevo.nombre} autoFocus placeholder="Nombre (Speaking, Cuaderno, Examen tema 3…)" aria-label="Nombre del nuevo instrumento"
+          <input value={nuevo.nombre} autoFocus placeholder="Nombre (Speaking, Cuaderno, Examen tema 3…)" aria-label="Nombre de la nueva actividad"
             onChange={e => setNuevo(n => n && ({ ...n, nombre: e.target.value }))}
             onKeyDown={e => { if (e.key === 'Enter') crear(); if (e.key === 'Escape') setNuevo(null) }}
             style={{ flex: '1 1 180px', fontSize: 12.5 }} />
@@ -462,7 +462,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
           <button data-hijo-crear className="btn-primary" style={{ fontSize: 12 }} onClick={crear} disabled={!nuevo.nombre.trim()}>Crear</button>
           <button className="btn-secondary" style={{ fontSize: 12 }} onClick={() => setNuevo(null)}>Cancelar</button>
           <div style={{ flexBasis: '100%', fontSize: 11, color: 'var(--gris-600)' }}>
-            Empieza cubriendo todos los criterios de la familia; después recórtalos con «criterios».
+            Empieza cubriendo todos los criterios del instrumento; después recórtalos con «criterios».
           </div>
         </div>
       )}

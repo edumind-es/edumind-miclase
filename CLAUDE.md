@@ -655,6 +655,19 @@ edumind_miclase/
   (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
   Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
   el informe de la prueba por unidad.
+- **Rediseño del Calificador, fase 1** (`PROPUESTA_UX_CALIFICADOR.html`, nov
+  2026). (1) **Vocabulario a la vista del docente**: lo que trae la
+  programación con su porcentaje es un **«instrumento»** y lo que hay dentro
+  es una **«actividad»**; «familia» e «hijo» quedan solo en el código, los
+  datos (`familia_id`) y estas notas. Decisión de Luis. Un texto nuevo no
+  debe decir «familia» ni «hijo» al docente. (2) **El semáforo de notas
+  cumple 4,5:1** con texto blanco (`--cal-*` en `index.css`: Notable
+  `#1f6fa5`, Bien `#6f52a0`, Suficiente `#a85a00`, Insuficiente `#c0302f`;
+  antes cuatro de los cinco no llegaban). (3) **Lo que se toca mide 44 px**:
+  pestañas, acciones de columna, conmutadores, casillas, cerrar y las flechas
+  del panel, que ahora se llaman «Alumno anterior» y «Alumno siguiente»
+  (`aria-label`). El orquestador de pruebas enseña más líneas de una suite
+  fallida con `LINEAS=400`.
 - **El análisis de un alumno lo compara con su grupo y no calcula ninguna
   nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
   `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que

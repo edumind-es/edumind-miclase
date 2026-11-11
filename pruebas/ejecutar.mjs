@@ -369,7 +369,7 @@ if (fallidas.length) {
   console.log(rojo(`\n${'─'.repeat(60)}`))
   for (const f of fallidas) {
     console.log(rojo(`\n✗ ${f.nombre}`))
-    console.log(f.salida.trimEnd().split('\n').slice(-40).join('\n'))
+    console.log(f.salida.trimEnd().split('\n').slice(-(Number(process.env.LINEAS) || 40)).join('\n'))
   }
 }
 

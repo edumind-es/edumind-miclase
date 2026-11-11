@@ -206,7 +206,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
-              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos</span>
+              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos y actividades</span>
             </h2>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
           </div>
@@ -214,7 +214,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               criterio puede declarar el suyo en la programación, decir «peso
               total» a secas hacía creer que mandaba siempre. */}
           <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.55 }}>
-            Cada bloque es una <strong>familia</strong>: lo que la programación pesa en el área. Dentro de cada una va lo que haces de verdad. Reparto por defecto:{' '}
+            Cada bloque es un <strong>instrumento</strong>: lo que la programación pesa en el área. Dentro de cada uno van sus <strong>actividades</strong>: lo que haces de verdad. Reparto por defecto:{' '}
             <strong style={{ color: totalOk ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
               {total}%{totalOk ? ' ✓' : total > 100 ? ' (excede 100)' : ` (falta ${100 - total})`}
             </strong>

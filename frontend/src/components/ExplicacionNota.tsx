@@ -208,7 +208,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
         <div className="explicacion-cab">
           <strong style={{ color: calificativo(tr.valor).color }}>{r1(tr.valor) ?? '—'}</strong>
           <span>
-            <span aria-hidden="true">{cfg.icon}</span> <b>{tr.ins?.nombre ?? 'familia borrada'}</b>
+            <span aria-hidden="true">{cfg.icon}</span> <b>{tr.ins?.nombre ?? 'instrumento borrado'}</b>
             <span className="suave">{tr.ins ? ` · ${tr.ins.peso} % del área` : ''}{tr.ramas.length > 1 ? ` · ${tr.ramas.length} instrumentos dentro` : ''}</span>
           </span>
         </div>
@@ -385,7 +385,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
           <p data-explicacion-regla style={{ fontSize: 12, color: 'var(--gris-600)', margin: '0 0 12px', lineHeight: 1.5, padding: '8px 10px', background: 'var(--gris-100)', borderRadius: 7 }}>
             Cada instrumento vale la <strong>media de sus unidades</strong> en el trimestre
             ({pesosUnidad ? <span data-explicacion-unidades="peso">cada unidad por el peso de la programación</span> : 'cada unidad cuenta igual'});
-            después pesa cada instrumento dentro de su familia, y cada familia en el área.
+            después pesa cada actividad dentro de su instrumento, y cada instrumento en el área.
           </p>
           {medidasVisibles.length > 0 && (
             <p data-explicacion-medida style={{ fontSize: 12, color: 'var(--azul-900)', margin: '0 0 12px', lineHeight: 1.5, padding: '8px 10px', background: 'var(--azul-50, #eff6ff)', borderLeft: '4px solid var(--azul-700)', borderRadius: 7 }}>

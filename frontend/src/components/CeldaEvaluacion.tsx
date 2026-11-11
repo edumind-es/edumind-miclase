@@ -576,11 +576,11 @@ export default function CeldaEvaluacion({
           </div>
           {(onAnterior || onSiguiente) && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-              <button onClick={onAnterior} disabled={!onAnterior} title="Alumno anterior (↑)"
-                className="btn-secondary" style={{ padding: '4px 9px', fontSize: 13 }}>↑</button>
+              <button onClick={onAnterior} disabled={!onAnterior} title="Alumno anterior (↑)" aria-label="Alumno anterior"
+                className="btn-secondary" style={{ minWidth: 44, minHeight: 44, padding: '4px 9px', fontSize: 16 }}>↑</button>
               {posicion && <span style={{ fontSize: 11, color: 'var(--gris-500)', minWidth: 40, textAlign: 'center' }}>{posicion}</span>}
-              <button onClick={onSiguiente} disabled={!onSiguiente} title="Alumno siguiente (↓)"
-                className="btn-secondary" style={{ padding: '4px 9px', fontSize: 13 }}>↓</button>
+              <button onClick={onSiguiente} disabled={!onSiguiente} title="Alumno siguiente (↓)" aria-label="Alumno siguiente"
+                className="btn-secondary" style={{ minWidth: 44, minHeight: 44, padding: '4px 9px', fontSize: 16 }}>↓</button>
             </div>
           )}
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>

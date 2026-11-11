@@ -174,7 +174,7 @@ try {
   const textoFicha = await ficha.textContent()
   ok(textoFicha.includes(`anotada en ${udA.nombre}`) && textoFicha.includes(`anotada en ${udB.nombre}`), 'nombrando cada unidad')
   ok(/media de 2 unidades/.test(textoFicha), 'y dice que el instrumento vale la media de sus unidades')
-  ok(await ficha.locator('[data-explicacion-regla]').count() === 1 && /media de sus unidades/.test(textoFicha) && /familia/.test(textoFicha), 'con la regla a la vista: unidades → instrumento → familia')
+  ok(await ficha.locator('[data-explicacion-regla]').count() === 1 && /media de sus unidades/.test(textoFicha) && /actividad dentro de su instrumento/.test(textoFicha), 'con la regla a la vista: unidades → actividad → instrumento')
   ok((await ficha.locator('[data-explicacion-valor]').first().textContent()).trim() === '7', 'el valor del bloque es la media, 7')
   ok(await ficha.locator('[data-explicacion-trimestres]').count() === 1, 'enseña T1 · T2 · T3 y la final')
   ok(await ficha.locator('[data-explicacion-area]').count() === 1, 'y la nota del área')
