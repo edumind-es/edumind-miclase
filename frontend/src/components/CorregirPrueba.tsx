@@ -7,7 +7,7 @@
  */
 import { useEffect, useState } from 'react'
 import {
-  notaDePrueba, puntosDePregunta, escalonesDePregunta, ACIERTO, FALLO, EN_BLANCO, LETRAS,
+  notaDePrueba, pruebaDeUnidad, puntosDePregunta, escalonesDePregunta, ACIERTO, FALLO, EN_BLANCO, LETRAS,
   type PruebaDef, type PreguntaPrueba,
 } from '@/db/prueba'
 import { calificativo } from '@/db/calculo'
@@ -19,18 +19,26 @@ interface Props {
   /** Criterios en los que este examen pone nota, según la programación. */
   destinos: string[]
   criterioActual: string
+  /**
+   * La unidad desde la que se corrige. Si el examen etiqueta sus preguntas
+   * por unidad, la nota que se enseña es la de las preguntas de esta; las
+   * demás se corrigen igual (el examen es uno) y se marcan.
+   */
+  unidadId?: number | null
   guardando: boolean
   onCambio: (respuestas: Record<string, number>) => void
 }
 
 const formato = (n: number) => String(Math.round(n * 100) / 100).replace('.', ',')
 
-export default function CorregirPrueba({ def, respuestas, destinos, criterioActual, guardando, onCambio }: Props) {
+export default function CorregirPrueba({ def, respuestas, destinos, criterioActual, unidadId, guardando, onCambio }: Props) {
   // Lo que se está tecleando en cada casilla de puntos, antes de darlo por bueno.
   const [borrador, setBorrador] = useState<Record<string, string>>({})
   useEffect(() => { setBorrador({}) }, [respuestas])
 
-  const r = notaDePrueba(def, respuestas, destinos)
+  const propia = pruebaDeUnidad(def, unidadId)
+  const deEstaUnidad = new Set(propia.preguntas.map(p => p.id))
+  const r = notaDePrueba(propia, respuestas, destinos)
 
   const poner = (id: string, valor: number | undefined) => {
     const siguiente = { ...respuestas }
@@ -124,6 +132,11 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
                 {def.reparto === 'criterios' && (
                   <span style={{ marginLeft: 6, fontSize: 10.5, color: 'var(--gris-500)', fontWeight: 700 }}>
                     {p.criterio_id || 'todos'}
+                  </span>
+                )}
+                {!deEstaUnidad.has(p.id) && (
+                  <span data-pregunta-otra-unidad style={{ marginLeft: 6, fontSize: 10.5, color: 'var(--gris-500)', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                    de otra unidad · no cuenta en esta
                   </span>
                 )}
                 {/* La planilla de corrección, delante mientras se corrige: la

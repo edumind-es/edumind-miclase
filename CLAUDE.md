@@ -631,6 +631,30 @@ edumind_miclase/
   `correccionesDeExamen` cuenta las correcciones de todas las unidades del
   examen (y una unidad cubierta por vínculo no cae al general), así el
   recálculo y el informe ven la misma corrección una vez por alumno.
+- **En un examen que cuenta en varias unidades, cada pregunta puede decir
+  de cuál es.** `PreguntaPrueba.unidad_id` (opcional, dentro de
+  `prueba_json`, sin índice ni esquema) y `pruebaDeUnidad(def, unidad)`
+  (`db/prueba.ts`, puro): el examen tal como cuenta en una unidad, con sus
+  preguntas y las que no dicen unidad. **Una pregunta sin unidad cuenta en
+  todas** (decisión de Luis, nov 2026), así que un examen sin etiquetas da
+  exactamente las notas de siempre. `guardarExamenDeAlumno` y
+  `recalcularNotasDeExamen` pasan el examen por `pruebaDeUnidad` antes de
+  `notaDePrueba`, unidad a unidad: un alumno puede suspender la UD1 y aprobar
+  la UD2 con el mismo examen. Las RESPUESTAS se siguen guardando enteras en
+  todas las unidades (el examen es uno y se corrige desde cualquiera). Una
+  unidad que se queda sin ninguna pregunta no recibe nota ni se le borra la
+  que tuviera, y el editor lo avisa (`[data-unidad-sin-preguntas]`). La
+  columna «Unidad» del editor (`[data-pregunta-unidad]`) solo sale con otra
+  unidad vinculada; desvincular una devuelve sus preguntas a «Todas»
+  (`sinUnidadesAjenas`, también en `guardarPrueba` y al cargar del banco,
+  donde los ids son de otra clase). El corrector marca las preguntas de otra
+  unidad (`[data-pregunta-otra-unidad]`) y el aviso «también en…» dice la
+  nota de cada unidad si es distinta (`UnidadTambienCorregida.nota`). El
+  examen general no reparte por unidad. **Un aparato sin actualizar ignora
+  la etiqueta al leer y la borra si vuelve a guardar el examen**
+  (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
+  Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
+  el informe de la prueba por unidad.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

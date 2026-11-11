@@ -466,7 +466,8 @@ export default function CeldaEvaluacion({
       const criterios = r.criterios
       const mia = r.porCriterio[criterio.id] ?? null
       setValorActual(criterio.id in r.porCriterio ? mia : valorActual)
-      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nombre).join(', ')}` : ''
+      // Con preguntas por unidad, cada unidad tiene su nota: se dice cuál.
+      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nota != null && t.nota !== r.nota ? `${t.nombre} (${t.nota})` : t.nombre).join(', ')}` : ''
       avisar({
         tipo: 'ok',
         texto: r.nota == null
@@ -727,6 +728,7 @@ export default function CeldaEvaluacion({
               respuestas={marcado}
               destinos={destinosPrueba}
               criterioActual={criterio.id}
+              unidadId={unidadId}
               guardando={guardando}
               onCambio={guardarRespuestas}
             />

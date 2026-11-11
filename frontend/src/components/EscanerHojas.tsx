@@ -13,7 +13,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getPrueba, guardarExamenDeAlumno, type CeldaInstrumento, type DatosDeArea, type PruebaGuardada } from '@/db/queries'
-import { tieneClave, respuestaDeMarca, notaDePrueba, LETRAS, type PruebaDef } from '@/db/prueba'
+import { tieneClave, respuestaDeMarca, notaDePrueba, pruebaDeUnidad, LETRAS, type PruebaDef } from '@/db/prueba'
 import { aGris, leerHoja, aplicar, type LecturaHoja, type Homografia } from '@/utils/lectorHoja'
 import { centroBurbuja, BURBUJA } from '@/db/hojaOMR'
 import { sePuedeEscanear } from '@/utils/lectorQR'
@@ -218,7 +218,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     def.preguntas.forEach((p, i) => { r[p.id] = respuestaDeMarca(p, capturada.marcadas[i]) })
     return r
   }, [capturada, def])
-  const resultado = useMemo(() => def ? notaDePrueba(def, respuestas, criterios.map(c => c.id)) : null, [def, respuestas, criterios])
+  const resultado = useMemo(() => def ? notaDePrueba(pruebaDeUnidad(def, unidadId), respuestas, criterios.map(c => c.id)) : null, [def, respuestas, criterios, unidadId])
 
   const elegir = (i: number, j: number | null) => setCapturada(c => c && { ...c, marcadas: c.marcadas.map((m, k) => k === i ? (m === j ? null : j) : m) })
 

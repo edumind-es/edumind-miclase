@@ -11,7 +11,7 @@ import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { resumirEvidencias, type ResumenEvidencias } from './almacen'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
-import { normalizarPrueba, notaDePrueba, unidadesDelExamen, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
+import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -2420,10 +2420,13 @@ export async function getPrueba(instrumento_id: number, unidad_id: number | null
 export async function guardarPrueba(
   instrumento_id: number, unidad_id: number | null, def: PruebaDef, opciones: { mover?: number } = {},
 ): Promise<number> {
-  const limpia = normalizarPrueba(def)
+  let limpia = normalizarPrueba(def)
   // Un examen no se vincula a su propia unidad, y el general no vincula nada.
   const vinculadas = unidad_id == null ? [] : (limpia.unidades_vinculadas ?? []).filter(u => u !== unidad_id)
   if (vinculadas.length) limpia.unidades_vinculadas = vinculadas; else delete limpia.unidades_vinculadas
+  // La unidad de una pregunta solo vale si es una de las del examen, y solo
+  // tiene sentido si cuenta en más de una: si no, se quita.
+  limpia = sinUnidadesAjenas(limpia, vinculadas.length ? unidadesDelExamen(unidad_id, limpia) : [])
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
   const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
     .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
@@ -2487,16 +2490,22 @@ export async function guardarExamenDeAlumno(p: {
   /** La observación es de un criterio concreto; en los demás no se toca. */
   observacion?: { criterio_id: string; texto: string | null }
 }): Promise<ResultadoPrueba & { criterios: string[]; tambien: UnidadTambienCorregida[] }> {
-  const r = notaDePrueba(p.def, p.respuestas, p.destinos)
-  const criterios = p.destinos.filter(c => c in r.porCriterio)
+  // Cada unidad recibe la nota de SUS preguntas (`pruebaDeUnidad`); sin
+  // preguntas etiquetadas es el examen entero. Una unidad a la que no le
+  // queda ninguna pregunta no recibe nada: escribirle «sin nota» borraría la
+  // que tuviera.
+  const propia = pruebaDeUnidad(p.def, p.unidad_id)
+  const r = notaDePrueba(propia, p.respuestas, p.destinos)
+  const criterios = propia.preguntas.length ? p.destinos.filter(c => c in r.porCriterio) : []
   await saveCalificaciones(criterios.map(c => ({
     alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
     trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
     ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
   })), { sinVinculos: true })
   // El mismo examen cuenta también en las unidades que tenga vinculadas (y
-  // desde una vinculada, en la suya): misma corrección, con los criterios que
-  // el instrumento evalúa en cada una, y en el MISMO trimestre: la casilla
+  // desde una vinculada, en la suya): misma corrección —las respuestas van
+  // enteras a todas—, con los criterios que el instrumento evalúa en cada
+  // una y la nota de sus preguntas, y en el MISMO trimestre: la casilla
   // lleva el trimestre de la barra, no el de la unidad. La observación se
   // queda donde se escribió.
   const tambien: UnidadTambienCorregida[] = []
@@ -2505,20 +2514,26 @@ export async function guardarExamenDeAlumno(p: {
     if (u === p.unidad_id) continue
     const unidad = await db.unidades.get(u)
     if (!unidad || unidad.deleted_at) continue
+    const deU = pruebaDeUnidad(p.def, u)
+    if (!deU.preguntas.length) continue
     const destinos = await criteriosQueEvalua(p.instrumento_id, u)
-    const ru = notaDePrueba(p.def, p.respuestas, destinos)
+    const ru = notaDePrueba(deU, p.respuestas, destinos)
     const cu = destinos.filter(c => c in ru.porCriterio)
     await saveCalificaciones(cu.map(c => ({
       alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
       trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
     })), { sinVinculos: true })
-    tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu })
+    tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu, nota: ru.nota })
   }
   return { ...r, criterios, tambien }
 }
 
 /** Una unidad vinculada en la que el examen también puso nota, y en qué criterios. */
-export type UnidadTambienCorregida = { unidad_id: number; nombre: string; criterios: string[] }
+export type UnidadTambienCorregida = {
+  unidad_id: number; nombre: string; criterios: string[]
+  /** La nota del examen en esa unidad: la de sus preguntas, si las tiene etiquetadas. */
+  nota: number | null
+}
 
 /**
  * Las respuestas de examen ya guardadas para un alumno, vengan del criterio
@@ -2614,7 +2629,11 @@ export async function recalcularNotasDeExamen(
     const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
     const enUnidad = filas.filter(f => f.unidad_id === base.unidad_id)
     const destinos = [...new Set([...enUnidad.map(f => f.criterio_id), ...cals.map(c => c.criterio_id)])]
-    const r = notaDePrueba(def, respuestas, destinos)
+    // La nota de cada unidad sale de sus preguntas; si al etiquetar se queda
+    // sin ninguna, sus notas no se tocan.
+    const deUnidad = pruebaDeUnidad(def, base.unidad_id)
+    if (!deUnidad.preguntas.length) continue
+    const r = notaDePrueba(deUnidad, respuestas, destinos)
     const comun = {
       alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id,
       asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,

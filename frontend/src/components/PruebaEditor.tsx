@@ -20,6 +20,7 @@ import type { Instrumento, Unidad } from '@/db/localDb'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, reasignarCriterio, idDePreguntaNueva, preguntasSinClave,
   TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
+  unidadesDelExamen, pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
   type PruebaDef, type PreguntaPrueba, type TipoPrueba, type RepartoPrueba,
 } from '@/db/prueba'
 import {
@@ -190,6 +191,17 @@ export default function PruebaEditor({
   }))
   const setReparto = (reparto: RepartoPrueba) => editar(d => ({ ...d, reparto }))
 
+  /**
+   * Las unidades en las que cuenta el examen (la suya y las vinculadas), para
+   * decir de cuál es cada pregunta. Con una sola no hay nada que repartir.
+   */
+  const unidadesDeEsteExamen = unidadesDelExamen(destino.unidadId, def)
+    .map(id => unidades.find(u => u.id === id)).filter((u): u is NonNullable<typeof u> => !!u)
+    .map(u => ({ id: u.id!, nombre: u.nombre }))
+  /** Unidades del examen que, con las preguntas etiquetadas, se quedan sin ninguna. */
+  const unidadesSinPreguntas = tieneUnidadesPorPregunta(def)
+    ? unidadesDeEsteExamen.filter(u => pruebaDeUnidad(def, u.id).preguntas.length === 0)
+    : []
   const setPregunta = (i: number, cambios: Partial<PreguntaPrueba>) =>
     editar(d => ({ ...d, preguntas: d.preguntas.map((p, j) => j === i ? { ...p, ...cambios } : p) }))
   const addPregunta = () => editar(d => ({
@@ -304,7 +316,8 @@ export default function PruebaEditor({
     if (sucio && !confirm('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
     const conocidos = new Set(criteriosActivos.map(c => c.id))
     let sueltas = 0
-    const preguntas = origen.def.preguntas.map(p => {
+    // La unidad de cada pregunta es de la clase de origen: aquí no vale.
+    const preguntas = origen.def.preguntas.map(({ unidad_id: _deOtraClase, ...p }) => {
       if (!p.criterio_id || !criteriosActivos.length || conocidos.has(p.criterio_id)) return p
       sueltas++
       return { ...p, criterio_id: null }
@@ -532,12 +545,16 @@ export default function PruebaEditor({
                         <label key={u.id} style={{ display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer', opacity: conExamenPropio && !marcada ? 0.6 : 1 }}
                           title={conExamenPropio ? 'Esta unidad ya tiene su propio examen: manda el suyo' : undefined}>
                           <input type="checkbox" data-unidad-id={u.id} checked={marcada}
-                            onChange={e => editar(d => ({
-                              ...d,
-                              unidades_vinculadas: e.target.checked
-                                ? [...(d.unidades_vinculadas ?? []), u.id!]
-                                : (d.unidades_vinculadas ?? []).filter(x => x !== u.id),
-                            }))} />
+                            onChange={e => editar(d => {
+                              const con = {
+                                ...d,
+                                unidades_vinculadas: e.target.checked
+                                  ? [...(d.unidades_vinculadas ?? []), u.id!]
+                                  : (d.unidades_vinculadas ?? []).filter(x => x !== u.id),
+                              }
+                              // Al desvincular una unidad, sus preguntas vuelven a «Todas».
+                              return sinUnidadesAjenas(con, unidadesDelExamen(destino.unidadId, con))
+                            })} />
                           {u.nombre}{conExamenPropio ? ' (tiene examen propio)' : ''}
                         </label>
                       )
@@ -545,7 +562,7 @@ export default function PruebaEditor({
                   </div>
                   <div style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 3 }}>
                     {(def.unidades_vinculadas ?? []).some(u => u !== destino.unidadId)
-                      ? <>Al corregir a un alumno, la misma nota se pone en esas unidades, en los criterios que «{nombreInstrumento}» evalúa en cada una. Se corrige desde cualquiera de ellas.</>
+                      ? <>Al corregir a un alumno, la nota se pone también en esas unidades, en los criterios que «{nombreInstrumento}» evalúa en cada una. Es la misma en todas salvo que digas de qué unidad es cada pregunta (columna «Unidad»): entonces cada unidad recibe la nota de las suyas, y una pregunta en «Todas» cuenta en todas. Se corrige desde cualquiera de ellas.</>
                       : <>Marca otra unidad si este examen recoge también lo suyo: la nota se pondrá en las dos a la vez.</>}
                   </div>
                 </div>
@@ -765,6 +782,11 @@ export default function PruebaEditor({
                 {[...new Set(def.preguntas.map(p => p.aspecto).filter((a): a is string => !!a))].map(a => <option key={a} value={a} />)}
               </datalist>
             )}
+            {unidadesSinPreguntas.length > 0 && (
+              <div data-unidad-sin-preguntas style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 8 }}>
+                {unidadesSinPreguntas.map(u => `«${u.nombre}»`).join(', ')} no {unidadesSinPreguntas.length === 1 ? 'tiene' : 'tienen'} ninguna pregunta: este examen no le{unidadesSinPreguntas.length === 1 ? '' : 's'} pondrá nota. Asígnale alguna o déjalas en «Todas».
+              </div>
+            )}
             <div style={{ overflowX: 'auto', marginBottom: 10 }}>
               <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 12.5 }}>
                 <thead>
@@ -773,6 +795,7 @@ export default function PruebaEditor({
                     <th style={{ padding: '7px 8px', textAlign: 'left' }}>Pregunta <span style={{ fontWeight: 400, opacity: .8 }}>(opcional: para reconocerla al corregir)</span></th>
                     <th style={{ padding: '7px 8px', textAlign: 'center', width: 84 }}>{def.tipo === 'niveles' ? 'Vale' : 'Puntos'}</th>
                     {def.reparto === 'criterios' && <th style={{ padding: '7px 8px', textAlign: 'left', width: 170 }}>Criterio</th>}
+                    {unidadesDeEsteExamen.length > 1 && <th style={{ padding: '7px 8px', textAlign: 'left', width: 150 }}>Unidad</th>}
                     {conAspectos && <th style={{ padding: '7px 8px', textAlign: 'left', width: 150 }}>Aspecto</th>}
                     {conPlanilla && <th style={{ padding: '7px 8px', textAlign: 'left', minWidth: 160 }}>Clave <span style={{ fontWeight: 400, opacity: .8 }}>(respuesta correcta)</span></th>}
                     {conPlanilla && <th style={{ padding: '7px 8px', textAlign: 'left', minWidth: 160 }}>Corrección <span style={{ fontWeight: 400, opacity: .8 }}>(cómo se puntúa)</span></th>}
@@ -812,6 +835,16 @@ export default function PruebaEditor({
                           )}
                         </td>
                       )}
+                      {unidadesDeEsteExamen.length > 1 && (
+                        <td style={{ padding: 5 }}>
+                          <select value={p.unidad_id ?? ''} data-pregunta-unidad
+                            onChange={e => setPregunta(i, { unidad_id: e.target.value ? Number(e.target.value) : null })}
+                            aria-label={`Unidad de la pregunta ${i + 1}`} style={{ width: '100%', fontSize: 12 }}>
+                            <option value="">Todas</option>
+                            {unidadesDeEsteExamen.map(u => <option key={u.id} value={u.id}>{u.nombre}</option>)}
+                          </select>
+                        </td>
+                      )}
                       {conAspectos && (
                         <td style={{ padding: 5 }}>
                           <input value={p.aspecto ?? ''} onChange={e => setPregunta(i, { aspecto: e.target.value || null })}
@@ -849,7 +882,7 @@ export default function PruebaEditor({
                     return [fila, (
                       <tr key={`${p.id}-opciones`} data-opciones-de={p.id} style={{ background: i % 2 === 0 ? 'white' : '#f8fafc' }}>
                         <td />
-                        <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (conAspectos ? 1 : 0) + (conPlanilla ? 2 : 0)} style={{ padding: '0 5px 8px' }}>
+                        <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (unidadesDeEsteExamen.length > 1 ? 1 : 0) + (conAspectos ? 1 : 0) + (conPlanilla ? 2 : 0)} style={{ padding: '0 5px 8px' }}>
                           <button type="button" onClick={() => alternarOpciones(p.id)} aria-expanded={abierta}
                             style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : '#92400e', cursor: 'pointer', fontWeight: 600 }}>
                             {abierta ? '▾' : '▸'} {resumen}
