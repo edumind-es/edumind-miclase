@@ -800,8 +800,9 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .instr-th-criterio button:hover { opacity: 1; }
 .instr-th-criterio-anadir { font-size: 10.5px; max-width: 110px; margin-top: 3px; padding: 1px 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: inherit; cursor: pointer; }
 .instr-th-criterio-anadir option { color: var(--gris-900); }
-.matriz-instrumentos.cabeceras-compactas .instr-th:not(.abierta) .instr-th-detalle { display: none; }
-/* «Más» de una columna: despliega lo suyo, sin abrir las demás. */
+/* Plegadas, los detalles siguen en el DOM pero sin sitio. */
+.matriz-instrumentos.cabeceras-compactas .instr-th .instr-th-detalle { display: none; }
+/* «Más» de una columna: abre su hoja, sin tocar las demás. */
 .instr-th-mas {
   display: block; width: 100%; margin-top: 4px; min-height: 44px; border: 1px solid rgba(255,255,255,.35);
   border-radius: var(--radio-sm); background: transparent; color: var(--blanco); font-size: 12px; font-weight: 600; cursor: pointer;
@@ -1040,3 +1041,33 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 .modal-overlay [tabindex="-1"]:focus { outline: none; }
 /* Pestañas: la elegida se distingue también con el teclado. */
 [role="tab"]:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 2px; }
+
+/* ── «Más» de una columna: hoja que sube desde abajo ─────────────────── */
+/* En una tablet las acciones quedan grandes y cerca del pulgar, y la tabla
+   no se mueve (antes la cabecera crecía y empujaba la lista). */
+.hoja-velo { align-items: flex-end; }
+.hoja-columna {
+  width: min(760px, 100vw); max-height: 82vh; overflow-y: auto;
+  background: var(--blanco); color: var(--gris-900); text-align: left;
+  border-radius: 16px 16px 0 0;
+  padding: 12px 18px calc(18px + env(safe-area-inset-bottom));
+  animation: hoja-sube .16s ease-out;
+}
+@keyframes hoja-sube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hoja-columna { animation: none; } }
+.hoja-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.hoja-titulo { font-size: 17px; font-weight: 700; color: var(--azul-900); display: flex; align-items: center; gap: 8px; }
+.hoja-titulo .abrev { color: var(--blanco); font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.hoja-columna .instr-th-tipo { font-size: 13px; opacity: 1; color: var(--gris-600); margin: 2px 0 8px; }
+.hoja-columna .instr-th-criterios { font-size: 13px; color: var(--gris-600); margin-bottom: 12px; display: block; overflow: visible; -webkit-line-clamp: unset; max-height: none; }
+.hoja-columna .instr-th-criterio { background: var(--gris-100); border: 1px solid var(--gris-300); color: var(--gris-900); padding: 2px 2px 2px 8px; margin: 3px 6px 3px 0; border-radius: 12px; }
+.hoja-columna .instr-th-criterio button { font-size: 16px; min-width: 36px; min-height: 36px; opacity: 1; }
+.hoja-columna .instr-th-criterio-anadir { font-size: 14px; max-width: 260px; min-height: 44px; padding: 6px 8px; border: 1px solid var(--gris-300); background: var(--blanco); color: var(--gris-900); }
+.hoja-acciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
+.hoja-accion {
+  min-height: 52px; padding: 10px 14px; text-align: left;
+  border: 1px solid var(--gris-300); border-radius: var(--radio-sm);
+  background: var(--gris-100); color: var(--gris-900); font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.hoja-accion:hover { background: var(--azul-100); border-color: var(--azul-300); }
+.hoja-accion.peligro { color: var(--cal-insuficiente); }

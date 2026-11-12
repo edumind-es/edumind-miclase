@@ -8,7 +8,8 @@
  * Nada se guarda aquí: pulsar una casilla abre el mismo panel de siempre, y
  * «Evaluar hoy» abre la pasada de clase del diario.
  */
-import { useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { getInstrConfig, abreviatura } from '@/ia/instrumentosConfig'
 import { etiquetaAgregacion, miniTendencia } from '@/db/diario'
 import { faltaHerramienta } from './ElegirHerramienta'
@@ -197,13 +198,15 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
-  /** Columnas con su menú «Más» abierto: cada una despliega lo suyo sin abrir las demás. */
-  const [abiertas, setAbiertas] = useState<Set<number>>(new Set())
-  const alternarColumna = (id: number) => setAbiertas(prev => {
-    const s = new Set(prev)
-    if (s.has(id)) s.delete(id); else s.add(id)
-    return s
-  })
+  /** Columna cuyo «Más» está abierto: sus acciones suben en una hoja desde abajo,
+      que es donde llega el pulgar en una tablet, y la tabla no se mueve. */
+  const [hoja, setHoja] = useState<number | null>(null)
+  useEffect(() => {
+    if (hoja == null) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setHoja(null) }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [hoja])
   /** Columna cuyo nombre se está editando, y el texto que lleva. */
   const [renombrando, setRenombrando] = useState<{ id: number; texto: string } | null>(null)
   const confirmarNombre = async (col: ColumnaInstrumento) => {
@@ -268,30 +271,12 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
               // tiene herramienta: se dice y se ofrece definirla aquí, no en
               // una casilla. «Evaluar hoy» (diario) queda como segunda opción.
               const sinHerramienta = faltaHerramienta(col.ins)
-              return (
-                <th key={col.ins.instrumento_id} scope="col" className={`instr-th${abiertas.has(col.ins.instrumento_id) ? ' abierta' : ''}`}
-                  data-instr-th data-nombre={col.ins.nombre} data-tipo={col.ins.tipo} data-con-examen={col.ins.tiene_prueba || undefined}
-                  data-familia={col.ins.familia_id ?? undefined} data-criterios={ids.join(' ')}
-                  style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
-                  title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
-                  {renombrando?.id === col.ins.instrumento_id ? (
-                    <input className="instr-th-renombrar" data-renombrar-campo autoFocus aria-label="Nuevo nombre del instrumento"
-                      value={renombrando.texto}
-                      onChange={e => setRenombrando({ id: col.ins.instrumento_id, texto: e.target.value })}
-                      onBlur={() => confirmarNombre(col)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
-                        if (e.key === 'Escape') setRenombrando(null)
-                      }} />
-                  ) : (
-                    <div className="instr-th-nombre">
-                      <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
-                      <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
-                      <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
-                        title="Cambiar el nombre de este instrumento (el tipo, el peso y los criterios se cambian en ⚙ Instrumentos)"
-                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
-                    </div>
-                  )}
+              /** Lo que no es la acción principal: datos de la columna, criterios y el
+                  resto de acciones. Va en la hoja de «Más» o, con «Más en todas»,
+                  desplegado en la cabecera. */
+              const detalle = (enHoja: boolean): ReactNode => {
+                const clase = enHoja ? 'hoja-accion' : 'instr-th-accion secundaria instr-th-detalle'
+                return (<>
                   <div className="instr-th-tipo instr-th-detalle">
                     {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
@@ -321,6 +306,109 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       </select>
                     )}
                   </div>
+                  <div className={enHoja ? 'hoja-acciones' : undefined} style={enHoja ? undefined : { display: 'contents' }}>
+                    {!esExamen && sinHerramienta && onNota && (
+                      <button type="button" className={clase} data-herramienta-definir
+                        onClick={() => onDefinir(col)}
+                        title="Elegir con qué se evalúa: rúbrica, lista de control o escala de estimación">
+                        Definir herramienta
+                      </button>
+                    )}
+                    {!esExamen && sinHerramienta && (
+                      <button type="button" className={clase} data-sesion-abrir
+                        onClick={() => onSesion(col)}
+                        title="Pasar por toda la clase hoy: un nivel por alumno, en el diario">
+                        Evaluar hoy, sin herramienta
+                      </button>
+                    )}
+                    {/* De observación, el diario es su herramienta y va primero; pero
+                        si el docente prefiere una rúbrica, la define aquí, no en una casilla. */}
+                    {!esExamen && !sinHerramienta && !col.ins.tiene_rubrica && (
+                      <button type="button" className={clase} data-herramienta-definir
+                        onClick={() => onDefinir(col)}
+                        title="Evaluar este instrumento con rúbrica, lista de control o escala en vez del diario">
+                        Definir una rúbrica
+                      </button>
+                    )}
+                  {esExamen && col.ins.tiene_prueba && onEscanear && (
+                    <button type="button" className={clase} data-escanear-abrir
+                      onClick={() => onEscanear(col)}
+                      title="Corregir las hojas de respuestas con la cámara, una tras otra">
+                      Corregir por cámara
+                    </button>
+                  )}
+                  {esExamen && col.ins.tiene_prueba && onInforme && (
+                    <button type="button" className={clase} data-informe-abrir
+                      onClick={() => onInforme(col)}
+                      title="Qué preguntas, criterios y aspectos falla la clase con este examen; se imprime o se guarda">
+                      Informe de la prueba
+                    </button>
+                  )}
+                  {/* Editar el examen entero es ocasional: plegado, con «Imprimir test». */}
+                  {esExamen && col.ins.tiene_prueba && onEditarExamen && (
+                    <button type="button" className={clase} data-editar-examen
+                      onClick={() => onEditarExamen(col)}
+                      title="Cambiar el examen: título, preguntas, reparto por criterios, o moverlo a otra unidad o instrumento">
+                      Editar el examen
+                    </button>
+                  )}
+                  {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
+                  {esExamen && col.ins.tiene_prueba && onImprimir && (
+                    <button type="button" className={clase} data-imprimir-abrir
+                      onClick={() => onImprimir(col)}
+                      title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
+                      Imprimir el test
+                    </button>
+                  )}
+                  <button type="button" className={clase} data-pegar-abrir
+                    onClick={() => onPegar(col)}
+                    title="Pegar una columna de notas copiada de tu hoja de cálculo">
+                    Pegar notas de Excel
+                  </button>
+                  {/* Lo que hay en esta columna, en ESTA unidad y trimestre, se puede
+                      vaciar (queda como fantasma) o llevar a otro instrumento. Luis puso
+                      una prueba del 20 % en la columna del 80 % y no podía deshacerlo. */}
+                  {onMover && (
+                    <button type="button" className={clase} data-mover-columna
+                      onClick={() => onMover(col)}
+                      title="Llevar las notas de esta columna, solo en esta unidad y trimestre, a otro instrumento">
+                      Mover a otra columna
+                    </button>
+                  )}
+                  {onVaciar && (
+                    <button type="button" className={`${clase}${enHoja ? ' peligro' : ''}`} data-vaciar-columna
+                      onClick={() => onVaciar(col)}
+                      title="Quitar las notas de esta columna, solo en esta unidad y trimestre; quedan como nota anterior, recuperables">
+                      Vaciar la columna
+                    </button>
+                  )}
+                  </div>
+                </>)
+              }
+              return (
+                <th key={col.ins.instrumento_id} scope="col" className="instr-th"
+                  data-instr-th data-nombre={col.ins.nombre} data-tipo={col.ins.tipo} data-con-examen={col.ins.tiene_prueba || undefined}
+                  data-familia={col.ins.familia_id ?? undefined} data-criterios={ids.join(' ')}
+                  style={{ borderTop: hayFamilias ? 'none' : `4px solid ${col.ins.color}`, boxShadow: `inset 4px 0 0 ${col.ins.color}` }}
+                  title={col.criterios.map(c => `${c.id} — ${c.descripcion}`).join('\n')}>
+                  {renombrando?.id === col.ins.instrumento_id ? (
+                    <input className="instr-th-renombrar" data-renombrar-campo autoFocus aria-label="Nuevo nombre del instrumento"
+                      value={renombrando.texto}
+                      onChange={e => setRenombrando({ id: col.ins.instrumento_id, texto: e.target.value })}
+                      onBlur={() => confirmarNombre(col)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
+                        if (e.key === 'Escape') setRenombrando(null)
+                      }} />
+                  ) : (
+                    <div className="instr-th-nombre">
+                      <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
+                      <span aria-hidden="true">{cfg.icon}</span> {col.ins.nombre}
+                      <button type="button" className="instr-th-lapiz" data-renombrar-abrir aria-label={`Renombrar «${col.ins.nombre}»`}
+                        title="Cambiar el nombre de este instrumento (el tipo, el peso y los criterios se cambian en ⚙ Instrumentos)"
+                        onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
+                    </div>
+                  )}
                   {esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}
@@ -340,88 +428,51 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                         Calificar
                       </button>
                     )}
-                    {sinHerramienta && (
-                      <button type="button" className={`instr-th-accion${onNota ? ' secundaria instr-th-detalle' : ''}`} data-herramienta-definir
+                    {sinHerramienta && !onNota && (
+                      <button type="button" className="instr-th-accion" data-herramienta-definir
                         onClick={() => onDefinir(col)}
                         title="Elegir con qué se evalúa: rúbrica, lista de control o escala de estimación">
                         Definir herramienta
                       </button>
                     )}
-                    <button type="button" className={`instr-th-accion${sinHerramienta ? ' secundaria instr-th-detalle' : ''}`} data-sesion-abrir
-                      onClick={() => onSesion(col)}
-                      title={col.ins.tiene_rubrica
-                        ? 'Pasar por toda la clase con la rúbrica a la vista: un nivel por alumno'
-                        : 'Pasar por toda la clase hoy: un nivel por alumno, en el diario'}>
-                      {sinHerramienta ? 'Evaluar hoy, sin herramienta' : 'Calificar'}
-                    </button>
-                    {/* De observación, el diario es su herramienta y va primero; pero
-                        si el docente prefiere una rúbrica, la define aquí, no en una casilla. */}
-                    {!sinHerramienta && !col.ins.tiene_rubrica && (
-                      <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-herramienta-definir
-                        onClick={() => onDefinir(col)}
-                        title="Evaluar este instrumento con rúbrica, lista de control o escala en vez del diario">
-                        Definir una rúbrica
+                    {!sinHerramienta && (
+                      <button type="button" className="instr-th-accion" data-sesion-abrir
+                        onClick={() => onSesion(col)}
+                        title={col.ins.tiene_rubrica
+                          ? 'Pasar por toda la clase con la rúbrica a la vista: un nivel por alumno'
+                          : 'Pasar por toda la clase hoy: un nivel por alumno, en el diario'}>
+                        Calificar
                       </button>
                     )}
                   </>)}
-                  {/* Una sola acción a la vista; lo demás, tras el «Más» de ESTA columna. */}
-                  <button type="button" className="instr-th-mas" data-columna-mas aria-expanded={detalles || abiertas.has(col.ins.instrumento_id)}
+                  {/* Una sola acción a la vista; lo demás, tras el «Más» de ESTA columna,
+                      que sube en una hoja desde abajo. Con «Más en todas» va todo
+                      desplegado en la cabecera y este botón sobra. */}
+                  <button type="button" className="instr-th-mas" data-columna-mas aria-haspopup="dialog" aria-expanded={detalles || hoja === col.ins.instrumento_id}
                     aria-label={`Más acciones de «${col.ins.nombre}»`} disabled={detalles}
                     title="Tipo, peso y criterios de la columna, y el resto de acciones: cámara, examen, informe, pegar, mover, vaciar"
-                    onClick={() => alternarColumna(col.ins.instrumento_id)}>
-                    {detalles || abiertas.has(col.ins.instrumento_id) ? '▴ Menos' : '▾ Más'}
+                    onClick={() => setHoja(col.ins.instrumento_id)}>
+                    Más
                   </button>
-                  {esExamen && col.ins.tiene_prueba && onEscanear && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-escanear-abrir
-                      onClick={() => onEscanear(col)}
-                      title="Corregir las hojas de respuestas con la cámara, una tras otra">
-                      Corregir por cámara
-                    </button>
-                  )}
-                  {esExamen && col.ins.tiene_prueba && onInforme && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-informe-abrir
-                      onClick={() => onInforme(col)}
-                      title="Qué preguntas, criterios y aspectos falla la clase con este examen; se imprime o se guarda">
-                      Informe de la prueba
-                    </button>
-                  )}
-                  {/* Editar el examen entero es ocasional: plegado, con «Imprimir test». */}
-                  {esExamen && col.ins.tiene_prueba && onEditarExamen && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-editar-examen
-                      onClick={() => onEditarExamen(col)}
-                      title="Cambiar el examen: título, preguntas, reparto por criterios, o moverlo a otra unidad o instrumento">
-                      Editar el examen
-                    </button>
-                  )}
-                  {/* Imprimir es previo al examen y ocasional: plegado, con «Pegar columna». */}
-                  {esExamen && col.ins.tiene_prueba && onImprimir && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-imprimir-abrir
-                      onClick={() => onImprimir(col)}
-                      title="Imprimir las hojas de respuestas de la clase y el examen del alumnado">
-                      Imprimir el test
-                    </button>
-                  )}
-                  <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-pegar-abrir
-                    onClick={() => onPegar(col)}
-                    title="Pegar una columna de notas copiada de tu hoja de cálculo">
-                    Pegar notas de Excel
-                  </button>
-                  {/* Lo que hay en esta columna, en ESTA unidad y trimestre, se puede
-                      vaciar (queda como fantasma) o llevar a otro instrumento. Luis puso
-                      una prueba del 20 % en la columna del 80 % y no podía deshacerlo. */}
-                  {onMover && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-mover-columna
-                      onClick={() => onMover(col)}
-                      title="Llevar las notas de esta columna, solo en esta unidad y trimestre, a otro instrumento">
-                      Mover a otra columna
-                    </button>
-                  )}
-                  {onVaciar && (
-                    <button type="button" className="instr-th-accion secundaria instr-th-detalle" data-vaciar-columna
-                      onClick={() => onVaciar(col)}
-                      title="Quitar las notas de esta columna, solo en esta unidad y trimestre; quedan como nota anterior, recuperables">
-                      Vaciar la columna
-                    </button>
+                  {/* Siempre en la cabecera, aunque plegado no ocupe sitio: lo enseña «Más en todas». */}
+                  {detalle(false)}
+                  {hoja === col.ins.instrumento_id && !detalles && createPortal(
+                    <div className="modal-overlay hoja-velo" onClick={e => { if (e.target === e.currentTarget) setHoja(null) }}>
+                      <div className="hoja-columna" role="dialog" aria-modal="true" aria-label={`Más acciones de «${col.ins.nombre}»`}
+                        data-hoja-columna data-nombre={col.ins.nombre} style={{ borderTop: `6px solid ${col.ins.color}` }}
+                        // Una acción abre su propia pantalla: la hoja se quita de en medio.
+                        onClick={e => { if ((e.target as HTMLElement).closest('button.hoja-accion')) setHoja(null) }}>
+                        <div className="hoja-cabecera">
+                          <div className="hoja-titulo">
+                            <span className="abrev" style={{ background: col.ins.color }}>{abreviatura(col.ins.nombre)}</span>
+                            {col.ins.nombre}
+                          </div>
+                          <button type="button" className="modal-close" data-hoja-cerrar aria-label="Cerrar" onClick={() => setHoja(null)}>✕</button>
+                        </div>
+                        {detalle(true)}
+                      </div>
+                    </div>,
+                    document.body,
                   )}
                 </th>
               )

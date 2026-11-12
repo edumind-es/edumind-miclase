@@ -54,10 +54,12 @@ const anadirHijo = async (bloque, nombre, tipo) => {
   await bloque.locator(`[data-hijo][data-nombre="${nombre}"]`).waitFor({ timeout: 5000 })
 }
 
-/** Abre el «Más» de una columna si está plegado: ahí van las acciones que no son la principal. */
+/** Abre el «Más» de una columna: sus acciones suben en una hoja desde abajo. Devuelve la hoja. */
 const abrirMasDeColumna = async (col) => {
-  const mas = col.locator('[data-columna-mas]')
-  if (await mas.count() && (await mas.getAttribute('aria-expanded')) !== 'true') await mas.click()
+  await col.locator('[data-columna-mas]').click()
+  const hoja = p.locator('[data-hoja-columna]')
+  await hoja.waitFor({ timeout: 5000 })
+  return hoja
 }
 
 try {
@@ -142,8 +144,7 @@ try {
 
   console.log('\n4. «Evaluar hoy» con Cuaderno escribe en el hijo')
   // Sin herramienta, «Evaluar hoy» es la segunda opción: va tras el «Más» de la columna.
-  await abrirMasDeColumna(p.locator('[data-instr-th][data-nombre="Cuaderno"]'))
-  await p.locator('[data-instr-th][data-nombre="Cuaderno"] [data-sesion-abrir]').click()
+  await (await abrirMasDeColumna(p.locator('[data-instr-th][data-nombre="Cuaderno"]'))).locator('[data-sesion-abrir]').click()
   const sesion = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesion.waitFor({ timeout: 5000 })
   await sesion.locator('[data-sesion-fila]').first().locator('button.nivel-3').click()
@@ -201,15 +202,25 @@ try {
   await directa.waitFor({ state: 'hidden', timeout: 5000 })
   await p.waitForTimeout(600)
   ok(await colCuaderno.locator('[data-sesion-abrir]').count() === 1, 'y «Evaluar hoy» sigue disponible como segunda opción')
-  await abrirMasDeColumna(colCuaderno)
-  await colCuaderno.locator('[data-sesion-abrir]').click()
+  {
+    const hoja = await abrirMasDeColumna(colCuaderno)
+    ok(await hoja.getAttribute('data-nombre') === 'Cuaderno' && await hoja.locator('button.hoja-accion').count() >= 3, 'el «Más» de la columna sube una hoja con sus acciones')
+    await p.waitForTimeout(300) // sube con una animación corta
+    await foto('familias-cal-hoja-mas')
+    const caja = await hoja.boundingBox(), alto = p.viewportSize().height
+    ok(caja && Math.abs(caja.y + caja.height - alto) < 2, 'pegada al borde de abajo de la pantalla', JSON.stringify(caja))
+    await p.keyboard.press('Escape')
+    await hoja.waitFor({ state: 'hidden', timeout: 3000 })
+    ok(await colCuaderno.locator('[data-columna-mas]').getAttribute('aria-expanded') === 'false', 'Esc la cierra sin hacer nada')
+    await (await abrirMasDeColumna(colCuaderno)).locator('[data-sesion-abrir]').click()
+    await hoja.waitFor({ state: 'hidden', timeout: 3000 })
+  }
   const sesionSin = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesionSin.waitFor({ timeout: 5000 })
   ok(await sesionSin.locator('[data-sin-herramienta] [data-elegir-herramienta="rubrica"]').count() === 1, '«Evaluar hoy» dice que falta la herramienta y la deja elegir')
   await sesionSin.getByRole('button', { name: 'Hecho' }).click()
   await sesionSin.waitFor({ state: 'hidden', timeout: 5000 })
-  await abrirMasDeColumna(colCuaderno)
-  await colCuaderno.locator('[data-herramienta-definir]').click()
+  await (await abrirMasDeColumna(colCuaderno)).locator('[data-herramienta-definir]').click()
   const elegir = p.locator('[data-elegir-herramienta-dialogo]')
   await elegir.waitFor({ timeout: 5000 })
   await elegir.locator('[data-elegir-herramienta="lista"]').click()

@@ -724,6 +724,19 @@ edumind_miclase/
   el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
   la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
   `.modal-overlay` se queda sin nada de esto.
+- **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
+  sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
+  `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
+  `.modal-overlay` para el foco): tipo y peso, criterios con su «×» y
+  «+ criterio», y las acciones secundarias como botones grandes
+  (`button.hoja-accion`, con los mismos `data-…` de siempre). Pulsar una
+  acción cierra la hoja; Esc y pulsar fuera, también. Luis la eligió por ser
+  lo más cómodo en tablet: la cabecera ya no crece ni empuja la lista. Los
+  detalles siguen ADEMÁS en la cabecera, sin sitio mientras está plegada
+  (`.instr-th-detalle`), y `[data-cabeceras-toggle]` («Más en todas») los
+  enseña ahí como antes; con él activo el «Más» de columna se desactiva. Una
+  prueba que abra la hoja busca la acción dentro de `[data-hoja-columna]`,
+  no en el `<th>`: con la hoja abierta el mismo `data-…` está dos veces.
 - **El corrector por cámara vuelve solo a la cámara tras «Guardar y
   siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
   «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no

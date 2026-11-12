@@ -446,7 +446,7 @@ ok(await p.getByRole('tab', { name: /Por competencia/ }).isVisible(), 'hay vista
 await p.getByRole('tab', { name: /Por competencia/ }).click()
 await p.waitForTimeout(1200)
 await foto('15b-seguimiento-competencias')
-await p.getByRole('button', { name: /Competencias clave/ }).click()
+await p.getByRole('tab', { name: /Competencias clave/ }).click()
 await p.locator('[data-competencias-clave]').waitFor({ timeout: 10000 })
 ok(await p.locator('[data-competencia]').count() > 0, 'Seguimiento enseña las competencias clave de la clase con sus notas', `${await p.locator('[data-competencia]').count()} competencias`)
 await p.locator('[data-competencia]').first().click()
