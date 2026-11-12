@@ -8,7 +8,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -28,7 +28,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 const estado = () => p.evaluate(async () => {
@@ -52,6 +52,14 @@ const anadirHijo = async (bloque, nombre, tipo) => {
   await bloque.locator('[data-hijo-form] select').selectOption(tipo)
   await bloque.locator('[data-hijo-crear]').click()
   await bloque.locator(`[data-hijo][data-nombre="${nombre}"]`).waitFor({ timeout: 5000 })
+}
+
+/** Abre el «Más» de una columna: sus acciones suben en una hoja desde abajo. Devuelve la hoja. */
+const abrirMasDeColumna = async (col) => {
+  await col.locator('[data-columna-mas]').click()
+  const hoja = p.locator('[data-hoja-columna]')
+  await hoja.waitFor({ timeout: 5000 })
+  return hoja
 }
 
 try {
@@ -95,7 +103,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const columnasCriterio = await p.locator('th.criterio-th').count()
   await p.getByRole('button', { name: /⚙ Instrumentos/ }).click()
@@ -135,7 +143,8 @@ try {
   await foto('familias-cal-02-instrumentos')
 
   console.log('\n4. «Evaluar hoy» con Cuaderno escribe en el hijo')
-  await p.locator('[data-instr-th][data-nombre="Cuaderno"] [data-sesion-abrir]').click()
+  // Sin herramienta, «Evaluar hoy» es la segunda opción: va tras el «Más» de la columna.
+  await (await abrirMasDeColumna(p.locator('[data-instr-th][data-nombre="Cuaderno"]'))).locator('[data-sesion-abrir]').click()
   const sesion = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesion.waitFor({ timeout: 5000 })
   await sesion.locator('[data-sesion-fila]').first().locator('button.nivel-3').click()
@@ -155,15 +164,63 @@ try {
   // observación) dice «sin herramienta» y la deja elegir ahí mismo.
   const colCuaderno = p.locator('[data-instr-th][data-nombre="Cuaderno"]')
   ok(await colCuaderno.locator('[data-herramienta-definir]').count() === 1, 'la cabecera de Cuaderno ofrece «Definir herramienta»')
-  ok((await colCuaderno.locator('[data-herramienta-definir]').textContent()).includes('Definir herramienta'), 'como acción principal: no tiene herramienta')
+  ok((await colCuaderno.locator('[data-herramienta-definir]').textContent()).includes('Definir herramienta'), 'en su «Más»: no tiene herramienta')
+
+  console.log('\n4a. «Calificar» sin herramienta: la clase en una lista, con calificativos')
+  ok(await colCuaderno.locator('[data-nota-abrir]').isVisible(), 'la acción principal de la columna es «Calificar»')
+  await colCuaderno.locator('[data-nota-abrir]').click()
+  const directa = p.getByRole('dialog', { name: /^Calificar: Cuaderno/ })
+  await directa.waitFor({ timeout: 5000 })
+  ok(await directa.locator('[data-sin-herramienta]').count() === 1 && await directa.locator('[data-herramienta-definir]').count() === 1,
+    'dice que es nota directa, sin herramienta, y ofrece definirla')
+  const filasNota = directa.locator('[data-fila-nota]')
+  ok(await filasNota.count() >= 2 && await filasNota.first().getAttribute('data-actual') !== null, 'una fila por alumno, y la primera es la actual')
+  ok(await filasNota.first().locator('[data-calificativo]').count() === 5, 'cada alumno tiene los cinco calificativos')
+  const antesDirecta = (await filasNota.first().locator('[data-nota-puesta]').textContent()).trim()
+  await filasNota.first().locator('[data-calificativo="SB"]').click()
+  await directa.locator('[data-fila-nota]').nth(1).and(directa.locator('[data-actual]')).waitFor({ timeout: 5000 })
+  ok((await filasNota.first().locator('[data-nota-puesta]').textContent()).trim() === '9,5', 'SB guarda un 9,5')
+  ok(await filasNota.first().getAttribute('data-actual') === null, 'y pasa sola al siguiente alumno')
+  e = await estado()
+  ok(e.notas.filter(n => n.instrumento_id === cuaderno.id && n.valor === 9.5).length >= 1 && !e.notas.some(n => n.instrumento_id === famTaboa.id),
+    'la nota se guarda con la actividad, en sus criterios', JSON.stringify(e.notas.slice(0, 3)))
+  await filasNota.nth(1).locator('[data-nota-exacta]').fill('6,25')
+  await filasNota.nth(1).locator('[data-nota-exacta]').blur()
+  await p.waitForFunction(() => document.querySelectorAll('[data-fila-nota]')[1]?.querySelector('[data-nota-puesta]')?.textContent.trim() === '6,3', null, { timeout: 5000 })
+  ok(true, 'la nota exacta también se guarda (6,25 se enseña como 6,3)')
+  await directa.locator('[data-nota-deshacer]').click()
+  await p.waitForFunction(() => document.querySelectorAll('[data-fila-nota]')[1]?.querySelector('[data-nota-puesta]')?.textContent.trim() === '—', null, { timeout: 5000 })
+  ok(true, '«Deshacer» devuelve al segundo alumno a como estaba, sin nota')
+  await filasNota.first().locator('[data-calificativo="SB"]').click()
+  await p.waitForFunction(() => document.querySelector('[data-fila-nota] [data-nota-puesta]')?.textContent.trim() === '—', null, { timeout: 5000 })
+  ok(true, 'volver a pulsar el mismo calificativo quita la nota')
+  // Se deja como estaba (un 7,5) para los pasos siguientes.
+  await filasNota.first().locator('[data-nota-exacta]').fill(antesDirecta)
+  await filasNota.first().locator('[data-nota-exacta]').blur()
+  await p.waitForFunction((v) => document.querySelector('[data-fila-nota] [data-nota-puesta]')?.textContent.trim() === v, antesDirecta, { timeout: 5000 })
+  await directa.locator('[data-sesion-nota-hecho]').click()
+  await directa.waitFor({ state: 'hidden', timeout: 5000 })
+  await p.waitForTimeout(600)
   ok(await colCuaderno.locator('[data-sesion-abrir]').count() === 1, 'y «Evaluar hoy» sigue disponible como segunda opción')
-  await colCuaderno.locator('[data-sesion-abrir]').click()
+  {
+    const hoja = await abrirMasDeColumna(colCuaderno)
+    ok(await hoja.getAttribute('data-nombre') === 'Cuaderno' && await hoja.locator('button.hoja-accion').count() >= 3, 'el «Más» de la columna sube una hoja con sus acciones')
+    await p.waitForTimeout(300) // sube con una animación corta
+    await foto('familias-cal-hoja-mas')
+    const caja = await hoja.boundingBox(), alto = p.viewportSize().height
+    ok(caja && Math.abs(caja.y + caja.height - alto) < 2, 'pegada al borde de abajo de la pantalla', JSON.stringify(caja))
+    await p.keyboard.press('Escape')
+    await hoja.waitFor({ state: 'hidden', timeout: 3000 })
+    ok(await colCuaderno.locator('[data-columna-mas]').getAttribute('aria-expanded') === 'false', 'Esc la cierra sin hacer nada')
+    await (await abrirMasDeColumna(colCuaderno)).locator('[data-sesion-abrir]').click()
+    await hoja.waitFor({ state: 'hidden', timeout: 3000 })
+  }
   const sesionSin = p.getByRole('dialog', { name: /^Evaluar hoy: Cuaderno/ })
   await sesionSin.waitFor({ timeout: 5000 })
   ok(await sesionSin.locator('[data-sin-herramienta] [data-elegir-herramienta="rubrica"]').count() === 1, '«Evaluar hoy» dice que falta la herramienta y la deja elegir')
   await sesionSin.getByRole('button', { name: 'Hecho' }).click()
   await sesionSin.waitFor({ state: 'hidden', timeout: 5000 })
-  await colCuaderno.locator('[data-herramienta-definir]').click()
+  await (await abrirMasDeColumna(colCuaderno)).locator('[data-herramienta-definir]').click()
   const elegir = p.locator('[data-elegir-herramienta-dialogo]')
   await elegir.waitFor({ timeout: 5000 })
   await elegir.locator('[data-elegir-herramienta="lista"]').click()
@@ -176,7 +233,7 @@ try {
   await editor.waitFor({ state: 'hidden', timeout: 5000 })
   await p.waitForTimeout(900)
   ok(await colCuaderno.locator('[data-herramienta-definir]').count() === 0, 'con la lista guardada, la cabecera ya no pide herramienta')
-  ok((await colCuaderno.locator('[data-sesion-abrir]').textContent()).includes('Calificar con la rúbrica'), 'y el botón pasa a «Calificar con la rúbrica»')
+  ok((await colCuaderno.locator('[data-sesion-abrir]').textContent()).includes('Calificar'), 'y el botón pasa a «Calificar con la rúbrica»')
   await colCuaderno.locator('[data-sesion-abrir]').click()
   const sesionLista = p.getByRole('dialog', { name: /^Calificar con la rúbrica: Cuaderno/ })
   await sesionLista.waitFor({ timeout: 8000 })

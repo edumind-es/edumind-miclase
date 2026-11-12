@@ -19,6 +19,7 @@ import {
 import { diagnostico, hacerCopia, inspeccionarCopia, restaurarDesdeCopia, ultimaCopia, ultimoErrorDeCopia } from '@/db/copia'
 import type { Diagnostico } from '@/db/copiaFormato'
 
+import { confirmar } from '@/utils/confirmar'
 type Estado = {
   destino: DestinoCopia | null
   permiso: PermissionState
@@ -91,7 +92,7 @@ export default function CopiaCarpeta({ onCambio, desbloqueado }: { onCambio?: ()
   }
 
   const desactivar = async () => {
-    if (!confirm('Dejar de copiar automáticamente. Lo que ya está en la carpeta no se borra.\n\n¿Seguir?')) return
+    if (!await confirmar('Dejar de copiar automáticamente. Lo que ya está en la carpeta no se borra.\n\n¿Seguir?')) return
     await olvidarDestino()
     setMsg({ tipo: 'ok', texto: 'Copia automática desactivada. La carpeta se queda como está.' })
     await refrescar()

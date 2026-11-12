@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -28,7 +28,7 @@ const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 const dialogos = []
-p.on('dialog', d => { dialogos.push(d.message()); d.accept() })
+await aceptarConfirmaciones(p, t => dialogos.push(t))
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Filas de una tabla de IndexedDB (con las borradas, para contar). */
@@ -139,7 +139,7 @@ try {
   await p.waitForURL(/\/evaluacion/)
   await p.waitForTimeout(1500)
   ok(/unidad_id=99000001/.test(p.url()), 'el Calificador abre con la unidad', p.url())
-  ok(await p.locator('.tab-unidad').filter({ hasText: /El poder de las palabras|UD3/ }).first().count() === 1, 'la pestaña de la UD3 está')
+  ok(await p.locator('[data-unidad-select] option').filter({ hasText: /El poder de las palabras|UD3/ }).first().count() === 1, 'la UD3 está en el selector de unidad')
 
   console.log('\n5. Borrar, mover y crear a mano')
   await p.goto(BASE + '/planificacion?fecha=2026-11-11', { waitUntil: 'networkidle' })
@@ -210,6 +210,45 @@ try {
   const md = await (await descarga).path().then(r => import('node:fs').then(fs => fs.readFileSync(r, 'utf8')))
   ok(/# Programación semanal · 6ºA/.test(md) && /Semana del 9 al 13 de noviembre de 2026/.test(md) && /Lectura do conto do Magosto/.test(md),
     'el .md exportado lleva la clase, la semana y lo editado a mano')
+
+  console.log('\n8. Pedir la semana a una IA y volcar su respuesta, marcada')
+  await p.locator('[data-volcar-abrir]').click()
+  await p.locator('[data-ia-semana-toggle]').click()
+  const promptIA = p.locator('[data-ia-semana-prompt]')
+  await p.waitForFunction(() => (document.querySelector('[data-ia-semana-prompt]')?.value || '').includes('# Programación semanal'), null, { timeout: 8000 })
+  const textoPrompt = await promptIA.inputValue()
+  ok(/6ºA/.test(textoPrompt) && /Semana del 9 al 13 de noviembre de 2026/.test(textoPrompt), 'el prompt lleva la clase y la semana que se mira', textoPrompt.slice(0, 120))
+  ok(/El poder de las palabras/.test(textoPrompt) && /9:00-9:50/.test(textoPrompt), 'las unidades de la programación y el horario que ya se conoce')
+  ok(await p.locator('[data-ia-semana] [data-aviso-contexto-ia]').count() === 1, 'las indicaciones llevan el aviso de no escribir datos del alumnado')
+  await p.locator('[data-ia-semana-indicaciones]').fill('El jueves hay salida.')
+  await p.waitForTimeout(200)
+  ok((await promptIA.inputValue()).includes('El jueves hay salida.'), 'lo que escribe el docente entra en el prompt')
+  ok(!(await p.locator('[data-volcar-de-ia]').isChecked()), 'sin haber pedido nada, el texto no se da por escrito por una IA')
+  await p.locator('[data-ia-semana-copiar]').click()
+  await p.locator('[role="dialog"] [data-borrador-ia]').waitFor({ timeout: 5000 }).catch(() => {})
+  ok(await p.locator('[data-volcar-de-ia]').isChecked() && await p.locator('[role="dialog"] [data-borrador-ia]').count() === 1,
+    'tras copiar el prompt, lo que se pegue queda marcado como borrador de IA')
+  await p.locator('[data-volcar-fichero]').setInputFiles(MD)
+  await p.locator('[data-volcar-guardar]:not([disabled])').waitFor({ timeout: 15000 })
+  await p.locator('[data-volcar-guardar]').click()
+  await p.locator('[data-plan-aviso]').filter({ hasText: /Volcadas 25 sesiones/ }).waitFor({ timeout: 8000 })
+  const deIA = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const filas = await new Promise((res) => {
+      const tx = db.transaction('planificacion', 'readonly').objectStore('planificacion').getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    return { total: filas.length, marcadas: filas.filter(f => f.generada_ia === true).length }
+  })
+  ok(deIA.total === 25 && deIA.marcadas === 25, 'las 25 sesiones volcadas llevan la marca de IA', JSON.stringify(deIA))
+  await sesion('2026-11-09', '1ª').click()
+  await detalle.waitFor({ timeout: 5000 })
+  ok(await detalle.locator('[data-borrador-ia]').count() === 1, 'el detalle de la sesión dice que es un borrador de IA')
+  await detalle.getByRole('button', { name: 'Cerrar' }).click()
+  const descargaIA = p.waitForEvent('download')
+  await p.locator('[data-plan-exportar]').click()
+  const mdIA = await (await descargaIA).path().then(r => import('node:fs').then(fs => fs.readFileSync(r, 'utf8')))
+  ok(mdIA.includes('<!-- generada-ia -->'), 'y el .md exportado conserva la marca')
 } catch (e) {
   ok(false, 'la prueba ha terminado sin excepciones', e.message)
   await foto('planificacion-error').catch(() => {})

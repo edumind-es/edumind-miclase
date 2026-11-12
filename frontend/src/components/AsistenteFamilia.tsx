@@ -124,7 +124,7 @@ export default function AsistenteFamilia({ familia, asignaturaNombre, cobertura,
                       {p.porUnidad
                         ? <>Se crean <strong>{cobertura.length}</strong>: {cobertura.map(u => `${nombreDe(i)} · ${u.nombre}`).slice(0, 3).join(', ')}{cobertura.length > 3 ? '…' : ''}, cada uno con los criterios de su unidad.</>
                         : ids.length === 0
-                          ? <span style={{ color: '#92400e' }}>Ningún criterio de la familia habla de esto: se crearía vacío, para marcarlos a mano.</span>
+                          ? <span style={{ color: '#92400e' }}>Ningún criterio del instrumento habla de esto: se crearía vacío, para marcarlos a mano.</span>
                           : <>Criterios: <strong>{ids.join(' · ')}</strong></>}
                     </div>
                   </div>
@@ -135,14 +135,14 @@ export default function AsistenteFamilia({ familia, asignaturaNombre, cobertura,
 
           {elegidas.length > 0 && !hayPorUnidad && sinCubrir.length > 0 && (
             <div data-sin-cubrir style={{ marginTop: 12, padding: '9px 12px', borderRadius: 8, fontSize: 12, background: 'var(--azul-100)', color: 'var(--azul-900)', lineHeight: 1.5 }}>
-              <strong>Sin dueño: {sinCubrir.join(', ')}.</strong> Ningún instrumento marcado los recoge; se seguirían calificando directamente con «{familia.nombre}», o se los puedes dar a alguno después.
+              <strong>Sin dueño: {sinCubrir.join(', ')}.</strong> Ninguna actividad marcada los recoge; se seguirían calificando directamente con «{familia.nombre}», o se los puedes dar a alguna después.
             </div>
           )}
           {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12.5, marginTop: 10 }}>{error}</div>}
 
           <div style={{ display: 'flex', gap: 8, marginTop: 14, alignItems: 'center' }}>
             <button data-asistente-crear className="btn-primary" onClick={crear} disabled={creando || elegidas.length === 0} style={{ fontSize: 13 }}>
-              {creando ? 'Creando…' : `Crear ${elegidas.reduce((s, p) => s + (p.porUnidad ? cobertura.length : 1), 0)} instrumento${elegidas.reduce((s, p) => s + (p.porUnidad ? cobertura.length : 1), 0) !== 1 ? 's' : ''}`}
+              {creando ? 'Creando…' : `Crear ${elegidas.reduce((s, p) => s + (p.porUnidad ? cobertura.length : 1), 0)} actividad${elegidas.reduce((s, p) => s + (p.porUnidad ? cobertura.length : 1), 0) !== 1 ? 'es' : ''}`}
             </button>
             <button className="btn-secondary" onClick={() => onCerrar(0)} disabled={creando} style={{ fontSize: 13 }}>Cancelar</button>
           </div>

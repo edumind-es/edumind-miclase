@@ -17,13 +17,21 @@
  * suman 100 (el cálculo normaliza por la suma, así que no rompe nada; es
  * solo para que el docente vea lo que ha escrito).
  */
-import { useState } from 'react'
-import type { ReglaArea, ReglaFinal } from '@/db/localDb'
-import { REGLAS_AREA, REGLAS_FINAL, normalizarReglaArea, normalizarReglaFinal, parsearPesosTrimestres } from '@/db/calculo'
-import { actualizarAsignatura } from '@/db/queries'
+import { useEffect, useState } from 'react'
+import type { ReglaArea, ReglaFinal, ReglaUnidades } from '@/db/localDb'
+import {
+  REGLAS_AREA, REGLAS_FINAL, REGLAS_UNIDADES, normalizarReglaArea, normalizarReglaFinal, normalizarReglaUnidades,
+  parsearPesosTrimestres,
+} from '@/db/calculo'
+import { actualizarAsignatura, actualizarUnidad, getUnidades } from '@/db/queries'
 
 /** Lo mínimo del área que hace falta aquí: el panel trabaja con su propio tipo recortado. */
-type AreaMin = { id?: number; pesos_trimestres?: string; regla_final?: ReglaFinal | null; regla_area?: ReglaArea | null }
+type AreaMin = {
+  id?: number; pesos_trimestres?: string; regla_final?: ReglaFinal | null; regla_area?: ReglaArea | null
+  regla_unidades?: ReglaUnidades | null
+}
+/** Una unidad con el peso que le da la programación, para editarlo aquí. */
+type UnidadPeso = { id: number; nombre: string; trimestre: number | null; peso: string }
 type Props = { asignatura: AreaMin; onCambio?: () => void }
 
 const ORDINAL: Record<number, string> = { 1: '1er trimestre', 2: '2º trimestre', 3: '3er trimestre' }
@@ -32,7 +40,34 @@ export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
   const [pesos, setPesos] = useState<Record<number, number>>(() => parsearPesosTrimestres(asignatura.pesos_trimestres))
   const [regla, setRegla] = useState<ReglaFinal>(() => normalizarReglaFinal(asignatura.regla_final))
   const [reglaArea, setReglaArea] = useState<ReglaArea>(() => normalizarReglaArea(asignatura.regla_area))
+  const [reglaUnidades, setReglaUnidades] = useState<ReglaUnidades>(() => normalizarReglaUnidades(asignatura.regla_unidades))
+  const [unidades, setUnidades] = useState<UnidadPeso[]>([])
   const [guardado, setGuardado] = useState('')
+
+  // Las unidades solo hacen falta para escribir sus pesos.
+  useEffect(() => {
+    let vigente = true
+    if (asignatura.id == null) return
+    getUnidades(asignatura.id).then(us => {
+      if (vigente) setUnidades(us.map(u => ({ id: u.id!, nombre: u.nombre, trimestre: u.trimestre ?? null, peso: u.peso ? String(u.peso) : '' })))
+    })
+    return () => { vigente = false }
+  }, [asignatura.id])
+  const sinPeso = unidades.filter(u => !(Number(u.peso) > 0))
+
+  const guardarReglaUnidades = async (nueva: ReglaUnidades) => {
+    setReglaUnidades(nueva)
+    await actualizarAsignatura(asignatura.id!, { regla_unidades: nueva })
+    setGuardado('Regla guardada')
+    onCambio?.()
+  }
+
+  const guardarPesoUnidad = async (u: UnidadPeso) => {
+    const peso = Number(u.peso.replace(',', '.'))
+    await actualizarUnidad(u.id, { peso: Number.isFinite(peso) && peso > 0 ? peso : null })
+    setGuardado('Peso de la unidad guardado')
+    onCambio?.()
+  }
 
   const total = pesos[1] + pesos[2] + pesos[3]
   const descripcion = REGLAS_FINAL.find(r => r.id === regla)!.descripcion
@@ -69,6 +104,44 @@ export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
         <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '6px 0 0' }}>
           {descripcionArea} Un instrumento sin nota en el trimestre no cuenta. La nota de cada criterio no cambia.
         </p>
+      </div>
+
+      <div>
+        <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Unidades de un mismo trimestre</div>
+        <select value={reglaUnidades} onChange={e => guardarReglaUnidades(e.target.value as ReglaUnidades)} data-regla-unidades
+          style={{ fontSize: 14, padding: '6px 8px', maxWidth: 320 }} aria-label="Cómo cuentan las unidades de un trimestre">
+          {REGLAS_UNIDADES.map(r => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+        </select>
+        <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '6px 0 0' }}>
+          {REGLAS_UNIDADES.find(r => r.id === reglaUnidades)!.descripcion} La nota de cada unidad no cambia: cambia lo que cuenta cada una en el trimestre.
+        </p>
+        {reglaUnidades === 'peso' && (
+          <div data-pesos-unidad style={{ marginTop: 8 }}>
+            {unidades.length === 0 ? (
+              <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: 0 }}>Esta área todavía no tiene unidades.</p>
+            ) : (
+              <div style={{ display: 'grid', gap: 5 }}>
+                {unidades.map((u, i) => (
+                  <label key={u.id} style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input type="number" min={0} step={1} value={u.peso} data-peso-unidad={u.id} placeholder="—"
+                      aria-label={`Peso de ${u.nombre}`}
+                      onChange={e => setUnidades(us => us.map((x, j) => j === i ? { ...x, peso: e.target.value } : x))}
+                      onBlur={() => guardarPesoUnidad(u)}
+                      style={{ width: 64, padding: '4px 6px', fontSize: 14 }} />
+                    <span>{u.nombre}{u.trimestre ? <span style={{ color: 'var(--gris-500)' }}> · T{u.trimestre}</span> : null}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+            <p data-pesos-unidad-aviso style={{ fontSize: 12.5, margin: '6px 0 0', color: sinPeso.length ? 'var(--ambar-600, #b45309)' : 'var(--gris-600)' }}>
+              {unidades.length > 0 && sinPeso.length === unidades.length
+                ? 'Ninguna unidad tiene peso: mientras tanto, todas cuentan igual.'
+                : sinPeso.length
+                  ? `${sinPeso.length} unidad${sinPeso.length !== 1 ? 'es' : ''} sin peso: cuenta${sinPeso.length !== 1 ? 'n' : ''} con la media de las demás.`
+                  : 'El peso se compara entre las unidades del mismo trimestre; no hace falta que sumen 100.'}
+            </p>
+          </div>
+        )}
       </div>
 
       <div>

@@ -13,7 +13,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -33,7 +33,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 const estado = () => p.evaluate(async () => {
@@ -109,7 +109,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="instrumentos"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
   await p.waitForTimeout(600)
   const idxProba = await p.locator('[data-instr-th]').evaluateAll(ths => ths.findIndex(t => /Proba/.test(t.dataset.nombre)))
@@ -140,7 +140,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1000)
 
   console.log('\n3. La familia se llama como la de Luis y se añade el primer hijo: el gestor ofrece convertir')
@@ -261,7 +261,12 @@ try {
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="instrumentos"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
+  // Los avisos de la programación van tras su contador, encima de la matriz.
+  const contador = p.locator('[data-avisos-toggle]')
+  await contador.waitFor({ timeout: 8000 })
+  ok(/aviso/.test(await contador.textContent()), 'la barra cuenta los avisos en vez de apilarlos', await contador.textContent())
+  await contador.click()
   const aviso = p.locator('[data-familias-escondidas]')
   await aviso.waitFor({ timeout: 8000 })
   const textoAviso = await aviso.textContent()

@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -27,7 +27,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 const notas = () => p.evaluate(async () => {
@@ -85,7 +85,7 @@ try {
   console.log('\n2. Primera vez en el Calificador: por instrumento y con la tarjeta')
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-instr-th]').count() >= 1, 'sin elección previa, abre por instrumento')
   ok(await p.locator('[data-vista="instrumentos"][aria-pressed="true"]').count() === 1, 'y el conmutador lo marca')
@@ -105,7 +105,7 @@ try {
   await p.waitForTimeout(1500)
   ok(await p.locator('[data-presentacion]').count() === 0, 'tras «Entendido» no vuelve a salir en este aparato')
   ok(await p.locator('[data-instr-th]').count() >= 1, 'y sigue por instrumento')
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
 
   console.log('\n3. Pegar una columna de Excel, por orden de lista')
@@ -149,6 +149,63 @@ try {
   ok(n[1].notas.every(x => x.valor === 5), 'Bello no estaba en la hoja y conserva su 5')
   const celda = p.locator('tbody tr').nth(2).locator('[data-celda-instr]').first()
   ok((await celda.textContent()).startsWith('9'), 'la matriz lo enseña', await celda.textContent())
+
+  console.log('\n5. El mínimo de consecución de PROENS se ve al calificar')
+  await celda.click()
+  const panel = p.getByRole('dialog', { name: /^Evaluar / })
+  await panel.waitFor({ timeout: 5000 })
+  const minimo = panel.locator('[data-minimo-criterio]')
+  await minimo.waitFor({ timeout: 5000 })
+  const textoMinimo = (await minimo.textContent()).trim()
+  ok(/^Mínimo: \S/.test(textoMinimo), 'el panel de la casilla enseña el mínimo del criterio', textoMinimo.slice(0, 70))
+  const guardado = await p.evaluate(async () => {
+    const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+    const ucs = await new Promise((res) => {
+      const tx = db.transaction('unidad_criterios', 'readonly').objectStore('unidad_criterios').getAll()
+      tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+    })
+    return ucs.map(u => (u.minimo || '').trim()).filter(Boolean)
+  })
+  ok(guardado.includes(textoMinimo.replace(/^Mínimo:\s*/, '')), 'y es uno de los que trae la programación')
+  await minimo.click()
+  ok(await minimo.getAttribute('aria-expanded') === 'true', 'al tocarlo se despliega entero')
+  await foto('aterrizaje-04-minimo')
+
+  console.log('\n6. Análisis de un alumno frente al grupo, desde Seguimiento')
+  await panel.getByRole('button', { name: /Cerrar/ }).first().click().catch(() => {})
+  await p.keyboard.press('Escape').catch(() => {})
+  await p.getByRole('link', { name: 'Seguimiento', exact: true }).click()
+  await p.waitForTimeout(1200)
+  await p.getByRole('tab', { name: /Por alumno/ }).click()
+  const abrirAnalisis = p.locator('[data-analisis-abrir]')
+  await abrirAnalisis.first().waitFor({ timeout: 8000 })
+  ok(await abrirAnalisis.count() === 3, 'cada alumno de la tabla abre su análisis')
+  await abrirAnalisis.first().click()
+  const analisis = p.locator('[data-analisis-alumno]')
+  await analisis.waitFor({ timeout: 8000 })
+  await analisis.locator('[data-analisis-grupo]').waitFor({ timeout: 8000 })
+  const textoGrupo = await analisis.locator('[data-analisis-grupo]').textContent()
+  // Abad 6, Bello 5, Casal 9 en la misma columna: mediana 6.
+  ok(/3 alumnos/.test(textoGrupo) && /mediana\s*6/.test(textoGrupo) && /moda/.test(textoGrupo), 'dice media, mediana y moda del grupo', textoGrupo.slice(0, 140))
+  ok(/Abad Ríos, Ana/.test(await analisis.textContent()) && await analisis.locator('[data-analisis-fila="area"]').count() === 1, 'con la nota del área de Ana frente al grupo')
+  ok(/no salen en el informe impreso/.test(textoGrupo), 'y avisa de que con tres notas el papel no dará las cifras del grupo')
+  ok(await analisis.locator('[data-analisis-imprimir]').isEnabled(), 'se puede imprimir el informe')
+  await foto('aterrizaje-05-analisis')
+  // El foco se queda dentro del diálogo (utils/foco.ts) y vuelve a quien lo abrió.
+  const dentro = () => p.evaluate(() => !!document.activeElement?.closest('.modal-overlay'))
+  ok(await dentro(), 'al abrir, el foco está dentro del diálogo')
+  let fuera = 0
+  for (let i = 0; i < 40; i++) { await p.keyboard.press('Tab'); if (!await dentro()) fuera++ }
+  for (let i = 0; i < 5; i++) { await p.keyboard.press('Shift+Tab'); if (!await dentro()) fuera++ }
+  ok(fuera === 0, 'el tabulador da la vuelta sin salir del diálogo', `${fuera} veces fuera`)
+  await analisis.getByRole('button', { name: 'Cerrar' }).click()
+  await analisis.waitFor({ state: 'hidden', timeout: 5000 })
+  await p.waitForTimeout(200)
+  ok(await p.evaluate(() => document.activeElement?.hasAttribute('data-analisis-abrir') ?? false), 'al cerrar, el foco vuelve al nombre que lo abrió')
+  // Las pestañas se recorren con las flechas.
+  await p.getByRole('tab', { name: /Por alumno/ }).focus()
+  await p.keyboard.press('ArrowLeft')
+  ok(await p.getByRole('tab', { name: /Competencias clave/ }).getAttribute('aria-selected') === 'true', 'la flecha izquierda pasa a la pestaña anterior')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {

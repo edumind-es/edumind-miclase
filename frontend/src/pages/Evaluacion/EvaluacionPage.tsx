@@ -30,6 +30,7 @@ import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import PruebaEditor from '@/components/PruebaEditor'
 import InformePrueba from '@/components/InformePrueba'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
+import SesionNota from '@/components/SesionNota'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
@@ -48,6 +49,7 @@ import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
+import { confirmar } from '@/utils/confirmar'
 type Criterio = { id: string; descripcion: string; objetivo_id?: string | null; peso?: number } & ConexionDeCriterio
 
 /** Lo que hace falta para pintar el criterio ampliado donde toca. */
@@ -77,14 +79,25 @@ function vistaGuardada(): Vista | null {
   } catch { return null }
 }
 /**
- * Las pestañas de unidad salen por número («UD3 · T1»), con el título en el
- * tooltip y debajo, en una línea, el de la unidad abierta. Decisión de Luis:
- * con doce unidades, los títulos ocupaban tres filas y empujaban la matriz,
- * que es lo que importa. Se recuerda en el aparato: es comodidad, no dato.
+ * La última unidad abierta en cada área. Sin esto se aterrizaba siempre en
+ * «Todo el curso», que es de solo lectura, y había que volver a buscar la
+ * unidad cada vez que se entraba a calificar. Se recuerda en el aparato: es
+ * comodidad, no dato. Elegir «Todo el curso» a propósito la olvida.
  */
-const CLAVE_UNIDADES = 'miclase.calificador.unidades'
-function unidadesConNombre(): boolean {
-  try { return localStorage.getItem(CLAVE_UNIDADES) === 'nombres' } catch { return false }
+const CLAVE_UNIDAD = 'miclase.calificador.unidad'
+function unidadRecordada(asignaturaId: number): number | null {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_UNIDAD) || '{}') as Record<string, number>
+    return typeof todo[asignaturaId] === 'number' ? todo[asignaturaId] : null
+  } catch { return null }
+}
+function recordarUnidad(asignaturaId: number, unidadId: number | null) {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_UNIDAD) || '{}') as Record<string, number>
+    if (unidadId === null) delete todo[asignaturaId]
+    else todo[asignaturaId] = unidadId
+    localStorage.setItem(CLAVE_UNIDAD, JSON.stringify(todo))
+  } catch { /* sin almacenamiento: se olvida y ya */ }
 }
 /**
  * El número de la unidad: el que lleve en el nombre («UD 3», «Unidade 3.»,
@@ -178,15 +191,13 @@ export default function EvaluacionPage() {
   /** Los tres trimestres y la final, solo en «Todo el curso». */
   const [resumen, setResumen] = useState<DatosResumen | null>(null)
   const [vistaElegida, setVistaElegida] = useState<Vista | null>(vistaGuardada)
-  const [nombresUnidad, setNombresUnidad] = useState(unidadesConNombre)
-  const alternarNombresUnidad = () => {
-    const v = !nombresUnidad
-    setNombresUnidad(v)
-    try { localStorage.setItem(CLAVE_UNIDADES, v ? 'nombres' : 'numeros') } catch { /* sin almacenamiento: no pasa nada */ }
-  }
+  /** Los avisos de la programación van tras un contador: no empujan la matriz. */
+  const [avisosAbiertos, setAvisosAbiertos] = useState(false)
   const [sesion, setSesion] = useState<ColumnaInstrumento | null>(null)
   /** Columna sin herramienta cuya cabecera ha pedido definirla. */
   const [definirEn, setDefinirEn] = useState<ColumnaInstrumento | null>(null)
+  /** Columna sin herramienta que se está calificando con nota directa, toda la clase. */
+  const [notaEn, setNotaEn] = useState<ColumnaInstrumento | null>(null)
   const [pegarEn, setPegarEn] = useState<ColumnaInstrumento | null>(null)
   /** Columna cuyas notas de esta unidad se van a llevar a otro instrumento. */
   const [moverEn, setMoverEn] = useState<ColumnaInstrumento | null>(null)
@@ -291,7 +302,13 @@ export default function EvaluacionPage() {
     getUnidades(asignaturaId).then(us => {
       setUnidades(us)
       const pedida = unidadParam ? Number(unidadParam) : null
-      setUnidadId(pedida && us.some(u => u.id === pedida) ? pedida : null)
+      if (pedida && us.some(u => u.id === pedida)) { setUnidadId(pedida); return }
+      // Sin unidad en la URL, la última que se abrió en esta área, pero solo
+      // si es del trimestre de la barra: la casilla lleva el trimestre de la
+      // barra, y abrir en enero la unidad de diciembre invitaría a poner las
+      // notas nuevas en una unidad del trimestre pasado.
+      const recordada = us.find(u => u.id === unidadRecordada(asignaturaId))
+      setUnidadId(recordada && (!recordada.trimestre || recordada.trimestre === trimestre) ? recordada.id! : null)
     })
   }, [asignaturaId, unidadParam])
 
@@ -311,10 +328,15 @@ export default function EvaluacionPage() {
   useEffect(() => {
     if (!asignaturaId) { setMatriz(null); setResumen(null); return }
     setCargando(true)
+    let vigente = true
     const carga = resumenDelCurso
-      ? getResumenCurso(asignaturaId).then(r => { setResumen(r); setMatriz(r ? r.porTrimestre[trimestre] ?? r.porTrimestre[1] : null) })
-      : getMatrizEvaluacion(asignaturaId, unidadId, trimestre).then(m => { setResumen(null); setMatriz(m) })
-    carga.then(() => setCargando(false)).catch(() => setCargando(false))
+      ? getResumenCurso(asignaturaId).then(r => { if (!vigente) return; setResumen(r); setMatriz(r ? r.porTrimestre[trimestre] ?? r.porTrimestre[1] : null) })
+      : getMatrizEvaluacion(asignaturaId, unidadId, trimestre).then(m => { if (!vigente) return; setResumen(null); setMatriz(m) })
+    carga.then(() => { if (vigente) setCargando(false) }).catch(() => { if (vigente) setCargando(false) })
+    // Una carga que llega tarde no pisa a la siguiente: al abrir directamente
+    // en una unidad, la matriz de «todo el curso» (más lenta) llegaba después
+    // y la pantalla enseñaba una unidad con los datos de otra vista.
+    return () => { vigente = false }
   }, [asignaturaId, unidadId, trimestre, refresco, resumenDelCurso])
 
   // ── Derivados ─────────────────────────────────────────────────────────
@@ -329,6 +351,11 @@ export default function EvaluacionPage() {
 
   const alumnos: Alumno[] = matriz?.alumnos ?? []
   const unidadActual = unidades.find(u => u.id === unidadId)
+  /** Abrir una unidad (o «Todo el curso») desde las pestañas: se recuerda. */
+  const elegirUnidad = (id: number | null) => {
+    setUnidadId(id)
+    if (asignaturaId) recordarUnidad(asignaturaId, id)
+  }
   // Al cambiar de área vuelve a decidirse si toca presentarla.
   useEffect(() => { setPresentacionCerrada(false) }, [asignaturaId])
 
@@ -353,7 +380,7 @@ export default function EvaluacionPage() {
       n.con_respuestas ? `${n.con_respuestas} con respuestas de examen` : '',
       n.diario ? `${n.diario} registro${n.diario !== 1 ? 's' : ''} del diario` : '',
     ].filter(Boolean).join(', ')
-    if (!confirm(`Vaciar «${col.ins.nombre}» solo en «${unidadActual.nombre}» (${trimestre}º trimestre):\n· ${partes}, de ${n.alumnos} alumno${n.alumnos !== 1 ? 's' : ''}.\n\nLas notas no se borran: quedan como nota anterior (fantasma), sin contar, y se recuperan desde la casilla o con «Deshacer». Las demás unidades y el instrumento no cambian.`)) return
+    if (!await confirmar({ texto: `Vaciar «${col.ins.nombre}» solo en «${unidadActual.nombre}» (${trimestre}º trimestre):\n· ${partes}, de ${n.alumnos} alumno${n.alumnos !== 1 ? 's' : ''}.\n\nLas notas no se borran: quedan como nota anterior (fantasma), sin contar, y se recuperan desde la casilla o con «Deshacer». Las demás unidades y el instrumento no cambian.`, aceptar: 'Vaciar la columna', peligro: true })) return
     const v = await vaciarColumna(col.ins.instrumento_id, unidadId, trimestre)
     setColumnaAviso({ texto: `Vaciada «${col.ins.nombre}» en «${unidadActual.nombre}»: ${partes}. Siguen como nota anterior en cada casilla.`, vaciado: v })
     setRefresco(r => r + 1)
@@ -403,6 +430,10 @@ export default function EvaluacionPage() {
   const sinColumna = useMemo(
     () => (matriz && unidadId ? familiasSinCriterio(matriz, columnasInstr, trimestre) : []),
     [matriz, columnasInstr, trimestre, unidadId])
+  /** Avisos de la programación que hay ahora mismo, para el contador de la barra. */
+  const nAvisos = (sinInstrumento > 0 ? 1 : 0) + (fueraDeTrimestre > 0 ? 1 : 0)
+    + (vista === 'instrumentos' && sinColumna.length > 0 ? 1 : 0)
+    + (vista === 'instrumentos' && matriz?.familiasConDatosEscondidos.length ? 1 : 0)
 
   /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
   const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
@@ -515,10 +546,33 @@ export default function EvaluacionPage() {
 
   return (
     <>
-      {/* Cabecera */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Calificador</h1>
+      {/* Cabecera: la unidad y lo poco que no es la matriz, en una sola fila */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '14px 0', flexWrap: 'wrap', gap: 10 }}>
+        {/* El título no ocupa fila: la barra de arriba ya dice clase y área, y lo
+            que importa aquí es la unidad. Sigue en el documento para el lector de pantalla. */}
+        <h1 className="page-title" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', margin: 0 }}>Calificador</h1>
+        {asignaturaId && unidades.length > 0 ? (
+          <label className="unidad-selector">
+            <span>Unidad</span>
+            <select data-unidad-select aria-label="Unidad" value={unidadId ?? ''}
+              onChange={e => elegirUnidad(e.target.value ? Number(e.target.value) : null)}>
+              <option value="">Todo el curso · resumen, solo lectura</option>
+              {unidades.map((u, i) => (
+                <option key={u.id} value={u.id} data-unidad-nombre={u.nombre}>
+                  {/^\s*UD\s*\d/i.test(u.nombre) ? u.nombre : `UD${numeroDeUnidad(u.nombre, i)} · ${u.nombre}`}{u.trimestre ? ` · T${u.trimestre}` : ''} · {u.criterios.length} crit.
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : <span />}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          {nAvisos > 0 && (
+            <button type="button" className="btn-secondary" data-avisos-toggle aria-expanded={avisosAbiertos}
+              onClick={() => setAvisosAbiertos(v => !v)} style={{ fontSize: 13, borderColor: '#b45309', color: '#92400e' }}
+              title="Cosas de la programación que conviene revisar; no impiden calificar">
+              {avisosAbiertos ? '▴' : '▾'} {nAvisos} aviso{nAvisos !== 1 ? 's' : ''}
+            </button>
+          )}
           {asignaturaId && (
             <div className="vista-conmutador" role="group" aria-label="Vista del calificador">
               <button type="button" data-vista="criterios" aria-pressed={vista === 'criterios'}
@@ -564,54 +618,10 @@ export default function EvaluacionPage() {
         </div>
       ) : (
         <>
-          {/* Pestañas de área */}
-          <div className="tabs-area" role="tablist" aria-label="Áreas">
-            {asignaturas.map(a => (
-              <button key={a.id} role="tab" aria-selected={a.id === asignaturaId}
-                className={`tab-area${a.id === asignaturaId ? ' activa' : ''}`}
-                onClick={() => elegirAsignatura(a.id!)}>
-                {a.nombre_display}
-              </button>
-            ))}
-          </div>
-
-          {/* Subpestañas de unidad */}
-          {unidades.length > 0 ? (
-            <div className="tabs-unidad" role="tablist" aria-label="Unidades de la programación">
-              <button role="tab" aria-selected={unidadId === null}
-                className={`tab-unidad${unidadId === null ? ' activa' : ''}`}
-                onClick={() => setUnidadId(null)}>
-                Todo el curso
-                <span className="trim">{criterios.length} criterios</span>
-              </button>
-              {unidades.map((u, i) => (
-                <button key={u.id} role="tab" aria-selected={u.id === unidadId}
-                  className={`tab-unidad${u.id === unidadId ? ' activa' : ''}`}
-                  data-unidad-nombre={u.nombre}
-                  onClick={() => setUnidadId(u.id!)}
-                  title={nombresUnidad ? (u.descripcion || u.nombre) : `${u.nombre}${u.descripcion ? ` — ${u.descripcion}` : ''}`}>
-                  {nombresUnidad ? u.nombre : `UD${numeroDeUnidad(u.nombre, i)}`}
-                  <span className="trim">{u.trimestre ? `T${u.trimestre}` : ''}{nombresUnidad ? ` · ${u.criterios.length}` : ''}</span>
-                </button>
-              ))}
-              <button type="button" className="tab-unidad-modo" data-unidades-modo aria-pressed={nombresUnidad}
-                onClick={alternarNombresUnidad}
-                title={nombresUnidad ? 'Pestañas por número: UD1, UD2… con el título al pasar por encima' : 'Pestañas con el título de cada unidad'}>
-                {nombresUnidad ? '▴ solo números' : '▾ títulos'}
-              </button>
-            </div>
-          ) : null}
-          {/* Con las pestañas por número, el título de la unidad abierta va aquí, en una sola línea. */}
-          {unidades.length > 0 && !nombresUnidad && unidadActual && (
-            <div className="unidad-actual" data-unidad-actual>
-              <strong>UD{numeroDeUnidad(unidadActual.nombre, unidades.indexOf(unidadActual))}</strong> · {unidadActual.nombre}
-              <span className="trim"> · {unidadActual.criterios.length} criterios</span>
-            </div>
-          )}
           {resumenDelCurso && (
             <div className="unidad-actual resumen-curso" data-resumen-curso>
               <span>
-                <strong>Todo el curso</strong> · solo lectura: los tres trimestres (1T · 2T · 3T) y la nota final, {vista === 'criterios' ? 'por criterio' : 'por familia de instrumentos'}.
+                <strong>Todo el curso</strong> · solo lectura: los tres trimestres (1T · 2T · 3T) y la nota final, {vista === 'criterios' ? 'por criterio' : 'por instrumento'}.
                 <span className="trim"> El trimestre de la barra no manda aquí. Pulsa una casilla para ver de dónde sale; para calificar, entra en una unidad.</span>
               </span>
               {vista === 'criterios' && competenciasDelArea.length > 0 && (
@@ -641,8 +651,8 @@ export default function EvaluacionPage() {
             </div>
           )}
 
-          {sinInstrumento > 0 && (
-            <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+          {avisosAbiertos && sinInstrumento > 0 && (
+            <div data-aviso-sin-instrumento style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
               Asígnales uno en la programación y podrás evaluarlos.{' '}
               <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
@@ -651,7 +661,7 @@ export default function EvaluacionPage() {
             </div>
           )}
 
-          {vista === 'instrumentos' && sinColumna.length > 0 && (
+          {avisosAbiertos && vista === 'instrumentos' && sinColumna.length > 0 && (
             <div data-familias-sin-criterio style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>
                 {sinColumna.map(f => `«${f.nombre}» (${f.peso} %)`).join(', ')} no evalúa{sinColumna.length !== 1 ? 'n' : ''} ningún criterio en {unidadActual?.nombre ?? 'esta unidad'}
@@ -676,7 +686,7 @@ export default function EvaluacionPage() {
             </div>
           )}
 
-          {vista === 'instrumentos' && !!matriz?.familiasConDatosEscondidos.length && (
+          {avisosAbiertos && vista === 'instrumentos' && !!matriz?.familiasConDatosEscondidos.length && (
             <div data-familias-escondidas style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               {matriz.familiasConDatosEscondidos.map(f => (
                 <div key={f.id}>
@@ -684,7 +694,7 @@ export default function EvaluacionPage() {
                     f.examenes ? `${f.examenes} examen${f.examenes !== 1 ? 'es' : ''}` : '',
                     f.calificaciones ? `${f.calificaciones} nota${f.calificaciones !== 1 ? 's' : ''}` : '',
                     f.diario ? `${f.diario} registro${f.diario !== 1 ? 's' : ''} del diario` : '',
-                  ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con instrumentos dentro, la familia solo resume.
+                  ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con actividades dentro, el instrumento solo resume.
                 </div>
               ))}
               Las notas siguen contando. Muévelo al instrumento que lo hizo desde{' '}
@@ -695,8 +705,8 @@ export default function EvaluacionPage() {
             </div>
           )}
 
-          {fueraDeTrimestre > 0 && (
-            <div style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)' }}>
+          {avisosAbiertos && fueraDeTrimestre > 0 && (
+            <div data-aviso-fuera-trimestre style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)' }}>
               <strong>{fueraDeTrimestre} criterio{fueraDeTrimestre !== 1 ? 's' : ''} no se evalúa{fueraDeTrimestre !== 1 ? 'n' : ''} en el {trimestre}º trimestre</strong> —
               su instrumento está configurado para otros. No hay nada que arreglar:
               cambia de trimestre o edita el instrumento en <strong>⚙ Instrumentos</strong>.
@@ -814,6 +824,7 @@ export default function EvaluacionPage() {
                   onCorregir={col => abrirPorInstrumento(0, col)}
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
+                  onNota={unidadId ? col => setNotaEn(col) : undefined}
                   onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
@@ -829,7 +840,7 @@ export default function EvaluacionPage() {
                     setRefresco(r => r + 1)
                   } : undefined}
                   onQuitarCriterio={unidadId ? async (col, cr) => {
-                    if (!confirm(`«${col.ins.nombre}» dejará de evaluar ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».\n\nLas notas ya puestas se conservan (quedan sin columna hasta volver a asociarlo). Las demás unidades no cambian.`)) return
+                    if (!await confirmar({ texto: `«${col.ins.nombre}» dejará de evaluar ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}».\n\nLas notas ya puestas se conservan (quedan sin columna hasta volver a asociarlo). Las demás unidades no cambian.`, aceptar: 'Quitar el criterio' })) return
                     try {
                       await quitarCriterioDeColumna(col.ins.instrumento_id, unidadId, cr)
                       setColumnaAviso({ texto: `«${col.ins.nombre}» ya no evalúa ${cr} en «${unidadActual?.nombre ?? 'esta unidad'}». Las notas se conservan.` })
@@ -997,7 +1008,7 @@ export default function EvaluacionPage() {
           {!cargando && matriz && columnas.length > 0 && alumnos.length > 0 && (
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12, fontSize: 11.5, color: 'var(--gris-600)', alignItems: 'center' }}>
               <span>{resumen
-                ? `Todo el curso es un resumen: aquí no se califica. Cada ${vista === 'criterios' ? 'criterio' : 'familia'} lleva sus tres trimestres${vista === 'criterios' ? ' y la final' : ''}; la nota de un trimestre es la media de las unidades y después la ponderación por instrumento y familia. Pulsa una casilla para ver de dónde sale.`
+                ? `Todo el curso es un resumen: aquí no se califica. Cada ${vista === 'criterios' ? 'criterio' : 'instrumento'} lleva sus tres trimestres${vista === 'criterios' ? ' y la final' : ''}; la nota de un trimestre es la media de las unidades y después la ponderación por instrumento y familia. Pulsa una casilla para ver de dónde sale.`
                 : vista === 'instrumentos' ? 'Cada columna es un instrumento; la casilla es la media del alumno con él. Pulsa para corregir.' : 'Pulsa una casilla para evaluar.'}</span>
               {[10, 8, 6, 5, 3].map(v => {
                 const c = calificativo(v)
@@ -1165,6 +1176,21 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onCambio={() => setRefresco(r => r + 1)}
           onCerrar={() => setSesion(null)}
+        />
+      )}
+
+      {notaEn && matriz && (
+        <SesionNota
+          columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
+          matriz={matriz}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setNotaEn(null)}
+          onDefinir={() => { const col = notaEn; setNotaEn(null); setDefinirEn(col) }}
         />
       )}
 

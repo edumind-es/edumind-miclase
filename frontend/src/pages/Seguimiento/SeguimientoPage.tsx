@@ -13,10 +13,12 @@ import {
 import { getResumenPorCriterio, getCalificacionesPorGrupo, getInstrumentos, getUnidades, getMedidasDeAsignatura } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
-import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, type NotaCompetencia } from '@/db/calculo'
+import { calcularNotaArea, calificativo, normalizarReglaArea, normalizarReglaFinal, perfilCompetencial, pesosVinculoDeUnidades, pesosDeUnidades, type NotaCompetencia } from '@/db/calculo'
 import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
+import AnalisisAlumno from '@/components/AnalisisAlumno'
 import { verNeae } from '@/db/datosSensibles'
 import CompetenciasClaveGrupo from '@/components/CompetenciasClaveGrupo'
+import Pestanas from '@/components/comunes/Pestanas'
 
 type FilaAlumno = {
   alumno: Alumno
@@ -31,6 +33,8 @@ export default function SeguimientoPage() {
   const [datosCriterios, setDatosCriterios] = useState<any[]>([])
   const [datosCompetencias, setDatosCompetencias] = useState<any[]>([])
   const [filas, setFilas] = useState<FilaAlumno[]>([])
+  /** El alumno cuyo análisis frente al grupo está abierto. */
+  const [analisisDe, setAnalisisDe] = useState<Alumno | null>(null)
   const [cargando, setCargando] = useState(false)
   const [vista, setVista] = useState<'criterios' | 'competencias' | 'clave' | 'alumnado'>('criterios')
 
@@ -74,7 +78,8 @@ export default function SeguimientoPage() {
         const n = calcularNotaArea(
           asignaturaId, propias, instrumentos as Instrumento[],
           asig?.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(asig?.regla_final),
-          normalizarReglaArea(asig?.regla_area), { medidas: medidas.get(al.id!) })
+          normalizarReglaArea(asig?.regla_area),
+          { medidas: medidas.get(al.id!), pesosUnidad: pesosDeUnidades(asig?.regla_unidades, unidades) })
 
         for (const comp of perfilCompetencial(n.criterios, pesosCriterio) as NotaCompetencia[]) {
           const e = acumulado.get(comp.numero) ??
@@ -150,18 +155,13 @@ export default function SeguimientoPage() {
             <Tarjeta titulo="Criterios con datos" valor={String(datosCriterios.length)} color="var(--gris-600)" />
           </div>
 
-          <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
-            {(['criterios', 'competencias', 'clave', 'alumnado'] as const).map(v => (
-              <button key={v} onClick={() => setVista(v)}
-                className={`tab-unidad${vista === v ? ' activa' : ''}`}
-                style={{ fontSize: 13 }}>
-                {v === 'criterios' ? '📊 Por criterio'
-                  : v === 'competencias' ? '🎯 Por competencia específica'
-                  : v === 'clave' ? '🔑 Competencias clave'
-                  : '👥 Por alumno'}
-              </button>
-            ))}
-          </div>
+          <Pestanas etiqueta="Qué se mira del seguimiento" style={{ marginBottom: 14 }} activa={vista} alCambiar={setVista}
+            pestanas={[
+              { id: 'criterios', etiqueta: '📊 Por criterio' },
+              { id: 'competencias', etiqueta: '🎯 Por competencia específica' },
+              { id: 'clave', etiqueta: '🔑 Competencias clave' },
+              { id: 'alumnado', etiqueta: '👥 Por alumno' },
+            ]} />
 
           {/* Mira todas las áreas de la clase: no depende de la que haya elegida */}
           {vista === 'clave' && grupoId && <CompetenciasClaveGrupo grupoId={grupoId} />}
@@ -246,7 +246,11 @@ export default function SeguimientoPage() {
                     return (
                       <tr key={f.alumno.id} style={{ background: i % 2 ? 'var(--gris-100)' : 'white' }}>
                         <td style={{ padding: '9px 14px', fontWeight: 500 }}>
-                          {f.alumno.apellidos}, {f.alumno.nombre}
+                          <button type="button" data-analisis-abrir={f.alumno.id} onClick={() => setAnalisisDe(f.alumno)}
+                            title="Ver su análisis frente al grupo"
+                            style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', fontWeight: 500, color: 'var(--azul-700)', textDecoration: 'underline', cursor: 'pointer', textAlign: 'left' }}>
+                            {f.alumno.apellidos}, {f.alumno.nombre}
+                          </button>
                           {f.alumno.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                         </td>
                         {[1, 2, 3].map(t => (
@@ -275,6 +279,9 @@ export default function SeguimientoPage() {
             </div>
           )}
         </>
+      )}
+      {analisisDe && grupoId && (
+        <AnalisisAlumno alumno={analisisDe} grupoId={grupoId} asignaturaId={asignaturaId} onCerrar={() => setAnalisisDe(null)} />
       )}
     </>
   )

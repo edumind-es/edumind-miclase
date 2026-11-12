@@ -35,6 +35,16 @@ export interface PreguntaPrueba {
   max: number
   criterio_id?: string | null
   /**
+   * Unidad a la que pertenece la pregunta, en un examen que cuenta en varias
+   * (`unidades_vinculadas`): un examen de la UD1 y la UD2 pone en cada unidad
+   * la nota de SUS preguntas, y un alumno puede suspender una y aprobar la
+   * otra. Sin unidad, la pregunta cuenta en todas (decisión de Luis, nov
+   * 2026), como una sin criterio cuenta para todos. Opcional y sin índice,
+   * dentro del JSON del examen. Un aparato sin actualizar la ignora al leer
+   * y la BORRA si vuelve a guardar el examen: hay que actualizar todos.
+   */
+  unidad_id?: number | null
+  /**
    * Aspecto o bloque que trabaja la pregunta («Ríos», «Comprensión»,
    * «Cálculo»), texto libre del docente. No cuenta para la nota: sirve al
    * informe de la prueba para decir QUÉ falla la clase, más fino que el
@@ -164,6 +174,7 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
       : []
     // `null` no es «la primera»: Number(null) da 0 y pondría correcta donde no la hay.
     const correcta = p?.correcta == null ? NaN : Number(p.correcta)
+    const unidadPregunta = p?.unidad_id == null ? NaN : Number(p.unidad_id)
     const aspecto = typeof p?.aspecto === 'string' ? p.aspecto.replace(/\s+/g, ' ').trim() : ''
     const clave = typeof p?.clave === 'string' ? p.clave.replace(/\s+/g, ' ').trim() : ''
     const correccion = typeof p?.correccion === 'string' ? p.correccion.replace(/\s+/g, ' ').trim() : ''
@@ -183,6 +194,7 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
       enunciado: String(p?.enunciado ?? '').trim(),
       max: maxLimpio,
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
+      ...(Number.isInteger(unidadPregunta) && unidadPregunta > 0 ? { unidad_id: unidadPregunta } : {}),
       ...(aspecto ? { aspecto } : {}),
       ...(clave ? { clave } : {}),
       ...(correccion ? { correccion } : {}),
@@ -207,6 +219,39 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     ...(tipo === 'niveles' ? { escala: escala.some(n => n.valor > 0) ? escala : ESCALA_POR_DEFECTO } : {}),
     ...(vinculadas.length ? { unidades_vinculadas: vinculadas } : {}),
     ...(d?.generada_ia === true ? { generada_ia: true } : {}),
+  }
+}
+
+/** ¿Alguna pregunta dice de qué unidad es? Sin eso, el examen da la misma nota en todas. */
+export function tieneUnidadesPorPregunta(def: PruebaDef): boolean {
+  return def.preguntas.some(p => p.unidad_id != null)
+}
+
+/**
+ * El examen tal como cuenta en una unidad: sus preguntas y las que no dicen
+ * unidad. Es lo que se le pasa a `notaDePrueba` para la nota de esa unidad;
+ * las respuestas no se tocan (se guardan enteras en todas). Sin unidad, o sin
+ * ninguna pregunta etiquetada, es el examen entero: lo de siempre.
+ */
+export function pruebaDeUnidad(def: PruebaDef, unidad_id: number | null | undefined): PruebaDef {
+  if (!unidad_id || !tieneUnidadesPorPregunta(def)) return def
+  return { ...def, preguntas: def.preguntas.filter(p => p.unidad_id == null || p.unidad_id === unidad_id) }
+}
+
+/**
+ * Quita de las preguntas las unidades que no son del examen (`validas`): la
+ * de una unidad que se desvinculó, o las de otra clase en un examen del banco.
+ */
+export function sinUnidadesAjenas(def: PruebaDef, validas: number[]): PruebaDef {
+  if (!tieneUnidadesPorPregunta(def)) return def
+  const ok = new Set(validas)
+  return {
+    ...def,
+    preguntas: def.preguntas.map(p => {
+      if (p.unidad_id == null || ok.has(p.unidad_id)) return p
+      const { unidad_id: _fuera, ...resto } = p
+      return resto
+    }),
   }
 }
 

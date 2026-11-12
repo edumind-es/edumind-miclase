@@ -7,6 +7,7 @@ import {
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { useParametrosClase } from '@/contexto/useParametrosClase'
 
+import { confirmar } from '@/utils/confirmar'
 type Alumno  = { id: number; nombre: string; apellidos: string }
 type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null }
 type Estado  = 'presente' | 'ausente' | 'justificada' | 'retraso'
@@ -104,7 +105,7 @@ export default function SesionesPage() {
    * fecha equivocada se quedaba ahí para siempre, contando en los informes.
    */
   const borrarSesion = async (s: Sesion) => {
-    const ok = window.confirm(
+    const ok = await confirmar(
       `¿Borrar la sesión del ${s.fecha}?\n\n` +
       'Se borra también su pase de lista y su diario. Las calificaciones no se tocan.')
     if (!ok) return

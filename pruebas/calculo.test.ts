@@ -6,6 +6,7 @@ import {
   porcentajesEnFamilia, pesosAlFijarPorcentaje,
   notaFinal, normalizarReglaFinal, REGLAS_FINAL,
   normalizarReglaArea, REGLAS_AREA,
+  pesosDeUnidades, normalizarReglaUnidades, REGLAS_UNIDADES,
 } from '../frontend/src/db/calculo'
 
 let fallos = 0
@@ -383,6 +384,35 @@ console.log('\n15. Unidades estancas: la misma casilla en dos unidades del trime
   ok(sola.valor === 5 && !sola.virtual, 'una sola unidad se devuelve tal cual, editable')
   const conHueco = fundirUnidades([enUd(1, 8), { ...enUd(2, 0), valor: null }])[0]
   ok(conHueco.valor === 8, 'una unidad sin nota no baja la media: no cuenta', `${conHueco.valor}`)
+}
+
+console.log('\n15b. Unidades ponderadas por el peso de la programación (regla del área)')
+{
+  const enUnidad = (unidad_id: number, valor: number) => ({ ...cal(1, 10, 'CE1.1', 1, valor), unidad_id })
+  const unidades = [{ id: 1, peso: 15 }, { id: 2, peso: 5 }, { id: 3, peso: null }]
+  ok(pesosDeUnidades('iguales', unidades) === undefined && pesosDeUnidades(undefined, unidades) === undefined && pesosDeUnidades('rara', unidades) === undefined,
+    'sin declarar la regla (o con una desconocida), no hay pesos: todas cuentan igual')
+  ok(pesosDeUnidades('peso', [{ id: 1 }, { id: 2, peso: 0 }]) === undefined, 'con la regla puesta pero sin ningún peso escrito, también cuentan igual')
+  const pesos = pesosDeUnidades('peso', unidades)!
+  ok(pesos.porUnidad.get(1) === 15 && pesos.porUnidad.get(2) === 5 && !pesos.porUnidad.has(3) && pesos.defecto === 10,
+    'los pesos son los de la programación; una unidad sin peso entra con la media de las demás (10)', JSON.stringify([...pesos.porUnidad]) + ' · ' + pesos.defecto)
+  ok(normalizarReglaUnidades('peso') === 'peso' && normalizarReglaUnidades(null) === 'iguales' && REGLAS_UNIDADES.length === 2, 'la regla se normaliza: vacía → iguales')
+
+  // Un 4 en la unidad de peso 15 y un 8 en la de peso 5.
+  const notas = [enUnidad(1, 4), enUnidad(2, 8)]
+  ok(fundirUnidades(notas)[0].valor === 6, 'cada unidad igual: (4 + 8) / 2 = 6')
+  ok(fundirUnidades(notas, pesos)[0].valor === 5, 'por peso: (4·15 + 8·5) / 20 = 5', `${fundirUnidades(notas, pesos)[0].valor}`)
+  ok(fundirUnidades([...notas, enUnidad(3, 10)], pesos)[0].valor === (4 * 15 + 8 * 5 + 10 * 10) / 30,
+    'la unidad sin peso cuenta con el de defecto', `${fundirUnidades([...notas, enUnidad(3, 10)], pesos)[0].valor}`)
+  ok(fundirUnidades([enUnidad(1, 4), { ...enUnidad(2, 0), valor: null }], pesos)[0].valor === 4, 'una unidad sin nota sigue sin contar')
+  ok(fundirUnidades([enUnidad(1, 4)], pesos)[0].valor === 4 && !fundirUnidades([enUnidad(1, 4)], pesos)[0].virtual, 'con una sola unidad no cambia nada')
+
+  // En el cálculo del área, con y sin la regla.
+  const examen = [instr(10, 'Examen', 100)]
+  const igual = calcularNotaArea(1, notas, examen, undefined)
+  const porPeso = calcularNotaArea(1, notas, examen, undefined, new Map(), undefined, 'ponderada', 'instrumento', { pesosUnidad: pesos })
+  ok(igual.trimestres[1] === 6 && igual.criterios[0].trimestres[1] === 6, 'sin la regla, el área sigue dando 6')
+  ok(porPeso.trimestres[1] === 5 && porPeso.criterios[0].trimestres[1] === 5, 'con la regla, criterio y área dan 5', `${porPeso.trimestres[1]}`)
 }
 
 console.log('\n16. Regla de la nota final por área')

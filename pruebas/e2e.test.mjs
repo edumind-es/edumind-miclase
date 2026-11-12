@@ -1,4 +1,4 @@
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
@@ -175,17 +175,17 @@ await p.getByRole('link', { name: 'Calificador', exact: true }).click()
 await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
 await p.waitForTimeout(2000)
 
-const pestanasArea = await p.locator('.tab-area').count()
-ok(pestanasArea === 3, 'las 3 áreas salen como pestañas', `${pestanasArea} pestañas`)
-const subpestanas = await p.locator('.tab-unidad').count()
-ok(subpestanas > 1, 'las unidades salen como subpestañas', `${subpestanas} subpestañas`)
+const pestanasArea = await p.getByLabel('Área').locator('option').count()
+ok(pestanasArea === 3, 'las 3 áreas salen en el selector de área de la barra', `${pestanasArea} áreas`)
+const subpestanas = await p.locator('[data-unidad-select] option').count()
+ok(subpestanas > 1, 'las unidades salen en el selector de unidad', `${subpestanas} opciones`)
 await foto('09-matriz-todo-el-curso')
 
 if (subpestanas === 0) {
   console.log('\n  ── DIAGNÓSTICO ──')
-  const pestanas = await p.locator('.tab-area').allInnerTexts()
+  const pestanas = await p.getByLabel('Área').locator('option').allInnerTexts()
   console.log('  pestañas de área:', JSON.stringify(pestanas))
-  const activa = await p.locator('.tab-area.activa').innerText().catch(() => '(ninguna)')
+  const activa = await p.getByLabel('Área').evaluate(s => s.selectedOptions[0]?.textContent).catch(() => '(ninguna)')
   console.log('  pestaña activa:', activa)
   const texto = (await p.locator('main').innerText()).slice(0, 700)
   console.log('  contenido:\n   ' + texto.split('\n').join('\n   '))
@@ -215,7 +215,7 @@ if (subpestanas === 0) {
   process.exit(1)
 }
 
-await p.locator('.tab-unidad').nth(1).click()
+await elegirUnidad(p, 1)
 await p.waitForTimeout(1400)
 const celdas = await p.locator('.celda-btn').count()
 ok(celdas > 0, 'la matriz alumno × criterio se pinta', `${celdas} casillas`)
@@ -335,7 +335,7 @@ await p.waitForTimeout(800)
 
 ok(await p.locator('.celda-btn.cal-8').count() > 0, 'la casilla recibe la clase del semáforo')
 const fondoNota = await p.locator('.celda-btn.cal-8').first().evaluate(e => getComputedStyle(e).backgroundColor)
-ok(fondoNota === 'rgb(58, 155, 213)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
+ok(fondoNota === 'rgb(31, 111, 165)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
 await foto('12-matriz-con-nota')
 
 // ── 10b · Calificar sobre la rúbrica, indicador a indicador ─────────────
@@ -420,7 +420,7 @@ await p.waitForTimeout(800)
 
 // ── 11 · Casilla sin instrumento ────────────────────────────────────────
 console.log('\n11. Criterio sin instrumento asignado')
-await p.locator('.tab-unidad').nth(2).click()
+await elegirUnidad(p, 2)
 await p.waitForTimeout(1400)
 const sinInstr = p.locator('.celda-btn.sin-instrumento').first()
 if (await sinInstr.count()) {
@@ -442,17 +442,17 @@ await p.waitForTimeout(1800)
 ok((await p.getByText(/Selecciona un grupo desde/).count()) === 0, 'ya no exige llegar con ?grupo_id= en la URL')
 ok(await p.getByText('Media del grupo', { exact: true }).isVisible(), 'muestra el resumen del grupo directamente')
 await foto('14-seguimiento')
-ok(await p.getByRole('button', { name: /Por competencia/ }).isVisible(), 'hay vista de perfil por competencia específica')
-await p.getByRole('button', { name: /Por competencia/ }).click()
+ok(await p.getByRole('tab', { name: /Por competencia/ }).isVisible(), 'hay vista de perfil por competencia específica')
+await p.getByRole('tab', { name: /Por competencia/ }).click()
 await p.waitForTimeout(1200)
 await foto('15b-seguimiento-competencias')
-await p.getByRole('button', { name: /Competencias clave/ }).click()
+await p.getByRole('tab', { name: /Competencias clave/ }).click()
 await p.locator('[data-competencias-clave]').waitFor({ timeout: 10000 })
 ok(await p.locator('[data-competencia]').count() > 0, 'Seguimiento enseña las competencias clave de la clase con sus notas', `${await p.locator('[data-competencia]').count()} competencias`)
 await p.locator('[data-competencia]').first().click()
 ok(await p.locator('[data-descriptor]').count() > 0, 'y al desplegar una, sus descriptores operativos')
 await foto('15c-seguimiento-competencias-clave')
-await p.getByRole('button', { name: /Por alumno/ }).click()
+await p.getByRole('tab', { name: /Por alumno/ }).click()
 await p.waitForTimeout(900)
 await foto('15-seguimiento-alumnado')
 

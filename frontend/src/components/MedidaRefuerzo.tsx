@@ -17,6 +17,7 @@ import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
 import { parsearPesos, trimestresDeMedida } from '@/db/medidas'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 
+import { confirmar } from '@/utils/confirmar'
 type Props = {
   alumno: Alumno
   asignatura: Asignatura
@@ -116,7 +117,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
 
   const quitar = async () => {
     if (!medida) return
-    if (!window.confirm(`¿Quitar el refuerzo de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelve a contar con los porcentajes de la clase.`)) return
+    if (!await confirmar(`¿Quitar el refuerzo de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelve a contar con los porcentajes de la clase.`)) return
     await eliminarMedida(medida.id!)
     setPesos(new Map())
     setEstado('Refuerzo retirado')
@@ -157,7 +158,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
         <input type="number" min={0} max={100} value={cuenta ? pct : 0} disabled={!cuenta} data-refuerzo-pct
           onChange={e => onPct(Number(e.target.value) || 0)}
           style={{ width: 62, fontSize: 13, textAlign: 'center' }} aria-label={`Porcentaje de ${i.nombre}`} />
-        <span style={{ fontSize: 12, color: 'var(--gris-600)' }}>%{dentro ? ' de la familia' : ''}</span>
+        <span style={{ fontSize: 12, color: 'var(--gris-600)' }}>%{dentro ? ' del instrumento' : ''}</span>
         <label style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
           <input type="checkbox" checked={!cuenta} data-refuerzo-excluir
             onChange={e => alternarExclusion(i, e.target.checked, dentro ? hijosDe(instrumentos.find(x => x.id === i.familia_id)!) : familias)} />
@@ -202,7 +203,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
               </div>
             ))}
             <p data-refuerzo-total style={{ fontSize: 12, margin: '6px 0 0', color: totalFamilias === 100 ? 'var(--gris-600)' : 'var(--ambar-600, #b45309)' }}>
-              {totalFamilias === 100 ? 'Las familias suman 100.' : `Las familias suman ${totalFamilias}. El cálculo reparte proporcionalmente; conviene que sumen 100 para leerlos como porcentajes.`}
+              {totalFamilias === 100 ? 'Los instrumentos suman 100.' : `Los instrumentos suman ${totalFamilias}. El cálculo reparte proporcionalmente; conviene que sumen 100 para leerlos como porcentajes.`}
             </p>
           </div>
 
@@ -223,7 +224,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
                   Dentro de
                   <select value={nuevo.familia_id ?? ''} data-propio-familia
                     onChange={e => setNuevo(n => n && ({ ...n, familia_id: e.target.value ? Number(e.target.value) : null, en_lugar_de: null }))} style={{ fontSize: 12 }}>
-                    <option value="">— ninguna familia (suelto) —</option>
+                    <option value="">— ningún instrumento (suelta) —</option>
                     {familias.filter(f => !f.solo_medidas).map(f => <option key={f.id} value={f.id}>{f.nombre}</option>)}
                   </select>
                 </label>

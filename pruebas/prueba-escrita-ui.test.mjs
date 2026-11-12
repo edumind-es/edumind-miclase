@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -30,7 +30,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Lo que hay en la base de datos, leído desde la página. */
@@ -154,7 +154,7 @@ try {
 
   const inicio = await bd()
   const [cA, cB, cC] = inicio.criterios
-  await p.locator('.tab-unidad').nth(inicio.pestana).click()
+  await elegirUnidad(p, inicio.pestana)
   await p.waitForTimeout(1200)
   ok(inicio.criterios.length >= 3, 'la prueba escrita evalúa varios criterios en la unidad', inicio.criterios.join(', '))
 
@@ -239,7 +239,7 @@ try {
   await cerrarPanel()
 
   console.log('\n5. «Todo el curso» no corrige: explica de dónde sale la nota del examen')
-  await p.locator('.tab-unidad').first().click()
+  await elegirUnidad(p, 0)
   await p.waitForTimeout(1200)
   {
     // La casilla de Ana en el criterio del examen: en el resumen del curso no
@@ -258,7 +258,7 @@ try {
     await p.keyboard.press('Escape')
     await ficha.waitFor({ state: 'hidden', timeout: 5000 })
   }
-  await p.locator('.tab-unidad').nth(inicio.pestana).click()
+  await elegirUnidad(p, inicio.pestana)
   await p.waitForTimeout(1200)
 
   console.log('\n6. Cambiar a test con penalización y nota única')
@@ -412,7 +412,8 @@ try {
     const esperados = inicio.otrosCriterios.filter(c => [cA, cB].includes(c))
     ok(esperados.length >= 1, 'la prueba escrita evalúa en la otra unidad algún criterio del examen', `${inicio.otraUnidadNombre}: ${inicio.otrosCriterios.join(', ')}`)
     await vinculo.check()
-    ok(await aparece(editor.getByText(/la misma nota se pone en esas unidades/)), 'y explica lo que pasará al corregir')
+    ok(await aparece(editor.getByText(/la nota se pone también en esas unidades/)), 'y explica lo que pasará al corregir')
+    ok(await editor.locator('[data-pregunta-unidad]').count() === 4, 'con otra unidad vinculada, cada pregunta puede decir de cuál es')
     await editor.getByRole('button', { name: /Guardar examen/ }).click()
     await aparece(editor.getByText(/Notas recalculadas|Examen guardado/))
     d = await bd()
@@ -433,7 +434,7 @@ try {
     await foto('prueba-06-vinculado')
     await cerrarPanel()
     // Desde la otra unidad: la columna sabe que el examen es de la primera y abre corregido.
-    await p.locator('.tab-unidad').nth(inicio.otraPestana).click()
+    await elegirUnidad(p, inicio.otraPestana)
     await p.waitForTimeout(1200)
     await p.locator('[data-vista="instrumentos"]').click()
     await p.waitForTimeout(800)
@@ -450,12 +451,58 @@ try {
     ok(d.notas[0][cA]?.valor === 7.14 && Object.values(d.notasOtra[0]).every(n => n.respuestas === 4),
       `corregir desde la otra unidad cambia también la nota en la del examen (${cA} de Ana pasa a 7,14)`, JSON.stringify(d.notas[0][cA]))
     await cerrarPanel()
-    await p.locator('.tab-unidad').nth(inicio.pestana).click()
+    await elegirUnidad(p, inicio.pestana)
     await p.waitForTimeout(1200)
     await abrirCelda(1, cA)
   }
 
+  console.log('\n7d. Cada unidad recibe la nota de sus preguntas')
+  {
+    // Las preguntas 1, 2 y 3 son de la unidad del examen; la 4, de la otra.
+    await cerrarPanel()
+    await abrirCelda(0, cA)
+    await panel.getByRole('button', { name: '📝 Examen' }).click()
+    await editor.waitFor({ timeout: 8000 })
+    await aparece(editor.getByLabel('Título del examen'))
+    for (const n of [1, 2, 3]) await editor.getByLabel(`Unidad de la pregunta ${n}`).selectOption(String(inicio.ud1))
+    await editor.getByLabel('Unidad de la pregunta 4').selectOption(String(inicio.otraUnidad))
+    ok(await editor.locator('[data-unidad-sin-preguntas]').count() === 0, 'las dos unidades tienen alguna pregunta: sin aviso')
+    // Está corregido para Ana: pregunta si recalcular (se acepta).
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    await aparece(editor.getByText(/Notas recalculadas/))
+    d = await bd()
+    ok(JSON.stringify(d.examenes[0].def.preguntas.map(q => q.unidad_id ?? null)) === JSON.stringify([inicio.ud1, inicio.ud1, inicio.ud1, inicio.otraUnidad]),
+      'la unidad de cada pregunta se guarda dentro del examen', JSON.stringify(d.examenes[0].def.preguntas.map(q => q.unidad_id ?? null)))
+    // Ana: aciertos en 1 y 2 y la 4 en blanco. En la unidad del examen la 4 ya
+    // no cuenta (5 de 5 → 10); en la otra solo cuenta la 4, en blanco → 0.
+    ok(d.notas[0][cA]?.valor === 10, `al recalcular, en la unidad del examen ${cA} sale solo de sus preguntas (10)`, JSON.stringify(d.notas[0][cA]))
+    ok(Object.values(d.notasOtra[0]).length >= 1 && Object.values(d.notasOtra[0]).every(n => n.valor === 0 && n.respuestas === 4),
+      'y en la otra unidad, solo de la suya (en blanco: 0), con las respuestas enteras', JSON.stringify(d.notasOtra[0]))
+    await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    await examen.waitFor({ timeout: 6000 })
+    ok(await examen.locator('[data-pregunta="4"] [data-pregunta-otra-unidad]').count() === 1 && await examen.locator('[data-pregunta-otra-unidad]').count() === 1,
+      'el corrector marca la pregunta que es de otra unidad')
+    // Suspende la unidad del examen (fallos en 1 y 2) y aprueba la otra (acierto en la 4).
+    await examen.locator('[data-pregunta="1"]').getByRole('button', { name: /fallo/ }).click()
+    await p.waitForTimeout(400)
+    await examen.locator('[data-pregunta="2"]').getByRole('button', { name: /fallo/ }).click()
+    await p.waitForTimeout(400)
+    await examen.locator('[data-pregunta="4"]').getByRole('button', { name: /acierto/ }).click()
+    ok(await aparece(panel.getByText(new RegExp(`también en ${inicio.otraUnidadNombre} \\(10\\)`))), 'el aviso dice la nota de la otra unidad cuando es distinta')
+    await p.waitForTimeout(500)
+    d = await bd()
+    ok(d.notas[0][cA]?.valor != null && d.notas[0][cA].valor < 5, `Ana suspende ${cA} en la unidad del examen`, JSON.stringify(d.notas[0][cA]))
+    ok(Object.values(d.notasOtra[0]).every(n => n.valor === 10), 'y aprueba en la otra con un 10: un mismo examen, dos notas', JSON.stringify(d.notasOtra[0]))
+    ok(Object.keys(d.notasOtra[1]).length === 0, 'Bruno, sin corregir, no se toca')
+    await foto('prueba-06b-por-unidad')
+    await cerrarPanel()
+    await abrirCelda(1, cA)
+  }
+
   console.log('\n8. Quitar el examen conserva las notas')
+  // La nota de Bruno antes de quitar el examen (el paso 7d la recalculó con
+  // las preguntas de su unidad): es la que tiene que seguir.
+  const notaDeBruno = (await bd()).notas[1][cA]?.valor
   await panel.getByRole('button', { name: '📝 Examen' }).click()
   await editor.waitFor({ timeout: 8000 })
   await editor.getByRole('button', { name: 'Eliminar examen' }).click()
@@ -463,7 +510,7 @@ try {
   await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
   ok(await aparece(panel.locator('button.cal-8')), 'el panel vuelve a la nota a mano')
   d = await bd()
-  ok(d.examenes.length === 0 && d.notas[1][cA]?.valor === 6.43, 'sin examen, y la nota sigue ahí')
+  ok(d.examenes.length === 0 && notaDeBruno != null && d.notas[1][cA]?.valor === notaDeBruno, 'sin examen, y la nota sigue ahí', `${notaDeBruno} → ${d.notas[1][cA]?.valor}`)
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {

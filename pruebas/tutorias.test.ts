@@ -143,6 +143,18 @@ const html = documentoActaTutoria(t, {
   revisados: [{ tutoria_id: 1, fecha_tutoria: '2026-09-20T16:00', alumnos: [10], acuerdo: { clave: 'a1', texto: 'Revisar agenda', estado: 'cumplido' }, vencido: false }],
 })
 ok(html.startsWith('<!doctype html>') && html.includes('lm-plate-top'), 'es un documento Lámina')
+{
+  // La cabecera lleva la marca (el corro de clase): cinco mundos y la clase en el centro.
+  const marca = html.match(/<svg class="marca"[^>]*>(.*?)<\/svg>/)
+  ok(!!marca && (marca[1].match(/<circle /g) || []).length === 6, 'la cabecera lleva la marca: seis círculos')
+}
+{
+  // Al imprimir, papel blanco y franja fina: el fondo crudo tintaba la hoja entera.
+  const impresion = html.slice(html.indexOf('@media print'), html.indexOf('@media screen'))
+  ok(/\.hoja \{[^}]*background: #fff/.test(impresion) && /--lm-paper: #fff/.test(impresion), 'al imprimir la hoja va sobre blanco')
+  ok(/\.lm-plate-top \{ height: 1\.5mm/.test(impresion), 'y la franja de los Cinco Mundos queda en un filete')
+  ok(html.includes('--lm-paper: #e9e6dd'), 'en pantalla sigue el papel de la lámina')
+}
 ok(html.includes('García, Lucía') && html.includes('6.º A') && html.includes('05/11/2026 · 17:30'), 'lleva alumno, clase y fecha')
 ok(html.includes('Ana Pérez') && html.includes('Orientadora'), 'lleva los asistentes')
 ok(html.includes('Temas tratados') && html.includes('Observaciones') && html.indexOf('Temas tratados') < html.indexOf('Observaciones'), 'lleva los apartados en su orden')

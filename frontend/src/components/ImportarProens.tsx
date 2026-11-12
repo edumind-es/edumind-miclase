@@ -11,6 +11,7 @@ import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import AsistenteFamilia from './AsistenteFamilia'
 
+import { confirmar } from '@/utils/confirmar'
 /**
  * Importar la programación didáctica oficial (PROENS) en un área.
  *
@@ -140,7 +141,7 @@ export default function ImportarProens({
           motivo = err?.message || 'el PDF no se ha podido abrir'
         }
         if (motivo) {
-          const enviar = confirm(
+          const enviar = await confirmar(
             `No se ha podido leer la programación en este aparato (${motivo}).\n\n`
             + 'Se puede probar en el servidor de EDUmind: el PDF viaja hasta él, se convierte a texto '
             + 'y se borra en el momento, sin guardarse. Si la programación lleva anexos con datos de '
@@ -259,7 +260,7 @@ export default function ImportarProens({
                 ¿Qué haces dentro de cada uno?
               </div>
               <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.55, marginBottom: 10 }}>
-                Lo que trae la programación son <strong>familias</strong> con su peso. Lo que tú corriges de verdad
+                Lo que trae la programación son <strong>instrumentos</strong> con su peso. Lo que tú corriges de verdad
                 —el examen de cada unidad, el cuaderno, speaking, listening, el billete de salida— va dentro.
                 Dilo ahora y el calificador tendrá una columna por cada cosa; o déjalo para después, desde ⚙ Instrumentos.
               </div>
@@ -274,7 +275,7 @@ export default function ImportarProens({
                       <div style={{ flex: '1 1 200px', fontSize: 12.5 }}>
                         <strong>{familia.nombre}</strong> · {familia.peso} % · {nCriterios} criterio{nCriterios !== 1 ? 's' : ''}
                         <div style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
-                          {hijos.length === 0 ? 'Nada dentro todavía: se califica directamente con la familia.' : `Dentro: ${hijos.join(', ')}.`}
+                          {hijos.length === 0 ? 'Nada dentro todavía: se califica directamente con el instrumento.' : `Dentro: ${hijos.join(', ')}.`}
                         </div>
                       </div>
                       <button data-familia-asistente className="btn-primary" style={{ fontSize: 12 }} onClick={() => setAsistenteDe(familia.id!)}>

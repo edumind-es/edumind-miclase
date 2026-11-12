@@ -6,6 +6,7 @@
 import { useEffect, useState } from 'react'
 import { contarDatosSensibles, fijarDatosSensibles, useDatosSensibles } from '@/db/datosSensibles'
 
+import { confirmar } from '@/utils/confirmar'
 export default function AjustesDatosSensibles() {
   const d = useDatosSensibles()
   const [abierta, setAbierta] = useState(false)
@@ -13,12 +14,12 @@ export default function AjustesDatosSensibles() {
 
   useEffect(() => { if (abierta) contarDatosSensibles().then(setN).catch(() => setN(null)) }, [abierta, d])
 
-  const cambiar = (clave: 'neae' | 'evidencias', valor: boolean) => {
+  const cambiar = async (clave: 'neae' | 'evidencias', valor: boolean) => {
     if (valor) {
       const que = clave === 'neae'
         ? 'El indicador NEAE puede revelar datos de salud o discapacidad del alumnado.'
         : 'Las evidencias son imagen y voz de menores, y se guardan en este aparato.'
-      if (!confirm(`${que}\n\nÚsalo solo si tu centro lo autoriza. ¿Encender?`)) return
+      if (!await confirmar(`${que}\n\nÚsalo solo si tu centro lo autoriza. ¿Encender?`)) return
     }
     fijarDatosSensibles({ [clave]: valor })
   }

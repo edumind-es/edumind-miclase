@@ -20,6 +20,7 @@ import { AGREGACIONES } from '@/db/diario'
 import RubricaEditor from './RubricaEditor'
 import PruebaEditor from './PruebaEditor'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   asignaturaId: number
   asignaturaNombre: string
@@ -129,7 +130,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
       '',
       'Si solo sobra en una unidad, cancela y usa «Retirar de una unidad»: la programación de esa unidad deja de usarlo y lo demás no cambia.',
     ]
-    if (!confirm(lineas.join('\n'))) return
+    if (!await confirmar({ texto: lineas.join('\n'), aceptar: 'Retirar de todas las unidades', cancelar: 'No retirar', peligro: true })) return
     await eliminarInstrumento(ins.id!)
     await cargar()
   }
@@ -141,7 +142,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
     const unidad = u?.unidades.find(x => String(x.unidad_id) === retirando.unidad)
     if (!unidad) return
     const notas = unidad.calificaciones + unidad.diario
-    if (!confirm(`Retirar «${ins.nombre}» solo de «${unidad.nombre}».\n\nDeja de evaluar sus ${unidad.criterios} criterio${unidad.criterios !== 1 ? 's' : ''} en esa unidad; en las demás sigue igual.${notas ? ` Las ${unidad.calificaciones} nota${unidad.calificaciones !== 1 ? 's' : ''}${unidad.diario ? ` y ${unidad.diario} registro${unidad.diario !== 1 ? 's' : ''} del diario` : ''} de esa unidad se conservan, sin columna hasta que vuelvas a asignarlo.` : ''}`)) return
+    if (!await confirmar({ texto: `Retirar «${ins.nombre}» solo de «${unidad.nombre}».\n\nDeja de evaluar sus ${unidad.criterios} criterio${unidad.criterios !== 1 ? 's' : ''} en esa unidad; en las demás sigue igual.${notas ? ` Las ${unidad.calificaciones} nota${unidad.calificaciones !== 1 ? 's' : ''}${unidad.diario ? ` y ${unidad.diario} registro${unidad.diario !== 1 ? 's' : ''} del diario` : ''} de esa unidad se conservan, sin columna hasta que vuelvas a asignarlo.` : ''}`, aceptar: 'Retirar de esta unidad' })) return
     const n = await retirarInstrumentoDeUnidad(ins.id!, unidad.unidad_id)
     setRetirando(null)
     setAvisoUso(`«${ins.nombre}» ya no se usa en «${unidad.nombre}» (${n} criterio${n !== 1 ? 's' : ''} retirado${n !== 1 ? 's' : ''}). Las notas de esa unidad siguen guardadas.`)
@@ -206,7 +207,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
-              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos</span>
+              🎯 Qué evalúo — {asignaturaNombre} <span style={{ fontWeight: 500, color: 'var(--gris-600)', fontSize: 13 }}>· instrumentos y actividades</span>
             </h2>
             <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
           </div>
@@ -214,7 +215,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               criterio puede declarar el suyo en la programación, decir «peso
               total» a secas hacía creer que mandaba siempre. */}
           <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.55 }}>
-            Cada bloque es una <strong>familia</strong>: lo que la programación pesa en el área. Dentro de cada una va lo que haces de verdad. Reparto por defecto:{' '}
+            Cada bloque es un <strong>instrumento</strong>: lo que la programación pesa en el área. Dentro de cada uno van sus <strong>actividades</strong>: lo que haces de verdad. Reparto por defecto:{' '}
             <strong style={{ color: totalOk ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
               {total}%{totalOk ? ' ✓' : total > 100 ? ' (excede 100)' : ` (falta ${100 - total})`}
             </strong>

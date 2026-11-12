@@ -16,6 +16,7 @@ import { getUnidades, guardarMedida, eliminarMedida } from '@/db/queries'
 import { parsearCriterios, trimestresDeMedida, type CriteriosAdaptados, type Sustituto } from '@/db/medidas'
 import * as curriculo from '@/curriculo'
 
+import { confirmar } from '@/utils/confirmar'
 type Props = {
   alumno: Alumno
   asignatura: Asignatura
@@ -123,7 +124,7 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
 
   const quitar = async () => {
     if (!medida) return
-    if (!window.confirm(`¿Quitar la adaptación de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelven a contar todos los criterios con el texto de la clase.`)) return
+    if (!await confirmar(`¿Quitar la adaptación de ${alumno.nombre} en ${asignatura.nombre_display}?\n\nSus notas no cambian: vuelven a contar todos los criterios con el texto de la clase.`)) return
     await eliminarMedida(medida.id!)
     setCriterios({})
     setEstado('Adaptación retirada')

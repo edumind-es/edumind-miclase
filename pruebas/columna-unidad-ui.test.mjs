@@ -15,7 +15,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -37,7 +37,7 @@ const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 /** Los confirm se aceptan, pero se guarda lo que decían: tienen que nombrar unidad y cifras. */
 const dialogos = []
-p.on('dialog', d => { dialogos.push(d.message()); d.accept() })
+await aceptarConfirmaciones(p, t => dialogos.push(t))
 const ultimoDialogo = () => dialogos[dialogos.length - 1] ?? ''
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
@@ -93,7 +93,7 @@ const pegar = async (nombre, texto) => {
   await p.waitForTimeout(600)
 }
 const irAUnidad = async (pestana) => {
-  await p.locator('.tab-unidad').nth(pestana).click()
+  await elegirUnidad(p, pestana)
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 5000 })
   await p.waitForTimeout(600)
 }
@@ -262,16 +262,15 @@ try {
   ok(d.criteriosProba.length === 0, 'la prueba ya no evalúa nada en esa unidad')
   ok(d.notasProba.length > 0 && d.notasProbaOtra.length === otrasAntes, 'pero las notas siguen guardadas, en esa unidad y en la otra', `${d.notasProba.length}`)
   // Borrar del todo: el confirm dice TODAS las unidades y cifras. Se cancela: nada cambia.
-  p.removeAllListeners('dialog')
-  let textoBorrar = ''
-  p.once('dialog', d2 => { textoBorrar = d2.message(); d2.dismiss() })
+  const antesDeBorrar = dialogos.length
+  await rechazarSiguienteConfirmacion(p)
   await bloqueProba.getByRole('button', { name: 'Eliminar' }).click()
   await p.waitForTimeout(500)
+  const textoBorrar = dialogos.slice(antesDeBorrar).join('\n')
   ok(textoBorrar.includes('TODAS las unidades') && /\d+ unidades · \d+ notas/.test(textoBorrar) && textoBorrar.includes('Retirar de una unidad'),
     'el confirm de borrar dice que es de todas las unidades, con cifras, y ofrece la alternativa', textoBorrar.split('\n')[2])
   d = await bd()
   ok(d.proba === inicio.proba, 'cancelar no borra nada')
-  p.on('dialog', d2 => { dialogos.push(d2.message()); d2.accept() })
 
   ok(erroresConsola.length === 0, 'sin errores de JavaScript', erroresConsola.join(' | '))
 } catch (e) {

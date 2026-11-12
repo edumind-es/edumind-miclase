@@ -253,7 +253,7 @@ function SesionDiario({
                           onClick={() => marcar(al, n)}
                           title={`${ETIQUETAS_NIVEL[n]} (${nivelDiarioANota(n)})${activo ? ' · pulsar otra vez lo quita' : ''}`}
                           style={{
-                            width: 44, height: 40, borderRadius: 8, cursor: 'pointer', fontWeight: 800, fontSize: 15,
+                            width: 44, height: 44, borderRadius: 8, cursor: 'pointer', fontWeight: 800, fontSize: 15,
                             border: `2px solid ${activo ? 'var(--gris-900)' : 'transparent'}`,
                             background: activo ? c.color : hoy ? 'var(--gris-100)' : c.color,
                             color: activo ? 'white' : hoy ? 'var(--gris-500)' : 'white',
@@ -266,7 +266,7 @@ function SesionDiario({
                   </div>
                   <button type="button" onClick={() => setNotaAbierta(notaAbierta === al.id ? null : al.id!)}
                     title="Añadir una observación a este registro" aria-label={`Observación de ${al.nombre}`}
-                    style={{ background: 'none', border: '1px solid var(--gris-300)', borderRadius: 6, width: 30, height: 30, cursor: 'pointer', color: (hoy?.observacion || textos[al.id!]) ? 'var(--azul-700)' : 'var(--gris-500)' }}>
+                    style={{ background: 'none', border: '1px solid var(--gris-300)', borderRadius: 6, width: 44, height: 44, cursor: 'pointer', color: (hoy?.observacion || textos[al.id!]) ? 'var(--azul-700)' : 'var(--gris-500)' }}>
                     ✎
                   </button>
                   {notaAbierta === al.id && (

@@ -13,7 +13,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getPrueba, guardarExamenDeAlumno, type CeldaInstrumento, type DatosDeArea, type PruebaGuardada } from '@/db/queries'
-import { tieneClave, respuestaDeMarca, notaDePrueba, LETRAS, type PruebaDef } from '@/db/prueba'
+import { tieneClave, respuestaDeMarca, notaDePrueba, pruebaDeUnidad, LETRAS, type PruebaDef } from '@/db/prueba'
 import { aGris, leerHoja, aplicar, type LecturaHoja, type Homografia } from '@/utils/lectorHoja'
 import { centroBurbuja, BURBUJA } from '@/db/hojaOMR'
 import { sePuedeEscanear } from '@/utils/lectorQR'
@@ -218,7 +218,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     def.preguntas.forEach((p, i) => { r[p.id] = respuestaDeMarca(p, capturada.marcadas[i]) })
     return r
   }, [capturada, def])
-  const resultado = useMemo(() => def ? notaDePrueba(def, respuestas, criterios.map(c => c.id)) : null, [def, respuestas, criterios])
+  const resultado = useMemo(() => def ? notaDePrueba(pruebaDeUnidad(def, unidadId), respuestas, criterios.map(c => c.id)) : null, [def, respuestas, criterios, unidadId])
 
   const elegir = (i: number, j: number | null) => setCapturada(c => c && { ...c, marcadas: c.marcadas.map((m, k) => k === i ? (m === j ? null : j) : m) })
 
@@ -269,6 +269,16 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
           {listo && (
             <div data-escaner-camara style={{ display: capturada ? 'none' : 'grid', gridTemplateColumns: 'minmax(0, 1fr) 220px', gap: 14 }}>
               <div>
+                {/* Tras guardar se vuelve aquí sola: que se vea qué se guardó y qué toca. */}
+                {corregidos.length > 0 && (() => {
+                  const u = corregidos[corregidos.length - 1]
+                  return (
+                    <div data-escaner-guardada role="status" style={{ padding: '8px 12px', marginBottom: 8, borderRadius: 8, fontSize: 13.5, background: 'var(--verde-100)', color: 'var(--gris-900)' }}>
+                      ✓ Guardada la de <strong>{u.alumno.apellidos}, {u.alumno.nombre}</strong> · nota {u.nota ?? '—'}.{' '}
+                      {faltan.length > 0 ? 'Enseña la hoja siguiente.' : 'Ya están todas: puedes cerrar.'}
+                    </div>
+                  )
+                })()}
                 <div style={{ position: 'relative', background: '#000', borderRadius: 10, overflow: 'hidden', minHeight: 240 }}>
                   <video ref={videoRef} playsInline muted style={{ width: '100%', display: 'block', maxHeight: '60vh', objectFit: 'contain' }} />
                   <div data-escaner-aviso style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: '8px 12px', background: 'rgba(0,0,0,.55)', color: 'white', fontSize: 13 }}>

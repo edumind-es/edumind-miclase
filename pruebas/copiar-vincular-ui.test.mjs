@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -105,7 +105,7 @@ try {
   // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
   await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   await p.locator('.celda-btn:not(.sin-instrumento)').first().click()
   await panel.waitFor({ timeout: 8000 })
@@ -164,7 +164,7 @@ try {
     String(await p.locator('.criterio-th-instr .vinculo').count()))
 
   console.log('\n4. Calificar con el vínculo puesto')
-  await panel.getByRole('button', { name: '↓' }).click()
+  await panel.getByRole('button', { name: 'Alumno siguiente' }).click()
   await p.waitForTimeout(400)
   await panel.locator('button.cal-6').click()
   ok(await aviso(/6 guardado en .+ y en 1 criterio vinculado/), 'al guardar avisa de que ha escrito también en el vinculado')
@@ -172,7 +172,7 @@ try {
   ok(Object.keys(n[1]).length === 2 && n[1][origen] === 6 && n[1][vinculado] === 6,
     'el segundo alumno tiene la nota en los dos criterios, y solo en esos', JSON.stringify(n[1]))
 
-  await panel.getByRole('button', { name: '↑' }).click()
+  await panel.getByRole('button', { name: 'Alumno anterior' }).click()
   await p.waitForTimeout(400)
   await panel.locator('button.cal-5').click()
   await aviso(/5 guardado/)
@@ -210,9 +210,9 @@ try {
   await caja.getByRole('button', { name: /Cambiar vínculo…/ }).click()
   await caja.getByRole('button', { name: 'Quitar el vínculo' }).click()
   ok(await aviso(/Vínculo quitado/), 'lo confirma')
-  await panel.getByRole('button', { name: '↓' }).click()
+  await panel.getByRole('button', { name: 'Alumno siguiente' }).click()
   await p.waitForTimeout(300)
-  await panel.getByRole('button', { name: '↓' }).click()
+  await panel.getByRole('button', { name: 'Alumno siguiente' }).click()
   await p.waitForTimeout(400)
   await poner(7)
   n = await notas()
@@ -242,13 +242,14 @@ try {
   await p.reload({ waitUntil: 'networkidle' })
   await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
   await p.waitForTimeout(1200)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const casilla = p.locator('tbody tr').nth(2).locator(`.celda-btn[title*="· ${origen}"]`)
   ok((await casilla.locator('span').first().textContent()) === '7', 'la matriz pinta la nota que cuenta (la más reciente), no la duplicada', await casilla.textContent())
   await casilla.click()
   await panel.waitFor({ timeout: 8000 })
-  ok((await panel.locator('[data-nota-actual]').textContent()).startsWith('7'), 'y el panel abre con esa misma nota')
+  const notaPanel = await panel.locator('[data-nota-actual]').textContent()
+  ok(notaPanel.startsWith('7'), 'y el panel abre con esa misma nota', notaPanel)
   await poner(4)
   await p.waitForTimeout(600)
   ok((await casilla.locator('span').first().textContent()) === '4', 'la nota nueva se ve en la matriz', await casilla.textContent())

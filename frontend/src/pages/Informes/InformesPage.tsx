@@ -24,6 +24,7 @@ import { documentoCompetenciasAlumnos, documentoCompetenciasGrupo } from '@/info
 import { useDatosSensibles } from '@/db/datosSensibles'
 
 
+import { confirmar } from '@/utils/confirmar'
 function normalizar(s: string) {
   return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-')
 }
@@ -222,7 +223,7 @@ export default function InformesPage() {
     setMsg(null)
     if (completa) {
       const { total } = await getResumenEvidencias()
-      if (total.bytes > COPIA_GRANDE && !confirm(
+      if (total.bytes > COPIA_GRANDE && !await confirmar(
         `Tus fotos, audios y vídeos ocupan ${tamanoLegible(total.bytes)}. Una copia así puede agotar la memoria del aparato: la página se recargaría y no saldría ningún fichero. Tus datos no corren peligro.\n\n¿Intentarlo?`,
       )) return
     }
@@ -252,7 +253,7 @@ export default function InformesPage() {
     const file = e.target.files?.[0]
     if (!file) return
     const texto = await file.text()
-    if (!confirm(esCopiaSinEvidencias(texto)
+    if (!await confirmar(esCopiaSinEvidencias(texto)
       ? '¿Restaurar datos desde este backup?\n\nSe reemplazarán todos los datos de este dispositivo por los del fichero. Sus fotos, audios y vídeos se conservan: esta copia no los lleva.'
       : '¿Restaurar datos desde este backup?\n\nSe borrarán TODOS los datos actuales de este dispositivo y se reemplazarán por los del fichero.')) {
       e.target.value = ''

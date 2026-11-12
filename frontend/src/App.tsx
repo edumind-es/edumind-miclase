@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Marca from '@/components/Marca'
 import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
 import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
@@ -63,9 +64,9 @@ const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', 
 // En Planificación manda la fecha, no el trimestre.
 const SIN_TRIMESTRE = ['/alumnos', '/informes', '/tutorias', '/planificacion']
 // El área no pinta nada donde se trabaja con la clase entera. En el
-// calificador tampoco: allí manda su fila de pestañas de área, que es más
-// visible y no cabe duplicarla en un desplegable.
-const SIN_AREA = ['/alumnos', '/sesiones', '/evaluacion', '/informes', '/tutorias', '/planificacion']
+// calificador sí: desde el rediseño (fase 2 · A) el área se elige aquí y no
+// en una fila de pestañas propia.
+const SIN_AREA = ['/alumnos', '/sesiones', '/informes', '/tutorias', '/planificacion']
 
 function usarBarra(pathname: string) {
   const raiz = '/' + (pathname.split('/')[1] ?? '')
@@ -108,7 +109,7 @@ function Layout() {
 
       <aside className="sidebar">
         <div className="sidebar-cabecera">
-          <div className="sidebar-logo">EDUmind <span>MiClase</span></div>
+          <div className="sidebar-logo"><Marca lado={26} /><span className="sidebar-logo-texto">EDUmind <span>MiClase</span></span></div>
           <button
             className="sidebar-toggle"
             onClick={() => setPlegado(p => !p)}

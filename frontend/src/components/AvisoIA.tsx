@@ -1,5 +1,5 @@
 /**
- * Avisos comunes de los bloques de IA (rúbricas y exámenes).
+ * Avisos comunes de los bloques de IA (rúbricas, exámenes y planificación).
  *
  * Lo que se escribe en el contexto viaja en el prompt: a la IA local no sale
  * del equipo, pero «Copiar prompt» lo lleva a una IA externa. Por eso el
@@ -20,11 +20,11 @@ export function AvisoContextoIA() {
  * Lo que genera la IA es un borrador. La marca `generada_ia` se guarda y se
  * exporta (AI Act, art. 50.2); aquí se dice a la vista mientras se edita.
  */
-export function AvisoBorradorIA({ que }: { que: 'rúbrica' | 'examen' }) {
+export function AvisoBorradorIA({ que }: { que: 'rúbrica' | 'examen' | 'planificación' }) {
   return (
     <div data-borrador-ia
       style={{ padding: '8px 12px', background: '#f5f3ff', border: '1px solid #ddd6fe', borderRadius: 8, fontSize: 12, color: '#5b21b6' }}>
-      🤖 <strong>Borrador generado con IA.</strong> Revisa {que === 'rúbrica' ? 'la rúbrica' : 'el examen'} antes
+      🤖 <strong>Borrador generado con IA.</strong> Revisa {que === 'rúbrica' ? 'la rúbrica' : que === 'examen' ? 'el examen' : 'la planificación'} antes
       de usarlo: la IA puede equivocarse. Quedará marcado como generado con IA, también al exportarlo.
     </div>
   )

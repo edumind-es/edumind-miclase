@@ -8,7 +8,7 @@
  * ficha del alumno y el borrado lógico. Ver frontend/src/db/tutorias.ts.
  */
 import { readFileSync, mkdirSync } from 'node:fs'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
@@ -26,7 +26,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1300, height: 950 },
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 
 /** Todas las filas de una tabla, borradas incluidas. */
 const filas = (tabla) => p.evaluate(async (tabla) => {

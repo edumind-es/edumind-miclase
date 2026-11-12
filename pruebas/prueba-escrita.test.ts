@@ -10,6 +10,7 @@
 import {
   notaDePrueba, normalizarPrueba, puntosTotales, unidadesDelExamen, criteriosSinDestino, preguntasIguales,
   idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, reasignarCriterio, type PruebaDef,
+  pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
 } from '../frontend/src/db/prueba'
 import { readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -349,6 +350,47 @@ console.log('\n11. Un examen que también cuenta en otras unidades')
   ok(JSON.stringify(unidadesDelExamen(2, d)) === '[2,7,9]', 'el examen de la UD2 corrige en la suya y en las vinculadas')
   ok(JSON.stringify(unidadesDelExamen(7, d)) === '[7,9]', 'y nunca repite la suya si viniera en la lista')
   ok(unidadesDelExamen(null, d).length === 0, 'el examen general no vincula nada: ya vale para todas por separado')
+}
+
+console.log('\n12. Preguntas por unidad: cada unidad recibe la nota de las suyas')
+{
+  // Examen de la UD1 (id 1) que cuenta también en la UD2 (id 2): dos preguntas
+  // de cada una y una común (presentación), sin unidad.
+  const d = normalizarPrueba({
+    titulo: 'UD1 + UD2', tipo: 'puntos', reparto: 'unica', unidades_vinculadas: [2],
+    preguntas: [
+      { id: 'p1', enunciado: 'a', max: 2, unidad_id: 1 },
+      { id: 'p2', enunciado: 'b', max: 2, unidad_id: 1 },
+      { id: 'p3', enunciado: 'c', max: 2, unidad_id: 2 },
+      { id: 'p4', enunciado: 'd', max: 2, unidad_id: '2' as any },
+      { id: 'p5', enunciado: 'presentación', max: 2 },
+      { id: 'p6', enunciado: 'x', max: 1, unidad_id: 0 },
+      { id: 'p7', enunciado: 'y', max: 1, unidad_id: 'UD2' as any },
+    ],
+  })
+  ok(JSON.stringify(d.preguntas.map(q => q.unidad_id ?? null)) === '[1,1,2,2,null,null,null]', 'normalizar conserva la unidad de cada pregunta si es un id válido', JSON.stringify(d.preguntas.map(q => q.unidad_id ?? null)))
+  ok(tieneUnidadesPorPregunta(d) && !tieneUnidadesPorPregunta(normalizarPrueba(PRUEBA_EJEMPLO)), 'se sabe si el examen reparte por unidad')
+  const sinExtras = { ...d, preguntas: d.preguntas.slice(0, 5) }
+  ok(pruebaDeUnidad(sinExtras, 1).preguntas.map(q => q.id).join() === 'p1,p2,p5', 'la UD1 cuenta con sus preguntas y la común')
+  ok(pruebaDeUnidad(sinExtras, 2).preguntas.map(q => q.id).join() === 'p3,p4,p5', 'la UD2, con las suyas y la común')
+  ok(pruebaDeUnidad(sinExtras, null) === sinExtras && pruebaDeUnidad(sinExtras, 0) === sinExtras, 'sin unidad (examen general, «todo el curso») es el examen entero')
+  ok(pruebaDeUnidad(normalizarPrueba(PRUEBA_EJEMPLO), 1).preguntas.length === normalizarPrueba(PRUEBA_EJEMPLO).preguntas.length, 'un examen sin etiquetas da lo de siempre en cualquier unidad')
+  // El alumno falla lo de la UD1 y borda lo de la UD2.
+  const respuestas = { p1: 0.5, p2: 0, p3: 2, p4: 2, p5: 2 }
+  const ud1 = notaDePrueba(pruebaDeUnidad(sinExtras, 1), respuestas, ['CE1.1'])
+  const ud2 = notaDePrueba(pruebaDeUnidad(sinExtras, 2), respuestas, ['CE2.1'])
+  ok(ud1.nota === 4.17 && ud1.porCriterio['CE1.1'] === 4.17, 'suspende la UD1: 2,5 de 6 → 4,17', String(ud1.nota))
+  ok(ud2.nota === 10 && ud2.porCriterio['CE2.1'] === 10, 'y aprueba la UD2: 6 de 6 → 10', String(ud2.nota))
+  ok(notaDePrueba(sinExtras, respuestas, ['CE1.1']).nota === 6.5, 'antes las dos recibían la del examen entero (6,5)')
+  ok(ud1.total === 3 && ud1.anotadas === 3, 'la cuenta de anotadas es la de las preguntas de la unidad')
+  // Una unidad sin ninguna pregunta: el examen filtrado queda vacío y quien guarda la salta.
+  const soloUd1 = { ...d, preguntas: d.preguntas.slice(0, 2) }
+  ok(pruebaDeUnidad(soloUd1, 2).preguntas.length === 0, 'una unidad sin preguntas se queda con el examen vacío (no recibe nota)')
+  // Etiquetas de unidades que ya no son del examen vuelven a «todas».
+  const limpio = sinUnidadesAjenas(sinExtras, [1])
+  ok(JSON.stringify(limpio.preguntas.map(q => q.unidad_id ?? null)) === '[1,1,null,null,null]', 'al desvincular la UD2, sus preguntas vuelven a contar en todas')
+  ok(!limpio.preguntas.some(q => 'unidad_id' in q && q.unidad_id == null), 'sin dejar la clave vacía en el JSON')
+  ok(sinUnidadesAjenas(sinExtras, []).preguntas.every(q => q.unidad_id == null), 'y un examen que ya no cuenta en varias no guarda ninguna')
 }
 
 console.log('\nLa marca de IA de un examen (AI Act, art. 50.2)')

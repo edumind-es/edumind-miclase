@@ -24,10 +24,10 @@
 
   /* Semáforo de calificaciones */
   --cal-sobresaliente: #1e7e43;
-  --cal-notable:       #3a9bd5;
-  --cal-bien:          #8a6db5;
-  --cal-suficiente:    #e07b10;
-  --cal-insuficiente:  #d94040;
+  --cal-notable:       #1f6fa5;
+  --cal-bien:          #6f52a0;
+  --cal-suficiente:    #a85a00;
+  --cal-insuficiente:  #c0302f;
   --cal-sin-dato:      #c4c4c4;
 
   /* Capas. Sin una escala, cada modal elegía su número a ojo: el editor de
@@ -194,8 +194,12 @@ input:focus, select:focus, textarea:focus {
   font-weight: 700;
   letter-spacing: .5px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.sidebar-logo span { color: var(--azul-300); }
+.sidebar-logo svg { flex: none; }
+.sidebar-logo-texto span { color: var(--azul-300); }
 .layout.plegado .sidebar-logo { display: none; }
 .layout.plegado .sidebar-cabecera { padding: 18px 0; justify-content: center; }
 
@@ -796,7 +800,15 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
 .instr-th-criterio button:hover { opacity: 1; }
 .instr-th-criterio-anadir { font-size: 10.5px; max-width: 110px; margin-top: 3px; padding: 1px 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: inherit; cursor: pointer; }
 .instr-th-criterio-anadir option { color: var(--gris-900); }
-.matriz-instrumentos.cabeceras-compactas .instr-th-detalle { display: none; }
+/* Plegadas, los detalles siguen en el DOM pero sin sitio. */
+.matriz-instrumentos.cabeceras-compactas .instr-th .instr-th-detalle { display: none; }
+/* «Más» de una columna: abre su hoja, sin tocar las demás. */
+.instr-th-mas {
+  display: block; width: 100%; margin-top: 4px; min-height: 44px; border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--radio-sm); background: transparent; color: var(--blanco); font-size: 12px; font-weight: 600; cursor: pointer;
+}
+.instr-th-mas:hover, .instr-th-mas[aria-expanded="true"] { background: rgba(255,255,255,.18); }
+.instr-th-mas:disabled { opacity: .5; cursor: default; }
 .matriz-instrumentos.cabeceras-compactas thead th.instr-th { min-width: 150px; padding-bottom: 8px; }
 .cabeceras-toggle {
   display: block; margin-top: 6px; border: 1px solid rgba(255,255,255,.35); border-radius: var(--radio-sm);
@@ -980,3 +992,82 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 .plan-previa-dia { color: var(--gris-600); }
 .plan-chip-nocasa { margin-left: 6px; font-size: 11px; background: var(--ambar-100); border-radius: 10px; padding: 0 6px; }
 @media (max-width: 600px) { .plan-previa-fila { grid-template-columns: 1fr; gap: 0; } }
+
+/* ── Táctil: lo que se toca mide 44 px de alto ────────────────────────────
+   Rediseño del Calificador, fase 1 (PROPUESTA_UX_CALIFICADOR.html, F). Un
+   dedo necesita 44 px; las pestañas de unidad, las acciones de columna y los
+   conmutadores se quedaban en 26–30. Lo que va dentro de una cabecera ya
+   desplegada (quitar un criterio, renombrar) sube a 32: más no cabe. */
+.tab-unidad, .tab-area, .vista-conmutador button, .instr-th-accion, .celda-btn { min-height: 44px; }
+.tab-unidad-modo, .cabeceras-toggle { min-height: 44px; padding-left: 12px; padding-right: 12px; }
+.modal-close { min-width: 44px; min-height: 44px; }
+.instr-th-criterio button, .instr-th-lapiz { min-width: 32px; min-height: 32px; }
+/* El lápiz de renombrar solo se veía bien al pasar el ratón: en un iPad no hay ratón. */
+.instr-th-lapiz { opacity: .8; }
+
+/* ── Calificador: la unidad se elige en un selector (rediseño, fase 2 · A) ──
+   Antes eran dos filas de pestañas (áreas y unidades). El área está en la
+   barra de la clase; la unidad, aquí, grande y con su título entero. */
+.unidad-selector { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 260px; }
+.unidad-selector > span { font-size: 12px; font-weight: 700; color: var(--gris-600); letter-spacing: .04em; text-transform: uppercase; }
+.unidad-selector select {
+  min-height: 44px; min-width: 0; flex: 1; max-width: 520px; padding: 8px 12px; font-size: 15px; font-weight: 700;
+  color: var(--azul-900); border: 1.5px solid var(--azul-700); border-radius: var(--radio-sm); background: var(--blanco);
+}
+
+/* ── Piezas comunes (components/comunes) ─────────────────────────────── */
+/* Botón: lo que pide un dedo. */
+.boton { min-height: 44px; padding: 8px 16px; }
+.boton.btn-danger { background: var(--cal-insuficiente); }
+.boton-enlace {
+  background: none; border: none; padding: 0 2px; min-height: 44px;
+  color: var(--azul-500); text-decoration: underline; font: inherit; cursor: pointer;
+}
+/* Diálogo: cabecera fija, cuerpo que se desplaza, pie con los botones. */
+.dialogo { max-height: 92vh; display: flex; flex-direction: column; padding: 0; }
+.dialogo-cabecera {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  padding: 16px 20px 10px;
+}
+.dialogo-antetitulo { font-size: 12px; font-weight: 700; color: var(--azul-700); letter-spacing: .03em; }
+.dialogo-titulo { margin: 2px 0 0; }
+.dialogo-subtitulo { font-size: 13px; color: var(--gris-600); margin-top: 2px; }
+.dialogo-cuerpo { padding: 0 20px 20px; overflow-y: auto; }
+.dialogo-pie {
+  display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+  padding: 12px 20px; border-top: 1px solid var(--gris-300);
+}
+/* El foco que `utils/foco.ts` lleva a la tarjeta al abrir no dibuja un marco. */
+.modal-overlay [tabindex="-1"]:focus { outline: none; }
+/* Pestañas: la elegida se distingue también con el teclado. */
+[role="tab"]:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 2px; }
+
+/* ── «Más» de una columna: hoja que sube desde abajo ─────────────────── */
+/* En una tablet las acciones quedan grandes y cerca del pulgar, y la tabla
+   no se mueve (antes la cabecera crecía y empujaba la lista). */
+.hoja-velo { align-items: flex-end; }
+.hoja-columna {
+  width: min(760px, 100vw); max-height: 82vh; overflow-y: auto;
+  background: var(--blanco); color: var(--gris-900); text-align: left;
+  border-radius: 16px 16px 0 0;
+  padding: 12px 18px calc(18px + env(safe-area-inset-bottom));
+  animation: hoja-sube .16s ease-out;
+}
+@keyframes hoja-sube { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hoja-columna { animation: none; } }
+.hoja-cabecera { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.hoja-titulo { font-size: 17px; font-weight: 700; color: var(--azul-900); display: flex; align-items: center; gap: 8px; }
+.hoja-titulo .abrev { color: var(--blanco); font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+.hoja-columna .instr-th-tipo { font-size: 13px; opacity: 1; color: var(--gris-600); margin: 2px 0 8px; }
+.hoja-columna .instr-th-criterios { font-size: 13px; color: var(--gris-600); margin-bottom: 12px; display: block; overflow: visible; -webkit-line-clamp: unset; max-height: none; }
+.hoja-columna .instr-th-criterio { background: var(--gris-100); border: 1px solid var(--gris-300); color: var(--gris-900); padding: 2px 2px 2px 8px; margin: 3px 6px 3px 0; border-radius: 12px; }
+.hoja-columna .instr-th-criterio button { font-size: 16px; min-width: 36px; min-height: 36px; opacity: 1; }
+.hoja-columna .instr-th-criterio-anadir { font-size: 14px; max-width: 260px; min-height: 44px; padding: 6px 8px; border: 1px solid var(--gris-300); background: var(--blanco); color: var(--gris-900); }
+.hoja-acciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
+.hoja-accion {
+  min-height: 52px; padding: 10px 14px; text-align: left;
+  border: 1px solid var(--gris-300); border-radius: var(--radio-sm);
+  background: var(--gris-100); color: var(--gris-900); font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.hoja-accion:hover { background: var(--azul-100); border-color: var(--azul-300); }
+.hoja-accion.peligro { color: var(--cal-insuficiente); }

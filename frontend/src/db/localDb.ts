@@ -69,6 +69,14 @@ export type ReglaFinal = 'ponderada' | 'continua' | 'maxima' | 'mediana'
  */
 export type ReglaArea = 'instrumento' | 'criterio'
 
+/**
+ * Cómo cuentan las unidades de un trimestre al fundir sus notas. 'iguales':
+ * cada unidad cuenta lo mismo (lo de siempre). 'peso': cada una por el peso
+ * que le da la programación (`Unidad.peso`, el «% Peso» de PROENS). Ver
+ * `REGLAS_UNIDADES` en `calculo.ts`.
+ */
+export type ReglaUnidades = 'iguales' | 'peso'
+
 export interface Asignatura extends Sincronizable {
   id?: number
   grupo_id: number
@@ -84,6 +92,11 @@ export interface Asignatura extends Sincronizable {
   regla_final?: ReglaFinal | null
   /** Regla de la nota del área (ver `ReglaArea`). Sin declarar vale 'instrumento'. Sin índice. */
   regla_area?: ReglaArea | null
+  /**
+   * Cómo cuentan las unidades de un trimestre (ver `ReglaUnidades`). Sin
+   * declarar vale 'iguales'. Sin índice.
+   */
+  regla_unidades?: ReglaUnidades | null
   orden?: number
   created_at?: string
 }
@@ -571,6 +584,13 @@ export interface SesionPlan extends Sincronizable {
   /** «9:00-10:40» cuando la sesión es parte de un bloque de varias franjas. */
   bloque?: string | null
   origen?: 'volcado' | 'manual' | null
+  /**
+   * La sesión salió de una IA (una propuesta volcada), aunque el docente la
+   * haya retocado. Marca legible por máquina del AI Act (art. 50.2), como en
+   * rúbricas y exámenes: se conserva al editar y viaja en el .md exportado
+   * (`MARCA_IA` en `planificacion/semanal.ts`). Sin índice.
+   */
+  generada_ia?: boolean
   created_at?: string
 }
 

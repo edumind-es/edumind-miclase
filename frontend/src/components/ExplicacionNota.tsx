@@ -21,7 +21,7 @@ import { getCalificacionesAlumnoAsignatura, type UnidadConCriterios } from '@/db
 import {
   calcularNotaArea, calificativo, fundirHijosEnFamilias, fundirUnidades, parsearPesosTrimestres,
   pesosCriterioDeUnidades, pesosVinculoDeUnidades, porcentajesEnFamilia, type NotaArea,
-  normalizarReglaArea, normalizarReglaFinal, REGLAS_AREA, REGLAS_FINAL,
+  normalizarReglaArea, normalizarReglaFinal, REGLAS_AREA, REGLAS_FINAL, pesosDeUnidades,
 } from '@/db/calculo'
 import { getInstrConfig } from '@/ia/instrumentosConfig'
 import type { Alumno, Asignatura, Calificacion, Instrumento, Medida } from '@/db/localDb'
@@ -73,7 +73,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
       setCals(lista)
       setNota(calcularNotaArea(asig.id!, lista, instrumentos, asig.pesos_trimestres,
         pesosCriterioDeUnidades(unidades), pesosVinculoDeUnidades(unidades), normalizarReglaFinal(asig.regla_final),
-        normalizarReglaArea(asig.regla_area), { medidas }))
+        normalizarReglaArea(asig.regla_area), { medidas, pesosUnidad: pesosDeUnidades(asig.regla_unidades, unidades) }))
     })
     return () => { vigente = false }
   }, [alumno.id, asig.id, instrumentos, unidades, medidas])
@@ -115,6 +115,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
    * las notas crudas (una por unidad) se funden por instrumento, y los
    * instrumentos en su familia. Las mismas funciones que el motor.
    */
+  const pesosUnidad = pesosDeUnidades(asig.regla_unidades, unidades)
   const desglose = (criterioId: string, t: number): Tronco[] => {
     // Lo que la medida retira no entra en el desglose: el criterio excluido
     // y los instrumentos que no pesan para este alumno en este trimestre.
@@ -123,7 +124,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
     const idT = porIdEn(t)
     const crudas = (cals ?? []).filter(c => c.criterio_id === criterioId && c.trimestre === t && c.valor != null
       && !(insT !== instrumentos && idT.has(c.instrumento_id) && idT.get(c.instrumento_id)!.peso <= 0))
-    const porInstr = fundirUnidades(crudas)
+    const porInstr = fundirUnidades(crudas, pesosUnidad)
     const porFamilia = fundirHijosEnFamilias(porInstr, insT)
     return porFamilia
       .sort((a, b) => orden(a.instrumento_id) - orden(b.instrumento_id))
@@ -207,7 +208,7 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
         <div className="explicacion-cab">
           <strong style={{ color: calificativo(tr.valor).color }}>{r1(tr.valor) ?? '—'}</strong>
           <span>
-            <span aria-hidden="true">{cfg.icon}</span> <b>{tr.ins?.nombre ?? 'familia borrada'}</b>
+            <span aria-hidden="true">{cfg.icon}</span> <b>{tr.ins?.nombre ?? 'instrumento borrado'}</b>
             <span className="suave">{tr.ins ? ` · ${tr.ins.peso} % del área` : ''}{tr.ramas.length > 1 ? ` · ${tr.ramas.length} instrumentos dentro` : ''}</span>
           </span>
         </div>
@@ -382,8 +383,9 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
 
         <div style={{ padding: '14px 18px 18px' }}>
           <p data-explicacion-regla style={{ fontSize: 12, color: 'var(--gris-600)', margin: '0 0 12px', lineHeight: 1.5, padding: '8px 10px', background: 'var(--gris-100)', borderRadius: 7 }}>
-            Cada instrumento vale la <strong>media de sus unidades</strong> en el trimestre (cada unidad cuenta igual);
-            después pesa cada instrumento dentro de su familia, y cada familia en el área.
+            Cada instrumento vale la <strong>media de sus unidades</strong> en el trimestre
+            ({pesosUnidad ? <span data-explicacion-unidades="peso">cada unidad por el peso de la programación</span> : 'cada unidad cuenta igual'});
+            después pesa cada actividad dentro de su instrumento, y cada instrumento en el área.
           </p>
           {medidasVisibles.length > 0 && (
             <p data-explicacion-medida style={{ fontSize: 12, color: 'var(--azul-900)', margin: '0 0 12px', lineHeight: 1.5, padding: '8px 10px', background: 'var(--azul-50, #eff6ff)', borderLeft: '4px solid var(--azul-700)', borderRadius: 7 }}>

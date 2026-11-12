@@ -68,7 +68,17 @@ export interface SemanaLeida {
   notas: NotaDia[]
   /** Lo que no se ha podido leer, dicho en castellano llano. */
   avisos: string[]
+  /** El fichero lleva la marca de que lo escribió una IA (`MARCA_IA`). */
+  generada_ia: boolean
 }
+
+/**
+ * La línea con la que un .md dice que su contenido salió de una IA. Es un
+ * comentario: no se ve al renderizar y no estorba al lector. La escribe la
+ * exportación y la pide el prompt (`ia/planificacionPrompt.ts`).
+ */
+export const MARCA_IA = '<!-- generada-ia -->'
+const ES_MARCA_IA = /<!--\s*generada[-_ ]ia\s*-->/i
 
 // ─── Utilidades ──────────────────────────────────────────────────────────
 
@@ -251,7 +261,9 @@ export function anclajeDe(evaluacion: string): { anclaje: string; criterios: str
 // ─── Lector ─────────────────────────────────────────────────────────────
 
 export function leerSemana(md: string, hoy: Date = new Date()): SemanaLeida {
-  const lineas = md.replace(/\r\n?/g, '\n').split('\n')
+  // La marca de IA se anota y se quita: es un comentario, no contenido.
+  const generada_ia = ES_MARCA_IA.test(md)
+  const lineas = md.replace(new RegExp(ES_MARCA_IA.source, 'gi'), '').replace(/\r\n?/g, '\n').split('\n')
   const avisos: string[] = []
   let clase: string | null = null
   let tituloSemana: string | null = null
@@ -442,7 +454,7 @@ export function leerSemana(md: string, hoy: Date = new Date()): SemanaLeida {
     clase, titulo_semana: tituloSemana,
     desde: rango ? isoFecha(rango.desde) : null,
     hasta: rango ? isoFecha(rango.hasta) : null,
-    sesiones, notas, avisos,
+    sesiones, notas, avisos, generada_ia,
   }
 }
 

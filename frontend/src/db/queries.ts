@@ -4,14 +4,15 @@ import { nuevoId, sello } from './ids'
 import { LIMITE_EVIDENCIA, LIMITE_EVIDENCIA_SINC, enMB } from './limites'
 import {
   aplicaEnTrimestre, trimestreDeFecha, fundirHijosEnFamilias, fundirUnidades, porcentajesEnFamilia,
-  calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosCriterioDeUnidades, pesosVinculoDeUnidades, type NotaArea,
+  calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosCriterioDeUnidades, pesosVinculoDeUnidades, pesosDeUnidades, type NotaArea, type PesosUnidad,
 } from './calculo'
 import { colorDeInstrumento } from '../ia/instrumentosConfig'
 import { reiniciarEstadoDeSincronizacion, alAplicarCambios } from './sync'
 import { resumirEvidencias, type ResumenEvidencias } from './almacen'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
-import { normalizarPrueba, notaDePrueba, unidadesDelExamen, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
+import type { ExamenDeArea } from './analisisAlumno'
+import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -603,8 +604,8 @@ export async function crearInstrumentoHijo(
   data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
 ): Promise<number> {
   const familia = await db.instrumentos.get(familia_id)
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (familia.familia_id != null) throw new Error('Un hijo no puede tener hijos: cuélgalo de la familia')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (familia.familia_id != null) throw new Error('Una actividad no puede tener actividades dentro: cuélgala del instrumento')
   const hermanos = await getHijos(familia_id)
   const reg = nuevo({
     asignatura_id: familia.asignatura_id, familia_id,
@@ -668,13 +669,13 @@ export async function fijarCriteriosDeHijo(
   unidad_id: number, hijo_id: number, criterios: string[]
 ): Promise<void> {
   const hijo = await db.instrumentos.get(hijo_id)
-  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es una actividad')
   const deFamilia = new Set(
     vivos(await db.criterio_instrumentos.where('instrumento_id').equals(hijo.familia_id).toArray())
       .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
   const fuera = criterios.filter(c => !deFamilia.has(c))
   if (fuera.length) {
-    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} de la familia en esta unidad`)
+    throw new Error(`${fuera.join(', ')} no ${fuera.length === 1 ? 'es' : 'son'} del instrumento en esta unidad`)
   }
   const pedidos = new Set(criterios)
   const actuales = await db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray()
@@ -789,8 +790,8 @@ export async function convertirFamiliaEnHijo(
   opciones: { nombre_hijo?: string; nombre_familia?: string | null; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoConversion> {
   const familia = await db.instrumentos.get(familia_id)
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (familia.familia_id != null) throw new Error('Solo se convierte una familia, no un hijo')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (familia.familia_id != null) throw new Error('Solo se convierte un instrumento, no una actividad')
 
   const nombreHijo = (opciones.nombre_hijo ?? familia.nombre).trim() || familia.nombre
   const nombreFamilia = opciones.nombre_familia?.trim() || null
@@ -851,13 +852,13 @@ export type CambioDeFamilia = {
  */
 export async function previsualizarCambioDeFamilia(hijo_id: number, familia_id: number): Promise<CambioDeFamilia> {
   const hijo = await db.instrumentos.get(hijo_id)
-  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es un instrumento hijo')
+  if (!hijo || hijo.deleted_at || hijo.familia_id == null) throw new Error('No es una actividad')
   const [actual, nueva] = await Promise.all([db.instrumentos.get(hijo.familia_id), db.instrumentos.get(familia_id)])
-  if (!actual || actual.deleted_at) throw new Error('La familia actual no existe')
-  if (!nueva || nueva.deleted_at) throw new Error('La familia de destino no existe')
-  if (nueva.familia_id != null) throw new Error('Un hijo no puede colgar de otro hijo: elige una familia')
-  if (nueva.asignatura_id !== hijo.asignatura_id) throw new Error('La familia es de otra área')
-  if (nueva.id === actual.id) throw new Error('Ya está en esa familia')
+  if (!actual || actual.deleted_at) throw new Error('El instrumento actual no existe')
+  if (!nueva || nueva.deleted_at) throw new Error('El instrumento de destino no existe')
+  if (nueva.familia_id != null) throw new Error('Una actividad no puede colgar de otra: elige un instrumento')
+  if (nueva.asignatura_id !== hijo.asignatura_id) throw new Error('El instrumento es de otra área')
+  if (nueva.id === actual.id) throw new Error('Ya está en ese instrumento')
 
   const [delHijo, deNueva, hermanos] = await Promise.all([
     db.criterio_instrumentos.where('instrumento_id').equals(hijo_id).toArray(),
@@ -970,8 +971,8 @@ export async function moverDatosDeFamiliaAHijo(
   familia_id: number, hijo_id: number, opciones: { sustituir?: boolean; bloque?: FiltroBloque } = {}
 ): Promise<ResultadoMovimiento> {
   const [familia, hijo] = await Promise.all([db.instrumentos.get(familia_id), db.instrumentos.get(hijo_id)])
-  if (!familia || familia.deleted_at) throw new Error('La familia no existe')
-  if (!hijo || hijo.deleted_at || hijo.familia_id !== familia_id) throw new Error('Ese instrumento no está dentro de la familia')
+  if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
+  if (!hijo || hijo.deleted_at || hijo.familia_id !== familia_id) throw new Error('Esa actividad no está dentro del instrumento')
   const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
 
   return db.transaction('rw',
@@ -1617,11 +1618,26 @@ export async function fijarInstrumentosDeCriterio(
   const actuales = await db.criterio_instrumentos
     .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).toArray()
 
+  // La programación habla de familias: quien llama (📋 Programación, la
+  // importación de PROENS) no nombra a los hijos. Un hijo cuya familia sigue
+  // asignada conserva su fila; si no, reimportar o tocar un instrumento
+  // deshacía en silencio el reparto «¿qué haces dentro?». Si la familia se
+  // retira, sus hijos se van con ella.
+  const pedidos = new Set(instrumento_ids)
+  const instrumentos = await db.instrumentos.bulkGet([...new Set(actuales.map(f => f.instrumento_id))])
+  const familiaDe = new Map<number, number>()
+  for (const i of instrumentos) {
+    if (i && !i.deleted_at && i.familia_id != null) familiaDe.set(i.id!, i.familia_id)
+  }
+
   for (const fila of actuales) {
-    const debeEstar = instrumento_ids.includes(fila.instrumento_id)
+    const debeEstar = pedidos.has(fila.instrumento_id)
     const esta = !fila.deleted_at
+    const hijoDeFamiliaAsignada = pedidos.has(familiaDe.get(fila.instrumento_id) ?? -1)
     if (debeEstar && !esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: null }))
-    if (!debeEstar && esta) await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+    if (!debeEstar && esta && !hijoDeFamiliaAsignada) {
+      await db.criterio_instrumentos.update(fila.id!, tocado({ deleted_at: sello() }))
+    }
   }
 
   const conocidos = new Set(actuales.map(f => f.instrumento_id))
@@ -1869,7 +1885,7 @@ export async function getResumenPorCriterio(asignatura_id: number): Promise<
 
   // Como en el motor: primero la media de unidades, después el peso.
   const cals = fundirUnidades(sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.valor != null).toArray())))
+    .filter(c => c.valor != null).toArray())), await pesosUnidadDeArea(asignatura_id))
 
   const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
@@ -2071,6 +2087,27 @@ export async function vincularCriterio(
   } else {
     await db.unidad_criterios.add(nuevo({ unidad_id, criterio_id, peso, ...extra }))
   }
+}
+
+/**
+ * Los pesos de unidad del área para fundir sus notas (`pesosDeUnidades`), o
+ * `undefined` si el área cuenta todas las unidades igual, que es lo normal.
+ */
+export async function pesosUnidadDeArea(asignatura_id: number): Promise<PesosUnidad | undefined> {
+  const asig = await db.asignaturas.get(asignatura_id)
+  if (!asig || asig.regla_unidades !== 'peso') return undefined
+  return pesosDeUnidades(asig.regla_unidades, vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()))
+}
+
+/**
+ * El mínimo de consecución que la programación declara para un criterio en
+ * una unidad (lo trae PROENS), o null. Lo enseña el panel de la casilla: es
+ * la referencia para decidir si el criterio está conseguido.
+ */
+export async function getMinimoDeCriterio(unidad_id: number, criterio_id: string): Promise<string | null> {
+  const filas = vivos(await db.unidad_criterios
+    .where('[unidad_id+criterio_id]').equals([unidad_id, criterio_id]).toArray())
+  return filas.map(f => (f.minimo || '').trim()).find(Boolean) ?? null
 }
 
 /** Cambia solo el mínimo de consecución de un criterio en una unidad. */
@@ -2394,10 +2431,13 @@ export async function getPrueba(instrumento_id: number, unidad_id: number | null
 export async function guardarPrueba(
   instrumento_id: number, unidad_id: number | null, def: PruebaDef, opciones: { mover?: number } = {},
 ): Promise<number> {
-  const limpia = normalizarPrueba(def)
+  let limpia = normalizarPrueba(def)
   // Un examen no se vincula a su propia unidad, y el general no vincula nada.
   const vinculadas = unidad_id == null ? [] : (limpia.unidades_vinculadas ?? []).filter(u => u !== unidad_id)
   if (vinculadas.length) limpia.unidades_vinculadas = vinculadas; else delete limpia.unidades_vinculadas
+  // La unidad de una pregunta solo vale si es una de las del examen, y solo
+  // tiene sentido si cuenta en más de una: si no, se quita.
+  limpia = sinUnidadesAjenas(limpia, vinculadas.length ? unidadesDelExamen(unidad_id, limpia) : [])
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
   const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
     .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
@@ -2461,16 +2501,22 @@ export async function guardarExamenDeAlumno(p: {
   /** La observación es de un criterio concreto; en los demás no se toca. */
   observacion?: { criterio_id: string; texto: string | null }
 }): Promise<ResultadoPrueba & { criterios: string[]; tambien: UnidadTambienCorregida[] }> {
-  const r = notaDePrueba(p.def, p.respuestas, p.destinos)
-  const criterios = p.destinos.filter(c => c in r.porCriterio)
+  // Cada unidad recibe la nota de SUS preguntas (`pruebaDeUnidad`); sin
+  // preguntas etiquetadas es el examen entero. Una unidad a la que no le
+  // queda ninguna pregunta no recibe nada: escribirle «sin nota» borraría la
+  // que tuviera.
+  const propia = pruebaDeUnidad(p.def, p.unidad_id)
+  const r = notaDePrueba(propia, p.respuestas, p.destinos)
+  const criterios = propia.preguntas.length ? p.destinos.filter(c => c in r.porCriterio) : []
   await saveCalificaciones(criterios.map(c => ({
     alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
     trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
     ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
   })), { sinVinculos: true })
   // El mismo examen cuenta también en las unidades que tenga vinculadas (y
-  // desde una vinculada, en la suya): misma corrección, con los criterios que
-  // el instrumento evalúa en cada una, y en el MISMO trimestre: la casilla
+  // desde una vinculada, en la suya): misma corrección —las respuestas van
+  // enteras a todas—, con los criterios que el instrumento evalúa en cada
+  // una y la nota de sus preguntas, y en el MISMO trimestre: la casilla
   // lleva el trimestre de la barra, no el de la unidad. La observación se
   // queda donde se escribió.
   const tambien: UnidadTambienCorregida[] = []
@@ -2479,20 +2525,49 @@ export async function guardarExamenDeAlumno(p: {
     if (u === p.unidad_id) continue
     const unidad = await db.unidades.get(u)
     if (!unidad || unidad.deleted_at) continue
+    const deU = pruebaDeUnidad(p.def, u)
+    if (!deU.preguntas.length) continue
     const destinos = await criteriosQueEvalua(p.instrumento_id, u)
-    const ru = notaDePrueba(p.def, p.respuestas, destinos)
+    const ru = notaDePrueba(deU, p.respuestas, destinos)
     const cu = destinos.filter(c => c in ru.porCriterio)
     await saveCalificaciones(cu.map(c => ({
       alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
       trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
     })), { sinVinculos: true })
-    tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu })
+    tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu, nota: ru.nota })
   }
   return { ...r, criterios, tambien }
 }
 
+/**
+ * Los exámenes corregidos de un área, con lo que respondió cada alumno: lo
+ * que necesita el análisis de un alumno (`db/analisisAlumno.ts`). Un examen
+ * sin ninguna corrección no sale.
+ */
+export async function examenesDeArea(asignatura_id: number): Promise<ExamenDeArea[]> {
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const unidades = new Map(vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()).map(u => [u.id!, u.nombre]))
+  const salida: ExamenDeArea[] = []
+  for (const ins of instrumentos) {
+    for (const prueba of await getPruebasDeInstrumento(ins.id!)) {
+      const respuestas = await respuestasDeExamen(ins.id!, prueba.unidad_id, prueba.def)
+      if (!respuestas.length) continue
+      salida.push({
+        instrumento: ins.nombre, unidad_id: prueba.unidad_id,
+        unidad: prueba.unidad_id != null ? unidades.get(prueba.unidad_id) ?? null : null,
+        def: prueba.def, destinos: await criteriosQueEvalua(ins.id!, prueba.unidad_id), respuestas,
+      })
+    }
+  }
+  return salida
+}
+
 /** Una unidad vinculada en la que el examen también puso nota, y en qué criterios. */
-export type UnidadTambienCorregida = { unidad_id: number; nombre: string; criterios: string[] }
+export type UnidadTambienCorregida = {
+  unidad_id: number; nombre: string; criterios: string[]
+  /** La nota del examen en esa unidad: la de sus preguntas, si las tiene etiquetadas. */
+  nota: number | null
+}
 
 /**
  * Las respuestas de examen ya guardadas para un alumno, vengan del criterio
@@ -2588,7 +2663,11 @@ export async function recalcularNotasDeExamen(
     const respuestas = cals.find(c => Object.keys(c.niveles_rubrica ?? {}).length)!.niveles_rubrica!
     const enUnidad = filas.filter(f => f.unidad_id === base.unidad_id)
     const destinos = [...new Set([...enUnidad.map(f => f.criterio_id), ...cals.map(c => c.criterio_id)])]
-    const r = notaDePrueba(def, respuestas, destinos)
+    // La nota de cada unidad sale de sus preguntas; si al etiquetar se queda
+    // sin ninguna, sus notas no se tocan.
+    const deUnidad = pruebaDeUnidad(def, base.unidad_id)
+    if (!deUnidad.preguntas.length) continue
+    const r = notaDePrueba(deUnidad, respuestas, destinos)
     const comun = {
       alumno_id: base.alumno_id, instrumento_id, trimestre: base.trimestre, unidad_id: base.unidad_id,
       asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad,
@@ -3573,7 +3652,7 @@ export async function getMatrizEvaluacion(
     ? sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
         .filter(c => c.trimestre === trimestre && (unidad_id == null || c.unidad_id === unidad_id)).toArray()))
     : []
-  const cals = unidad_id == null ? fundirUnidades(crudas) : crudas
+  const cals = unidad_id == null ? fundirUnidades(crudas, await pesosUnidadDeArea(asignatura_id)) : crudas
   // Las notas de los hijos se funden en la de su familia, con la misma
   // función que el cálculo del área: la casilla enseña el mismo número que el
   // boletín. Las de los hijos siguen disponibles por su propia clave.
@@ -3670,7 +3749,8 @@ export async function getResumenCurso(asignatura_id: number): Promise<ResumenCur
   for (const al of m1.alumnos) {
     notas.set(al.id!, calcularNotaArea(asignatura_id, porAlumno.get(al.id!) ?? [], m1.instrumentos,
       m1.asig.pesos_trimestres, pesosCriterio, pesosVinculo, normalizarReglaFinal(m1.asig.regla_final),
-      normalizarReglaArea(m1.asig.regla_area), { medidas: m1.medidas.get(al.id!) }))
+      normalizarReglaArea(m1.asig.regla_area),
+      { medidas: m1.medidas.get(al.id!), pesosUnidad: pesosDeUnidades(m1.asig.regla_unidades, unidades) }))
   }
   return {
     grupo: m1.grupo, asig: m1.asig, alumnos: m1.alumnos, instrumentos: m1.instrumentos,

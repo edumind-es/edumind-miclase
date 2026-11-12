@@ -631,6 +631,136 @@ edumind_miclase/
   `correccionesDeExamen` cuenta las correcciones de todas las unidades del
   examen (y una unidad cubierta por vínculo no cae al general), así el
   recálculo y el informe ven la misma corrección una vez por alumno.
+- **En un examen que cuenta en varias unidades, cada pregunta puede decir
+  de cuál es.** `PreguntaPrueba.unidad_id` (opcional, dentro de
+  `prueba_json`, sin índice ni esquema) y `pruebaDeUnidad(def, unidad)`
+  (`db/prueba.ts`, puro): el examen tal como cuenta en una unidad, con sus
+  preguntas y las que no dicen unidad. **Una pregunta sin unidad cuenta en
+  todas** (decisión de Luis, nov 2026), así que un examen sin etiquetas da
+  exactamente las notas de siempre. `guardarExamenDeAlumno` y
+  `recalcularNotasDeExamen` pasan el examen por `pruebaDeUnidad` antes de
+  `notaDePrueba`, unidad a unidad: un alumno puede suspender la UD1 y aprobar
+  la UD2 con el mismo examen. Las RESPUESTAS se siguen guardando enteras en
+  todas las unidades (el examen es uno y se corrige desde cualquiera). Una
+  unidad que se queda sin ninguna pregunta no recibe nota ni se le borra la
+  que tuviera, y el editor lo avisa (`[data-unidad-sin-preguntas]`). La
+  columna «Unidad» del editor (`[data-pregunta-unidad]`) solo sale con otra
+  unidad vinculada; desvincular una devuelve sus preguntas a «Todas»
+  (`sinUnidadesAjenas`, también en `guardarPrueba` y al cargar del banco,
+  donde los ids son de otra clase). El corrector marca las preguntas de otra
+  unidad (`[data-pregunta-otra-unidad]`) y el aviso «también en…» dice la
+  nota de cada unidad si es distinta (`UnidadTambienCorregida.nota`). El
+  examen general no reparte por unidad. **Un aparato sin actualizar ignora
+  la etiqueta al leer y la borra si vuelve a guardar el examen**
+  (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
+  Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
+  el informe de la prueba por unidad.
+- **Rediseño del Calificador, fase 1** (`PROPUESTA_UX_CALIFICADOR.html`, nov
+  2026). (1) **Vocabulario a la vista del docente**: lo que trae la
+  programación con su porcentaje es un **«instrumento»** y lo que hay dentro
+  es una **«actividad»**; «familia» e «hijo» quedan solo en el código, los
+  datos (`familia_id`) y estas notas. Decisión de Luis. Un texto nuevo no
+  debe decir «familia» ni «hijo» al docente. (2) **El semáforo de notas
+  cumple 4,5:1** con texto blanco (`--cal-*` en `index.css`: Notable
+  `#1f6fa5`, Bien `#6f52a0`, Suficiente `#a85a00`, Insuficiente `#c0302f`;
+  antes cuatro de los cinco no llegaban). (3) **Lo que se toca mide 44 px**:
+  pestañas, acciones de columna, conmutadores, casillas, cerrar y las flechas
+  del panel, que ahora se llaman «Alumno anterior» y «Alumno siguiente»
+  (`aria-label`). El orquestador de pruebas enseña más líneas de una suite
+  fallida con `LINEAS=400`.
+- **Rediseño del Calificador, fase 2** (nov 2026). Sustituye a lo que otras
+  notas de este fichero dicen de pestañas y cabeceras: **(A) no hay filas de
+  pestañas.** El área se elige en la barra de la clase (`BarraClase`, que ya
+  no la esconde en `/evaluacion`) y la unidad en un selector
+  (`[data-unidad-select]`: la primera opción es «Todo el curso»); las clases
+  `.tab-area` y `.tab-unidad`, `[data-unidades-modo]` y `[data-unidad-actual]`
+  ya no existen. Las pruebas eligen unidad con `elegirUnidad(p, n)` de
+  `pruebas/lib/entorno.mjs` (0 = «Todo el curso») y leen la elegida con
+  `unidadElegida(p)`. Los avisos de la programación (criterios sin
+  instrumento, instrumentos sin criterio en la unidad, datos escondidos,
+  fuera de trimestre) van tras un contador, `[data-avisos-toggle]`, cerrado
+  al entrar; `[data-columna-aviso]` (lo que acaba de pasar con una columna)
+  sigue a la vista. **(C) una acción principal por columna** y un «Más»
+  propio (`[data-columna-mas]`) que despliega solo esa columna: cámara,
+  examen, informe, pegar, mover, vaciar, criterios y «Definir herramienta».
+  «Más en todas» es el `[data-cabeceras-toggle]` de siempre. Una prueba que
+  pulse una acción secundaria abre antes el «Más» de su columna. **(B)
+  «Calificar» en una columna sin examen ni rúbrica que no es de observación**
+  (`[data-nota-abrir]`) abre `SesionNota` (`[data-nota-directa]`): la clase
+  en una lista con cinco calificativos de nota fija —IN 3 · SU 5 · BI 6 ·
+  NT 7,5 · SB 9,5, decisión de Luis— y una casilla de nota exacta; cada
+  pulsación guarda en todos los criterios de la columna (`sinVinculos`, como
+  «Pegar columna») y pasa al siguiente; repetir el calificativo quita la
+  nota y «Deshacer» devuelve a cada criterio lo que tenía. No finge una
+  herramienta: lo dice (`[data-sin-herramienta]`) y ofrece definirla. Con
+  examen sigue abriéndose el corrector y con rúbrica o diario, su pasada.
+- **Rediseño del Calificador, fase 3: la app pregunta con su propio
+  diálogo** (nov 2026). `utils/confirmar.tsx`: `await confirmar(…)` y
+  `await avisar(…)` sustituyen a `confirm()` y `alert()` del navegador en
+  toda la app (no queda ninguno fuera de AulaMap, que es código ajeno). Con
+  una cadena, el primer párrafo es la pregunta; con un objeto se da el verbo
+  del botón (`aceptar`), el de cancelar y `peligro` para lo que borra. Se
+  monta solo por encima de cualquier diálogo (`[data-confirmar]`), Esc
+  cancela sin cerrar lo de debajo y devuelve el foco. **Un `confirm()` nuevo
+  es un error**: no deja poner el verbo y las pruebas no lo aceptan igual.
+  Como es asíncrono, quien pregunta es `async` y una casilla que pregunta al
+  marcarse cambia al aceptar, no al pulsar. Las pruebas llaman a
+  `aceptarConfirmaciones(p, alVer?)` de `pruebas/lib/entorno.mjs` ANTES de
+  navegar (acepta sola cada pregunta y entrega su texto) y a
+  `rechazarSiguienteConfirmacion(p)` para cancelar una.
+- **Piezas comunes y foco retenido** (cierre de la fase 3, nov 2026).
+  `components/comunes/`: `Boton` (variantes primario, secundario, peligro y
+  enlace; 44 px), `Dialogo` (velo, título, cerrar, Esc, pie; los `data-…`
+  van a la tarjeta) y `Pestanas` (`tablist`/`tab`, flechas, Inicio y Fin;
+  aspectos `area` y `unidad`). Usan las clases de siempre (`.btn-primary`,
+  `.modal-overlay`, `.tab-area`, `.tab-unidad`), así que lo escrito antes
+  sigue valiendo; **lo nuevo se hace con ellas** y lo viejo se pasa cuando se
+  toque. Ya las usan `confirmar`, `AnalisisAlumno`, las pestañas de la clase
+  y las de Seguimiento, que ahora son `role="tab"`: las pruebas las buscan
+  con `getByRole('tab', …)`. El foco lo retiene `utils/foco.ts`
+  (`instalarFoco()` en `main.tsx`) para TODO lo que lleve `.modal-overlay`,
+  sin tocar cada diálogo: manda el último velo visible del documento, al
+  abrirse se lleva el foco a la tarjeta (no a un campo: en el iPad abriría
+  el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
+  la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
+  `.modal-overlay` se queda sin nada de esto.
+- **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
+  sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
+  `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
+  `.modal-overlay` para el foco): tipo y peso, criterios con su «×» y
+  «+ criterio», y las acciones secundarias como botones grandes
+  (`button.hoja-accion`, con los mismos `data-…` de siempre). Pulsar una
+  acción cierra la hoja; Esc y pulsar fuera, también. Luis la eligió por ser
+  lo más cómodo en tablet: la cabecera ya no crece ni empuja la lista. Los
+  detalles siguen ADEMÁS en la cabecera, sin sitio mientras está plegada
+  (`.instr-th-detalle`), y `[data-cabeceras-toggle]` («Más en todas») los
+  enseña ahí como antes; con él activo el «Más» de columna se desactiva. Una
+  prueba que abra la hoja busca la acción dentro de `[data-hoja-columna]`,
+  no en el `<th>`: con la hoja abierta el mismo `data-…` está dos veces.
+- **El corrector por cámara vuelve solo a la cámara tras «Guardar y
+  siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
+  «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no
+  se avanza solo: decisión de Luis (nov 2026).
+- **El análisis de un alumno lo compara con su grupo y no calcula ninguna
+  nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
+  `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que
+  ya da `getResumenCurso` y de las respuestas de cada examen
+  (`examenesDeArea` en `queries.ts`): por área, por familia de instrumentos
+  y por criterio, la nota del alumno junto a media, mediana y moda del
+  grupo; sus puntos débiles (suspenso, o un punto o más bajo la mediana) y
+  fuertes; y en cada examen, las preguntas que él falló (< 50 %) y la
+  mayoría acertó (≥ 60 %), con `informeDePrueba`. Decisiones de Luis (nov
+  2026): la **moda va sobre el calificativo** (IN·SU·BI·NT·SB), no sobre la
+  nota, que con decimales no se repite; y la nota de un criterio
+  **adaptado (ACI) no entra** en la estadística del grupo de ese criterio ni
+  se compara ahí, siempre, con NEAE a la vista o no. La pantalla es
+  `AnalisisAlumno` (`[data-analisis-alumno]`), desde Seguimiento → «Por
+  alumno» (`[data-analisis-abrir]` en el nombre) y desde la ficha; es del
+  docente y enseña todas las cifras. El documento
+  (`informes/analisisAlumno.ts`, Lámina, por `imprimir`) lleva nombre y
+  **no da cifras del grupo con menos de `MINIMO_GRUPO` (5) notas**: de tres
+  se deducen las de los compañeros. El informe de una prueba sigue siendo
+  del grupo y sin nombres.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota
@@ -680,6 +810,22 @@ edumind_miclase/
   `localStorage`. Un aparato con la versión anterior que sincronice puede
   retirar notas que el nuevo ya distingue: hay que actualizar todos antes
   de volver a calificar, y así lo dicen la puerta y el aviso.
+- **Las unidades de un trimestre cuentan igual salvo que el área diga otra
+  cosa.** `Asignatura.regla_unidades` (sin índice; `REGLAS_UNIDADES`,
+  `normalizarReglaUnidades`): `iguales` (por defecto, lo de siempre) o `peso`,
+  que pondera cada unidad por `Unidad.peso`, el «% Peso» de PROENS.
+  `pesosDeUnidades(regla, unidades)` (`calculo.ts`, puro) da los pesos o
+  `undefined` si cuentan igual, y `fundirUnidades(cals, pesosUnidad)` hace la
+  media ponderada; una unidad sin peso entra con la media de las que lo
+  tienen, y sin ningún peso escrito todas cuentan igual. Lo pasan TODOS los
+  que funden: `calcularNotaArea` (`opciones.pesosUnidad`, desde
+  `getResumenCurso`, `ExplicacionNota`, `informes/datos.ts` y Seguimiento),
+  `getMatrizEvaluacion` y `getResumenPorCriterio` (`pesosUnidadDeArea`); si
+  uno no lo pasara, «Todo el curso» y el boletín discreparían. Se elige en
+  «Nota final» (`[data-regla-unidades]`), donde con `peso` se editan los
+  pesos de cada unidad (`[data-peso-unidad]`), y `ExplicacionNota` lo dice
+  (`[data-explicacion-unidades]`). La nota de cada unidad no cambia. Decisión
+  de Luis (auditoría de nov 2026): que se pueda elegir por área.
 - **La nota final del curso sale de una sola función**, `notaFinal` en
   `calculo.ts`, con la regla que declare el área (`Asignatura.regla_final`,
   sin índice: ponderada por `pesos_trimestres` —lo de siempre y el valor por
@@ -952,8 +1098,52 @@ edumind_miclase/
   **antes de publicar en la App Store o en Google Play, confirmarlo con el
   autor**, porque las condiciones de la App Store chocan con la AGPL de
   código ajeno.
+- **El mínimo de consecución se ve donde se califica y en el informe.**
+  `unidad_criterios.minimo` (lo trae PROENS) sale en la franja del instrumento
+  del panel de la casilla (`[data-minimo-criterio]`, dos líneas; al tocarlo,
+  entero), solo dentro de una unidad, con `getMinimoDeCriterio`. Se pide
+  DESPUÉS de la nota: por delante retrasaba lo primero que tiene que llegar
+  al panel. En el informe individual va bajo la descripción del criterio
+  (`lineaMinimos` en `informes/documentos.ts`, con `AreaInforme.minimos`): con
+  mínimos distintos en varias unidades, cada uno con el nombre de la suya; el
+  mismo texto, una vez; con trimestre, solo los de sus unidades; y no se
+  imprime en un criterio adaptado a la vista, porque no es el suyo. Boletines
+  y acta no lo llevan. Es texto: ninguna nota se compara con él. Antes solo
+  se veía en 📋 Programación (auditoría de nov 2026).
+- **En papel, la lámina va sobre blanco.** El `@media print` de
+  `informes/lamina.ts` pone `--lm-paper` y `.hoja` en blanco y deja la franja
+  de los Cinco Mundos en un filete de 1,5 mm: el fondo crudo a página
+  completa, forzado con `print-color-adjust`, tintaba cada hoja (una por
+  alumno en boletines e informes). «Guardar como PDF» y el PDF de iOS usan el
+  mismo medio, así que también salen en blanco; el papel de la lámina queda
+  para la pantalla y el `.html` descargado. Las hojas de respuestas llevan su
+  propio CSS y no cambian. Luis: los informes eran demasiado caros de imprimir.
+- **Tocar los instrumentos de un criterio no retira a los hijos de una
+  familia que sigue asignada.** `fijarInstrumentosDeCriterio` recibe familias
+  (la importación de PROENS y 📋 Programación no nombran hijos): un hijo
+  conserva su fila mientras su familia esté en la lista y se va con ella si
+  se retira. Antes reimportar la programación deshacía en silencio el reparto
+  de criterios de los hijos (`proens-ui.test.mjs`, paso 6).
+- **El Calificador reabre la última unidad del área**
+  (`miclase.calificador.unidad`, por área, en el aparato), pero solo si es
+  del trimestre de la barra: la casilla lleva el trimestre de la barra, y
+  reabrir en enero la unidad de diciembre invitaría a calificar en el
+  trimestre equivocado. Un `?unidad_id=` manda, y pulsar «Todo el curso» la
+  olvida. Sin unidad recordada se sigue abriendo en «Todo el curso». La carga
+  de la matriz descarta la respuesta que llega tarde (`vigente`): abrir
+  directamente en una unidad dejaba que la de todo el curso, más lenta, la
+  pisara.
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
+  La marca es un **corro de clase**: cinco círculos (Los Cinco Mundos)
+  alrededor de uno central, la clase. La eligió Luis (nov 2026); antes era la
+  matriz 5×3 del calificador. La misma geometría vive en `frontend/src/marca.ts`
+  (puro), que da el símbolo del menú (`components/Marca.tsx`, `[data-marca]`)
+  y el de la cabecera de los informes (`marcaSVG` en `lamina.ts`): si cambia
+  en el script, cambia allí. Sobre fondo oscuro el mundo interior va aclarado
+  (`#5b9aa6`), porque el `#2c5c66` del canon se pierde sobre el azul; sobre
+  papel va el canon y el círculo central en tinta. El splash de Android sigue
+  siendo el de Capacitor.
 - **Todo fichero sale por `descargarFichero` (`utils/compartir.ts`).** Un
   `<a download>` no hace nada dentro de WKWebView: la copia de seguridad
   «se descargaba» en el iPad sin que saliera nada. En nativo la función abre
@@ -990,6 +1180,24 @@ edumind_miclase/
 - **`iosScheme` no se fija en `capacitor.config.ts`.** iOS no admite http/https
   como esquema propio y Capacitor lo ignora: el origen real es
   `capacitor://localhost`, y cambiarlo tras publicar vaciaría IndexedDB.
+- **La semana se le puede pedir a una IA, y lo que vuelve queda marcado.**
+  `ia/planificacionPrompt.ts` (puro) monta el prompt con lo que ya sabe la
+  app —clase, semana, horario, áreas, unidades del trimestre con sus
+  criterios y los eventos de esos días; nunca alumnado— y la plantilla de
+  formato NO se escribe a mano: es lo que `semanaAMarkdown` exporta para una
+  sesión de ejemplo, así que el prompt y `leerSemana` no pueden separarse
+  (`planificacion-semanal.test.ts` lee la plantilla sin avisos). Vive en
+  «Volcar una semana» (`[data-ia-semana-toggle]`): «Copiar prompt» para una
+  IA externa (`[data-ia-semana-prompt]` lo enseña) y, con WebGPU, «Generar
+  el día» con la IA local —un solo día (`soloDia`): una semana no le cabe en
+  1200 tokens—. La respuesta entra por el cuadro de texto y la vista previa
+  de siempre. No hay horario guardado: sale de las franjas ya planificadas y
+  el docente lo corrige en el propio diálogo (`franjasDeTexto`). La marca es
+  `SesionPlan.generada_ia` (sin índice): la pone la casilla
+  `[data-volcar-de-ia]`, que se marca sola al copiar el prompt, al generar o
+  si el .md trae `MARCA_IA` (`<!-- generada-ia -->`); se conserva al editar,
+  se ve en el detalle (`AvisoBorradorIA`) y `semanaAMarkdown` la escribe.
+  Decisión de Luis (auditoría de nov 2026): las dos vías, externa y local.
 - **La planificación es una previsión, no un registro de aula** (esquema v10,
   tablas `planificacion` y `eventos`; entrada «Planificación» del menú, con
   vistas Semana y Mes en `pages/Planificacion/`). Una sesión planificada es de

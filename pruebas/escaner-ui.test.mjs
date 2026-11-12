@@ -13,7 +13,7 @@
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { createRequire } from 'node:module'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const require = createRequire(import.meta.url)
 const { hojaDeMuestra } = require(process.env.HOJA_DEMO)
@@ -35,7 +35,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1000 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 const aparece = (loc) => loc.waitFor({ timeout: 8000 }).then(() => true, () => false)
 
@@ -104,7 +104,7 @@ try {
   await p.waitForTimeout(1500)
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-instr-th]').first().waitFor({ timeout: 8000 })
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const colExamen = p.locator('[data-instr-th][data-tipo="prueba-escrita"]').first()
   ok(await colExamen.count() === 1, 'hay columna de prueba escrita en la unidad')
@@ -157,7 +157,9 @@ try {
   await hoja.close()
 
   console.log('\n4. Corregir por cámara con esa foto')
-  await colExamen.locator('[data-escanear-abrir]').click()
+  // La cámara no es la acción principal de la columna: va tras su «Más».
+  await colExamen.locator('[data-columna-mas]').click()
+  await p.locator('[data-hoja-columna] [data-escanear-abrir]').click()
   await escaner.waitFor({ timeout: 8000 })
   await escaner.locator('[data-escaner-fichero]').setInputFiles({ name: 'hoja.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })
   ok(await aparece(escaner.locator('[data-escaner-capturada]')), 'la foto se reconoce como hoja')
@@ -175,6 +177,10 @@ try {
   ok(nota === '7.5', 'resuelta la duda, la nota se recalcula: 6 de 8 → 7,5', nota)
   await escaner.locator('[data-escaner-guardar]').click()
   ok(await aparece(escaner.locator('[data-escaner-progreso]').getByText('1 de 2 corregidos')), 'guardada: 1 de 2')
+  // Tras guardar se vuelve sola a la cámara, lista para la hoja siguiente, y lo dice.
+  ok(await escaner.locator('[data-escaner-camara]').isVisible() && await escaner.locator('[data-escaner-capturada]').count() === 0, 'vuelve sola a la cámara para la hoja siguiente')
+  const guardada = await escaner.locator('[data-escaner-guardada]').textContent()
+  ok(/Abad Ríos, Ana/.test(guardada) && /7[.,]5/.test(guardada) && /hoja siguiente/.test(guardada), 'y dice qué se guardó y que toca la siguiente', guardada)
   ok(await escaner.locator('[data-escaner-faltan]').getByText(/Bello Souto/).count() === 1 && await escaner.locator('[data-escaner-faltan]').getByText(/Abad/).count() === 0, 'en «faltan» queda solo Bruno')
   await p.keyboard.press('Escape')
   await escaner.waitFor({ state: 'hidden', timeout: 5000 })

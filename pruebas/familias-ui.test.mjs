@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -27,7 +27,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Instrumentos vivos y filas criterio↔instrumento vivas. */
@@ -107,7 +107,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const columnasAntes = await p.locator('th.criterio-th').count()
   await p.getByRole('button', { name: /⚙ Instrumentos/ }).click()

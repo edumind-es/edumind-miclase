@@ -13,6 +13,7 @@
  * abre la hoja del sistema (ver `nativo/impresora.ts`).
  */
 import { esNativo } from '@/api'
+import { marcaSVG } from '@/marca'
 import { esWebKit } from '@/nativo/webkit'
 import { Impresora } from '@/nativo/impresora'
 import { descargarFichero } from '@/utils/compartir'
@@ -113,6 +114,7 @@ body {
   color: var(--lm-ink-2); text-transform: uppercase;
 }
 .lm-plate-meta .fig { color: var(--lm-ink); font-weight: 600; }
+.lm-plate-meta .fig .marca { vertical-align: -3px; margin-right: 5px; }
 
 .kicker {
   font-weight: 600; font-size: 8.5pt; color: var(--lm-fisico-deep);
@@ -217,8 +219,15 @@ tr.destacada td { border-bottom: 2px solid var(--lm-rule-strong); font-weight: 6
 @page { size: A4; margin: 0; }
 
 @media print {
+  /* En papel, la lámina va sobre blanco: el fondo crudo a página completa
+     tintaba cada hoja entera (una por alumno en boletines e informes) y
+     además se forzaba con print-color-adjust. La franja de los Cinco Mundos
+     se queda como un filete fino: identidad sin gastar tinta. En pantalla y
+     en el .html descargado la lámina sigue igual. */
+  :root { --lm-paper: #fff; --lm-paper-2: #fff; }
   body { background: #fff; }
-  .hoja { margin: 0; box-shadow: none; }
+  .hoja { margin: 0; box-shadow: none; background: #fff; }
+  .lm-plate-top { height: 1.5mm; }
   .no-imprimir { display: none !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
@@ -254,7 +263,7 @@ export function hoja(contenido: string): string {
 
 export function cabecera(figura: string): string {
   return `<div class="lm-plate-meta">
-    <span class="fig">EDUmind · MiClase</span>
+    <span class="fig">${marcaSVG(14, 'papel')}EDUmind · MiClase</span>
     <span>${esc(figura)}</span>
   </div>`
 }

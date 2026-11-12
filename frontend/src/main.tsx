@@ -8,6 +8,10 @@ import PuertaMigracion from './components/PuertaMigracion'
 import BarreraErrores from './components/BarreraErrores'
 import { asegurarContador } from './db/ids'
 import { maxIdLocal } from './db/queries'
+import { instalarFoco } from './utils/foco'
+
+// El foco se queda dentro del diálogo abierto, sea cual sea.
+instalarFoco()
 
 // Pedir almacenamiento persistente: evita que el navegador borre IndexedDB
 // (datos de aula y evidencias fotográficas) si escasea el espacio

@@ -277,7 +277,7 @@ export default function ResumenCurso({ datos, criterios, vista, plegadas, altern
                 style={{ borderTop: `4px solid ${f.color}`, cursor: f.hijos.length ? 'pointer' : 'default' }}
                 onClick={f.hijos.length ? () => alternarFamilia(f.id) : undefined}
                 title={f.hijos.length
-                  ? `${f.nombre} · ${f.peso}% del área · dentro: ${f.hijos.map(h => h.nombre).join(', ')}. Pulsa para ${desplegadas.has(f.id) ? 'plegar' : 'desplegar'} los hijos.`
+                  ? `${f.nombre} · ${f.peso}% del área · dentro: ${f.hijos.map(h => h.nombre).join(', ')}. Pulsa para ${desplegadas.has(f.id) ? 'plegar' : 'desplegar'} sus actividades.`
                   : `${f.nombre} · ${f.peso}% del área`}>
                 {f.hijos.length ? <span className="comp-flecha">{desplegadas.has(f.id) ? '▾' : '▸'} </span> : null}
                 {f.nombre}

@@ -10,13 +10,16 @@ import {
   getCalificacionesPorGrupo, getEvidenciasAlumno, getResumenAsistencia,
   getUnidades, getMedidasDeGrupo,
 } from '@/db/queries'
-import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, type NotaArea, type PesosVinculo } from '@/db/calculo'
+import { calcularNotaArea, normalizarReglaArea, normalizarReglaFinal, pesosVinculoDeUnidades, pesosDeUnidades, type NotaArea, type PesosVinculo, type PesosUnidad } from '@/db/calculo'
 import {
   conexionesDeCriterios, perfilCompetenciasClave,
   type ConexionCriterio, type Descriptor, type PerfilCompetenciasClave,
 } from '@/db/competenciasClave'
 import type { Alumno, Grupo, Asignatura, Instrumento, Calificacion, Medida } from '@/db/localDb'
 import * as curriculo from '@/curriculo'
+
+/** El mínimo de consecución de un criterio en una unidad de la programación. */
+export type MinimoDeUnidad = { unidad: string; trimestre: number | null; minimo: string }
 
 export type AreaInforme = {
   asig: Asignatura
@@ -29,6 +32,10 @@ export type AreaInforme = {
   pesosVinculo: PesosVinculo
   /** criterio_id → descriptores y competencias clave de su competencia específica */
   conexiones: Map<string, ConexionCriterio>
+  /** Pesos de unidad, si el área las pondera (`pesosDeUnidades`); sin ellos cuentan igual. */
+  pesosUnidad?: PesosUnidad
+  /** criterio_id → mínimos de consecución que la programación declara, por unidad */
+  minimos?: Map<string, MinimoDeUnidad[]>
 }
 
 export type DatosGrupo = {
@@ -116,8 +123,18 @@ export async function reunirDatosGrupo(
         pesosCriterio.set(c.criterio_id, Math.max(pesosCriterio.get(c.criterio_id) ?? 0, c.peso || 1))
       }
     }
+    // Mínimos de consecución de la programación, por criterio y unidad.
+    const minimos = new Map<string, MinimoDeUnidad[]>()
+    for (const u of unidades) {
+      for (const c of u.criterios) {
+        const texto = (c.minimo || '').trim()
+        if (!texto) continue
+        minimos.set(c.criterio_id, [...(minimos.get(c.criterio_id) ?? []), { unidad: u.nombre, trimestre: u.trimestre ?? null, minimo: texto }])
+      }
+    }
     areas.push({
-      asig, instrumentos, descripciones, pesosCriterio,
+      asig, instrumentos, descripciones, pesosCriterio, minimos,
+      pesosUnidad: pesosDeUnidades(asig.regla_unidades, unidades),
       pesosVinculo: pesosVinculoDeUnidades(unidades),
       conexiones,
     })
@@ -138,7 +155,7 @@ export function notasDeAlumno(datos: DatosGrupo, alumnoId: number): { area: Area
         area.asig.id!, propias, area.instrumentos,
         area.asig.pesos_trimestres, area.pesosCriterio, area.pesosVinculo,
         normalizarReglaFinal(area.asig.regla_final), normalizarReglaArea(area.asig.regla_area),
-        { medidas: datos.medidas.get(`${alumnoId}:${area.asig.id}`) }
+        { medidas: datos.medidas.get(`${alumnoId}:${area.asig.id}`), pesosUnidad: area.pesosUnidad }
       ),
     }
   })

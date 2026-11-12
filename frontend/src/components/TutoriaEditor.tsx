@@ -18,6 +18,7 @@ import { guardarTutoria, eliminarTutoria, getTutoriasDeAlumno, revisarAcuerdo, g
 import { documentoActaTutoria, nombreFicheroActa } from '@/informes/actaTutoria'
 import { imprimir, descargarHTML } from '@/informes/lamina'
 
+import { confirmar } from '@/utils/confirmar'
 export type BorradorTutoria = Omit<Tutoria, 'updated_at' | 'deleted_at' | 'created_at'>
 
 const nombreAlumno = (a: Alumno) => `${a.apellidos}, ${a.nombre}`
@@ -80,8 +81,8 @@ export default function TutoriaEditor({ inicial, alumnos, grupo, onCerrar, onGua
     return () => window.removeEventListener('keydown', esc)
   })
 
-  const cerrar = () => {
-    if (cambios && !window.confirm('Hay cambios sin guardar en esta tutoría. ¿Cerrar sin guardar?')) return
+  const cerrar = async () => {
+    if (cambios && !await confirmar('Hay cambios sin guardar en esta tutoría. ¿Cerrar sin guardar?')) return
     onCerrar()
   }
 
@@ -141,7 +142,7 @@ export default function TutoriaEditor({ inicial, alumnos, grupo, onCerrar, onGua
 
   const borrar = async () => {
     if (!t.id) { onCerrar(); return }
-    if (!window.confirm('¿Borrar esta tutoría y sus acuerdos? Desaparece de este dispositivo y, al sincronizar, de los demás.')) return
+    if (!await confirmar('¿Borrar esta tutoría y sus acuerdos? Desaparece de este dispositivo y, al sincronizar, de los demás.')) return
     await eliminarTutoria(t.id)
     onGuardado(null)
     onCerrar()

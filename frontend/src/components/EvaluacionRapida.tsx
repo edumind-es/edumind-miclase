@@ -278,7 +278,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         observacion: { criterio_id: criterioId, texto: observacion.trim() || null },
       })
       if (criterioId in r.porCriterio) setValorActual(r.porCriterio[criterioId])
-      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nombre).join(', ')}` : ''
+      const tambien = r.tambien.length ? ` · también en ${r.tambien.map(t => t.nota != null && t.nota !== r.nota ? `${t.nombre} (${t.nota})` : t.nombre).join(', ')}` : ''
       setMsg({
         tipo: 'ok',
         texto: r.nota == null
@@ -466,6 +466,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
               respuestas={marcado}
               destinos={destinosPrueba}
               criterioActual={criterioId}
+              unidadId={unidadId}
               guardando={guardando}
               onCambio={guardarRespuestas}
             />

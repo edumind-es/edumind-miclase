@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -30,7 +30,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1000 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 /** Unidades con sus criterios e instrumentos, tal como están en IndexedDB. */
@@ -126,21 +126,21 @@ try {
   await p.locator('[data-vista="criterios"]').click()
   // El selector de la barra en el trimestre de las unidades, para calificar en él.
   await p.getByLabel('Trimestre').selectOption(String(T))
-  await p.locator('.tab-unidad').nth(udA.pestana).click()
+  await elegirUnidad(p, udA.pestana)
   await p.waitForTimeout(1200)
   const enA = await calificar(criterio, 8)
-  await p.locator('.tab-unidad').nth(udB.pestana).click()
+  await elegirUnidad(p, udB.pestana)
   await p.waitForTimeout(1200)
   const enB = await calificar(criterio, 6)
   ok(enB.startsWith('6'), `en ${udB.nombre} la casilla vale 6`, enB)
-  await p.locator('.tab-unidad').nth(udA.pestana).click()
+  await elegirUnidad(p, udA.pestana)
   await p.waitForTimeout(1200)
   const idxA = await p.locator('th.criterio-th .criterio-th-id').evaluateAll((els, id) => els.findIndex(x => x.textContent.trim() === id), criterio)
   const otraVezA = (await p.locator('tbody tr').first().locator('td.celda .celda-btn').nth(idxA).textContent()).trim()
   ok(enA.startsWith('8') && otraVezA.startsWith('8'), `y en ${udA.nombre} sigue valiendo 8: las unidades son estancas`, `${enA} / ${otraVezA}`)
 
   console.log('\n3. «Todo el curso» por criterio: 1T · 2T · 3T · Final, con la media de las unidades')
-  await p.locator('.tab-unidad').nth(0).click()
+  await elegirUnidad(p, 0)
   await p.locator('[data-resumen-curso]').waitFor({ timeout: 5000 })
   await p.locator('[data-matriz-resumen="criterios"]').waitFor({ timeout: 8000 })
   const banda = await p.locator('[data-resumen-curso]').textContent()
@@ -174,7 +174,7 @@ try {
   const textoFicha = await ficha.textContent()
   ok(textoFicha.includes(`anotada en ${udA.nombre}`) && textoFicha.includes(`anotada en ${udB.nombre}`), 'nombrando cada unidad')
   ok(/media de 2 unidades/.test(textoFicha), 'y dice que el instrumento vale la media de sus unidades')
-  ok(await ficha.locator('[data-explicacion-regla]').count() === 1 && /media de sus unidades/.test(textoFicha) && /familia/.test(textoFicha), 'con la regla a la vista: unidades → instrumento → familia')
+  ok(await ficha.locator('[data-explicacion-regla]').count() === 1 && /media de sus unidades/.test(textoFicha) && /actividad dentro de su instrumento/.test(textoFicha), 'con la regla a la vista: unidades → actividad → instrumento')
   ok((await ficha.locator('[data-explicacion-valor]').first().textContent()).trim() === '7', 'el valor del bloque es la media, 7')
   ok(await ficha.locator('[data-explicacion-trimestres]').count() === 1, 'enseña T1 · T2 · T3 y la final')
   ok(await ficha.locator('[data-explicacion-area]').count() === 1, 'y la nota del área')

@@ -14,6 +14,7 @@ import { useLocalAI, hasWebGPU } from '@/ia/useLocalAI'
 import { descargarFichero } from '@/utils/compartir'
 import { AvisoContextoIA, AvisoBorradorIA } from './AvisoIA'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   instrumentoId: number
   instrumentoNombre: string
@@ -85,8 +86,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
 
   // Ningún camino de salida descarta trabajo sin preguntar: ni la ✕, ni Esc,
   // ni el clic fuera del modal.
-  const cerrar = () => {
-    if (sucio && !confirm('Tienes cambios sin guardar en esta rúbrica. Si sales ahora se pierden.\n\n¿Salir de todos modos?')) return
+  const cerrar = async () => {
+    if (sucio && !await confirmar({ texto: 'Tienes cambios sin guardar en esta rúbrica. Si sales ahora se pierden.\n\n¿Salir de todos modos?', aceptar: 'Salir sin guardar', cancelar: 'Seguir editando' })) return
     onCerrar()
   }
 
@@ -281,7 +282,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   }
 
   const borrar = async () => {
-    if (!confirm('¿Eliminar esta rúbrica? No se puede deshacer.')) return
+    if (!await confirmar({ texto: '¿Eliminar esta rúbrica? No se puede deshacer.', aceptar: 'Eliminar la rúbrica', peligro: true })) return
     await eliminarRubrica(instrumentoId)
     setRubrica(rubricaVacia(instrumentoNombre))
     setTieneDatos(false)
@@ -333,12 +334,12 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
    * Importar o cargar del banco sustituye lo que hay en el editor. Si eso es
    * trabajo sin guardar, se pregunta: es la misma regla que al cerrar.
    */
-  const puedeReemplazar = () =>
-    !sucio || confirm('Tienes cambios sin guardar en esta rúbrica. Si cargas otra encima se pierden.\n\n¿Cargarla de todos modos?')
+  const puedeReemplazar = async () =>
+    !sucio || await confirmar('Tienes cambios sin guardar en esta rúbrica. Si cargas otra encima se pierden.\n\n¿Cargarla de todos modos?')
 
   /** Elegir una rúbrica del banco la COPIA aquí: adaptarla no toca la original. */
-  const cargarDelBanco = (elegida: RubricaParsed, origen: RubricaDeBanco) => {
-    if (!puedeReemplazar()) return
+  const cargarDelBanco = async (elegida: RubricaParsed, origen: RubricaDeBanco) => {
+    if (!await puedeReemplazar()) return
     setRubrica(elegida)
     setSucio(true)
     setVieneDeIA(!!origen.generada_ia)
@@ -386,7 +387,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   const importarFichero = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     e.target.value = ''
-    if (!file || !puedeReemplazar()) return
+    if (!file || !await puedeReemplazar()) return
     try {
       const { rubrica: leida, avisos, contexto, area, generada_ia } = await importarRubrica(file.name, await file.arrayBuffer())
       setRubrica(leida)

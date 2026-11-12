@@ -26,6 +26,7 @@ import { getResumenEvidencias } from '@/db/queries'
 import { COPIA_GRANDE, tamanoLegible, type Cuenta } from '@/db/almacen'
 import { registrarCopiaEnFichero } from '@/db/copia'
 
+import { confirmar } from '@/utils/confirmar'
 /** Por qué se pide contraseña antes de aplicar un paquete. */
 type Pendiente = { paquete: PaqueteSync; motivo: 'desbloquear' | 'unificar' }
 
@@ -71,7 +72,7 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
 
   const enviar = async (todasLasEvidencias = false) => {
     limpiar()
-    if (todasLasEvidencias && evidencias && !confirm(
+    if (todasLasEvidencias && evidencias && !await confirmar(
       `El paquete llevará ${evidencias.n} fotos, audios y vídeos (${tamanoLegible(evidencias.bytes)}, algo más al cifrarlos).` +
       (evidencias.bytes > COPIA_GRANDE
         ? ' Puede agotar la memoria del aparato: la página se recargaría y no saldría ningún fichero. Tus datos no corren peligro.'

@@ -7,7 +7,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -27,7 +27,7 @@ const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 }
 const p = await ctx.newPage()
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
-p.on('dialog', d => d.accept())
+await aceptarConfirmaciones(p)
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })
 
 try {
@@ -73,7 +73,7 @@ try {
   await p.waitForTimeout(1500)
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-vista="criterios"]').click()
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   const columnasAntes = await p.locator('th.criterio-th').count()
   const comps = p.locator('[data-competencia-th]')
@@ -110,7 +110,7 @@ try {
   await foto('cobertura-01-plegado')
   await p.reload({ waitUntil: 'networkidle' })
   await p.waitForTimeout(1500)
-  await p.locator('.tab-unidad').nth(1).click()
+  await elegirUnidad(p, 1)
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-plegado="CE1"]').count() === 1, 'el plegado se recuerda al recargar')
   await plegada.click()

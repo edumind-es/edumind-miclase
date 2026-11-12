@@ -12,6 +12,7 @@ import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import * as curriculo from '@/curriculo'
 import { NOMBRES_AREAS } from './nombresAreas'
 
+import { confirmar } from '@/utils/confirmar'
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
   'ciencias-naturales':               'Ciencias de la Naturaleza',
@@ -201,13 +202,13 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
   }
 
   const borrarInstrumento = async (instrId: number, nombre: string) => {
-    if (!confirm(`¿Eliminar «${nombre}»?\n\nSe eliminarán también sus calificaciones y dejará de estar asignado a los criterios.`)) return
+    if (!await confirmar(`¿Eliminar «${nombre}»?\n\nSe eliminarán también sus calificaciones y dejará de estar asignado a los criterios.`)) return
     await eliminarInstrumento(instrId)
     cargar()
   }
 
   const borrarAsignatura = async (a: Asignatura) => {
-    if (!confirm(`¿Eliminar el área «${a.nombre_display}»?\n\nSe eliminarán su programación, sus instrumentos y todas sus calificaciones. No se puede deshacer.`)) return
+    if (!await confirmar({ texto: `¿Eliminar el área «${a.nombre_display}»?\n\nSe eliminarán su programación, sus instrumentos y todas sus calificaciones. No se puede deshacer.`, aceptar: 'Eliminar el área', peligro: true })) return
     await eliminarAsignatura(a.id)
     if (expandida === a.id) setExpandida(null)
     cargar()

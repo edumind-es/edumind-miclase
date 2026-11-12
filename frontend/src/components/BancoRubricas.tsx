@@ -16,6 +16,7 @@ import {
 import { importarRubrica } from '@/ia/rubricaImportar'
 import type { RubricaParsed } from '@/ia/rubricaPrompt'
 
+import { confirmar } from '@/utils/confirmar'
 interface Props {
   /** El instrumento que se está editando: su propia rúbrica no se le ofrece. */
   instrumentoId: number
@@ -67,7 +68,7 @@ export default function BancoRubricas({ instrumentoId, onElegir, onCerrar, refre
   const quitar = async (r: RubricaDeBanco) => {
     if (r.bancoId == null) return
     const sigue = r.usos.length > 0
-    if (!confirm(sigue
+    if (!await confirmar(sigue
       ? `¿Quitar «${r.titulo}» del banco?\n\nLos instrumentos que la usan la conservan.`
       : `¿Quitar «${r.titulo}» del banco?\n\nNingún instrumento la usa: se perderá.`)) return
     await eliminarDelBanco(r.bancoId)

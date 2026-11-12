@@ -20,7 +20,7 @@ interface Props {
 
 const PASOS = [
   ['Arriba eliges la clase y el trimestre', 'Todo lo que hagas aquí es de esa clase y ese trimestre.'],
-  ['Cada columna es algo que corriges', 'Un examen, el cuaderno, speaking… Lo que la programación trae son familias con su peso; lo que hay dentro lo decides tú.'],
+  ['Cada columna es algo que corriges', 'Un examen, el cuaderno, speaking… Lo que la programación trae son instrumentos con su peso; las actividades de dentro las decides tú.'],
   ['Pulsa una casilla para poner nota', 'Verás el criterio, con qué se evalúa y su rúbrica. La nota se guarda al pulsarla.'],
   ['«Evaluar hoy» pasa por toda la clase', 'Cuatro niveles por alumno, al diario. Y «Pegar columna» trae las notas de tu hoja de cálculo.'],
 ]

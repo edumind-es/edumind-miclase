@@ -13,6 +13,7 @@ import {
 } from '@/db/tutorias'
 import { getModelosTutoria, guardarModeloTutoria, eliminarModeloTutoria } from '@/db/queries'
 
+import { confirmar } from '@/utils/confirmar'
 type Borrador = Omit<ModeloTutoria, 'updated_at' | 'deleted_at' | 'created_at'>
 
 const borradorDe = (m: ModeloElegible, copia: boolean): Borrador => ({
@@ -48,7 +49,7 @@ export default function ModelosTutoria({ onCerrar }: { onCerrar: () => void }) {
 
   const borrar = async (m: ModeloElegible) => {
     if (!m.id) return
-    if (!window.confirm(`¿Borrar el modelo «${m.nombre}»? Las tutorías ya hechas con él no cambian.`)) return
+    if (!await confirmar(`¿Borrar el modelo «${m.nombre}»? Las tutorías ya hechas con él no cambian.`)) return
     await eliminarModeloTutoria(m.id)
     setMsg(`Modelo «${m.nombre}» borrado.`)
     cargar()
