@@ -8,14 +8,14 @@
  * sale nada del dispositivo. El documento va por `imprimir` (iframe en web,
  * plugin Impresora en nativo) y por `descargarHTML`, como los demás informes.
  */
-import { useEffect, useState } from 'react'
-import { getPrueba, respuestasDeExamen } from '@/db/queries'
+import { useEffect, useMemo, useState } from 'react'
+import { getPrueba, getUnidades, respuestasDeExamen } from '@/db/queries'
 import { competenciasDeLaPrueba, informeDePrueba, radialSVG, type InformePrueba as Informe } from '@/db/informePrueba'
 import type { ConexionCriterio } from '@/db/competenciasClave'
 import type { Asignatura, Grupo } from '@/db/localDb'
 import { curriculoDeArea } from '@/informes/datos'
 import { useAppStore } from '@/store/useAppStore'
-import type { PruebaDef } from '@/db/prueba'
+import { pruebaDeUnidad, tieneUnidadesPorPregunta, unidadesDelExamen, type PruebaDef } from '@/db/prueba'
 import { documentoInformePrueba } from '@/informes/informePrueba'
 import { imprimir, descargarHTML } from '@/informes/lamina'
 
@@ -35,8 +35,13 @@ interface Props {
 }
 
 export default function InformePrueba({ instrumentoId, instrumentoNombre, unidadId, unidadNombre, criterios, grupo, asig, grupoNombre, areaNombre, onCerrar }: Props) {
-  const [def, setDef] = useState<PruebaDef | null>(null)
-  const [informe, setInforme] = useState<Informe | null>(null)
+  /** El examen entero, tal como está guardado. */
+  const [entero, setEntero] = useState<PruebaDef | null>(null)
+  const [respuestas, setRespuestas] = useState<Awaited<ReturnType<typeof respuestasDeExamen>> | null>(null)
+  /** Unidades en las que cuenta el examen, si reparte sus preguntas entre ellas. */
+  const [partes, setPartes] = useState<{ id: number; nombre: string }[]>([])
+  /** Qué parte se mira: una unidad, o null para el examen entero. */
+  const [parte, setParte] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
   const [ocupado, setOcupado] = useState(false)
@@ -50,11 +55,28 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
       if (!prueba) { if (vigente) setError(`«${instrumentoNombre}» no tiene examen definido${unidadNombre ? ` en ${unidadNombre}` : ''}.`); return }
       const respuestas = await respuestasDeExamen(instrumentoId, prueba.unidad_id, prueba.def)
       if (!vigente) return
-      setDef(prueba.def)
-      setInforme(informeDePrueba(prueba.def, respuestas, criterios.map(c => c.id)))
+      // Con preguntas repartidas por unidad, el informe se puede mirar unidad a unidad.
+      let unidades: { id: number; nombre: string }[] = []
+      if (tieneUnidadesPorPregunta(prueba.def) && asig?.id != null) {
+        const ids = unidadesDelExamen(prueba.unidad_id, prueba.def)
+        const todas = await getUnidades(asig.id)
+        unidades = ids.map(id => todas.find(u => u.id === id)).filter((u): u is NonNullable<typeof u> => !!u).map(u => ({ id: u.id!, nombre: u.nombre }))
+      }
+      if (!vigente) return
+      setEntero(prueba.def)
+      setRespuestas(respuestas)
+      setPartes(unidades.length > 1 ? unidades : [])
     })().catch(() => { if (vigente) setError('No se pudo preparar el informe.') })
     return () => { vigente = false }
-  }, [instrumentoId, unidadId, instrumentoNombre, unidadNombre, criterios])
+  }, [instrumentoId, unidadId, instrumentoNombre, unidadNombre, criterios, asig?.id])
+
+  // El examen tal como cuenta en la unidad elegida: sus preguntas y las que no dicen unidad.
+  const def = useMemo(() => entero && parte != null ? pruebaDeUnidad(entero, parte) : entero, [entero, parte])
+  const informe: Informe | null = useMemo(
+    () => def && respuestas ? informeDePrueba(def, respuestas, criterios.map(c => c.id)) : null,
+    [def, respuestas, criterios],
+  )
+  const nombreParte = parte != null ? partes.find(u => u.id === parte)?.nombre ?? null : null
 
   // Sin conexión el informe sale igual, sin el bloque de competencias clave
   useEffect(() => {
@@ -64,7 +86,7 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
     return () => { vigente = false }
   }, [grupo, asig, headers])
 
-  const ctx = { grupo: grupoNombre, area: areaNombre, unidad: unidadNombre, descripciones: new Map(criterios.map(c => [c.id, c.descripcion])), conexiones }
+  const ctx = { grupo: grupoNombre, area: areaNombre, unidad: nombreParte ? `${nombreParte} (solo sus preguntas)` : unidadNombre, descripciones: new Map(criterios.map(c => [c.id, c.descripcion])), conexiones }
   const nombreFichero = `informe-${(def?.titulo ?? instrumentoNombre).replace(/\s+/g, '-').toLowerCase()}.html`
 
   const aImprimir = async () => {
@@ -103,6 +125,16 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
           {!error && !informe && <div style={{ color: 'var(--gris-500)' }}>Preparando el informe…</div>}
           {informe && def && (
             <>
+              {partes.length > 0 && (
+                <label style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 12, fontSize: 13 }}>
+                  Este examen reparte sus preguntas por unidad. Ver:
+                  <select data-informe-unidad value={parte ?? ''} onChange={e => setParte(e.target.value ? Number(e.target.value) : null)}
+                    aria-label="Unidad del informe" style={{ minHeight: 44, fontSize: 14 }}>
+                    <option value="">Todo el examen</option>
+                    {partes.map(u => <option key={u.id} value={u.id}>Solo «{u.nombre}»</option>)}
+                  </select>
+                </label>
+              )}
               <div data-informe-resumen style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 12, fontSize: 12.5 }}>
                 <span><strong>{informe.alumnos}</strong> alumno{informe.alumnos !== 1 ? 's' : ''} corregido{informe.alumnos !== 1 ? 's' : ''}</span>
                 {informe.notaMedia != null && <span>nota media <strong>{informe.notaMedia.toFixed(1).replace('.', ',')}</strong></span>}

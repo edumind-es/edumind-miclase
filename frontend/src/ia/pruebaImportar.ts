@@ -173,6 +173,8 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
   const colsNivel = cab.map((c, j) => (otra(j) && /^nivel\s*\d*$/i.test(c) ? j : -1)).filter(j => j >= 0)
   const colCriterio = cab.findIndex((c, j) => otra(j) && j !== colCorreccion && /^criterio/i.test(c))
   const colAspecto = cab.findIndex((c, j) => otra(j) && /^(aspecto|bloque|tema)/i.test(c))
+  // «Unidad»: de qué unidad es la pregunta en un examen que cuenta en varias.
+  const colUnidad = cab.findIndex((c, j) => otra(j) && j !== colAspecto && /^(unidade?|ud)\b/i.test(c))
   // Un test con clave: «Opciones» (separadas por «;», «·» o «/») y «Correcta» (la letra).
   const colOpciones = cab.findIndex((c, j) => otra(j) && /^opcion/i.test(c))
   const colCorrecta = cab.findIndex((c, j) => otra(j) && /^correcta/i.test(c))
@@ -202,9 +204,11 @@ export function pruebaDeFilas(filasOriginales: unknown[][], tituloPorDefecto: st
     const correcta = colCorrecta >= 0 ? letraAIndice(f[colCorrecta] ?? '') : letraClave
     const clave = letraClave == null ? textoClave : ''
     const aspecto = colAspecto >= 0 ? (f[colAspecto] ?? '') : ''
+    const unidad = colUnidad >= 0 ? (f[colUnidad] ?? '').trim() : ''
     preguntas.push({
       enunciado, max: puntos != null && puntos > 0 ? puntos : 1, criterio_id: criterio || null,
       ...(aspecto ? { aspecto } : {}),
+      ...(unidad && !/^todas?$/i.test(unidad) ? { unidad_texto: unidad } : {}),
       ...(clave ? { clave } : {}),
       ...(correccion ? { correccion } : {}),
       ...(niveles.length ? { niveles } : {}),
@@ -326,6 +330,8 @@ export function pruebaDeExamenMarkdown(texto: string, tituloPorDefecto: string):
     if (mCriterio) { actual.criterio_id = mCriterio[1].toUpperCase(); continue }
     const mAspecto = linea.match(/^\s*(?:aspecto|bloque|tema)\s*:\s*(.+?)\s*$/i)
     if (mAspecto) { actual.aspecto = mAspecto[1]; continue }
+    const mUnidad = linea.match(/^\s*(?:unidade?|ud)\s*:\s*(.+?)\s*$/i)
+    if (mUnidad) { if (!/^todas?$/i.test(mUnidad[1])) actual.unidad_texto = mUnidad[1]; continue }
     const mCorreccion = linea.match(/^\s*(?:correcci[oó]n|indicadores|puntuaci[oó]n)\s*:\s*(.+?)\s*$/i)
     if (mCorreccion) { actual.correccion = mCorreccion[1].replace(/\*\*/g, ''); continue }
     const mNotas = linea.match(/^\s*notas?\s*:\s*(.+?)\s*$/i)
@@ -412,6 +418,8 @@ export function pruebaDeJson(texto: string, tituloPorDefecto: string): PruebaImp
       : {
         id: q?.id, enunciado: limpiar(q?.enunciado ?? q?.pregunta), max: numero(q?.max ?? q?.puntos), criterio_id: limpiar(q?.criterio_id ?? q?.criterio),
         aspecto: limpiar(q?.aspecto ?? q?.bloque),
+        unidad_id: q?.unidad_id,
+        unidad_texto: typeof q?.unidad === 'string' ? limpiar(q.unidad) : undefined,
         clave: limpiar(q?.clave ?? q?.solucion),
         correccion: limpiar(q?.correccion ?? q?.indicadores ?? q?.puntuacion),
         notas: limpiar(q?.notas),
@@ -511,8 +519,14 @@ function celdasCsv(linea: string, sep: ',' | ';'): string[] {
 const NOMBRE_TIPO: Record<TipoPrueba, string> = { puntos: 'puntos', test: 'test', niveles: 'niveles' }
 const NOMBRE_REPARTO: Record<RepartoPrueba, string> = { unica: 'nota única', criterios: 'por criterios' }
 
+/** Una unidad con su nombre: lo que se escribe en el fichero, porque el id solo vale en este aparato. */
+export interface UnidadNombrada { id: number; nombre: string }
+const nombresDeUnidad = (unidades: UnidadNombrada[]) => new Map(unidades.map(u => [u.id, u.nombre]))
+
 /** El examen como tabla, con la misma forma que se sabe leer. */
-export function filasDePrueba(d: PruebaDef): (string | number)[][] {
+export function filasDePrueba(d: PruebaDef, unidades: UnidadNombrada[] = []): (string | number)[][] {
+  const nombre = nombresDeUnidad(unidades)
+  const conUnidad = d.preguntas.some(p => p.unidad_id != null && nombre.has(p.unidad_id))
   const conCriterio = d.reparto === 'criterios' || d.preguntas.some(p => p.criterio_id)
   const conAspecto = d.preguntas.some(p => p.aspecto)
   const conPlanilla = d.preguntas.some(p => p.clave || p.correccion)
@@ -526,11 +540,12 @@ export function filasDePrueba(d: PruebaDef): (string | number)[][] {
     ['Reparto', NOMBRE_REPARTO[d.reparto]],
     ...(d.tipo === 'test' ? [['Penalización', d.penalizacion ?? 0]] : []),
     ...(d.tipo === 'niveles' ? [['Escala', ...(d.escala ?? []).map(n => `${n.nombre} (${n.valor})`)]] : []),
-    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conAspecto ? ['Aspecto'] : []), ...(conPlanilla ? ['Clave', 'Corrección'] : []),
+    ['Pregunta', 'Puntos', ...(conCriterio ? ['Criterio'] : []), ...(conUnidad ? ['Unidad'] : []), ...(conAspecto ? ['Aspecto'] : []), ...(conPlanilla ? ['Clave', 'Corrección'] : []),
       ...Array.from({ length: nNiveles }, (_, i) => `Nivel ${i + 1}`), ...(conNotas ? ['Notas'] : []), ...(conOpciones ? ['Opciones', 'Correcta'] : [])],
     ...d.preguntas.map((p, i) => [
       p.enunciado || `Pregunta ${i + 1}`, p.max,
       ...(conCriterio ? [p.criterio_id ?? ''] : []),
+      ...(conUnidad ? [(p.unidad_id != null && nombre.get(p.unidad_id)) || 'Todas'] : []),
       ...(conAspecto ? [p.aspecto ?? ''] : []),
       ...(conPlanilla ? [p.clave ?? '', p.correccion ?? ''] : []),
       ...Array.from({ length: nNiveles }, (_, i) => (p.niveles?.[i] ? nivelTexto(p.niveles[i]) : '')),
@@ -544,12 +559,14 @@ export function filasDePrueba(d: PruebaDef): (string | number)[][] {
  * El examen tal como lo lee el alumnado: título, preguntas y opciones. Sin la
  * clave, salvo que se pida. Es el mismo formato que se sabe importar.
  */
-export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean } = {}): string {
+export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean; unidades?: UnidadNombrada[] } = {}): string {
+  const nombre = nombresDeUnidad(opciones.unidades ?? [])
   const lineas = [`# ${d.titulo}`, '']
   if (opciones.conClave && d.penalizacion) lineas.push(`Penalización: ${d.penalizacion}`, '')
   d.preguntas.forEach((p, i) => {
     lineas.push(`${i + 1}. ${p.enunciado || `Pregunta ${i + 1}`}`)
     if (opciones.conClave && p.criterio_id) lineas.push(`   Criterio: ${p.criterio_id}`)
+    if (opciones.conClave && p.unidad_id != null && nombre.has(p.unidad_id)) lineas.push(`   Unidad: ${nombre.get(p.unidad_id)}`)
     if (opciones.conClave && p.aspecto) lineas.push(`   Aspecto: ${p.aspecto}`)
     if (opciones.conClave && p.max !== 1) lineas.push(`   Puntos: ${p.max}`)
     if (opciones.conClave && p.clave) lineas.push(`   Clave: ${p.clave}`)
@@ -565,12 +582,12 @@ export function examenAMarkdown(d: PruebaDef, opciones: { conClave?: boolean } =
   return lineas.join('\n')
 }
 
-export function pruebaAXlsx(d: PruebaDef): Uint8Array<ArrayBuffer> {
-  return escribirXlsx(filasDePrueba(d), 'Examen')
+export function pruebaAXlsx(d: PruebaDef, unidades: UnidadNombrada[] = []): Uint8Array<ArrayBuffer> {
+  return escribirXlsx(filasDePrueba(d, unidades), 'Examen')
 }
 
-export function pruebaAMarkdown(d: PruebaDef): string {
-  const filas = filasDePrueba(d)
+export function pruebaAMarkdown(d: PruebaDef, unidades: UnidadNombrada[] = []): string {
+  const filas = filasDePrueba(d, unidades)
   const iCab = filas.findIndex(f => f[0] === 'Pregunta')
   const fila = (f: (string | number)[]) => `| ${f.map(c => String(c).replace(/\|/g, '/')).join(' | ')} |`
   const ajustes = filas.slice(1, iCab).map(([clave, ...v]) => `${clave}: ${v.join(' · ')}`)
@@ -578,8 +595,12 @@ export function pruebaAMarkdown(d: PruebaDef): string {
   return `# ${filas[0][0]}\n\n${ajustes.join('\n')}\n\n${fila(cab)}\n${fila(cab.map(() => '---'))}\n${filas.slice(iCab + 1).map(fila).join('\n')}\n`
 }
 
-export function pruebaAJson(d: PruebaDef): string {
-  return JSON.stringify({ formato: 'edumind-prueba', version: 1, exportado: new Date().toISOString(), ...d }, null, 2)
+export function pruebaAJson(d: PruebaDef, unidades: UnidadNombrada[] = []): string {
+  // La unidad de cada pregunta viaja por su nombre («unidad»): el id solo vale
+  // en este aparato, y quien lo importe la casa con las suyas.
+  const nombre = nombresDeUnidad(unidades)
+  const preguntas = d.preguntas.map(p => p.unidad_id != null && nombre.has(p.unidad_id) ? { ...p, unidad: nombre.get(p.unidad_id) } : p)
+  return JSON.stringify({ formato: 'edumind-prueba', version: 1, exportado: new Date().toISOString(), ...d, preguntas }, null, 2)
 }
 
 /** Examen de muestra para las plantillas: puntos por pregunta, repartido por criterios. */

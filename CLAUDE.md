@@ -226,6 +226,15 @@ edumind_miclase/
   (va centrada en su bloque y no se repite si salta de página). Normalizar
   espacios antes de parsear lo rompe todo. El fixture se regenera con
   `pruebas/lib/proens_gemelo.py`; el PDF real de Luis aún no ha pasado por él.
+- **Un PDF de PROENS de otro curso, etapa o área pregunta antes de
+  importarse** (`ImportarProens.aplicar`, con `confirmar` y «Importar de
+  todos modos»): el aviso de arriba no bastaba, porque los criterios se casan
+  solo por el número (CA→CE) con el currículo de la clase.
+- **Física y Química de Galicia (ESO) lleva OBJ5 y OBJ6 añadidos a mano** en
+  los tres JSON: la matriz de origen traía criterios que los nombraban pero
+  no las competencias. Van con el texto del RD 217/2022 y sin descriptores
+  propios, así que su conexión sale como `estatal` (`meta.nota` lo dice). Si
+  se regenera el JSON desde la matriz, hay que volver a añadirlos.
 - **La tabla `rubricas` guarda tres cosas.** La rúbrica de un instrumento, las
   copias del banco del docente (`instrumento_id = INSTRUMENTO_BANCO`, que no
   cuelgan de ningún instrumento y sobreviven al borrado de la clase) y las
@@ -653,8 +662,22 @@ edumind_miclase/
   examen general no reparte por unidad. **Un aparato sin actualizar ignora
   la etiqueta al leer y la borra si vuelve a guardar el examen**
   (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
-  Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
-  el informe de la prueba por unidad.
+  **La unidad de cada pregunta viaja por su nombre**, porque el id solo vale
+  en el aparato: `filasDePrueba`, `examenAMarkdown` y `pruebaAJson` reciben
+  las unidades del área y escriben «Unidad» (columna, línea «Unidad: …» o
+  campo `unidad`; «Todas» en la común), y al leer queda en
+  `PreguntaPrueba.unidad_texto`, que es solo de paso: `casarUnidades`
+  (`db/prueba.ts`, puro) lo convierte en `unidad_id` con `unidadDeTexto`
+  —nombre, número escrito («UD2») o un trozo que solo quepa en una; nunca
+  por orden—, deja vinculada la unidad que el fichero nombra y el examen no
+  vinculaba, quita los ids que no son del área y dice lo que no casa (esas
+  preguntas cuentan en todas). El editor lo aplica en las dos entradas
+  (fichero y texto pegado) y lo cuenta en el mensaje; `sinUnidadesAjenas`
+  borra el texto de paso al guardar. Los prompts (`generarPromptTest`,
+  `generarPromptPlanilla`) piden la unidad solo con dos o más. El informe de
+  la prueba (`InformePrueba`) lleva `[data-informe-unidad]` cuando el examen
+  reparte por unidad: «Todo el examen» o solo una, con `pruebaDeUnidad`; los
+  criterios son los de la unidad desde la que se abrió.
 - **Rediseño del Calificador, fase 1** (`PROPUESTA_UX_CALIFICADOR.html`, nov
   2026). (1) **Vocabulario a la vista del docente**: lo que trae la
   programación con su porcentaje es un **«instrumento»** y lo que hay dentro
