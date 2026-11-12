@@ -176,7 +176,7 @@ try {
   await p.keyboard.press('Escape').catch(() => {})
   await p.getByRole('link', { name: 'Seguimiento', exact: true }).click()
   await p.waitForTimeout(1200)
-  await p.getByRole('button', { name: /Por alumno/ }).click()
+  await p.getByRole('tab', { name: /Por alumno/ }).click()
   const abrirAnalisis = p.locator('[data-analisis-abrir]')
   await abrirAnalisis.first().waitFor({ timeout: 8000 })
   ok(await abrirAnalisis.count() === 3, 'cada alumno de la tabla abre su análisis')
@@ -191,7 +191,21 @@ try {
   ok(/no salen en el informe impreso/.test(textoGrupo), 'y avisa de que con tres notas el papel no dará las cifras del grupo')
   ok(await analisis.locator('[data-analisis-imprimir]').isEnabled(), 'se puede imprimir el informe')
   await foto('aterrizaje-05-analisis')
+  // El foco se queda dentro del diálogo (utils/foco.ts) y vuelve a quien lo abrió.
+  const dentro = () => p.evaluate(() => !!document.activeElement?.closest('.modal-overlay'))
+  ok(await dentro(), 'al abrir, el foco está dentro del diálogo')
+  let fuera = 0
+  for (let i = 0; i < 40; i++) { await p.keyboard.press('Tab'); if (!await dentro()) fuera++ }
+  for (let i = 0; i < 5; i++) { await p.keyboard.press('Shift+Tab'); if (!await dentro()) fuera++ }
+  ok(fuera === 0, 'el tabulador da la vuelta sin salir del diálogo', `${fuera} veces fuera`)
   await analisis.getByRole('button', { name: 'Cerrar' }).click()
+  await analisis.waitFor({ state: 'hidden', timeout: 5000 })
+  await p.waitForTimeout(200)
+  ok(await p.evaluate(() => document.activeElement?.hasAttribute('data-analisis-abrir') ?? false), 'al cerrar, el foco vuelve al nombre que lo abrió')
+  // Las pestañas se recorren con las flechas.
+  await p.getByRole('tab', { name: /Por alumno/ }).focus()
+  await p.keyboard.press('ArrowLeft')
+  ok(await p.getByRole('tab', { name: /Competencias clave/ }).getAttribute('aria-selected') === 'true', 'la flecha izquierda pasa a la pestaña anterior')
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {

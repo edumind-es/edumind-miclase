@@ -1013,3 +1013,30 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
   min-height: 44px; min-width: 0; flex: 1; max-width: 520px; padding: 8px 12px; font-size: 15px; font-weight: 700;
   color: var(--azul-900); border: 1.5px solid var(--azul-700); border-radius: var(--radio-sm); background: var(--blanco);
 }
+
+/* ── Piezas comunes (components/comunes) ─────────────────────────────── */
+/* Botón: lo que pide un dedo. */
+.boton { min-height: 44px; padding: 8px 16px; }
+.boton.btn-danger { background: var(--cal-insuficiente); }
+.boton-enlace {
+  background: none; border: none; padding: 0 2px; min-height: 44px;
+  color: var(--azul-500); text-decoration: underline; font: inherit; cursor: pointer;
+}
+/* Diálogo: cabecera fija, cuerpo que se desplaza, pie con los botones. */
+.dialogo { max-height: 92vh; display: flex; flex-direction: column; padding: 0; }
+.dialogo-cabecera {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  padding: 16px 20px 10px;
+}
+.dialogo-antetitulo { font-size: 12px; font-weight: 700; color: var(--azul-700); letter-spacing: .03em; }
+.dialogo-titulo { margin: 2px 0 0; }
+.dialogo-subtitulo { font-size: 13px; color: var(--gris-600); margin-top: 2px; }
+.dialogo-cuerpo { padding: 0 20px 20px; overflow-y: auto; }
+.dialogo-pie {
+  display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;
+  padding: 12px 20px; border-top: 1px solid var(--gris-300);
+}
+/* El foco que `utils/foco.ts` lleva a la tarjeta al abrir no dibuja un marco. */
+.modal-overlay [tabindex="-1"]:focus { outline: none; }
+/* Pestañas: la elegida se distingue también con el teclado. */
+[role="tab"]:focus-visible { outline: 2px solid var(--azul-500); outline-offset: 2px; }

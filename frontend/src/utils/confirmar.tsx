@@ -15,6 +15,7 @@
  */
 import { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
+import Boton from '@/components/comunes/Boton'
 
 export interface OpcionesConfirmar {
   /** La pregunta, en una línea. Sin él, el primer párrafo de `texto`. */
@@ -56,14 +57,13 @@ function Dialogo({ o, alCerrar }: { o: OpcionesConfirmar; alCerrar: (v: boolean)
         )}
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', flexWrap: 'wrap', marginTop: 18 }}>
           {!o.soloAviso && (
-            <button type="button" className="btn-secondary" data-confirmar-cancelar onClick={() => alCerrar(false)} style={{ minHeight: 44, padding: '8px 16px' }}>
+            <Boton data-confirmar-cancelar onClick={() => alCerrar(false)}>
               {o.cancelar ?? 'Cancelar'}
-            </button>
+            </Boton>
           )}
-          <button type="button" ref={principal} className="btn-primary" data-confirmar-aceptar onClick={() => alCerrar(true)}
-            style={{ minHeight: 44, padding: '8px 16px', ...(o.peligro ? { background: 'var(--cal-insuficiente)', borderColor: 'var(--cal-insuficiente)' } : {}) }}>
+          <Boton ref={principal} variante={o.peligro ? 'peligro' : 'primario'} data-confirmar-aceptar onClick={() => alCerrar(true)}>
             {o.aceptar ?? (o.soloAviso ? 'Entendido' : 'Aceptar')}
-          </button>
+          </Boton>
         </div>
       </div>
     </div>

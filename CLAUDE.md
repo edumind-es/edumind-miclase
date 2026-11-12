@@ -707,9 +707,27 @@ edumind_miclase/
   marcarse cambia al aceptar, no al pulsar. Las pruebas llaman a
   `aceptarConfirmaciones(p, alVer?)` de `pruebas/lib/entorno.mjs` ANTES de
   navegar (acepta sola cada pregunta y entrega su texto) y a
-  `rechazarSiguienteConfirmacion(p)` para cancelar una. Pendiente de esta
-  fase: componentes comunes de botón, diálogo y pestañas, y retener el foco
-  dentro de los diálogos grandes.
+  `rechazarSiguienteConfirmacion(p)` para cancelar una.
+- **Piezas comunes y foco retenido** (cierre de la fase 3, nov 2026).
+  `components/comunes/`: `Boton` (variantes primario, secundario, peligro y
+  enlace; 44 px), `Dialogo` (velo, título, cerrar, Esc, pie; los `data-…`
+  van a la tarjeta) y `Pestanas` (`tablist`/`tab`, flechas, Inicio y Fin;
+  aspectos `area` y `unidad`). Usan las clases de siempre (`.btn-primary`,
+  `.modal-overlay`, `.tab-area`, `.tab-unidad`), así que lo escrito antes
+  sigue valiendo; **lo nuevo se hace con ellas** y lo viejo se pasa cuando se
+  toque. Ya las usan `confirmar`, `AnalisisAlumno`, las pestañas de la clase
+  y las de Seguimiento, que ahora son `role="tab"`: las pruebas las buscan
+  con `getByRole('tab', …)`. El foco lo retiene `utils/foco.ts`
+  (`instalarFoco()` en `main.tsx`) para TODO lo que lleve `.modal-overlay`,
+  sin tocar cada diálogo: manda el último velo visible del documento, al
+  abrirse se lleva el foco a la tarjeta (no a un campo: en el iPad abriría
+  el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
+  la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
+  `.modal-overlay` se queda sin nada de esto.
+- **El corrector por cámara vuelve solo a la cámara tras «Guardar y
+  siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
+  «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no
+  se avanza solo: decisión de Luis (nov 2026).
 - **El análisis de un alumno lo compara con su grupo y no calcula ninguna
   nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
   `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que

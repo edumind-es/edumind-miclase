@@ -177,6 +177,10 @@ try {
   ok(nota === '7.5', 'resuelta la duda, la nota se recalcula: 6 de 8 → 7,5', nota)
   await escaner.locator('[data-escaner-guardar]').click()
   ok(await aparece(escaner.locator('[data-escaner-progreso]').getByText('1 de 2 corregidos')), 'guardada: 1 de 2')
+  // Tras guardar se vuelve sola a la cámara, lista para la hoja siguiente, y lo dice.
+  ok(await escaner.locator('[data-escaner-camara]').isVisible() && await escaner.locator('[data-escaner-capturada]').count() === 0, 'vuelve sola a la cámara para la hoja siguiente')
+  const guardada = await escaner.locator('[data-escaner-guardada]').textContent()
+  ok(/Abad Ríos, Ana/.test(guardada) && /7[.,]5/.test(guardada) && /hoja siguiente/.test(guardada), 'y dice qué se guardó y que toca la siguiente', guardada)
   ok(await escaner.locator('[data-escaner-faltan]').getByText(/Bello Souto/).count() === 1 && await escaner.locator('[data-escaner-faltan]').getByText(/Abad/).count() === 0, 'en «faltan» queda solo Bruno')
   await p.keyboard.press('Escape')
   await escaner.waitFor({ state: 'hidden', timeout: 5000 })

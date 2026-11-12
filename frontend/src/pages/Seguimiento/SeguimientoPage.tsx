@@ -18,6 +18,7 @@ import type { Alumno, Instrumento, Calificacion } from '@/db/localDb'
 import AnalisisAlumno from '@/components/AnalisisAlumno'
 import { verNeae } from '@/db/datosSensibles'
 import CompetenciasClaveGrupo from '@/components/CompetenciasClaveGrupo'
+import Pestanas from '@/components/comunes/Pestanas'
 
 type FilaAlumno = {
   alumno: Alumno
@@ -154,18 +155,13 @@ export default function SeguimientoPage() {
             <Tarjeta titulo="Criterios con datos" valor={String(datosCriterios.length)} color="var(--gris-600)" />
           </div>
 
-          <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
-            {(['criterios', 'competencias', 'clave', 'alumnado'] as const).map(v => (
-              <button key={v} onClick={() => setVista(v)}
-                className={`tab-unidad${vista === v ? ' activa' : ''}`}
-                style={{ fontSize: 13 }}>
-                {v === 'criterios' ? '📊 Por criterio'
-                  : v === 'competencias' ? '🎯 Por competencia específica'
-                  : v === 'clave' ? '🔑 Competencias clave'
-                  : '👥 Por alumno'}
-              </button>
-            ))}
-          </div>
+          <Pestanas etiqueta="Qué se mira del seguimiento" style={{ marginBottom: 14 }} activa={vista} alCambiar={setVista}
+            pestanas={[
+              { id: 'criterios', etiqueta: '📊 Por criterio' },
+              { id: 'competencias', etiqueta: '🎯 Por competencia específica' },
+              { id: 'clave', etiqueta: '🔑 Competencias clave' },
+              { id: 'alumnado', etiqueta: '👥 Por alumno' },
+            ]} />
 
           {/* Mira todas las áreas de la clase: no depende de la que haya elegida */}
           {vista === 'clave' && grupoId && <CompetenciasClaveGrupo grupoId={grupoId} />}

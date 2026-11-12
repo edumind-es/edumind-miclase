@@ -13,6 +13,7 @@ import PlanoClase from '@/components/PlanoClase'
 import { verNeae } from '@/db/datosSensibles'
 
 import { confirmar, avisar } from '@/utils/confirmar'
+import Pestanas from '@/components/comunes/Pestanas'
 const COLORES = ['#1a4a7a','#27a35a','#d94040','#e07b10','#7b4fa6','#2ea8a0','#c07b1a']
 const CURSOS_PRIMARIA = ['1','2','3','4','5','6']
 const CURSOS_ESO = ['1','2','3','4']
@@ -235,15 +236,9 @@ function DetalleGrupo() {
         </div>
       </div>
 
-      <div className="tabs-area" role="tablist" aria-label="Configuración de la clase" style={{ margin: '18px 0 22px' }}>
-        {PESTANAS.map(p => (
-          <button key={p.id} role="tab" aria-selected={p.id === pestana}
-            className={`tab-area${p.id === pestana ? ' activa' : ''}`}
-            onClick={() => setParams({ pestana: p.id }, { replace: true })}>
-            {p.label}
-          </button>
-        ))}
-      </div>
+      <Pestanas aspecto="area" etiqueta="Configuración de la clase" style={{ margin: '18px 0 22px' }}
+        pestanas={PESTANAS.map(p => ({ id: p.id, etiqueta: p.label }))} activa={pestana}
+        alCambiar={id => setParams({ pestana: id }, { replace: true })} />
 
       {pestana === 'datos' && (
         <DatosClase grupo={grupo} onGuardado={async () => { await recargar(); await recargarGrupos() }} />

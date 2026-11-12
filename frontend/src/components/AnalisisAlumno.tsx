@@ -22,6 +22,7 @@ import { calificativo } from '@/db/calculo'
 import { documentoAnalisisAlumno } from '@/informes/analisisAlumno'
 import { imprimir } from '@/informes/lamina'
 import * as curriculo from '@/curriculo'
+import Dialogo from '@/components/comunes/Dialogo'
 
 interface Props {
   alumno: Alumno
@@ -123,12 +124,6 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
     return () => { vigente = false }
   }, [areaId, areas, grupo])
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onCerrar])
-
   const analisis = useMemo(() => resumen ? analizarAlumno(alumno.id!, resumen.notas, resumen.medidas) : null, [resumen, alumno.id])
   const deExamenes = useMemo(() => examenes.map(e => analizarExamen(e, alumno.id!)).filter((e): e is NonNullable<typeof e> => !!e), [examenes, alumno.id])
   const asig = areas.find(a => a.id === areaId)
@@ -146,16 +141,7 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
   }
 
   return (
-    <div className="modal-overlay" style={{ zIndex: 'var(--z-modal-anidado)' as unknown as number }} onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
-      <div className="card" role="dialog" aria-modal="true" aria-label={`Análisis de ${nombre}`} data-analisis-alumno
-        style={{ width: 'min(860px, 96vw)', maxHeight: '92vh', overflowY: 'auto', padding: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--azul-700)', letterSpacing: '.03em' }}>ANÁLISIS FRENTE AL GRUPO</div>
-            <h2 style={{ margin: '2px 0 0' }}>{nombre}</h2>
-          </div>
-          <button className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
-        </div>
+    <Dialogo anidado ancho={860} antetitulo="ANÁLISIS FRENTE AL GRUPO" titulo={nombre} onCerrar={onCerrar} data-analisis-alumno>
 
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', margin: '12px 0 4px' }}>
           <label style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -259,7 +245,6 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
             ))}
           </>
         )}
-      </div>
-    </div>
+    </Dialogo>
   )
 }
