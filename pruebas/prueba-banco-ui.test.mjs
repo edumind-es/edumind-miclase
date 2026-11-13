@@ -9,7 +9,7 @@
  * la copia del banco sobreviva al borrado del instrumento.
  */
 import { mkdirSync } from 'node:fs'
-import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones, gestorEnPesosDelArea } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -26,6 +26,7 @@ const ok = (cond, msg, extra = '') => {
 const navegador = await chromium.launch()
 const ctx = await navegador.newContext({ viewport: { width: 1400, height: 1000 } })
 const p = await ctx.newPage()
+await gestorEnPesosDelArea(p)
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 // Las confirmaciones (cargar encima, quitar del banco, borrar instrumento) se aceptan.

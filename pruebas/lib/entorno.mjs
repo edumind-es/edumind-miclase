@@ -140,6 +140,18 @@ export async function unidadElegida(p) {
 }
 
 /**
+ * «Qué evalúo» abre «Por unidad» en un área con unidades. Las pruebas que
+ * trabajan con lo que es de toda el área (pesos, actividades, borrar) llaman
+ * a esto ANTES de navegar y el gestor les abre en «Pesos del área», como si
+ * el docente la hubiera elegido la última vez. No pisa una elección ya hecha.
+ */
+export async function gestorEnPesosDelArea(p) {
+  await p.addInitScript(() => {
+    try { if (!localStorage.getItem('miclase.queevaluo.vista')) localStorage.setItem('miclase.queevaluo.vista', 'pesos') } catch { /* sin almacenamiento */ }
+  })
+}
+
+/**
  * Acepta las preguntas de la app: las del navegador (`confirm`, que ya casi
  * no quedan) y el diálogo propio (`utils/confirmar.tsx`, `[data-confirmar]`).
  * Hay que llamarla antes de la primera navegación. `alVer` recibe el texto de

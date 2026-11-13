@@ -817,6 +817,31 @@ edumind_miclase/
   varios registros; peso y criterios solo se enseñan. No guarda por su
   cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
   desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
+- **«Qué evalúo» tiene dos pestañas: «Por unidad» y «Pesos del área»** (fase
+  2 de la misma propuesta). `InstrumentosManager` abre «Por unidad»
+  (`QueEvaluoPorUnidad`, `[data-que-por-unidad]`) en un área con unidades,
+  con la unidad del Calificador (`unidadActual`) o la primera; la pestaña
+  elegida se recuerda en el aparato (`miclase.queevaluo.vista`) y sin
+  unidades solo existe «Pesos del área», que es el gestor de siempre, entero
+  (`[data-familia-bloque]`, `FamiliaHijos`). Por unidad se elige una
+  (`[data-que-unidad]`) y sale cada instrumento (`[data-unidad-instrumento]`)
+  con lo que se usa EN ELLA (`[data-unidad-actividad]`: herramienta,
+  porcentaje, criterios en `data-criterios` y «Editar» con la ficha); una
+  actividad sin criterios en la unidad no sale. No calcula ni guarda por su
+  cuenta: las filas son las columnas del Calificador (`getMatrizEvaluacion`
+  con el trimestre de la unidad + `columnasPorInstrumento`) y los criterios
+  se escriben con `asignarCriterioAColumna`/`quitarCriterioDeColumna`.
+  «+ actividad en esta unidad» (`[data-unidad-anadir]`) crea una
+  (`crearInstrumentoHijo`) o trae una de otra unidad
+  (`[data-unidad-anadir-cual]`), con los criterios del instrumento ya
+  marcados; **la primera actividad de un instrumento con notas o herramienta
+  a su nombre no se crea ahí** (`[data-unidad-primera-con-datos]`): manda a
+  «Pesos del área», el único sitio que pregunta con `ConvertirFamilia`. Los
+  criterios de la unidad que nada evalúa van en `[data-unidad-sin-actividad]`.
+  Las pruebas que trabajan con lo de toda el área llaman a
+  `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
+  ficha «Editar» cierra con Esc sin cerrar lo de debajo y acepta `capa`.
+  Luis: el gestor era «complejísimo», todo mezclado.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

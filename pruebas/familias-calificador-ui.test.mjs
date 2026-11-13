@@ -8,7 +8,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, gestorEnPesosDelArea } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -26,6 +26,7 @@ const ok = (cond, msg, extra = '') => {
 const navegador = await chromium.launch()
 const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1100 } })
 const p = await ctx.newPage()
+await gestorEnPesosDelArea(p)
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 await aceptarConfirmaciones(p)

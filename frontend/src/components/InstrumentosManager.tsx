@@ -8,12 +8,14 @@
  */
 import { useEffect, useState } from 'react'
 import {
-  getAsignaturaDetalle, crearInstrumento, eliminarInstrumento,
+  getAsignaturaDetalle, crearInstrumento, eliminarInstrumento, getUnidades,
   actualizarInstrumento, moverInstrumento, getGrupo,
   usoDeInstrumento, retirarInstrumentoDeUnidad, type UsoDeInstrumento,
 } from '@/db/queries'
 import * as curriculo from '@/curriculo'
 import FamiliaHijos from './FamiliaHijos'
+import QueEvaluoPorUnidad from './QueEvaluoPorUnidad'
+import Pestanas from './comunes/Pestanas'
 import type { Instrumento, Agregacion } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig } from '@/ia/instrumentosConfig'
 import { AGREGACIONES } from '@/db/diario'
@@ -45,6 +47,13 @@ export function describeUso(u: UsoDeInstrumento): string {
   ].filter(Boolean).join(' · ')
 }
 
+/** La pestaña elegida es una comodidad del aparato, como la vista del Calificador. */
+const CLAVE_VISTA = 'miclase.queevaluo.vista'
+type Vista = 'unidad' | 'pesos'
+function vistaRecordada(): Vista {
+  try { return localStorage.getItem(CLAVE_VISTA) === 'pesos' ? 'pesos' : 'unidad' } catch { return 'unidad' }
+}
+
 function parseTrimestres(json: string | undefined): number[] {
   try {
     const t = JSON.parse(json || '[1,2,3]')
@@ -64,6 +73,15 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
   const [avisoUso, setAvisoUso] = useState<string | null>(null)
   /** Enunciados del currículo, para que el asistente reparta criterios por sus palabras. */
   const [criterios, setCriterios] = useState<{ id: string; descripcion: string }[]>([])
+  /** Sin unidades no hay nada que ver «por unidad»: null mientras no se sabe. */
+  const [hayUnidades, setHayUnidades] = useState<boolean | null>(null)
+  const [vista, setVista] = useState<Vista>(vistaRecordada)
+  const elegirVista = (v: Vista) => {
+    setVista(v)
+    try { localStorage.setItem(CLAVE_VISTA, v) } catch { /* sin almacenamiento, no se recuerda */ }
+    if (v === 'pesos') void cargar()
+  }
+  const porUnidad = hayUnidades === true && vista === 'unidad'
 
   const cargar = async () => {
     const det = await getAsignaturaDetalle(asignaturaId)
@@ -72,6 +90,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
     setInstrumentos(familias)
     const pares = await Promise.all(familias.map(async f => [f.id!, await usoDeInstrumento(f.id!)] as const))
     setUsos(Object.fromEntries(pares))
+    setHayUnidades((await getUnidades(asignaturaId)).length > 0)
   }
   useEffect(() => { cargar() }, [asignaturaId])
 
@@ -215,6 +234,13 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               criterio puede declarar el suyo en la programación, decir «peso
               total» a secas hacía creer que mandaba siempre. */}
           <div style={{ fontSize: 12, color: 'var(--gris-600)', marginBottom: 14, lineHeight: 1.55 }}>
+            {hayUnidades && (
+              <Pestanas<Vista> etiqueta="Qué se mira" aspecto="unidad" activa={porUnidad ? 'unidad' : 'pesos'} alCambiar={elegirVista}
+                pestanas={[{ id: 'unidad', etiqueta: 'Por unidad' }, { id: 'pesos', etiqueta: 'Pesos del área' }]} style={{ marginBottom: 10 }} />
+            )}
+            {porUnidad ? (
+              <>Lo que usas en <strong>una unidad</strong>: cada instrumento con sus actividades, con qué se evalúan y qué criterios cubren. Los pesos, los trimestres y borrar están en «Pesos del área».</>
+            ) : (<>
             Cada bloque es un <strong>instrumento</strong>: lo que la programación pesa en el área. Dentro de cada uno van sus <strong>actividades</strong>: lo que haces de verdad. Reparto por defecto:{' '}
             <strong style={{ color: totalOk ? 'var(--verde-500)' : 'var(--ambar-500)' }}>
               {total}%{totalOk ? ' ✓' : total > 100 ? ' (excede 100)' : ` (falta ${100 - total})`}
@@ -224,7 +250,15 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               concreto puede repartir distinto —por ejemplo, que prueba, cuaderno y lista
               de control cuenten por igual— desde 📋 Programación, sin tocar esto.
             </div>
+            </>)}
           </div>
+
+          {porUnidad && (
+            <QueEvaluoPorUnidad asignaturaId={asignaturaId} criterios={criterios} unidadInicial={unidadActual?.id ?? null}
+              capa={anidado ? 'var(--z-modal-anidado-2)' : undefined} onIrAPesos={() => elegirVista('pesos')} />
+          )}
+
+          {hayUnidades != null && !porUnidad && (<>
 
           {avisoUso && (
             <div data-uso-aviso role="status" style={{ fontSize: 12.5, color: 'var(--verde-500)', fontWeight: 600, marginBottom: 10 }}>{avisoUso}</div>
@@ -397,6 +431,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
               + Nuevo instrumento
             </button>
           )}
+          </>)}
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
             <button className="btn-primary" onClick={onClose}>Hecho</button>

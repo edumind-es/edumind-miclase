@@ -15,7 +15,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, gestorEnPesosDelArea } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -33,6 +33,7 @@ const ok = (cond, msg, extra = '') => {
 const navegador = await chromium.launch()
 const ctx = await navegador.newContext({ viewport: { width: 1500, height: 1000 } })
 const p = await ctx.newPage()
+await gestorEnPesosDelArea(p)
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 /** Los confirm se aceptan, pero se guarda lo que decían: tienen que nombrar unidad y cifras. */

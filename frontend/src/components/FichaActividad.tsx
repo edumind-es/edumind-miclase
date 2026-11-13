@@ -14,7 +14,7 @@
  * peso y los criterios se enseñan, y se cambian donde ya se cambiaban («Qué
  * evalúo» y el «Más» de la columna).
  */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { actualizarInstrumento, type CeldaInstrumento, type DatosDeArea } from '@/db/queries'
 import RubricaEditor from './RubricaEditor'
@@ -36,18 +36,32 @@ interface Props {
   onHerramienta?: () => void
   /** Definir o editar el examen, si quien abre sabe dónde. */
   onExamen?: () => void
+  /** Capa de la hoja cuando se abre desde un diálogo que ya está por encima de los normales. */
+  capa?: string
 }
 
 const campo = { minHeight: 44, fontSize: 15, padding: '6px 10px', width: '100%' } as const
 const rotulo = { fontSize: 12, fontWeight: 700, color: 'var(--gris-600)', display: 'block', marginBottom: 4 } as const
 
-export default function FichaActividad({ instrumento, criterios, unidadNombre, area, onCambio, onHerramienta, onExamen, onCerrar }: Props & { onCerrar: () => void }) {
+export default function FichaActividad({ instrumento, criterios, unidadNombre, area, onCambio, onHerramienta, onExamen, capa, onCerrar }: Props & { onCerrar: () => void }) {
   const [nombre, setNombre] = useState(instrumento.nombre)
   const [tipo, setTipo] = useState(instrumento.tipo)
   const [agregacion, setAgregacion] = useState<Agregacion>(instrumento.agregacion ?? 'media')
   const [editor, setEditor] = useState<{ inicio?: HerramientaSimple } | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
   const esActividad = instrumento.familia_id != null
+
+  // Esc cierra la ficha y nada más: sin esto la tecla llegaba a la pantalla
+  // de debajo (la pasada de clase o «Qué evalúo») y se cerraban las dos.
+  useEffect(() => {
+    if (editor) return
+    const alTeclear = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || document.querySelector('[data-confirmar]')) return
+      e.stopPropagation(); onCerrar()
+    }
+    window.addEventListener('keydown', alTeclear, true)
+    return () => window.removeEventListener('keydown', alTeclear, true)
+  }, [editor, onCerrar])
 
   const guardar = async (campos: Parameters<typeof actualizarInstrumento>[1], dicho: string) => {
     try { await actualizarInstrumento(instrumento.instrumento_id, campos); setAviso(dicho); onCambio() }
@@ -67,7 +81,7 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
         instrumentoNombre={nombre.trim() || instrumento.nombre}
         asignaturaNombre={area.asignatura}
         nivel={`${area.curso}º ${area.etapa}`}
-        capa="var(--z-modal)"
+        capa={capa ?? 'var(--z-modal)'}
         onCerrar={() => { setEditor(null); (onHerramienta ?? onCambio)(); onCerrar() }}
       />
     )
@@ -78,7 +92,7 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
     : esDeObservacion(tipo) ? 'diario' : 'ninguna'
 
   return createPortal(
-    <div className="modal-overlay hoja-velo" onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
+    <div className="modal-overlay hoja-velo" style={capa ? { zIndex: capa } : undefined} onClick={e => { if (e.target === e.currentTarget) onCerrar() }}>
       <div className="hoja-columna" role="dialog" aria-modal="true" aria-label={`Editar «${instrumento.nombre}»`}
         data-ficha-actividad style={{ borderTop: `6px solid ${instrumento.color}`, maxHeight: '88vh', overflowY: 'auto' }}>
         <div className="hoja-cabecera">
@@ -153,7 +167,7 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
           {criterios.length === 0
             ? <span style={{ color: 'var(--gris-600)' }}>Ninguno todavía.</span>
             : criterios.map(c => <span key={c.id} title={c.descripcion} style={{ display: 'inline-block', fontWeight: 700, color: 'var(--azul-700)', background: 'var(--gris-100)', border: '1px solid var(--gris-300)', padding: '3px 9px', margin: '0 6px 6px 0' }}>{c.id}</span>)}
-          <div style={{ color: 'var(--gris-600)', fontSize: 12.5 }}>Se añaden o quitan en el «Más» de su columna.</div>
+          <div style={{ color: 'var(--gris-600)', fontSize: 12.5 }}>Se añaden o quitan en «Qué evalúo» → Por unidad, o en el «Más» de su columna.</div>
         </div>
 
         {aviso && <div data-ficha-aviso role="status" style={{ marginTop: 12, fontSize: 13, color: '#166534', background: '#dcfce7', padding: '8px 10px' }}>{aviso}</div>}
