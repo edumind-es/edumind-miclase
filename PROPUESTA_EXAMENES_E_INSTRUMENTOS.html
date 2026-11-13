@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta de rediseño de exámenes e instrumentos · EDUmind MiClase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== EDUmind-Lámina v1.0 — hoja base canónica ===== */
+:root{
+  --paper:#ece9e1; --paper-2:#e4e0d6; --card:#f4f2ec;
+  --ink:#17181a; --ink-2:#3d3f42; --ink-3:#5c5a55;
+  --rule:#17181a; --hair:#c9c4b8;
+  --m-emocional:#c05f3c; --m-social:#c19a2e; --m-fisico:#7ba24f;
+  --m-mental:#6c8fb3; --m-interior:#4a5f68;
+  --ok:#4f7a3f; --alert:#b03a2e;
+  --font-display:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-body:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0 !important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:400 16.5px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 288px;gap:52px;align-items:start}
+.aside{position:sticky;top:32px}
+
+.worlds-bar{display:grid;grid-template-columns:repeat(5,1fr);height:6px}
+.worlds-bar i:nth-child(1){background:var(--m-emocional)}
+.worlds-bar i:nth-child(2){background:var(--m-social)}
+.worlds-bar i:nth-child(3){background:var(--m-fisico)}
+.worlds-bar i:nth-child(4){background:var(--m-mental)}
+.worlds-bar i:nth-child(5){background:var(--m-interior)}
+
+.topbar{border-bottom:2px solid var(--rule);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
+.mono{font:400 11px/1.4 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3)}
+.mono-ink{color:var(--ink);font-weight:500}
+
+.eyebrow{font:500 13px/1 var(--font-mono);letter-spacing:.06em;color:var(--ink-2);margin:44px 0 14px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(2.9rem,7vw,5.2rem);margin:0 0 18px;max-width:14ch}
+h1 .light{font-weight:400}
+.lede{font-size:19px;line-height:1.45;color:var(--ink-2);max-width:46ch;margin:0 0 28px}
+
+.btn{display:inline-block;background:var(--ink);color:var(--paper);text-decoration:none;
+  font:500 12px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;
+  padding:17px 22px;border:2px solid var(--ink);cursor:pointer;transition:background .15s ease,color .15s ease}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn-block{display:block;width:100%;text-align:center}
+.stamp{display:inline-block;border:1px solid var(--alert);color:var(--alert);
+  font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.11em;padding:11px 14px;margin-left:10px}
+
+.metastrip{display:flex;flex-wrap:wrap;border-top:1px solid var(--hair);margin-top:34px}
+.metastrip span{font:400 13px/1 var(--font-mono);color:var(--ink-2);padding:14px 22px 14px 0;
+  border-right:1px solid var(--hair);margin-right:22px}
+.metastrip span:last-child{border-right:0}
+
+.sec{margin:74px 0}
+.sec-head{display:flex;align-items:flex-start;gap:22px;margin-bottom:26px}
+.sec-num{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:.9;
+  color:var(--m-mental);letter-spacing:-.03em}
+.sec-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:26px;
+  letter-spacing:-.02em;padding-top:12px;border-top:2px solid var(--rule);flex:1}
+.sec-lede{font-size:20px;line-height:1.45;font-weight:500;margin:0 0 26px;max-width:60ch}
+.sec p{max-width:68ch}
+
+.rules{list-style:none;margin:0 0 30px;padding:0}
+.rules li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--hair);
+  font-size:16px;line-height:1.5}
+.rules li .dash{color:var(--ink-3);flex:none}
+
+.blabel{font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;
+  color:var(--ink-3);margin:34px 0 12px}
+
+.spec{border-top:2px solid var(--rule);margin-top:26px}
+.spec div{padding:14px 0;border-bottom:1px solid var(--hair)}
+.spec dt{font:400 11px/1.3 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin-bottom:5px}
+.spec dd{margin:0;font-weight:600;font-size:16px}
+
+.note{background:var(--card);border-left:3px solid var(--c,var(--ink));padding:20px 22px;margin:26px 0}
+.note .tag{display:inline-block;border:1px solid var(--c,var(--ink));color:var(--ink);
+  font:400 10px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;padding:5px 8px;margin-bottom:10px}
+.note p{margin:0;color:var(--ink-2)}
+.note.alert{--c:var(--alert)}
+
+.panel{border:1px solid var(--hair);background:var(--card);padding:18px}
+.panel-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:14px}
+
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px}
+th{background:var(--ink);color:var(--paper);font:500 11px/1.3 var(--font-mono);
+  text-transform:uppercase;letter-spacing:.1em;text-align:left;padding:12px 14px}
+td{padding:13px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.num{font:500 15px/1.4 var(--font-mono);white-space:nowrap}
+
+footer{border-top:2px solid var(--rule);margin-top:90px;padding:34px 0 0}
+footer .tm{font-size:11.5px;line-height:1.6;color:var(--ink-3);max-width:70ch;margin:14px 0 34px}
+
+/* ── Ampliación de esta lámina: maquetas ─────────────────────────────── */
+.mock-par{display:grid;grid-template-columns:1fr;gap:14px;margin:22px 0 8px}
+.mock{border:1px solid var(--ink);background:var(--card)}
+.mock-cab{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--ink)}
+.mock-cab.hoy{background:var(--paper-2)}
+.mock-cab.prop{background:var(--ink)}
+.mock-cab.prop .mono{color:var(--paper)}
+.mock-cuerpo{padding:12px}
+.mk-fila{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;align-items:center}
+.mk{border:1px solid var(--ink-3);font:400 11px/1 var(--font-mono);padding:6px 7px;color:var(--ink-2);background:var(--paper)}
+.mk.pri{background:var(--ink);color:var(--paper);border-color:var(--ink);padding:11px 14px;font-size:12px}
+.mk.gr{padding:11px 14px;font-size:12px}
+.mk.act{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk.aviso{border-color:var(--alert);color:var(--alert);width:100%}
+.mk-matriz{display:grid;gap:3px;margin-top:6px}
+.mk-matriz span{border:1px solid var(--hair);background:var(--paper);height:22px;font:400 10px/20px var(--font-mono);text-align:center;color:var(--ink-2)}
+.mk-matriz span.c{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk-matriz span.n{text-align:left;padding-left:6px}
+.mk-nota{font:400 12px/1.45 var(--font-body);color:var(--ink-2);margin:8px 0 0}
+.mk-alumno{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--hair);padding:7px 0;font-size:13px}
+.mk-alumno.sel{border:2px solid var(--ink);padding:7px 8px;font-weight:600}
+.mk-niveles{display:flex;gap:4px}
+.mk-niveles span{border:1px solid var(--ink-3);font:500 11px/1 var(--font-mono);padding:8px 9px}
+.mk-niveles span.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.muestra{display:inline-block;width:64px;padding:8px 0;text-align:center;color:#fff;font:500 13px/1 var(--font-mono)}
+.fase{font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ink);padding:5px 8px;white-space:nowrap}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr;gap:34px}
+  .aside{position:static}
+  .sec{margin:52px 0}
+  .mock-par{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+@media print{
+  .aside,.topbar{position:static}
+  body{background:#fff}
+  .btn{display:none}
+  .mock,.sec-head,tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="mono mono-ink">EDUMIND · LÁMINA DE APLICACIÓN</span>
+    <span class="mono">FIG. XX — EXÁMENES E INSTRUMENTOS · REDISEÑO</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">Mundo mental · organización del trabajo docente</p>
+  <h1>Cada cosa<br><span class="light">en su unidad</span></h1>
+  <p class="lede">Propuesta para reorganizar «Exámenes y pruebas» por área, enseñar «Qué evalúo» unidad a unidad y poder editar una actividad desde donde se califica. Cuatro maquetas y seis fases. Las cuatro primeras decisiones ya están tomadas; quedan dos sobre el informe individual. Nada de esto está implementado.</p>
+
+  <p><a class="btn" href="#s08">Ir a las decisiones →</a>
+     <span class="stamp">Propuesta · sin implementar · 13·11·2026</span></p>
+
+  <div class="metastrip">
+    <span>Petición del 12·11·2026</span><span>Ampliada el 13·11·2026</span><span>4 pantallas</span><span>6 fases</span>
+  </div>
+
+  <div class="cols" style="margin-top:64px">
+
+    <div>
+
+      <section class="sec" id="s01">
+        <div class="sec-head"><span class="sec-num">01</span><h2>Lo que has pedido</h2></div>
+        <ul class="rules">
+          <li><span class="dash">1</span> «Exámenes y pruebas» se reorganiza con una pestaña por cada área que se califica. Cada área contiene los instrumentos de evaluación registrados y modelos adicionales que generaremos.</li>
+          <li><span class="dash">2</span> Editar el instrumento desde la pasada de clase cuesta: en la captura del «Billete de salida» solo hay un desplegable pequeño arriba.</li>
+          <li><span class="dash">3</span> La pestaña de instrumentos del área es demasiado compleja y lo mezcla todo. Cada unidad debe verse independiente.</li>
+          <li><span class="dash">4</span> Cada elemento que evalúas debe poder asociarse con instrumentos del espacio de «Exámenes y pruebas».</li>
+          <li><span class="dash">5</span> Añadido el 13·11: un informe del examen de un alumno, por etiqueta y con sus preguntas falladas, comparado con la clase o con un grupo de alumnos de media parecida. Y que exista un informe individual por instrumento, no solo del grupo.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s02">
+        <div class="sec-head"><span class="sec-num">02</span><h2>Qué pasa hoy</h2></div>
+        <p class="sec-lede">Las tres pantallas hacen bien su trabajo por dentro. El problema es dónde está cada cosa y cuánto se enseña a la vez.</p>
+        <table>
+          <thead><tr><th>Pantalla</th><th>Qué enseña hoy</th><th>Por qué estorba</th></tr></thead>
+          <tbody>
+            <tr><td>Exámenes y pruebas</td><td>La cámara y una sola lista con los exámenes de todas las clases y áreas, por fecha.</td><td>Solo hay exámenes. Las rúbricas, listas de control y escalas no aparecen aquí: viven dentro de cada instrumento.</td></tr>
+            <tr><td>Qué evalúo (instrumentos del área)</td><td>Un diálogo con todos los instrumentos; en cada uno, nombre, tipo, peso, «solo con medida», trimestres, regla del diario, examen, rúbrica y sus actividades con los criterios de todas las unidades.</td><td>Mezcla tres cosas distintas: cuánto pesa cada instrumento en el área, qué actividades hay y qué se evalúa en cada unidad. Unos doce controles por instrumento antes de llegar a las actividades.</td></tr>
+            <tr><td>Evaluar hoy (la pasada de clase)</td><td>Título, día y la lista con los niveles. Para cambiar la herramienta, un desplegable de texto pequeño.</td><td>No hay ningún botón para editar la actividad: nombre, criterios o peso obligan a salir, abrir «Instrumentos» y buscarla.</td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="--c:var(--m-mental)">
+          <span class="tag">Un dato del código que condiciona el diseño</span>
+          <p>Un examen ya se guarda por actividad y unidad. Una rúbrica, no: hay una sola por actividad, la misma en todas las unidades. Si cada unidad tiene que verse independiente, la rúbrica debería poder ser distinta en cada una. Es la decisión 3.</p>
+        </div>
+      </section>
+
+      <section class="sec" id="s03">
+        <div class="sec-head"><span class="sec-num">03</span><h2>La idea: dos espacios, un papel cada uno</h2></div>
+        <ul class="rules">
+          <li><span class="dash">—</span> <span><strong>Exámenes y pruebas</strong> pasa a ser la biblioteca del área: todo aquello con lo que se evalúa (exámenes, rúbricas, listas de control, escalas) y los modelos para crear más.</span></li>
+          <li><span class="dash">—</span> <span><strong>Qué evalúo</strong> pasa a ser la unidad: qué actividades tiene, qué criterios cubre cada una y con qué herramienta de la biblioteca se califica.</span></li>
+          <li><span class="dash">—</span> <span><strong>Los pesos del área</strong> (el 80 / 20 de la programación, trimestres, regla del diario) salen de ahí a una vista aparte, porque se tocan una vez al año.</span></li>
+          <li><span class="dash">—</span> <span><strong>Editar</strong> es un botón grande en la cabecera de toda pantalla de calificar, que abre la ficha de esa actividad en esa unidad.</span></li>
+        </ul>
+        <p>Vocabulario: «instrumento» sigue siendo lo que trae la programación con su porcentaje y «actividad» lo que haces dentro. Añado una palabra que la app ya usa en «Definir herramienta»: la <strong>herramienta</strong> es el examen, la rúbrica, la lista o la escala con que se califica una actividad.</p>
+      </section>
+
+      <section class="sec" id="s04">
+        <div class="sec-head"><span class="sec-num">04</span><h2>A · Exámenes y pruebas, por área</h2></div>
+        <p class="sec-lede">Una pestaña por área. Dentro, tres bloques: lo que ya usas, agrupado por unidad; los modelos; y la cámara arriba, como hasta ahora.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">una lista de todo</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr">Cámara</span><span class="mk pri">Nuevo examen</span></div>
+              <div class="mk-alumno"><span>Examen · A nosa saúde <span class="mono">6.ºA · C. da Natureza</span></span><span class="mk-niveles"><span>Editar</span><span>Imprimir</span><span>Informe</span><span class="on">Corregir</span></span></div>
+              <div class="mk-alumno"><span>Test fraccións <span class="mono">6.ºA · Matemáticas</span></span><span class="mk-niveles"><span>Editar</span><span>Imprimir</span><span>Informe</span><span class="on">Corregir</span></span></div>
+              <div class="mk-alumno"><span>Proba UD1 <span class="mono">5.ºB · Lingua galega</span></span><span class="mk-niveles"><span>Editar</span><span>Imprimir</span><span>Informe</span><span class="on">Corregir</span></span></div>
+              <p class="mk-nota">Clases y áreas mezcladas. Las rúbricas no están.</p>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">6.ºA · pestaña por área</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr">Cámara: leer una hoja o un QR de mesa</span></div>
+              <div class="mk-fila"><span class="mk gr act">C. da Natureza</span><span class="mk gr">Matemáticas</span><span class="mk gr">Lingua galega</span><span class="mk gr">Ed. Física</span></div>
+              <p class="blabel" style="margin:14px 0 6px">UD2 · A nosa saúde</p>
+              <div class="mk-alumno"><span>Examen · A nosa saúde <span class="mono">examen · 12 preguntas · Proba escrita</span></span><span class="mk-niveles"><span>Editar</span><span>Imprimir</span><span class="on">Corregir</span></span></div>
+              <div class="mk-alumno"><span>Billete de salida <span class="mono">sin herramienta · Táboa de indicadores</span></span><span class="mk-niveles"><span class="on">Elegir herramienta</span></span></div>
+              <div class="mk-alumno"><span>Exposición oral <span class="mono">rúbrica · 4 indicadores · Táboa de indicadores</span></span><span class="mk-niveles"><span>Editar</span><span class="on">Calificar</span></span></div>
+              <p class="blabel" style="margin:14px 0 6px">UD1 · Os seres vivos</p>
+              <div class="mk-alumno"><span>Examen · Os seres vivos <span class="mono">examen · 10 preguntas</span></span><span class="mk-niveles"><span>Editar</span><span>Informe</span></span></div>
+              <p class="blabel" style="margin:14px 0 6px">Modelos</p>
+              <div class="mk-fila"><span class="mk gr">Rúbrica de exposición oral</span><span class="mk gr">Lista de control del cuaderno</span><span class="mk gr">Escala de trabajo en equipo</span><span class="mk gr">Mis modelos (7)</span><span class="mk pri">Nuevo</span></div>
+              <p class="mk-nota">Cada fila es una actividad de esa unidad con su herramienta. Las acciones secundarias (informe, mover, guardar como modelo) van en una hoja «Más», como en las columnas del Calificador.</p>
+            </div>
+          </div>
+        </div>
+        <p>Los modelos son lo que hoy se llama banco de rúbricas y banco de pruebas, más los que traiga la app de serie. Usar un modelo en una actividad hace una copia, como hoy: retocarla no cambia el modelo ni las otras actividades (decisión 2).</p>
+      </section>
+
+      <section class="sec" id="s05">
+        <div class="sec-head"><span class="sec-num">05</span><h2>B · Qué evalúo, unidad a unidad</h2></div>
+        <p class="sec-lede">Se elige la unidad y solo se ve esa unidad. Los pesos del área van en otra pestaña.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">todo en cada instrumento</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk">▲▼</span><span class="mk">Proba escrita</span><span class="mk">tipo</span><span class="mk">80 %</span><span class="mk">solo con medida</span><span class="mk">×</span></div>
+              <div class="mk-fila"><span class="mk">Se usa en 4 unidades · 212 notas</span><span class="mk">Retirar de una unidad…</span></div>
+              <div class="mk-fila"><span class="mk">1.º</span><span class="mk">2.º</span><span class="mk">3.º</span><span class="mk">Varios registros</span><span class="mk">Examen</span><span class="mk">Rúbrica</span></div>
+              <div class="mk-fila"><span class="mk">Igualar</span><span class="mk">Asistente</span><span class="mk">+ actividad</span></div>
+              <div class="mk-fila"><span class="mk">Examen UD1</span><span class="mk">color</span><span class="mk">instrumento</span><span class="mk">50 %</span><span class="mk">criterios: UD1 · UD2 · UD3 · UD4</span></div>
+              <div class="mk-fila"><span class="mk">Examen UD2</span><span class="mk">color</span><span class="mk">instrumento</span><span class="mk">50 %</span><span class="mk">criterios: UD1 · UD2 · UD3 · UD4</span></div>
+              <p class="mk-nota">Y lo mismo otra vez para «Táboa de indicadores».</p>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">C. da Natureza</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr act">Por unidad</span><span class="mk gr">Pesos del área</span></div>
+              <div class="mk-fila"><span class="mk gr">Unidad: UD2 · A nosa saúde ▾</span><span class="mono">1.º trim. · 9 criterios</span></div>
+              <p class="blabel" style="margin:14px 0 6px">Proba escrita · 80 % del área</p>
+              <div class="mk-alumno"><span>Examen · A nosa saúde <span class="mono">examen · CE1.2 CE1.3 CE4.1 · 100 %</span></span><span class="mk-niveles"><span class="on">Editar</span></span></div>
+              <div class="mk-fila"><span class="mk gr">+ actividad en esta unidad</span></div>
+              <p class="blabel" style="margin:14px 0 6px">Táboa de indicadores · 20 % del área</p>
+              <div class="mk-alumno"><span>Billete de salida <span class="mono">sin herramienta · CE1.2 CE1.3 CE4.1 CE4.3 · 60 %</span></span><span class="mk-niveles"><span class="on">Editar</span></span></div>
+              <div class="mk-alumno"><span>Exposición oral <span class="mono">rúbrica · CE4.3 · 40 %</span></span><span class="mk-niveles"><span class="on">Editar</span></span></div>
+              <div class="mk-fila"><span class="mk gr">+ actividad en esta unidad</span></div>
+              <div class="mk-fila"><span class="mk aviso">2 criterios de la unidad sin actividad: CE2.1 · CE5.2</span></div>
+              <p class="mk-nota">Una actividad que no se usa en la unidad elegida no sale. «+ actividad» ofrece crear una nueva o traer una que ya existe en otra unidad.</p>
+            </div>
+          </div>
+        </div>
+        <p>«Pesos del área» conserva lo que hoy está en la primera fila de cada instrumento: nombre, porcentaje, trimestres, «solo con medida», regla del diario, orden y borrar. Es la misma información, apartada de lo que se toca cada semana.</p>
+      </section>
+
+      <section class="sec" id="s06">
+        <div class="sec-head"><span class="sec-num">06</span><h2>C · Editar desde donde se califica</h2></div>
+        <p class="sec-lede">Toda pantalla de calificar lleva «Editar» en la cabecera. Abre la ficha de la actividad en esa unidad, en una hoja que sube desde abajo.</p>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">tu captura</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-alumno"><span><strong>Billete de salida</strong> <span class="mono">diario · 1.º trim. · A nosa saúde</span></span><span class="mk-niveles"><span>12 nov</span><span>×</span></span></div>
+              <p class="mk-nota" style="margin:8px 0">▼ ¿Prefieres evaluar «Billete de salida» con rúbrica, lista de control o escala?</p>
+              <div class="mk-alumno"><span>Abad Ríos, Ana</span><span class="mk-niveles"><span>1</span><span>2</span><span>3</span><span>4</span></span></div>
+              <div class="mk-alumno"><span>Blanco Vila, Brais</span><span class="mk-niveles"><span>1</span><span>2</span><span>3</span><span>4</span></span></div>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">cabecera + ficha</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-alumno"><span><strong>Billete de salida</strong> <span class="mono">diario · 1.º trim. · A nosa saúde</span></span><span class="mk-niveles"><span class="on">Editar</span><span>12 nov</span><span>×</span></span></div>
+              <div class="mk-alumno"><span>Abad Ríos, Ana</span><span class="mk-niveles"><span>1</span><span>2</span><span>3</span><span>4</span></span></div>
+              <div style="border:2px solid var(--ink);padding:12px;margin-top:12px;background:var(--paper)">
+                <p class="blabel" style="margin:0 0 10px">Ficha · Billete de salida en UD2</p>
+                <div class="mk-fila"><span class="mk gr">Nombre: Billete de salida</span><span class="mk gr">Tipo: diario de aprendizaje</span></div>
+                <div class="mk-fila"><span class="mk gr">Cuenta en: Táboa de indicadores · 60 %</span></div>
+                <div class="mk-fila"><span class="mono">Criterios en esta unidad</span><span class="mk">CE1.2 ×</span><span class="mk">CE1.3 ×</span><span class="mk">CE4.1 ×</span><span class="mk">CE4.3 ×</span><span class="mk">+ criterio</span></div>
+                <div class="mk-fila"><span class="mono">Herramienta</span><span class="mk gr act">Diario 1-4</span><span class="mk gr">Elegir de Exámenes y pruebas</span><span class="mk gr">Crear nueva</span></div>
+                <div class="mk-fila"><span class="mk gr">Retirar de esta unidad</span><span class="mk pri">Hecho</span></div>
+              </div>
+              <p class="mk-nota">La misma ficha se abre desde «Editar» en Qué evalúo, en Exámenes y pruebas y en el «Más» de la columna. Un solo sitio para editar una actividad.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="s06b">
+        <div class="sec-head"><span class="sec-num">07</span><h2>D · El informe de un alumno en una prueba</h2></div>
+        <p class="sec-lede">El informe de la prueba gana un selector: el grupo, como hoy, o un alumno. Con un alumno, cada etiqueta y cada pregunta se compara con la clase y con sus compañeros de media parecida.</p>
+        <div class="note" style="--c:var(--m-mental)">
+          <span class="tag">Lo que ya existe y dónde está</span>
+          <p>Una parte está hecha, pero escondida: en Seguimiento → «Por alumno» → análisis, cada examen enseña una línea con el porcentaje del alumno por etiqueta frente al grupo y las preguntas que él falló y la mayoría acertó. No se llega desde el examen, no lista todas las falladas, no compara con alumnos parecidos y no tiene documento propio. Para rúbricas, listas y diario no hay nada individual.</p>
+        </div>
+        <div class="mock-par">
+          <div class="mock">
+            <div class="mock-cab hoy"><span class="mono mono-ink">Hoy</span><span class="mono">informe de la prueba</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr act">Todo el examen</span><span class="mk gr">Solo UD2</span><span class="mk gr">Imprimir</span></div>
+              <div class="mk-alumno"><span>Comprensión</span><span class="mono">grupo 71 %</span></div>
+              <div class="mk-alumno"><span>Vocabulario</span><span class="mono">grupo 58 %</span></div>
+              <div class="mk-alumno"><span>Cálculo</span><span class="mono">grupo 44 %</span></div>
+              <p class="mk-nota">Solo el grupo, sin nombres. No se puede elegir a nadie.</p>
+            </div>
+          </div>
+          <div class="mock">
+            <div class="mock-cab prop"><span class="mono">Propuesta</span><span class="mono">un alumno en la prueba</span></div>
+            <div class="mock-cuerpo">
+              <div class="mk-fila"><span class="mk gr">El grupo</span><span class="mk gr act">Un alumno: Abad Ríos, Ana ▾</span><span class="mk gr">Imprimir</span></div>
+              <div class="mk-fila"><span class="mono">Comparar con</span><span class="mk gr act">La clase (23)</span><span class="mk gr">Media parecida (6)</span></div>
+              <div class="mk-alumno"><span><strong>Nota 5,8</strong></span><span class="mono">clase 6,4 · parecidos 6,1</span></div>
+              <p class="blabel" style="margin:14px 0 6px">Por etiqueta</p>
+              <div class="mk-alumno"><span>Comprensión</span><span class="mono">ella 80 % · clase 71 % · parecidos 74 %</span></div>
+              <div class="mk-alumno"><span>Vocabulario</span><span class="mono">ella 60 % · clase 58 % · parecidos 55 %</span></div>
+              <div class="mk-alumno sel"><span>Cálculo</span><span class="mono">ella 20 % · clase 44 % · parecidos 48 %</span></div>
+              <p class="blabel" style="margin:14px 0 6px">Preguntas falladas (4 de 12)</p>
+              <div class="mk-alumno"><span>7 · Calcula a frecuencia cardíaca… <span class="mono">cálculo</span></span><span class="mono">0 de 1 · clase 65 %</span></div>
+              <div class="mk-alumno"><span>9 · Ordena de menor a maior… <span class="mono">cálculo</span></span><span class="mono">0 de 1 · clase 30 %</span></div>
+              <p class="mk-nota">Se marca la etiqueta en la que queda claramente por debajo. Las falladas van todas, ordenadas de la que más acertó la clase a la que menos: las primeras son las que más le separan del grupo.</p>
+            </div>
+          </div>
+        </div>
+        <p><strong>«Media parecida»</strong>: propongo los compañeros cuya nota del área en ese trimestre queda a un punto o menos de la suya, sin contar la prueba que se analiza para no comparar al alumno con los que sacaron lo mismo que él en ella. Si salen menos de cinco, se toman los cinco más cercanos y se dice.</p>
+        <p><strong>Se abre desde</strong> el informe de la prueba, desde «Exámenes y pruebas», desde el corrector al terminar con un alumno y desde su análisis en Seguimiento, que deja de ser el único camino.</p>
+        <p><strong>Por instrumento, no solo exámenes</strong>: el mismo informe para una rúbrica, lista o escala compara indicador a indicador (el nivel del alumno frente al más frecuente de la clase), y para el diario enseña sus registros en el tiempo frente a la media. Va en una fase aparte porque es cálculo nuevo; el del examen reutiliza casi todo.</p>
+        <div class="note alert">
+          <span class="tag">Protección de datos</span>
+          <p>En pantalla, que es del docente, salen todas las cifras. El documento impreso lleva el nombre del alumno y por eso no da cifras de un grupo de menos de cinco, igual que el análisis actual: de tres compañeros «parecidos» se deducen sus notas. Nunca aparece el nombre de otro alumno.</p>
+        </div>
+      </section>
+
+      <section class="sec" id="s07">
+        <div class="sec-head"><span class="sec-num">08</span><h2>Plan por fases</h2></div>
+        <p class="sec-lede">Seis entregas que se pueden desplegar por separado. Solo la cuarta cambia algo en los datos guardados. La quinta no depende de las anteriores y puede ir la primera.</p>
+        <table>
+          <thead><tr><th>Fase</th><th>Qué entrega</th><th>Qué toca</th><th>Datos</th></tr></thead>
+          <tbody>
+            <tr><td><span class="fase">1</span></td><td>La ficha de la actividad y el botón «Editar» en la cabecera de las cuatro pantallas de calificar (diario, rúbrica, nota directa, corrector).</td><td>Componente nuevo con las piezas comunes; reutiliza lo que hoy hace el «Más» de la columna.</td><td>Ninguno</td></tr>
+            <tr><td><span class="fase">2</span></td><td>«Qué evalúo» con dos pestañas: «Por unidad» y «Pesos del área».</td><td>Se reparte el diálogo actual en dos vistas. Las funciones de guardar son las mismas.</td><td>Ninguno</td></tr>
+            <tr><td><span class="fase">3</span></td><td>«Exámenes y pruebas» con pestañas de área, filas por unidad y bloque de modelos.</td><td>La página y la lista de exámenes; los bancos de rúbricas y pruebas pasan a verse aquí.</td><td>Ninguno</td></tr>
+            <tr><td><span class="fase">4</span></td><td>Asociar: elegir herramienta de la biblioteca desde la ficha, rúbrica propia por unidad y modelos de serie.</td><td>Cómo se busca la rúbrica de una actividad (la de la unidad y, si no hay, la general, igual que el examen).</td><td>Un campo más en la rúbrica, sin versión nueva de la base</td></tr>
+            <tr><td><span class="fase">5</span></td><td>Informe de un alumno en un examen: por etiqueta, preguntas falladas, frente a la clase y a los de media parecida; con documento para imprimir.</td><td>El informe de la prueba y el cálculo del análisis del alumno, que ya hace la mitad.</td><td>Ninguno</td></tr>
+            <tr><td><span class="fase">6</span></td><td>El mismo informe individual para rúbricas, listas, escalas y diario.</td><td>Cálculo nuevo por indicador y por registro.</td><td>Ninguno</td></tr>
+          </tbody>
+        </table>
+        <div class="note alert">
+          <span class="tag">Riesgo de la fase 4</span>
+          <p>Un aparato sin actualizar no sabría que una rúbrica es de una unidad y la tomaría por la de todas. Como con las unidades estancas, habría que actualizar todos los aparatos antes de usar rúbricas por unidad. Las fases 1 a 3 no tienen este riesgo.</p>
+        </div>
+        <p>Cada fase lleva sus pruebas de interfaz y su nota en CLAUDE.md. Las pruebas actuales del gestor de instrumentos y de la pantalla de exámenes habrá que adaptarlas, porque buscan los controles donde están hoy.</p>
+      </section>
+
+      <section class="sec" id="s08">
+        <div class="sec-head"><span class="sec-num">09</span><h2>Decisiones</h2></div>
+        <p class="blabel" style="margin-top:0">Tomadas el 13·11·2026</p>
+        <table>
+          <thead><tr><th>N.º</th><th>Pregunta</th><th>Decidido</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>Pestañas de «Exámenes y pruebas»</td><td>Las áreas de la clase activa.</td></tr>
+            <tr><td class="num">2</td><td>Asociar una herramienta de la biblioteca</td><td>Se copia. Retocarla no cambia el modelo ni otras actividades.</td></tr>
+            <tr><td class="num">3</td><td>Rúbrica distinta por unidad</td><td>Sí, con la general como reserva. «Es la clave del proceso de evaluación».</td></tr>
+            <tr><td class="num">4</td><td>Modelos de serie</td><td>Rúbrica de exposición oral, lista de control del cuaderno y escala de trabajo en equipo, además de los que guarde el docente.</td></tr>
+          </tbody>
+        </table>
+        <p class="blabel">Pendientes, sobre el informe individual</p>
+        <table>
+          <thead><tr><th>N.º</th><th>Pregunta</th><th>Mi recomendación</th></tr></thead>
+          <tbody>
+            <tr><td class="num">5</td><td>¿Quiénes son los de «media parecida»?</td><td>Los que quedan a un punto o menos en la nota del área de ese trimestre, sin contar esa prueba; si son menos de cinco, los cinco más cercanos.</td></tr>
+            <tr><td class="num">6</td><td>El documento impreso, ¿es para ti o también para la familia?</td><td>Hacerlo apto para la familia: con las cifras de la clase, sin el grupo de media parecida, que queda solo en tu pantalla.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="sec" id="s09">
+        <div class="sec-head"><span class="sec-num">10</span><h2>Lo que no cambia</h2></div>
+        <ul class="rules">
+          <li><span class="dash">—</span> El cálculo de notas, los pesos y la programación. La programación sigue mandando qué criterios puede cubrir cada instrumento.</li>
+          <li><span class="dash">—</span> Las notas ya puestas, el diario y los exámenes corregidos. Ninguna fase mueve ni borra datos.</li>
+          <li><span class="dash">—</span> La cámara: sigue leyendo el QR de mesa y la hoja de respuestas desde la misma pantalla.</li>
+          <li><span class="dash">—</span> El Calificador. La ficha de la actividad se suma a su «Más»; la matriz no se toca.</li>
+        </ul>
+        <p>Las maquetas son esquemas hechos a partir del código, no capturas. No se han probado con ningún docente ni en el iPad.</p>
+      </section>
+
+    </div>
+
+    <aside class="aside">
+      <a class="btn btn-block" href="#s08">Ver las decisiones</a>
+
+      <div class="panel" style="margin-top:20px">
+        <div class="panel-head"><span class="mono">Los cinco mundos</span><span class="mono">1 / 5</span></div>
+        <svg viewBox="0 0 200 190" width="100%" height="128" role="img" aria-label="Uno de los cinco mundos activo: mental">
+          <polygon points="100,20 172,72 145,158 55,158 28,72" fill="none" stroke="#17181a" stroke-width="1"/>
+          <g stroke="#c9c4b8" stroke-width="1">
+            <line x1="100" y1="90" x2="100" y2="20"/><line x1="100" y1="90" x2="172" y2="72"/>
+            <line x1="100" y1="90" x2="145" y2="158"/><line x1="100" y1="90" x2="55" y2="158"/>
+            <line x1="100" y1="90" x2="28" y2="72"/>
+          </g>
+          <circle cx="100" cy="20"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="172" cy="72"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="145" cy="158" r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+          <circle cx="55"  cy="158" r="5" fill="#6c8fb3"/>
+          <circle cx="28"  cy="72"  r="4.5" fill="#ece9e1" stroke="#c9c4b8"/>
+        </svg>
+        <dl class="spec" style="margin-top:6px;border-top:0">
+          <div><dt>Mental</dt><dd style="font:400 12px/1 var(--font-mono);letter-spacing:.1em">ACTIVO</dd></div>
+        </dl>
+      </div>
+
+      <dl class="spec">
+        <div><dt>Público</dt><dd>Autor de la app</dd></div>
+        <div><dt>Usuario final del rediseño</dt><dd>Docente de Primaria y ESO, en iPad</dd></div>
+        <div><dt>Estado</dt><dd>Propuesta. Nada implementado</dd></div>
+        <div><dt>Alcance</dt><dd>Exámenes y pruebas, Qué evalúo, las pantallas de calificar y el informe individual</dd></div>
+        <div><dt>No toca</dt><dd>Cálculo, notas guardadas, Calificador</dd></div>
+        <div><dt>Fuente</dt><dd>Peticiones del 12 y el 13·11·2026 y lectura del código</dd></div>
+        <div><dt>Clave de lámina</dt><dd>FIG. XX: número por asignar en el registro</dd></div>
+      </dl>
+    </aside>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="mono mono-ink">EDUmind® · Luis Vilela Acuña</p>
+    <p class="tm">EDUmind® es una marca registrada en España (OEPM M4319166), titularidad de
+    Luis Vilela Acuña. EDUmind MiClase · propuesta de rediseño de exámenes e instrumentos · verificada contra el código el 12·11·2026.</p>
+  </div>
+  <div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+</footer>
+
+</body>
+</html>

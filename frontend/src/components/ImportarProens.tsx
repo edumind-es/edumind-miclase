@@ -204,6 +204,21 @@ export default function ImportarProens({
 
   const aplicar = async () => {
     if (!prog) return
+    // Un PDF de otro curso, etapa o área se puede importar (los códigos se
+    // cotejan con el currículo de la clase), pero casi siempre es un error
+    // de fichero: se pregunta antes, no se deja pasar con un aviso arriba.
+    if (cursoDistinto || etapaDistinta || areaDudosa) {
+      const que = [
+        (cursoDistinto || etapaDistinta) ? `es de ${prog.curso ?? '?'}º de ${prog.etapa ?? '?'} y esta clase es de ${cursoGrupo}º de ${grupoEtapa}` : '',
+        areaDudosa ? `dice «${prog.area}» y esta área es «${areaLegible}»` : '',
+      ].filter(Boolean).join(', y ')
+      const seguir = await confirmar({
+        titulo: 'Este PDF no parece el de esta área',
+        texto: `El documento ${que}.\n\nSi lo importas, sus unidades, pesos e instrumentos entran en esta área y sus criterios se casan solo por el número con los del currículo de la clase, que pueden decir otra cosa.`,
+        aceptar: 'Importar de todos modos', cancelar: 'No importar', peligro: true,
+      })
+      if (!seguir) return
+    }
     setAplicando(true); setError('')
     try {
       const r = await aplicarProgramacionImportada(asignaturaId, {

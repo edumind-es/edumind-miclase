@@ -8,8 +8,9 @@
  * la mayoría acierta.
  */
 import { mediana, modaDeCalificativos, resumenEstadistico, textoDeModa } from '../frontend/src/db/estadistica'
-import { analizarAlumno, analizarExamen, grupoPublicable, MINIMO_GRUPO, type ExamenDeArea } from '../frontend/src/db/analisisAlumno'
+import { analizarAlumno, analizarExamen, alumnosDeMediaParecida, grupoPublicable, MINIMO_GRUPO, type ExamenDeArea } from '../frontend/src/db/analisisAlumno'
 import { documentoAnalisisAlumno } from '../frontend/src/informes/analisisAlumno'
+import { documentoInformeAlumnoPrueba } from '../frontend/src/informes/informeAlumnoPrueba'
 import { normalizarPrueba, ACIERTO, FALLO, EN_BLANCO } from '../frontend/src/db/prueba'
 import type { NotaArea } from '../frontend/src/db/calculo'
 
@@ -116,9 +117,29 @@ console.log('\n4. Un examen: lo que él falla y la mayoría acierta')
   ok(a.ejesPor === 'aspecto' && cuerpo.pctAlumno === 50 && cuerpo.pctGrupo === 80 && salud.pctAlumno === 0 && salud.pctGrupo === 50,
     'por aspecto: su acierto frente al del grupo', JSON.stringify(a.ejes))
   ok(analizarExamen(ex, 99) === null, 'un alumno sin el examen corregido no tiene análisis')
+  ok(a.falladas.map(p => p.numero).join() === '1,3,4', 'todas las que falló, de la más acertada por el grupo a la menos', a.falladas.map(p => `${p.numero}:${p.pctGrupo}`).join(' '))
+  // El documento del alumno: con nombre, y con la clase solo si hay cinco o más.
+  const doc = documentoInformeAlumnoPrueba({ alumno: 'Abad <Ríos>, Ana', clase: '6.º A', area: 'CCNN', unidad: 'UD1', def, analisis: a })
+  ok(doc.includes('Abad &lt;Ríos&gt;, Ana') && doc.includes('Preguntas falladas') && doc.includes('Media de la clase'), 'el documento del alumno lleva su nombre, lo que falló y, con cinco exámenes, la clase')
+  ok(doc.includes('data-eje="Salud"') && doc.includes('Acierto de la clase'), 'y su acierto por etiqueta frente al de la clase')
+  const docPocos = documentoInformeAlumnoPrueba({ alumno: 'Ana', clase: '6.º A', area: 'CCNN', def, analisis: analizarExamen({ ...ex, respuestas: ex.respuestas.slice(0, 3) }, 1)! })
+  ok(!docPocos.includes('Media de la clase') && !docPocos.includes('Acierto de la clase') && docPocos.includes('no se dan las cifras de la clase'), 'con tres exámenes corregidos no imprime ninguna cifra de la clase')
+  // Frente a un grupo más pequeño: solo esos compañeros y él.
+  const con23 = analizarExamen(ex, 1, { solo: [2, 3] })!
+  ok(con23.nota.grupo!.n === 3 && con23.nota.valor === 2.5, 'con «solo», el grupo son esos compañeros y él', JSON.stringify(con23.nota.grupo))
   // Con preguntas por unidad, en la unidad del examen cuentan las suyas.
   const porUnidad = { ...ex, def: { ...def, preguntas: def.preguntas.map((p, i) => i < 2 ? { ...p, unidad_id: 3 } : { ...p, unidad_id: 4 }) } }
   ok(analizarExamen(porUnidad, 1)!.preguntas.length === 2, 'un examen con preguntas por unidad se analiza con las de su unidad')
+}
+
+console.log('\n4b. Compañeros de media parecida')
+{
+  const n = new Map<number, number | null>([[1, 6], [2, 6.5], [3, 5.2], [4, 7], [5, 5], [6, 6.9], [7, 9], [8, 2], [9, null]])
+  const todos = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  ok(alumnosDeMediaParecida(1, n, todos).join() === '2,3,6,4,5', 'a un punto o menos, del más cercano al más lejano, sin él', alumnosDeMediaParecida(1, n, todos).join())
+  ok(alumnosDeMediaParecida(7, n, todos).length === MINIMO_GRUPO && alumnosDeMediaParecida(7, n, todos)[0] === 4, 'si a un punto hay menos de cinco, los cinco más cercanos', alumnosDeMediaParecida(7, n, todos).join())
+  ok(alumnosDeMediaParecida(1, n, [1, 2, 7]).join() === '2,7', 'solo entre los candidatos (los que tienen el examen); si no hay cinco, los que haya')
+  ok(alumnosDeMediaParecida(9, n, todos).length === 0 && !alumnosDeMediaParecida(1, n, todos).includes(9), 'sin nota del área no hay grupo, ni se entra en el de otro')
 }
 
 console.log('\n5. El informe impreso')

@@ -10,12 +10,12 @@
 import {
   notaDePrueba, normalizarPrueba, puntosTotales, unidadesDelExamen, criteriosSinDestino, preguntasIguales,
   idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, reasignarCriterio, type PruebaDef,
-  pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
+  pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas, casarUnidades, unidadDeTexto,
 } from '../frontend/src/db/prueba'
 import { readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import {
-  importarPrueba, pruebaDeFilas, pruebaDeJson, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
+  importarPrueba, pruebaDeFilas, filasDePrueba, pruebaDeJson, pruebaAXlsx, pruebaAMarkdown, pruebaAJson, PRUEBA_EJEMPLO,
   pruebaDeExamenMarkdown, pareceExamenMarkdown, examenAMarkdown, letraAIndice, pruebaDeTexto, pareceCsv,
 } from '../frontend/src/ia/pruebaImportar'
 import { generarPromptTest, generarPromptPlanilla } from '../frontend/src/ia/pruebaPrompt'
@@ -391,6 +391,43 @@ console.log('\n12. Preguntas por unidad: cada unidad recibe la nota de las suyas
   ok(JSON.stringify(limpio.preguntas.map(q => q.unidad_id ?? null)) === '[1,1,null,null,null]', 'al desvincular la UD2, sus preguntas vuelven a contar en todas')
   ok(!limpio.preguntas.some(q => 'unidad_id' in q && q.unidad_id == null), 'sin dejar la clave vacía en el JSON')
   ok(sinUnidadesAjenas(sinExtras, []).preguntas.every(q => q.unidad_id == null), 'y un examen que ya no cuenta en varias no guarda ninguna')
+
+  // La unidad de cada pregunta viaja por su NOMBRE: el id solo vale en este aparato.
+  const aqui = [{ id: 1, nombre: 'UD1 · A nosa saúde' }, { id: 2, nombre: 'UD2 · Os ríos de Galicia' }]
+  // Otra clase: mismas unidades, otros ids.
+  const alli = [{ id: 71, nombre: 'UD1 · A nosa saúde' }, { id: 72, nombre: 'UD2 · Os ríos de Galicia' }, { id: 73, nombre: 'UD3 · O relevo' }]
+  const esperado = '[71,71,72,72,null]'
+  const unidadesDe = (x: { preguntas: { unidad_id?: number | null }[] }) => JSON.stringify(x.preguntas.map(q => q.unidad_id ?? null))
+  const filasU = filasDePrueba(sinExtras, aqui)
+  const iCab = filasU.findIndex(f => f[0] === 'Pregunta')
+  ok(filasU[iCab].includes('Unidad') && filasU[iCab + 1].includes('UD1 · A nosa saúde') && filasU[iCab + 5].includes('Todas'), 'la tabla lleva la columna «Unidad» con el nombre, y «Todas» en la común')
+  ok(!filasDePrueba(normalizarPrueba(PRUEBA_EJEMPLO), aqui).some(f => f.includes('Unidad')), 'un examen sin etiquetas no gana columna')
+  for (const [formato, leida] of [
+    ['xlsx', (await importarPrueba('e.xlsx', pruebaAXlsx(sinExtras, aqui).buffer as ArrayBuffer)).prueba],
+    ['md', (await importarPrueba('e.md', bytes(pruebaAMarkdown(sinExtras, aqui)))).prueba],
+    ['json', (await importarPrueba('e.json', bytes(pruebaAJson(sinExtras, aqui)))).prueba],
+    ['examen escrito', pruebaDeExamenMarkdown(examenAMarkdown({ ...sinExtras, tipo: 'test', preguntas: sinExtras.preguntas.map(q => ({ ...q, opciones: ['a', 'b'], correcta: 0 })) }, { conClave: true, unidades: aqui }), 't').prueba],
+  ] as const) {
+    const r = casarUnidades(leida, alli, 71)
+    ok(unidadesDe(r.def) === esperado, `${formato}: exportado y vuelto a leer en otra clase, cada pregunta cae en su unidad`, unidadesDe(r.def))
+    ok(r.vinculadas.join() === '72' && r.def.unidades_vinculadas?.join() === '72' && r.sinCasar.length === 0, `${formato}: y la otra unidad queda vinculada`, JSON.stringify([r.vinculadas, r.def.unidades_vinculadas, r.sinCasar]))
+    ok(!r.def.preguntas.some(q => 'unidad_texto' in q), `${formato}: el texto de paso no se guarda`)
+  }
+  // Lo que no casa no se inventa.
+  const raro = casarUnidades({ ...sinExtras, preguntas: sinExtras.preguntas.map((q, i) => ({ ...q, unidad_id: undefined, unidad_texto: i === 0 ? 'O clima' : i === 1 ? 'UD3' : undefined })) }, alli, 71)
+  ok(raro.sinCasar.join() === 'O clima' && raro.def.preguntas[0].unidad_id == null, 'una unidad que no existe en el área se dice y la pregunta cuenta en todas')
+  ok(raro.def.preguntas[1].unidad_id === 73 && raro.vinculadas.join() === '73', '«UD3» casa por el número escrito en el nombre')
+  ok(unidadDeTexto('2', alli) === 72 && unidadDeTexto('os rios de galicia', alli) === 72 && unidadDeTexto('ríos', alli) === 72, 'vale el número, el nombre sin tildes o un trozo')
+  ok(unidadDeTexto('UD', alli) === null && unidadDeTexto('4', alli) === null, 'y lo ambiguo o inexistente no casa con ninguna')
+  const general = casarUnidades(pruebaDeJson(pruebaAJson(sinExtras, aqui), 't').prueba, alli, null)
+  ok(general.def.preguntas.every(q => q.unidad_id == null) && general.vinculadas.length === 0, 'el examen general no reparte: las etiquetas se quitan')
+  ok(casarUnidades(sinExtras, alli, 71).def.preguntas.every(q => q.unidad_id == null), 'los ids de otra clase que no son del área se quitan')
+  // Los prompts piden la unidad solo si el examen cuenta en varias.
+  const conU = { asignatura: 'Ciencias', nivel: '6º', unidades: aqui.map(u => u.nombre) }
+  ok(/\| Unidad \|/.test(generarPromptPlanilla({ ...conU, examen: 'x' })) && /Unidad: \[nombre/.test(generarPromptTest({ ...conU, contexto: 'x', nPreguntas: 4, nOpciones: 4 })), 'los dos prompts piden la unidad de cada pregunta')
+  ok(!/Unidad/.test(generarPromptPlanilla({ asignatura: 'C', nivel: '6º', examen: 'x', unidades: ['UD1'] })), 'con una sola unidad no se pide nada')
+  const planillaIA = pruebaDeTexto('# Examen\n\n| Ítem | Pregunta | Criterio | Unidad | Tipo | Máximo | Clave | Puntuación |\n|---|---|---|---|---|---|---|---|\n| 1 | Uno | | UD2 · Os ríos de Galicia | Desarrollo | 1 | x | y |\n| 2 | Dos | | | Desarrollo | 1 | x | y |', 't').prueba
+  ok(unidadesDe(casarUnidades(planillaIA, alli, 71).def) === '[72,null]', 'y la tabla que devuelve la IA con «Unidad» se lee')
 }
 
 console.log('\nLa marca de IA de un examen (AI Act, art. 50.2)')

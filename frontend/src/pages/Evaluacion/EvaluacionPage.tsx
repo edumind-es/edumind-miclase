@@ -1167,7 +1167,7 @@ export default function EvaluacionPage() {
 
       {sesion && matriz && (
         <SesionInstrumento
-          instrumento={sesion.ins}
+          instrumento={columnasInstr.find(c => c.ins.instrumento_id === sesion.ins.instrumento_id)?.ins ?? sesion.ins}
           criterios={sesion.criterios}
           alumnos={alumnos}
           trimestre={trimestre}

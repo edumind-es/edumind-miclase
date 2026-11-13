@@ -35,6 +35,8 @@ import { claveUnidad } from '@/db/migracionUnidades'
 import { verNeae, verEvidencias } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import ChipsCompetencias from './ChipsCompetencias'
+import InformePrueba from './InformePrueba'
+import { BotonEditarActividad } from './FichaActividad'
 
 import { confirmar } from '@/utils/confirmar'
 type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
@@ -147,6 +149,8 @@ export default function CeldaEvaluacion({
   const [pruebaAbierta, setPruebaAbierta] = useState(false)
   /** El examen con el que se corrige aquí, si el instrumento es una prueba escrita y lo tiene. */
   const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
+  /** El informe de este alumno en el examen, abierto desde el corrector. */
+  const [informeAlumno, setInformeAlumno] = useState(false)
   /** Hay exámenes definidos, pero por unidad, y se está mirando «Todo el curso». */
   const [pruebaSoloPorUnidad, setPruebaSoloPorUnidad] = useState(false)
   /** Nota fantasma de esta casilla: la anterior a un recálculo. Visible, pero no cuenta. */
@@ -651,6 +655,11 @@ export default function CeldaEvaluacion({
               )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+              {instrumentoSel && (
+                <BotonEditarActividad instrumento={instrumentoSel} criterios={[criterio, ...hermanos]} unidadNombre={unidadNombre}
+                  area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
+                  onCambio={trasEditarConfig} />
+              )}
               <div data-nota-actual style={{
                 width: 60, height: 60, borderRadius: 12, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center',
@@ -732,6 +741,27 @@ export default function CeldaEvaluacion({
               unidadId={unidadId}
               guardando={guardando}
               onCambio={guardarRespuestas}
+            />
+          )}
+          {calificaPorPrueba && prueba && instrumentoSel && Object.keys(marcado).length > 0 && (
+            <button type="button" className="btn-secondary" data-informe-alumno-abrir onClick={() => setInformeAlumno(true)}
+              style={{ minHeight: 44, fontSize: 13, marginTop: 8 }}>
+              Informe de {alumno.nombre} en este examen
+            </button>
+          )}
+          {informeAlumno && instrumentoSel && (
+            <InformePrueba
+              instrumentoId={instrumentoSel.instrumento_id}
+              instrumentoNombre={instrumentoSel.nombre}
+              unidadId={unidadId}
+              unidadNombre={unidadNombre}
+              criterios={[criterio, ...hermanos]}
+              grupo={grupo}
+              asig={asig}
+              grupoNombre={grupo.nombre}
+              areaNombre={asig.nombre_display || asig.nombre}
+              alumnoInicial={alumno.id!}
+              onCerrar={() => setInformeAlumno(false)}
             />
           )}
 

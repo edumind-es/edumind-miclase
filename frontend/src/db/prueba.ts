@@ -52,6 +52,12 @@ export interface PreguntaPrueba {
    */
   aspecto?: string | null
   /**
+   * Solo de paso, al importar: lo que el fichero dice de la unidad de la
+   * pregunta («UD1», «A nosa saúde»). `casarUnidades` lo convierte en
+   * `unidad_id` y lo quita; nunca se guarda.
+   */
+  unidad_texto?: string
+  /**
    * La planilla de corrección de la pregunta, para tenerla delante al
    * corregir: `clave` es la respuesta correcta («1-d · 2-e · 3-a», «meridiano
    * de Greenwich») y `correccion` cómo se reparten los puntos («completo 0,25 ·
@@ -176,6 +182,7 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
     const correcta = p?.correcta == null ? NaN : Number(p.correcta)
     const unidadPregunta = p?.unidad_id == null ? NaN : Number(p.unidad_id)
     const aspecto = typeof p?.aspecto === 'string' ? p.aspecto.replace(/\s+/g, ' ').trim() : ''
+    const unidadTexto = typeof p?.unidad_texto === 'string' ? p.unidad_texto.replace(/\s+/g, ' ').trim() : ''
     const clave = typeof p?.clave === 'string' ? p.clave.replace(/\s+/g, ' ').trim() : ''
     const correccion = typeof p?.correccion === 'string' ? p.correccion.replace(/\s+/g, ' ').trim() : ''
     const notas = typeof p?.notas === 'string' ? p.notas.replace(/\s+/g, ' ').trim() : ''
@@ -196,6 +203,7 @@ export function normalizarPrueba(d: Partial<PruebaDef> | null | undefined): Prue
       criterio_id: typeof p?.criterio_id === 'string' && p.criterio_id.trim() ? p.criterio_id.trim() : null,
       ...(Number.isInteger(unidadPregunta) && unidadPregunta > 0 ? { unidad_id: unidadPregunta } : {}),
       ...(aspecto ? { aspecto } : {}),
+      ...(unidadTexto ? { unidad_texto: unidadTexto } : {}),
       ...(clave ? { clave } : {}),
       ...(correccion ? { correccion } : {}),
       ...(niveles.length ? { niveles } : {}),
@@ -243,16 +251,81 @@ export function pruebaDeUnidad(def: PruebaDef, unidad_id: number | null | undefi
  * de una unidad que se desvinculó, o las de otra clase en un examen del banco.
  */
 export function sinUnidadesAjenas(def: PruebaDef, validas: number[]): PruebaDef {
-  if (!tieneUnidadesPorPregunta(def)) return def
+  if (!tieneUnidadesPorPregunta(def) && !def.preguntas.some(p => p.unidad_texto)) return def
   const ok = new Set(validas)
   return {
     ...def,
     preguntas: def.preguntas.map(p => {
-      if (p.unidad_id == null || ok.has(p.unidad_id)) return p
-      const { unidad_id: _fuera, ...resto } = p
+      // El texto de paso de una importación no se guarda nunca.
+      const { unidad_texto: _texto, ...q } = p
+      if (q.unidad_id == null || ok.has(q.unidad_id)) return q
+      const { unidad_id: _fuera, ...resto } = q
       return resto
     }),
   }
+}
+
+const sinTildes = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
+
+/** El número de unidad que lleva escrito un texto: «UD2», «Unidad 2», «2», «2. Os ríos». */
+function numeroDeUnidad(texto: string): number | null {
+  const t = sinTildes(texto)
+  const m = t.match(/^(?:ud|unidad|unidade|u)?\s*0*(\d{1,2})\b/) ?? t.match(/\b(?:ud|unidad|unidade)\s*0*(\d{1,2})\b/)
+  return m ? Number(m[1]) : null
+}
+
+/** La unidad que nombra un texto, entre las del área: por nombre y, si no, por el número escrito. Nunca por orden. */
+export function unidadDeTexto(texto: string, unidades: { id: number; nombre: string }[]): number | null {
+  const t = sinTildes(texto)
+  if (!t) return null
+  const exacta = unidades.filter(u => sinTildes(u.nombre) === t)
+  if (exacta.length === 1) return exacta[0].id
+  // Solo un número («UD2», «2»): la unidad que lo lleva escrito en su nombre.
+  if (/^(?:ud|unidad|unidade|u)?\s*\d{1,2}$/.test(t)) {
+    const n = numeroDeUnidad(t)
+    const porNumero = unidades.filter(u => numeroDeUnidad(u.nombre) === n)
+    return porNumero.length === 1 ? porNumero[0].id : null
+  }
+  // Un trozo del nombre, si solo cabe en una.
+  if (t.length >= 4) {
+    const contiene = unidades.filter(u => { const n = sinTildes(u.nombre); return n.includes(t) || t.includes(n) })
+    if (contiene.length === 1) return contiene[0].id
+  }
+  return null
+}
+
+export interface UnidadesCasadas {
+  def: PruebaDef
+  /** Unidades que el fichero nombra y el examen aún no vinculaba: quedan vinculadas. */
+  vinculadas: number[]
+  /** Textos de unidad que no casan con ninguna del área: esas preguntas cuentan en todas. */
+  sinCasar: string[]
+}
+
+/**
+ * Convierte la unidad escrita en un fichero (`unidad_texto`) en la unidad
+ * del área. Una pregunta de otra unidad que no es la del examen la deja
+ * vinculada: sin eso la etiqueta no valdría para nada. El examen general
+ * (sin unidad) no reparte, así que ahí el texto solo se quita. Los
+ * `unidad_id` que no son del área (un JSON de otra clase) también se quitan.
+ */
+export function casarUnidades(def: PruebaDef, unidades: { id: number; nombre: string }[], propia: number | null): UnidadesCasadas {
+  const delArea = new Set(unidades.map(u => u.id))
+  const yaVinculadas = new Set(unidadesDelExamen(propia, def))
+  const vinculadas: number[] = []
+  const sinCasar: string[] = []
+  const preguntas = def.preguntas.map(p => {
+    const { unidad_texto, ...q } = p
+    if (q.unidad_id != null && !delArea.has(q.unidad_id)) delete q.unidad_id
+    if (!unidad_texto || propia == null) return q
+    const id = unidadDeTexto(unidad_texto, unidades)
+    if (id == null) { if (!sinCasar.includes(unidad_texto)) sinCasar.push(unidad_texto); return q }
+    if (!yaVinculadas.has(id)) { yaVinculadas.add(id); vinculadas.push(id) }
+    return { ...q, unidad_id: id }
+  })
+  const todas = [...(def.unidades_vinculadas ?? []).filter(u => delArea.has(u) && u !== propia), ...vinculadas]
+  const { unidades_vinculadas: _antes, ...resto } = def
+  return { def: { ...resto, preguntas, ...(todas.length ? { unidades_vinculadas: todas } : {}) }, vinculadas, sinCasar }
 }
 
 /**

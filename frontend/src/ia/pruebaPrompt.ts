@@ -16,11 +16,15 @@ export function generarPromptTest(params: {
   nOpciones: number
   /** Criterios que evalúa el instrumento, para que cada pregunta nombre el suyo. */
   criterios?: { id: string; descripcion: string }[]
+  /** Nombres de las unidades en las que cuenta el examen; con dos o más, cada pregunta dice la suya. */
+  unidades?: string[]
 }): string {
   const n = Math.max(1, Math.min(60, Math.round(params.nPreguntas)))
   const k = Math.max(2, Math.min(5, Math.round(params.nOpciones)))
   const letras = ['a', 'b', 'c', 'd', 'e'].slice(0, k)
   const conCriterios = (params.criterios?.length ?? 0) > 0
+  const conUnidades = (params.unidades?.length ?? 0) > 1
+  const lineaUnidad = conUnidades ? '\n   Unidad: [nombre de la unidad]' : ''
   const ejemploOpciones = letras.map((l, i) => `${l}) [opción${i === 1 ? ' correcta' : ''}]${i === 1 ? ' *' : ''}`).join('\n')
   return `Eres docente experto en ${params.asignatura} en España (LOMLOE). Escribe un test de ${n} preguntas de opción múltiple para alumnado de ${params.nivel}.
 
@@ -28,6 +32,10 @@ export function generarPromptTest(params: {
 ${conCriterios ? `
 **Criterios de evaluación que debe cubrir** (reparte las preguntas entre ellos y escribe bajo cada pregunta cuál evalúa):
 ${params.criterios!.map(c => `- ${c.id}: ${c.descripcion}`).join('\n')}
+` : ''}
+${conUnidades ? `
+**El examen cuenta en varias unidades** (escribe bajo cada pregunta de cuál es, con el nombre tal cual; si una pregunta es de todas, no pongas la línea):
+${params.unidades!.map(u => `- ${u}`).join('\n')}
 ` : ''}
 Reglas:
 - Cada pregunta tiene exactamente ${k} opciones (${letras.join(', ')}) y UNA sola correcta.
@@ -38,10 +46,10 @@ Reglas:
 
 # [Título del examen]
 
-1. [Enunciado de la pregunta 1]${conCriterios ? '\n   Criterio: [id del criterio]' : ''}
+1. [Enunciado de la pregunta 1]${conCriterios ? '\n   Criterio: [id del criterio]' : ''}${lineaUnidad}
 ${ejemploOpciones.split('\n').map(l => `   ${l}`).join('\n')}
 
-2. [Enunciado de la pregunta 2]${conCriterios ? '\n   Criterio: [id del criterio]' : ''}
+2. [Enunciado de la pregunta 2]${conCriterios ? '\n   Criterio: [id del criterio]' : ''}${lineaUnidad}
 ${letras.map((l, i) => `   ${l}) [opción${i === 0 ? ' correcta' : ''}]${i === 0 ? ' *' : ''}`).join('\n')}`
 }
 
@@ -61,10 +69,16 @@ export function generarPromptPlanilla(params: {
   puntosTotales?: number
   /** Criterios que evalúa el instrumento, para que cada pregunta nombre el suyo. */
   criterios?: { id: string; descripcion: string }[]
+  /** Nombres de las unidades en las que cuenta el examen; con dos o más, cada pregunta dice la suya. */
+  unidades?: string[]
 }): string {
   const total = params.puntosTotales && params.puntosTotales > 0 ? params.puntosTotales : 10
   const conCriterios = (params.criterios?.length ?? 0) > 0
   const crit = conCriterios ? '[id]' : ''
+  const conUnidades = (params.unidades?.length ?? 0) > 1
+  const colU = conUnidades ? ' Unidad |' : ''
+  const rayaU = conUnidades ? '---|' : ''
+  const celdaU = conUnidades ? ' [unidad] |' : ''
   return `Eres docente experto en ${params.asignatura} en España (LOMLOE), con alumnado de ${params.nivel}. Te paso un examen ya hecho (o su planilla de corrección). Conviértelo en una PLANILLA DE CORRECCIÓN CON RÚBRICA POR PREGUNTA: una fila por pregunta con la respuesta correcta, cómo se reparten sus puntos y, en las preguntas de desarrollo, los niveles que puede alcanzar la respuesta. Es lo que el docente tendrá delante para corregir pulsando un nivel por pregunta.
 
 **El examen**:
@@ -72,6 +86,10 @@ ${params.examen.trim()}
 ${conCriterios ? `
 **Criterios de evaluación del instrumento** (en «Criterio» escribe el id del que evalúa cada pregunta, o déjalo vacío si evalúa todos):
 ${params.criterios!.map(c => `- ${c.id}: ${c.descripcion}`).join('\n')}
+` : ''}
+${conUnidades ? `
+**El examen cuenta en varias unidades** (en «Unidad» escribe de cuál es cada pregunta, con el nombre tal cual, o déjalo vacío si es de todas):
+${params.unidades!.map(u => `- ${u}`).join('\n')}
 ` : ''}
 Reglas:
 - No inventes preguntas ni cambies su orden: una fila por pregunta del examen. Una pregunta con apartados de criterios distintos se parte en dos filas (P5.1 a-d y P5.2 e-j), cada una con sus puntos; si todos los apartados son del mismo criterio, van en la misma fila.
@@ -87,8 +105,8 @@ Reglas:
 
 # [Título del examen]
 
-| Ítem | Pregunta | Criterio | Tipo | Máximo | Clave | Puntuación | Nivel 1 | Nivel 2 | Nivel 3 | Nivel 4 | Nivel 5 | Nivel 6 | Notas |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | [enunciado resumido] | ${crit} | Desarrollo | 1 | [respuesta esperada] | 4 indicadores × 0,25: … | 1 pt · [todo] | 0,75 pt · [tres de cuatro] | 0,5 pt · [dos] | 0,25 pt · [uno] | 0 pt · Nada correcto o sin respuesta | | [qué se admite] |
-| 2 | [enunciado resumido] | ${crit} | Respuesta cerrada | 1 | a) … · b) … · c) … · d) … | 0,25 por cada acierto | | | | | | | |`
+| Ítem | Pregunta | Criterio |${colU} Tipo | Máximo | Clave | Puntuación | Nivel 1 | Nivel 2 | Nivel 3 | Nivel 4 | Nivel 5 | Nivel 6 | Notas |
+|---|---|---|${rayaU}---|---|---|---|---|---|---|---|---|---|---|
+| 1 | [enunciado resumido] | ${crit} |${celdaU} Desarrollo | 1 | [respuesta esperada] | 4 indicadores × 0,25: … | 1 pt · [todo] | 0,75 pt · [tres de cuatro] | 0,5 pt · [dos] | 0,25 pt · [uno] | 0 pt · Nada correcto o sin respuesta | | [qué se admite] |
+| 2 | [enunciado resumido] | ${crit} |${celdaU} Respuesta cerrada | 1 | a) … · b) … · c) … · d) … | 0,25 por cada acierto | | | | | | | |`
 }

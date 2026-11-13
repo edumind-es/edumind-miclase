@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, gestorEnPesosDelArea } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -28,6 +28,7 @@ const ok = (cond, msg, extra = '') => {
 const navegador = await chromium.launch()
 const ctx = await navegador.newContext({ viewport: { width: 1400, height: 950 }, acceptDownloads: true })
 const p = await ctx.newPage()
+await gestorEnPesosDelArea(p)
 const erroresConsola = []
 p.on('pageerror', e => erroresConsola.push('PAGEERROR: ' + e.message))
 const foto = async n => p.screenshot({ path: `${TIROS}/${n}.png`, fullPage: true })

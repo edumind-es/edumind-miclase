@@ -226,6 +226,15 @@ edumind_miclase/
   (va centrada en su bloque y no se repite si salta de página). Normalizar
   espacios antes de parsear lo rompe todo. El fixture se regenera con
   `pruebas/lib/proens_gemelo.py`; el PDF real de Luis aún no ha pasado por él.
+- **Un PDF de PROENS de otro curso, etapa o área pregunta antes de
+  importarse** (`ImportarProens.aplicar`, con `confirmar` y «Importar de
+  todos modos»): el aviso de arriba no bastaba, porque los criterios se casan
+  solo por el número (CA→CE) con el currículo de la clase.
+- **Física y Química de Galicia (ESO) lleva OBJ5 y OBJ6 añadidos a mano** en
+  los tres JSON: la matriz de origen traía criterios que los nombraban pero
+  no las competencias. Van con el texto del RD 217/2022 y sin descriptores
+  propios, así que su conexión sale como `estatal` (`meta.nota` lo dice). Si
+  se regenera el JSON desde la matriz, hay que volver a añadirlos.
 - **La tabla `rubricas` guarda tres cosas.** La rúbrica de un instrumento, las
   copias del banco del docente (`instrumento_id = INSTRUMENTO_BANCO`, que no
   cuelgan de ningún instrumento y sobreviven al borrado de la clase) y las
@@ -653,8 +662,22 @@ edumind_miclase/
   examen general no reparte por unidad. **Un aparato sin actualizar ignora
   la etiqueta al leer y la borra si vuelve a guardar el examen**
   (`normalizarPrueba` antiguo): hay que actualizar todos antes de usarlo.
-  Pendiente: importar y exportar la unidad (xlsx, md, json), los prompts y
-  el informe de la prueba por unidad.
+  **La unidad de cada pregunta viaja por su nombre**, porque el id solo vale
+  en el aparato: `filasDePrueba`, `examenAMarkdown` y `pruebaAJson` reciben
+  las unidades del área y escriben «Unidad» (columna, línea «Unidad: …» o
+  campo `unidad`; «Todas» en la común), y al leer queda en
+  `PreguntaPrueba.unidad_texto`, que es solo de paso: `casarUnidades`
+  (`db/prueba.ts`, puro) lo convierte en `unidad_id` con `unidadDeTexto`
+  —nombre, número escrito («UD2») o un trozo que solo quepa en una; nunca
+  por orden—, deja vinculada la unidad que el fichero nombra y el examen no
+  vinculaba, quita los ids que no son del área y dice lo que no casa (esas
+  preguntas cuentan en todas). El editor lo aplica en las dos entradas
+  (fichero y texto pegado) y lo cuenta en el mensaje; `sinUnidadesAjenas`
+  borra el texto de paso al guardar. Los prompts (`generarPromptTest`,
+  `generarPromptPlanilla`) piden la unidad solo con dos o más. El informe de
+  la prueba (`InformePrueba`) lleva `[data-informe-unidad]` cuando el examen
+  reparte por unidad: «Todo el examen» o solo una, con `pruebaDeUnidad`; los
+  criterios son los de la unidad desde la que se abrió.
 - **Rediseño del Calificador, fase 1** (`PROPUESTA_UX_CALIFICADOR.html`, nov
   2026). (1) **Vocabulario a la vista del docente**: lo que trae la
   programación con su porcentaje es un **«instrumento»** y lo que hay dentro
@@ -761,6 +784,64 @@ edumind_miclase/
   **no da cifras del grupo con menos de `MINIMO_GRUPO` (5) notas**: de tres
   se deducen las de los compañeros. El informe de una prueba sigue siendo
   del grupo y sin nombres.
+- **El informe de una prueba tiene dos lecturas: «El grupo» y «Un alumno»**
+  (nov 2026, `PROPUESTA_EXAMENES_E_INSTRUMENTOS.html`, fase 5).
+  `InformePrueba` lleva `[data-informe-de="grupo"|"alumno"]`; con un alumno
+  (`[data-informe-alumno]`, solo los corregidos) enseña
+  `[data-informe-individual]`: su nota, su acierto por etiqueta o criterio
+  (`[data-informe-ejes]`) y TODAS las preguntas que falló
+  (`[data-informe-falladas]`, `AnalisisExamen.falladas`: menos de la mitad de
+  los puntos, de la más acertada por el grupo a la menos). Se compara con la
+  clase o con los de **media parecida** (`[data-informe-comparar]`,
+  `alumnosDeMediaParecida` en `db/analisisAlumno.ts`, puro: compañeros con
+  el examen corregido y la nota del área —la final de `getResumenCurso`, que
+  incluye esa prueba— a `MARGEN_PARECIDOS` (1 punto) o menos; si no llegan a
+  `MINIMO_GRUPO`, los cinco más cercanos). Nada se calcula en la pantalla:
+  es `analizarExamen(examen, alumno, { solo })`. El documento
+  (`informes/informeAlumnoPrueba.ts`, Lámina) lleva nombre, vale para la
+  familia, compara SOLO con la clase y calla sus cifras con menos de
+  `MINIMO_GRUPO` exámenes (`[data-informe-pocos]` lo avisa); el grupo de
+  media parecida es solo de la pantalla del docente. Se entra además con
+  `alumnoInicial` desde el corrector de la casilla
+  (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
+  (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y
+  diario no hay informe individual todavía (fase 6).
+- **Cada pantalla de calificar lleva «Editar» en la cabecera** (fase 1 de la
+  misma propuesta). `BotonEditarActividad` (`[data-editar-actividad]`, en
+  `FichaActividad.tsx`) está en «Evaluar hoy», la pasada con rúbrica, la
+  nota directa y la franja del panel de la casilla, y abre
+  `[data-ficha-actividad]`, una hoja desde abajo (portal, `.modal-overlay`):
+  nombre (`[data-ficha-nombre]`, guarda al salir del campo), tipo, con qué
+  se evalúa (`[data-ficha-herramienta]` = examen · rubrica · diario ·
+  ninguna, con «Editar la rúbrica» o `BotonesHerramienta`) y la regla de
+  varios registros; peso y criterios solo se enseñan. No guarda por su
+  cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
+  desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
+- **«Qué evalúo» tiene dos pestañas: «Por unidad» y «Pesos del área»** (fase
+  2 de la misma propuesta). `InstrumentosManager` abre «Por unidad»
+  (`QueEvaluoPorUnidad`, `[data-que-por-unidad]`) en un área con unidades,
+  con la unidad del Calificador (`unidadActual`) o la primera; la pestaña
+  elegida se recuerda en el aparato (`miclase.queevaluo.vista`) y sin
+  unidades solo existe «Pesos del área», que es el gestor de siempre, entero
+  (`[data-familia-bloque]`, `FamiliaHijos`). Por unidad se elige una
+  (`[data-que-unidad]`) y sale cada instrumento (`[data-unidad-instrumento]`)
+  con lo que se usa EN ELLA (`[data-unidad-actividad]`: herramienta,
+  porcentaje, criterios en `data-criterios` y «Editar» con la ficha); una
+  actividad sin criterios en la unidad no sale. No calcula ni guarda por su
+  cuenta: las filas son las columnas del Calificador (`getMatrizEvaluacion`
+  con el trimestre de la unidad + `columnasPorInstrumento`) y los criterios
+  se escriben con `asignarCriterioAColumna`/`quitarCriterioDeColumna`.
+  «+ actividad en esta unidad» (`[data-unidad-anadir]`) crea una
+  (`crearInstrumentoHijo`) o trae una de otra unidad
+  (`[data-unidad-anadir-cual]`), con los criterios del instrumento ya
+  marcados; **la primera actividad de un instrumento con notas o herramienta
+  a su nombre no se crea ahí** (`[data-unidad-primera-con-datos]`): manda a
+  «Pesos del área», el único sitio que pregunta con `ConvertirFamilia`. Los
+  criterios de la unidad que nada evalúa van en `[data-unidad-sin-actividad]`.
+  Las pruebas que trabajan con lo de toda el área llaman a
+  `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
+  ficha «Editar» cierra con Esc sin cerrar lo de debajo y acepta `capa`.
+  Luis: el gestor era «complejísimo», todo mezclado.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

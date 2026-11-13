@@ -20,7 +20,7 @@ import type { Instrumento, Unidad } from '@/db/localDb'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, reasignarCriterio, idDePreguntaNueva, preguntasSinClave,
   TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
-  unidadesDelExamen, pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
+  unidadesDelExamen, casarUnidades, pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
   type PruebaDef, type PreguntaPrueba, type TipoPrueba, type RepartoPrueba,
 } from '@/db/prueba'
 import {
@@ -196,6 +196,7 @@ export default function PruebaEditor({
    * Las unidades en las que cuenta el examen (la suya y las vinculadas), para
    * decir de cuál es cada pregunta. Con una sola no hay nada que repartir.
    */
+  const unidadesNombradas = unidades.filter(u => u.id != null).map(u => ({ id: u.id!, nombre: u.nombre }))
   const unidadesDeEsteExamen = unidadesDelExamen(destino.unidadId, def)
     .map(id => unidades.find(u => u.id === id)).filter((u): u is NonNullable<typeof u> => !!u)
     .map(u => ({ id: u.id!, nombre: u.nombre }))
@@ -264,12 +265,26 @@ export default function PruebaEditor({
       asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
       contexto: iaContexto, nPreguntas: iaN, nOpciones: iaOpciones,
       criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
+      unidades: unidadesDeEsteExamen.map(u => u.nombre),
     })
     : generarPromptPlanilla({
       asignatura: asignaturaNombre ?? instrumentoNombre, nivel: nivel ?? 'Educación Primaria',
       examen: iaContexto, puntosTotales: genTotal,
       criterios: def.reparto === 'criterios' ? criteriosActivos : undefined,
+      unidades: unidadesDeEsteExamen.map(u => u.nombre),
     })
+  /**
+   * Lo importado puede decir de qué unidad es cada pregunta, por su nombre:
+   * se casa con las unidades del área y se dice lo que se ha hecho con ello.
+   */
+  const conUnidadesCasadas = (prueba: PruebaDef, avisos: string[]) => {
+    const r = casarUnidades(prueba, unidadesNombradas, destino.unidadId)
+    const nombreDe = (id: number) => unidadesNombradas.find(u => u.id === id)?.nombre ?? String(id)
+    const mas: string[] = []
+    if (r.vinculadas.length) mas.push(`El fichero reparte preguntas por unidad: el examen cuenta ahora también en ${r.vinculadas.map(id => `«${nombreDe(id)}»`).join(', ')}.`)
+    if (r.sinCasar.length) mas.push(`No hay ninguna unidad en el área que se llame ${r.sinCasar.map(t => `«${t}»`).join(', ')}: esas preguntas cuentan en todas.`)
+    return { prueba: r.def, avisos: [...avisos, ...mas] }
+  }
   const copiarPrompt = async () => {
     await navigator.clipboard.writeText(prompt)
     setPromptCopiado(true)
@@ -280,7 +295,8 @@ export default function PruebaEditor({
     setIaError('')
     try {
       // La respuesta puede venir como test escrito, como tabla o como JSON: se lee lo que sea.
-      const { prueba, avisos } = pruebaDeTexto(texto, def.titulo || instrumentoNombre)
+      const leida = pruebaDeTexto(texto, def.titulo || instrumentoNombre)
+      const { prueba, avisos } = conUnidadesCasadas(leida.prueba, leida.avisos)
       setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: prueba.tipo === 'test' ? def.penalizacion ?? prueba.penalizacion : undefined, generada_ia: true })
       setSucio(true)
       setGenN(prueba.preguntas.length)
@@ -426,7 +442,8 @@ export default function PruebaEditor({
     if (!file) return
     if (sucio && !await confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
     try {
-      const { prueba, avisos } = await importarPrueba(file.name, await file.arrayBuffer())
+      const leida = await importarPrueba(file.name, await file.arrayBuffer())
+      const { prueba, avisos } = conUnidadesCasadas(leida.prueba, leida.avisos)
       setDef(prueba)
       if (tienePlanilla(prueba)) setConPlanilla(true)
       setSucio(true)
@@ -972,12 +989,12 @@ export default function PruebaEditor({
                 ❓ Cómo importar
               </button>
               <button className="btn-secondary" style={{ fontSize: 12 }} disabled={def.preguntas.length === 0}
-                onClick={() => descargar(`examen-${nombreFichero}.xlsx`, pruebaAXlsx(normalizarPrueba(def)), TIPO_XLSX)}
+                onClick={() => descargar(`examen-${nombreFichero}.xlsx`, pruebaAXlsx(normalizarPrueba(def), unidadesNombradas), TIPO_XLSX)}
                 title="Descargar el examen como hoja de cálculo">
                 ⬇ .xlsx
               </button>
               <button className="btn-secondary" style={{ fontSize: 12 }} disabled={def.preguntas.length === 0}
-                onClick={() => descargar(`examen-${nombreFichero}.md`, pruebaAMarkdown(normalizarPrueba(def)), 'text/markdown;charset=utf-8')}>
+                onClick={() => descargar(`examen-${nombreFichero}.md`, pruebaAMarkdown(normalizarPrueba(def), unidadesNombradas), 'text/markdown;charset=utf-8')}>
                 ⬇ .md
               </button>
               {def.tipo === 'test' && def.preguntas.some(p => p.opciones?.length) && (
@@ -988,7 +1005,7 @@ export default function PruebaEditor({
                 </button>
               )}
               <button className="btn-secondary" style={{ fontSize: 12 }} disabled={def.preguntas.length === 0}
-                onClick={() => descargar(`${nombreFichero}.eduprueba.json`, pruebaAJson(normalizarPrueba(def)), 'application/json')}
+                onClick={() => descargar(`${nombreFichero}.eduprueba.json`, pruebaAJson(normalizarPrueba(def), unidadesNombradas), 'application/json')}
                 title="Guardar el examen en un fichero para compartirlo con otro docente">
                 📤 Compartir
               </button>

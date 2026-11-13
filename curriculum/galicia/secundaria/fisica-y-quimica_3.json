@@ -6,7 +6,8 @@
     "ciclo_origen": "3º",
     "fuente": "iDoceo_fisica-y-quimica_3º.xlsx",
     "generado": "2026-06-29",
-    "curso": "3º"
+    "curso": "3º",
+    "nota": "OBJ5 y OBJ6 no venían en la matriz de origen: se añaden con el texto del RD 217/2022 y sin descriptores propios (la conexión es la estatal)."
   },
   "competencias": [
     {
@@ -191,6 +192,16 @@
         "CE3",
         "CCEC4"
       ]
+    },
+    {
+      "id": "OBJ5",
+      "descripcion": "Utilizar las estrategias propias del trabajo colaborativo, potenciando el crecimiento entre iguales como base emprendedora de una comunidad científica crítica, ética y eficiente, para comprender la importancia de la ciencia en la mejora de la sociedad, las aplicaciones y repercusiones de los avances científicos, la preservación de la salud y la conservación sostenible del medio ambiente.",
+      "descriptores_ids": []
+    },
+    {
+      "id": "OBJ6",
+      "descripcion": "Comprender y valorar la ciencia como una construcción colectiva en continuo cambio y evolución, en la que no solo participan las personas dedicadas a ella, sino que también requiere de una interacción con el resto de la sociedad, para obtener resultados que repercutan en el avance tecnológico, económico, ambiental y social.",
+      "descriptores_ids": []
     }
   ],
   "criterios": [
