@@ -29,6 +29,7 @@ import { BotonEditarActividad } from './FichaActividad'
 import { herramientaDe } from './QueEvaluoPorUnidad'
 import { abreviatura } from '@/ia/instrumentosConfig'
 import { unidadesDelExamen } from '@/db/prueba'
+import { MODELOS_DE_SERIE } from '@/db/modelosDeSerie'
 import { columnasPorInstrumento, type ColumnaInstrumento } from './MatrizInstrumentos'
 import { criteriosDeArea } from '@/informes/datos'
 import { useAppStore } from '@/store/useAppStore'
@@ -425,7 +426,7 @@ function AreaDeExamenes({ grupo, asig, examenes, recarga, ocupado, onEditarExame
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
                       {examen
                         ? <BotonesExamen f={examen} ocupado={ocupado === examen.prueba.id} onEditar={() => onEditarExamen(examen.instrumento, unidad)} onAbrir={que => onAbrir(examen.prueba.id, que)} />
-                        : <BotonEditarActividad instrumento={ins} criterios={col.criterios} unidadNombre={unidad.nombre} area={area} onCambio={onCambio}
+                        : <BotonEditarActividad instrumento={ins} criterios={col.criterios} unidadNombre={unidad.nombre} unidadId={unidad.id} area={area} onCambio={onCambio}
                             onExamen={insCompleto ? () => onEditarExamen(insCompleto, unidad) : undefined} />}
                       <Link className="btn-secondary" data-fila-calificar to={`/evaluacion?grupo_id=${grupo.id}&asignatura_id=${asig.id}&unidad_id=${unidad.id}`}
                         style={{ ...accion, display: 'inline-flex', alignItems: 'center', padding: '0 14px', textDecoration: 'none' }}>Calificar</Link>
@@ -480,10 +481,18 @@ function Modelos({ recarga }: { recarga: number }) {
           Mis modelos ({modelos.length})
         </button>
       </div>
+      <ul data-modelos-serie style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {MODELOS_DE_SERIE.map(m => (
+          <li key={m.id} data-modelo-serie={m.id} style={{ fontSize: 13, padding: '6px 10px', background: 'var(--gris-100)', border: '1px solid var(--gris-300)' }}>
+            <strong>{m.nombre}</strong> <span style={{ color: 'var(--gris-600)' }}>· de serie</span>
+          </li>
+        ))}
+      </ul>
       <p style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5, margin: '6px 0 0' }}>
+        Para usar uno, pulsa «Editar» en la actividad y «Elegir de mis modelos»: se copia a la actividad y lo adaptas allí.{' '}
         {modelos.length === 0
-          ? 'Todavía no has guardado ningún modelo. Se guardan desde el editor de una rúbrica o de un examen, en tu banco.'
-          : 'Lo que tienes guardado en el banco de rúbricas y en el de exámenes. Se usan desde el editor de la rúbrica o del examen, y siempre como copia.'}
+          ? 'Todavía no has guardado ninguno tuyo: se guardan desde el editor de una rúbrica o de un examen, en tu banco.'
+          : '«Mis modelos» es lo que tienes guardado en el banco de rúbricas y en el de exámenes.'}
       </p>
       {abierto && (
         <ul data-modelos-lista style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>

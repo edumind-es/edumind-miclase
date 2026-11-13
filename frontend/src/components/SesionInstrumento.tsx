@@ -78,9 +78,9 @@ export default function SesionInstrumento(props: Props) {
   useEffect(() => {
     let vigente = true
     setRubrica(undefined)
-    getRubrica(props.instrumento.instrumento_id).then(r => { if (vigente) setRubrica(rubricaCompleta(r)) })
+    getRubrica(props.instrumento.instrumento_id, props.unidadId).then(r => { if (vigente) setRubrica(rubricaCompleta(r)) })
     return () => { vigente = false }
-  }, [props.instrumento.instrumento_id, refresco])
+  }, [props.instrumento.instrumento_id, props.unidadId, refresco])
   if (rubrica === undefined) return null
   const releer = () => { setRefresco(n => n + 1); props.onCambio() }
   if (rubrica) return <SesionRubrica {...props} onHerramienta={releer} niveles={rubrica.niveles} indicadores={rubrica.indicadores} />
@@ -170,6 +170,8 @@ function SesionDiario({
     {editor && (
       <RubricaEditor
         inicio={editor.inicio}
+        unidadId={unidadId}
+        unidadNombre={unidadNombre}
         instrumentoId={instrumento.instrumento_id}
         instrumentoNombre={instrumento.nombre}
         asignaturaNombre={area.asignatura}
@@ -195,7 +197,7 @@ function SesionDiario({
             <input type="date" value={dia} max={diaLocal()} onChange={e => e.target.value && setDia(e.target.value)}
               style={{ fontSize: 13, padding: '4px 6px' }} />
           </label>
-          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={onRubricaEditada} />
+          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} unidadId={unidadId} area={area} onCambio={onCambio} onHerramienta={onRubricaEditada} />
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 

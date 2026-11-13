@@ -210,7 +210,7 @@ export default function CeldaEvaluacion({
   // Rúbrica del instrumento seleccionado
   useEffect(() => {
     if (!instrumentoId) { setNiveles([]); setIndicadores([]); return }
-    getRubrica(instrumentoId).then(r => {
+    getRubrica(instrumentoId, unidadId).then(r => {
       if (!r) { setNiveles([]); setIndicadores([]); return }
       try {
         const nvs = JSON.parse(r.niveles_json) as NivelRubrica[]
@@ -222,7 +222,7 @@ export default function CeldaEvaluacion({
         setIndicadores(Array.isArray(inds) ? inds.filter(i => i?.nombre) : [])
       } catch { setNiveles([]); setIndicadores([]) }
     })
-  }, [instrumentoId, refrescoInstr])
+  }, [instrumentoId, unidadId, refrescoInstr])
 
   // Examen del instrumento para esta unidad (o el general)
   const esPruebaEscrita = instrumentoSel?.tipo === 'prueba-escrita'
@@ -554,6 +554,8 @@ export default function CeldaEvaluacion({
     {rubricaAbierta && instrumentoSel && (
       <RubricaEditor
         inicio={inicioRubrica}
+        unidadId={unidadId}
+        unidadNombre={unidadNombre}
         instrumentoId={instrumentoSel.instrumento_id}
         instrumentoNombre={instrumentoSel.nombre}
         asignaturaNombre={asig.nombre_display}
@@ -656,7 +658,7 @@ export default function CeldaEvaluacion({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
               {instrumentoSel && (
-                <BotonEditarActividad instrumento={instrumentoSel} criterios={[criterio, ...hermanos]} unidadNombre={unidadNombre}
+                <BotonEditarActividad instrumento={instrumentoSel} criterios={[criterio, ...hermanos]} unidadNombre={unidadNombre} unidadId={unidadId}
                   area={{ asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }}
                   onCambio={trasEditarConfig} />
               )}

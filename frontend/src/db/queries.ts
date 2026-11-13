@@ -934,7 +934,8 @@ export async function conflictosAlMover(familia_id: number, hijo_id: number, blo
   const f = vivos(deFamilia).filter(r => enBloque(bloque, r.unidad_id, diaDeRubrica(r))), h = vivos(deHijo)
   return {
     examenes: f.filter(r => r.tipo === 'prueba' && h.some(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))).length,
-    rubrica: f.some(esRubrica) && h.some(esRubrica),
+    // Una rúbrica solo choca con la del hijo de su misma unidad (o con la general, si es general).
+    rubrica: f.some(r => esRubrica(r) && h.some(x => esRubrica(x) && mismaUnidadDePrueba(r, x))),
   }
 }
 
@@ -1020,7 +1021,7 @@ export async function moverDatosDeFamiliaAHijo(
         if (!enBloque(bloque, r.unidad_id, diaDeRubrica(r))) continue
         const choca = r.tipo === 'prueba'
           ? delHijoRub.filter(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))
-          : delHijoRub.filter(esRubrica)
+          : delHijoRub.filter(x => esRubrica(x) && mismaUnidadDePrueba(r, x))
         if (choca.length && !opciones.sustituir) {
           if (r.tipo === 'prueba') noMovidos.examenes++; else noMovidos.rubricas++
           continue
@@ -2314,26 +2315,50 @@ export async function borrarProgramacion(asignatura_id: number): Promise<void> {
 // apartan siempre, o un examen se abriría como una rúbrica vacía.
 const esRubrica = (r: Rubrica) => r.tipo !== 'prueba'
 
-export async function getRubrica(instrumento_id: number): Promise<Rubrica | null> {
-  const filas = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray()).filter(esRubrica)
-  return vivos(filas)[0] ?? null
+/** La unidad de una rúbrica: la suya, o null si es la general del instrumento. */
+const unidadDeRubrica = (unidad_id: number | null | undefined) => unidad_id || null
+
+/**
+ * La rúbrica con la que se califica un instrumento, igual que el examen: la
+ * propia de la unidad que se mira y, si no la tiene, la general. Sin unidad
+ * (todo el curso, o el gestor del área) es siempre la general. Decisión de
+ * Luis (nov 2026): la misma actividad puede llevar una rúbrica distinta en
+ * cada unidad, con la general de reserva.
+ */
+export async function getRubrica(instrumento_id: number, unidad_id?: number | null): Promise<Rubrica | null> {
+  const filas = vivos((await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray()).filter(esRubrica))
+  const unidad = unidadDeRubrica(unidad_id)
+  return (unidad != null ? filas.find(r => unidadDeRubrica(r.unidad_id) === unidad) : undefined)
+    ?? filas.find(r => unidadDeRubrica(r.unidad_id) == null) ?? null
 }
 
+/**
+ * Guarda la rúbrica general del instrumento o, con `unidad_id`, la propia de
+ * esa unidad. Una fila por instrumento y unidad: se reutiliza aunque esté
+ * borrada, y guardar la de una unidad no toca la general ni las de otras.
+ */
 export async function guardarRubrica(data: Omit<Rubrica, 'id' | 'created_at'> & { id?: number }): Promise<number> {
-  // Se reutiliza la fila aunque esté borrada: una rúbrica por instrumento.
-  const existing = (await db.rubricas.where('instrumento_id').equals(data.instrumento_id).toArray()).find(esRubrica)
+  const unidad = unidadDeRubrica(data.unidad_id)
+  const deLaUnidad = (await db.rubricas.where('instrumento_id').equals(data.instrumento_id).toArray())
+    .filter(r => esRubrica(r) && unidadDeRubrica(r.unidad_id) === unidad)
+  const existing = deLaUnidad.find(r => !r.deleted_at) ?? deLaUnidad[0]
   if (existing?.id != null) {
-    await db.rubricas.update(existing.id, tocado({ ...data, deleted_at: null, created_at: now() }))
+    await db.rubricas.update(existing.id, tocado({ ...data, unidad_id: unidad, deleted_at: null, created_at: now() }))
     return existing.id
   }
-  const reg = nuevo({ ...data, created_at: now() })
+  const reg = nuevo({ ...data, unidad_id: unidad, created_at: now() })
   await db.rubricas.add(reg)
   return reg.id
 }
 
-export async function eliminarRubrica(instrumento_id: number): Promise<void> {
+/**
+ * Elimina las rúbricas del instrumento. Con `unidad_id` (un número, o null
+ * para la general) solo esa; sin él, todas.
+ */
+export async function eliminarRubrica(instrumento_id: number, unidad_id?: number | null): Promise<void> {
   const t = sello()
-  await db.rubricas.where('instrumento_id').equals(instrumento_id).filter(esRubrica)
+  await db.rubricas.where('instrumento_id').equals(instrumento_id)
+    .filter(r => esRubrica(r) && (unidad_id === undefined || unidadDeRubrica(r.unidad_id) === unidadDeRubrica(unidad_id)))
     .modify({ deleted_at: t, updated_at: t })
 }
 
@@ -3463,6 +3488,8 @@ export type CeldaInstrumento = {
   tipo: string
   peso: number
   tiene_rubrica: boolean
+  /** La rúbrica es la propia de la unidad que se mira, no la general del instrumento. */
+  rubrica_propia?: boolean
   /** Tiene una prueba escrita definida (la de la unidad que se mira, la de otra que la vincula, o la general). */
   tiene_prueba: boolean
   /** Si el examen es de otra unidad que vincula a esta, el nombre de esa unidad. */
@@ -3555,7 +3582,11 @@ export async function getMatrizEvaluacion(
 
   // Qué instrumentos tienen rúbrica (para pintar el icono en la celda)
   const delosInstrumentos = vivos(await db.rubricas.where('instrumento_id').anyOf(instrumentos.map(i => i.id!)).toArray())
-  const conRubrica = new Set(delosInstrumentos.filter(esRubrica).map(r => r.instrumento_id))
+  // Con rúbrica para lo que se mira: la propia de la unidad o la general. Sin
+  // unidad (todo el curso) vale cualquiera.
+  const rubricas = delosInstrumentos.filter(esRubrica)
+  const conRubrica = new Set(rubricas.filter(r => !unidad_id || !r.unidad_id || r.unidad_id === unidad_id).map(r => r.instrumento_id))
+  const conRubricaPropia = new Set(rubricas.filter(r => !!unidad_id && r.unidad_id === unidad_id).map(r => r.instrumento_id))
   // Con examen definido para lo que se está viendo: el de la unidad, el de
   // otra unidad que la vincula, o el general.
   const conPrueba = new Set(delosInstrumentos
@@ -3626,6 +3657,7 @@ export async function getMatrizEvaluacion(
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
+        rubrica_propia: conRubricaPropia.has(ins.id!),
         tiene_prueba: conPrueba.has(ins.id!),
         prueba_de_unidad: pruebaVinculada.get(ins.id!) ?? null,
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],

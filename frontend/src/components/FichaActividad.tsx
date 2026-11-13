@@ -20,6 +20,8 @@ import { actualizarInstrumento, type CeldaInstrumento, type DatosDeArea } from '
 import RubricaEditor from './RubricaEditor'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
+import type { RubricaParsed } from '@/ia/rubricaPrompt'
+import ElegirModelo from './ElegirModelo'
 import { AGREGACIONES } from '@/db/diario'
 import type { Agregacion } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, abreviatura } from '@/ia/instrumentosConfig'
@@ -29,6 +31,8 @@ interface Props {
   /** Los criterios que evalúa en la unidad que se mira. */
   criterios: { id: string; descripcion: string }[]
   unidadNombre?: string
+  /** La unidad que se mira: la rúbrica que se edita es la suya (o la general). */
+  unidadId?: number | null
   area: DatosDeArea
   /** Se ha guardado algo del instrumento: quien abre tiene que releer. */
   onCambio: () => void
@@ -43,11 +47,12 @@ interface Props {
 const campo = { minHeight: 44, fontSize: 15, padding: '6px 10px', width: '100%' } as const
 const rotulo = { fontSize: 12, fontWeight: 700, color: 'var(--gris-600)', display: 'block', marginBottom: 4 } as const
 
-export default function FichaActividad({ instrumento, criterios, unidadNombre, area, onCambio, onHerramienta, onExamen, capa, onCerrar }: Props & { onCerrar: () => void }) {
+export default function FichaActividad({ instrumento, criterios, unidadNombre, unidadId, area, onCambio, onHerramienta, onExamen, capa, onCerrar }: Props & { onCerrar: () => void }) {
   const [nombre, setNombre] = useState(instrumento.nombre)
   const [tipo, setTipo] = useState(instrumento.tipo)
   const [agregacion, setAgregacion] = useState<Agregacion>(instrumento.agregacion ?? 'media')
-  const [editor, setEditor] = useState<{ inicio?: HerramientaSimple } | null>(null)
+  const [editor, setEditor] = useState<{ inicio?: HerramientaSimple; modelo?: { rubrica: RubricaParsed; nombre: string; generadaIA?: boolean } } | null>(null)
+  const [modelos, setModelos] = useState(false)
   const [aviso, setAviso] = useState<string | null>(null)
   const esActividad = instrumento.familia_id != null
 
@@ -77,6 +82,9 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
     return (
       <RubricaEditor
         inicio={editor.inicio}
+        modelo={editor.modelo}
+        unidadId={unidadId}
+        unidadNombre={unidadNombre}
         instrumentoId={instrumento.instrumento_id}
         instrumentoNombre={nombre.trim() || instrumento.nombre}
         asignaturaNombre={area.asignatura}
@@ -137,6 +145,7 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
           {herramienta === 'rubrica' && (
             <div style={{ fontSize: 13.5 }}>
               Con su <strong>rúbrica</strong> (o lista de control o escala).
+              {unidadId ? <> {instrumento.rubrica_propia ? <>La de <strong>{unidadNombre ?? 'esta unidad'}</strong>, propia.</> : <>La general, que vale en todas las unidades.</>}</> : null}
               <div><button type="button" className="btn-primary" data-ficha-rubrica onClick={() => setEditor({})} style={{ minHeight: 44, fontSize: 14, marginTop: 6 }}>Editar la rúbrica</button></div>
             </div>
           )}
@@ -151,6 +160,15 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, a
             </div>
           )}
         </div>
+
+        {herramienta !== 'examen' && (
+          <div style={{ marginTop: 8 }}>
+            <button type="button" className="btn-secondary" data-ficha-modelos aria-expanded={modelos} onClick={() => setModelos(v => !v)} style={{ minHeight: 44, fontSize: 14 }}>
+              {modelos ? 'Ocultar los modelos' : 'Elegir de mis modelos'}
+            </button>
+            {modelos && <ElegirModelo onElegir={modelo => { setModelos(false); setEditor({ modelo }) }} />}
+          </div>
+        )}
 
         {!instrumento.tiene_prueba && !instrumento.tiene_rubrica && (
           <label style={{ display: 'block', marginTop: 14 }}>
