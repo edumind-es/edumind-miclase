@@ -31,6 +31,7 @@ import PreguntaRubrica, { SelectorModoRubrica, type ModoRubrica } from './Pregun
 import type { Alumno } from '@/db/localDb'
 import { claveUnidad } from '@/db/migracionUnidades'
 import { verNeae } from '@/db/datosSensibles'
+import { BotonEditarActividad } from './FichaActividad'
 
 export type NivelRubrica = { nombre: string; valor: number; descripcion?: string }
 export type IndicadorRubrica = { nombre: string; peso?: number; descriptores?: Record<string, string> }
@@ -48,12 +49,14 @@ interface Props {
   /** Algo se ha guardado: la matriz tiene que releerse. */
   onCambio: () => void
   onCerrar: () => void
+  /** Ha cambiado la rúbrica desde la ficha «Editar»: hay que releerla. */
+  onHerramienta?: () => void
 }
 
 type Marcas = Record<string, number>
 
 export default function SesionRubrica({
-  instrumento, niveles, indicadores, criterios, alumnos, trimestre, unidadId, unidadNombre, area, onCambio, onCerrar,
+  instrumento, niveles, indicadores, criterios, alumnos, trimestre, unidadId, unidadNombre, area, onCambio, onCerrar, onHerramienta,
 }: Props) {
   /** alumno_id → nivel marcado en cada indicador (lo guardado en la casilla). */
   const [marcas, setMarcas] = useState<Map<number, Marcas>>(new Map())
@@ -196,6 +199,7 @@ export default function SesionRubrica({
               {cfg.label} · {trimestre}º trim.{unidadNombre ? ` · ${unidadNombre}` : ''} · {indicadores.length} indicador{indicadores.length !== 1 ? 'es' : ''} · {niveles.length} niveles
             </div>
           </div>
+          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={onHerramienta} />
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 

@@ -356,6 +356,19 @@ try {
     const [fichero] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
     ok(fichero.suggestedFilename() === 'informe-examen-de-la-unidad-1.html', 'se guarda como .html', fichero.suggestedFilename())
     await foto('prueba-05-informe')
+
+    // El mismo informe, de un alumno: su nota, sus etiquetas y lo que falló.
+    await informe.locator('[data-informe-de="alumno"]').click()
+    const individual = informe.locator('[data-informe-individual]')
+    ok(await aparece(individual), '«Un alumno» enseña el informe individual')
+    ok(await informe.locator('[data-informe-alumno] option').count() === 2, 'con los dos alumnos corregidos para elegir')
+    ok(/Nota\s*\d/.test(await individual.locator('[data-informe-alumno-nota]').textContent()), 'su nota', await individual.locator('[data-informe-alumno-nota]').textContent())
+    ok(await individual.locator('[data-informe-ejes] [data-eje]').count() >= 1, 'su acierto por etiqueta o criterio frente a la clase')
+    ok(await informe.locator('[data-informe-comparar]').count() === 1, 'y con quién se compara: la clase o media parecida')
+    ok(await aparece(informe.locator('[data-informe-pocos]')), 'con dos exámenes avisa de que el documento va sin cifras de la clase')
+    const [suyo] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
+    ok(/^informe-examen-de-la-unidad-1-.+\.html$/.test(suyo.suggestedFilename()), 'el documento del alumno lleva su nombre en el fichero', suyo.suggestedFilename())
+    await foto('prueba-05b-informe-alumno')
     await informe.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
     await informe.waitFor({ state: 'detached', timeout: 5000 })
   }

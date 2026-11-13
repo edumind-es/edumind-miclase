@@ -15,6 +15,7 @@
  * `saveCalificaciones` con `sinVinculos`. «Deshacer» devuelve a cada
  * criterio lo que tenía antes de la última pulsación.
  */
+import { BotonEditarActividad } from './FichaActividad'
 import { useEffect, useRef, useState } from 'react'
 import { saveCalificaciones, type DatosDeArea, type MatrizEvaluacion } from '@/db/queries'
 import { resumenCelda, type ColumnaInstrumento } from './MatrizInstrumentos'
@@ -149,7 +150,10 @@ export default function SesionNota({ columna, matriz, alumnos, trimestre, unidad
                   ? <>su criterio</> : <>sus <strong>{columna.criterios.length} criterios</strong></>}
               </div>
             </div>
-            <button className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <BotonEditarActividad instrumento={ins} criterios={columna.criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={() => { onCambio(); onCerrar() }} />
+              <button className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
+            </div>
           </div>
           <div data-sin-herramienta style={{ fontSize: 12.5, color: 'var(--gris-600)', marginTop: 6 }}>
             Nota directa, sin examen ni rúbrica: IN 3 · SU 5 · BI 6 · NT 7,5 · SB 9,5, o la nota exacta.

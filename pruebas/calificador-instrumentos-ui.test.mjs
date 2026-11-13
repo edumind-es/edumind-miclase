@@ -191,6 +191,28 @@ try {
   await filas.nth(1).locator('button.nivel-4').click()
   await filas.nth(1).locator('[data-sesion-nota]').getByText('10').waitFor({ timeout: 5000 })
   await foto('instrumentos-02-sesion')
+
+  // «Editar» en la cabecera: la ficha de la actividad, sin salir de la pasada.
+  await sesion.locator('[data-editar-actividad]').click()
+  const fichaAct = p.locator('[data-ficha-actividad]')
+  await fichaAct.waitFor({ timeout: 5000 })
+  ok(true, '«Editar» abre la ficha desde «Evaluar hoy»')
+  const nombreAntes = await fichaAct.locator('[data-ficha-nombre]').inputValue()
+  ok(nombreAntes.length > 0 && /%/.test(await fichaAct.locator('[data-ficha-peso]').textContent()), 'con su nombre y lo que pesa', nombreAntes)
+  ok(await fichaAct.locator('[data-ficha-herramienta]').getAttribute('data-ficha-herramienta') === 'diario'
+    && await fichaAct.locator('[data-elegir-herramienta="rubrica"]').count() === 1, 'dice con qué se evalúa y ofrece rúbrica, lista o escala')
+  ok(await fichaAct.locator('[data-ficha-criterios] span[title]').count() >= 1, 'y los criterios que evalúa en la unidad')
+  await fichaAct.locator('[data-ficha-nombre]').fill('Nombre de prueba')
+  await fichaAct.locator('[data-ficha-nombre]').blur()
+  await p.getByRole('dialog', { name: 'Evaluar hoy: Nombre de prueba' }).waitFor({ timeout: 5000 })
+  ok(true, 'cambiar el nombre lo cambia en la pasada sin cerrarla')
+  await fichaAct.locator('[data-ficha-nombre]').fill(nombreAntes)
+  await fichaAct.locator('[data-ficha-nombre]').blur()
+  await p.getByRole('dialog', { name: `Evaluar hoy: ${nombreAntes}` }).waitFor({ timeout: 5000 })
+  await foto('instrumentos-02b-ficha')
+  await fichaAct.locator('[data-ficha-hecho]').click()
+  await fichaAct.waitFor({ state: 'detached', timeout: 5000 })
+
   await sesion.getByRole('button', { name: 'Hecho' }).click()
   await sesion.waitFor({ state: 'hidden', timeout: 5000 })
 

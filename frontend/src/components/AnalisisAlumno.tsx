@@ -23,6 +23,7 @@ import { documentoAnalisisAlumno } from '@/informes/analisisAlumno'
 import { imprimir } from '@/informes/lamina'
 import * as curriculo from '@/curriculo'
 import Dialogo from '@/components/comunes/Dialogo'
+import InformePrueba from '@/components/InformePrueba'
 
 interface Props {
   alumno: Alumno
@@ -125,7 +126,11 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
   }, [areaId, areas, grupo])
 
   const analisis = useMemo(() => resumen ? analizarAlumno(alumno.id!, resumen.notas, resumen.medidas) : null, [resumen, alumno.id])
-  const deExamenes = useMemo(() => examenes.map(e => analizarExamen(e, alumno.id!)).filter((e): e is NonNullable<typeof e> => !!e), [examenes, alumno.id])
+  // Cada análisis con su examen, para poder abrir el informe completo.
+  const conExamen = useMemo(() => examenes.map(e => ({ examen: e, a: analizarExamen(e, alumno.id!) }))
+    .filter((x): x is { examen: ExamenDeArea; a: NonNullable<ReturnType<typeof analizarExamen>> } => !!x.a), [examenes, alumno.id])
+  const deExamenes = useMemo(() => conExamen.map(x => x.a), [conExamen])
+  const [informeDe, setInformeDe] = useState<ExamenDeArea | null>(null)
   const asig = areas.find(a => a.id === areaId)
   const nombre = `${alumno.apellidos}, ${alumno.nombre}`
   const sinDatos = !!analisis && PERIODOS.every(p => analisis.area.periodos[p].valor == null) && deExamenes.length === 0
@@ -241,10 +246,31 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
                     </ul>
                   </div>
                 ) : <div style={{ marginTop: 5, color: 'var(--gris-600)' }}>No falló ninguna pregunta que la mayoría acertara.</div>}
+                {conExamen[i].examen.instrumento_id != null && (
+                  <button type="button" className="btn-secondary" data-analisis-informe-examen onClick={() => setInformeDe(conExamen[i].examen)}
+                    style={{ minHeight: 44, fontSize: 13, marginTop: 8 }}>
+                    Informe completo de este examen
+                  </button>
+                )}
               </div>
             ))}
           </>
         )}
+      {informeDe && grupo && asig && (
+        <InformePrueba
+          instrumentoId={informeDe.instrumento_id!}
+          instrumentoNombre={informeDe.instrumento}
+          unidadId={informeDe.unidad_id}
+          unidadNombre={informeDe.unidad}
+          criterios={informeDe.destinos.map(id => ({ id, descripcion: descripciones.get(id) ?? '' }))}
+          grupo={grupo}
+          asig={asig}
+          grupoNombre={grupo.nombre}
+          areaNombre={asig.nombre_display || asig.nombre}
+          alumnoInicial={alumno.id!}
+          onCerrar={() => setInformeDe(null)}
+        />
+      )}
     </Dialogo>
   )
 }

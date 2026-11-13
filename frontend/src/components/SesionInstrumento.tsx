@@ -25,6 +25,7 @@ import {
 import SesionRubrica, { type IndicadorRubrica, type NivelRubrica } from './SesionRubrica'
 import RubricaEditor from './RubricaEditor'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
+import { BotonEditarActividad } from './FichaActividad'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
 import { ETIQUETAS_NIVEL, NIVELES_DIARIO, etiquetaAgregacion, nivelDiarioANota, notaDeDiario } from '@/db/diario'
 import { calificativo } from '@/db/calculo'
@@ -44,6 +45,8 @@ interface Props {
   /** Algo ha cambiado en el diario: la matriz tiene que releerse. */
   onCambio: () => void
   onCerrar: () => void
+  /** Ha cambiado la herramienta desde la ficha «Editar»: la pasada puede ser otra. */
+  onHerramienta?: () => void
 }
 
 /** AAAA-MM-DD en hora local: lo que entiende `<input type="date">`. */
@@ -79,10 +82,11 @@ export default function SesionInstrumento(props: Props) {
     return () => { vigente = false }
   }, [props.instrumento.instrumento_id, refresco])
   if (rubrica === undefined) return null
-  if (rubrica) return <SesionRubrica {...props} niveles={rubrica.niveles} indicadores={rubrica.indicadores} />
+  const releer = () => { setRefresco(n => n + 1); props.onCambio() }
+  if (rubrica) return <SesionRubrica {...props} onHerramienta={releer} niveles={rubrica.niveles} indicadores={rubrica.indicadores} />
   // Si desde el diario se define la rúbrica, se relee y esta misma pantalla
   // pasa a ser la pasada con la rúbrica: sin cerrar ni volver a la matriz.
-  return <SesionDiario {...props} onRubricaEditada={() => { setRefresco(n => n + 1); props.onCambio() }} />
+  return <SesionDiario {...props} onRubricaEditada={releer} />
 }
 
 function SesionDiario({
@@ -191,6 +195,7 @@ function SesionDiario({
             <input type="date" value={dia} max={diaLocal()} onChange={e => e.target.value && setDia(e.target.value)}
               style={{ fontSize: 13, padding: '4px 6px' }} />
           </label>
+          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={onRubricaEditada} />
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 

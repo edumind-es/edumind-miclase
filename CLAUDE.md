@@ -784,6 +784,39 @@ edumind_miclase/
   **no da cifras del grupo con menos de `MINIMO_GRUPO` (5) notas**: de tres
   se deducen las de los compañeros. El informe de una prueba sigue siendo
   del grupo y sin nombres.
+- **El informe de una prueba tiene dos lecturas: «El grupo» y «Un alumno»**
+  (nov 2026, `PROPUESTA_EXAMENES_E_INSTRUMENTOS.html`, fase 5).
+  `InformePrueba` lleva `[data-informe-de="grupo"|"alumno"]`; con un alumno
+  (`[data-informe-alumno]`, solo los corregidos) enseña
+  `[data-informe-individual]`: su nota, su acierto por etiqueta o criterio
+  (`[data-informe-ejes]`) y TODAS las preguntas que falló
+  (`[data-informe-falladas]`, `AnalisisExamen.falladas`: menos de la mitad de
+  los puntos, de la más acertada por el grupo a la menos). Se compara con la
+  clase o con los de **media parecida** (`[data-informe-comparar]`,
+  `alumnosDeMediaParecida` en `db/analisisAlumno.ts`, puro: compañeros con
+  el examen corregido y la nota del área —la final de `getResumenCurso`, que
+  incluye esa prueba— a `MARGEN_PARECIDOS` (1 punto) o menos; si no llegan a
+  `MINIMO_GRUPO`, los cinco más cercanos). Nada se calcula en la pantalla:
+  es `analizarExamen(examen, alumno, { solo })`. El documento
+  (`informes/informeAlumnoPrueba.ts`, Lámina) lleva nombre, vale para la
+  familia, compara SOLO con la clase y calla sus cifras con menos de
+  `MINIMO_GRUPO` exámenes (`[data-informe-pocos]` lo avisa); el grupo de
+  media parecida es solo de la pantalla del docente. Se entra además con
+  `alumnoInicial` desde el corrector de la casilla
+  (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
+  (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y
+  diario no hay informe individual todavía (fase 6).
+- **Cada pantalla de calificar lleva «Editar» en la cabecera** (fase 1 de la
+  misma propuesta). `BotonEditarActividad` (`[data-editar-actividad]`, en
+  `FichaActividad.tsx`) está en «Evaluar hoy», la pasada con rúbrica, la
+  nota directa y la franja del panel de la casilla, y abre
+  `[data-ficha-actividad]`, una hoja desde abajo (portal, `.modal-overlay`):
+  nombre (`[data-ficha-nombre]`, guarda al salir del campo), tipo, con qué
+  se evalúa (`[data-ficha-herramienta]` = examen · rubrica · diario ·
+  ninguna, con «Editar la rúbrica» o `BotonesHerramienta`) y la regla de
+  varios registros; peso y criterios solo se enseñan. No guarda por su
+  cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
+  desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

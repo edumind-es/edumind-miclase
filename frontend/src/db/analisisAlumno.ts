@@ -145,6 +145,8 @@ export function analizarAlumno(
 
 /** Un examen corregido del área, con lo que respondió cada alumno. */
 export type ExamenDeArea = {
+  /** El instrumento del examen, para abrir su informe. */
+  instrumento_id?: number
   instrumento: string
   unidad_id: number | null
   unidad: string | null
@@ -178,13 +180,46 @@ export type AnalisisExamen = {
   preguntas: PreguntaAnalizada[]
   /** Las preguntas que él falló y la mayoría acertó, de la más acertada por el grupo a la menos. */
   fallosDestacados: PreguntaAnalizada[]
+  /** Todas las que falló (menos de la mitad), de la más acertada por el grupo a la menos. */
+  falladas: PreguntaAnalizada[]
   /** Por aspecto (o por criterio si no hay aspectos): % del alumno frente al del grupo. */
   ejes: { nombre: string; pctAlumno: number; pctGrupo: number }[]
   ejesPor: 'aspecto' | 'criterio'
 }
 
-/** El examen de un alumno frente al del grupo, o null si no lo tiene corregido. */
-export function analizarExamen(examen: ExamenDeArea, alumno_id: number): AnalisisExamen | null {
+/** Hasta cuánto se puede separar la nota del área de un compañero para ser «de media parecida». */
+export const MARGEN_PARECIDOS = 1
+
+/**
+ * Los compañeros de media parecida a la de un alumno: los que tienen la nota
+ * del área a `MARGEN_PARECIDOS` o menos de la suya. Si salen menos de
+ * `MINIMO_GRUPO`, se toman los `MINIMO_GRUPO` más cercanos (o todos, si no
+ * hay tantos). El alumno no va en la lista; sin nota del área, no hay grupo.
+ *
+ * @param notas      alumno_id → nota del área
+ * @param candidatos los que se pueden comparar (los que tienen el examen corregido)
+ */
+export function alumnosDeMediaParecida(
+  alumno_id: number, notas: Map<number, number | null | undefined>, candidatos: number[],
+): number[] {
+  const suya = notas.get(alumno_id)
+  if (suya == null) return []
+  const otros = [...new Set(candidatos)].filter(id => id !== alumno_id && notas.get(id) != null)
+    .map(id => ({ id, distancia: Math.abs(notas.get(id)! - suya) }))
+    .sort((a, b) => a.distancia - b.distancia || a.id - b.id)
+  const cerca = otros.filter(o => o.distancia <= MARGEN_PARECIDOS + 1e-9)
+  return (cerca.length >= MINIMO_GRUPO ? cerca : otros.slice(0, MINIMO_GRUPO)).map(o => o.id)
+}
+
+/**
+ * El examen de un alumno frente al del grupo, o null si no lo tiene corregido.
+ * Con `solo`, el grupo son esos compañeros (y él): los de media parecida.
+ */
+export function analizarExamen(examen: ExamenDeArea, alumno_id: number, opciones: { solo?: number[] } = {}): AnalisisExamen | null {
+  if (opciones.solo) {
+    const dentro = new Set([...opciones.solo, alumno_id])
+    examen = { ...examen, respuestas: examen.respuestas.filter(r => dentro.has(r.alumno_id)) }
+  }
   // Con preguntas por unidad, el examen cuenta en su unidad con las suyas.
   const def = pruebaDeUnidad(examen.def, examen.unidad_id)
   const suyas = examen.respuestas.find(r => r.alumno_id === alumno_id)
@@ -208,6 +243,7 @@ export function analizarExamen(examen: ExamenDeArea, alumno_id: number): Analisi
     nota: comparar(mia, notas),
     preguntas,
     fallosDestacados: preguntas.filter(p => p.falloDestacado).sort((a, b) => b.pctGrupo - a.pctGrupo || a.numero - b.numero),
+    falladas: preguntas.filter(p => p.pctAlumno < 50).sort((a, b) => b.pctGrupo - a.pctGrupo || a.numero - b.numero),
     ejes: grupo.ejes.map(e => ({
       nombre: e.nombre, pctGrupo: Math.round(e.pctAcierto),
       pctAlumno: Math.round(propio.ejes.find(x => x.clave === e.clave)?.pctAcierto ?? 0),

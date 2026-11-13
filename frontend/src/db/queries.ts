@@ -2553,7 +2553,7 @@ export async function examenesDeArea(asignatura_id: number): Promise<ExamenDeAre
       const respuestas = await respuestasDeExamen(ins.id!, prueba.unidad_id, prueba.def)
       if (!respuestas.length) continue
       salida.push({
-        instrumento: ins.nombre, unidad_id: prueba.unidad_id,
+        instrumento_id: ins.id!, instrumento: ins.nombre, unidad_id: prueba.unidad_id,
         unidad: prueba.unidad_id != null ? unidades.get(prueba.unidad_id) ?? null : null,
         def: prueba.def, destinos: await criteriosQueEvalua(ins.id!, prueba.unidad_id), respuestas,
       })
