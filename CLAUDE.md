@@ -842,6 +842,30 @@ edumind_miclase/
   `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
   ficha «Editar» cierra con Esc sin cerrar lo de debajo y acepta `capa`.
   Luis: el gestor era «complejísimo», todo mezclado.
+- **«Exámenes y pruebas» va por área y por unidad** (fase 3 de la misma
+  propuesta). `ExamenesConHoja` pone una pestaña por área de la CLASE ACTIVA
+  (`[data-examenes-clase]`, `Pestanas`; la elegida no cambia el área de la
+  barra) y dentro `AreaDeExamenes` (`[data-area-examenes]`): un bloque por
+  unidad (`[data-unidad-bloque]`) con una fila por actividad
+  (`[data-fila-actividad]`, `data-nombre`, `data-herramienta` = examen ·
+  rúbrica · diario · sin herramienta). Las filas son las columnas del
+  Calificador (`getMatrizEvaluacion` con el trimestre de la unidad +
+  `columnasPorInstrumento`); nada se calcula ni se guarda aquí. Con examen
+  PROPIO de esa unidad la fila lleva además `data-examen` y los botones de
+  siempre (`[data-examen-editar]`, `-imprimir`, `-informe`, `-corregir`); sin
+  él, «Editar» es la ficha de la actividad (`[data-editar-actividad]`), desde
+  la que se define el examen o la rúbrica, y si usa el examen de otra unidad
+  o el general lo dice. «Calificar» (`[data-fila-calificar]`) lleva a esa
+  unidad del Calificador por URL. **Ningún examen se esconde**: los del área
+  que no caen en una fila (generales, o de un instrumento sin criterios en su
+  unidad) van en `[data-examenes-sueltos]`; los de otras clases, plegados
+  tras `[data-examenes-otras-toggle]` (`[data-examenes-otras]`); y sin clase
+  activa o sin áreas queda la lista de siempre, con todo. `[data-examen]`
+  sale una vez por examen, así que las pruebas que buscaban una fila por su
+  título siguen valiendo. El bloque `[data-modelos]` enseña lo guardado en
+  los bancos de rúbricas y de exámenes (`[data-modelos-toggle]`,
+  `[data-modelo="rubrica"|"examen"]`); usarlos desde ahí y los modelos de
+  serie son de la fase 4. Prueba: `examenes-area-ui.test.mjs`.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

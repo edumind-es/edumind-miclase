@@ -17,11 +17,18 @@
  * cámara lee el QR de una hoja.
  */
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   getPruebaConContexto, listarPruebas, getMatrizEvaluacion, getAlumnosByGrupo,
-  getGrupos, getAsignaturas, getUnidades, getInstrumentos,
-  type PruebaConContexto, type CeldaInstrumento, type DatosDeArea, type GrupoConCount, type UnidadConCriterios,
+  getGrupos, getAsignaturas, getUnidades, getInstrumentos, getBancoRubricas, getBancoPruebas,
+  type PruebaConContexto, type DatosDeArea, type GrupoConCount, type UnidadConCriterios, type MatrizEvaluacion,
 } from '@/db/queries'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import Pestanas from './comunes/Pestanas'
+import { BotonEditarActividad } from './FichaActividad'
+import { herramientaDe } from './QueEvaluoPorUnidad'
+import { abreviatura } from '@/ia/instrumentosConfig'
+import { unidadesDelExamen } from '@/db/prueba'
 import { columnasPorInstrumento, type ColumnaInstrumento } from './MatrizInstrumentos'
 import { criteriosDeArea } from '@/informes/datos'
 import { useAppStore } from '@/store/useAppStore'
@@ -88,6 +95,12 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
   const [informe, setInforme] = useState<ContextoExamen | null>(null)
   const [editar, setEditar] = useState<{ instrumento: Instrumento; asig: Asignatura; grupo: GrupoConCount | { nombre: string; curso: string; etapa: string }; unidad: UnidadConCriterios | null; criterios: { id: string; descripcion: string }[] } | null>(null)
   const [nuevo, setNuevo] = useState(false)
+  // Las pestañas son las áreas de la clase activa (decisión de Luis); la
+  // elegida aquí no cambia el área de la barra, solo lo que se mira.
+  const { grupo, asignaturas, asignaturaId } = useClaseActiva()
+  const [areaId, setAreaId] = useState<number | null>(null)
+  const [verOtras, setVerOtras] = useState(false)
+  const areaElegida = asignaturas.find(a => a.id === areaId) ?? asignaturas.find(a => a.id === asignaturaId) ?? asignaturas[0] ?? null
 
   useEffect(() => {
     let vigente = true
@@ -142,61 +155,65 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
     <div className="card" data-examenes-hoja>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
         <h2 style={{ fontSize: 15, fontWeight: 600, color: 'var(--azul-700)', margin: 0, flex: 1 }}>
-          📝 Exámenes con hoja de respuestas
+          📝 Con qué evalúo: exámenes y herramientas
         </h2>
         <button className="btn-primary" data-examen-nuevo onClick={() => setNuevo(true)} style={{ fontSize: 13 }}>
           + Nuevo examen
         </button>
       </div>
       <p style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5, margin: '0 0 10px' }}>
-        Un test con sus opciones y la correcta se imprime como hoja de respuestas con QR por alumno,
-        y se corrige apuntando la cámara a cada hoja. Cada examen va ligado a un instrumento de prueba
-        escrita de la programación; las preguntas se reparten a sus criterios en el editor.
+        Cada área, unidad a unidad, con la herramienta de cada actividad: examen, rúbrica o diario.
+        Un test con sus opciones y la correcta se imprime como hoja de respuestas con QR por alumno
+        y se corrige apuntando la cámara a cada hoja.
       </p>
 
       {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
 
       {lista == null ? (
         <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Cargando…</div>
-      ) : lista.length === 0 ? (
-        <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Todavía no hay ningún examen definido. Empieza por «Nuevo examen».</div>
-      ) : (
-        <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {lista.map(f => {
-            const cfg = getInstrConfig(f.instrumento.tipo)
-            return (
-              <li key={f.prueba.id} data-examen={f.prueba.def.titulo} data-con-clave={f.conClave || undefined}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '8px 10px', borderRadius: 8, background: 'var(--gris-100)' }}>
-                <div style={{ flex: '1 1 220px', minWidth: 0 }}>
-                  <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--gris-900)' }}>{f.prueba.def.titulo}</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
-                    {f.grupo.nombre} · {f.asig.nombre_display} · {f.unidad ? f.unidad.nombre : 'general'} · <span aria-hidden="true">{cfg.icon}</span> {f.instrumento.nombre}
-                    {' · '}{f.prueba.def.preguntas.length} pregunta{f.prueba.def.preguntas.length !== 1 ? 's' : ''}
-                    {f.conClave ? '' : f.prueba.def.tipo === 'test' ? ' · falta la clave' : ' · no es un test'}
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {/* Con la unidad del examen desde el principio, igual que «Nuevo
-                      examen»: antes se abría sin unidad —la matriz de toda el área— y
-                      se le ponía la unidad después, y a Luis ese botón no le abría nada. */}
-                  <button className="btn-secondary" data-examen-editar style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id}
-                    onClick={() => abrirEditor(f.instrumento, f.asig, f.grupo, f.unidad as UnidadConCriterios | null)}
-                    title="Ver o cambiar el examen">✏️ Editar</button>
-                  <button className="btn-secondary" data-examen-imprimir style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id || !f.conClave}
-                    onClick={() => abrir(f.prueba.id, 'imprimir')}
-                    title={f.conClave ? 'Imprimir la hoja de respuestas de cada alumno y el examen' : 'Completa opciones y correcta en todas las preguntas para poder imprimir'}>🖨 Imprimir hojas</button>
-                  <button className="btn-secondary" data-examen-informe style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id}
-                    onClick={() => abrir(f.prueba.id, 'informe')}
-                    title="Qué preguntas, criterios y aspectos falla la clase con este examen">📈 Informe</button>
-                  <button className="btn-primary" data-examen-corregir style={{ fontSize: 12 }} disabled={ocupado === f.prueba.id || !f.conClave}
-                    onClick={() => abrir(f.prueba.id, 'corregir')}
-                    title={f.conClave ? 'Corregir las hojas con la cámara, una tras otra' : 'Completa la clave del examen para corregir por cámara'}>📷 Corregir por cámara</button>
-                </div>
-              </li>
-            )
-          })}
-        </ul>
-      )}
+      ) : !grupo || !areaElegida ? (
+        // Sin clase activa (o sin áreas) no hay pestañas que poner: la lista de siempre.
+        lista.length === 0 ? (
+          <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Todavía no hay ningún examen definido. Empieza por «Nuevo examen».</div>
+        ) : (
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {lista.map(f => <FilaExamen key={f.prueba.id} f={f} ocupado={ocupado === f.prueba.id} conClase onEditar={() => abrirEditor(f.instrumento, f.asig, f.grupo, f.unidad as UnidadConCriterios | null)} onAbrir={que => abrir(f.prueba.id, que)} />)}
+          </ul>
+        )
+      ) : (() => {
+        const otras = lista.filter(f => f.grupo.id !== grupo.id)
+        return (
+          <>
+            <div data-examenes-clase style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--gris-700)', marginBottom: 4 }}>{grupo.nombre}</div>
+            <Pestanas
+              pestanas={asignaturas.map(a => ({ id: String(a.id), etiqueta: a.nombre_display }))}
+              activa={String(areaElegida.id)} alCambiar={id => setAreaId(Number(id))}
+              etiqueta="Área de la que se ven las actividades" aspecto="area" style={{ marginBottom: 10 }}
+            />
+            <AreaDeExamenes
+              key={areaElegida.id} grupo={grupo} asig={areaElegida} recarga={recarga} ocupado={ocupado}
+              examenes={lista.filter(f => f.asig.id === areaElegida.id)}
+              onEditarExamen={(ins, unidad) => abrirEditor(ins, areaElegida, grupo, unidad)}
+              onAbrir={abrir} onCambio={() => setRecarga(n => n + 1)} onError={setAviso}
+            />
+            {otras.length > 0 && (
+              <div style={{ marginTop: 14 }}>
+                <button type="button" className="btn-secondary" data-examenes-otras-toggle aria-expanded={verOtras}
+                  onClick={() => setVerOtras(v => !v)} style={{ minHeight: 44, fontSize: 13 }}>
+                  {verOtras ? 'Ocultar' : 'Ver'} los exámenes de otras clases ({otras.length})
+                </button>
+                {verOtras && (
+                  <ul data-examenes-otras style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {otras.map(f => <FilaExamen key={f.prueba.id} f={f} ocupado={ocupado === f.prueba.id} conClase onEditar={() => abrirEditor(f.instrumento, f.asig, f.grupo, f.unidad as UnidadConCriterios | null)} onAbrir={que => abrir(f.prueba.id, que)} />)}
+                  </ul>
+                )}
+              </div>
+            )}
+          </>
+        )
+      })()}
+
+      <Modelos recarga={recarga} />
 
       {nuevo && (
         <ElegirInstrumentoDePrueba
@@ -258,6 +275,224 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
           onGuardado={() => { /* la matriz no está en pantalla; la lista se relee al cerrar */ }}
           onCerrar={cerrarCorrector}
         />
+      )}
+    </div>
+  )
+}
+
+type Accion = 'imprimir' | 'corregir' | 'informe'
+const accion = { minHeight: 44, fontSize: 13 } as const
+
+/** Los cuatro botones de un examen: editar, imprimir, informe y corregir por cámara. */
+function BotonesExamen({ f, ocupado, onEditar, onAbrir }: { f: PruebaConContexto; ocupado: boolean; onEditar: () => void; onAbrir: (que: Accion) => void }) {
+  return (
+    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+      {/* Con la unidad del examen desde el principio, igual que «Nuevo
+          examen»: antes se abría sin unidad —la matriz de toda el área— y
+          se le ponía la unidad después, y a Luis ese botón no le abría nada. */}
+      <button className="btn-secondary" data-examen-editar style={accion} disabled={ocupado} onClick={onEditar}
+        title="Ver o cambiar el examen">✏️ Editar</button>
+      <button className="btn-secondary" data-examen-imprimir style={accion} disabled={ocupado || !f.conClave}
+        onClick={() => onAbrir('imprimir')}
+        title={f.conClave ? 'Imprimir la hoja de respuestas de cada alumno y el examen' : 'Completa opciones y correcta en todas las preguntas para poder imprimir'}>🖨 Imprimir hojas</button>
+      <button className="btn-secondary" data-examen-informe style={accion} disabled={ocupado}
+        onClick={() => onAbrir('informe')}
+        title="Qué preguntas, criterios y aspectos falla la clase con este examen">📈 Informe</button>
+      <button className="btn-primary" data-examen-corregir style={accion} disabled={ocupado || !f.conClave}
+        onClick={() => onAbrir('corregir')}
+        title={f.conClave ? 'Corregir las hojas con la cámara, una tras otra' : 'Completa la clave del examen para corregir por cámara'}>📷 Corregir por cámara</button>
+    </div>
+  )
+}
+
+const detalleExamen = (f: PruebaConContexto) =>
+  `${f.prueba.def.preguntas.length} pregunta${f.prueba.def.preguntas.length !== 1 ? 's' : ''}${f.conClave ? '' : f.prueba.def.tipo === 'test' ? ' · falta la clave' : ' · no es un test'}`
+
+/** Un examen suelto, con su contexto escrito: la fila de la lista de siempre. */
+function FilaExamen({ f, ocupado, conClase, onEditar, onAbrir }: { f: PruebaConContexto; ocupado: boolean; conClase?: boolean; onEditar: () => void; onAbrir: (que: Accion) => void }) {
+  const cfg = getInstrConfig(f.instrumento.tipo)
+  return (
+    <li data-examen={f.prueba.def.titulo} data-con-clave={f.conClave || undefined}
+      style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '8px 10px', borderRadius: 8, background: 'var(--gris-100)' }}>
+      <div style={{ flex: '1 1 220px', minWidth: 0 }}>
+        <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--gris-900)' }}>{f.prueba.def.titulo}</div>
+        <div style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
+          {conClase ? `${f.grupo.nombre} · ${f.asig.nombre_display} · ` : ''}{f.unidad ? f.unidad.nombre : 'general'} · <span aria-hidden="true">{cfg.icon}</span> {f.instrumento.nombre}
+          {' · '}{detalleExamen(f)}
+        </div>
+      </div>
+      <BotonesExamen f={f} ocupado={ocupado} onEditar={onEditar} onAbrir={onAbrir} />
+    </li>
+  )
+}
+
+type UnidadDeArea = { unidad: UnidadConCriterios; matriz: MatrizEvaluacion | null; columnas: ColumnaInstrumento[] }
+
+/**
+ * Un área de la clase activa, unidad a unidad: cada fila es una actividad de
+ * esa unidad (la misma columna que pinta el Calificador) con la herramienta
+ * con la que se evalúa. Con examen propio lleva los botones del examen; sin
+ * él, «Editar» abre la ficha de la actividad, donde se elige la herramienta.
+ * Los exámenes del área que no caen en ninguna fila (generales, o de un
+ * instrumento sin criterios en su unidad) van al final: ninguno se esconde.
+ */
+function AreaDeExamenes({ grupo, asig, examenes, recarga, ocupado, onEditarExamen, onAbrir, onCambio, onError }: {
+  grupo: GrupoConCount
+  asig: Asignatura
+  examenes: PruebaConContexto[]
+  recarga: number
+  ocupado: number | null
+  onEditarExamen: (ins: Instrumento, unidad: UnidadConCriterios | null) => void
+  onAbrir: (prueba_id: number, que: Accion) => void
+  onCambio: () => void
+  onError: (texto: string) => void
+}) {
+  const headers = useAppStore(s => s._headers)
+  const [unidades, setUnidades] = useState<UnidadDeArea[] | null>(null)
+
+  useEffect(() => {
+    let vigente = true
+    ;(async () => {
+      try {
+        const us = await getUnidades(asig.id!)
+        // Las descripciones vienen del currículo; sin ellas se pintan los códigos.
+        const descripciones = await criteriosDeArea(grupo, asig, headers).catch(() => new Map<string, string>())
+        const filas = await Promise.all(us.map(async unidad => {
+          const matriz = await getMatrizEvaluacion(asig.id!, unidad.id!, unidad.trimestre ?? 1)
+          const criterios = matriz ? [...matriz.porCriterio.keys()].map(id => ({ id, descripcion: descripciones.get(id) ?? '' })) : []
+          return { unidad, matriz, columnas: matriz ? columnasPorInstrumento(matriz, criterios) : [] }
+        }))
+        if (vigente) setUnidades(filas)
+      } catch (e) {
+        if (vigente) { setUnidades([]); onError(`No se han podido leer las actividades de «${asig.nombre_display}»: ${mensajeDe(e)}`) }
+      }
+    })()
+    return () => { vigente = false }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asig.id, grupo.id, recarga])
+
+  if (unidades == null) return <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Cargando…</div>
+
+  const area: DatosDeArea = { asignatura: asig.nombre, curso: grupo.curso, etapa: grupo.etapa, comunidad: asig.comunidad || grupo.comunidad }
+  const enFila = new Set<number>()
+  const propio = (insId: number, unidadId: number) => examenes.find(e => e.instrumento.id === insId && e.prueba.unidad_id === unidadId)
+  for (const u of unidades) for (const c of u.columnas) { const e = propio(c.ins.instrumento_id, u.unidad.id!); if (e) enFila.add(e.prueba.id) }
+  const sueltos = examenes.filter(e => !enFila.has(e.prueba.id))
+  const titulo = { fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', margin: '12px 0 6px' } as const
+
+  return (
+    <div data-area-examenes={asig.nombre_display}>
+      {unidades.length === 0 && sueltos.length === 0 && (
+        <div data-area-vacia style={{ fontSize: 12.5, color: 'var(--gris-600)' }}>
+          Esta área no tiene unidades ni exámenes todavía. Las unidades se crean en 📋 Programación; un examen general, con «Nuevo examen».
+        </div>
+      )}
+      {unidades.map(({ unidad, matriz, columnas }) => (
+        <section key={unidad.id} data-unidad-bloque={unidad.nombre}>
+          <h3 style={titulo}>{unidad.nombre} <span style={{ fontWeight: 400, color: 'var(--gris-600)' }}>· {unidad.trimestre ?? 1}.º trimestre</span></h3>
+          {columnas.length === 0 ? (
+            <div data-unidad-sin-actividades style={{ fontSize: 12.5, color: 'var(--gris-600)' }}>Ninguna actividad evalúa criterios en esta unidad todavía: se asignan en «Qué evalúo».</div>
+          ) : (
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {columnas.map(col => {
+                const ins = col.ins
+                const examen = propio(ins.instrumento_id, unidad.id!)
+                // Sin examen propio pero con examen: el de otra unidad que vincula a esta, o el general.
+                const ajeno = !examen && ins.tiene_prueba
+                  ? examenes.find(e => e.instrumento.id === ins.instrumento_id && unidadesDelExamen(e.prueba.unidad_id, e.prueba.def).includes(unidad.id!))
+                    ?? examenes.find(e => e.instrumento.id === ins.instrumento_id && e.prueba.unidad_id == null)
+                  : undefined
+                // Con examen propio a la vista manda el examen, aunque la matriz aún no se haya releído.
+                const herramienta = examen ? 'examen' : herramientaDe(ins)
+                const insCompleto = matriz?.instrumentos.find(i => i.id === ins.instrumento_id)
+                return (
+                  <li key={ins.instrumento_id} data-fila-actividad data-nombre={ins.nombre} data-herramienta={herramienta}
+                    data-examen={examen?.prueba.def.titulo} data-con-clave={examen?.conClave || undefined}
+                    style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', padding: '8px 10px', background: 'var(--gris-100)', borderLeft: `6px solid ${ins.color}` }}>
+                    <div style={{ flex: '1 1 220px', minWidth: 0 }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--gris-900)' }}>
+                        <span className="abrev" style={{ background: ins.color, marginRight: 6 }}>{abreviatura(ins.nombre)}</span>
+                        {ins.nombre}
+                      </div>
+                      <div style={{ fontSize: 12, color: 'var(--gris-700)' }}>
+                        <span data-fila-herramienta>{herramienta}</span>
+                        {examen ? <> · «{examen.prueba.def.titulo}» · {detalleExamen(examen)}</> : null}
+                        {ajeno ? <> · el de {ajeno.unidad ? `«${ajeno.unidad.nombre}»` : 'todas las unidades'}</> : null}
+                        {ins.familia_nombre ? <> · {ins.familia_nombre}</> : null}
+                        {' · '}{col.criterios.length} criterio{col.criterios.length !== 1 ? 's' : ''}
+                      </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                      {examen
+                        ? <BotonesExamen f={examen} ocupado={ocupado === examen.prueba.id} onEditar={() => onEditarExamen(examen.instrumento, unidad)} onAbrir={que => onAbrir(examen.prueba.id, que)} />
+                        : <BotonEditarActividad instrumento={ins} criterios={col.criterios} unidadNombre={unidad.nombre} area={area} onCambio={onCambio}
+                            onExamen={insCompleto ? () => onEditarExamen(insCompleto, unidad) : undefined} />}
+                      <Link className="btn-secondary" data-fila-calificar to={`/evaluacion?grupo_id=${grupo.id}&asignatura_id=${asig.id}&unidad_id=${unidad.id}`}
+                        style={{ ...accion, display: 'inline-flex', alignItems: 'center', padding: '0 14px', textDecoration: 'none' }}>Calificar</Link>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </section>
+      ))}
+      {sueltos.length > 0 && (
+        <section data-examenes-sueltos>
+          <h3 style={titulo}>Otros exámenes del área <span style={{ fontWeight: 400, color: 'var(--gris-600)' }}>· generales o sin columna en su unidad</span></h3>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {sueltos.map(f => <FilaExamen key={f.prueba.id} f={f} ocupado={ocupado === f.prueba.id} onEditar={() => onEditarExamen(f.instrumento, f.unidad as UnidadConCriterios | null)} onAbrir={que => onAbrir(f.prueba.id, que)} />)}
+          </ul>
+        </section>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Los modelos del docente: lo que tiene guardado en el banco de rúbricas y
+ * en el de exámenes, a la vista en un solo sitio. Aquí solo se enseñan; se
+ * usan, como hasta ahora, desde el editor de la rúbrica o del examen.
+ */
+function Modelos({ recarga }: { recarga: number }) {
+  const [modelos, setModelos] = useState<{ clave: string; tipo: 'rubrica' | 'examen'; titulo: string; detalle: string }[] | null>(null)
+  const [abierto, setAbierto] = useState(false)
+
+  useEffect(() => {
+    let vigente = true
+    Promise.all([getBancoRubricas(), getBancoPruebas()]).then(([rubricas, pruebas]) => {
+      if (!vigente) return
+      setModelos([
+        ...rubricas.filter(r => r.enBanco).map(r => ({ clave: `r${r.id}`, tipo: 'rubrica' as const, titulo: r.titulo || 'Rúbrica sin título', detalle: 'rúbrica' })),
+        ...pruebas.filter(p => p.enBanco).map(p => ({ clave: `p${p.id}`, tipo: 'examen' as const, titulo: p.def.titulo || 'Examen sin título', detalle: ['examen', p.area, p.nivel].filter(Boolean).join(' · ') })),
+      ])
+    }).catch(() => { if (vigente) setModelos([]) })
+    return () => { vigente = false }
+  }, [recarga])
+
+  if (modelos == null) return null
+  return (
+    <div data-modelos style={{ marginTop: 16, borderTop: '1px solid var(--gris-300)', paddingTop: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--azul-900)', margin: 0, flex: 1 }}>Modelos</h3>
+        <button type="button" className="btn-secondary" data-modelos-toggle aria-expanded={abierto} disabled={modelos.length === 0}
+          onClick={() => setAbierto(v => !v)} style={accion}>
+          Mis modelos ({modelos.length})
+        </button>
+      </div>
+      <p style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.5, margin: '6px 0 0' }}>
+        {modelos.length === 0
+          ? 'Todavía no has guardado ningún modelo. Se guardan desde el editor de una rúbrica o de un examen, en tu banco.'
+          : 'Lo que tienes guardado en el banco de rúbricas y en el de exámenes. Se usan desde el editor de la rúbrica o del examen, y siempre como copia.'}
+      </p>
+      {abierto && (
+        <ul data-modelos-lista style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {modelos.map(m => (
+            <li key={m.clave} data-modelo={m.tipo} style={{ fontSize: 13, padding: '8px 10px', background: 'var(--gris-100)' }}>
+              <strong>{m.titulo}</strong> <span style={{ color: 'var(--gris-600)' }}>· {m.detalle}</span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   )

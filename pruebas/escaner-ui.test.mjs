@@ -196,7 +196,7 @@ try {
   const tarjeta = p.locator('[data-examenes-hoja]')
   await tarjeta.locator('[data-examen]').first().waitFor({ timeout: 8000 })
   ok(await tarjeta.locator('[data-examen]').count() === 1 && await tarjeta.locator('[data-examen][data-con-clave]').count() === 1, 'la pantalla lista el examen, con clave')
-  ok((await tarjeta.locator('[data-examen]').first().textContent()).includes('6ºA'), 'y dice de qué clase es')
+  ok((await tarjeta.locator('[data-examenes-clase]').textContent()).includes('6ºA') && await tarjeta.getByRole('tab').count() >= 1, 'dice de qué clase es y pone una pestaña por área')
   await tarjeta.locator('[data-examen-corregir]').click()
   await escaner.waitFor({ timeout: 8000 })
   await escaner.locator('[data-escaner-fichero]').setInputFiles({ name: 'hoja.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })
