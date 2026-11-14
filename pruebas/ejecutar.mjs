@@ -319,6 +319,8 @@ async function principal() {
     await suite('vaciar o mover una columna en una unidad', 'node', ['pruebas/columna-unidad-ui.test.mjs'], entorno)
     await suite('familias e hijos desde el gestor', 'node', ['pruebas/familias-ui.test.mjs'], entorno)
     await suite('«Qué evalúo» unidad a unidad', 'node', ['pruebas/que-evaluo-unidad-ui.test.mjs'], entorno)
+    await suite('«Exámenes y pruebas» por área', 'node', ['pruebas/examenes-area-ui.test.mjs'], entorno)
+    await suite('rúbrica propia por unidad y modelos', 'node', ['pruebas/rubrica-unidad-ui.test.mjs'], entorno)
     await suite('familias e hijos en el calificador', 'node', ['pruebas/familias-calificador-ui.test.mjs'], entorno)
     await suite('convertir lo que ya hay en una familia en su primer hijo', 'node', ['pruebas/familias-convertir-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel', 'node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)

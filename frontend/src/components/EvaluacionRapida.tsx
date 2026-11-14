@@ -183,7 +183,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
   // rúbrica se despachaba con un clic y sus indicadores no salían nunca.
   useEffect(() => {
     if (!instrumentoId) { setNiveles([]); setIndicadores([]); return }
-    getRubrica(instrumentoId).then(r => {
+    getRubrica(instrumentoId, unidadId).then(r => {
       if (!r) { setNiveles([]); setIndicadores([]); return }
       try {
         const nvs = JSON.parse(r.niveles_json) as NivelRubrica[]
@@ -192,7 +192,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
         setIndicadores(Array.isArray(inds) ? inds.filter(i => i?.nombre) : [])
       } catch { setNiveles([]); setIndicadores([]) }
     })
-  }, [instrumentoId])
+  }, [instrumentoId, unidadId])
 
   // Examen del instrumento para la unidad elegida (o el general)
   const esPruebaEscrita = instrumentoSel?.tipo === 'prueba-escrita'

@@ -842,6 +842,63 @@ edumind_miclase/
   `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
   ficha «Editar» cierra con Esc sin cerrar lo de debajo y acepta `capa`.
   Luis: el gestor era «complejísimo», todo mezclado.
+- **«Exámenes y pruebas» va por área y por unidad** (fase 3 de la misma
+  propuesta). `ExamenesConHoja` pone una pestaña por área de la CLASE ACTIVA
+  (`[data-examenes-clase]`, `Pestanas`; la elegida no cambia el área de la
+  barra) y dentro `AreaDeExamenes` (`[data-area-examenes]`): un bloque por
+  unidad (`[data-unidad-bloque]`) con una fila por actividad
+  (`[data-fila-actividad]`, `data-nombre`, `data-herramienta` = examen ·
+  rúbrica · diario · sin herramienta). Las filas son las columnas del
+  Calificador (`getMatrizEvaluacion` con el trimestre de la unidad +
+  `columnasPorInstrumento`); nada se calcula ni se guarda aquí. Con examen
+  PROPIO de esa unidad la fila lleva además `data-examen` y los botones de
+  siempre (`[data-examen-editar]`, `-imprimir`, `-informe`, `-corregir`); sin
+  él, «Editar» es la ficha de la actividad (`[data-editar-actividad]`), desde
+  la que se define el examen o la rúbrica, y si usa el examen de otra unidad
+  o el general lo dice. «Calificar» (`[data-fila-calificar]`) lleva a esa
+  unidad del Calificador por URL. **Ningún examen se esconde**: los del área
+  que no caen en una fila (generales, o de un instrumento sin criterios en su
+  unidad) van en `[data-examenes-sueltos]`; los de otras clases, plegados
+  tras `[data-examenes-otras-toggle]` (`[data-examenes-otras]`); y sin clase
+  activa o sin áreas queda la lista de siempre, con todo. `[data-examen]`
+  sale una vez por examen, así que las pruebas que buscaban una fila por su
+  título siguen valiendo. El bloque `[data-modelos]` enseña lo guardado en
+  los bancos de rúbricas y de exámenes (`[data-modelos-toggle]`,
+  `[data-modelo="rubrica"|"examen"]`); usarlos desde ahí y los modelos de
+  serie son de la fase 4. Prueba: `examenes-area-ui.test.mjs`.
+- **Una rúbrica puede ser de una unidad, con la general de reserva** (fase 4
+  de la misma propuesta; decisión de Luis: «es la clave del proceso de
+  evaluación»). Sin esquema nuevo: `Rubrica.unidad_id`, el campo que ya
+  usaban los exámenes. `getRubrica(instrumento, unidad?)` resuelve como
+  `getPrueba`: la propia de la unidad y, si no hay, la general (`unidad_id`
+  null); sin unidad, siempre la general. `guardarRubrica` escribe una fila
+  por instrumento Y unidad —guardar la de una unidad no toca la general ni
+  las de otras— y `eliminarRubrica(instrumento, unidad)` retira solo esa
+  (sin segundo argumento, todas). Quien lee la rúbrica para calificar pasa
+  la unidad (`SesionInstrumento`, `CeldaEvaluacion`, `EvaluacionRapida`); el
+  gestor del área y la cabecera de columna siguen con la general. En la
+  matriz, `tiene_rubrica` es «tiene la de esta unidad o la general» y
+  `CeldaInstrumento.rubrica_propia` dice si es la propia. `RubricaEditor`
+  recibe `unidadId`/`unidadNombre` y enseña «Esta rúbrica vale para»
+  (`[data-rubrica-alcance]`, `[data-rubrica-alcance-select]` = general ·
+  unidad): abre la que toca y guarda donde diga el selector; eliminar la
+  propia avisa de que la unidad vuelve a la general. Mover lo de una familia
+  a un hijo solo choca con la rúbrica de la MISMA unidad. Las notas ya
+  puestas no cambian al estrenar una rúbrica propia: como al editar una
+  rúbrica, sus marcas son de la anterior. **Un aparato sin actualizar no
+  distingue la propia de la general** (abre la primera fila y, si guarda,
+  escribe en ella): hay que actualizar todos antes de usarlo.
+- **Los modelos de serie viven en el código** (`db/modelosDeSerie.ts`, puro:
+  rúbrica de exposición oral, lista de control del cuaderno, escala de
+  trabajo en equipo), no en la tabla: sembrarlos los triplicaría al
+  sincronizar. Se eligen en la ficha «Editar» de una actividad
+  (`[data-ficha-modelos]` → `ElegirModelo`, `[data-elegir-modelo]`,
+  `[data-modelo-elegir="serie:<id>"|"banco:<id>"]`, con las rúbricas del
+  banco del docente al lado) y **se copian** al `RubricaEditor` (prop
+  `modelo`): nada se guarda hasta «Guardar rúbrica», y adaptarlo no cambia
+  el modelo ni otras actividades. «Exámenes y pruebas» los enseña en
+  `[data-modelo-serie]`. Los exámenes del banco se siguen eligiendo dentro
+  del editor de examen. Prueba: `rubrica-unidad-ui.test.mjs`.
 - **El informe de una prueba se calcula entero en el aparato y es del grupo,
   no de nadie.** `db/informePrueba.ts` (puro, `informe-prueba.test.ts`)
   recibe la definición y las respuestas que ya guarda cada nota

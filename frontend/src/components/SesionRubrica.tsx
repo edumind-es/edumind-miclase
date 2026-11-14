@@ -199,7 +199,7 @@ export default function SesionRubrica({
               {cfg.label} · {trimestre}º trim.{unidadNombre ? ` · ${unidadNombre}` : ''} · {indicadores.length} indicador{indicadores.length !== 1 ? 'es' : ''} · {niveles.length} niveles
             </div>
           </div>
-          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={onHerramienta} />
+          <BotonEditarActividad instrumento={instrumento} criterios={criterios} unidadNombre={unidadNombre} unidadId={unidadId} area={area} onCambio={onCambio} onHerramienta={onHerramienta} />
           <button onClick={onCerrar} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
 

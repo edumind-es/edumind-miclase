@@ -463,7 +463,9 @@ export interface Rubrica extends Sincronizable {
   /**
    * Unidad a la que pertenece el examen, o null si vale para todas las del
    * instrumento. Un mismo instrumento («Prueba escrita») se usa en varias
-   * unidades y cada una tiene su examen. Solo con `tipo: 'prueba'`.
+   * unidades y cada una tiene su examen. Desde nov 2026 también una
+   * rúbrica puede ser de una unidad: se usa en ella en vez de la general
+   * (`getRubrica`). Un aparato sin actualizar no las distingue.
    */
   unidad_id?: number | null
 }

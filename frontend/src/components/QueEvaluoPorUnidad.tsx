@@ -212,7 +212,7 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
                         onClick={() => setEditando(abierto ? null : ins.instrumento_id)} style={boton}>
                         Criterios ({col.criterios.length})
                       </button>
-                      {area && <BotonEditarActividad instrumento={ins} criterios={col.criterios} unidadNombre={unidad.nombre} area={area} capa={capa} onCambio={releer} />}
+                      {area && <BotonEditarActividad instrumento={ins} criterios={col.criterios} unidadNombre={unidad.nombre} unidadId={unidad.id} area={area} capa={capa} onCambio={releer} />}
                     </div>
                     <div data-unidad-criterios data-criterios={col.criterios.map(c => c.id).join(' ')} style={{ marginTop: 6 }}>
                       {!abierto && col.criterios.map(c => <span key={c.id} title={c.descripcion} style={chip}>{c.id}</span>)}

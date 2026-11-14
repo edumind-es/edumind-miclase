@@ -151,7 +151,7 @@ export default function SesionNota({ columna, matriz, alumnos, trimestre, unidad
               </div>
             </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <BotonEditarActividad instrumento={ins} criterios={columna.criterios} unidadNombre={unidadNombre} area={area} onCambio={onCambio} onHerramienta={() => { onCambio(); onCerrar() }} />
+              <BotonEditarActividad instrumento={ins} criterios={columna.criterios} unidadNombre={unidadNombre} unidadId={unidadId} area={area} onCambio={onCambio} onHerramienta={() => { onCambio(); onCerrar() }} />
               <button className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
             </div>
           </div>

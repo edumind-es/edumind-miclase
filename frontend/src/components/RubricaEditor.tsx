@@ -35,6 +35,15 @@ interface Props {
    * partir, como siempre. Si ya hay rúbrica, se abre esa y esto no cuenta.
    */
   inicio?: HerramientaSimple
+  /**
+   * La unidad desde la que se abre. Con ella el editor carga la rúbrica de
+   * esa unidad (o la general, si no tiene propia) y deja elegir para qué
+   * vale lo que se guarde; sin ella es siempre la general.
+   */
+  unidadId?: number | null
+  unidadNombre?: string
+  /** Un modelo que se COPIA al abrir: nada se guarda hasta pulsar «Guardar rúbrica». */
+  modelo?: { rubrica: RubricaParsed; nombre: string; generadaIA?: boolean }
 }
 
 /**
@@ -53,7 +62,11 @@ type Tab = 'diseniar' | 'ia'
 /** Antes de editar hay que decidir de dónde parte la rúbrica. */
 type Modo = 'cargando' | 'elegir' | 'editar'
 
-export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)', inicio }: Props) {
+export default function RubricaEditor({ instrumentoId, instrumentoNombre, asignaturaNombre, nivel, onCerrar, capa = 'var(--z-modal-anidado)', inicio, unidadId = null, unidadNombre, modelo }: Props) {
+  // Para qué vale lo que se guarde: todas las unidades o solo la que se mira.
+  const [alcance, setAlcance] = useState<'general' | 'unidad'>('general')
+  const [hayGeneral, setHayGeneral] = useState(false)
+  const unidadDeGuardado = alcance === 'unidad' && unidadId ? unidadId : null
   const [tab, setTab] = useState<Tab>('diseniar')
   const [modo, setModo] = useState<Modo>('cargando')
   const [plantillasAbiertas, setPlantillasAbiertas] = useState(false)
@@ -112,7 +125,23 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   // el docente se encontraba el trabajo por hacer y sin pistas de por dónde.
   // Ahora se le ofrece de dónde partir.
   useEffect(() => {
-    getRubrica(instrumentoId).then(r => {
+    getRubrica(instrumentoId, unidadId).then(r => {
+      const propia = !!unidadId && r?.unidad_id === unidadId
+      setAlcance(propia ? 'unidad' : 'general')
+      // Con la propia abierta hay que saber si detrás queda una general: es lo que dice el aviso al eliminarla.
+      if (propia) getRubrica(instrumentoId).then(g => setHayGeneral(!!g)).catch(() => {})
+      else setHayGeneral(!!r)
+      if (modelo) {
+        // Un modelo elegido se copia encima de lo que hubiera; se guarda al pulsar «Guardar».
+        setTieneDatos(!!r)
+        setRubrica({ ...modelo.rubrica, titulo: modelo.rubrica.titulo || instrumentoNombre })
+        setVieneDeIA(!!modelo.generadaIA)
+        setSucio(true)
+        setTab('diseniar')
+        setModo('editar')
+        setMsg({ tipo: 'ok', texto: `«${modelo.nombre}» copiado${r ? ' encima de la rúbrica que había (no se cambia hasta guardar)' : ''}. Adáptalo si hace falta y pulsa «Guardar rúbrica».` })
+        return
+      }
       if (r) {
         setTieneDatos(true)
         setRubrica({
@@ -272,8 +301,12 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         indicadores_json: JSON.stringify(rubrica.indicadores),
         generada_ia: generadaIA ? 1 : 0,
         contexto: iaContexto || undefined,
+        unidad_id: unidadDeGuardado,
       })
-      setMsg({ tipo: 'ok', texto: 'Rúbrica guardada correctamente.' })
+      setMsg({ tipo: 'ok', texto: unidadDeGuardado != null
+        ? `Rúbrica guardada solo para ${unidadNombre ?? 'esta unidad'}: las demás unidades siguen con la general.`
+        : 'Rúbrica guardada correctamente.' })
+      if (unidadDeGuardado == null) setHayGeneral(true)
       setTieneDatos(true)
       setSucio(false)
     } catch {
@@ -282,8 +315,13 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
   }
 
   const borrar = async () => {
-    if (!await confirmar({ texto: '¿Eliminar esta rúbrica? No se puede deshacer.', aceptar: 'Eliminar la rúbrica', peligro: true })) return
-    await eliminarRubrica(instrumentoId)
+    const deUnidad = unidadDeGuardado != null
+    if (!await confirmar({ texto: deUnidad
+      ? `¿Eliminar la rúbrica propia de ${unidadNombre ?? 'esta unidad'}? ${hayGeneral ? 'La unidad volverá a usar la general.' : 'La unidad se quedará sin rúbrica.'} No se puede deshacer.`
+      : '¿Eliminar esta rúbrica? No se puede deshacer.', aceptar: 'Eliminar la rúbrica', peligro: true })) return
+    // Solo la que se está editando: la de la unidad o la general, nunca las de otras unidades.
+    await eliminarRubrica(instrumentoId, unidadDeGuardado)
+    if (!deUnidad) setHayGeneral(false)
     setRubrica(rubricaVacia(instrumentoNombre))
     setTieneDatos(false)
     setSucio(false)
@@ -503,6 +541,22 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         {/* Fuera de los modos: importar vale tanto al empezar como ya editando. */}
         <input ref={importRef} type="file" style={{ display: 'none' }} onChange={importarFichero}
           accept=".xlsx,.md,.markdown,.txt,.json,application/json,text/markdown,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+
+        {!!unidadId && modo !== 'cargando' && (
+          <label data-rubrica-alcance={alcance} style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', padding: '8px 24px', fontSize: 13, background: 'var(--gris-100)', borderBottom: '1px solid var(--gris-300)' }}>
+            <span style={{ fontWeight: 700, color: 'var(--gris-700)' }}>Esta rúbrica vale para</span>
+            <select data-rubrica-alcance-select value={alcance} onChange={e => { setAlcance(e.target.value as 'general' | 'unidad'); setSucio(true) }}
+              style={{ minHeight: 44, fontSize: 14, padding: '6px 10px' }}>
+              <option value="general">Todas las unidades (la general)</option>
+              <option value="unidad">Solo {unidadNombre ?? 'esta unidad'}</option>
+            </select>
+            <span style={{ color: 'var(--gris-600)' }}>
+              {alcance === 'unidad'
+                ? 'Se guarda aparte: las demás unidades siguen con la general.'
+                : 'Una unidad con rúbrica propia sigue usando la suya.'}
+            </span>
+          </label>
+        )}
 
         {modo === 'cargando' && (
           <div style={{ padding: 40, textAlign: 'center', color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>
