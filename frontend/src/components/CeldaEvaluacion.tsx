@@ -36,6 +36,7 @@ import { verNeae, verEvidencias } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import ChipsCompetencias from './ChipsCompetencias'
 import InformePrueba from './InformePrueba'
+import InformeActividad from './InformeActividad'
 import { BotonEditarActividad } from './FichaActividad'
 
 import { confirmar } from '@/utils/confirmar'
@@ -151,6 +152,7 @@ export default function CeldaEvaluacion({
   const [prueba, setPrueba] = useState<PruebaGuardada | null>(null)
   /** El informe de este alumno en el examen, abierto desde el corrector. */
   const [informeAlumno, setInformeAlumno] = useState(false)
+  const [informeActividad, setInformeActividad] = useState(false)
   /** Hay exámenes definidos, pero por unidad, y se está mirando «Todo el curso». */
   const [pruebaSoloPorUnidad, setPruebaSoloPorUnidad] = useState(false)
   /** Nota fantasma de esta casilla: la anterior a un recálculo. Visible, pero no cuenta. */
@@ -764,6 +766,28 @@ export default function CeldaEvaluacion({
               areaNombre={asig.nombre_display || asig.nombre}
               alumnoInicial={alumno.id!}
               onCerrar={() => setInformeAlumno(false)}
+            />
+          )}
+
+          {/* El mismo informe para lo que no es examen: rúbrica marcada o registros del diario. */}
+          {instrumentoSel && !calificaPorPrueba && ((calificaPorRubrica && Object.keys(marcado).length > 0) || registros.length > 0) && (
+            <button type="button" className="btn-secondary" data-informe-actividad-abrir onClick={() => setInformeActividad(true)}
+              style={{ minHeight: 44, fontSize: 13, marginBottom: 10 }}>
+              Informe de {alumno.nombre} en esta actividad
+            </button>
+          )}
+          {informeActividad && instrumentoSel && (
+            <InformeActividad
+              asignaturaId={asig.id!}
+              instrumentoId={instrumentoSel.instrumento_id}
+              instrumentoNombre={instrumentoSel.nombre}
+              unidadId={claveUnidad(unidadId)}
+              trimestre={trimestre}
+              grupoNombre={grupo.nombre}
+              areaNombre={asig.nombre_display || asig.nombre}
+              alumnoInicial={alumno.id!}
+              anidado
+              onCerrar={() => setInformeActividad(false)}
             />
           )}
 

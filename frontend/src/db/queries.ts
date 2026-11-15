@@ -12,6 +12,7 @@ import { resumirEvidencias, type ResumenEvidencias } from './almacen'
 import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
 import type { ExamenDeArea } from './analisisAlumno'
+import { tieneDatos as tieneDatosDeActividad, type ActividadDeUnidad } from './informeActividad'
 import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
@@ -2585,6 +2586,80 @@ export async function examenesDeArea(asignatura_id: number): Promise<ExamenDeAre
     }
   }
   return salida
+}
+
+/**
+ * Las actividades de un área que se evalúan con rúbrica (o lista de control,
+ * o escala) o con el diario, unidad a unidad y trimestre a trimestre, con lo
+ * que tiene cada alumno: lo que necesita el informe individual
+ * (`db/informeActividad.ts`). Los exámenes van aparte (`examenesDeArea`) y una
+ * actividad de nota directa no sale: no hay nada que desgranar.
+ *
+ * No calcula notas: la de cada alumno es la media de lo guardado en sus
+ * casillas de la actividad (todas valen lo mismo salvo excepción).
+ */
+export async function actividadesDeArea(
+  asignatura_id: number, solo?: { instrumento_id: number; unidad_id: number; trimestre: number },
+): Promise<ActividadDeUnidad[]> {
+  const instrumentos = (await getInstrumentos(asignatura_id)).filter(i => !solo || i.id === solo.instrumento_id)
+  const unidades = new Map(vivos(await db.unidades.where('asignatura_id').equals(asignatura_id).toArray()).map(u => [u.id!, u.nombre]))
+  const nombres = new Map<number, string | null>()
+  const nombreDe = async (id: number) => {
+    if (!nombres.has(id)) {
+      const al = await db.alumnos.get(id)
+      nombres.set(id, al && !al.deleted_at ? `${al.apellidos}, ${al.nombre}` : null)
+    }
+    return nombres.get(id)!
+  }
+  const salida: ActividadDeUnidad[] = []
+  for (const ins of instrumentos) {
+    const cals = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').equals(ins.id!).toArray()))
+    const regs = vivos(await db.diario.where('instrumento_id').equals(ins.id!).toArray())
+    const claves = new Set([...cals, ...regs].map(x => `${x.unidad_id}:${x.trimestre}`))
+    for (const clave of claves) {
+      const [unidad_id, trimestre] = clave.split(':').map(Number)
+      if (solo && (solo.unidad_id !== unidad_id || solo.trimestre !== trimestre)) continue
+      if (await getPrueba(ins.id!, unidad_id)) continue
+      const fila = await getRubrica(ins.id!, unidad_id)
+      let rubrica: ActividadDeUnidad['rubrica'] = null
+      if (fila) {
+        try {
+          const niveles = (JSON.parse(fila.niveles_json) as { nombre: string; valor: number }[]).filter(n => typeof n?.valor === 'number')
+          const indicadores = (JSON.parse(fila.indicadores_json) as { nombre: string; peso?: number; descriptores?: Record<string, string> }[]).filter(i => i?.nombre)
+          if (niveles.length && indicadores.length) rubrica = { titulo: fila.titulo, niveles, indicadores }
+        } catch { /* una rúbrica ilegible cuenta como no tenerla */ }
+      }
+      const deAqui = cals.filter(c => c.unidad_id === unidad_id && c.trimestre === trimestre)
+      const regsAqui = regs.filter(r => r.unidad_id === unidad_id && r.trimestre === trimestre)
+      if (!rubrica && !regsAqui.length) continue
+      const herramienta = rubrica ? 'rubrica' as const : 'diario' as const
+      const alumnos: ActividadDeUnidad['alumnos'] = []
+      for (const alumno_id of new Set([...deAqui, ...regsAqui].map(x => x.alumno_id))) {
+        const nombre = await nombreDe(alumno_id)
+        if (!nombre) continue
+        const suyas = deAqui.filter(c => c.alumno_id === alumno_id)
+        const conNota = suyas.filter(c => c.valor != null)
+        const marcada = suyas.filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).length)
+          .sort((a, b) => (b.updated_at ?? '').localeCompare(a.updated_at ?? ''))[0]
+        alumnos.push({
+          alumno_id, nombre,
+          nota: conNota.length ? Math.round(conNota.reduce((s, c) => s + c.valor!, 0) / conNota.length * 100) / 100 : null,
+          marcas: rubrica ? marcada?.niveles_rubrica ?? {} : {},
+          registros: regsAqui.filter(r => r.alumno_id === alumno_id)
+            .map(r => ({ id: r.id, fecha: r.fecha, valor: r.valor, nota: r.nota ?? null, observacion: r.observacion ?? null, niveles_rubrica: r.niveles_rubrica ?? null })),
+        })
+      }
+      if (!alumnos.some(a => tieneDatosDeActividad(a, herramienta))) continue
+      alumnos.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+      salida.push({
+        instrumento_id: ins.id!, instrumento: ins.nombre, unidad_id, unidad: unidades.get(unidad_id) ?? null, trimestre,
+        herramienta, rubrica, agregacion: ins.agregacion ?? 'media',
+        criterios: [...new Set(deAqui.map(c => c.criterio_id))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })),
+        alumnos,
+      })
+    }
+  }
+  return salida.sort((a, b) => a.trimestre - b.trimestre || a.unidad_id - b.unidad_id || a.instrumento.localeCompare(b.instrumento, 'es'))
 }
 
 /** Una unidad vinculada en la que el examen también puso nota, y en qué criterios. */
