@@ -16,7 +16,7 @@ import { readFileSync } from 'node:fs'
 import { leerSemana, claveArea, nombreArea, codigosCriterio, MARCA_IA } from '../frontend/src/planificacion/semanal'
 import { generarPromptSemana, franjasDeTexto, franjasATexto } from '../frontend/src/ia/planificacionPrompt'
 import { casarArea, casarUnidad, prepararVolcado, codigoCurriculo, criteriosDe, secuenciaDe } from '../frontend/src/planificacion/casar'
-import { semanaAMarkdown, tituloSemana, semanaAHtml } from '../frontend/src/planificacion/exportar'
+import { semanaAMarkdown, tituloSemana, semanaAHtml, trozosConEnlaces } from '../frontend/src/planificacion/exportar'
 import type { SesionPlan } from '../frontend/src/db/localDb'
 
 let fallos = 0
@@ -202,6 +202,51 @@ console.log('\nLa marca de IA de una planificación (AI Act, art. 50.2)')
   ok(conMarca.includes(MARCA_IA) && !semanaAMarkdown('6º A', '2026-11-09', '2026-11-13', guardadas).includes(MARCA_IA), 'exportar la escribe solo si alguna sesión salió de una IA')
   const releida = leerSemana(conMarca, new Date(2026, 0, 1))
   ok(releida.generada_ia === true && releida.sesiones.length === 25 && releida.avisos.length === 0, 'y al volver a leer se reconoce, sin estorbar a las 25 sesiones', releida.avisos.join(' | '))
+}
+
+console.log('\nEl otro formato: una fila por sesión (semana del 16 de noviembre)')
+for (const [fichero, nombre] of [
+  ['planificacion_semanal_6A_por_sesion.md', 'con columna «Hora»'],
+  ['planificacion_semanal_6A_por_sesion_sin_horas.md', 'sin columna «Hora»'],
+] as const) {
+  const t = leerSemana(readFileSync(`pruebas/fixtures/${fichero}`, 'utf8'), new Date(2026, 0, 1))
+  const de = (fecha: string, franja: string) => t.sesiones.find(x => x.fecha === fecha && x.franja === franja)
+  ok(t.avisos.length === 0, `${nombre}: sin avisos`, t.avisos.join(' | '))
+  ok(t.desde === '2026-11-16' && t.hasta === '2026-11-20', `${nombre}: del lunes 16 al viernes 20`, `${t.desde} → ${t.hasta}`)
+  ok(t.sesiones.length === 25, `${nombre}: 20 filas con cinco franjas dobles = 25 sesiones`, String(t.sesiones.length))
+  const l1 = de('2026-11-16', '1ª'), l2 = de('2026-11-16', '2ª'), l3 = de('2026-11-16', '3ª')
+  ok(!!l1 && !!l2 && l1.hora_inicio === '9:00' && l1.hora_fin === '9:50' && l2.hora_inicio === '9:50' && l2.hora_fin === '10:40',
+    `${nombre}: la franja «1ª-2ª» son dos sesiones con sus horas`, `${l1?.hora_inicio}-${l1?.hora_fin} · ${l2?.hora_inicio}-${l2?.hora_fin}`)
+  ok(l1?.bloque === '9:00-10:40' && l1.area === 'Lengua Castellana' && l1.unidad === 'UD3' && l1.evaluable === true,
+    `${nombre}: con su bloque, área, unidad y ■`, JSON.stringify([l1?.bloque, l1?.area, l1?.unidad, l1?.evaluable]))
+  ok(l1?.titulo === 'cierre del glosario · ap. 6 epíteto y antítesis', `${nombre}: el título es el de la tabla, sin la unidad`, l1?.titulo)
+  ok(!!l1?.objetivo.startsWith('Corregir el propio glosario') && l1.secuencia.length === 3
+    && l1.secuencia[0].fase === 'Inicio' && l1.secuencia[0].minutos === 10 && l1.secuencia[1].minutos === 75,
+    `${nombre}: objetivo y fases sin negrita, con sus minutos`, JSON.stringify(l1?.secuencia.map(f => [f.fase, f.minutos])))
+  ok(l1?.criterios.join() === 'CA6.5,CA6.6,CA6.7,CA5.8' && l1.sigla_criterios === 'LC' && l1.anclaje.startsWith('LC UD3'),
+    `${nombre}: criterios y sigla sin la palabra «Anclaje»`, `${l1?.sigla_criterios} · ${l1?.anclaje}`)
+  ok(l3?.tipo === 'especialista' && l3.area === 'Educación Física' && l3.hora_inicio === '10:40' && l3.hora_fin === '11:30',
+    `${nombre}: el especialista, que no tiene detalle, también tiene hora`, `${l3?.tipo} ${l3?.hora_inicio}-${l3?.hora_fin}`)
+  const j5 = de('2026-11-19', '5ª')
+  ok(j5?.area === 'Lengua Castellana' && j5.unidad === 'UD4' && j5.hora_inicio === '13:10' && !!j5.objetivo && j5.bloque === null,
+    `${nombre}: una sesión sencilla lleva su detalle y no es parte de un bloque`, JSON.stringify([j5?.area, j5?.unidad, j5?.hora_inicio]))
+  const v4 = de('2026-11-20', '4ª')
+  ok(v4?.area === 'Valores' && v4.criterios.join() === 'CA1.4,CA1.5', `${nombre}: Valores con sus criterios`, v4?.criterios.join())
+}
+{
+  const sinNada = leerSemana('# Programación · 6º A\n\nSemana del 16 al 20 de noviembre de 2026\n\n| Día | Franja | Área | Sesión |\n|---|---|---|---|\n| Lun 16/11 | 3ª | Educación Física | Especialista |\n', new Date(2026, 0, 1))
+  ok(sinNada.sesiones.length === 0 && sinNada.avisos.some(a => a.includes('«3ª»') && a.includes('«Hora»')),
+    'una franja de la que no se sabe la hora se dice, con el arreglo', sinNada.avisos.join(' | '))
+}
+
+console.log('\nLos enlaces de los recursos')
+{
+  const t = trozosConEnlaces('[Apuntes LC UD3 (PDF)](https://example.org/a?x=1) · Glosario en EDIXGAL · [Ficha](http://example.org/b)')
+  ok(t.length === 3 && t[0].texto === 'Apuntes LC UD3 (PDF)' && t[0].url === 'https://example.org/a?x=1'
+    && t[1].texto === ' · Glosario en EDIXGAL · ' && !t[1].url && t[2].url === 'http://example.org/b',
+    'un enlace de Markdown sale con su nombre y su dirección, y el resto como texto', JSON.stringify(t))
+  ok(trozosConEnlaces('[malo](javascript:alert(1)) y nada más').every(x => !x.url), 'lo que no es http(s) se queda en texto')
+  ok(trozosConEnlaces('Papel, espejos').length === 1, 'sin enlaces, el texto tal cual')
 }
 
 console.log(fallos ? `\n✗ ${fallos} fallo(s)` : '\n✓ todo bien')

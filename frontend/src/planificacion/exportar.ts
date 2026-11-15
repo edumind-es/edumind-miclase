@@ -60,6 +60,27 @@ function celda(s: SesionPlan): string {
   return partes.join(' · ').replace(/\|/g, '/') + (s.evaluable ? ' ■' : '')
 }
 
+/** Un trozo de texto, con su dirección si era un enlace de Markdown. */
+export interface TrozoTexto { texto: string; url?: string }
+
+/**
+ * Parte un texto por sus enlaces de Markdown («[Apuntes](https://…)»), para
+ * pintarlos como enlaces. Solo http y https: otra cosa se deja como texto.
+ * Lo guardado no cambia; esto es solo para enseñarlo.
+ */
+export function trozosConEnlaces(texto: string): TrozoTexto[] {
+  const out: TrozoTexto[] = []
+  const re = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g
+  let desde = 0
+  for (const m of texto.matchAll(re)) {
+    if (m.index > desde) out.push({ texto: texto.slice(desde, m.index) })
+    out.push({ texto: m[1], url: m[2] })
+    desde = m.index + m[0].length
+  }
+  if (desde < texto.length) out.push({ texto: texto.slice(desde) })
+  return out
+}
+
 const tieneDetalle = (s: SesionPlan) => !!(s.objetivo || s.secuencia_json || s.recursos || s.evaluacion || s.criterios_json)
 
 /** Sesiones con detalle agrupadas por bloque (las de un bloque de varias franjas, juntas). */
@@ -154,7 +175,7 @@ export function semanaAHtml(
         ${esc([s.unidad_texto, s.titulo].filter(Boolean).join(' · '))}
         ${s.objetivo ? `<p><b>Objetivo.</b> ${esc(s.objetivo)}</p>` : ''}
         ${fases.length ? `<ul>${fases.map(f => `<li><b>${esc(f.fase)}${f.minutos != null ? ` (${f.minutos} min)` : ''}:</b> ${esc(f.texto)}</li>`).join('')}</ul>` : ''}
-        ${s.recursos ? `<p><b>Recursos.</b> ${esc(s.recursos)}</p>` : ''}
+        ${s.recursos ? `<p><b>Recursos.</b> ${trozosConEnlaces(s.recursos).map(t => t.url ? `<a href="${esc(t.url)}">${esc(t.texto)}</a>` : esc(t.texto)).join('')}</p>` : ''}
         ${s.evaluacion ? `<p><b>Evaluación.</b> ${esc(s.evaluacion)}</p>` : ''}
       </div>`
     }).join('')

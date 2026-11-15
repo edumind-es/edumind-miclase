@@ -15,7 +15,7 @@ import { eliminarSesionPlan, getEventos, getPlanificacion } from '@/db/queries'
 import type { EventoCalendario, SesionPlan } from '@/db/localDb'
 import { criteriosDe, secuenciaDe, vaAlCalificador } from '@/planificacion/casar'
 import { claveArea } from '@/planificacion/semanal'
-import { diaLargo, diasDeSemana, franjasDe, nombreDia, semanaAHtml, semanaAMarkdown, tituloSemana, type Franja } from '@/planificacion/exportar'
+import { diaLargo, diasDeSemana, franjasDe, nombreDia, semanaAHtml, semanaAMarkdown, tituloSemana, trozosConEnlaces, type Franja } from '@/planificacion/exportar'
 import { imprimir } from '@/informes/lamina'
 import { descargarFichero } from '@/utils/compartir'
 import { cuadriculaMes, deIso, hoyIso, lunesDe, mismoMes, nombreMes, sumarDias } from './fechas'
@@ -319,7 +319,10 @@ function DetalleSesion({ sesion: s, onCerrar, onEditar, onBorrar }: {
             <ul>{fases.map((f, i) => <li key={i}><b>{f.fase}{f.minutos != null ? ` (${f.minutos} min)` : ''}:</b> {f.texto}</li>)}</ul>
           </section>
         )}
-        {s.recursos && <section className="plan-detalle-sec"><h3>Recursos</h3><p>{s.recursos}</p></section>}
+        {s.recursos && <section className="plan-detalle-sec"><h3>Recursos</h3>
+          <p data-recursos>{trozosConEnlaces(s.recursos).map((t, i) => t.url
+            ? <a key={i} href={t.url} target="_blank" rel="noopener noreferrer">{t.texto}</a>
+            : <span key={i}>{t.texto}</span>)}</p></section>}
         {s.evaluacion && <section className="plan-detalle-sec"><h3>Evaluación formativa</h3><p>{s.evaluacion}</p></section>}
         {criterios.length > 0 && (
           <section className="plan-detalle-sec"><h3>Criterios anclados</h3>

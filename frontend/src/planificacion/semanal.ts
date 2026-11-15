@@ -17,6 +17,14 @@
  *   EVALUACIÓN FORMATIVA con «Anclaje: LCL CA6.5…».
  * - Notas de día en cursiva («*Magosto: …*»).
  *
+ * Hay una segunda forma, la de la semana del 16 de noviembre
+ * (`planificacion_semanal_6A_por_sesion.md`): la tabla lleva una fila por
+ * SESIÓN («Día | Hora | Franja | Área | Sesión», con «Lun 16/11» y franjas
+ * dobles «1ª-2ª»), puede venir sin la columna «Hora» —entonces la hora sale
+ * de la tabla «Horas de cada franja» o de los bloques del detalle—, el
+ * título va en la cabecera del bloque («**9:00-10:40 · ÁREA** — título ■»)
+ * y las fases de la secuencia van sin negrita («- Inicio (10 min): …»).
+ *
  * Mezcla castellano y gallego: los rótulos se reconocen en las dos lenguas.
  * Un bloque de detalle que cubre varias franjas de la tabla se copia en cada
  * una (cada franja conserva su título y su ■); un bloque sin franja en la
@@ -210,6 +218,79 @@ function celdasDeFila(cab: (string | null)[], fila: string[], avisos: string[]):
 
 const celdasDeTabla = (l: string) => l.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim())
 
+// ─── Tabla con una fila por sesión ──────────────────────────────────────
+
+/** Una fila de «Día | Hora | Franja | Área | Sesión», aún sin repartir en franjas. */
+interface FilaLarga {
+  fecha: string
+  dia: string
+  /** Números de franja: «1ª-2ª» → [1, 2]; sin columna de franja, []. */
+  franjas: number[]
+  franja_texto: string | null
+  horas: { ini: string; fin: string } | null
+  area: string
+  unidad: string | null
+  titulo: string
+  tipo: TipoSesionPlan
+  evaluable: boolean
+}
+
+interface ColumnasLargas { dia: number; hora: number; franja: number; area: number; sesion: number }
+
+/** Las columnas de una cabecera «Día | Hora | Franja | Área | Sesión», o null si no lo es. */
+function columnasLargas(cs: string[]): ColumnasLargas | null {
+  const n = cs.map(c => normal(limpio(c)))
+  const col = (re: RegExp) => n.findIndex(c => re.test(c))
+  const dia = col(/^(dia|data|fecha)$/), area = col(/^(area|materia)$/)
+  if (dia < 0 || area < 0) return null
+  return { dia, area, hora: col(/^horas?$|^horario$/), franja: col(/^franxa$|^franja$/), sesion: col(/^(sesion|contido|contenido|titulo)$/) }
+}
+
+/** «1ª-2ª» → [1, 2]; «3ª» → [3]; «1ª y 2ª» → [1, 2]. */
+function numerosDeFranja(s: string): number[] {
+  const ns = [...s.matchAll(/(\d{1,2})/g)].map(m => Number(m[1]))
+  if (ns.length === 2 && /[-–]/.test(s) && ns[1] > ns[0]) {
+    return Array.from({ length: ns[1] - ns[0] + 1 }, (_, i) => ns[0] + i)
+  }
+  return ns
+}
+
+const aHora = (min: number) => `${Math.floor(min / 60)}:${pad(min % 60)}`
+
+function filaLarga(
+  col: ColumnasLargas, fila: string[], rango: { desde: Date; hasta: Date } | null, anio: number, avisos: string[],
+): FilaLarga | null {
+  const dia = limpio(fila[col.dia] ?? '')
+  const bruto = (col.sesion >= 0 ? fila[col.sesion] ?? '' : '').trim()
+  const area = nombreArea(fila[col.area] ?? '')
+  if (!dia && !area) return null
+  // «Lun 16/11» lleva día y mes; «Lunes 16», solo el día dentro de la semana
+  const dm = /(\d{1,2})\s*\/\s*(\d{1,2})/.exec(dia)
+  const d = /(\d{1,2})/.exec(dia)
+  let fecha: string | null = null
+  if (dm) {
+    const mes = Number(dm[2])
+    const a = rango ? rango.desde.getFullYear() + (mes < rango.desde.getMonth() + 1 ? 1 : 0) : anio
+    fecha = isoFecha(fechaDe(a, mes, Number(dm[1])))
+  } else if (d) fecha = fechaEnRango(Number(d[1]), rango)
+  if (!fecha) { avisos.push(`No sé qué fecha es «${dia}» en la tabla`); return null }
+
+  const h = col.hora >= 0 ? RE_HORAS.exec(fila[col.hora] ?? '') : null
+  const franjaTexto = col.franja >= 0 ? limpio(fila[col.franja] ?? '') || null : null
+  const evaluable = bruto.includes('■')
+  let texto = limpio(bruto.replace(/■/g, ''))
+  let unidad: string | null = null
+  const ud = /^(?:UD|U\.D\.|Unidad|Unidade)\s*(\d+)\b\s*(?:·\s*)?/i.exec(texto)
+  if (ud) { unidad = `UD${ud[1]}`; texto = texto.slice(ud[0].length).trim() }
+  const partes = texto.split(/\s+·\s+/).map(limpio).filter(Boolean)
+  const tipo: TipoSesionPlan = partes.some(esEspecialista) ? 'especialista' : partes.some(esCentro) ? 'centro' : 'clase'
+  return {
+    fecha, dia, franjas: franjaTexto ? numerosDeFranja(franjaTexto) : [], franja_texto: franjaTexto,
+    horas: h ? { ini: normalizarHora(h[1]), fin: normalizarHora(h[2]) } : null,
+    area, unidad, titulo: texto, tipo, evaluable,
+  }
+}
+
 // ─── Bloques del detalle ────────────────────────────────────────────────
 
 interface Bloque {
@@ -240,7 +321,9 @@ function rotuloDe(s: string): Rotulo | null {
 
 /** «- **Inicio (15 min):** texto» → fase. */
 function faseDe(l: string): FaseSecuencia | null {
+  // Con negrita («- **Inicio (15 min):** …») o sin ella («- Inicio (10 min): …»)
   const m = /^\s*[-*]\s+\*\*(.+?)\*\*\s*:?\s*(.*)$/.exec(l)
+    ?? /^\s*[-*]\s+([^:*]{1,40}):\s+(.*)$/.exec(l)
   if (!m) return null
   let nombre = m[1].replace(/:\s*$/, '').trim()
   let minutos: number | null = null
@@ -252,7 +335,13 @@ function faseDe(l: string): FaseSecuencia | null {
 /** Lo que va tras «Anclaje:» / «Anclaxe:» / «Ancoraxe:». */
 export function anclajeDe(evaluacion: string): { anclaje: string; criterios: string[]; sigla: string | null } {
   const m = /\b(?:Anclaje|Anclaxe|Ancoraxe|Criterios?)\s*:\s*(.+)$/i.exec(evaluacion)
-  if (!m) return { anclaje: '', criterios: codigosCriterio(evaluacion), sigla: null }
+  if (!m) {
+    // Sin la palabra: «… billete de salida. LC UD3: CA6.5, CA6.6.»
+    const u = /(?:^|\s)((\p{Lu}[\p{L}]{1,11})\s+UD\s?\d+[^:.]*:\s*C[AE]\s?\d.*)$/u.exec(evaluacion)
+    if (!u) return { anclaje: '', criterios: codigosCriterio(evaluacion), sigla: null }
+    const anclaje = u[1].trim().replace(/\.$/, '')
+    return { anclaje, criterios: codigosCriterio(anclaje), sigla: /^\p{Lu}{2,5}$/u.test(u[2]) ? u[2] : null }
+  }
   const anclaje = m[1].trim().replace(/\.$/, '')
   const sigla = /^([A-ZÁÉÍÓÚ]{2,5})\s+C[AE]\s?\d/.exec(anclaje)?.[1] ?? null
   return { anclaje, criterios: codigosCriterio(anclaje), sigla }
@@ -284,12 +373,35 @@ export function leerSemana(md: string, hoy: Date = new Date()): SemanaLeida {
 
   // Vista rápida
   const celdas: Celda[] = []
+  const largas: FilaLarga[] = []
+  /** Horas de cada franja, de la tabla «Horas de cada franja» o deducidas. */
+  const horasFranja = new Map<number, { ini: string; fin: string }>()
   let cab: (string | null)[] | null = null
+  let colLargas: ColumnasLargas | null = null
+  let colHoras: { franja: number; ini: number; fin: number } | null = null
   for (const l of lineas) {
-    if (!l.trim().startsWith('|')) { cab = null; continue }
+    if (!l.trim().startsWith('|')) { cab = null; colLargas = null; colHoras = null; continue }
     const cs = celdasDeTabla(l)
     if (cs.every(c => /^:?-{2,}:?$/.test(c) || c === '')) continue   // separador
+    if (colLargas) {
+      const f = filaLarga(colLargas, cs, rango, hoy.getFullYear(), avisos)
+      if (f) largas.push(f)
+      continue
+    }
+    if (colHoras) {
+      const n = numerosDeFranja(cs[colHoras.franja] ?? '')
+      const ini = normalizarHora(cs[colHoras.ini] ?? ''), fin = normalizarHora(cs[colHoras.fin] ?? '')
+      if (n.length === 1 && !isNaN(minutosDe(ini)) && !isNaN(minutosDe(fin))) horasFranja.set(n[0], { ini, fin })
+      continue
+    }
     if (!cab) {
+      // Una fila por sesión («Día | Hora | Franja | Área | Sesión»)
+      colLargas = columnasLargas(cs)
+      if (colLargas) continue
+      // Las horas de cada franja («Franja | Inicio | Fin»)
+      const n = cs.map(c => normal(limpio(c)))
+      const iF = n.indexOf('franja'), iI = n.findIndex(c => /^(inicio|comezo|empieza|desde)$/.test(c)), iN = n.findIndex(c => /^(fin|final|remate|ata|hasta)$/.test(c))
+      if (iF >= 0 && iI >= 0 && iN >= 0) { colHoras = { franja: iF, ini: iI, fin: iN }; continue }
       cab = cs.map(c => {
         const m = /^(\p{L}+)\s+(\d{1,2})(?:\s+de\s+(\p{L}+))?/u.exec(sinAcentos(limpio(c)))
         if (!m || DIAS[normal(m[1])] === undefined) return null
@@ -336,16 +448,18 @@ export function leerSemana(md: string, hoy: Date = new Date()): SemanaLeida {
     if (!fechaDia) continue
 
     // Cabecera de bloque: «**9:00-10:40 · LENGUA CASTELLANA (dos sesiones)**»
-    const cabBloque = /^\*\*\s*(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2})\s*·\s*(.+?)\s*\*\*$/.exec(t)
+    // o con el título detrás: «**9:00-10:40 · LENGUA CASTELLANA** — Cerramos el glosario ■»
+    const cabBloque = /^\*\*\s*(\d{1,2}[:.]\d{2})\s*[-–]\s*(\d{1,2}[:.]\d{2})\s*·\s*([^*]+?)\s*\*\*(?:\s*[—–-]\s*(.+))?$/.exec(t)
     if (cabBloque) {
+      const tituloCab = limpio((cabBloque[4] ?? '').replace(/■/g, ''))
       actual = {
         fecha: fechaDia, hora_inicio: normalizarHora(cabBloque[1]), hora_fin: normalizarHora(cabBloque[2]),
-        area: nombreArea(cabBloque[3]), unidad: null, unidad_titulo: null, titulo: '',
-        objetivo: '', secuencia: [], recursos: '', evaluacion: '', evaluable: false,
+        area: nombreArea(cabBloque[3]), unidad: null, unidad_titulo: null, titulo: tituloCab,
+        objetivo: '', secuencia: [], recursos: '', evaluacion: '', evaluable: (cabBloque[4] ?? '').includes('■'),
       }
       bloques.push(actual)
       rotulo = null
-      lineaUnidadPendiente = true
+      lineaUnidadPendiente = !tituloCab
       continue
     }
 
@@ -385,6 +499,50 @@ export function leerSemana(md: string, hoy: Date = new Date()): SemanaLeida {
       continue
     }
     if (rotulo) anadir(rotulo, limpio(t))
+  }
+
+  // Filas de la tabla por sesión → una celda por franja
+  if (largas.length) {
+    const aprender = (f: FilaLarga) => {
+      if (f.horas && f.franjas.length === 1 && !horasFranja.has(f.franjas[0])) horasFranja.set(f.franjas[0], f.horas)
+    }
+    largas.forEach(aprender)
+    // Sin columna «Hora»: la del bloque del detalle del mismo día y área, por orden
+    const gastados = new Set<Bloque>()
+    for (const f of largas) {
+      if (f.horas) continue
+      const b = bloques.find(x => !gastados.has(x) && x.fecha === f.fecha && claveArea(x.area) === claveArea(f.area))
+      if (!b) continue
+      gastados.add(b)
+      f.horas = { ini: b.hora_inicio, fin: b.hora_fin }
+      aprender(f)
+    }
+    // Y lo que quede (un especialista no tiene detalle), de las horas de su franja
+    const sinHora = new Set<string>()
+    for (const f of largas) {
+      if (!f.horas && f.franjas.length) {
+        const a = horasFranja.get(f.franjas[0]), z = horasFranja.get(f.franjas[f.franjas.length - 1])
+        if (a && z) f.horas = { ini: a.ini, fin: z.fin }
+      }
+      if (!f.horas) { sinHora.add(f.franja_texto ? `la franja «${f.franja_texto}»` : `«${f.dia}»`); continue }
+      const base = { fecha: f.fecha, area: f.area, unidad: f.unidad, titulo: f.titulo, tipo: f.tipo, evaluable: f.evaluable }
+      if (f.franjas.length < 2) {
+        celdas.push({ ...base, franja: f.franja_texto, hora_inicio: f.horas.ini, hora_fin: f.horas.fin })
+        continue
+      }
+      // Franja doble: cada una con sus horas si se saben y cuadran; si no, a partes iguales
+      const sabidas = f.franjas.map(n => horasFranja.get(n))
+      const cuadran = sabidas.every(Boolean) && sabidas[0]!.ini === f.horas.ini && sabidas[sabidas.length - 1]!.fin === f.horas.fin
+      const ini = minutosDe(f.horas.ini), paso = (minutosDe(f.horas.fin) - ini) / f.franjas.length
+      f.franjas.forEach((n, i) => celdas.push({
+        ...base, franja: `${n}ª`,
+        hora_inicio: cuadran ? sabidas[i]!.ini : aHora(Math.round(ini + paso * i)),
+        hora_fin: cuadran ? sabidas[i]!.fin : aHora(Math.round(ini + paso * (i + 1))),
+      }))
+    }
+    for (const q of sinHora) {
+      avisos.push(`No sé a qué hora es ${q}: añade a la tabla una columna «Hora» o una tabla «Franja | Inicio | Fin»`)
+    }
   }
 
   // Unir: cada bloque se reparte entre las celdas que cubre
