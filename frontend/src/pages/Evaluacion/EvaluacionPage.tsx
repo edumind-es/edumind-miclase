@@ -29,6 +29,7 @@ import InstrumentosManager from '@/components/InstrumentosManager'
 import CeldaEvaluacion from '@/components/CeldaEvaluacion'
 import PruebaEditor from '@/components/PruebaEditor'
 import InformePrueba from '@/components/InformePrueba'
+import InformeActividad from '@/components/InformeActividad'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionNota from '@/components/SesionNota'
 import SesionInstrumento from '@/components/SesionInstrumento'
@@ -212,6 +213,7 @@ export default function EvaluacionPage() {
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
   const [editarExamenEn, setEditarExamenEn] = useState<ColumnaInstrumento | null>(null)
   const [informeEn, setInformeEn] = useState<ColumnaInstrumento | null>(null)
+  const [informeActividadEn, setInformeActividadEn] = useState<ColumnaInstrumento | null>(null)
   const [escanearEn, setEscanearEn] = useState<ColumnaInstrumento | null>(null)
   const [presentacionCerrada, setPresentacionCerrada] = useState(false)
   /** Competencias (CE1, CE2…) plegadas a una sola columna en la vista por criterio. */
@@ -830,6 +832,7 @@ export default function EvaluacionPage() {
                   onEscanear={col => setEscanearEn(col)}
                   onEditarExamen={col => setEditarExamenEn(col)}
                   onInforme={col => setInformeEn(col)}
+                  onInformeActividad={unidadId ? col => setInformeActividadEn(col) : undefined}
                   onVaciar={unidadId ? vaciarColumnaActual : undefined}
                   criteriosUnidad={unidadId ? columnas : undefined}
                   onAsignarCriterio={unidadId ? async (col, cr) => {
@@ -1216,6 +1219,19 @@ export default function EvaluacionPage() {
           area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
           onGuardado={() => setRefresco(r => r + 1)}
           onCerrar={() => setEscanearEn(null)}
+        />
+      )}
+
+      {informeActividadEn && matriz && unidadId && (
+        <InformeActividad
+          asignaturaId={matriz.asig.id!}
+          instrumentoId={informeActividadEn.ins.instrumento_id}
+          instrumentoNombre={informeActividadEn.ins.nombre}
+          unidadId={unidadId}
+          trimestre={trimestre}
+          grupoNombre={matriz.grupo.nombre}
+          areaNombre={matriz.asig.nombre_display}
+          onCerrar={() => setInformeActividadEn(null)}
         />
       )}
 
