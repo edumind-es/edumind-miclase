@@ -1394,6 +1394,20 @@ edumind_miclase/
   `imprimir` (Lámina) y exportar el .md por `descargarFichero`; el .md
   exportado se vuelve a leer igual (`planificacion-semanal.test.ts`).
   Borrar una clase retira su planificación y sus eventos.
+- **El .md de la semana se lee en dos formas** (`planificacion/semanal.ts`).
+  La de siempre: tabla con una fila por franja («1ª 9:00-9:50») y una columna
+  por día. Y la de la semana del 16/11/2026 (fixtures
+  `planificacion_semanal_6A_por_sesion.md` y `…_sin_horas.md`): una fila por
+  SESIÓN («Día | Hora | Franja | Área | Sesión», «Lun 16/11»), el título en
+  la cabecera del bloque («**9:00-10:40 · ÁREA** — título ■»), fases sin
+  negrita y criterios sin la palabra «Anclaje» («LC UD3: CA6.5…»). Una franja
+  doble («1ª-2ª») son dos sesiones con el detalle del bloque. Sin columna
+  «Hora», la hora sale de la tabla «Franja | Inicio | Fin» o del bloque del
+  detalle del mismo día y área; una franja sin hora no se vuelca y el aviso
+  dice qué añadir. Luis subió esa semana y salían «Fila de la tabla sin
+  horas» y 0 sesiones. Los enlaces de Markdown de los recursos se PINTAN como
+  enlaces (`trozosConEnlaces` en `exportar.ts`, solo http/https) en el detalle
+  y en la lámina; lo guardado y el .md exportado no cambian.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
