@@ -12,7 +12,7 @@
  */
 import { useEffect, useMemo, useState } from 'react'
 import type { Alumno, Asignatura, Grupo } from '@/db/localDb'
-import { getAsignaturas, getGrupo, getResumenCurso, examenesDeArea, type ResumenCurso } from '@/db/queries'
+import { getAsignaturas, getGrupo, getResumenCurso, examenesDeArea, actividadesDeArea, type ResumenCurso } from '@/db/queries'
 import {
   analizarAlumno, analizarExamen, PERIODOS, ETIQUETA_PERIODO, MINIMO_GRUPO,
   type Comparacion, type ExamenDeArea, type FilaAnalisis, type Periodo,
@@ -24,6 +24,8 @@ import { imprimir } from '@/informes/lamina'
 import * as curriculo from '@/curriculo'
 import Dialogo from '@/components/comunes/Dialogo'
 import InformePrueba from '@/components/InformePrueba'
+import InformeActividad from '@/components/InformeActividad'
+import { analizarActividad, type ActividadDeUnidad } from '@/db/informeActividad'
 
 interface Props {
   alumno: Alumno
@@ -86,6 +88,7 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
   const [areaId, setAreaId] = useState<number | null>(asignaturaId ?? null)
   const [resumen, setResumen] = useState<ResumenCurso | null>(null)
   const [examenes, setExamenes] = useState<ExamenDeArea[]>([])
+  const [actividades, setActividades] = useState<ActividadDeUnidad[]>([])
   const [descripciones, setDescripciones] = useState<Map<string, string>>(new Map())
   const [cargando, setCargando] = useState(true)
   const [aviso, setAviso] = useState<string | null>(null)
@@ -107,9 +110,9 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
     if (!areaId) return
     let vigente = true
     setCargando(true); setAviso(null)
-    Promise.all([getResumenCurso(areaId), examenesDeArea(areaId)]).then(([r, ex]) => {
+    Promise.all([getResumenCurso(areaId), examenesDeArea(areaId), actividadesDeArea(areaId)]).then(([r, ex, acts]) => {
       if (!vigente) return
-      setResumen(r); setExamenes(ex); setCargando(false)
+      setResumen(r); setExamenes(ex); setActividades(acts); setCargando(false)
     }).catch(e => { if (vigente) { setAviso(`No se pudo calcular el análisis: ${(e as Error).message}`); setCargando(false) } })
     return () => { vigente = false }
   }, [areaId])
@@ -131,6 +134,10 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
     .filter((x): x is { examen: ExamenDeArea; a: NonNullable<ReturnType<typeof analizarExamen>> } => !!x.a), [examenes, alumno.id])
   const deExamenes = useMemo(() => conExamen.map(x => x.a), [conExamen])
   const [informeDe, setInformeDe] = useState<ExamenDeArea | null>(null)
+  // Sus actividades con rúbrica o diario: la lectura corta aquí, y el informe entero aparte.
+  const deActividades = useMemo(() => actividades.map(act => ({ act, a: analizarActividad(act, alumno.id!) }))
+    .filter((x): x is { act: ActividadDeUnidad; a: NonNullable<ReturnType<typeof analizarActividad>> } => !!x.a), [actividades, alumno.id])
+  const [actividadDe, setActividadDe] = useState<ActividadDeUnidad | null>(null)
   const asig = areas.find(a => a.id === areaId)
   const nombre = `${alumno.apellidos}, ${alumno.nombre}`
   const sinDatos = !!analisis && PERIODOS.every(p => analisis.area.periodos[p].valor == null) && deExamenes.length === 0
@@ -254,8 +261,51 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
                 )}
               </div>
             ))}
+
+            <h3 style={tituloSeccion}>Rúbricas y diario</h3>
+            {deActividades.length === 0 && <p style={{ fontSize: 13, color: 'var(--gris-600)', margin: 0 }}>No tiene ninguna actividad calificada con rúbrica ni registros del diario en esta área.</p>}
+            {deActividades.map(({ act, a }) => (
+              <div key={`${act.instrumento_id}:${act.unidad_id}:${act.trimestre}`} data-analisis-actividad={a.herramienta}
+                style={{ border: '1px solid var(--gris-300)', padding: '10px 12px', marginBottom: 8, fontSize: 13 }}>
+                <div>
+                  <strong>{a.instrumento}</strong>{a.unidad ? ` · ${a.unidad}` : ''} <span style={{ color: 'var(--gris-600)' }}>({act.trimestre}T · {a.herramienta === 'rubrica' ? 'rúbrica' : 'diario'})</span>
+                </div>
+                <div style={{ marginTop: 3 }}>
+                  Nota <strong style={{ color: calificativo(a.nota.valor).color }}>{formato(a.nota.valor)}</strong>
+                  {a.nota.grupo && <> · grupo ({a.nota.grupo.n}): media {formato(a.nota.grupo.media)}, mediana {formato(a.nota.grupo.mediana)}</>}
+                </div>
+                {a.herramienta === 'rubrica' && (
+                  <div style={{ marginTop: 3, color: 'var(--gris-600)' }}>
+                    {a.flojos.length ? <>A mejorar: {a.flojos.map(i => i.nombre).join(' · ')}</> : 'Ningún indicador por debajo de la mitad.'}
+                  </div>
+                )}
+                {a.registros.length > 0 && (
+                  <div style={{ marginTop: 3, color: 'var(--gris-600)' }}>
+                    {a.registros.length} registro{a.registros.length !== 1 ? 's' : ''}{a.tendencia ? ` · ${a.tendencia === 'sube' ? 'va a más' : a.tendencia === 'baja' ? 'va a menos' : 'se mantiene'}` : ''}
+                  </div>
+                )}
+                <button type="button" className="btn-secondary" data-analisis-informe-actividad onClick={() => setActividadDe(act)}
+                  style={{ minHeight: 44, fontSize: 13, marginTop: 8 }}>
+                  Informe completo de esta actividad
+                </button>
+              </div>
+            ))}
           </>
         )}
+      {actividadDe && grupo && asig && (
+        <InformeActividad
+          asignaturaId={asig.id!}
+          instrumentoId={actividadDe.instrumento_id}
+          instrumentoNombre={actividadDe.instrumento}
+          unidadId={actividadDe.unidad_id}
+          trimestre={actividadDe.trimestre}
+          grupoNombre={grupo.nombre}
+          areaNombre={asig.nombre_display || asig.nombre}
+          alumnoInicial={alumno.id!}
+          anidado
+          onCerrar={() => setActividadDe(null)}
+        />
+      )}
       {informeDe && grupo && asig && (
         <InformePrueba
           instrumentoId={informeDe.instrumento_id!}

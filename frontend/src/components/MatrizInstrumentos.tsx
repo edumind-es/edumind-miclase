@@ -179,6 +179,8 @@ interface Props {
   onEditarExamen?: (col: ColumnaInstrumento) => void
   /** «Informe»: qué preguntas y aspectos falla la clase con este examen. */
   onInforme?: (col: ColumnaInstrumento) => void
+  /** Informe de un alumno en una actividad con rúbrica o diario (solo dentro de una unidad). */
+  onInformeActividad?: (col: ColumnaInstrumento) => void
   /** «Vaciar columna»: quitar las notas de esta unidad y trimestre (quedan como fantasma). Solo dentro de una unidad. */
   onVaciar?: (col: ColumnaInstrumento) => void
   /** «Mover a otro instrumento»: las notas de esta unidad y trimestre, a otra columna. Solo dentro de una unidad. */
@@ -194,7 +196,7 @@ interface Props {
   onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onInformeActividad, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -342,6 +344,13 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                       onClick={() => onInforme(col)}
                       title="Qué preguntas, criterios y aspectos falla la clase con este examen; se imprime o se guarda">
                       Informe de la prueba
+                    </button>
+                  )}
+                  {!esExamen && !sinHerramienta && onInformeActividad && (
+                    <button type="button" className={clase} data-informe-actividad-abrir
+                      onClick={() => onInformeActividad(col)}
+                      title="Cómo le fue a un alumno en esta actividad, indicador a indicador o registro a registro; se imprime o se guarda">
+                      Informe de un alumno
                     </button>
                   )}
                   {/* Editar el examen entero es ocasional: plegado, con «Imprimir test». */}

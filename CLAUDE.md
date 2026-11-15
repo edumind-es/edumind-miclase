@@ -805,7 +805,38 @@ edumind_miclase/
   `alumnoInicial` desde el corrector de la casilla
   (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
   (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y
-  diario no hay informe individual todavía (fase 6).
+  diario, el informe es el de la nota siguiente.
+- **El informe de un alumno en una actividad con rúbrica o con diario**
+  (fase 6 de la misma propuesta, nov 2026). `db/informeActividad.ts` (puro,
+  `informe-actividad.test.ts`) no calcula ninguna nota: la del alumno y las
+  del grupo son las guardadas en la casilla. `analizarActividad(actividad,
+  alumno, { solo })` da, con rúbrica (o lista de control, o escala), cada
+  indicador con su nivel, su porcentaje del nivel máximo y el del grupo, los
+  **flojos** (menos de la mitad del nivel máximo, del más bajo al menos) y
+  los sin marcar, que no cuentan como cero; con diario —y en una rúbrica que
+  ha evolucionado—, los registros del más antiguo al más reciente en nota
+  (`notaDeRegistro`) y la tendencia (medio punto o más entre el primero y el
+  último). Las marcas van por el NOMBRE del indicador: una rúbrica editada
+  después deja «sin marcar» lo renombrado. Los datos los trae
+  `actividadesDeArea(asignatura, solo?)` (`queries.ts`), por instrumento,
+  unidad y trimestre; un instrumento con examen en esa unidad no sale (es de
+  `examenesDeArea`) y una actividad de nota directa tampoco. La pantalla es
+  `InformeActividad` (`[data-informe-actividad="rubrica"|"diario"]`, hecha
+  con `Dialogo`): `[data-informe-alumno]`, `[data-informe-comparar]` (clase o
+  media parecida, la misma regla que el examen),
+  `[data-informe-indicadores]` (filas `tr[data-indicador]`, con
+  `data-flojo`), `[data-informe-flojos]`, `[data-informe-registros]`. Se abre
+  desde el «Más» de la columna (`[data-informe-actividad-abrir]`, solo dentro
+  de una unidad y en columnas que no son examen ni «sin herramienta»), desde
+  el panel de la casilla («Informe de … en esta actividad») y desde
+  Seguimiento → Por alumno (`[data-analisis-actividad]`,
+  `[data-analisis-informe-actividad]`). El documento
+  (`informes/informeAlumnoActividad.ts`, Lámina) lleva nombre, compara SOLO
+  con la clase, calla la nota del grupo con menos de `MINIMO_GRUPO` notas y
+  la cifra de un indicador con menos de `MINIMO_GRUPO` marcas, y **las
+  observaciones del docente no se imprimen salvo que marque
+  `[data-informe-observaciones]`**: suelen ser notas para él. Prueba de
+  pantalla: `informe-actividad-ui.test.mjs`.
 - **Cada pantalla de calificar lleva «Editar» en la cabecera** (fase 1 de la
   misma propuesta). `BotonEditarActividad` (`[data-editar-actividad]`, en
   `FichaActividad.tsx`) está en «Evaluar hoy», la pasada con rúbrica, la
