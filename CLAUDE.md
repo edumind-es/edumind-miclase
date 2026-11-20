@@ -747,6 +747,21 @@ edumind_miclase/
   el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
   la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
   `.modal-overlay` se queda sin nada de esto.
+- **El alumnado vive en su clase, en un solo sitio** (nov 2026). Ya no hay
+  entrada «Alumnado» en el menú ni pantalla propia: es la pestaña «Alumnado»
+  de la clase en «Mis clases» (`components/AlumnadoClase.tsx`,
+  `[data-alumnado-clase]`), con todo lo que tenía la pantalla —buscador, alta,
+  importar lista, ficha (`EditarAlumno`), evidencias, claves de anonimización
+  y `AjustesDatosSensibles`— más el «Anonimizar» que solo tenía la pestaña
+  (`[data-anonimizar]`). Antes había dos listas del mismo alumnado y la
+  pestaña mandaba a la otra pantalla: a Luis le hacía dudar. El componente
+  recibe `grupoId` y NO lee la clase activa: la ficha puede ser de otra clase
+  que la de la barra. `/alumnos` se conserva como dirección (`IrAlAlumnado`
+  en `App.tsx`): redirige a `/grupos/<id>?pestana=alumnado` con la clase de
+  `?grupo_id=` o la activa, y sin ninguna a `/grupos`; los enlaces de dentro
+  de la app siguen apuntando a `/alumnos`. Donde otra nota de este fichero
+  dice «en Alumnado», es esa pestaña. Las pruebas entran con
+  `irAlAlumnado(p)` de `pruebas/lib/entorno.mjs`.
 - **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
   sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
   `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con

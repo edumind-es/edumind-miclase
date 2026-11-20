@@ -15,7 +15,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, gestorEnPesosDelArea } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, gestorEnPesosDelArea, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -137,7 +137,7 @@ try {
     .getByTitle('Evaluar este criterio con «Táboa de indicadores»').click()
   await p.waitForTimeout(600)
   await p.getByRole('button', { name: 'Cerrar' }).click()
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno\nCasal Vidal, Carla')

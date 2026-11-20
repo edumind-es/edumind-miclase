@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useAppStore } from '@/store/useAppStore'
 import {
   crearAlumno as dbCrearAlumno, getAlumnosByGrupo,
@@ -12,7 +11,6 @@ import HistorialTutorias from '@/components/HistorialTutorias'
 import AnalisisAlumno from '@/components/AnalisisAlumno'
 import { useDatosSensibles } from '@/db/datosSensibles'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
-import { useParametrosClase } from '@/contexto/useParametrosClase'
 import { descargarFichero } from '@/utils/compartir'
 import type { Alumno as DBAlumno } from '@/db/localDb'
 
@@ -63,9 +61,28 @@ async function exportarCodigos(grupoId: string | null) {
 
 // ─── Componente principal ────────────────────────────────────────────────────
 
-export default function AlumnosPage() {
-  useParametrosClase()
-  const { grupos, grupo: grupoActual, grupoId } = useClaseActiva()
+/**
+ * El alumnado de UNA clase, entero: lista con buscador, alta de uno en uno,
+ * importar la lista, la ficha de cada alumno, sus evidencias, las claves de
+ * anonimización y los interruptores de datos sensibles.
+ *
+ * Es la pestaña «Alumnado» de la clase en «Mis clases». Antes había además
+ * una pantalla «Alumnado» en el menú con otra lista del mismo alumnado, y la
+ * pestaña de la clase solo enseñaba nombres y mandaba a la otra: Luis dudaba
+ * de dónde se hacía cada cosa. Ahora solo existe este sitio y `/alumnos`
+ * redirige a él.
+ *
+ * La clase es la que se le pasa, no la activa: se puede abrir la ficha de
+ * una clase distinta de la que está en la barra.
+ */
+export default function AlumnadoClase({ grupoId, modoAnon = false, onToggleAnon, alCambiar }: {
+  grupoId: number
+  /** Se enseñan los códigos en vez de los nombres (para proyectar en clase). */
+  modoAnon?: boolean
+  onToggleAnon?: () => void
+  /** Ha cambiado la lista o un alumno: quien la enseña en otro sitio tiene que releer. */
+  alCambiar?: () => void
+}) {
   const { alumnos, cargarAlumnos, crearAlumno } = useAppStore()
   const [busqueda, setBusqueda] = useState('')
   const [modal, setModal] = useState<'individual' | 'bulk' | null>(null)
@@ -87,31 +104,35 @@ export default function AlumnosPage() {
 
   const recargar = () => {
     if (grupoId) cargarAlumnos(grupoId)
+    alCambiar?.()
   }
 
   return (
-    <>
+    <div data-alumnado-clase>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 10 }}>
-        <h1 className="page-title" style={{ marginBottom: 0 }}>Alumnado</h1>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn-secondary" onClick={() => setModal('bulk')} disabled={!grupoId}>📋 Importar lista</button>
-          <button className="btn-primary" onClick={() => setModal('individual')} disabled={!grupoId}>+ Añadir alumno</button>
+        <h2 style={{ fontSize: 16, fontWeight: 600 }}>Alumnado ({alumnos.length})</h2>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button className="btn-secondary" onClick={() => setModal('bulk')}>📋 Importar lista</button>
+          <button className="btn-primary" onClick={() => setModal('individual')}>+ Añadir alumno</button>
         </div>
       </div>
 
-      {grupos.length === 0 && (
-        <div className="card" style={{ padding: 32, textAlign: 'center', color: 'var(--gris-600)' }}>
-          Primero crea una clase: el alumnado siempre pertenece a una.{' '}
-          <Link to="/grupos/nuevo" style={{ color: 'var(--azul-500)', fontWeight: 600 }}>Crear clase →</Link>
-        </div>
-      )}
-
-      {grupoId && (
-        <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(String(grupoId))}>
-            🔐 Descargar claves anonimización
+      <div style={{ marginBottom: 16, display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        {onToggleAnon && (
+          <button onClick={onToggleAnon} data-anonimizar
+            className={modoAnon ? 'btn-primary' : 'btn-secondary'} style={{ fontSize: 12, padding: '4px 12px' }}
+            title="Oculta los nombres reales y muestra solo el código. Útil al proyectar en clase.">
+            {modoAnon ? '🔐 Anon. activa' : '🔓 Anonimizar'}
           </button>
-          <Link to={`/grupos/${grupoId}`} style={{ fontSize: 13, color: 'var(--azul-500)' }}>Configurar esta clase →</Link>
+        )}
+        <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 12px' }} onClick={() => exportarCodigos(String(grupoId))}>
+          🔐 Descargar claves anonimización
+        </button>
+      </div>
+
+      {modoAnon && alumnos.length > 0 && (
+        <div style={{ fontSize: 12, color: 'var(--azul-700)', background: 'var(--azul-100)', padding: '6px 12px', borderRadius: 6, marginBottom: 12 }}>
+          Modo privacidad activo — se muestran solo códigos
         </div>
       )}
 
@@ -155,11 +176,17 @@ export default function AlumnosPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
         {filtrados.map(a => (
           <div key={a.id} className="card" style={{ padding: '12px 14px' }}>
-            <div style={{ fontWeight: 600, fontSize: 14 }}>{a.apellidos}</div>
-            <div style={{ fontSize: 14, color: 'var(--gris-600)' }}>{a.nombre}</div>
+            {modoAnon ? (
+              <div style={{ fontWeight: 700, fontFamily: 'monospace', color: 'var(--azul-700)', letterSpacing: 1 }}>
+                {(a as any).codigo_cifrado || '—'}
+              </div>
+            ) : (<>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>{a.apellidos}</div>
+              <div style={{ fontSize: 14, color: 'var(--gris-600)' }}>{a.nombre}</div>
+            </>)}
             <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
               {a.neae && sensibles.neae ? <span className="badge" style={{ background: 'var(--ambar-100)', color: 'var(--ambar-500)', fontSize: 11 }}>NEAE</span> : null}
-              {(a as any).codigo_cifrado && (
+              {(a as any).codigo_cifrado && !modoAnon && (
                 <span className="badge" style={{ background: 'var(--azul-100)', color: 'var(--azul-700)', fontSize: 11, fontFamily: 'monospace' }}>
                   {(a as any).codigo_cifrado}
                 </span>
@@ -197,7 +224,7 @@ export default function AlumnosPage() {
           onGuardado={() => { setAlumnoEditar(null); recargar() }}
         />
       )}
-    </>
+    </div>
   )
 }
 
@@ -290,7 +317,7 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
         </div>
         <div style={{ fontSize: 13, color: 'var(--gris-600)', marginBottom: 16 }}>
           Se ha asignado un código de anonimización a cada alumno.
-          {grupoId && ' Pulsa "Descargar claves" arriba para guardar la lista de códigos.'}
+          {grupoId && ' Pulsa «Descargar claves» arriba para guardar la lista de códigos.'}
         </div>
         <button className="btn-primary" onClick={onCerrar}>Cerrar</button>
       </div>
@@ -404,7 +431,9 @@ function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   onGuardado: () => void
 }) {
   const sensibles = useDatosSensibles()
-  const { grupo } = useClaseActiva()
+  // La clase de la ficha, que puede no ser la que está en la barra.
+  const { grupos } = useClaseActiva()
+  const grupo = grupos.find(g => g.id === grupoId) ?? null
   const [medidasAbiertas, setMedidasAbiertas] = useState(false)
   const [analisisAbierto, setAnalisisAbierto] = useState(false)
   const [form, setForm] = useState({
