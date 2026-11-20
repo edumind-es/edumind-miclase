@@ -220,6 +220,9 @@ async function principal() {
     const bloques = join(scratch, 'bloques-familia.mjs')
     await paquete('pruebas/bloques-familia.test.ts', bloques, ['--platform=node', '--format=esm'])
     await suite('bloques de lo que una familia guarda a su nombre', 'node', [bloques])
+    const nombreActividad = join(scratch, 'nombre-actividad.mjs')
+    await paquete('pruebas/nombre-actividad.test.ts', nombreActividad, ['--platform=node', '--format=esm'])
+    await suite('nombre de una actividad por unidad', 'node', [nombreActividad])
 
     const directo = join(scratch, 'transporte-directo.mjs')
     await paquete('pruebas/transporte-directo.test.ts', directo, ['--platform=node', '--format=esm'])
