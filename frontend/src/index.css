@@ -138,6 +138,12 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
 }
+/* El scroll de un diálogo no sale de él. Al llegar al final, el gesto pasaba
+   a la página de detrás y, con dos dedos en el trackpad, al navegador
+   («página anterior»). La propiedad solo actúa en lo que tiene scroll, así
+   que ponerla en todo lo de dentro no cambia nada más. */
+.modal-overlay, .modal-overlay * { overscroll-behavior: contain; }
+html:has(.modal-overlay), html:has(.modal-overlay) body { overscroll-behavior: none; }
 .modal-close {
   background: none;
   border: none;
