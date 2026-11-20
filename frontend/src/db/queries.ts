@@ -24,6 +24,7 @@ import type {
 } from './localDb'
 import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 import { medidaDe } from './medidas'
+import { nombreEnUnidad, tieneNombrePropio, alRenombrar } from './nombreActividad'
 import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
@@ -1444,6 +1445,19 @@ export async function actualizarInstrumento(
   await db.instrumentos.update(id, tocado(fields))
   // Otra regla de agregación cambia la nota de todas las casillas con diario.
   if ('agregacion' in fields && (fields.agregacion ?? 'media') !== antes) await rematerializarInstrumento(id)
+}
+
+/**
+ * Cambia el nombre de un instrumento o de una actividad. Con unidad, solo en
+ * esa unidad (`nombres_unidad`); sin ella, el general, y se quitan los
+ * nombres propios de las unidades: «en todas» es en todas.
+ */
+export async function renombrarInstrumento(id: number, nombre: string, unidad_id?: number | null): Promise<void> {
+  const ins = await db.instrumentos.get(id)
+  if (!ins || ins.deleted_at) throw new Error('Ese instrumento ya no existe')
+  const cambio = alRenombrar(ins, nombre, unidad_id)
+  if (!cambio) throw new Error('El nombre no puede quedar vacío')
+  await db.instrumentos.update(id, tocado(cambio))
 }
 
 /** Al borrar un instrumento caen sus notas, su rúbrica y sus vínculos con criterios. */
@@ -3559,7 +3573,12 @@ alAplicarCambios(async () => { await asignarUnidadesPendientes(); await reconcil
 
 export type CeldaInstrumento = {
   instrumento_id: number
+  /** Cómo se llama en la unidad que se mira (`nombreEnUnidad`); sin unidad, el general. */
   nombre: string
+  /** El nombre de siempre, el que vale donde no tiene uno propio. */
+  nombre_general: string
+  /** En la unidad que se mira se llama distinto que en las demás. */
+  nombre_propio: boolean
   tipo: string
   peso: number
   tiene_rubrica: boolean
@@ -3728,7 +3747,9 @@ export async function getMatrizEvaluacion(
       if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
       celdas.push({
         instrumento_id: ins.id!,
-        nombre: ins.nombre,
+        nombre: nombreEnUnidad(ins, unidad_id),
+        nombre_general: ins.nombre,
+        nombre_propio: tieneNombrePropio(ins, unidad_id),
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
@@ -3738,7 +3759,7 @@ export async function getMatrizEvaluacion(
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
         agregacion: ins.agregacion ?? 'media',
         familia_id: familia?.id ?? null,
-        familia_nombre: familia?.nombre ?? null,
+        familia_nombre: familia ? nombreEnUnidad(familia, unidad_id) : null,
         familia_peso: familia ? familia.peso : ins.peso,
         pct_familia: familia ? pctPorId.get(ins.id!) ?? null : null,
         color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
