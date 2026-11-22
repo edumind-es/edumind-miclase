@@ -1002,6 +1002,13 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 .tab-unidad-modo, .cabeceras-toggle { min-height: 44px; padding-left: 12px; padding-right: 12px; }
 .modal-close { min-width: 44px; min-height: 44px; }
 .instr-th-criterio button, .instr-th-lapiz { min-width: 32px; min-height: 32px; }
+/* El nombre del alumno en una fila del Calificador abre su ficha rápida. */
+.alumno-nombre {
+  background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit;
+  text-align: left; cursor: pointer; min-height: 32px;
+  text-decoration: underline dotted var(--gris-500); text-underline-offset: 3px;
+}
+.alumno-nombre:hover, .alumno-nombre:focus-visible { text-decoration-style: solid; color: var(--azul-700); }
 /* El lápiz de renombrar solo se veía bien al pasar el ratón: en un iPad no hay ratón. */
 .instr-th-lapiz { opacity: .8; }
 

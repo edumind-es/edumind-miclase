@@ -19,6 +19,7 @@ import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
 import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from './SelloMedida'
+import { NombreAlumno } from './FichaRapidaAlumno'
 
 export type Criterio = { id: string; descripcion: string }
 
@@ -150,6 +151,8 @@ interface Props {
   matriz: MatrizEvaluacion
   /** Pulsar el sello ACI/RE de un alumno abre sus medidas. */
   onMedidas?: (alumno: Alumno) => void
+  /** Abrir la ficha rápida del alumno desde su nombre. */
+  onAlumno?: (alumno: Alumno) => void
   columnas: ColumnaInstrumento[]
   alumnos: Alumno[]
   trimestre: number
@@ -196,7 +199,7 @@ interface Props {
   onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onInformeActividad, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onInformeActividad, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas, onAlumno }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -492,7 +495,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
           {alumnos.map((al, idx) => (
             <tr key={al.id}>
               <td className="col-alumno">
-                {al.apellidos}, {al.nombre}
+                <NombreAlumno alumno={al} onAbrir={onAlumno} />
                 {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                 <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={onMedidas ? () => onMedidas(al) : undefined} />
               </td>

@@ -424,7 +424,7 @@ function ImportadorMasivo({ grupoId, onCompletado, onCerrar }: {
 
 // ─── Editar un alumno ya creado ─────────────────────────────────────────────
 
-function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
+export function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
   alumno: DBAlumno
   grupoId: number
   onCerrar: () => void

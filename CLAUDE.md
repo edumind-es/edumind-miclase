@@ -775,6 +775,24 @@ edumind_miclase/
   enseña ahí como antes; con él activo el «Más» de columna se desactiva. Una
   prueba que abra la hoja busca la acción dentro de `[data-hoja-columna]`,
   no en el `<th>`: con la hoja abierta el mismo `data-…` está dos veces.
+- **El nombre del alumno en el Calificador abre su ficha rápida** (nov 2026).
+  En las tres tablas (por instrumento, por criterio y «Todo el curso») el
+  nombre es un botón (`NombreAlumno`, `[data-alumno-abrir]` con el id): un
+  toque basta, así que valen el doble clic y mantener pulsado, que es lo que
+  pidió Luis. Abre `FichaRapidaAlumno` (`[data-ficha-rapida]`, con `Dialogo`
+  y `Pestanas`): «Esta área» (`[data-ficha-rapida-area]`: la nota del área
+  por trimestre y la final en `[data-ficha-nota-area]`, el desglose por
+  instrumento en `[data-ficha-nota-instrumento]`, las medidas y el análisis
+  frente al grupo) y «Todas las áreas» (`[data-ficha-rapida-todas]`: una
+  fila `[data-ficha-area]` por área, las observaciones y
+  `[data-ficha-rapida-editar]`). **No calcula ni guarda nada**: las notas
+  son las de `getResumenCurso` (las del boletín; las demás áreas solo se
+  calculan al pedir la segunda pestaña) y para editar abre `MedidasAlumno`,
+  `AnalisisAlumno` y `EditarAlumno` (exportado de `AlumnadoClase.tsx`), que
+  se enseñan EN LUGAR de la ficha, no encima, para que Esc cierre uno solo.
+  Las medidas van tras `verNeae`, como el sello. No hay observaciones por
+  área: son las del alumno, las de siempre. Prueba:
+  `ficha-rapida-ui.test.mjs`.
 - **El corrector por cámara vuelve solo a la cámara tras «Guardar y
   siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
   «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no

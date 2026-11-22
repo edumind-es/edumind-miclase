@@ -48,6 +48,7 @@ import { verNeae } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
+import FichaRapidaAlumno, { NombreAlumno } from '@/components/FichaRapidaAlumno'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
 import { confirmar } from '@/utils/confirmar'
@@ -175,6 +176,8 @@ export default function EvaluacionPage() {
   const [managerAbierto, setManagerAbierto] = useState(false)
   /** Alumno cuyas medidas de atención a la diversidad se editan (desde el sello de la fila). */
   const [medidasDe, setMedidasDe] = useState<Alumno | null>(null)
+  /** Alumno con la ficha rápida abierta (se abre desde su nombre). */
+  const [fichaDe, setFichaDe] = useState<Alumno | null>(null)
   const [refresco, setRefresco] = useState(0)
   /**
    * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
@@ -798,6 +801,7 @@ export default function EvaluacionPage() {
             ) : resumen ? (
               <ResumenCurso
                 onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                 datos={resumen}
                 criterios={columnas}
                 vista={vista}
@@ -817,6 +821,7 @@ export default function EvaluacionPage() {
               ) : (
                 <MatrizInstrumentos
                   onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                   matriz={matriz}
                   columnas={columnasInstr}
                   alumnos={alumnos}
@@ -939,7 +944,7 @@ export default function EvaluacionPage() {
                     {alumnos.map((al, idx) => (
                       <tr key={al.id}>
                         <td className="col-alumno">
-                          {al.apellidos}, {al.nombre}
+                          <NombreAlumno alumno={al} onAbrir={setFichaDe} />
                           {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                           <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={() => setMedidasDe(al)} />
                         </td>
@@ -1148,6 +1153,11 @@ export default function EvaluacionPage() {
           />
         )
       })()}
+
+      {fichaDe && asignaturaId && grupo && (
+        <FichaRapidaAlumno alumno={fichaDe} grupo={grupo} asignaturaId={asignaturaId}
+          onCerrar={() => setFichaDe(null)} onCambio={() => setRefresco(r => r + 1)} />
+      )}
 
       {medidasDe && matriz && (
         <MedidasAlumno alumno={medidasDe} grupo={matriz.grupo} asignaturaId={asignaturaId}

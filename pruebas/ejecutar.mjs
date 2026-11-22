@@ -332,6 +332,7 @@ async function principal() {
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
     await suite('medidas de atención a la diversidad desde la interfaz', 'node', ['pruebas/medidas-ui.test.mjs'], entorno)
+    await suite('ficha rápida del alumno desde el Calificador', 'node', ['pruebas/ficha-rapida-ui.test.mjs'], entorno)
     await suite('seguimiento de tutorías desde la interfaz', 'node', ['pruebas/tutorias-ui.test.mjs'], entorno)
     await suite('planificación semanal y calendario desde la interfaz', 'node', ['pruebas/planificacion-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
