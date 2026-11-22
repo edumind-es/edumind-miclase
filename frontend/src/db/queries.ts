@@ -19,12 +19,14 @@ import type {
   Grupo, Alumno, Asignatura, Instrumento,
   Calificacion, Sesion, AsistenciaRec, Unidad, Rubrica,
   Evidencia, Plano, Asiento, CriterioInstrumento, Sincronizable, RegistroDiario, Agregacion,
-  GrupoAlumno, UnidadCriterio, Medida, Tutoria, ModeloTutoria, AcuerdoTutoria,
+  GrupoAlumno, UnidadCriterio, Medida, Tutoria, ModeloTutoria, AcuerdoTutoria, Agrupamiento,
   SesionPlan, EventoCalendario,
 } from './localDb'
 import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 import { medidaDe } from './medidas'
+import { nombreEnUnidad, tieneNombrePropio, alRenombrar } from './nombreActividad'
 import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
+import { normalizarAgrupamiento } from './equipos'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
 
@@ -193,9 +195,10 @@ export async function eliminarGrupo(id: number): Promise<void> {
     [db.grupos, db.grupo_alumnos, db.asignaturas, db.instrumentos,
      db.calificaciones, db.diario, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.tutorias,
-     db.planificacion, db.eventos],
+     db.planificacion, db.eventos, db.agrupamientos],
     async () => {
       const marcar = { deleted_at: t, updated_at: t }
+      await db.agrupamientos.where('grupo_id').equals(id).modify(marcar)
       await db.planificacion.where('grupo_id').equals(id).modify(marcar)
       await db.eventos.where('grupo_id').equals(id).modify(marcar)
 
@@ -1446,6 +1449,19 @@ export async function actualizarInstrumento(
   if ('agregacion' in fields && (fields.agregacion ?? 'media') !== antes) await rematerializarInstrumento(id)
 }
 
+/**
+ * Cambia el nombre de un instrumento o de una actividad. Con unidad, solo en
+ * esa unidad (`nombres_unidad`); sin ella, el general, y se quitan los
+ * nombres propios de las unidades: «en todas» es en todas.
+ */
+export async function renombrarInstrumento(id: number, nombre: string, unidad_id?: number | null): Promise<void> {
+  const ins = await db.instrumentos.get(id)
+  if (!ins || ins.deleted_at) throw new Error('Ese instrumento ya no existe')
+  const cambio = alRenombrar(ins, nombre, unidad_id)
+  if (!cambio) throw new Error('El nombre no puede quedar vacío')
+  await db.instrumentos.update(id, tocado(cambio))
+}
+
 /** Al borrar un instrumento caen sus notas, su rúbrica y sus vínculos con criterios. */
 export async function eliminarInstrumento(instrumento_id: number): Promise<void> {
   // Borrar una familia se lleva a sus hijos: sin ella no pesan en nada.
@@ -1774,6 +1790,45 @@ export async function copiarNotasACriterios(p: {
   // Sin réplica: se copia a donde se ha pedido, no a lo que cuelgue de ahí.
   await saveCalificaciones(items, { sinVinculos: true })
   return { copiadas, respetadas, sinNota }
+}
+
+/**
+ * La nota de un alumno, a sus compañeros de equipo: la misma copia que «a
+ * toda la clase» (`copiarNotasACriterios` con `desde_alumno_id`), criterio a
+ * criterio, pero solo para `alumno_ids`. Lleva la nota y las marcas de la
+ * rúbrica; la observación no, que es de cada alumno. Una casilla que ya
+ * tenía nota se respeta salvo `sobrescribir`. Quién es del equipo lo decide
+ * la pantalla con `db/equipos.ts`; aquí solo se copia.
+ */
+export async function copiarNotaAlEquipo(p: {
+  instrumento_id: number
+  trimestre: number
+  unidad_id: number
+  criterios: string[]
+  desde_alumno_id: number
+  alumno_ids: number[]
+  sobrescribir: boolean
+}): Promise<{ copiadas: number; respetadas: number; sinNota: number }> {
+  const total = { copiadas: 0, respetadas: 0, sinNota: 0 }
+  const items: CalItem[] = []
+  for (const criterio of p.criterios) {
+    const src = await getCalificacionUnica(p.desde_alumno_id, p.instrumento_id, criterio, p.trimestre, p.unidad_id)
+    if (!src || src.valor == null) { total.sinNota++; continue }
+    for (const alumno_id of p.alumno_ids) {
+      if (alumno_id === p.desde_alumno_id) continue
+      const ya = await getCalificacionUnica(alumno_id, p.instrumento_id, criterio, p.trimestre, p.unidad_id)
+      if (ya?.valor != null && !p.sobrescribir) { total.respetadas++; continue }
+      items.push({
+        alumno_id, instrumento_id: p.instrumento_id, criterio_id: criterio,
+        asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
+        trimestre: p.trimestre, valor: src.valor, observacion: ya?.observacion ?? null,
+        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null,
+      })
+      total.copiadas++
+    }
+  }
+  await saveCalificaciones(items, { sinVinculos: true })
+  return total
 }
 
 /**
@@ -3559,7 +3614,12 @@ alAplicarCambios(async () => { await asignarUnidadesPendientes(); await reconcil
 
 export type CeldaInstrumento = {
   instrumento_id: number
+  /** Cómo se llama en la unidad que se mira (`nombreEnUnidad`); sin unidad, el general. */
   nombre: string
+  /** El nombre de siempre, el que vale donde no tiene uno propio. */
+  nombre_general: string
+  /** En la unidad que se mira se llama distinto que en las demás. */
+  nombre_propio: boolean
   tipo: string
   peso: number
   tiene_rubrica: boolean
@@ -3728,7 +3788,9 @@ export async function getMatrizEvaluacion(
       if (!aplicaEnTrimestre(ins.trimestres, trimestre)) continue
       celdas.push({
         instrumento_id: ins.id!,
-        nombre: ins.nombre,
+        nombre: nombreEnUnidad(ins, unidad_id),
+        nombre_general: ins.nombre,
+        nombre_propio: tieneNombrePropio(ins, unidad_id),
         tipo: ins.tipo,
         peso: ins.peso,
         tiene_rubrica: conRubrica.has(ins.id!),
@@ -3738,7 +3800,7 @@ export async function getMatrizEvaluacion(
         vinculados: filasVinculo.has(ins.id!) ? criteriosVinculados(filasVinculo.get(ins.id!)!, criterio) : [],
         agregacion: ins.agregacion ?? 'media',
         familia_id: familia?.id ?? null,
-        familia_nombre: familia?.nombre ?? null,
+        familia_nombre: familia ? nombreEnUnidad(familia, unidad_id) : null,
         familia_peso: familia ? familia.peso : ins.peso,
         pct_familia: familia ? pctPorId.get(ins.id!) ?? null : null,
         color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
@@ -3985,7 +4047,7 @@ export async function exportarDatos(
   const [grupos, alumnos, grupo_alumnos, asignaturas, instrumentos,
          calificaciones, sesiones, asistencia, unidades, unidad_criterios,
          criterio_instrumentos, rubricas, evidencias, planos, asientos, diario, medidas,
-         tutorias, modelos_tutoria, planificacion, eventos] = await Promise.all([
+         tutorias, modelos_tutoria, planificacion, eventos, agrupamientos] = await Promise.all([
     leer<Grupo>('grupos'),
     leer<Alumno>('alumnos'),
     leer<GrupoAlumno>('grupo_alumnos'),
@@ -4007,6 +4069,7 @@ export async function exportarDatos(
     leer<ModeloTutoria>('modelos_tutoria'),
     leer<SesionPlan>('planificacion'),
     leer<EventoCalendario>('eventos'),
+    leer<Agrupamiento>('agrupamientos'),
   ])
 
   // Serializar los blobs de evidencias a base64. En la copia ligera no van: con
@@ -4027,6 +4090,7 @@ export async function exportarDatos(
     evidencias: evidenciasSerial, planos, asientos, diario, medidas,
     tutorias, modelos_tutoria,
     planificacion, eventos,
+    agrupamientos,
   }, null, 2)
 }
 
@@ -4069,7 +4133,7 @@ export async function importarDatos(json: string): Promise<void> {
      db.calificaciones, db.sesiones, db.asistencia, db.unidades, db.unidad_criterios,
      db.criterio_instrumentos, db.rubricas, db.evidencias, db.planos, db.asientos, db.diario,
      db.medidas, db.tutorias, db.modelos_tutoria,
-     db.medidas, db.planificacion, db.eventos,
+     db.medidas, db.planificacion, db.eventos, db.agrupamientos,
      // La restauración también toca el estado de sincronización: ver abajo.
      db.sync_base, db.meta],
     async () => {
@@ -4082,7 +4146,7 @@ export async function importarDatos(json: string): Promise<void> {
         ...(data.sin_evidencias ? [] : [db.evidencias.clear()]),
         db.planos.clear(), db.asientos.clear(), db.diario.clear(), db.medidas.clear(),
         db.tutorias.clear(), db.modelos_tutoria.clear(),
-        db.planificacion.clear(), db.eventos.clear(),
+        db.planificacion.clear(), db.eventos.clear(), db.agrupamientos.clear(),
       ])
       await db.grupos.bulkAdd(sellar(data.grupos || []))
       await db.alumnos.bulkAdd(sellar(data.alumnos || []))
@@ -4108,6 +4172,8 @@ export async function importarDatos(json: string): Promise<void> {
       // Ni las anteriores a la v10 planificación ni calendario.
       await db.planificacion.bulkAdd(sellar(data.planificacion || []))
       await db.eventos.bulkAdd(sellar(data.eventos || []))
+      // Ni las anteriores a la v11, equipos.
+      await db.agrupamientos.bulkAdd(sellar(data.agrupamientos || []))
 
       // Los ids siguen existiendo pero su contenido es otro. Si no se
       // reinicia, la base de fusión apunta a versiones que ya no tienen nada
@@ -4117,6 +4183,36 @@ export async function importarDatos(json: string): Promise<void> {
       await reiniciarEstadoDeSincronizacion()
     }
   )
+}
+
+// ─── Equipos y agrupamientos (esquema v11) ────────────────────────────────────
+//
+// Un agrupamiento es de la clase y lleva sus equipos dentro. Repartir, mover
+// y decidir cuál vale para un área o unidad lo hace `db/equipos.ts` (puro).
+
+/** Los agrupamientos vivos de una clase, del más antiguo al más reciente. */
+export async function getAgrupamientos(grupo_id: number): Promise<Agrupamiento[]> {
+  return vivos(await db.agrupamientos.where('grupo_id').equals(grupo_id).toArray())
+    .map(a => ({ ...a, equipos: a.equipos ?? [] }))
+    .sort((a, b) => a.id! - b.id!)
+}
+
+/** Alta o modificación de un agrupamiento. Devuelve su id. */
+export async function guardarAgrupamiento(datos: Omit<Agrupamiento, 'id' | 'updated_at' | 'deleted_at' | 'created_at'> & { id?: number }): Promise<number> {
+  const { id, ...resto } = normalizarAgrupamiento(datos)
+  if (id) {
+    await db.agrupamientos.update(id, tocado(resto))
+    return id
+  }
+  const reg = nuevo({ ...resto, created_at: sello() })
+  await db.agrupamientos.add(reg)
+  return reg.id
+}
+
+/** Borrado lógico: el borrado tiene que viajar a los demás aparatos. */
+export async function eliminarAgrupamiento(id: number): Promise<void> {
+  const t = sello()
+  await db.agrupamientos.update(id, { deleted_at: t, updated_at: t })
 }
 
 // ─── Planificación semanal y calendario (esquema v10) ─────────────────────────

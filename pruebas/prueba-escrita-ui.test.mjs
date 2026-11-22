@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -138,7 +138,7 @@ try {
   await p.getByRole('button', { name: /Importar 7 unidades/ }).click({ timeout: 20000 })
   await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno')

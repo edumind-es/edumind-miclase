@@ -318,6 +318,10 @@ dispositivo y lo recibe ese tercero.
   vuelca se lee en el aparato y no sale de él; para comprobar los códigos de
   criterio se piden al servidor los criterios del área, que son dato público
   del currículo.
+- Los **equipos y agrupamientos** (noviembre de 2026) son listas de alumnado
+  de la clase repartido en equipos con nombre. Viven solo en el aparato y
+  viajan, como el resto del cuaderno, cifrados de extremo a extremo; el
+  servidor no ve quién va con quién. No guardan por qué se agrupa a nadie.
 - Un centro puede además **instalar su propio servidor**: el código es libre y
   la aplicación permite apuntar a otra dirección sin recompilarla. En ese caso
   EDUmind no interviene en absoluto.

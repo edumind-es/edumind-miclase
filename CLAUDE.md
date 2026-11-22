@@ -20,7 +20,7 @@ edumind_miclase/
 │   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v10) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v11) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
@@ -747,6 +747,62 @@ edumind_miclase/
   el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
   la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
   `.modal-overlay` se queda sin nada de esto.
+- **El alumnado vive en su clase, en un solo sitio** (nov 2026). Ya no hay
+  entrada «Alumnado» en el menú ni pantalla propia: es la pestaña «Alumnado»
+  de la clase en «Mis clases» (`components/AlumnadoClase.tsx`,
+  `[data-alumnado-clase]`), con todo lo que tenía la pantalla —buscador, alta,
+  importar lista, ficha (`EditarAlumno`), evidencias, claves de anonimización
+  y `AjustesDatosSensibles`— más el «Anonimizar» que solo tenía la pestaña
+  (`[data-anonimizar]`). Antes había dos listas del mismo alumnado y la
+  pestaña mandaba a la otra pantalla: a Luis le hacía dudar. El componente
+  recibe `grupoId` y NO lee la clase activa: la ficha puede ser de otra clase
+  que la de la barra. `/alumnos` se conserva como dirección (`IrAlAlumnado`
+  en `App.tsx`): redirige a `/grupos/<id>?pestana=alumnado` con la clase de
+  `?grupo_id=` o la activa, y sin ninguna a `/grupos`; los enlaces de dentro
+  de la app siguen apuntando a `/alumnos`. Donde otra nota de este fichero
+  dice «en Alumnado», es esa pestaña. Las pruebas entran con
+  `irAlAlumnado(p)` de `pruebas/lib/entorno.mjs`.
+- **Los equipos son de la clase y viven en su pestaña «Equipos»** (esquema
+  v11, tabla `agrupamientos`; `db/equipos.ts`, puro; `equipos.test.ts` y
+  `equipos-ui.test.mjs`). Un agrupamiento («Equipos de proyecto») lleva
+  `grupo_id` y, si el docente quiere, `asignatura_id` y `unidad_id`: sin
+  ellos vale para todas las áreas (`agrupamientosPara` los ordena del más
+  concreto al más general; la unidad no se guarda sin área). Decisión de
+  Luis (nov 2026): de la clase, con área y unidad opcionales. Los equipos
+  van DENTRO de la fila como array de verdad (`equipos: [{ clave, nombre,
+  alumnos }]`), igual que los acuerdos de una tutoría: la fusión los compara
+  como JSON, así que dos aparatos que mueven alumnos del mismo agrupamiento
+  a la vez se quedan con el reparto del más reciente. Un alumno va en un
+  solo equipo de cada agrupamiento (`normalizarAgrupamiento`, `moverAlumno`)
+  y quien deja la clase no se enseña (`sinBajas`, al leer; lo guardado no se
+  toca). La pantalla es `EquiposClase` (`[data-equipos-clase]`, recibe
+  `grupoId` y no lee la clase activa): `[data-agrupamiento]`, `[data-equipo]`,
+  reparto al azar (`[data-reparto-azar]`, pregunta si ya había alguien
+  colocado), `[data-sin-equipo]`. Tener equipos no pone ni cambia ninguna
+  nota. **Calificar por equipo es una copia que se pide**: el panel de la
+  casilla enseña, a la vista y no en «Más», la franja `[data-equipo-nota]`
+  (`NotaAlEquipo`) si el alumno tiene compañeros en un agrupamiento que vale
+  para esa área y unidad, con «Poner esta nota a su equipo»
+  (`[data-equipo-nota-poner]`, apagado sin nota). Copia con
+  `copiarNotaAlEquipo` (`queries.ts`): nota y marcas de rúbrica a los
+  criterios de la casilla (`destinosNota`), con `sinVinculos`; la
+  observación no viaja, que es de cada alumno; una casilla del compañero
+  que ya tenía nota se respeta y solo se sustituye tras `confirmar`. No se
+  ofrece en un examen. Borrar una clase se lleva sus agrupamientos. Una base v10 no pasa
+  por la puerta de migración: solo gana una tabla vacía. Tras desplegar,
+  reiniciar el backend: `agrupamientos` está en su lista blanca.
+- **Un diálogo solo se cierra «pulsando fuera» si la pulsación empezó y
+  terminó en el velo** (nov 2026). `utils/velo.ts` (`instalarVelo()` en
+  `main.tsx`) lo hace para TODO lo que lleve `.modal-overlay`, como
+  `foco.ts`: el navegador da por clic en el velo un arrastre que empieza en
+  la tarjeta y se suelta fuera (seleccionar texto deprisa), y a Luis se le
+  cerraba el diálogo a medio escribir. Ese clic se corta en captura antes de
+  React; uno sin puntero (`detail` 0: teclado, `.click()`) pasa. El scroll
+  tampoco sale del diálogo: `overscroll-behavior: contain` en el velo y lo de
+  dentro, y `none` en `html` mientras haya uno abierto (`:has`), para que el
+  gesto de dos dedos no llegue a «página anterior». Un diálogo nuevo no
+  necesita nada si lleva `.modal-overlay`. Prueba: `dialogos-velo-ui.test.mjs`.
+  En Safari y en el iPad reales no se ha probado todavía.
 - **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
   sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
   `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
@@ -760,6 +816,24 @@ edumind_miclase/
   enseña ahí como antes; con él activo el «Más» de columna se desactiva. Una
   prueba que abra la hoja busca la acción dentro de `[data-hoja-columna]`,
   no en el `<th>`: con la hoja abierta el mismo `data-…` está dos veces.
+- **El nombre del alumno en el Calificador abre su ficha rápida** (nov 2026).
+  En las tres tablas (por instrumento, por criterio y «Todo el curso») el
+  nombre es un botón (`NombreAlumno`, `[data-alumno-abrir]` con el id): un
+  toque basta, así que valen el doble clic y mantener pulsado, que es lo que
+  pidió Luis. Abre `FichaRapidaAlumno` (`[data-ficha-rapida]`, con `Dialogo`
+  y `Pestanas`): «Esta área» (`[data-ficha-rapida-area]`: la nota del área
+  por trimestre y la final en `[data-ficha-nota-area]`, el desglose por
+  instrumento en `[data-ficha-nota-instrumento]`, las medidas y el análisis
+  frente al grupo) y «Todas las áreas» (`[data-ficha-rapida-todas]`: una
+  fila `[data-ficha-area]` por área, las observaciones y
+  `[data-ficha-rapida-editar]`). **No calcula ni guarda nada**: las notas
+  son las de `getResumenCurso` (las del boletín; las demás áreas solo se
+  calculan al pedir la segunda pestaña) y para editar abre `MedidasAlumno`,
+  `AnalisisAlumno` y `EditarAlumno` (exportado de `AlumnadoClase.tsx`), que
+  se enseñan EN LUGAR de la ficha, no encima, para que Esc cierre uno solo.
+  Las medidas van tras `verNeae`, como el sello. No hay observaciones por
+  área: son las del alumno, las de siempre. Prueba:
+  `ficha-rapida-ui.test.mjs`.
 - **El corrector por cámara vuelve solo a la cámara tras «Guardar y
   siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
   «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no
@@ -848,6 +922,27 @@ edumind_miclase/
   varios registros; peso y criterios solo se enseñan. No guarda por su
   cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
   desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
+- **El nombre de una actividad se cambia en la unidad que se mira, no en
+  todas** (nov 2026; Luis: «lo que se edita en una ud, se queda en esa ud
+  salvo que se indique lo contrario»). `Instrumento.nombre` es el general e
+  `Instrumento.nombres_unidad` (unidad → nombre, sin índice ni esquema)
+  guarda el propio de la unidad que lo llame distinto; `db/nombreActividad.ts`
+  (puro, `nombre-actividad.test.ts`: `nombreEnUnidad`, `tieneNombrePropio`,
+  `alRenombrar`). Se resuelve UNA vez en `getMatrizEvaluacion`
+  (`CeldaInstrumento.nombre` es el de la unidad, con `nombre_general` y
+  `nombre_propio`; `familia_nombre` igual), así que el Calificador, «Qué
+  evalúo → Por unidad» y «Exámenes y pruebas» dicen lo mismo; «Todo el
+  curso», «Pesos del área» y los informes enseñan el general. Se escribe
+  solo con `renombrarInstrumento(id, nombre, unidad?)`: con unidad, solo
+  ahí; sin ella, el general y se quitan los propios. Dentro de una unidad
+  el lápiz de la columna y la ficha «Editar» guardan solo en ella SIN
+  preguntar y lo dicen, con el botón que lo lleva a todas
+  (`[data-renombrar-todas]` en `[data-columna-aviso]`;
+  `[data-ficha-nombre-alcance="unidad"|"general"]`,
+  `[data-ficha-nombre-todas]` y `[data-ficha-nombre-general]` en la ficha):
+  un diálogo con dos salidas haría que Esc eligiera una. Renombrar en «Pesos
+  del área» cambia el general y deja los propios. Un aparato sin actualizar
+  enseña el nombre general en todas partes.
 - **«Qué evalúo» tiene dos pestañas: «Por unidad» y «Pesos del área»** (fase
   2 de la misma propuesta). `InstrumentosManager` abre «Por unidad»
   (`QueEvaluoPorUnidad`, `[data-que-por-unidad]`) en un área con unidades,
@@ -866,8 +961,10 @@ edumind_miclase/
   (`crearInstrumentoHijo`) o trae una de otra unidad
   (`[data-unidad-anadir-cual]`), con los criterios del instrumento ya
   marcados; **la primera actividad de un instrumento con notas o herramienta
-  a su nombre no se crea ahí** (`[data-unidad-primera-con-datos]`): manda a
-  «Pesos del área», el único sitio que pregunta con `ConvertirFamilia`. Los
+  a su nombre también se crea ahí**, y al aceptar pregunta con
+  `ConvertirFamilia`, igual que «Pesos del área» (nada se crea hasta
+  contestar): antes mandaba a la otra pestaña (`[data-unidad-primera-con-datos]`,
+  que ya no existe) y Luis no podía añadir un segundo examen a la unidad. Los
   criterios de la unidad que nada evalúa van en `[data-unidad-sin-actividad]`.
   Las pruebas que trabajan con lo de toda el área llaman a
   `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
@@ -1461,7 +1558,7 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No hacer `fetch` de `/api/curriculum` desde una pantalla: todo pasa por
   `src/curriculo/`, que lee el currículo empaquetado y deja el servidor de reserva
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación). Una tabla nueva va además en
+  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación y la v11 la de equipos). Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
   (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)

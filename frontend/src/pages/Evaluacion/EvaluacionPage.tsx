@@ -14,7 +14,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
-  getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento,
+  getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento, renombrarInstrumento,
   contarColumna, vaciarColumna, deshacerVaciado, asignarCriterioAColumna, quitarCriterioDeColumna, type Vaciado,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
@@ -48,6 +48,7 @@ import { verNeae } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
+import FichaRapidaAlumno, { NombreAlumno } from '@/components/FichaRapidaAlumno'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
 import { confirmar } from '@/utils/confirmar'
@@ -175,6 +176,8 @@ export default function EvaluacionPage() {
   const [managerAbierto, setManagerAbierto] = useState(false)
   /** Alumno cuyas medidas de atención a la diversidad se editan (desde el sello de la fila). */
   const [medidasDe, setMedidasDe] = useState<Alumno | null>(null)
+  /** Alumno con la ficha rápida abierta (se abre desde su nombre). */
+  const [fichaDe, setFichaDe] = useState<Alumno | null>(null)
   const [refresco, setRefresco] = useState(0)
   /**
    * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
@@ -207,7 +210,7 @@ export default function EvaluacionPage() {
    * poder deshacerlo mientras la pantalla siga abierta. Las notas vaciadas
    * quedan además como fantasma, recuperables casilla a casilla.
    */
-  const [columnaAviso, setColumnaAviso] = useState<{ texto: string; vaciado?: Vaciado } | null>(null)
+  const [columnaAviso, setColumnaAviso] = useState<{ texto: string; vaciado?: Vaciado; renombrado?: { id: number; nombre: string } } | null>(null)
   /** Importador del CSV de Edixgal (Moodle) abierto. */
   const [importarMoodle, setImportarMoodle] = useState(false)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
@@ -678,6 +681,17 @@ export default function EvaluacionPage() {
           {columnaAviso && (
             <div data-columna-aviso role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{ flex: 1 }}>{columnaAviso.texto}</span>
+              {columnaAviso.renombrado && (
+                <button type="button" data-renombrar-todas className="btn-secondary" style={{ fontSize: 12, minHeight: 44 }}
+                  onClick={async () => {
+                    const { id, nombre } = columnaAviso.renombrado!
+                    await renombrarInstrumento(id, nombre, null)
+                    setColumnaAviso({ texto: `«${nombre}» se llama así en todas las unidades.` })
+                    setRefresco(r => r + 1)
+                  }}>
+                  Ponerlo en todas las unidades
+                </button>
+              )}
               {columnaAviso.vaciado && (
                 <button type="button" data-vaciado-deshacer className="btn-secondary" style={{ fontSize: 12 }} onClick={deshacerVaciadoActual}>
                   ↩ Deshacer
@@ -798,6 +812,7 @@ export default function EvaluacionPage() {
             ) : resumen ? (
               <ResumenCurso
                 onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                 datos={resumen}
                 criterios={columnas}
                 vista={vista}
@@ -817,6 +832,7 @@ export default function EvaluacionPage() {
               ) : (
                 <MatrizInstrumentos
                   onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                   matriz={matriz}
                   columnas={columnasInstr}
                   alumnos={alumnos}
@@ -827,7 +843,19 @@ export default function EvaluacionPage() {
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
                   onNota={unidadId ? col => setNotaEn(col) : undefined}
-                  onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
+                  onRenombrar={async (col, nombre) => {
+                    // Dentro de una unidad el nombre cambia solo en ella; el aviso ofrece llevarlo a todas.
+                    try {
+                      await renombrarInstrumento(col.ins.instrumento_id, nombre, unidadId)
+                      if (unidadId) {
+                        const limpio = nombre.trim()
+                        setColumnaAviso(limpio === col.ins.nombre_general
+                          ? { texto: `«${limpio}» vuelve a llamarse igual que en las demás unidades.` }
+                          : { texto: `Ahora se llama «${limpio}» solo en «${unidadActual?.nombre ?? 'esta unidad'}». En las demás sigue siendo «${col.ins.nombre_general}».`, renombrado: { id: col.ins.instrumento_id, nombre: limpio } })
+                      }
+                    } catch (e) { setColumnaAviso({ texto: e instanceof Error ? e.message : 'No se pudo cambiar el nombre' }) }
+                    setRefresco(r => r + 1)
+                  }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
                   onEditarExamen={col => setEditarExamenEn(col)}
@@ -939,7 +967,7 @@ export default function EvaluacionPage() {
                     {alumnos.map((al, idx) => (
                       <tr key={al.id}>
                         <td className="col-alumno">
-                          {al.apellidos}, {al.nombre}
+                          <NombreAlumno alumno={al} onAbrir={setFichaDe} />
                           {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                           <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={() => setMedidasDe(al)} />
                         </td>
@@ -1148,6 +1176,11 @@ export default function EvaluacionPage() {
           />
         )
       })()}
+
+      {fichaDe && asignaturaId && grupo && (
+        <FichaRapidaAlumno alumno={fichaDe} grupo={grupo} asignaturaId={asignaturaId}
+          onCerrar={() => setFichaDe(null)} onCambio={() => setRefresco(r => r + 1)} />
+      )}
 
       {medidasDe && matriz && (
         <MedidasAlumno alumno={medidasDe} grupo={matriz.grupo} asignaturaId={asignaturaId}

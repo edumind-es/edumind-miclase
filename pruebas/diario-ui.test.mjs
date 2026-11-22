@@ -8,7 +8,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, gestorEnPesosDelArea } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, gestorEnPesosDelArea, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -101,7 +101,7 @@ try {
   await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
 
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno\nCasal Vidal, Carla')
@@ -123,7 +123,7 @@ try {
   await diario.waitFor({ timeout: 5000 })
   const origen = (await panel.getByText(/^CRITERIO /).textContent()).replace('CRITERIO ', '').trim()
   let e = await estado()
-  ok(e.version === 100, 'la base está en la versión 10 del esquema', `idb v${e.version}`)
+  ok(e.version === 110, 'la base está en la versión 11 del esquema', `idb v${e.version}`)
   ok(Object.keys(e.notas).length === 0 && e.registros.length === 0, 'sin notas ni registros todavía')
   ok(await panel.locator('button.cal-5').count() === 1, 'sin registros, la parrilla 0-10 sigue a la vista')
 

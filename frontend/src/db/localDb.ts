@@ -4,7 +4,7 @@ import {
 } from './migracionUnidades'
 
 /** Versión actual del esquema Dexie. La copia de seguridad la lleva también. */
-export const VERSION_ESQUEMA = 10
+export const VERSION_ESQUEMA = 11
 
 /**
  * Campos comunes de sincronización.
@@ -143,6 +143,12 @@ export interface Instrumento extends Sincronizable {
    * índice: no exige versión de esquema.
    */
   solo_medidas?: number | null
+  /**
+   * Nombre propio en una unidad (id de unidad → nombre), para quien lo llama
+   * distinto allí; `nombre` es el general. Se lee con `nombreEnUnidad`
+   * (`db/nombreActividad.ts`). Sin índice: no exige versión de esquema.
+   */
+  nombres_unidad?: Record<string, string> | null
 }
 
 export type TipoMedida = 'adaptacion' | 'refuerzo'
@@ -617,6 +623,33 @@ export interface EventoCalendario extends Sincronizable {
   created_at?: string
 }
 
+/** Un equipo dentro de un agrupamiento. `clave` lo identifica aunque cambie de nombre. */
+export interface Equipo {
+  clave: string
+  nombre: string
+  /** Ids de alumno. Un alumno va en un solo equipo del agrupamiento. */
+  alumnos: number[]
+}
+
+/**
+ * Agrupamiento de una clase (esquema v11): «Equipos de proyecto», «Parejas de
+ * lectura». Es de la clase y puede decir para qué área o unidad vale; sin
+ * decirlo vale para todas. Los equipos van dentro, como array de verdad: la
+ * fusión los compara como JSON, igual que los acuerdos de una tutoría.
+ * La lógica vive en `db/equipos.ts` (puro).
+ */
+export interface Agrupamiento extends Sincronizable {
+  id?: number
+  grupo_id: number
+  nombre: string
+  /** Área para la que vale, o null: todas. */
+  asignatura_id?: number | null
+  /** Unidad para la que vale (dentro de su área), o null: todas. */
+  unidad_id?: number | null
+  equipos: Equipo[]
+  created_at?: string
+}
+
 // Plano de clase: dimensiones de la cuadrícula por grupo
 export interface Plano extends Sincronizable {
   id?: number
@@ -681,6 +714,7 @@ export class MiClaseDB extends Dexie {
   modelos_tutoria!: Table<ModeloTutoria>
   planificacion!: Table<SesionPlan>
   eventos!: Table<EventoCalendario>
+  agrupamientos!: Table<Agrupamiento>
 
   /**
    * `hasta` limita las versiones declaradas. La app usa la última; la puerta
@@ -843,6 +877,18 @@ export class MiClaseDB extends Dexie {
         })
       }
     })
+
+    // v11 — equipos y agrupamientos de la clase. Una tabla nueva y vacía:
+    // no toca filas existentes, así que la puerta no pide copia.
+    if (hasta >= 11) this.version(11).stores({
+      agrupamientos: '++id, grupo_id, updated_at',
+    }).upgrade(async tx => {
+      const sello = new Date().toISOString()
+      await tx.table('agrupamientos').toCollection().modify(r => {
+        if (!r.updated_at) r.updated_at = r.created_at || sello
+        if (r.deleted_at === undefined) r.deleted_at = null
+      })
+    })
   }
 }
 
@@ -860,7 +906,7 @@ export const TABLAS_SINC = [
   'grupos', 'alumnos', 'grupo_alumnos', 'asignaturas', 'instrumentos',
   'unidades', 'unidad_criterios', 'criterio_instrumentos', 'calificaciones', 'diario',
   'sesiones', 'asistencia', 'rubricas', 'evidencias', 'planos', 'asientos', 'medidas',
-  'tutorias', 'modelos_tutoria', 'planificacion', 'eventos',
+  'tutorias', 'modelos_tutoria', 'planificacion', 'eventos', 'agrupamientos',
 ] as const
 
 export type TablaSinc = typeof TABLAS_SINC[number]

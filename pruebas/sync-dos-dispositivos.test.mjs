@@ -12,7 +12,7 @@
  *   backend de PRUEBA en :3999 con JWT_SECRET=clave_de_pruebas_de_al_menos_32_caracteres
  *   vite en :5173 con VITE_API_TARGET=http://127.0.0.1:3999
  */
-import { moduloDe, navegadorChromium } from './lib/entorno.mjs'
+import { moduloDe, navegadorChromium, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const { SignJWT } = await moduloDe('backend', 'jose/dist/webapi/index.js')
@@ -73,7 +73,7 @@ await A.p.getByRole('button', { name: /Crear grupo/ }).click()
 // Crear una clase abre su configuración, no el listado
 await A.p.waitForURL(/\/grupos\/\d+/)
 
-await A.p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+await irAlAlumnado(A.p)
 await A.p.waitForTimeout(600)
 await A.p.getByRole('button', { name: /Importar lista/ }).click()
 await A.p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Rivas Pena, Noa\nSeoane Lois, Iago')
@@ -139,7 +139,7 @@ console.log('\n5. B ha recibido el curso de A')
 await B.p.getByRole('link', { name: 'Inicio', exact: true }).click()
 await B.p.waitForTimeout(1500)
 ok(await B.p.getByText('4ºC', { exact: true }).first().isVisible(), 'la clase 4ºC aparece en la tablet')
-await B.p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+await irAlAlumnado(B.p)
 await B.p.waitForTimeout(1200)
 ok(await B.p.getByText('Rivas Pena').first().isVisible(), 'el alumnado llegó descifrado correctamente')
 ok(await B.p.getByText('Seoane Lois').first().isVisible(), 'los dos alumnos, no solo uno')
