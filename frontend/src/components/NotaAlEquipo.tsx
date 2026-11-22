@@ -44,14 +44,19 @@ export default function NotaAlEquipo({
 
   useEffect(() => {
     let vigente = true
-    Promise.all([getAgrupamientos(grupoId), getAlumnosByGrupo(grupoId)]).then(([ags, als]) => {
-      if (!vigente) return
-      const ids = als.map(a => a.id!)
-      setAlumnos(als)
-      setAgrupamientos(agrupamientosPara(ags, asignaturaId, unidadId)
-        .map(a => ({ ...a, equipos: sinBajas(a.equipos, ids) })))
-    }).catch(() => { /* sin equipos no hay franja: no es un fallo que enseñar */ })
-    return () => { vigente = false }
+    // Los equipos se piden después de la nota: el efecto de un hijo corre antes
+    // que el del panel, y sin esta espera sus consultas se ponían por delante
+    // de lo primero que tiene que llegar, que es la nota.
+    const espera = setTimeout(() => {
+      Promise.all([getAgrupamientos(grupoId), getAlumnosByGrupo(grupoId)]).then(([ags, als]) => {
+        if (!vigente) return
+        const ids = als.map(a => a.id!)
+        setAlumnos(als)
+        setAgrupamientos(agrupamientosPara(ags, asignaturaId, unidadId)
+          .map(a => ({ ...a, equipos: sinBajas(a.equipos, ids) })))
+      }).catch(() => { /* sin equipos no hay franja: no es un fallo que enseñar */ })
+    }, 150)
+    return () => { vigente = false; clearTimeout(espera) }
   }, [grupoId, asignaturaId, unidadId])
 
   // Solo cuentan los agrupamientos en los que este alumno tiene compañeros.
