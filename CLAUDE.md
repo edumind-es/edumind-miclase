@@ -922,6 +922,27 @@ edumind_miclase/
   varios registros; peso y criterios solo se enseñan. No guarda por su
   cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
   desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
+- **El nombre de una actividad se cambia en la unidad que se mira, no en
+  todas** (nov 2026; Luis: «lo que se edita en una ud, se queda en esa ud
+  salvo que se indique lo contrario»). `Instrumento.nombre` es el general e
+  `Instrumento.nombres_unidad` (unidad → nombre, sin índice ni esquema)
+  guarda el propio de la unidad que lo llame distinto; `db/nombreActividad.ts`
+  (puro, `nombre-actividad.test.ts`: `nombreEnUnidad`, `tieneNombrePropio`,
+  `alRenombrar`). Se resuelve UNA vez en `getMatrizEvaluacion`
+  (`CeldaInstrumento.nombre` es el de la unidad, con `nombre_general` y
+  `nombre_propio`; `familia_nombre` igual), así que el Calificador, «Qué
+  evalúo → Por unidad» y «Exámenes y pruebas» dicen lo mismo; «Todo el
+  curso», «Pesos del área» y los informes enseñan el general. Se escribe
+  solo con `renombrarInstrumento(id, nombre, unidad?)`: con unidad, solo
+  ahí; sin ella, el general y se quitan los propios. Dentro de una unidad
+  el lápiz de la columna y la ficha «Editar» guardan solo en ella SIN
+  preguntar y lo dicen, con el botón que lo lleva a todas
+  (`[data-renombrar-todas]` en `[data-columna-aviso]`;
+  `[data-ficha-nombre-alcance="unidad"|"general"]`,
+  `[data-ficha-nombre-todas]` y `[data-ficha-nombre-general]` en la ficha):
+  un diálogo con dos salidas haría que Esc eligiera una. Renombrar en «Pesos
+  del área» cambia el general y deja los propios. Un aparato sin actualizar
+  enseña el nombre general en todas partes.
 - **«Qué evalúo» tiene dos pestañas: «Por unidad» y «Pesos del área»** (fase
   2 de la misma propuesta). `InstrumentosManager` abre «Por unidad»
   (`QueEvaluoPorUnidad`, `[data-que-por-unidad]`) en un área con unidades,

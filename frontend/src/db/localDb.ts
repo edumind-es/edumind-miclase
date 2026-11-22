@@ -143,6 +143,12 @@ export interface Instrumento extends Sincronizable {
    * índice: no exige versión de esquema.
    */
   solo_medidas?: number | null
+  /**
+   * Nombre propio en una unidad (id de unidad → nombre), para quien lo llama
+   * distinto allí; `nombre` es el general. Se lee con `nombreEnUnidad`
+   * (`db/nombreActividad.ts`). Sin índice: no exige versión de esquema.
+   */
+  nombres_unidad?: Record<string, string> | null
 }
 
 export type TipoMedida = 'adaptacion' | 'refuerzo'
