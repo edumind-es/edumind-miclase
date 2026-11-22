@@ -11,6 +11,7 @@ import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import PlanoClase from '@/components/PlanoClase'
 import AlumnadoClase from '@/components/AlumnadoClase'
+import EquiposClase from '@/components/EquiposClase'
 
 import { confirmar, avisar } from '@/utils/confirmar'
 import Pestanas from '@/components/comunes/Pestanas'
@@ -188,6 +189,7 @@ function NuevoGrupo() {
 const PESTANAS = [
   { id: 'datos',    label: 'Datos de la clase' },
   { id: 'alumnado', label: 'Alumnado' },
+  { id: 'equipos',  label: 'Equipos' },
   { id: 'areas',    label: 'Áreas y evaluación' },
   { id: 'plano',    label: 'Plano y QR de mesas' },
 ] as const
@@ -249,6 +251,8 @@ function DetalleGrupo() {
         <AlumnadoClase grupoId={grupoId} modoAnon={modoAnon} onToggleAnon={toggleAnon}
           alCambiar={async () => { await recargar(); await recargarGrupos() }} />
       )}
+
+      {pestana === 'equipos' && <EquiposClase grupoId={grupoId} />}
 
       {pestana === 'areas' && (
         <AsignaturasPanel

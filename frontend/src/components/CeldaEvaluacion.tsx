@@ -32,6 +32,7 @@ import type { Alumno, Asignatura, Grupo, Evidencia, RegistroDiario, Instrumento,
 import { celdasParaAlumno, estadoCasilla } from '@/db/medidasVista'
 import { etiquetaMedida, medidasDelAlumno } from '@/db/medidas'
 import { claveUnidad } from '@/db/migracionUnidades'
+import NotaAlEquipo from './NotaAlEquipo'
 import { verNeae, verEvidencias } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import ChipsCompetencias from './ChipsCompetencias'
@@ -1031,6 +1032,19 @@ export default function CeldaEvaluacion({
             }}>
               {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
             </div>
+          )}
+
+          {/* La nota, a su equipo: a la vista, porque en un trabajo de equipo es lo
+              siguiente que hace el docente. Sin equipo no se pinta nada. */}
+          {instrumentoSel && !calificaPorPrueba && (
+            <NotaAlEquipo
+              alumno={alumno} grupoId={grupo.id!} asignaturaId={asig.id!}
+              unidadId={unidadId} unidadClave={claveUnidad(unidadId)}
+              instrumentoId={instrumentoSel.instrumento_id} trimestre={trimestre} criterios={destinosNota}
+              tieneNota={valorActual != null} deshabilitado={guardando}
+              onCambio={texto => { avisar({ tipo: 'ok', texto }); onGuardado() }}
+              onError={texto => avisar({ tipo: 'error', texto })}
+            />
           )}
 
           {/* 4. Lo demás, plegado: el criterio entero, los otros criterios, copiar o

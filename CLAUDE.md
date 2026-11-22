@@ -20,7 +20,7 @@ edumind_miclase/
 │   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v10) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v11) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
@@ -762,6 +762,35 @@ edumind_miclase/
   de la app siguen apuntando a `/alumnos`. Donde otra nota de este fichero
   dice «en Alumnado», es esa pestaña. Las pruebas entran con
   `irAlAlumnado(p)` de `pruebas/lib/entorno.mjs`.
+- **Los equipos son de la clase y viven en su pestaña «Equipos»** (esquema
+  v11, tabla `agrupamientos`; `db/equipos.ts`, puro; `equipos.test.ts` y
+  `equipos-ui.test.mjs`). Un agrupamiento («Equipos de proyecto») lleva
+  `grupo_id` y, si el docente quiere, `asignatura_id` y `unidad_id`: sin
+  ellos vale para todas las áreas (`agrupamientosPara` los ordena del más
+  concreto al más general; la unidad no se guarda sin área). Decisión de
+  Luis (nov 2026): de la clase, con área y unidad opcionales. Los equipos
+  van DENTRO de la fila como array de verdad (`equipos: [{ clave, nombre,
+  alumnos }]`), igual que los acuerdos de una tutoría: la fusión los compara
+  como JSON, así que dos aparatos que mueven alumnos del mismo agrupamiento
+  a la vez se quedan con el reparto del más reciente. Un alumno va en un
+  solo equipo de cada agrupamiento (`normalizarAgrupamiento`, `moverAlumno`)
+  y quien deja la clase no se enseña (`sinBajas`, al leer; lo guardado no se
+  toca). La pantalla es `EquiposClase` (`[data-equipos-clase]`, recibe
+  `grupoId` y no lee la clase activa): `[data-agrupamiento]`, `[data-equipo]`,
+  reparto al azar (`[data-reparto-azar]`, pregunta si ya había alguien
+  colocado), `[data-sin-equipo]`. Tener equipos no pone ni cambia ninguna
+  nota. **Calificar por equipo es una copia que se pide**: el panel de la
+  casilla enseña, a la vista y no en «Más», la franja `[data-equipo-nota]`
+  (`NotaAlEquipo`) si el alumno tiene compañeros en un agrupamiento que vale
+  para esa área y unidad, con «Poner esta nota a su equipo»
+  (`[data-equipo-nota-poner]`, apagado sin nota). Copia con
+  `copiarNotaAlEquipo` (`queries.ts`): nota y marcas de rúbrica a los
+  criterios de la casilla (`destinosNota`), con `sinVinculos`; la
+  observación no viaja, que es de cada alumno; una casilla del compañero
+  que ya tenía nota se respeta y solo se sustituye tras `confirmar`. No se
+  ofrece en un examen. Borrar una clase se lleva sus agrupamientos. Una base v10 no pasa
+  por la puerta de migración: solo gana una tabla vacía. Tras desplegar,
+  reiniciar el backend: `agrupamientos` está en su lista blanca.
 - **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
   sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
   `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
@@ -1494,7 +1523,7 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No hacer `fetch` de `/api/curriculum` desde una pantalla: todo pasa por
   `src/curriculo/`, que lee el currículo empaquetado y deja el servidor de reserva
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación). Una tabla nueva va además en
+  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación y la v11 la de equipos). Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
   (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)
