@@ -961,8 +961,10 @@ edumind_miclase/
   (`crearInstrumentoHijo`) o trae una de otra unidad
   (`[data-unidad-anadir-cual]`), con los criterios del instrumento ya
   marcados; **la primera actividad de un instrumento con notas o herramienta
-  a su nombre no se crea ahí** (`[data-unidad-primera-con-datos]`): manda a
-  «Pesos del área», el único sitio que pregunta con `ConvertirFamilia`. Los
+  a su nombre también se crea ahí**, y al aceptar pregunta con
+  `ConvertirFamilia`, igual que «Pesos del área» (nada se crea hasta
+  contestar): antes mandaba a la otra pestaña (`[data-unidad-primera-con-datos]`,
+  que ya no existe) y Luis no podía añadir un segundo examen a la unidad. Los
   criterios de la unidad que nada evalúa van en `[data-unidad-sin-actividad]`.
   Las pruebas que trabajan con lo de toda el área llaman a
   `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La

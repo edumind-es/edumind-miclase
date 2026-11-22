@@ -25,6 +25,8 @@ import { BotonEditarActividad } from './FichaActividad'
 import { esDeObservacion } from './ElegirHerramienta'
 import { TIPOS_INSTRUMENTO, abreviatura } from '@/ia/instrumentosConfig'
 import { confirmar } from '@/utils/confirmar'
+import ConvertirFamilia from './ConvertirFamilia'
+import type { DatosDirectosDeFamilia } from '@/db/queries'
 
 interface Props {
   asignaturaId: number
@@ -55,6 +57,8 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
   const [actividades, setActividades] = useState<Record<number, Instrumento[]>>({})
   /** Instrumentos sin actividades que ya guardan notas, diario, examen o rúbrica a su nombre. */
   const [conDatos, setConDatos] = useState<Record<number, boolean>>({})
+  // La primera actividad de un instrumento con notas a su nombre: se pregunta antes.
+  const [conversion, setConversion] = useState<{ familia: Instrumento; datos: DatosDirectosDeFamilia } | null>(null)
   const [anadir, setAnadir] = useState<Anadir | null>(null)
   const [editando, setEditando] = useState<number | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
@@ -131,7 +135,28 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
     setAnadir({ familia: f.id!, cual: 'nueva', nombre: '', tipo: f.tipo, criterios: delInstrumento.length ? delInstrumento : [] })
   }
 
+  /**
+   * La primera actividad deja al instrumento sin columna propia. Si ya tiene
+   * notas, diario, examen o rúbrica a su nombre, se pregunta aquí mismo con
+   * `ConvertirFamilia`, igual que en «Pesos del área»: Luis quería añadir un
+   * segundo examen a la unidad y esta pestaña lo mandaba a la otra.
+   */
   const aceptarAnadir = async () => {
+    if (!anadir) return
+    const a = anadir
+    if (a.cual === 'nueva' && a.nombre.trim() && a.criterios.length > 0
+        && (actividades[a.familia] ?? []).length === 0 && conDatos[a.familia]) {
+      const familia = familias.find(f => f.id === a.familia)
+      if (familia) {
+        try { setConversion({ familia, datos: await datosDirectosDeFamilia(a.familia) }) }
+        catch (e) { setError((e as Error).message) }
+        return
+      }
+    }
+    await anadirDeVerdad()
+  }
+
+  const anadirDeVerdad = async () => {
     if (!anadir) return
     const a = anadir
     const existente = a.cual === 'nueva' ? null : (actividades[a.familia] ?? []).find(h => String(h.id) === a.cual)
@@ -146,6 +171,11 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
 
   return (
     <div data-que-por-unidad>
+      {conversion && anadir && (
+        <ConvertirFamilia familia={conversion.familia} datos={conversion.datos} accion={`«${anadir.nombre.trim()}»`} capa={capa}
+          onCancelar={() => setConversion(null)}
+          onSeguir={() => { setConversion(null); void anadirDeVerdad() }} />
+      )}
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
         <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, fontWeight: 700 }}>
           Unidad
@@ -176,7 +206,6 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
           const enUso = new Set(cols.map(c => c.ins.instrumento_id))
           const deOtras = (actividades[f.id!] ?? []).filter(h => !enUso.has(h.id!))
           const form = anadir?.familia === f.id ? anadir : null
-          const primeraConDatos = (actividades[f.id!] ?? []).length === 0 && conDatos[f.id!]
           return (
             <section key={f.id} data-unidad-instrumento data-nombre={f.nombre}
               style={{ border: '1px solid var(--gris-300)', borderRadius: 10, padding: '10px 12px', background: 'var(--blanco)' }}>
@@ -269,12 +298,6 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
                     <button type="button" className="btn-secondary" style={boton} onClick={() => setAnadir(null)}>Cancelar</button>
                   </div>
                 </div>
-              ) : primeraConDatos ? (
-                // La primera actividad deja al instrumento sin columna propia: eso se pregunta, y se pregunta en un solo sitio.
-                <p data-unidad-primera-con-datos style={{ fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', padding: '8px 10px', margin: '10px 0 0' }}>
-                  «{f.nombre}» ya tiene notas o herramienta a su nombre. Su primera actividad se crea en «Pesos del área», que pregunta antes qué hacer con ellas.{' '}
-                  <button type="button" className="btn-secondary" style={boton} onClick={onIrAPesos}>Ir a «Pesos del área»</button>
-                </p>
               ) : (
                 <button type="button" className="btn-secondary" data-unidad-anadir style={{ ...boton, marginTop: 10 }} onClick={() => abrirAnadir(f, delInstrumento)}>
                   + actividad en esta unidad

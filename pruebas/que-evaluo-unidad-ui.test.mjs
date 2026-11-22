@@ -183,6 +183,46 @@ try {
   await vista.waitFor({ timeout: 5000 })
   ok(true, 'y se vuelve a «Por unidad» con un toque')
 
+  console.log('\n7. La primera actividad de un instrumento con notas se crea aquí, preguntando antes')
+  e = await leer()
+  const proba = e.instrumentos.find(i => i.familia_id == null && i.id !== insTaboa.id)
+  const filaProba = e.ci.find(f => f.instrumento_id === proba.id && String(f.unidad_id) === unidadCal)
+  await p.evaluate(async ([ins, criterio, unidad]) => {
+    const q = await import('/src/db/queries.ts')
+    const l = await import('/src/db/localDb.ts')
+    const alumno = (await l.db.alumnos.toArray()).find(a => !a.deleted_at)
+    await q.saveCalificaciones([{
+      alumno_id: alumno.id, instrumento_id: ins, criterio_id: criterio, asignatura: 'ciencias_sociales',
+      curso: '6', etapa: 'primaria', comunidad: 'Galicia', trimestre: 1, valor: 6, unidad_id: Number(unidad),
+    }], { sinVinculos: true })
+  }, [proba.id, filaProba.criterio_id, unidadCal])
+  // Releer: la vista se monta de nuevo al cambiar de pestaña.
+  await gestor.locator('[data-pestana="pesos"]').click()
+  await gestor.locator('[data-familia-bloque]').first().waitFor({ timeout: 5000 })
+  await gestor.locator('[data-pestana="unidad"]').click()
+  await vista.waitFor({ timeout: 5000 })
+  const bloqueProba = vista.locator(`[data-unidad-instrumento][data-nombre="${proba.nombre}"]`)
+  await bloqueProba.locator('[data-unidad-anadir]').waitFor({ timeout: 8000 })
+  ok(await vista.locator('[data-unidad-primera-con-datos]').count() === 0, 'ya no manda a «Pesos del área»')
+  await bloqueProba.locator('[data-unidad-anadir]').click()
+  await bloqueProba.locator('[data-unidad-anadir-nombre]').fill('Problemas')
+  await bloqueProba.locator('[data-unidad-anadir-aceptar]').click()
+  const convertir = p.locator('[data-convertir-familia]')
+  await convertir.waitFor({ timeout: 5000 })
+  ok(true, 'al aceptar, pregunta qué hacer con lo que el instrumento ya tiene')
+  e = await leer()
+  ok(!e.instrumentos.some(i => i.nombre === 'Problemas'), 'y no crea nada hasta que se contesta')
+  await convertir.locator('[data-convertir-aceptar]').click()
+  await vista.locator('[data-unidad-actividad][data-nombre="Problemas"]').waitFor({ timeout: 8000 })
+  e = await leer()
+  const dentro = e.instrumentos.filter(i => i.familia_id === proba.id)
+  ok(dentro.length === 2 && dentro.some(i => i.nombre === 'Problemas'), 'quedan dos actividades: lo de antes y «Problemas»', dentro.map(i => i.nombre).join(' · '))
+  const nota = await p.evaluate(async () => {
+    const l = await import('/src/db/localDb.ts')
+    return (await l.db.calificaciones.toArray()).find(c => !c.deleted_at && c.valor === 6)?.instrumento_id
+  })
+  ok(dentro.some(i => i.id === nota && i.nombre !== 'Problemas'), 'la nota que había pasa a la actividad que recoge lo de antes')
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('que-evaluo-error').catch(() => {})
