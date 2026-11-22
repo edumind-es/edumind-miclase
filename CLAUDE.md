@@ -791,6 +791,18 @@ edumind_miclase/
   ofrece en un examen. Borrar una clase se lleva sus agrupamientos. Una base v10 no pasa
   por la puerta de migración: solo gana una tabla vacía. Tras desplegar,
   reiniciar el backend: `agrupamientos` está en su lista blanca.
+- **Un diálogo solo se cierra «pulsando fuera» si la pulsación empezó y
+  terminó en el velo** (nov 2026). `utils/velo.ts` (`instalarVelo()` en
+  `main.tsx`) lo hace para TODO lo que lleve `.modal-overlay`, como
+  `foco.ts`: el navegador da por clic en el velo un arrastre que empieza en
+  la tarjeta y se suelta fuera (seleccionar texto deprisa), y a Luis se le
+  cerraba el diálogo a medio escribir. Ese clic se corta en captura antes de
+  React; uno sin puntero (`detail` 0: teclado, `.click()`) pasa. El scroll
+  tampoco sale del diálogo: `overscroll-behavior: contain` en el velo y lo de
+  dentro, y `none` en `html` mientras haya uno abierto (`:has`), para que el
+  gesto de dos dedos no llegue a «página anterior». Un diálogo nuevo no
+  necesita nada si lleva `.modal-overlay`. Prueba: `dialogos-velo-ui.test.mjs`.
+  En Safari y en el iPad reales no se ha probado todavía.
 - **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
   sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
   `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
