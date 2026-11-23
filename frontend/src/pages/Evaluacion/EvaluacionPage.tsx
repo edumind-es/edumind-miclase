@@ -707,7 +707,7 @@ export default function EvaluacionPage() {
               {matriz.familiasConDatosEscondidos.map(f => (
                 <div key={f.id}>
                   <strong>«{f.nombre}» guarda a su nombre {[
-                    f.examenes ? `${f.examenes} examen${f.examenes !== 1 ? 'es' : ''}` : '',
+                    f.examenes ? `${f.examenes} ${f.examenes !== 1 ? 'exámenes' : 'examen'}` : '',
                     f.calificaciones ? `${f.calificaciones} nota${f.calificaciones !== 1 ? 's' : ''}` : '',
                     f.diario ? `${f.diario} registro${f.diario !== 1 ? 's' : ''} del diario` : '',
                   ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con actividades dentro, el instrumento solo resume.
