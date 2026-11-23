@@ -3,10 +3,12 @@ import { cifrarExport, descifrarExport, descargarBlob, type ExportCifrado } from
 import { exportarDatos, importarDatos } from '@/db/queries'
 import { registrarCopiaEnFichero } from '@/db/copia'
 import { db } from '@/db/localDb'
+import { notasRecuperablesDeCopia, recuperarNotasDeCopia, type CopiaLeida, type GrupoRecuperable } from '@/db/recuperarDeCopia'
+import { confirmar } from '@/utils/confirmar'
 
 interface Props { onClose: () => void }
 
-type Paso = 'menu' | 'exportar' | 'importar' | 'importar_preview'
+type Paso = 'menu' | 'exportar' | 'importar' | 'importar_preview' | 'recuperar' | 'recuperar_preview' | 'recuperar_elegir'
 
 export default function ExportImport({ onClose }: Props) {
   const [paso, setPaso] = useState<Paso>('menu')
@@ -17,6 +19,12 @@ export default function ExportImport({ onClose }: Props) {
   const [datosImport, setDatosImport] = useState<any>(null)
   const [conEvidencias, setConEvidencias] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  // Recuperar notas sueltas: la copia descifrada (solo en memoria), lo que
+  // difiere de lo que hay en el aparato y lo que el docente marca.
+  const [copia, setCopia] = useState<CopiaLeida | null>(null)
+  const [grupos, setGrupos] = useState<GrupoRecuperable[]>([])
+  const [marcados, setMarcados] = useState<Set<string>>(new Set())
+  const [quitar, setQuitar] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -61,7 +69,7 @@ export default function ExportImport({ onClose }: Props) {
         const cifrado: ExportCifrado = JSON.parse(ev.target?.result as string)
         if (!cifrado.version || !cifrado.datos) throw new Error('Formato de archivo no válido.')
         setDatosImport(cifrado)
-        setPaso('importar_preview')
+        setPaso(p => p === 'recuperar' ? 'recuperar_preview' : 'importar_preview')
         setMsg(null)
       } catch {
         setMsg({ tipo: 'error', texto: 'El archivo no es un backup válido de EDUmind MiClase.' })
@@ -93,6 +101,58 @@ export default function ExportImport({ onClose }: Props) {
     }
   }
 
+  // ── RECUPERAR NOTAS SUELTAS ───────────────────────────────────────
+
+  /** Abre la copia y la compara con lo que hay. No escribe nada. */
+  const compararCopia = async () => {
+    if (password.length < 1) return setMsg({ tipo: 'error', texto: 'Introduce la contraseña del backup.' })
+    setTrabajando(true)
+    setMsg(null)
+    try {
+      const datos = await descifrarExport(datosImport, password) as CopiaLeida
+      const lista = await notasRecuperablesDeCopia(datos)
+      setCopia(datos); setGrupos(lista); setMarcados(new Set()); setQuitar(new Set())
+      setPaso('recuperar_elegir')
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.name === 'OperationError' ? 'Contraseña incorrecta o archivo dañado.' : (e.message || 'No se pudo leer la copia.') })
+    } finally {
+      setTrabajando(false)
+    }
+  }
+
+  const alternar = (conjunto: Set<string>, poner: (s: Set<string>) => void, clave: string) => {
+    const s = new Set(conjunto)
+    if (s.has(clave)) s.delete(clave); else s.add(clave)
+    poner(s)
+  }
+
+  const recuperar = async () => {
+    if (!copia || !marcados.size) return
+    const elegidos = grupos.filter(g => marcados.has(g.clave))
+    const casillas = elegidos.reduce((n, g) => n + g.distintas, 0)
+    const aQuitar = elegidos.filter(g => quitar.has(g.clave)).reduce((n, g) => n + g.nuevas, 0)
+    const si = await confirmar({
+      titulo: `¿Devolver ${casillas} ${casillas === 1 ? 'nota' : 'notas'} a como ${casillas === 1 ? 'estaba' : 'estaban'} en la copia?`,
+      texto: `${elegidos.map(g => `· ${g.area} · ${g.unidad} · ${g.instrumento} (${g.trimestre}.º trimestre): ${g.distintas}`).join('\n')}`
+        + (aQuitar ? `\n\nAdemás se ${aQuitar === 1 ? 'quita 1 nota' : `quitan ${aQuitar} notas`} que la copia no tenía.` : '')
+        + '\n\nLa nota que hay ahora en cada casilla queda guardada como nota anterior, a la vista y recuperable. Lo demás no se toca.',
+      aceptar: 'Recuperar',
+    })
+    if (!si) return
+    setTrabajando(true)
+    setMsg(null)
+    try {
+      const r = await recuperarNotasDeCopia(copia, elegidos.map(g => ({ clave: g.clave, quitarNuevas: quitar.has(g.clave) })))
+      setGrupos(await notasRecuperablesDeCopia(copia))
+      setMarcados(new Set()); setQuitar(new Set())
+      setMsg({ tipo: 'ok', texto: `${r.recuperadas} ${r.recuperadas === 1 ? 'nota recuperada' : 'notas recuperadas'} de la copia${r.quitadas ? ` y ${r.quitadas} ${r.quitadas === 1 ? 'quitada' : 'quitadas'}` : ''}. Las que había quedan como nota anterior en su casilla.` })
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message || 'No se pudo recuperar.' })
+    } finally {
+      setTrabajando(false)
+    }
+  }
+
   // ── UI ────────────────────────────────────────────────────────────
 
   return (
@@ -100,12 +160,13 @@ export default function ExportImport({ onClose }: Props) {
       className="modal-overlay"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="card" role="dialog" aria-modal="true" aria-label="Exportar o importar datos" style={{ width: 460, padding: 32 }}>
+      <div className="card" role="dialog" aria-modal="true" aria-label="Exportar o importar datos" style={{ width: 'min(520px, 94vw)', maxHeight: '90vh', overflowY: 'auto', padding: 32 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-700)' }}>
             {paso === 'menu' && '📦 Exportar / Importar datos'}
             {paso === 'exportar' && '⬇️ Exportar backup cifrado'}
             {(paso === 'importar' || paso === 'importar_preview') && '⬆️ Importar backup'}
+            {paso.startsWith('recuperar') && 'Recuperar notas de una copia'}
           </h2>
           <button onClick={onClose} className="modal-close" aria-label="Cerrar">✕</button>
         </div>
@@ -123,6 +184,9 @@ export default function ExportImport({ onClose }: Props) {
             </button>
             <button className="btn-secondary" onClick={() => { setPaso('importar'); setMsg(null); setPassword('') }}>
               ⬆️ Importar backup existente
+            </button>
+            <button className="btn-secondary" data-recuperar-abrir onClick={() => { setPaso('recuperar'); setMsg(null); setPassword('') }}>
+              Recuperar notas de una copia, sin importarla
             </button>
             <div style={{ fontSize: 11, color: 'var(--gris-600)', marginTop: 8, padding: '8px 12px', background: 'var(--gris-100)', borderRadius: 6 }}>
               <strong>Cifrado:</strong> AES-256-GCM · PBKDF2 100.000 iteraciones · Web Crypto API nativo
@@ -161,6 +225,81 @@ export default function ExportImport({ onClose }: Props) {
               style={{ padding: '8px 0' }} />
             {msg && <Aviso {...msg} />}
             <button className="btn-secondary" onClick={() => setPaso('menu')}>Cancelar</button>
+          </div>
+        )}
+
+        {/* RECUPERAR — fichero, contraseña y elegir */}
+        {paso === 'recuperar' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.6 }}>
+              Para cuando unas notas se han pisado y una copia anterior las conserva. La copia solo se lee:
+              verás qué notas son distintas ahora y elegirás cuáles vuelven. Lo demás se queda como está.
+            </div>
+            <input type="file" accept=".miclase,.json" data-recuperar-fichero onChange={leerArchivo} style={{ padding: '8px 0' }} />
+            {msg && <Aviso {...msg} />}
+            <button className="btn-secondary" onClick={() => setPaso('menu')}>Cancelar</button>
+          </div>
+        )}
+        {paso === 'recuperar_preview' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>
+              Introduce la contraseña de la copia. Todavía no se cambia nada.
+            </div>
+            <input type="password" data-recuperar-clave value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="Contraseña del backup" style={{ width: '100%' }} autoFocus />
+            {msg && <Aviso {...msg} />}
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button className="btn-primary" data-recuperar-comparar onClick={compararCopia} disabled={trabajando}>
+                {trabajando ? 'Comparando…' : 'Abrir y comparar'}
+              </button>
+              <button className="btn-secondary" onClick={() => setPaso('menu')}>Cancelar</button>
+            </div>
+          </div>
+        )}
+        {paso === 'recuperar_elegir' && (
+          <div data-recuperar-lista style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {grupos.length === 0 ? (
+              <div data-recuperar-nada style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.6 }}>
+                Todas las notas de la copia están igual en este aparato: no hay nada que recuperar.
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.6 }}>
+                Estas notas no están ahora como en la copia. Marca solo lo que se haya pisado:
+                lo que hayas cambiado a propósito después de la copia también sale aquí.
+              </div>
+            )}
+            {grupos.map(g => (
+              <div key={g.clave} data-recuperar-grupo={g.clave} data-unidad={g.unidad} data-instrumento={g.instrumento}
+                style={{ border: '1px solid var(--gris-200)', borderRadius: 8, padding: '10px 12px' }}>
+                <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minHeight: 44, cursor: 'pointer' }}>
+                  <input type="checkbox" data-recuperar-marcar checked={marcados.has(g.clave)}
+                    onChange={() => alternar(marcados, setMarcados, g.clave)} style={{ marginTop: 4, width: 20, height: 20 }} />
+                  <span style={{ fontSize: 14, lineHeight: 1.45 }}>
+                    <strong>{g.unidad} · {g.instrumento}</strong>
+                    <br />
+                    <span style={{ color: 'var(--gris-600)', fontSize: 13 }}>
+                      {g.clase} · {g.area} · {g.trimestre}.º trimestre — {g.distintas} {g.distintas === 1 ? 'nota distinta' : 'notas distintas'}, de {g.alumnos} {g.alumnos === 1 ? 'alumno' : 'alumnos'}
+                    </span>
+                  </span>
+                </label>
+                {g.nuevas > 0 && marcados.has(g.clave) && (
+                  <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minHeight: 44, cursor: 'pointer', marginLeft: 30, fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.45 }}>
+                    <input type="checkbox" data-recuperar-quitar checked={quitar.has(g.clave)}
+                      onChange={() => alternar(quitar, setQuitar, g.clave)} style={{ marginTop: 4, width: 20, height: 20 }} />
+                    <span>Quitar también {g.nuevas === 1 ? 'la nota' : `las ${g.nuevas} notas`} que la copia no tenía aquí (en criterios que entonces estaban sin nota).</span>
+                  </label>
+                )}
+              </div>
+            ))}
+            {msg && <Aviso {...msg} />}
+            <div style={{ display: 'flex', gap: 10 }}>
+              {grupos.length > 0 && (
+                <button className="btn-primary" data-recuperar-aplicar onClick={recuperar} disabled={trabajando || !marcados.size}>
+                  {trabajando ? 'Recuperando…' : 'Recuperar lo marcado'}
+                </button>
+              )}
+              <button className="btn-secondary" onClick={onClose}>Cerrar</button>
+            </div>
           </div>
         )}
 

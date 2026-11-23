@@ -346,6 +346,7 @@ async function principal() {
     await suite('ficha rápida del alumno desde el Calificador', 'node', ['pruebas/ficha-rapida-ui.test.mjs'], entorno)
     await suite('seguimiento de tutorías desde la interfaz', 'node', ['pruebas/tutorias-ui.test.mjs'], entorno)
     await suite('equipos de la clase desde la interfaz', 'node', ['pruebas/equipos-ui.test.mjs'], entorno)
+    await suite('recuperar notas de una copia sin importarla', 'node', ['pruebas/recuperar-copia-ui.test.mjs'], entorno)
     await suite('equipos: la nota de un alumno a su equipo', 'node', ['pruebas/equipos-nota-ui.test.mjs'], entorno)
     await suite('recuperación por criterio desde la interfaz', 'node', ['pruebas/recuperacion-ui.test.mjs'], entorno)
     await suite('planificación semanal y calendario desde la interfaz', 'node', ['pruebas/planificacion-ui.test.mjs'], entorno)
