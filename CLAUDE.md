@@ -1431,6 +1431,23 @@ edumind_miclase/
   (`miclase.plano.equipos`). Son dos cosas distintas con el mismo nombre:
   los equipos de AulaMap viven en `Plano.aulamap`; los de MiClase, en
   `agrupamientos`, y son los que sirven para calificar.
+- **De una copia se pueden recuperar notas sueltas sin importarla** (nov
+  2026). Importar sustituye todo; `db/recuperarDeCopia.ts` solo LEE la copia
+  y la compara con el aparato casilla a casilla, **por el `id` de la fila**
+  (es el mismo en todos los aparatos y sobrevive a convertir un instrumento
+  en actividad, que cambia `instrumento_id`). `ExportImport` → «Recuperar
+  notas de una copia, sin importarla» (`[data-recuperar-abrir]`): lista los
+  grupos de instrumento, unidad y trimestre con alguna nota o respuestas
+  distintas (`[data-recuperar-grupo]`, con `data-unidad` y
+  `data-instrumento`); el docente marca (`[data-recuperar-marcar]`) y solo
+  eso vuelve (`[data-recuperar-aplicar]`, con `confirmar`): valor, respuestas
+  y origen de la copia, `updated_at` nuevo para que viaje, y lo que había
+  como fantasma (`MOTIVO_RECUPERADA_DE_COPIA`). Las notas del grupo que la
+  copia no tenía se quitan solo si se pide (`[data-recuperar-quitar]`). Un
+  grupo con trabajo nuevo y nada distinto no sale. La lista incluye también
+  lo cambiado a propósito después de la copia: por eso elige el docente.
+  Nació de que el examen de la UD2 pisó el de la UD1 de Luis y solo el Mac
+  mini, sin sincronizar, lo conservaba. Prueba: `recuperar-copia-ui.test.mjs`.
 - **El mínimo de consecución se ve donde se califica y en el informe.**
   `unidad_criterios.minimo` (lo trae PROENS) sale en la franja del instrumento
   del panel de la casilla (`[data-minimo-criterio]`, dos líneas; al tocarlo,
