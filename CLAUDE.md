@@ -881,8 +881,13 @@ edumind_miclase/
   **nivel alcanzado** (`PreguntaAnalizada.nivel`, de `nivelAlcanzado` en
   `db/prueba.ts`: nivel de corrección, escala o test; solo lee), con la
   letra que baje `densidadUnaPagina` (de 9 a 6 pt; hasta ~35 preguntas con
-  rúbrica larga caben). `[data-informe-imprimir-clase]` imprime una hoja
-  por alumno corregido, siempre frente a toda la clase. Se entra además con
+  rúbrica larga caben). **La hoja es personal: ninguna cifra de la clase**
+  (decisión de Luis, 23/11/2026), solo su corrección: el nivel marcado, la
+  respuesta correcta (`clave`, o la opción buena de un test) y, si no hay
+  nivel, el reparto (`correccion`); las `notas` de corrección no salen, son
+  del docente. Con todo eso caben unas 20 preguntas.
+  `[data-informe-imprimir-clase]` imprime una hoja por alumno corregido.
+  Se entra además con
   `alumnoInicial` desde el corrector de la casilla
   (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
   (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y

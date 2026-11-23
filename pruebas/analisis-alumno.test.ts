@@ -138,7 +138,7 @@ console.log('\n4a. El informe de una página, con la rúbrica de cada pregunta')
   const def = normalizarPrueba({
     titulo: 'Potencias', tipo: 'puntos', reparto: 'unico',
     preguntas: [
-      { id: 'p1', enunciado: 'Yogures: potencia', max: 2, criterio_id: 'CE1.3' },
+      { id: 'p1', enunciado: 'Yogures: potencia', max: 2, criterio_id: 'CE1.3', clave: '5 × 5 × 5 = 5³', correccion: 'a) 0,75 · b) 0,5 · c) 0,75', notas: 'COMPROBAR CON EL ENUNCIADO' },
       { id: 'p2', enunciado: 'Explica el error', max: 0.5, niveles: [
         { puntos: 0.5, texto: 'Explica que se ha multiplicado la base por el exponente' },
         { puntos: 0.25, texto: 'Solo da 125 sin explicar el error' },
@@ -157,6 +157,9 @@ console.log('\n4a. El informe de una página, con la rúbrica de cada pregunta')
   const doc = documentoUnaPagina('Potencias', [{ alumno: 'Javier', clase: '6.º A', area: 'Matemáticas', def, analisis: a }])
   ok(doc.includes('data-informe-una-pagina') && doc.includes('Solo da 125 sin explicar el error') && doc.includes('Sin anotar') && doc.includes('Nivel alcanzado'), 'la hoja lleva el nivel de cada pregunta')
   ok(!doc.includes('Preguntas falladas') && (doc.match(/class="hoja/g) ?? []).length === 1, 'una sola hoja, sin las secciones del informe completo')
+  ok(doc.includes('5 × 5 × 5 = 5³') && doc.includes('a) 0,75 · b) 0,5 · c) 0,75'), 'lleva la respuesta correcta y el reparto de la corrección')
+  ok(!doc.includes('COMPROBAR'), 'pero no las notas de corrección, que son del docente')
+  ok(a.nota.grupo!.n === 5 && !/clase \d|Media de la clase|>Clase</.test(doc), 'es personal: ninguna cifra de la clase, aunque haya cinco exámenes')
   const clase = documentoUnaPagina('Potencias', [1, 2, 3].map(id => ({ alumno: `A${id}`, clase: '6.º A', area: 'Mat', def, analisis: analizarExamen(ex, id)! })))
   ok((clase.match(/data-informe-una-pagina/g) ?? []).length === 3, 'la de toda la clase: una hoja por alumno')
   const corta = densidadUnaPagina(a.preguntas)

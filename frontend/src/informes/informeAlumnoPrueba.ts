@@ -115,13 +115,15 @@ function lineas(texto: string, ancho: number, pt: number): number {
 const relleno_mm = (pt: number) => pt >= 7 ? 1.2 : 0.7
 
 /** El tamaño de letra (pt) más grande con el que la tabla cabe en la hoja. Puro, se prueba aparte. */
-export function densidadUnaPagina(ps: Pick<PreguntaAnalizada, 'enunciado' | 'nivel' | 'criterio_id'>[]): number {
+export function densidadUnaPagina(ps: (Pick<PreguntaAnalizada, 'enunciado' | 'nivel' | 'criterio_id'> & Partial<Pick<PreguntaAnalizada, 'clave' | 'correccion'>>)[]): number {
   for (const pt of TAMANOS_PT) {
     const linea = pt * 0.3528 * 1.3
     const relleno = relleno_mm(pt) * 2 + 0.4
+    // Clave y corrección van en letra un 15 % menor, bajo la pregunta y bajo el nivel.
+    const menor = (t: string | false | null | undefined, ancho: number) => t ? 0.85 * lineas(t, ancho / 0.85, pt) : 0
     const alto = ps.reduce((s, p) => s + relleno + linea * Math.max(
-      lineas(p.enunciado + (p.criterio_id ? ` ${p.criterio_id}` : ''), 56, pt),
-      lineas(p.nivel ?? '', 76, pt),
+      lineas(p.enunciado + (p.criterio_id ? ` ${p.criterio_id}` : ''), 56, pt) + menor(p.clave && `Respuesta: ${p.clave}`, 56),
+      lineas(p.nivel ?? '', 84, pt) + menor(!p.nivel && p.correccion && `Corrección: ${p.correccion}`, 84),
     ), 6)
     if (alto <= ALTO_TABLA_MM) return pt
   }
@@ -141,27 +143,30 @@ const CSS_UNA_PAGINA = `
 .breve td { line-height: 1.3; }
 .breve th.n, .breve td.n { width: auto; padding-right: 2mm; }
 .breve th:last-child, .breve td:last-child { padding-right: 0; }
-.breve td.nivel { color: var(--lm-ink-2); }
-.breve td.nivel.sin { font-style: italic; color: var(--lm-ink-3); }
+.breve .nivel { color: var(--lm-ink); }
+.breve .nivel.sin { font-style: italic; color: var(--lm-ink-3); }
+.breve .det { display: block; font-size: .85em; color: var(--lm-ink-2); margin-top: .4mm; }
+.breve .det b { font-weight: 600; color: var(--lm-ink); }
 .breve .crit { font-family: var(--lm-mono); font-weight: 600; font-size: .85em; color: var(--lm-ink-2); white-space: nowrap; }
 .breve .pie { margin-top: 4mm; padding-top: 2mm; font-size: 6.5pt; line-height: 1.4; }
 `
 
-function filaBreve(p: PreguntaAnalizada, conClase: boolean): string {
+// Es un documento personal: ninguna cifra de la clase, solo su corrección.
+// El reparto de puntos sale solo si no hay nivel de rúbrica marcado: el
+// nivel ya dice por qué tiene esos puntos, y repetirlo no deja caber la hoja.
+function filaBreve(p: PreguntaAnalizada): string {
   const nivel = !p.anotada ? 'Sin anotar' : p.nivel ?? '—'
   return `<tr data-pregunta="${p.numero}">
     <td class="n">${p.numero}</td>
-    <td>${esc(p.enunciado || `Pregunta ${p.numero}`)}${p.criterio_id ? ` <span class="crit">${esc(p.criterio_id)}</span>` : ''}</td>
+    <td>${esc(p.enunciado || `Pregunta ${p.numero}`)}${p.criterio_id ? ` <span class="crit">${esc(p.criterio_id)}</span>` : ''}${p.clave ? `<span class="det" data-clave><b>Respuesta:</b> ${esc(p.clave)}</span>` : ''}</td>
     <td class="n" style="white-space:nowrap;color:${tintaPct(p.pctAlumno)}">${nota(p.obtenido, 2)} / ${nota(p.max, 2)}</td>
-    <td class="nivel${p.anotada && p.nivel ? '' : ' sin'}" data-nivel>${esc(nivel)}</td>
-    ${conClase ? `<td class="n">${p.pctGrupo} %</td>` : ''}
+    <td><span class="nivel${p.anotada && p.nivel ? '' : ' sin'}" data-nivel>${esc(nivel)}</span>${p.correccion && !p.nivel ? `<span class="det" data-correccion><b>Corrección:</b> ${esc(p.correccion)}</span>` : ''}</td>
   </tr>`
 }
 
 /** La hoja de una página de un alumno. `documentoUnaPagina` junta una o varias. */
 export function hojaInformeAlumnoPruebaBreve(d: DatosInformeAlumnoPrueba): string {
   const a = d.analisis
-  const conClase = grupoPublicable(a.nota)
   const tipo = TIPOS_PRUEBA.find(t => t.valor === d.def.tipo)?.nombre ?? d.def.tipo
   const pt = densidadUnaPagina(a.preguntas)
   const obtenido = a.preguntas.reduce((s, p) => s + Math.max(0, p.obtenido), 0)
@@ -169,7 +174,7 @@ export function hojaInformeAlumnoPruebaBreve(d: DatosInformeAlumnoPrueba): strin
   const que = a.ejesPor === 'aspecto' ? 'etiqueta' : 'criterio'
   const ejes = a.ejes.length > 1
     ? `<div class="linea" data-ejes>Por ${que}: ${[...a.ejes].sort((x, y) => x.pctAlumno - y.pctAlumno)
-      .map(e => `${esc(e.nombre)} <b style="color:${tintaPct(e.pctAlumno)}">${e.pctAlumno} %</b>${conClase ? ` (clase ${e.pctGrupo} %)` : ''}`).join(' · ')}</div>`
+      .map(e => `${esc(e.nombre)} <b style="color:${tintaPct(e.pctAlumno)}">${e.pctAlumno} %</b>`).join(' · ')}</div>`
     : ''
   const repasar = a.falladas.length
     ? `<div class="linea" data-repasar>Para repasar: <b>${[...a.falladas].sort((x, y) => x.numero - y.numero).map(p => p.numero).join(', ')}</b> (menos de la mitad de sus puntos).</div>`
@@ -184,14 +189,13 @@ export function hojaInformeAlumnoPruebaBreve(d: DatosInformeAlumnoPrueba): strin
       <span>Nota <b style="color:${tinta(a.nota.valor)}">${a.nota.valor == null ? '—' : nota(a.nota.valor)}</b></span>
       <span>Puntos <b>${nota(obtenido, 2)} / ${nota(maximo, 2)}</b></span>
       <span>Preguntas <b>${a.preguntas.length}</b></span>
-      ${conClase ? `<span>Media de la clase <b>${nota(a.nota.grupo!.media)}</b></span>` : ''}
     </div>
     ${ejes}
     ${repasar}
     <table style="font-size:${pt}pt;--pad:${relleno_mm(pt)}mm" data-una-pagina-pt="${pt}">
-      <colgroup><col style="width:9mm"><col style="width:58mm"><col style="width:22mm"><col>${conClase ? '<col style="width:13mm">' : ''}</colgroup>
-      <thead><tr><th class="n">N.º</th><th>Pregunta</th><th class="n">Puntos</th><th>Nivel alcanzado</th>${conClase ? '<th class="n">Clase</th>' : ''}</tr></thead>
-      <tbody>${a.preguntas.map(p => filaBreve(p, conClase)).join('')}</tbody>
+      <colgroup><col style="width:9mm"><col style="width:58mm"><col style="width:22mm"><col></colgroup>
+      <thead><tr><th class="n">N.º</th><th>Pregunta</th><th class="n">Puntos</th><th>Nivel alcanzado</th></tr></thead>
+      <tbody>${a.preguntas.map(filaBreve).join('')}</tbody>
     </table>
     ${pie('Datos personales de un menor: compártelo solo con quien deba conocerlo.')}
   `
