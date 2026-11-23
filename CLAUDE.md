@@ -1364,6 +1364,21 @@ edumind_miclase/
   **antes de publicar en la App Store o en Google Play, confirmarlo con el
   autor**, porque las condiciones de la App Store chocan con la AGPL de
   código ajeno.
+- **Los equipos de MiClase se miran en el plano, y mirar no guarda** (nov
+  2026). En la vista de `PlanoClase`, con algún agrupamiento en la clase,
+  sale «Equipos a la vista» (`[data-plano-equipos]`; la primera opción deja
+  el plano como está) y una leyenda con el número de cada equipo
+  (`[data-plano-leyenda]`, `[data-plano-equipo]`). No se toca el código de
+  AulaMap: `conEquipos` (`db/planoAulaMap.ts`, puro) le da la clase con
+  `student.team` = el orden del equipo y `showTeams`, que es como AulaMap ya
+  pinta los suyos (color en el puesto y un número). Con equipos a la vista
+  el anfitrión no guarda nada (`guardar` vuelve sin hacer nada): si
+  guardase, pisaría los equipos que el docente tenga hechos en el propio
+  AulaMap. Al «Editar el aula» el selector se quita y mandan los de AulaMap.
+  El agrupamiento elegido se recuerda por clase en el aparato
+  (`miclase.plano.equipos`). Son dos cosas distintas con el mismo nombre:
+  los equipos de AulaMap viven en `Plano.aulamap`; los de MiClase, en
+  `agrupamientos`, y son los que sirven para calificar.
 - **El mínimo de consecución se ve donde se califica y en el informe.**
   `unidad_criterios.minimo` (lo trae PROENS) sale en la franja del instrumento
   del panel de la casilla (`[data-minimo-criterio]`, dos líneas; al tocarlo,
