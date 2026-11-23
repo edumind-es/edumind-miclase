@@ -67,6 +67,16 @@ export default function ExportImport({ onClose }: Props) {
     reader.onload = ev => {
       try {
         const cifrado: ExportCifrado = JSON.parse(ev.target?.result as string)
+        if (paso === 'recuperar') {
+          const leido = cifrado as any
+          // El índice de la copia automática en carpeta no lleva datos.
+          if (leido?.formato === 'miclase-copia') {
+            setMsg({ tipo: 'error', texto: 'Ese fichero es el índice de la copia automática en carpeta, no una copia con los datos. Usa una copia de seguridad descargada desde «Exportar / Importar» o desde Informes.' })
+            return
+          }
+          // La copia de Informes va sin cifrar: se compara sin pedir contraseña.
+          if (Array.isArray(leido?.calificaciones)) { void abrirCopia(leido as CopiaLeida); return }
+        }
         if (!cifrado.version || !cifrado.datos) throw new Error('Formato de archivo no válido.')
         setDatosImport(cifrado)
         setPaso(p => p === 'recuperar' ? 'recuperar_preview' : 'importar_preview')
@@ -103,16 +113,25 @@ export default function ExportImport({ onClose }: Props) {
 
   // ── RECUPERAR NOTAS SUELTAS ───────────────────────────────────────
 
-  /** Abre la copia y la compara con lo que hay. No escribe nada. */
+  /** Compara una copia ya leída con lo que hay y enseña la lista. No escribe nada. */
+  const abrirCopia = async (datos: CopiaLeida) => {
+    try {
+      const lista = await notasRecuperablesDeCopia(datos)
+      setCopia(datos); setGrupos(lista); setMarcados(new Set()); setQuitar(new Set())
+      setMsg(null)
+      setPaso('recuperar_elegir')
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message || 'No se pudo leer la copia.' })
+    }
+  }
+
+  /** Abre la copia cifrada y la compara con lo que hay. No escribe nada. */
   const compararCopia = async () => {
     if (password.length < 1) return setMsg({ tipo: 'error', texto: 'Introduce la contraseña del backup.' })
     setTrabajando(true)
     setMsg(null)
     try {
-      const datos = await descifrarExport(datosImport, password) as CopiaLeida
-      const lista = await notasRecuperablesDeCopia(datos)
-      setCopia(datos); setGrupos(lista); setMarcados(new Set()); setQuitar(new Set())
-      setPaso('recuperar_elegir')
+      await abrirCopia(await descifrarExport(datosImport, password) as CopiaLeida)
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.name === 'OperationError' ? 'Contraseña incorrecta o archivo dañado.' : (e.message || 'No se pudo leer la copia.') })
     } finally {
