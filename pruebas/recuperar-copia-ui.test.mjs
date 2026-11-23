@@ -60,6 +60,9 @@ try {
     await poner(ana, FAMILIA, UD1, 'CE1.1', 8, { p1: 1, p2: 1 })
     await poner(bruno, FAMILIA, UD1, 'CE1.1', 6, { p1: 1, p2: 0 })
     await poner(ana, FAMILIA, UD2, 'CE1.1', 5, null)
+    // El examen de la UD1, de dos preguntas, con el que se pusieron esas notas.
+    const pregunta = (n) => ({ id: `p${n}`, texto: `Pregunta ${n}`, puntos: 1 })
+    const examenId = await q.guardarPrueba(FAMILIA, UD1, { titulo: 'Examen UD1', tipo: 'puntos', reparto: 'unica', preguntas: [pregunta(1), pregunta(2)] })
     // La copia, cifrada (Exportar / Importar) y sin cifrar (la de Informes).
     const plana = await q.exportarDatos(db, { sinEvidencias: true })
     const copia = await cifrarExport(JSON.parse(plana), 'clave-de-la-copia')
@@ -78,8 +81,11 @@ try {
     await poner(bruno, ACTIVIDAD, UD1, 'CE1.1', 3, { p1: 0 })
     await poner(ana, ACTIVIDAD, UD1, 'CE1.2', 2, { p1: 0 })
     await poner(bruno, ACTIVIDAD, UD2, 'CE1.1', 9, null)
+    // Y el examen de la UD1 desaparece: queda retirado, y su sitio lo ocupa otro.
+    await db.rubricas.update(examenId, { deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    const otroId = await q.guardarPrueba(ACTIVIDAD, UD1, { titulo: 'Problemas', tipo: 'puntos', reparto: 'unica', preguntas: [pregunta(1)] })
     localStorage.setItem('miclase_clase_activa', String(g))
-    return { ana, bruno, UD1, UD2, ACTIVIDAD, copia: JSON.stringify(copia), plana, copiaGrande }
+    return { ana, bruno, UD1, UD2, ACTIVIDAD, copia: JSON.stringify(copia), plana, copiaGrande, examenId, otroId }
   })
   await p.goto(BASE + '/', { waitUntil: 'networkidle' })
 
@@ -124,6 +130,37 @@ try {
   const quitar = grupo.locator('[data-recuperar-quitar]')
   ok(await quitar.count() === 1 && /la nota que la copia no tenía/.test(await grupo.textContent()), 'ofrece quitar la nota que la copia no tenía en esa unidad')
   await quitar.check()
+
+  console.log('\n2b. El examen que falta')
+  {
+    const examenes = lista.locator('[data-recuperar-examen]')
+    ok(await examenes.count() === 1 && await examenes.first().getAttribute('data-titulo') === 'Examen UD1' && await examenes.first().getAttribute('data-estado') === 'retirado',
+      'sale el examen de la UD1, retirado en este aparato', `${await examenes.count()} · ${await examenes.first().getAttribute('data-estado').catch(() => '')}`)
+    ok(/Examen de contenidos/.test(await examenes.first().textContent()), 'irá a la actividad donde hoy están sus notas', (await examenes.first().textContent()).slice(0, 160))
+    await examenes.first().locator('[data-recuperar-examen-marcar]').check()
+    const sust = examenes.first().locator('[data-recuperar-examen-sustituir]')
+    ok(await sust.count() === 1 && /lo ocupa ahora «Problemas»/.test(await examenes.first().textContent()), 'dice qué examen ocupa ahora ese sitio')
+    // Sin marcar «sustituir» no se toca nada.
+    await p.locator('[data-recuperar-examenes-aplicar]').click()
+    ok(await p.getByText(/0 exámenes recuperados.*1 sin recuperar/).waitFor({ timeout: 8000 }).then(() => true, () => false), 'sin pedir que lo sustituya, no recupera y lo dice')
+    await examenes.first().locator('[data-recuperar-examen-marcar]').check()
+    await examenes.first().locator('[data-recuperar-examen-sustituir]').check()
+    await p.locator('[data-recuperar-examenes-aplicar]').click()
+    ok(await p.getByText(/1 examen recuperado de la copia/).waitFor({ timeout: 8000 }).then(() => true, () => false), 'con «sustituir», lo recupera')
+    const r = await p.evaluate(async ({ examenId, otroId, UD1, ACTIVIDAD }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const ex = await db.rubricas.get(examenId), otro = await db.rubricas.get(otroId)
+      const abre = await q.getPrueba(ACTIVIDAD, UD1)
+      const banco = (await q.getBancoPruebas()).map(b => b.titulo ?? b.def?.titulo)
+      return { vivo: !ex.deleted_at, ins: ex.instrumento_id, unidad: ex.unidad_id, otroRetirado: !!otro.deleted_at,
+        abre: abre?.id, preguntas: abre?.def.preguntas.length, banco }
+    }, { examenId: d.examenId, otroId: d.otroId, UD1: d.UD1, ACTIVIDAD: d.ACTIVIDAD })
+    ok(r.vivo && r.ins === d.ACTIVIDAD && r.unidad === d.UD1, 'el examen vuelve, en la actividad de ahora y en su unidad', JSON.stringify(r))
+    ok(r.abre === d.examenId && r.preguntas === 2, 'y es el que abre la UD1, con sus dos preguntas')
+    ok(r.otroRetirado && r.banco.includes('Problemas'), 'el que ocupaba el sitio queda retirado, con copia en el banco de exámenes', JSON.stringify(r.banco))
+    ok(await lista.locator('[data-recuperar-examen]').count() === 0, 'y ya no sale en la lista')
+  }
 
   console.log('\n3. Recuperar')
   await p.locator('[data-recuperar-aplicar]').click()

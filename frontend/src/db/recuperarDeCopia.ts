@@ -15,14 +15,15 @@
  * (`valor_anterior`). Nació de que corregir el examen de la UD2 pisó el de la
  * UD1 de Luis (nov 2026) y solo un Mac sin sincronizar lo conservaba.
  */
-import { db, type Calificacion } from './localDb'
+import { db, INSTRUMENTO_BANCO, type Calificacion, type Rubrica } from './localDb'
+import { guardarPruebaEnBanco } from './queries'
 import { sello } from './ids'
 
 export const MOTIVO_RECUPERADA_DE_COPIA = 'Sustituida al recuperar la nota de una copia de seguridad'
 export const MOTIVO_NO_ESTABA_EN_COPIA = 'Quitada al recuperar una copia de seguridad que no la tenía'
 
 /** Lo que se lee de una copia: solo hacen falta sus calificaciones. */
-export type CopiaLeida = { calificaciones?: Calificacion[] }
+export type CopiaLeida = { calificaciones?: Calificacion[]; rubricas?: Rubrica[] }
 
 /** Casillas de un instrumento, unidad y trimestre que no están como en la copia. */
 export type GrupoRecuperable = {
@@ -160,4 +161,132 @@ export async function recuperarNotasDeCopia(
     }
   })
   return { recuperadas, quitadas }
+}
+
+// ── Exámenes ────────────────────────────────────────────────────────────
+//
+// Las notas pueden seguir en su sitio y faltar el examen: sin sus preguntas
+// no se ven las respuestas de cada alumno ni sale el informe. Le pasó a Luis
+// al reorganizar las pruebas de una unidad (nov 2026): las notas de la UD1
+// estaban, el examen no.
+
+/** Un examen de la copia que en el aparato falta, está retirado o es distinto. */
+export type ExamenRecuperable = {
+  /** Id de la fila, el mismo en la copia y en el aparato. */
+  id: number
+  titulo: string
+  preguntas: number
+  clase: string
+  area: string
+  unidad: string
+  /** La actividad o el instrumento donde hoy están las notas de ese examen. */
+  instrumento: string
+  estado: 'falta' | 'retirado' | 'cambiado' | 'movido'
+  /** Con `cambiado`: cuántas preguntas tiene ahora. */
+  preguntasAhora: number | null
+  /** Otro examen que hoy ocupa ese instrumento y esa unidad. */
+  ocupa: { id: number; titulo: string; preguntas: number } | null
+}
+
+type ExamenComparado = {
+  copia: Rubrica; actual: Rubrica | undefined; destino: number
+  estado: ExamenRecuperable['estado']; ocupa: Rubrica | null
+}
+
+const numPreguntas = (r: Rubrica | undefined): number => {
+  try { return (JSON.parse(r?.prueba_json || 'null')?.preguntas ?? []).length } catch { return 0 }
+}
+const mismoExamen = (a: Rubrica, b: Rubrica): boolean => {
+  try { return JSON.stringify(JSON.parse(a.prueba_json || 'null')) === JSON.stringify(JSON.parse(b.prueba_json || 'null')) }
+  catch { return false }
+}
+
+/** Compara (puro) los exámenes de la copia con los del aparato. */
+export function compararExamenes(rubricas: Rubrica[], calificaciones: Calificacion[], copia: CopiaLeida): ExamenComparado[] {
+  const porId = new Map(rubricas.filter(r => r.id != null).map(r => [r.id!, r]))
+  const notaPorId = new Map(calificaciones.filter(c => c.id != null && !c.deleted_at).map(c => [c.id!, c]))
+  const salida: ExamenComparado[] = []
+  for (const e of copia.rubricas ?? []) {
+    if (e.tipo !== 'prueba' || e.deleted_at || e.id == null || e.instrumento_id === INSTRUMENTO_BANCO || !numPreguntas(e)) continue
+    const actual = porId.get(e.id)
+    // Dónde están hoy las notas que ese examen tenía en la copia: si el
+    // instrumento se convirtió en actividad, las notas cambiaron de
+    // instrumento y el examen tiene que ir con ellas.
+    const votos = new Map<number, number>()
+    for (const c of copia.calificaciones ?? []) {
+      if (c.id == null || c.deleted_at || c.instrumento_id !== e.instrumento_id) continue
+      if (e.unidad_id != null && c.unidad_id !== e.unidad_id) continue
+      const hoy = notaPorId.get(c.id)
+      if (hoy) votos.set(hoy.instrumento_id, (votos.get(hoy.instrumento_id) ?? 0) + 1)
+    }
+    const masVotado = [...votos.entries()].sort((a, b) => b[1] - a[1])[0]?.[0]
+    const destino = masVotado ?? (actual && !actual.deleted_at ? actual.instrumento_id : e.instrumento_id)
+    const estado: ExamenRecuperable['estado'] | null =
+      !actual ? 'falta'
+      : actual.deleted_at ? 'retirado'
+      : !mismoExamen(actual, e) ? 'cambiado'
+      : actual.instrumento_id !== destino || (actual.unidad_id ?? null) !== (e.unidad_id ?? null) ? 'movido'
+      : null
+    if (!estado) continue
+    const ocupa = rubricas.find(r => r.tipo === 'prueba' && !r.deleted_at && r.id !== e.id
+      && r.instrumento_id === destino && (r.unidad_id ?? null) === (e.unidad_id ?? null) && numPreguntas(r) > 0) ?? null
+    salida.push({ copia: e, actual, destino, estado, ocupa })
+  }
+  return salida
+}
+
+/** Los exámenes que se pueden recuperar de una copia, con nombres. No escribe nada. */
+export async function examenesRecuperablesDeCopia(copia: CopiaLeida): Promise<ExamenRecuperable[]> {
+  const comparado = compararExamenes(await db.rubricas.toArray(), await db.calificaciones.toArray(), copia)
+  const salida: ExamenRecuperable[] = []
+  for (const x of comparado) {
+    const ins = await db.instrumentos.get(x.destino)
+    const asig = ins ? await db.asignaturas.get(ins.asignatura_id) : undefined
+    const clase = asig ? await db.grupos.get(asig.grupo_id) : undefined
+    const unidad = x.copia.unidad_id != null ? await db.unidades.get(x.copia.unidad_id) : undefined
+    salida.push({
+      id: x.copia.id!,
+      titulo: x.copia.titulo || 'Examen sin título',
+      preguntas: numPreguntas(x.copia),
+      clase: clase?.nombre ?? 'Clase que ya no existe',
+      area: asig?.nombre_display || asig?.nombre || '',
+      unidad: x.copia.unidad_id == null ? 'Todas las unidades' : unidad?.nombre ?? 'Unidad que ya no existe',
+      instrumento: ins && !ins.deleted_at ? ins.nombre : `${ins?.nombre ?? 'Instrumento'} (retirado)`,
+      estado: x.estado,
+      preguntasAhora: x.estado === 'cambiado' ? numPreguntas(x.actual) : null,
+      ocupa: x.ocupa ? { id: x.ocupa.id!, titulo: x.ocupa.titulo || 'Examen sin título', preguntas: numPreguntas(x.ocupa) } : null,
+    })
+  }
+  return salida.sort((a, b) => `${a.clase}|${a.area}|${a.unidad}`.localeCompare(`${b.clase}|${b.area}|${b.unidad}`, 'es', { numeric: true }))
+}
+
+/**
+ * Devuelve al aparato los exámenes elegidos tal como estaban en la copia, en
+ * el instrumento donde hoy están sus notas. Si otro examen ocupa ese sitio,
+ * solo se sustituye con `sustituir`, y antes se guarda una copia suya en el
+ * banco de exámenes. No toca ninguna nota.
+ */
+export async function recuperarExamenesDeCopia(
+  copia: CopiaLeida, elegidos: { id: number; sustituir?: boolean }[],
+): Promise<{ recuperados: number; sustituidos: number; ocupados: number }> {
+  let recuperados = 0, sustituidos = 0, ocupados = 0
+  const comparado = compararExamenes(await db.rubricas.toArray(), await db.calificaciones.toArray(), copia)
+  for (const e of elegidos) {
+    const x = comparado.find(c => c.copia.id === e.id)
+    if (!x) continue
+    if (x.ocupa) {
+      if (!e.sustituir) { ocupados++; continue }
+      try { await guardarPruebaEnBanco(JSON.parse(x.ocupa.prueba_json || 'null')) } catch { /* ilegible: nada que guardar */ }
+      await db.rubricas.update(x.ocupa.id!, { deleted_at: sello(), updated_at: sello() })
+      sustituidos++
+    }
+    const campos = {
+      instrumento_id: x.destino, unidad_id: x.copia.unidad_id ?? null, titulo: x.copia.titulo,
+      prueba_json: x.copia.prueba_json, tipo: 'prueba' as const, deleted_at: null, updated_at: sello(),
+    }
+    if (x.actual) await db.rubricas.update(x.actual.id!, campos)
+    else await db.rubricas.add({ ...x.copia, ...campos })
+    recuperados++
+  }
+  return { recuperados, sustituidos, ocupados }
 }
