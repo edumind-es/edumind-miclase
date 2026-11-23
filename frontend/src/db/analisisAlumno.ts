@@ -22,7 +22,7 @@ import type { NotaArea } from './calculo'
 import type { Medida } from './localDb'
 import { criterioAdaptado } from './medidas'
 import { resumenEstadistico, type ResumenEstadistico } from './estadistica'
-import { notaDePrueba, pruebaDeUnidad, puntosDePregunta, type PruebaDef } from './prueba'
+import { nivelAlcanzado, notaDePrueba, pruebaDeUnidad, puntosDePregunta, type PruebaDef } from './prueba'
 import { informeDePrueba, type RespuestasAlumno } from './informePrueba'
 
 /** Con menos notas que estas, el documento impreso no da cifras del grupo. */
@@ -170,6 +170,10 @@ export type PreguntaAnalizada = {
   pctGrupo: number
   /** La falló (menos de la mitad) y la mayoría del grupo la acertó (60 % o más). */
   falloDestacado: boolean
+  /** ¿Se anotó? Una pregunta sin anotar cuenta como cero, pero no es lo mismo. */
+  anotada: boolean
+  /** Texto del nivel marcado (rúbrica de la pregunta, escala o test), o null. */
+  nivel: string | null
 }
 
 export type AnalisisExamen = {
@@ -236,6 +240,8 @@ export function analizarExamen(examen: ExamenDeArea, alumno_id: number, opciones
     return {
       numero: i + 1, enunciado: p.enunciado, criterio_id: p.criterio_id ?? null, aspecto: p.aspecto ?? null, max: p.max,
       obtenido, pctAlumno, pctGrupo, falloDestacado: pctAlumno < 50 && pctGrupo >= 60,
+      anotada: typeof suyas.respuestas[p.id] === 'number',
+      nivel: nivelAlcanzado(def, p, suyas.respuestas[p.id]),
     }
   })
   return {

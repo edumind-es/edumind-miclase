@@ -875,7 +875,14 @@ edumind_miclase/
   (`informes/informeAlumnoPrueba.ts`, Lámina) lleva nombre, vale para la
   familia, compara SOLO con la clase y calla sus cifras con menos de
   `MINIMO_GRUPO` exámenes (`[data-informe-pocos]` lo avisa); el grupo de
-  media parecida es solo de la pantalla del docente. Se entra además con
+  media parecida es solo de la pantalla del docente. **Al imprimir, por
+  defecto va en una hoja A4** (`[data-informe-formato]` = una · completo;
+  `documentoUnaPagina`): una tabla con cada pregunta, sus puntos y el
+  **nivel alcanzado** (`PreguntaAnalizada.nivel`, de `nivelAlcanzado` en
+  `db/prueba.ts`: nivel de corrección, escala o test; solo lee), con la
+  letra que baje `densidadUnaPagina` (de 9 a 6 pt; hasta ~35 preguntas con
+  rúbrica larga caben). `[data-informe-imprimir-clase]` imprime una hoja
+  por alumno corregido, siempre frente a toda la clase. Se entra además con
   `alumnoInicial` desde el corrector de la casilla
   (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
   (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y
