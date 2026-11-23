@@ -413,6 +413,19 @@ export function puntosDePregunta(def: PruebaDef, p: PreguntaPrueba, respuesta: n
   return Math.max(0, Math.min(p.max, respuesta))
 }
 
+/**
+ * El texto del nivel que el docente marcó en una pregunta, para los informes:
+ * el nivel de corrección (rúbrica de la pregunta), el de la escala del examen
+ * o acierto/fallo en un test. Null si no se anotó o si se puso una cifra que
+ * no es ningún nivel. Solo lee: la nota sigue saliendo de `puntosDePregunta`.
+ */
+export function nivelAlcanzado(def: PruebaDef, p: PreguntaPrueba, respuesta: number | undefined): string | null {
+  if (typeof respuesta !== 'number' || !Number.isFinite(respuesta)) return null
+  if (def.tipo === 'test') return respuesta > 0 ? 'Correcta' : respuesta < 0 ? 'Incorrecta' : 'En blanco'
+  if (def.tipo === 'niveles') return (def.escala ?? ESCALA_POR_DEFECTO).find(n => Math.abs(n.valor - respuesta) < 1e-6)?.nombre ?? null
+  return p.niveles?.find(n => Math.abs(n.puntos - respuesta) < 1e-6)?.texto || null
+}
+
 export type ResultadoPrueba = {
   /** Nota 0-10 del examen entero. Null mientras no se haya anotado ninguna pregunta. */
   nota: number | null

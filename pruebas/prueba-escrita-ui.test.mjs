@@ -368,6 +368,16 @@ try {
     ok(await aparece(informe.locator('[data-informe-pocos]')), 'con dos exámenes avisa de que el documento va sin cifras de la clase')
     const [suyo] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
     ok(/^informe-examen-de-la-unidad-1-.+\.html$/.test(suyo.suggestedFilename()), 'el documento del alumno lleva su nombre en el fichero', suyo.suggestedFilename())
+    {
+      // Por defecto, la hoja de una página con el nivel de cada pregunta; «Completo», el de cuatro secciones.
+      const html = (await import('node:fs')).readFileSync(await suyo.path(), 'utf8')
+      ok(html.includes('data-informe-una-pagina') && html.includes('Nivel alcanzado') && (html.match(/class="hoja/g) ?? []).length === 1, 'sale en una página, con el nivel alcanzado en cada pregunta')
+      await informe.locator('[data-informe-formato]').selectOption('completo')
+      const [completo] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
+      ok(!(await import('node:fs')).readFileSync(await completo.path(), 'utf8').includes('data-informe-una-pagina'), '«Completo» guarda el informe de siempre')
+      await informe.locator('[data-informe-formato]').selectOption('una')
+      ok(await informe.locator('[data-informe-imprimir-clase]').count() === 1, 'y se ofrecen los de toda la clase, una hoja por alumno')
+    }
     await foto('prueba-05b-informe-alumno')
     await informe.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
     await informe.waitFor({ state: 'detached', timeout: 5000 })

@@ -91,3 +91,115 @@ export function documentoInformeAlumnoPrueba(d: DatosInformeAlumnoPrueba): strin
   `
   return documento(`Informe · ${a.titulo} · ${d.alumno}`, [hoja(contenido)])
 }
+
+// ─── Formato de una página ───────────────────────────────────────────────
+//
+// Lo que se da al alumno o a la familia: cabe en un A4. Una sola tabla con
+// cada pregunta, sus puntos y el nivel de la rúbrica de corrección que se le
+// marcó, en vez de las cuatro secciones del informe completo. La letra baja
+// según cuánto texto haya (`densidadUnaPagina`), porque el documento no puede
+// medirse a sí mismo al imprimir (en el iPad lo compone el plugin nativo).
+
+/** Alto útil para la tabla en una hoja A4, en mm, descontando cabecera, resumen y pie. */
+const ALTO_TABLA_MM = 210
+const TAMANOS_PT = [9, 8.5, 8, 7.5, 7, 6.5, 6]
+
+/** Cuántas líneas ocupa un texto en una columna de `ancho` mm con letra de `pt` puntos. */
+function lineas(texto: string, ancho: number, pt: number): number {
+  const porLinea = Math.max(8, Math.floor(ancho / (pt * 0.3528 * 0.54)))
+  // Se parte por palabras: una línea nunca se llena del todo.
+  return Math.max(1, Math.ceil(texto.length * 1.15 / porLinea))
+}
+
+/** Margen arriba y abajo de cada fila: con la letra mínima, también se aprieta. */
+const relleno_mm = (pt: number) => pt >= 7 ? 1.2 : 0.7
+
+/** El tamaño de letra (pt) más grande con el que la tabla cabe en la hoja. Puro, se prueba aparte. */
+export function densidadUnaPagina(ps: Pick<PreguntaAnalizada, 'enunciado' | 'nivel' | 'criterio_id'>[]): number {
+  for (const pt of TAMANOS_PT) {
+    const linea = pt * 0.3528 * 1.3
+    const relleno = relleno_mm(pt) * 2 + 0.4
+    const alto = ps.reduce((s, p) => s + relleno + linea * Math.max(
+      lineas(p.enunciado + (p.criterio_id ? ` ${p.criterio_id}` : ''), 56, pt),
+      lineas(p.nivel ?? '', 76, pt),
+    ), 6)
+    if (alto <= ALTO_TABLA_MM) return pt
+  }
+  return TAMANOS_PT[TAMANOS_PT.length - 1]
+}
+
+const CSS_UNA_PAGINA = `
+.breve .kicker { margin: 4mm 0 1mm; }
+.breve h1 { font-family: var(--lm-display); font-weight: 800; font-size: 17pt; line-height: 1.05; letter-spacing: -.02em; margin: 0; }
+.breve .subtitulo { font-size: 9pt; margin-top: 1mm; }
+.breve .metas { margin-top: 3mm; }
+.breve .metas span { padding: 1.5mm 3mm 1.5mm 0; margin-right: 3mm; }
+.breve .linea { font-size: 8.5pt; color: var(--lm-ink-2); margin-top: 2mm; line-height: 1.45; }
+.breve .linea b { color: var(--lm-ink); }
+.breve table { margin-top: 3mm; table-layout: fixed; }
+.breve th, .breve td { padding: var(--pad, 1.2mm) 2mm var(--pad, 1.2mm) 0; }
+.breve td { line-height: 1.3; }
+.breve th.n, .breve td.n { width: auto; padding-right: 2mm; }
+.breve th:last-child, .breve td:last-child { padding-right: 0; }
+.breve td.nivel { color: var(--lm-ink-2); }
+.breve td.nivel.sin { font-style: italic; color: var(--lm-ink-3); }
+.breve .crit { font-family: var(--lm-mono); font-weight: 600; font-size: .85em; color: var(--lm-ink-2); white-space: nowrap; }
+.breve .pie { margin-top: 4mm; padding-top: 2mm; font-size: 6.5pt; line-height: 1.4; }
+`
+
+function filaBreve(p: PreguntaAnalizada, conClase: boolean): string {
+  const nivel = !p.anotada ? 'Sin anotar' : p.nivel ?? '—'
+  return `<tr data-pregunta="${p.numero}">
+    <td class="n">${p.numero}</td>
+    <td>${esc(p.enunciado || `Pregunta ${p.numero}`)}${p.criterio_id ? ` <span class="crit">${esc(p.criterio_id)}</span>` : ''}</td>
+    <td class="n" style="white-space:nowrap;color:${tintaPct(p.pctAlumno)}">${nota(p.obtenido, 2)} / ${nota(p.max, 2)}</td>
+    <td class="nivel${p.anotada && p.nivel ? '' : ' sin'}" data-nivel>${esc(nivel)}</td>
+    ${conClase ? `<td class="n">${p.pctGrupo} %</td>` : ''}
+  </tr>`
+}
+
+/** La hoja de una página de un alumno. `documentoUnaPagina` junta una o varias. */
+export function hojaInformeAlumnoPruebaBreve(d: DatosInformeAlumnoPrueba): string {
+  const a = d.analisis
+  const conClase = grupoPublicable(a.nota)
+  const tipo = TIPOS_PRUEBA.find(t => t.valor === d.def.tipo)?.nombre ?? d.def.tipo
+  const pt = densidadUnaPagina(a.preguntas)
+  const obtenido = a.preguntas.reduce((s, p) => s + Math.max(0, p.obtenido), 0)
+  const maximo = a.preguntas.reduce((s, p) => s + p.max, 0)
+  const que = a.ejesPor === 'aspecto' ? 'etiqueta' : 'criterio'
+  const ejes = a.ejes.length > 1
+    ? `<div class="linea" data-ejes>Por ${que}: ${[...a.ejes].sort((x, y) => x.pctAlumno - y.pctAlumno)
+      .map(e => `${esc(e.nombre)} <b style="color:${tintaPct(e.pctAlumno)}">${e.pctAlumno} %</b>${conClase ? ` (clase ${e.pctGrupo} %)` : ''}`).join(' · ')}</div>`
+    : ''
+  const repasar = a.falladas.length
+    ? `<div class="linea" data-repasar>Para repasar: <b>${[...a.falladas].sort((x, y) => x.numero - y.numero).map(p => p.numero).join(', ')}</b> (menos de la mitad de sus puntos).</div>`
+    : `<div class="linea" data-repasar>No falló ninguna pregunta.</div>`
+
+  const contenido = `
+    ${cabecera('Informe de la prueba · alumno')}
+    <div class="kicker">${esc(tipo)} · ${esc(a.titulo)}</div>
+    <h1>${esc(d.alumno)}</h1>
+    <div class="subtitulo">${esc(d.clase)} · ${esc(d.area)}${d.unidad ? ` · ${esc(d.unidad)}` : ''}</div>
+    <div class="metas">
+      <span>Nota <b style="color:${tinta(a.nota.valor)}">${a.nota.valor == null ? '—' : nota(a.nota.valor)}</b></span>
+      <span>Puntos <b>${nota(obtenido, 2)} / ${nota(maximo, 2)}</b></span>
+      <span>Preguntas <b>${a.preguntas.length}</b></span>
+      ${conClase ? `<span>Media de la clase <b>${nota(a.nota.grupo!.media)}</b></span>` : ''}
+    </div>
+    ${ejes}
+    ${repasar}
+    <table style="font-size:${pt}pt;--pad:${relleno_mm(pt)}mm" data-una-pagina-pt="${pt}">
+      <colgroup><col style="width:9mm"><col style="width:58mm"><col style="width:22mm"><col>${conClase ? '<col style="width:13mm">' : ''}</colgroup>
+      <thead><tr><th class="n">N.º</th><th>Pregunta</th><th class="n">Puntos</th><th>Nivel alcanzado</th>${conClase ? '<th class="n">Clase</th>' : ''}</tr></thead>
+      <tbody>${a.preguntas.map(p => filaBreve(p, conClase)).join('')}</tbody>
+    </table>
+    ${pie('Datos personales de un menor: compártelo solo con quien deba conocerlo.')}
+  `
+  return hoja(contenido).replace('<div class="hoja">', '<div class="hoja breve" data-informe-una-pagina>')
+}
+
+/** Uno o varios alumnos, una hoja A4 cada uno. */
+export function documentoUnaPagina(titulo: string, datos: DatosInformeAlumnoPrueba[]): string {
+  return documento(titulo, datos.map(hojaInformeAlumnoPruebaBreve))
+    .replace('</style>', `${CSS_UNA_PAGINA}</style>`)
+}
