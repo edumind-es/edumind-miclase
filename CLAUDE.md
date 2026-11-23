@@ -1112,7 +1112,48 @@ edumind_miclase/
   porcentajes solo se escribían al crear el área. Decisión de Luis: lo
   normal es la media de los tres, pero hay docentes que no lo hacen así. La
   recuperación automática de un criterio suspenso que una unidad posterior
-  supera NO está hecha: es otra regla, por criterio y entre unidades.
+  supera NO está hecha; la recuperación que hay es una actividad (nota siguiente).
+- **La recuperación es una actividad que mejora la nota de su instrumento, y
+  no escribe encima de nada** (nov 2026; `db/recuperacion.ts`, puro;
+  `recuperacion.test.ts` y `recuperacion-ui.test.mjs`). Decisiones de Luis
+  (23/11/2026): es una actividad propia dentro de un instrumento
+  (`Instrumento.recuperacion` = 'mejor' | 'sustituir' | 'tope', sin índice ni
+  esquema), con su columna en la unidad que se recupera; **recupera solo lo
+  de su instrumento** (examen 3 al 80 %, tabla 8 al 20 %, recuperación 6 →
+  el examen cuenta 6, la tabla sigue en 8, el criterio queda en 6,4); la
+  regla se elige en cada recuperación (la mejor de las dos · la de la
+  recuperación · la mejor con tope de 5, `notaRecuperada`); y entra quien
+  tiene nota en ella, criterio a criterio. `aplicarRecuperaciones(crudas,
+  instrumentos)` va ANTES de `fundirUnidades` y `fundirHijosEnFamilias`,
+  porque necesita la unidad de cada casilla: por alumno, criterio,
+  instrumento, trimestre y unidad compara la media ponderada de las demás
+  actividades con la de la recuperación; si la regla la cambia, esas
+  actividades entran todas con la nota recuperada (virtual) y la
+  recuperación no entra como una más; sin nada que recuperar en esa casilla,
+  cuenta como una actividad. Lo llaman TODOS los que funden
+  (`calcularNotaArea`, `getMatrizEvaluacion`, `getResumenPorCriterio`,
+  `ExplicacionNota`): si uno no lo hiciera, boletín y matriz discreparían.
+  En la matriz la columna de cada actividad enseña la nota que se le puso y
+  solo lo que resume el instrumento va recuperado (`MatrizEvaluacion.recuperaciones`
+  dice cuáles); `ExplicacionNota` lo cuenta en `[data-explicacion-recuperacion]`.
+  Una recuperación no reparte porcentaje: `pct_familia`, «Pesos del área»
+  (`[data-hijo-recuperacion]`, donde se cambia la regla) y el peso medio de
+  una actividad nueva la dejan fuera. Se crea en «Qué evalúo → Por unidad»
+  con «+ recuperación en esta unidad» (`[data-unidad-recuperacion]`,
+  `[data-unidad-anadir-regla]`; si ya hay una en otra unidad, propone
+  traerla: es la misma actividad). Su columna, sin examen ni rúbrica
+  propios, abre `SesionRecuperacion` (`[data-recuperacion-abrir]` →
+  `[data-recuperacion]`): salen los alumnos con algún criterio suspenso con
+  ese instrumento en la unidad (`notasParaRecuperar`, `notasARecuperar`;
+  `[data-recuperacion-todos]` enseña la clase entera), cada uno con sus
+  criterios (`[data-recuperar-criterio]`, marcados los suspensos, con «tenía
+  X → queda Y») y la nota va SOLO a los marcados, con `sinVinculos`.
+  Pendiente: con examen o rúbrica propios la recuperación se califica como
+  cualquier actividad y la nota va a todos sus criterios, sin la propuesta
+  por alumno; «Pegar columna» y el panel de la casilla por instrumento
+  tampoco la aplican. **Un aparato sin actualizar cuenta la recuperación
+  como una actividad más** (promedia en vez de aplicar la regla): hay que
+  actualizar todos antes de usarla.
 - **Una casilla tiene una sola fila que cuenta** (`masReciente` en
   `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
   aparatos que califican la misma casilla antes de sincronizar crean dos

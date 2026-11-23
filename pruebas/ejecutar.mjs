@@ -196,6 +196,10 @@ async function principal() {
     const equipos = join(scratch, 'equipos.mjs')
     await paquete('pruebas/equipos.test.ts', equipos, ['--platform=node', '--format=esm'])
     await suite('equipos y agrupamientos: reparto y alcance', 'node', [equipos])
+
+    const recuperacion = join(scratch, 'recuperacion.mjs')
+    await paquete('pruebas/recuperacion.test.ts', recuperacion, ['--platform=node', '--format=esm'])
+    await suite('recuperación por criterio: reglas y nota del área', 'node', [recuperacion])
     const planificacion = join(scratch, 'planificacion-semanal.mjs')
     await paquete('pruebas/planificacion-semanal.test.ts', planificacion, ['--platform=node', '--format=esm'])
     await suite('planificación semanal: volcado de un .md', 'node', [planificacion])
@@ -343,6 +347,7 @@ async function principal() {
     await suite('seguimiento de tutorías desde la interfaz', 'node', ['pruebas/tutorias-ui.test.mjs'], entorno)
     await suite('equipos de la clase desde la interfaz', 'node', ['pruebas/equipos-ui.test.mjs'], entorno)
     await suite('equipos: la nota de un alumno a su equipo', 'node', ['pruebas/equipos-nota-ui.test.mjs'], entorno)
+    await suite('recuperación por criterio desde la interfaz', 'node', ['pruebas/recuperacion-ui.test.mjs'], entorno)
     await suite('planificación semanal y calendario desde la interfaz', 'node', ['pruebas/planificacion-ui.test.mjs'], entorno)
     await suite('prueba escrita desde la interfaz', 'node', ['pruebas/prueba-escrita-ui.test.mjs'], entorno)
     await suite('planilla de corrección desde la interfaz', 'node', ['pruebas/planilla-ui.test.mjs'], entorno)

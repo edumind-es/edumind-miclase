@@ -27,6 +27,10 @@ import { medidaDe } from './medidas'
 import { nombreEnUnidad, tieneNombrePropio, alRenombrar } from './nombreActividad'
 import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
 import { normalizarAgrupamiento } from './equipos'
+import {
+  aplicarRecuperaciones, recuperacionesAplicadas, esRecuperacion, reglaDeRecuperacion, notasARecuperar,
+  type ReglaRecuperacion, type RecuperacionAplicada,
+} from './recuperacion'
 
 // ─── Tipos de respuesta ───────────────────────────────────────────────────────
 
@@ -605,12 +609,13 @@ function pesoMedio(hijos: Instrumento[]): number {
 
 export async function crearInstrumentoHijo(
   familia_id: number,
-  data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null }
+  data: { nombre: string; tipo: string; peso?: number; agregacion?: Agregacion | null; recuperacion?: ReglaRecuperacion | null }
 ): Promise<number> {
   const familia = await db.instrumentos.get(familia_id)
   if (!familia || familia.deleted_at) throw new Error('El instrumento no existe')
   if (familia.familia_id != null) throw new Error('Una actividad no puede tener actividades dentro: cuélgala del instrumento')
-  const hermanos = await getHijos(familia_id)
+  // El peso medio se mira entre las actividades que reparten nota.
+  const hermanos = (await getHijos(familia_id)).filter(h => !esRecuperacion(h))
   const reg = nuevo({
     asignatura_id: familia.asignatura_id, familia_id,
     nombre: data.nombre.trim(), tipo: data.tipo,
@@ -619,6 +624,7 @@ export async function crearInstrumentoHijo(
     peso: data.peso != null && data.peso > 0 ? data.peso : pesoMedio(hermanos),
     trimestres: familia.trimestres, orden: hermanos.length,
     agregacion: data.agregacion ?? null, created_at: now(),
+    ...(data.recuperacion ? { recuperacion: data.recuperacion } : {}),
   })
   await db.instrumentos.add(reg)
   return reg.id
@@ -1441,7 +1447,7 @@ export async function crearInstrumento(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color' | 'solo_medidas'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color' | 'solo_medidas' | 'recuperacion'>>
 ): Promise<void> {
   const antes = 'agregacion' in fields ? (await db.instrumentos.get(id))?.agregacion ?? 'media' : null
   await db.instrumentos.update(id, tocado(fields))
@@ -1941,8 +1947,8 @@ export async function getResumenPorCriterio(asignatura_id: number): Promise<
   const pesoDe = new Map(instrumentos.map(i => [i.id!, i.peso]))
 
   // Como en el motor: primero la media de unidades, después el peso.
-  const cals = fundirUnidades(sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
-    .filter(c => c.valor != null).toArray())), await pesosUnidadDeArea(asignatura_id))
+  const cals = fundirUnidades(aplicarRecuperaciones(sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(instrIds)
+    .filter(c => c.valor != null).toArray())), instrumentos), await pesosUnidadDeArea(asignatura_id))
 
   const acc = new Map<string, { suma: number; pesos: number }>()
   for (const c of cals) {
@@ -2555,6 +2561,23 @@ export async function criteriosQueEvalua(instrumento_id: number, unidad_id: numb
 }
 
 /** Los campos de una nota que no dependen del criterio ni del alumno. */
+/**
+ * Lo que cada alumno tenía con el instrumento de una recuperación en una
+ * unidad y trimestre, criterio a criterio y ANTES de recuperar: de ahí salen
+ * los suspensos que propone la pantalla (`notasARecuperar`, puro).
+ */
+export async function notasParaRecuperar(
+  asignatura_id: number, recuperacion_id: number, unidad_id: number, trimestre: number, criterios: string[]
+): Promise<Map<number, Map<string, number | null>>> {
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const familia = instrumentos.find(i => i.id === recuperacion_id)?.familia_id
+  if (familia == null) return new Map()
+  const ids = instrumentos.filter(i => i.id === familia || i.familia_id === familia).map(i => i.id!)
+  const crudas = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(ids)
+    .filter(c => c.trimestre === trimestre && c.unidad_id === unidad_id).toArray()))
+  return notasARecuperar(crudas, instrumentos, recuperacion_id, criterios)
+}
+
 export type DatosDeArea = Pick<CalItem, 'asignatura' | 'curso' | 'etapa' | 'comunidad'>
 
 /**
@@ -3644,6 +3667,8 @@ export type CeldaInstrumento = {
    * Resuelto aquí una vez, como el color, para que cabecera y panel digan lo mismo.
    */
   pct_familia: number | null
+  /** Si la actividad es una recuperación, su regla (`db/recuperacion.ts`); si no, null. */
+  recuperacion?: ReglaRecuperacion | null
   /** Color de identidad, ya resuelto (propio o por orden). */
   color: string
 }
@@ -3685,6 +3710,8 @@ export type MatrizEvaluacion = {
    * gestor lo mueve a un hijo (`moverDatosDeFamiliaAHijo`); la matriz avisa.
    */
   familiasConDatosEscondidos: FamiliaConDatosEscondidos[]
+  /** Las recuperaciones que han contado en lo que se mira (`db/recuperacion.ts`). */
+  recuperaciones: RecuperacionAplicada[]
   /** Criterios de la unidad activa (vacío = todos los de la asignatura) */
   criteriosDeUnidad: Set<string> | null
   /** alumno_id → sus medidas de atención a la diversidad en el área (`db/medidas.ts`). */
@@ -3767,7 +3794,8 @@ export async function getMatrizEvaluacion(
   // Porcentaje de cada hijo dentro de su familia, con todos los hermanos.
   const pctPorId = new Map<number, number>()
   for (const familiaId of new Set(instrumentos.filter(i => i.familia_id != null).map(i => i.familia_id!))) {
-    const hermanos = instrumentos.filter(i => i.familia_id === familiaId)
+    // Una recuperación no reparte porcentaje: mejora la nota de las demás.
+    const hermanos = instrumentos.filter(i => i.familia_id === familiaId && !esRecuperacion(i))
     porcentajesEnFamilia(hermanos.map(h => h.peso)).forEach((v, k) => pctPorId.set(hermanos[k].id!, v))
   }
 
@@ -3803,6 +3831,7 @@ export async function getMatrizEvaluacion(
         familia_nombre: familia ? nombreEnUnidad(familia, unidad_id) : null,
         familia_peso: familia ? familia.peso : ins.peso,
         pct_familia: familia ? pctPorId.get(ins.id!) ?? null : null,
+        recuperacion: familia ? reglaDeRecuperacion(ins) : null,
         color: colorPorId.get(ins.id!) ?? colorDeInstrumento(ins, 0),
       })
     }
@@ -3829,7 +3858,13 @@ export async function getMatrizEvaluacion(
   for (const c of cals) {
     calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
   }
-  for (const c of fundirHijosEnFamilias(cals, instrumentos)) {
+  // Las recuperaciones se aplican solo a lo que resume el instrumento: cada
+  // actividad sigue enseñando en su columna la nota que se le puso.
+  const aplicadas = recuperacionesAplicadas(crudas, instrumentos)
+  const recuperadas = aplicadas.length ? aplicarRecuperaciones(crudas, instrumentos) : crudas
+  const paraFundir = !aplicadas.length ? cals
+    : unidad_id == null ? fundirUnidades(recuperadas, await pesosUnidadDeArea(asignatura_id)) : recuperadas
+  for (const c of fundirHijosEnFamilias(paraFundir, instrumentos)) {
     if (c.virtual) calificaciones[`${c.alumno_id}:${c.criterio_id}:${c.instrumento_id}:${c.trimestre}`] = c
   }
 
@@ -3872,7 +3907,7 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
-    familiasConDatosEscondidos, medidas,
+    familiasConDatosEscondidos, medidas, recuperaciones: aplicadas,
   }
 }
 

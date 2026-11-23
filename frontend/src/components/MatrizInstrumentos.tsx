@@ -283,7 +283,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 const clase = enHoja ? 'hoja-accion' : 'instr-th-accion secundaria instr-th-detalle'
                 return (<>
                   <div className="instr-th-tipo instr-th-detalle">
-                    {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
+                    {cfg.label}{col.ins.recuperacion ? ` · recuperación de ${col.ins.familia_nombre}` : esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   {/* Los criterios que cubre; quien necesite la lista la lee de `data-criterios`
@@ -421,7 +421,15 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                         onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
                     </div>
                   )}
-                  {esExamen ? (
+                  {col.ins.recuperacion && !col.ins.tiene_prueba && !col.ins.tiene_rubrica && onNota ? (
+                    // Una recuperación sin examen ni rúbrica propios: la pasada que
+                    // propone los criterios suspensos de cada alumno.
+                    <button type="button" className="instr-th-accion" data-nota-abrir data-recuperacion-abrir
+                      onClick={() => onNota(col)}
+                      title="Poner la nota de la recuperación: la app marca los criterios suspensos de cada alumno y tú retocas">
+                      Calificar
+                    </button>
+                  ) : esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}
                       title={col.ins.tiene_prueba

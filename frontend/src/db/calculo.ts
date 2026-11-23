@@ -19,6 +19,7 @@
  */
 import type { Calificacion, Instrumento, Medida, ReglaArea, ReglaFinal, ReglaUnidades } from './localDb'
 import { instrumentosParaAlumno, criteriosExcluidos, medidasVigentes, medidaDe, parsearPesos } from './medidas'
+import { aplicarRecuperaciones } from './recuperacion'
 
 export type NotaCriterio = {
   criterio_id: string
@@ -493,7 +494,10 @@ export function calcularNotaArea(
       // Un instrumento que no cuenta para este alumno no entra ni en la
       // fusión de su familia: con peso 0 un hijo contaría como 1.
       && !(ajustado && byId.has(c.instrumento_id) && byId.get(c.instrumento_id)!.peso <= 0))
-    conValor.push(...fundirHijosEnFamilias(fundirUnidades(deT, opciones.pesosUnidad), insT).filter(c => c.valor != null))
+    // Antes de fundir, las recuperaciones: mejoran la nota del instrumento
+    // en su unidad y no entran como una actividad más.
+    const recuperadas = aplicarRecuperaciones(deT, insT)
+    conValor.push(...fundirHijosEnFamilias(fundirUnidades(recuperadas, opciones.pesosUnidad), insT).filter(c => c.valor != null))
   }
 
   // criterio → trimestre → aportaciones

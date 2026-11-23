@@ -149,6 +149,13 @@ export interface Instrumento extends Sincronizable {
    * (`db/nombreActividad.ts`). Sin índice: no exige versión de esquema.
    */
   nombres_unidad?: Record<string, string> | null
+  /**
+   * Si es una actividad de recuperación, su regla ('mejor' | 'sustituir' |
+   * 'tope'); null o ausente = una actividad normal. Su nota no cuenta como
+   * una más: mejora la que el alumno tenía con el resto de su instrumento en
+   * ese criterio y unidad (`db/recuperacion.ts`). Sin índice ni esquema.
+   */
+  recuperacion?: string | null
 }
 
 export type TipoMedida = 'adaptacion' | 'refuerzo'
