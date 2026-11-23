@@ -60,7 +60,15 @@ try {
     await poner(ana, FAMILIA, UD1, 'CE1.1', 8, { p1: 1, p2: 1 })
     await poner(bruno, FAMILIA, UD1, 'CE1.1', 6, { p1: 1, p2: 0 })
     await poner(ana, FAMILIA, UD2, 'CE1.1', 5, null)
-    const copia = await cifrarExport(JSON.parse(await q.exportarDatos(db, { sinEvidencias: true })), 'clave-de-la-copia')
+    // La copia, cifrada (Exportar / Importar) y sin cifrar (la de Informes).
+    const plana = await q.exportarDatos(db, { sinEvidencias: true })
+    const copia = await cifrarExport(JSON.parse(plana), 'clave-de-la-copia')
+    // Una copia de varios MB se cifra y se abre: convertirla de golpe desbordaba la pila.
+    const { descifrarExport } = await import('/src/auth/crypto.ts')
+    const grande = { relleno: 'x'.repeat(4_000_000) }
+    let copiaGrande = ''
+    try { copiaGrande = (await descifrarExport(await cifrarExport(grande, 'clave'), 'clave')).relleno.length === 4_000_000 ? 'ok' : 'distinta' }
+    catch (e) { copiaGrande = e.message }
     // Después de la copia: el instrumento pasa a ser una actividad (misma fila,
     // otro instrumento_id), el otro examen pisa la UD1, pone una nota donde no
     // la había y se sigue trabajando en la UD2.
@@ -71,14 +79,29 @@ try {
     await poner(ana, ACTIVIDAD, UD1, 'CE1.2', 2, { p1: 0 })
     await poner(bruno, ACTIVIDAD, UD2, 'CE1.1', 9, null)
     localStorage.setItem('miclase_clase_activa', String(g))
-    return { ana, bruno, UD1, UD2, ACTIVIDAD, copia: JSON.stringify(copia) }
+    return { ana, bruno, UD1, UD2, ACTIVIDAD, copia: JSON.stringify(copia), plana, copiaGrande }
   })
   await p.goto(BASE + '/', { waitUntil: 'networkidle' })
 
-  console.log('\n1. Abrir la copia no cambia nada')
+  console.log('\n0. Una copia grande, el índice de la copia automática y la copia sin cifrar')
+  ok(d.copiaGrande === 'ok', 'una copia de 4 MB se cifra y se vuelve a abrir', d.copiaGrande)
   const antes = await notas()
-  await p.getByTitle('Exportar / Importar copia de seguridad').first().click()
-  await p.locator('[data-recuperar-abrir]').click()
+  const abrir = async () => {
+    await p.getByTitle('Exportar / Importar copia de seguridad').first().click()
+    await p.locator('[data-recuperar-abrir]').click()
+  }
+  const fichero = (nombre, texto) => p.locator('[data-recuperar-fichero]').setInputFiles({ name: nombre, mimeType: 'application/json', buffer: Buffer.from(texto) })
+  await abrir()
+  await fichero('MiClase.copia.json', JSON.stringify({ formato: 'miclase-copia', version: 1, salt: 'x', verificador: 'y', ficheros: 3 }))
+  ok(await p.getByText(/es el índice de la copia automática/).waitFor({ timeout: 6000 }).then(() => true, () => false), 'el índice de la copia automática se reconoce y se explica')
+  await fichero('copia-informes.json', d.plana)
+  await p.locator('[data-recuperar-lista]').waitFor({ timeout: 8000 })
+  ok(await p.locator('[data-recuperar-grupo]').count() === 1, 'la copia sin cifrar de Informes se abre sin pedir contraseña', String(await p.locator('[data-recuperar-grupo]').count()))
+  ok(JSON.stringify(await notas()) === JSON.stringify(antes), 'y abrirla tampoco escribe nada')
+  await p.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+
+  console.log('\n1. Abrir la copia no cambia nada')
+  await abrir()
   await p.locator('[data-recuperar-fichero]').setInputFiles({ name: 'copia.miclase', mimeType: 'application/json', buffer: Buffer.from(d.copia) })
   await p.locator('[data-recuperar-clave]').fill('otra-clave')
   await p.locator('[data-recuperar-comparar]').click()
