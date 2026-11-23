@@ -3,7 +3,10 @@ import { cifrarExport, descifrarExport, descargarBlob, type ExportCifrado } from
 import { exportarDatos, importarDatos } from '@/db/queries'
 import { registrarCopiaEnFichero } from '@/db/copia'
 import { db } from '@/db/localDb'
-import { notasRecuperablesDeCopia, recuperarNotasDeCopia, type CopiaLeida, type GrupoRecuperable } from '@/db/recuperarDeCopia'
+import {
+  notasRecuperablesDeCopia, recuperarNotasDeCopia, examenesRecuperablesDeCopia, recuperarExamenesDeCopia,
+  type CopiaLeida, type GrupoRecuperable, type ExamenRecuperable,
+} from '@/db/recuperarDeCopia'
 import { confirmar } from '@/utils/confirmar'
 
 interface Props { onClose: () => void }
@@ -25,6 +28,9 @@ export default function ExportImport({ onClose }: Props) {
   const [grupos, setGrupos] = useState<GrupoRecuperable[]>([])
   const [marcados, setMarcados] = useState<Set<string>>(new Set())
   const [quitar, setQuitar] = useState<Set<string>>(new Set())
+  const [examenes, setExamenes] = useState<ExamenRecuperable[]>([])
+  const [examenesMarcados, setExamenesMarcados] = useState<Set<string>>(new Set())
+  const [sustituir, setSustituir] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -117,6 +123,7 @@ export default function ExportImport({ onClose }: Props) {
   const abrirCopia = async (datos: CopiaLeida) => {
     try {
       const lista = await notasRecuperablesDeCopia(datos)
+      setExamenes(await examenesRecuperablesDeCopia(datos)); setExamenesMarcados(new Set()); setSustituir(new Set())
       setCopia(datos); setGrupos(lista); setMarcados(new Set()); setQuitar(new Set())
       setMsg(null)
       setPaso('recuperar_elegir')
@@ -165,6 +172,32 @@ export default function ExportImport({ onClose }: Props) {
       setGrupos(await notasRecuperablesDeCopia(copia))
       setMarcados(new Set()); setQuitar(new Set())
       setMsg({ tipo: 'ok', texto: `${r.recuperadas} ${r.recuperadas === 1 ? 'nota recuperada' : 'notas recuperadas'} de la copia${r.quitadas ? ` y ${r.quitadas} ${r.quitadas === 1 ? 'quitada' : 'quitadas'}` : ''}. Las que había quedan como nota anterior en su casilla.` })
+    } catch (e: any) {
+      setMsg({ tipo: 'error', texto: e.message || 'No se pudo recuperar.' })
+    } finally {
+      setTrabajando(false)
+    }
+  }
+
+  const recuperarExamenes = async () => {
+    if (!copia || !examenesMarcados.size) return
+    const elegidos = examenes.filter(x => examenesMarcados.has(String(x.id)))
+    const aSustituir = elegidos.filter(x => x.ocupa && sustituir.has(String(x.id)))
+    const si = await confirmar({
+      titulo: `¿Devolver ${elegidos.length === 1 ? 'este examen' : `estos ${elegidos.length} exámenes`} a como ${elegidos.length === 1 ? 'estaba' : 'estaban'} en la copia?`,
+      texto: elegidos.map(x => `· «${x.titulo}» (${x.preguntas} preguntas) → ${x.unidad} · ${x.instrumento}`).join('\n')
+        + (aSustituir.length ? `\n\nSe ${aSustituir.length === 1 ? 'sustituye' : 'sustituyen'}: ${aSustituir.map(x => `«${x.ocupa!.titulo}»`).join(', ')}. Queda una copia en el banco de exámenes.` : '')
+        + '\n\nNo se toca ninguna nota.',
+      aceptar: 'Recuperar',
+    })
+    if (!si) return
+    setTrabajando(true)
+    setMsg(null)
+    try {
+      const r = await recuperarExamenesDeCopia(copia, elegidos.map(x => ({ id: x.id, sustituir: sustituir.has(String(x.id)) })))
+      setExamenes(await examenesRecuperablesDeCopia(copia)); setExamenesMarcados(new Set()); setSustituir(new Set())
+      setMsg({ tipo: 'ok', texto: `${r.recuperados} ${r.recuperados === 1 ? 'examen recuperado' : 'exámenes recuperados'} de la copia`
+        + (r.ocupados ? `; ${r.ocupados} sin recuperar porque su sitio lo ocupa otro examen y no marcaste sustituirlo` : '') + '.' })
     } catch (e: any) {
       setMsg({ tipo: 'error', texto: e.message || 'No se pudo recuperar.' })
     } finally {
@@ -277,7 +310,52 @@ export default function ExportImport({ onClose }: Props) {
         )}
         {paso === 'recuperar_elegir' && (
           <div data-recuperar-lista style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {grupos.length === 0 ? (
+            {examenes.length > 0 && (
+              <div data-recuperar-examenes style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--azul-900)' }}>Exámenes</div>
+                <div style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.6 }}>
+                  Estos exámenes de la copia no están igual en este aparato. Recuperar uno devuelve sus preguntas; no toca ninguna nota.
+                </div>
+                {examenes.map(x => {
+                  const k = String(x.id)
+                  return (
+                    <div key={k} data-recuperar-examen={k} data-estado={x.estado} data-titulo={x.titulo}
+                      style={{ border: '1px solid var(--gris-200)', borderRadius: 8, padding: '10px 12px' }}>
+                      <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minHeight: 44, cursor: 'pointer' }}>
+                        <input type="checkbox" data-recuperar-examen-marcar checked={examenesMarcados.has(k)}
+                          onChange={() => alternar(examenesMarcados, setExamenesMarcados, k)} style={{ marginTop: 4, width: 20, height: 20 }} />
+                        <span style={{ fontSize: 14, lineHeight: 1.45 }}>
+                          <strong>«{x.titulo}» · {x.preguntas} {x.preguntas === 1 ? 'pregunta' : 'preguntas'}</strong>
+                          <br />
+                          <span style={{ color: 'var(--gris-600)', fontSize: 13 }}>
+                            {x.clase} · {x.area} · {x.unidad} · {x.instrumento}
+                            <br />
+                            {x.estado === 'falta' && 'En este aparato no está.'}
+                            {x.estado === 'retirado' && 'En este aparato está retirado.'}
+                            {x.estado === 'cambiado' && `En este aparato ha cambiado desde la copia: ahora tiene ${x.preguntasAhora} ${x.preguntasAhora === 1 ? 'pregunta' : 'preguntas'}.`}
+                            {x.estado === 'movido' && 'En este aparato está en otro instrumento o en otra unidad.'}
+                          </span>
+                        </span>
+                      </label>
+                      {x.ocupa && examenesMarcados.has(k) && (
+                        <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minHeight: 44, cursor: 'pointer', marginLeft: 30, fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.45 }}>
+                          <input type="checkbox" data-recuperar-examen-sustituir checked={sustituir.has(k)}
+                            onChange={() => alternar(sustituir, setSustituir, k)} style={{ marginTop: 4, width: 20, height: 20 }} />
+                          <span>Ese sitio lo ocupa ahora «{x.ocupa.titulo}» ({x.ocupa.preguntas} {x.ocupa.preguntas === 1 ? 'pregunta' : 'preguntas'}). Sustituirlo; queda una copia en el banco de exámenes.</span>
+                        </label>
+                      )}
+                    </div>
+                  )
+                })}
+                <div>
+                  <button className="btn-primary" data-recuperar-examenes-aplicar onClick={recuperarExamenes} disabled={trabajando || !examenesMarcados.size}>
+                    Recuperar los exámenes marcados
+                  </button>
+                </div>
+                {grupos.length > 0 && <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--azul-900)', marginTop: 8 }}>Notas</div>}
+              </div>
+            )}
+            {grupos.length === 0 && examenes.length > 0 ? null : grupos.length === 0 ? (
               <div data-recuperar-nada style={{ fontSize: 13, color: 'var(--gris-600)', lineHeight: 1.6 }}>
                 Todas las notas de la copia están igual en este aparato: no hay nada que recuperar.
               </div>
