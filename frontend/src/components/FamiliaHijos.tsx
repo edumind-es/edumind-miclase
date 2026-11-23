@@ -182,7 +182,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       let sustituir = false
       if (choques.examenes || choques.rubrica) {
         const que = [
-          choques.examenes ? `${choques.examenes} examen${choques.examenes !== 1 ? 'es' : ''} para la misma unidad` : '',
+          choques.examenes ? `${choques.examenes} ${choques.examenes !== 1 ? 'exámenes' : 'examen'} para la misma unidad` : '',
           choques.rubrica ? 'rúbrica propia' : '',
         ].filter(Boolean).join(' y ')
         sustituir = await confirmar({ titulo: `«${hijo.nombre}» ya tiene ${que}`, texto: `¿Sustituirlo por lo de «${familia.nombre}»? Si lo conservas, lo del instrumento se queda donde está.`, aceptar: 'Sustituir', cancelar: 'Conservar lo de la actividad' })
@@ -191,7 +191,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       const partes = [
         r.calificaciones ? `${r.calificaciones} nota${r.calificaciones !== 1 ? 's' : ''}` : '',
         r.diario ? `${r.diario} registro${r.diario !== 1 ? 's' : ''} del diario` : '',
-        r.rubricas ? `${r.rubricas} examen${r.rubricas !== 1 ? 'es' : ''} o rúbrica` : '',
+        r.rubricas ? `${r.rubricas} ${r.rubricas !== 1 ? 'exámenes o rúbricas' : 'examen o rúbrica'}` : '',
       ].filter(Boolean)
       const quedan = r.noMovidos.calificaciones + r.noMovidos.examenes + r.noMovidos.rubricas
       setMovido(`${partes.length ? `Movido a «${hijo.nombre}»: ${partes.join(', ')}.` : 'Nada que mover.'}${quedan ? ` Se quedan en la familia ${quedan} que habrían pisado lo del hijo.` : ''}`)

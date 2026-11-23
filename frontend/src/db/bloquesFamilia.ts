@@ -141,7 +141,7 @@ export function etiquetaHora(iso: string | null): string {
 /** «1 examen, 3 notas, su rúbrica», como lo dice el gestor. */
 export function describeBloque(b: Pick<BloqueDirecto, 'calificaciones' | 'diario' | 'examenes' | 'rubricas'>): string {
   return [
-    b.examenes ? `${b.examenes} examen${b.examenes !== 1 ? 'es' : ''}` : '',
+    b.examenes ? `${b.examenes} ${b.examenes !== 1 ? 'exámenes' : 'examen'}` : '',
     b.calificaciones ? `${b.calificaciones} nota${b.calificaciones !== 1 ? 's' : ''}` : '',
     b.diario ? `${b.diario} registro${b.diario !== 1 ? 's' : ''} del diario` : '',
     b.rubricas ? 'su rúbrica' : '',
