@@ -19,6 +19,10 @@
 import { useEffect, useState } from 'react'
 import { getCalificacionesAlumnoAsignatura, type UnidadConCriterios } from '@/db/queries'
 import {
+  aplicarRecuperaciones, recuperacionesAplicadas, esRecuperacion, reglaDeRecuperacion, REGLAS_RECUPERACION,
+  type RecuperacionAplicada,
+} from '@/db/recuperacion'
+import {
   calcularNotaArea, calificativo, fundirHijosEnFamilias, fundirUnidades, parsearPesosTrimestres,
   pesosCriterioDeUnidades, pesosVinculoDeUnidades, porcentajesEnFamilia, type NotaArea,
   normalizarReglaArea, normalizarReglaFinal, REGLAS_AREA, REGLAS_FINAL, pesosDeUnidades,
@@ -60,7 +64,7 @@ function origenDe(c: Calificacion): string {
 /** Una rama del desglose: el instrumento con su nota fundida y sus notas crudas, una por unidad. */
 type Rama = { ins: Instrumento | undefined; id: number; valor: number | null; crudas: Calificacion[] }
 /** Lo que pesa en el área: la familia (o el instrumento suelto) con sus ramas. */
-type Tronco = { ins: Instrumento | undefined; id: number; valor: number | null; ramas: Rama[]; suelto: boolean }
+type Tronco = { ins: Instrumento | undefined; id: number; valor: number | null; ramas: Rama[]; suelto: boolean; recuperaciones: RecuperacionAplicada[] }
 
 export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos, unidades, criterio, instrumento, onCerrar, medidas }: Props) {
   const [cals, setCals] = useState<Calificacion[] | null>(null)
@@ -125,7 +129,12 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
     const crudas = (cals ?? []).filter(c => c.criterio_id === criterioId && c.trimestre === t && c.valor != null
       && !(insT !== instrumentos && idT.has(c.instrumento_id) && idT.get(c.instrumento_id)!.peso <= 0))
     const porInstr = fundirUnidades(crudas, pesosUnidad)
-    const porFamilia = fundirHijosEnFamilias(porInstr, insT)
+    // Lo que resume el instrumento lleva las recuperaciones aplicadas; cada
+    // actividad sigue enseñando abajo la nota que se le puso.
+    const aplicadas = recuperacionesAplicadas(crudas, insT)
+    const porFamilia = aplicadas.length
+      ? fundirHijosEnFamilias(fundirUnidades(aplicarRecuperaciones(crudas, insT), pesosUnidad), insT)
+      : fundirHijosEnFamilias(porInstr, insT)
     return porFamilia
       .sort((a, b) => orden(a.instrumento_id) - orden(b.instrumento_id))
       .map(f => {
@@ -136,8 +145,9 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
             ins: idT.get(i.instrumento_id), id: i.instrumento_id, valor: i.valor ?? null,
             crudas: crudas.filter(c => c.instrumento_id === i.instrumento_id).sort((a, b) => ordenUnidad(a.unidad_id) - ordenUnidad(b.unidad_id)),
           }))
+        const recuperaciones = aplicadas.filter(a => a.familia_id === f.instrumento_id)
         const suelto = ramas.length === 1 && ramas[0].id === f.instrumento_id && familiaDe(f.instrumento_id) == null
-        return { ins: idT.get(f.instrumento_id), id: f.instrumento_id, valor: f.valor ?? null, ramas, suelto }
+        return { ins: idT.get(f.instrumento_id), id: f.instrumento_id, valor: f.valor ?? null, ramas, suelto, recuperaciones }
       })
   }
 
@@ -162,7 +172,9 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
     const insT = instrumentosEn(t)
     const fam = insT.find(i => i.id === ins.familia_id)
     if (!fam) return null
-    const hermanos = insT.filter(i => i.familia_id === fam.id)
+    const regla = REGLAS_RECUPERACION.find(x => x.id === reglaDeRecuperacion(ins))
+    if (regla) return `recuperación de ${fam.nombre}: ${regla.nombre.toLowerCase()}`
+    const hermanos = insT.filter(i => i.familia_id === fam.id && !esRecuperacion(i))
     return `${porcentajesEnFamilia(hermanos.map(h => h.peso))[hermanos.findIndex(h => h.id === ins.id)]} % de ${fam.nombre}`
   }
 
@@ -213,6 +225,16 @@ export default function ExplicacionNota({ alumno, asig, trimestre, instrumentos,
           </span>
         </div>
         <ul className="explicacion-ramas">{tr.ramas.map(r => rama(r, true, t))}</ul>
+        {tr.recuperaciones.map(a => {
+          const regla = REGLAS_RECUPERACION.find(x => x.id === a.regla)
+          const unidad = nombreUnidad(a.unidad_id)
+          return (
+            <p key={`${a.instrumento_id}:${a.unidad_id}`} data-explicacion-recuperacion className="suave" style={{ margin: '4px 0 0 28px', fontSize: 13 }}>
+              Recuperación{unidad ? <> en <b>{unidad}</b></> : ''}: tenía <b>{r1(a.antes)}</b>, sacó <b>{r1(a.recuperacion)}</b> y
+              {' '}cuenta <b>{r1(a.despues)}</b> ({regla?.nombre.toLowerCase()}). Las notas de arriba son las que se pusieron.
+            </p>
+          )
+        })}
       </li>
     )
   }

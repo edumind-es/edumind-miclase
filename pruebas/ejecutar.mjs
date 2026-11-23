@@ -196,6 +196,10 @@ async function principal() {
     const equipos = join(scratch, 'equipos.mjs')
     await paquete('pruebas/equipos.test.ts', equipos, ['--platform=node', '--format=esm'])
     await suite('equipos y agrupamientos: reparto y alcance', 'node', [equipos])
+
+    const recuperacion = join(scratch, 'recuperacion.mjs')
+    await paquete('pruebas/recuperacion.test.ts', recuperacion, ['--platform=node', '--format=esm'])
+    await suite('recuperación por criterio: reglas y nota del área', 'node', [recuperacion])
     const planificacion = join(scratch, 'planificacion-semanal.mjs')
     await paquete('pruebas/planificacion-semanal.test.ts', planificacion, ['--platform=node', '--format=esm'])
     await suite('planificación semanal: volcado de un .md', 'node', [planificacion])
