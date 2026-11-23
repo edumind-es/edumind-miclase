@@ -207,3 +207,23 @@ export function resumenPlano(clase: ClaseAulaMap | null): { puestos: number; sen
 export function leerPlanoGuardado(json: string | null | undefined): ClaseAulaMap | null {
   return leer(json)
 }
+
+/**
+ * La misma clase con los equipos de un agrupamiento de MiClase a la vista.
+ *
+ * AulaMap ya sabe pintar equipos: colorea el puesto y le pone un número
+ * (`student.team`, con `showTeams`). Aquí solo se le dice quién va con quién,
+ * por el orden de los equipos (el primero es el 1). Quien no está en ninguno
+ * va sin equipo. Es para MIRAR: lo que devuelve no se guarda nunca, porque
+ * pisaría los equipos que el docente tenga hechos en el propio AulaMap.
+ */
+export function conEquipos(clase: ClaseAulaMap, equipos: { alumnos: number[] }[]): ClaseAulaMap {
+  const numero = new Map<string, number>()
+  equipos.forEach((e, i) => { for (const a of e.alumnos) if (!numero.has(idAulaMap(a))) numero.set(idAulaMap(a), i + 1) })
+  const students = (clase.students || []).map(s => {
+    const { team: _fuera, ...resto } = s
+    const n = numero.get(s.id)
+    return n ? { ...resto, team: n } : resto
+  })
+  return { ...clase, students, showTeams: true }
+}
