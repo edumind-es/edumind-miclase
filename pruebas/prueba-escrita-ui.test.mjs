@@ -522,6 +522,55 @@ try {
     await abrirCelda(1, cA)
   }
 
+  console.log('\n7e. Una unidad con examen propio no recibe el de otra que la vincula')
+  {
+    // El caso de Luis: la UD1 tiene su examen corregido, y el de la UD2
+    // «también cuenta en» la UD1. Corregir el de la UD2 no puede tocar la UD1.
+    // Aquí la «otra» unidad estrena examen propio y se corrige a Bruno con
+    // él; después se le corrige el examen de la primera, que la vincula.
+    const r = await p.evaluate(async ({ ud1, otra, criterios, otrosCriterios }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const vivo = (x) => !x.deleted_at
+      const ins = (await db.instrumentos.toArray()).filter(vivo).find(i => i.tipo === 'prueba-escrita')
+      const alumnos = (await db.alumnos.toArray()).filter(vivo).sort((a, b) => a.apellidos.localeCompare(b.apellidos))
+      const bruno = alumnos[1]
+      const deBruno = async (u) => (await db.calificaciones.where('instrumento_id').equals(ins.id).toArray())
+        .filter(c => vivo(c) && c.alumno_id === bruno.id && c.unidad_id === u)
+        .sort((a, b) => a.criterio_id.localeCompare(b.criterio_id))
+      const enUd1 = await deBruno(ud1)
+      const base = enUd1.find(c => Object.keys(c.niveles_rubrica || {}).length)
+      if (!base) return { error: 'Bruno no tiene el examen corregido en la primera unidad' }
+      const area = { asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad }
+      const vinculado = await q.getPrueba(ins.id, ud1)
+      // Examen propio de la otra unidad: una sola pregunta, sin vínculos.
+      const propio = { ...vinculado.def, titulo: 'Examen propio de la otra unidad', unidades_vinculadas: [],
+        preguntas: [{ ...vinculado.def.preguntas[0], unidad_id: undefined, criterio: undefined, criterios: undefined }] }
+      const propioId = await q.guardarPrueba(ins.id, otra, propio)
+      const defPropio = (await q.getPrueba(ins.id, otra)).def
+      await q.guardarExamenDeAlumno({
+        alumno_id: bruno.id, instrumento_id: ins.id, trimestre: base.trimestre, unidad_id: otra,
+        def: defPropio, respuestas: { [defPropio.preguntas[0].id]: defPropio.preguntas[0].puntos ?? 1 }, destinos: otrosCriterios, area,
+      })
+      const foto = async () => JSON.stringify((await deBruno(otra)).map(c => [c.criterio_id, c.valor, c.niveles_rubrica]))
+      const antes = await foto()
+      // Ahora el examen de la primera unidad, con lo que Bruno ya tenía.
+      const res = await q.guardarExamenDeAlumno({
+        alumno_id: bruno.id, instrumento_id: ins.id, trimestre: base.trimestre, unidad_id: ud1,
+        def: vinculado.def, respuestas: base.niveles_rubrica, destinos: criterios, area,
+      })
+      const despues = await foto()
+      // Se retira el examen propio: el resto de la suite espera uno solo.
+      await db.rubricas.update(propioId, { deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      return { antes, despues, tambien: res.tambien.map(t => t.unidad_id), vinculadas: vinculado.def.unidades_vinculadas ?? [] }
+    }, { ud1: inicio.ud1, otra: inicio.otraUnidad, criterios: inicio.criterios, otrosCriterios: inicio.otrosCriterios })
+    ok(!r.error, 'el caso se puede montar', r.error ?? '')
+    ok(r.vinculadas?.includes(inicio.otraUnidad), 'el examen de la primera unidad sigue vinculando la otra')
+    ok(r.antes !== '[]', 'Bruno tiene su examen propio corregido en la otra unidad', r.antes)
+    ok(r.antes === r.despues, 'corregir el examen que la vincula no toca ni su nota ni sus respuestas', `${r.antes} → ${r.despues}`)
+    ok(r.tambien?.length === 0, 'y no dice haber puesto nota allí', JSON.stringify(r.tambien))
+  }
+
   console.log('\n8. Quitar el examen conserva las notas')
   // La nota de Bruno antes de quitar el examen (el paso 7d la recalculó con
   // las preguntas de su unidad): es la que tiene que seguir.

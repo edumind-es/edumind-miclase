@@ -1120,6 +1120,7 @@ export async function contarColumna(instrumento_id: number, unidad_id: number, t
 }
 
 export const MOTIVO_COLUMNA_VACIADA = 'Columna vaciada por el docente'
+export const MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO = 'Sustituida al corregir el examen de otra unidad que también cuenta en esta'
 
 /**
  * Lo que `vaciarColumna` ha cambiado, tal como estaba antes: es lo que
@@ -2625,8 +2626,15 @@ export async function guardarExamenDeAlumno(p: {
   // queda donde se escribió.
   const tambien: UnidadTambienCorregida[] = []
   const examen = p.unidad_id !== SIN_UNIDAD ? await getPrueba(p.instrumento_id, p.unidad_id) : null
+  // Una unidad con examen propio manda el suyo: el vínculo ajeno no le entra.
+  // Sin esta comprobación, corregir el examen de la UD2 que «también cuenta
+  // en» la UD1 escribía sus respuestas y su nota encima de las del examen de
+  // la UD1 (le pasó a Luis, nov 2026).
+  const conExamenPropio = new Set(examen
+    ? (await getPruebasDeInstrumento(p.instrumento_id)).filter(q => q.unidad_id != null && q.id !== examen.id).map(q => q.unidad_id!)
+    : [])
   for (const u of examen ? unidadesDelExamen(examen.unidad_id, examen.def) : []) {
-    if (u === p.unidad_id) continue
+    if (u === p.unidad_id || conExamenPropio.has(u)) continue
     const unidad = await db.unidades.get(u)
     if (!unidad || unidad.deleted_at) continue
     const deU = pruebaDeUnidad(p.def, u)
@@ -2634,10 +2642,19 @@ export async function guardarExamenDeAlumno(p: {
     const destinos = await criteriosQueEvalua(p.instrumento_id, u)
     const ru = notaDePrueba(deU, p.respuestas, destinos)
     const cu = destinos.filter(c => c in ru.porCriterio)
-    await saveCalificaciones(cu.map(c => ({
-      alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
-      trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
-    })), { sinVinculos: true })
+    // La nota que la otra unidad ya tuviera y cambie queda como fantasma: el
+    // docente está mirando otra unidad y no ve lo que se sustituye.
+    const items: CalItem[] = []
+    for (const c of cu) {
+      const previa = await getCalificacionUnica(p.alumno_id, p.instrumento_id, c, p.trimestre, u)
+      const cambia = previa?.valor != null && previa.valor !== ru.porCriterio[c]
+      items.push({
+        alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
+        trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
+        ...(cambia ? { valor_anterior: previa!.valor, anterior_motivo: MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO } : {}),
+      })
+    }
+    await saveCalificaciones(items, { sinVinculos: true })
     tambien.push({ unidad_id: u, nombre: unidad.nombre, criterios: cu, nota: ru.nota })
   }
   return { ...r, criterios, tambien }

@@ -636,7 +636,11 @@ edumind_miclase/
   casilla lleva el trimestre de la barra, no el de la unidad; replicar con
   el de la unidad dejó la otra unidad en blanco—; devuelve `tambien` y las
   pantallas lo dicen. Se corrige desde cualquiera de las unidades. Una
-  unidad con examen propio manda el suyo y el vínculo ajeno no le entra.
+  unidad con examen propio manda el suyo y el vínculo ajeno no le entra:
+  `guardarExamenDeAlumno` se la salta al replicar (no lo hacía, y corregir
+  el examen de la UD2 pisó notas y respuestas del de la UD1 de Luis, nov
+  2026), y la nota que sí sustituye en otra unidad queda como fantasma
+  (`MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO`).
   `correccionesDeExamen` cuenta las correcciones de todas las unidades del
   examen (y una unidad cubierta por vínculo no cae al general), así el
   recálculo y el informe ven la misma corrección una vez por alumno.
