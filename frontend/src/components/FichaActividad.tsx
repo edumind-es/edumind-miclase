@@ -14,6 +14,7 @@
  * peso y los criterios se enseñan, y se cambian donde ya se cambiaban («Qué
  * evalúo» y el «Más» de la columna).
  */
+import { REGLAS_RECUPERACION } from '@/db/recuperacion'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { actualizarInstrumento, renombrarInstrumento, type CeldaInstrumento, type DatosDeArea } from '@/db/queries'
@@ -156,7 +157,9 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, u
 
         <div data-ficha-peso style={{ marginTop: 12, fontSize: 13.5, color: 'var(--gris-700)' }}>
           <span style={rotulo}>Cuánto pesa</span>
-          {esActividad
+          {esActividad && instrumento.recuperacion
+            ? <span data-ficha-recuperacion>No reparte porcentaje: es la <strong>recuperación</strong> de «{instrumento.familia_nombre}». Queda {REGLAS_RECUPERACION.find(r => r.id === instrumento.recuperacion)?.nombre.toLowerCase()}.</span>
+            : esActividad
             ? <>{instrumento.pct_familia != null ? <><strong>{instrumento.pct_familia} %</strong> dentro de </> : 'Dentro de '}«{instrumento.familia_nombre}», que vale el <strong>{instrumento.familia_peso} %</strong> del área.</>
             : <><strong>{instrumento.peso} %</strong> del área.</>}
           <span style={{ color: 'var(--gris-600)' }}> Se cambia en «Qué evalúo».</span>

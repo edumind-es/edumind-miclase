@@ -32,6 +32,7 @@ import InformePrueba from '@/components/InformePrueba'
 import InformeActividad from '@/components/InformeActividad'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionNota from '@/components/SesionNota'
+import SesionRecuperacion from '@/components/SesionRecuperacion'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
@@ -1215,7 +1216,21 @@ export default function EvaluacionPage() {
         />
       )}
 
-      {notaEn && matriz && (
+      {notaEn && matriz && notaEn.ins.recuperacion && (
+        <SesionRecuperacion
+          columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
+          matriz={matriz}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setNotaEn(null)}
+        />
+      )}
+
+      {notaEn && matriz && !notaEn.ins.recuperacion && (
         <SesionNota
           columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
           matriz={matriz}

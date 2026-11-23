@@ -28,7 +28,7 @@ import { nombreEnUnidad, tieneNombrePropio, alRenombrar } from './nombreActivida
 import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
 import { normalizarAgrupamiento } from './equipos'
 import {
-  aplicarRecuperaciones, recuperacionesAplicadas, esRecuperacion, reglaDeRecuperacion,
+  aplicarRecuperaciones, recuperacionesAplicadas, esRecuperacion, reglaDeRecuperacion, notasARecuperar,
   type ReglaRecuperacion, type RecuperacionAplicada,
 } from './recuperacion'
 
@@ -1447,7 +1447,7 @@ export async function crearInstrumento(
 
 export async function actualizarInstrumento(
   id: number,
-  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color' | 'solo_medidas'>>
+  fields: Partial<Pick<Instrumento, 'nombre' | 'tipo' | 'peso' | 'orden' | 'trimestres' | 'agregacion' | 'color' | 'solo_medidas' | 'recuperacion'>>
 ): Promise<void> {
   const antes = 'agregacion' in fields ? (await db.instrumentos.get(id))?.agregacion ?? 'media' : null
   await db.instrumentos.update(id, tocado(fields))
@@ -2561,6 +2561,23 @@ export async function criteriosQueEvalua(instrumento_id: number, unidad_id: numb
 }
 
 /** Los campos de una nota que no dependen del criterio ni del alumno. */
+/**
+ * Lo que cada alumno tenía con el instrumento de una recuperación en una
+ * unidad y trimestre, criterio a criterio y ANTES de recuperar: de ahí salen
+ * los suspensos que propone la pantalla (`notasARecuperar`, puro).
+ */
+export async function notasParaRecuperar(
+  asignatura_id: number, recuperacion_id: number, unidad_id: number, trimestre: number, criterios: string[]
+): Promise<Map<number, Map<string, number | null>>> {
+  const instrumentos = await getInstrumentos(asignatura_id)
+  const familia = instrumentos.find(i => i.id === recuperacion_id)?.familia_id
+  if (familia == null) return new Map()
+  const ids = instrumentos.filter(i => i.id === familia || i.familia_id === familia).map(i => i.id!)
+  const crudas = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').anyOf(ids)
+    .filter(c => c.trimestre === trimestre && c.unidad_id === unidad_id).toArray()))
+  return notasARecuperar(crudas, instrumentos, recuperacion_id, criterios)
+}
+
 export type DatosDeArea = Pick<CalItem, 'asignatura' | 'curso' | 'etapa' | 'comunidad'>
 
 /**

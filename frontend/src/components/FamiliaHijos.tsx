@@ -24,6 +24,7 @@ import { describeBloque, etiquetaDia, etiquetaHora, type FiltroBloque } from '@/
 import type { Instrumento } from '@/db/localDb'
 import { TIPOS_INSTRUMENTO, getInstrConfig, PALETA_INSTRUMENTOS, colorDeInstrumento } from '@/ia/instrumentosConfig'
 import { porcentajesEnFamilia, pesosAlFijarPorcentaje } from '@/db/calculo'
+import { REGLAS_RECUPERACION, esRecuperacion } from '@/db/recuperacion'
 import AsistenteFamilia from './AsistenteFamilia'
 import ConvertirFamilia from './ConvertirFamilia'
 import { describeUso } from './InstrumentosManager'
@@ -237,15 +238,17 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
     return ids.size
   }
   const totalFamilia = new Set(cobertura.flatMap(u => u.criterios)).size
-  const porcentajes = porcentajesEnFamilia(hijos.map(h => h.peso))
+  // Una recuperación no reparte porcentaje: mejora la nota de las demás.
+  const reparten = hijos.filter(h => !esRecuperacion(h))
+  const porcentajes = porcentajesEnFamilia(reparten.map(h => h.peso))
   /** Guarda los pesos que cambian tras fijar el porcentaje de un hijo (o igualarlos). */
   const guardarPesos = async (nuevos: number[]) => {
-    await Promise.all(hijos.map((h, i) => (nuevos[i] !== h.peso ? actualizarInstrumento(h.id!, { peso: nuevos[i] }) : Promise.resolve())))
+    await Promise.all(reparten.map((h, i) => (nuevos[i] !== h.peso ? actualizarInstrumento(h.id!, { peso: nuevos[i] }) : Promise.resolve())))
     cambiado()
   }
-  const fijarPorcentaje = (idx: number, pct: number) => guardarPesos(pesosAlFijarPorcentaje(hijos.map(h => h.peso), idx, pct))
-  const igualar = () => guardarPesos(porcentajesEnFamilia(hijos.map(() => 1)))
-  const yaIguales = porcentajes.every(v => Math.abs(v - 100 / hijos.length) < 1)
+  const fijarPorcentaje = (idx: number, pct: number) => guardarPesos(pesosAlFijarPorcentaje(reparten.map(h => h.peso), idx, pct))
+  const igualar = () => guardarPesos(porcentajesEnFamilia(reparten.map(() => 1)))
+  const yaIguales = porcentajes.every(v => Math.abs(v - 100 / reparten.length) < 1)
 
   return (
     <div data-familia-hijos data-familia-id={familia.id} style={{ marginTop: 10, paddingTop: 10, borderTop: '1px dashed var(--gris-300)' }}>
@@ -357,7 +360,8 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
             const color = colorDeInstrumento(h, idx)
             const n = totalCriterios(h)
             const abierto = editando === h.id
-            const pct = porcentajes[idx]
+            const idxReparto = reparten.indexOf(h)
+            const pct = porcentajes[idxReparto]
             return (
               <div key={h.id} data-hijo data-nombre={h.nombre} style={{ background: 'white', border: `1px solid ${color}40`, borderLeft: `4px solid ${color}`, borderRadius: 8, padding: '6px 10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
@@ -392,16 +396,27 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                       {familias.map(f => <option key={f.id} value={String(f.id)}>{f.nombre} · {f.peso} %</option>)}
                     </select>
                   )}
+                  {esRecuperacion(h) ? (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--gris-600)', fontWeight: 600 }}
+                      title={`No reparte porcentaje: mejora lo que el alumno sacó con «${familia.nombre}» en la unidad, criterio a criterio.`}>
+                      Recuperación
+                      <select data-hijo-recuperacion value={h.recuperacion ?? ''} aria-label={`Qué nota queda al recuperar con «${h.nombre}»`}
+                        onChange={e => actualizarInstrumento(h.id!, { recuperacion: e.target.value }).then(cambiado)} style={{ fontSize: 11.5, padding: '4px 5px' }}>
+                        {REGLAS_RECUPERACION.map(r => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+                      </select>
+                    </label>
+                  ) : (
                   <label title={`Cuánto cuenta dentro de «${familia.nombre}». Al cambiarlo, los demás se reparten el resto guardando su proporción.`}
                     style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gris-600)', fontWeight: 600 }}>
                     <input type="number" min={1} max={100} key={`${h.id}-${pct}`} defaultValue={pct} data-peso-hijo
                       aria-label={`Porcentaje de «${h.nombre}» dentro de «${familia.nombre}»`}
-                      onBlur={e => { const v = Number(e.target.value); if (Number.isFinite(v) && v >= 1 && Math.round(v) !== pct) fijarPorcentaje(idx, v) }}
+                      onBlur={e => { const v = Number(e.target.value); if (Number.isFinite(v) && v >= 1 && Math.round(v) !== pct) fijarPorcentaje(idxReparto, v) }}
                       onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }}
                       style={{ width: 46, fontSize: 12, fontWeight: 700, textAlign: 'center', padding: '4px 2px' }} />
                     <span style={{ fontWeight: 600 }}>%</span>
                     <span style={{ fontWeight: 500 }} title="De la nota del área">· {Math.round((familia.peso * pct) / 100 * 10) / 10} % del área</span>
                   </label>
+                  )}
                   <button data-hijo-criterios onClick={() => setEditando(abierto ? null : h.id!)} aria-expanded={abierto}
                     title="Qué criterios del instrumento evalúa esta actividad, unidad por unidad"
                     style={{ fontSize: 11, fontWeight: 600, padding: '4px 9px', borderRadius: 6, cursor: 'pointer', background: n === 0 ? '#fffbeb' : 'white', color: n === 0 ? '#92400e' : 'var(--gris-600)', border: `1px solid ${n === 0 ? '#fde68a' : 'var(--gris-300)'}` }}>
