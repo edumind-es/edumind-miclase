@@ -22,7 +22,7 @@ import type { NotaArea } from './calculo'
 import type { Medida } from './localDb'
 import { criterioAdaptado } from './medidas'
 import { resumenEstadistico, type ResumenEstadistico } from './estadistica'
-import { nivelAlcanzado, notaDePrueba, pruebaDeUnidad, puntosDePregunta, type PruebaDef } from './prueba'
+import { LETRAS, nivelAlcanzado, notaDePrueba, pruebaDeUnidad, puntosDePregunta, type PruebaDef } from './prueba'
 import { informeDePrueba, type RespuestasAlumno } from './informePrueba'
 
 /** Con menos notas que estas, el documento impreso no da cifras del grupo. */
@@ -174,6 +174,10 @@ export type PreguntaAnalizada = {
   anotada: boolean
   /** Texto del nivel marcado (rúbrica de la pregunta, escala o test), o null. */
   nivel: string | null
+  /** La respuesta correcta de la planilla (en un test, la opción buena), o null. */
+  clave: string | null
+  /** Cómo se reparten los puntos de la pregunta, de la planilla, o null. */
+  correccion: string | null
 }
 
 export type AnalisisExamen = {
@@ -242,6 +246,9 @@ export function analizarExamen(examen: ExamenDeArea, alumno_id: number, opciones
       obtenido, pctAlumno, pctGrupo, falloDestacado: pctAlumno < 50 && pctGrupo >= 60,
       anotada: typeof suyas.respuestas[p.id] === 'number',
       nivel: nivelAlcanzado(def, p, suyas.respuestas[p.id]),
+      clave: p.clave?.trim() || (def.tipo === 'test' && p.correcta != null && p.opciones?.[p.correcta] != null
+        ? `${LETRAS[p.correcta]}) ${p.opciones[p.correcta]}` : null),
+      correccion: p.correccion?.trim() || null,
     }
   })
   return {
