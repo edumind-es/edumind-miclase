@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [1.14.0] — 2026-11-24
+
 ### Añadido
 - Con Lámina encendida, una clase con **una sola área entra directa** al
   Calificador y a «Exámenes y pruebas»: el hub de áreas solo sale cuando hay
