@@ -308,3 +308,51 @@ Se da por buena la tipografía del prototipo aprobado (Outfit + IBM Plex Mono, l
 | **0b. Interruptor y tokens** | `data-aspecto` en `<html>` (preferencia del aparato), tokens de Lámina bajo `:root[data-aspecto="lamina"]`, fuentes declaradas | Nada |
 | **0c. Iconos** | Pieza `Icono` con la familia del prototipo | Nada |
 | **0d. Pruebas** | «Nada cortado» y trinquete | Nada |
+
+## 14. Estado a 24·11·2026: qué está hecho y qué falta
+
+Lámina sigue **apagada por defecto**. Se enciende en un aparato con `?aspecto=lamina` y se apaga en «Acerca de» → «El de siempre».
+
+### Hecho
+
+| Fase | Qué | PR | En producción |
+|---|---|---|---|
+| Previo | Galego, fase 1, y versión descargable | 133 | 1.9.0 |
+| 0a | Protocolo de versiones: un número, `CHANGELOG`, candado, etiqueta al desplegar | 135 | 1.9.0 |
+| 0b | Interruptor, tokens y fuentes | 136 | 1.9.0 |
+| 0c | Familia de iconos y pieza `Icono` | 137 | 1.9.0 |
+| 0d | Trinquete y «nada cortado» | 138 | 1.9.0 |
+| 1 | Marco: menú en tres formas, barra superior, «Acerca de», pieza `Lista` | 139 | 1.9.0 |
+| 2 | Piezas comunes y 255 colores de aviso con nombre | 140 | 1.10.0 |
+| 3 | Tabla del Calificador, notas en filete o relleno, hub de áreas, sigla y color por área | 141 | 1.10.0 |
+| 3 | Selector de color y sigla en Mis clases → Áreas | 142 | 1.10.0 |
+| 4 | Hub de áreas en «Exámenes y pruebas» | 143 | 1.11.0 |
+| — | Pestañas que no se cortan, aspa como icono, desplegables iguales cerrados | 144 | 1.11.0 |
+
+Arreglos que salieron por el camino y afectan también al aspecto de siempre: Asistencia cabe en el móvil (el pase de lista quedaba en 78 px).
+
+### Lo que cambió respecto al plan
+
+- **Fases más cortas y encadenadas.** Cada PR va sobre el anterior y se fusiona al pasar las pruebas de GitHub; un despliegue recoge varios.
+- **El hub de áreas es una ruta propia** (`/areas`), no un estado del Calificador: así los enlaces con área y unidad entran directos y el Calificador no cambia.
+- **Notas**: obedecen a filete o relleno las casillas con clase `.cal-N`. Las que un diálogo pinta en línea siguen en relleno.
+- **La cola «Por corregir»** del hub de exámenes no está: `listarPruebas` no trae cuántos alumnos lleva corregidos cada examen.
+- **El trinquete solo exige lo que ya tiene sustituto** (radios, sombras, degradados, emoji). Desplegables, colores a mano y estilos en línea se cuentan y se exigirán después.
+
+### Lo que falta para la 2.0.0
+
+| Qué | Tamaño | Nota |
+|---|---|---|
+| Interior de las pantallas | ~2.700 estilos en línea en 98 ficheros | Con Lámina ya siguen la paleta y las piezas; falta su composición. Empezar por Inicio, Calificador y el panel de la casilla |
+| Emoji | 365 | Quitarlos cambia también el aspecto de siempre: van al final, o condicionados al aspecto |
+| Desplegables dentro de las pantallas | 95 `<select>` | Cerrados ya se ven igual; pasar a `Lista` los de uso diario. Las pruebas usan `selectOption` en 133 sitios |
+| Notas pintadas en línea | 14 ficheros | Explicación de la nota, pasadas de clase, corrector, análisis |
+| Cola «Por corregir» | Una consulta | Contar correcciones por examen sin calcular notas |
+| Color de área en Planificación | Pequeño | En el prototipo, cada sesión lleva el color de su área |
+| Identidad | Icono, splash, `theme-color` del manifiesto | Decisión 3, abierta |
+| Pruebas de pantalla en Lámina | ~90 suites | Hoy corren con el aspecto de siempre. Antes de encender por defecto hay que pasarlas |
+| Encender por defecto | Un valor | Es la 2.0.0 |
+
+### Lo que no se ha podido comprobar
+
+Todo se ha visto en Chromium (escritorio, iPad horizontal y vertical, móvil) y en la web publicada. No en un iPad real, ni en Safari, ni en la app instalada en la pantalla de inicio, ni con lector de pantalla.
