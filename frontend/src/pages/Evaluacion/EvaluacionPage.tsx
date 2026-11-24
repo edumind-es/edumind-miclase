@@ -165,7 +165,7 @@ export default function EvaluacionPage() {
   useParametrosClase()
   const {
     grupos, grupo, grupoId, asignaturas, asignatura: asigActual, asignaturaId,
-    trimestre, elegirAsignatura, cargando: cargandoClase,
+    trimestre, elegirAsignatura, elegirTrimestre, cargando: cargandoClase,
   } = useClaseActiva()
 
   const [unidades, setUnidades] = useState<UnidadConCriterios[]>([])
@@ -440,6 +440,7 @@ export default function EvaluacionPage() {
   const nAvisos = (sinInstrumento > 0 ? 1 : 0) + (fueraDeTrimestre > 0 ? 1 : 0)
     + (vista === 'instrumentos' && sinColumna.length > 0 ? 1 : 0)
     + (vista === 'instrumentos' && matriz?.familiasConDatosEscondidos.length ? 1 : 0)
+    + (matriz?.notasSinColumna.length ? 1 : 0)
 
   /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
   const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
@@ -657,6 +658,21 @@ export default function EvaluacionPage() {
             </div>
           )}
 
+          {/* A la vista, no tras el contador: lleva a calificar en el trimestre equivocado. */}
+          {unidadActual?.trimestre != null && unidadActual.trimestre !== trimestre && (
+            <div data-unidad-otro-trimestre role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ flex: '1 1 320px' }}>
+                <strong>«{unidadActual.nombre}» es del {unidadActual.trimestre}º trimestre y la barra está en el {trimestre}º.</strong>{' '}
+                Lo que califiques ahora se guarda en el {trimestre}º trimestre, aparte de lo que la unidad
+                tenga en el {unidadActual.trimestre}º, y cuenta en la nota del {trimestre}º.
+              </span>
+              <button type="button" className="btn-secondary" data-ir-al-trimestre
+                onClick={() => elegirTrimestre(unidadActual.trimestre!)}>
+                Ir al {unidadActual.trimestre}º trimestre
+              </button>
+            </div>
+          )}
+
           {avisosAbiertos && sinInstrumento > 0 && (
             <div data-aviso-sin-instrumento style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
@@ -719,6 +735,19 @@ export default function EvaluacionPage() {
                 style={{ background: 'none', border: 0, padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', font: 'inherit' }}>
                 ⚙ Instrumentos →
               </button>
+            </div>
+          )}
+
+          {avisosAbiertos && !!matriz?.notasSinColumna.length && (
+            <div data-notas-sin-columna style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+              <strong>Hay notas que cuentan y no tienen columna {unidadId ? 'en esta unidad' : 'en el área'}:</strong>{' '}
+              {matriz.notasSinColumna.map((f, i) => (
+                <span key={f.instrumento_id} data-sin-columna-instrumento={f.instrumento_id}>
+                  {i > 0 ? '; ' : ''}{f.notas} de «{f.nombre}» ({f.criterios.join(', ')})
+                </span>
+              ))}. La programación ya no asigna {matriz.notasSinColumna.some(f => f.criterios.length > 1) || matriz.notasSinColumna.length > 1 ? 'esos criterios' : 'ese criterio'} a
+              ese instrumento aquí, pero las notas siguen entrando en el cálculo. Para verlas, vuelve a asignarle
+              el criterio desde el «Más» de su columna («+ criterio»); si sobran, vacíalas desde ahí.
             </div>
           )}
 
