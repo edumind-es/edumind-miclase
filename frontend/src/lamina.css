@@ -53,8 +53,10 @@
   --area-1: #5b4a8a;  --area-2: #2c6e8a;  --area-3: #8f4a2b;  --area-4: #457436;  --area-5: #846514;
   --area-6: #a23f5c;  --area-7: #1f6e63;  --area-8: #8e4a8c;  --area-9: #3c5a9c;  --area-10: #666a22;
 
-  --f-display: 'Outfit Lamina', 'Helvetica Neue', Arial, sans-serif;
-  --f-mono:    'Plex Mono Lamina', ui-monospace, Menlo, Consolas, monospace;
+  /* «Emoji Lamina» va la primera: solo atiende a los emoji de la interfaz
+     (emoji-lamina.css) y los dibuja como iconos de línea del color del texto */
+  --f-display: 'Emoji Lamina', 'Outfit Lamina', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:    'Emoji Lamina', 'Plex Mono Lamina', ui-monospace, Menlo, Consolas, monospace;
 
   /* La cabecera del menú y la barra superior miden lo mismo: su filete es continuo */
   --alto-barra: 56px;
@@ -262,3 +264,35 @@
 :root[data-aspecto="lamina"] .plan-sesion:hover { box-shadow: none; background: var(--papel-2) !important; }
 :root[data-aspecto="lamina"] .plan-sesion .sigla-area { margin-bottom: 4px; }
 :root[data-aspecto="lamina"] .plan-evaluable { color: var(--tinta); }
+
+/* ============================================================
+   Lo que las pantallas llevan escrito en línea
+
+   Unos 2.700 estilos viven en el propio marcado de cada pantalla, donde los
+   nombres de color no llegan. Estas reglas los alcanzan por lo que dicen
+   (`[style*="…"]`, que es el texto del estilo tal como lo escribe React) y
+   los llevan a papel, tinta y filete sin tocar cada pantalla. Necesitan
+   `!important` porque un estilo en línea gana a cualquier hoja.
+   ============================================================ */
+
+/* Blanco puro → papel claro. En Lámina no hay blanco: el papel es crudo */
+:root[data-aspecto="lamina"] [style*="background: white"],
+:root[data-aspecto="lamina"] [style*="background: rgb(255, 255, 255)"],
+:root[data-aspecto="lamina"] [style*="background-color: white"],
+:root[data-aspecto="lamina"] [style*="background-color: rgb(255, 255, 255)"] { background-color: var(--papel-2) !important; }
+
+/* Ninguna sombra: lo que separa es el filete */
+:root[data-aspecto="lamina"] [style*="box-shadow"] { box-shadow: none !important; }
+
+/* Las notas que un diálogo pinta por su cuenta (con el color del semáforo de
+   fondo y la cifra en blanco) obedecen también a «filete»: cifra en tinta y
+   raya de su tramo. En relleno se quedan como están. */
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-sobresaliente)"] { --nota: var(--cal-sobresaliente); }
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-notable)"] { --nota: var(--cal-notable); }
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-bien)"] { --nota: var(--cal-bien); }
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-suficiente)"] { --nota: var(--cal-suficiente); }
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-insuficiente)"] { --nota: var(--cal-insuficiente); }
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-"] {
+  background: transparent !important; color: var(--tinta) !important; border-bottom: 4px solid var(--nota, var(--pelo)) !important;
+}
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) [style*="background: var(--cal-"] * { color: inherit !important; }

@@ -1792,11 +1792,22 @@ edumind_miclase/
   `<html data-notas>` y `lamina.css` cuelga de ahí; solo cambia cómo se ve,
   la nota y su tramo salen de `calculo.ts`. Lo obedecen las casillas que
   usan las clases `.cal-N` (la tabla del Calificador y las parrillas 0-10);
-  las notas que un diálogo pinta en línea con `calificativo().color` siguen
-  en relleno hasta que se pasen a clases. `calificador-lamina-ui.test.mjs`
+  y también las notas que un diálogo pinta en línea con
+  `calificativo().color` de fondo: `lamina.css` las alcanza por el texto de
+  su estilo (`[style*="background: var(--cal-…)"]`). `calificador-lamina-ui.test.mjs`
   lo comprueba sobre una clase sembrada con `pruebas/lib/sembrar.mjs`
   (6ºA, PROENS, tres alumnos y notas de varios tramos), que es la siembra a
   reutilizar en las pruebas de aspecto. Decisión de Luis (nov 2026).
+- **Lámina alcanza lo escrito en línea por el texto del estilo.** Al final de
+  `lamina.css` hay reglas `[style*="…"]` (el estilo tal como lo serializa
+  React) con `!important`, porque un estilo en línea gana a cualquier hoja:
+  blanco puro → papel claro (`background: white` y `rgb(255, 255, 255)`),
+  ninguna sombra (`box-shadow`), y las notas con el semáforo de fondo → en
+  filete salvo que el aparato pida relleno. Sirven para no tocar los ~2.700
+  estilos en línea uno a uno; lo correcto a la larga sigue siendo pasarlos a
+  clases y piezas. Si React cambiase cómo escribe un estilo (un espacio, el
+  orden) dejarían de casar: `calificador-lamina-ui.test.mjs` lo vigila
+  (nota del panel en filete, ningún fondo blanco).
 - **Los colores de aviso tienen nombre** (`index.css`: `--aviso-tinta`,
   `--aviso-fuerte`, `--aviso-fondo`, `--aviso-borde`, `--bien-tinta`,
   `--bien-fondo`, `--mal-tinta`, `--mal-fuerte`, `--mal-fondo`,
@@ -1819,6 +1830,29 @@ edumind_miclase/
   foco entra cuando la lista ya se ve: mientras se coloca está oculta y a
   algo oculto no se le puede dar. Las pruebas esperan a `aria-current`
   tras navegar: el cambio de pantalla entra en una transición.
+- **Con Lámina, los emoji del código se ven como iconos de línea, y eso lo
+  hace una fuente.** `frontend/public/fonts/EmojiLamina.woff` (generada por
+  `scripts/generar_fuente_emoji.py` desde `scripts/emoji_lamina.json`, con
+  fontTools) dibuja cada emoji de la interfaz —75 distintos, unas 365
+  apariciones— como un icono de la familia, de una tinta y del color del
+  texto. Va la primera en `--f-display` y `--f-mono`, y su `@font-face`
+  (`src/emoji-lamina.css`, GENERADO, no se edita) lleva el `unicode-range`
+  exacto, así que solo atiende a esos caracteres y al selector de variación
+  U+FE0F. Con el aspecto de siempre no se usa ni se descarga: por eso los
+  emoji no hubo que quitarlos uno a uno, que habría cambiado también ese
+  aspecto. El generador convierte cada línea en su contorno (un rectángulo
+  por tramo con extremos cuadrados, un anillo por círculo) y solo sabe trazar
+  M L H V Z C S, sin arcos. **Un emoji nuevo en la interfaz necesita dibujo
+  en el JSON y regenerar la fuente**: `emoji-lamina.test.mjs` (rápida) falla
+  si alguno de `frontend/src` no lo tiene, y `aspecto-ui.test.mjs` comprueba
+  por píxeles que se pintan de una sola tinta. El service worker precachea
+  `woff` además de `woff2`. La fuente declara cada emoji también CON su
+  selector de variación (tabla de secuencias, `uvs` al generarla): sin eso,
+  donde hay emoji de color instalados el navegador se iba a la fuente del
+  sistema con «⚠️», «⬇️» y los otros diez que lo llevan en el código. **Eso
+  solo se ve donde hay fuente de color: el CI y los aparatos reales, no el
+  servidor de desarrollo**, así que la prueba por píxeles es la del CI.
+  Comprobado en Chromium; **no en Safari**.
 - **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
   puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
   sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los

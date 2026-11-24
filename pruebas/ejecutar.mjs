@@ -264,6 +264,7 @@ async function principal() {
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
     await suite('trinquete de Lámina: lo que se retira no vuelve', 'node', ['pruebas/trinquete.test.mjs'])
+    await suite('emoji de Lámina: todos tienen icono de línea', 'node', ['pruebas/emoji-lamina.test.mjs'])
     await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])
   }
 

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
 import './lamina.css'
+import './emoji-lamina.css'
 
 import PuertaMigracion from './components/PuertaMigracion'
 import BarreraErrores from './components/BarreraErrores'
