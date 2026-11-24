@@ -57,7 +57,7 @@ function ListaGrupos() {
       {cargando && <p>Cargando…</p>}
       {error && !cargando && (
         <div className="card" role="alert" data-error-clases
-          style={{ borderLeft: '4px solid var(--rojo-500)', color: 'var(--rojo-600, #b91c1c)', marginBottom: 16 }}>
+          style={{ borderLeft: '4px solid var(--rojo-500)', color: 'var(--rojo-600, var(--mal-fuerte))', marginBottom: 16 }}>
           {error}
         </div>
       )}

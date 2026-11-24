@@ -195,8 +195,8 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
         </span>
       </div>
 
-      {aviso && <div data-que-aviso role="status" style={{ fontSize: 13, color: '#166534', background: '#dcfce7', padding: '8px 10px', marginBottom: 10 }}>{aviso}</div>}
-      {error && <div data-que-error role="alert" style={{ fontSize: 13, color: '#991b1b', background: '#fee2e2', padding: '8px 10px', marginBottom: 10 }}>{error}</div>}
+      {aviso && <div data-que-aviso role="status" style={{ fontSize: 13, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', padding: '8px 10px', marginBottom: 10 }}>{aviso}</div>}
+      {error && <div data-que-error role="alert" style={{ fontSize: 13, color: 'var(--mal-tinta)', background: 'var(--mal-fondo)', padding: '8px 10px', marginBottom: 10 }}>{error}</div>}
 
       {familias.length === 0 && matriz && (
         <p style={{ fontSize: 14, color: 'var(--gris-600)' }}>
@@ -343,10 +343,10 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
 
       {sinActividad.length > 0 && (
         <div data-unidad-sin-actividad data-criterios={sinActividad.map(c => c.id).join(' ')}
-          style={{ marginTop: 12, fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', padding: '8px 10px' }}>
+          style={{ marginTop: 12, fontSize: 13, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', padding: '8px 10px' }}>
           <strong>{sinActividad.length} criterio{sinActividad.length !== 1 ? 's' : ''} de la unidad sin nada que lo{sinActividad.length !== 1 ? 's' : ''} evalúe:</strong>{' '}
           {sinActividad.map(c => (
-            <span key={c.id} title={c.descripcion} style={{ ...chip, color: '#92400e' }}>
+            <span key={c.id} title={c.descripcion} style={{ ...chip, color: 'var(--aviso-tinta)' }}>
               {c.id}{matriz?.criteriosFueraDeTrimestre.has(c.id) ? ' (su instrumento no aplica este trimestre)' : ''}
             </span>
           ))}

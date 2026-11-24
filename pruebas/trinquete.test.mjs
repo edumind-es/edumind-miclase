@@ -35,8 +35,8 @@ const FUERA = ['informes/']
 
 /** Qué se cuenta, en qué ficheros y por qué se quiere a cero. */
 const MEDIDAS = {
-  radios:       { en: /\.(tsx|css)$/, que: /border-?radius|borderRadius|border(?:Top|Bottom)(?:Left|Right)Radius/g, nota: 'esquinas redondeadas' },
-  sombras:      { en: /\.(tsx|css)$/, que: /box-shadow|boxShadow/g, nota: 'sombras' },
+  radios:       { en: /\.(tsx|css)$/, que: /(?:border-?radius|borderRadius|border(?:Top|Bottom)(?:Left|Right)Radius)(?!\s*:\s*['"]?0\b)/g, nota: 'esquinas redondeadas' },   // «: 0» es quitarlas, no ponerlas
+  sombras:      { en: /\.(tsx|css)$/, que: /(?:box-shadow|boxShadow)(?!\s*:\s*['"]?none)/g, nota: 'sombras' },   // «: none» es quitarla
   degradados:   { en: /\.(tsx|css)$/, que: /gradient\(/g, nota: 'degradados' },
   emoji:        { en: /\.(tsx|ts)$/,  que: /(?![©®™])\p{Extended_Pictographic}/gu, nota: 'emoji: cada sistema los dibuja a su manera' },   // ©, ® y ™ son texto, no dibujos
   desplegables: { en: /\.tsx$/,       que: /<select\b/g, nota: 'desplegables del sistema', desde: 'la pieza Lista (fase 2)' },

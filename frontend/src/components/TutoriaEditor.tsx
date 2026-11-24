@@ -330,7 +330,7 @@ export default function TutoriaEditor({ inicial, alumnos, grupo, onCerrar, onGua
           <button className="btn-secondary" onClick={() => acta('imprimir')} disabled={guardando} data-tutoria-acta>🖨 Imprimir acta</button>
           <button className="btn-secondary" onClick={() => acta('guardar')} disabled={guardando} data-tutoria-acta-guardar>Guardar acta (.html)</button>
           <button onClick={borrar} disabled={guardando} data-tutoria-borrar
-            style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--rojo-500, #b91c1c)', fontSize: 13, fontWeight: 600 }}>
+            style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--rojo-500, var(--mal-fuerte))', fontSize: 13, fontWeight: 600 }}>
             {t.id ? 'Borrar tutoría' : 'Descartar'}
           </button>
         </div>

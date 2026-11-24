@@ -122,3 +122,87 @@
 @media (prefers-reduced-motion: reduce) {
   :root[data-aspecto="lamina"] * { transition: none !important; }
 }
+
+/* ============================================================
+   Fase 2 — las piezas comunes, con el aspecto encendido
+
+   Botones, campos, tarjetas, diálogos, pestañas y títulos se escriben
+   aquí UNA vez sobre las clases que la app ya usa: cambia el aire de
+   todas las pantallas sin tocar ninguna. Lo que una pantalla lleve
+   escrito en línea sigue mandando sobre esto hasta que se le quite.
+   ============================================================ */
+
+:root[data-aspecto="lamina"] {
+  /* Avisos: sin fondos pastel. Papel, y el color en el filete y en la tinta */
+  --aviso-fondo:  var(--papel-2);
+  --aviso-borde:  #a8811f;
+  --aviso-tinta:  #6a5015;
+  --aviso-fuerte: #6a5015;
+  --bien-fondo:   var(--papel-2);
+  --bien-tinta:   #17663a;
+  --mal-fondo:    var(--papel-2);
+  --mal-tinta:    #991b1b;
+  --mal-fuerte:   #991b1b;
+  --borde-suave:  var(--pelo);
+  --verde-100: var(--papel-2);
+  --rojo-100:  var(--papel-2);
+  --ambar-100: var(--papel-2);
+  --verde-500: #17663a;
+  --rojo-500:  #b3261e;
+  --ambar-500: #8a5a00;
+}
+
+/* ── Botones: tinta sobre papel, y al revés al pasar ── */
+:root[data-aspecto="lamina"] .btn-primary { background: var(--tinta); color: var(--papel); border: 2px solid var(--tinta); font-weight: 600; }
+:root[data-aspecto="lamina"] .btn-primary:hover:not(:disabled) { background: transparent; color: var(--tinta); }
+:root[data-aspecto="lamina"] .btn-secondary { background: transparent; color: var(--tinta); border: 1px solid var(--tinta); }
+:root[data-aspecto="lamina"] .btn-secondary:hover:not(:disabled) { background: var(--tinta); color: var(--papel); }
+:root[data-aspecto="lamina"] .btn-danger { background: transparent; color: var(--mal-tinta); border: 2px solid var(--mal-tinta); font-weight: 600; }
+:root[data-aspecto="lamina"] .btn-danger:hover:not(:disabled) { background: var(--mal-tinta); color: var(--papel); }
+:root[data-aspecto="lamina"] button { transition: background .15s, color .15s, border-color .15s; }
+:root[data-aspecto="lamina"] .boton-enlace { color: var(--tinta); text-underline-offset: 3px; }
+
+/* ── Campos: papel claro y filete de tinta debajo ── */
+:root[data-aspecto="lamina"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+:root[data-aspecto="lamina"] select,
+:root[data-aspecto="lamina"] textarea {
+  border: 0; border-bottom: 2px solid var(--tinta); background: var(--papel-2); color: var(--tinta);
+}
+:root[data-aspecto="lamina"] input:focus, :root[data-aspecto="lamina"] select:focus, :root[data-aspecto="lamina"] textarea:focus {
+  box-shadow: none; outline: 2px solid var(--tinta); outline-offset: 2px;
+}
+:root[data-aspecto="lamina"] input[type="checkbox"], :root[data-aspecto="lamina"] input[type="radio"] { accent-color: var(--tinta); }
+:root[data-aspecto="lamina"] :where(a, button, [role="button"], [tabindex]):focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+/* ── Tarjetas y diálogos: filete en vez de sombra ── */
+:root[data-aspecto="lamina"] .card { background: var(--papel-2); border: 1px solid var(--pelo); box-shadow: none; }
+:root[data-aspecto="lamina"] .modal-overlay { background: rgba(23, 24, 26, .6); }
+:root[data-aspecto="lamina"] .modal-overlay > .card,
+:root[data-aspecto="lamina"] .dialogo { background: var(--papel); border: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .dialogo-cabecera { align-items: center; padding: 12px 16px; border-bottom: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .dialogo-titulo { margin: 0; font: 800 22px/1.1 var(--f-display); letter-spacing: -.02em; }
+:root[data-aspecto="lamina"] .dialogo-antetitulo { font: 400 12px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
+:root[data-aspecto="lamina"] .dialogo-cuerpo { padding: 16px; }
+:root[data-aspecto="lamina"] .dialogo-pie { border-top: 1px solid var(--pelo); padding: 12px 16px; }
+:root[data-aspecto="lamina"] .modal-close { color: var(--tinta); }
+:root[data-aspecto="lamina"] .modal-close:hover { background: var(--tinta); color: var(--papel); }
+
+/* ── Títulos ── */
+:root[data-aspecto="lamina"] .page-title { font: 800 clamp(1.6rem, 3.2vw, 2.4rem)/1.05 var(--f-display); letter-spacing: -.03em; color: var(--tinta); }
+:root[data-aspecto="lamina"] h1, :root[data-aspecto="lamina"] h2, :root[data-aspecto="lamina"] h3 { letter-spacing: -.01em; }
+/* Solo los enlaces de texto de las pantallas. Los del marco y los que hacen de
+   botón llevan su propia clase: pintarlos todos dejó la entrada activa del
+   menú en tinta sobre tinta. */
+:root[data-aspecto="lamina"] .main-content a:not([class]) { color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Pestañas: la elegida es un bloque de tinta apoyado en el filete ── */
+:root[data-aspecto="lamina"] .tabs-area { gap: 0; border-bottom: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .tab-area { margin-bottom: 0; border-bottom: 0; border-right: 1px solid var(--pelo); color: var(--tinta); font-weight: 500; }
+:root[data-aspecto="lamina"] .tab-area:hover { background: var(--papel-2); color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-area.activa, :root[data-aspecto="lamina"] .tab-area[aria-selected="true"] { background: var(--tinta); color: var(--papel); font-weight: 600; border-right-color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad { border: 1px solid var(--tinta); background: transparent; color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad:hover { background: var(--papel-2); border-color: var(--tinta); color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad.activa, :root[data-aspecto="lamina"] .tab-unidad[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
+
+/* ── Etiquetas: filete, no pastilla ── */
+:root[data-aspecto="lamina"] .badge { border: 1px solid currentColor; font-family: var(--f-mono); letter-spacing: .04em; }

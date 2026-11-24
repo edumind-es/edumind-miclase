@@ -136,7 +136,7 @@ export default function GrabadorVideo({ onGuardar, onCerrar, onCamaraDelSistema 
           </p>
         )}
         {yaNoViaja && (
-          <p style={{ fontSize: 12.5, color: '#92400e', marginBottom: 8 }}>
+          <p style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', marginBottom: 8 }}>
             ⚠️ Ya pasa de {enMB(LIMITE_EVIDENCIA_SINC)} MB: se guardará en este aparato, pero no llegará a los demás.
           </p>
         )}

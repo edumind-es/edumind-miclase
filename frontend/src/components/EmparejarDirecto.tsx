@@ -382,7 +382,7 @@ export default function EmparejarDirecto({ onCambio }: { onCambio?: () => void }
               ? 'Con muchos datos o fotos puede tardar unos minutos. No cierres ni cambies de app en ninguno de los dos.'
               : 'Si en medio minuto no se encuentran, se explicará por qué.'}
           </p>
-          {nota && <p style={{ fontSize: 12.5, color: '#92400e', marginTop: 6 }}>{nota}</p>}
+          {nota && <p style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', marginTop: 6 }}>{nota}</p>}
         </div>
       )}
 

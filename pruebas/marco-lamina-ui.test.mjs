@@ -67,6 +67,9 @@ console.log('\n1. Escritorio: el menú entero')
   ok(altos[0] === altos[1], 'la cabecera del menú y la barra superior acaban a la misma altura: el filete es continuo', altos.join(' y '))
   ok((await bajosDelMarco(p)).length === 0, 'todo lo que se toca en el marco mide 44 px o más', (await bajosDelMarco(p)).join(' | '))
   ok(await p.locator('.ml-menu a[aria-current="page"]').count() === 1 && await p.locator('.ml-menu a[aria-current="page"]').getAttribute('data-entrada') === 'inicio', 'Inicio marcado como «estás aquí»')
+  // Inversión de tinta, y que se lea: una regla general de enlaces la dejó una vez en tinta sobre tinta
+  const activa = await p.locator('.ml-menu a[aria-current="page"]').evaluate(e => { const s = getComputedStyle(e); return [s.backgroundColor, s.color] })
+  ok(activa[0] === 'rgb(23, 24, 26)' && activa[1] === 'rgb(236, 233, 225)', 'la entrada activa va en papel sobre tinta', activa.join(' / '))
 
   console.log('\n2. Navegar y plegar')
   await p.locator('.ml-menu [data-entrada="tutorias"]').click()

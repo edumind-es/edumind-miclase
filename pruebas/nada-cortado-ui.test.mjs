@@ -64,6 +64,8 @@ for (const [tamano, viewport] of Object.entries(TAMANOS)) {
     await p.evaluate(() => document.fonts.ready)
     const clave = `${nombre}@${tamano}`
     const m = await medirCortes(p)
+    // Una captura por pantalla en escritorio y en móvil, para mirarlas (--conservar)
+    if (tamano === 'escritorio' || tamano === 'movil') await p.screenshot({ path: `${TIROS}/pantalla-${nombre}-${tamano}.png` })
     resumen.sale += m.sale.length; resumen.corta += m.corta.length; resumen.bajo += m.bajo.length
     detalle[clave] = { desborda: m.desborda.length, sale: m.sale.length, corta: m.corta.length, bajo: m.bajo.length }
 

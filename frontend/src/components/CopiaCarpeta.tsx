@@ -139,7 +139,7 @@ export default function CopiaCarpeta({ onCambio, desbloqueado }: { onCambio?: ()
   const web = soportaCarpeta()
   const app = soportaCarpetaDeApp()
   const puede = web || app
-  const colorMsg = { ok: ['var(--verde-100)', 'var(--verde-500)'], error: ['var(--rojo-100)', 'var(--rojo-500)'], aviso: ['#fffbeb', '#92400e'] } as const
+  const colorMsg = { ok: ['var(--verde-100)', 'var(--verde-500)'], error: ['var(--rojo-100)', 'var(--rojo-500)'], aviso: ['var(--aviso-fondo)', 'var(--aviso-tinta)'] } as const
 
   return (
     <div className="card" data-copia-carpeta style={{ marginBottom: 18 }}>
@@ -159,7 +159,7 @@ export default function CopiaCarpeta({ onCambio, desbloqueado }: { onCambio?: ()
             <>
               <div>Destino: <strong>{estado.destino.nombre}</strong> · última copia: <strong>{fecha(estado.ultima)}</strong></div>
               {estado.permiso !== 'granted' && (
-                <div style={{ color: '#92400e' }}>El navegador ha retirado el permiso de la carpeta: pulsa «Copiar ahora» para volver a darlo.</div>
+                <div style={{ color: 'var(--aviso-tinta)' }}>El navegador ha retirado el permiso de la carpeta: pulsa «Copiar ahora» para volver a darlo.</div>
               )}
               {estado.error && <div style={{ color: 'var(--rojo-500)' }}>Última copia fallida: {estado.error}</div>}
             </>
@@ -170,7 +170,7 @@ export default function CopiaCarpeta({ onCambio, desbloqueado }: { onCambio?: ()
       )}
 
       {estado && !estado.tieneClave && puede && (
-        <p style={{ fontSize: 12.5, color: '#92400e', marginBottom: 10 }}>
+        <p style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', marginBottom: 10 }}>
           Antes crea tu contraseña de sincronización (arriba, en «Enlace directo» o «Fichero»): es la que cifra la copia.
         </p>
       )}

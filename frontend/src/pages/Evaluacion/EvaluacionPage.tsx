@@ -575,7 +575,7 @@ export default function EvaluacionPage() {
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           {nAvisos > 0 && (
             <button type="button" className="btn-secondary" data-avisos-toggle aria-expanded={avisosAbiertos}
-              onClick={() => setAvisosAbiertos(v => !v)} style={{ fontSize: 13, borderColor: '#b45309', color: '#92400e' }}
+              onClick={() => setAvisosAbiertos(v => !v)} style={{ fontSize: 13, borderColor: 'var(--aviso-fuerte)', color: 'var(--aviso-tinta)' }}
               title="Cosas de la programación que conviene revisar; no impiden calificar">
               {avisosAbiertos ? '▴' : '▾'} {nAvisos} aviso{nAvisos !== 1 ? 's' : ''}
             </button>
@@ -641,7 +641,7 @@ export default function EvaluacionPage() {
             </div>
           )}
           {unidades.length > 0 ? null : (
-            <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', boxShadow: 'none' }}>
+            <div className="card" style={{ margin: '14px 0', padding: '14px 18px', fontSize: 13, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', boxShadow: 'none' }}>
               <strong>Esta área no tiene programación todavía.</strong>{' '}
               Sin unidades puedes calificar sobre todos los criterios, pero no sabrás con qué instrumento evaluar cada uno.{' '}
               <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 600 }}>
@@ -660,7 +660,7 @@ export default function EvaluacionPage() {
 
           {/* A la vista, no tras el contador: lleva a calificar en el trimestre equivocado. */}
           {unidadActual?.trimestre != null && unidadActual.trimestre !== trimestre && (
-            <div data-unidad-otro-trimestre role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div data-unidad-otro-trimestre role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{ flex: '1 1 320px' }}>
                 <strong>«{unidadActual.nombre}» es del {unidadActual.trimestre}º trimestre y la barra está en el {trimestre}º.</strong>{' '}
                 Lo que califiques ahora se guarda en el {trimestre}º trimestre, aparte de lo que la unidad
@@ -674,7 +674,7 @@ export default function EvaluacionPage() {
           )}
 
           {avisosAbiertos && sinInstrumento > 0 && (
-            <div data-aviso-sin-instrumento style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+            <div data-aviso-sin-instrumento style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
               Asígnales uno en la programación y podrás evaluarlos.{' '}
               <Link to={`/grupos/${grupoId}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>
@@ -684,7 +684,7 @@ export default function EvaluacionPage() {
           )}
 
           {avisosAbiertos && vista === 'instrumentos' && sinColumna.length > 0 && (
-            <div data-familias-sin-criterio style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+            <div data-familias-sin-criterio style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
               <strong>
                 {sinColumna.map(f => `«${f.nombre}» (${f.peso} %)`).join(', ')} no evalúa{sinColumna.length !== 1 ? 'n' : ''} ningún criterio en {unidadActual?.nombre ?? 'esta unidad'}
               </strong> — sin criterios asignados no hay columna, y su peso no entra en esta unidad.
@@ -720,7 +720,7 @@ export default function EvaluacionPage() {
           )}
 
           {avisosAbiertos && vista === 'instrumentos' && !!matriz?.familiasConDatosEscondidos.length && (
-            <div data-familias-escondidas style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+            <div data-familias-escondidas style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
               {matriz.familiasConDatosEscondidos.map(f => (
                 <div key={f.id}>
                   <strong>«{f.nombre}» guarda a su nombre {[
@@ -739,7 +739,7 @@ export default function EvaluacionPage() {
           )}
 
           {avisosAbiertos && !!matriz?.notasSinColumna.length && (
-            <div data-notas-sin-columna style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+            <div data-notas-sin-columna style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', lineHeight: 1.5 }}>
               <strong>Hay notas que cuentan y no tienen columna {unidadId ? 'en esta unidad' : 'en el área'}:</strong>{' '}
               {matriz.notasSinColumna.map((f, i) => (
                 <span key={f.instrumento_id} data-sin-columna-instrumento={f.instrumento_id}>

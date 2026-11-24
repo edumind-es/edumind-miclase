@@ -92,7 +92,7 @@ export default function AsistenteFamilia({ familia, asignaturaNombre, cobertura,
 
         <div style={{ padding: 18 }}>
           {sinDescripciones && (
-            <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
+            <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 10 }}>
               No se han podido leer los enunciados del currículo, así que solo se pueden repartir las plantillas que cubren todos los criterios. Las demás se crean vacías y las rellenas a mano.
             </div>
           )}
@@ -117,14 +117,14 @@ export default function AsistenteFamilia({ familia, asignaturaNombre, cobertura,
                         onChange={e => setNombres(n => ({ ...n, [i]: e.target.value }))}
                         style={{ fontSize: 13, fontWeight: 700, padding: '3px 7px', width: 200 }} />
                       <span style={{ fontSize: 11, color: 'var(--gris-500)' }}>{cfg.label}</span>
-                      {existe && <span style={{ fontSize: 11, color: '#92400e', fontWeight: 600 }}>ya existe uno con este nombre</span>}
+                      {existe && <span style={{ fontSize: 11, color: 'var(--aviso-tinta)', fontWeight: 600 }}>ya existe uno con este nombre</span>}
                     </div>
                     <div style={{ fontSize: 11.5, color: 'var(--gris-600)', marginTop: 3 }}>{p.ayuda}</div>
                     <div data-plantilla-criterios style={{ fontSize: 11.5, marginTop: 4, color: 'var(--gris-900)' }}>
                       {p.porUnidad
                         ? <>Se crean <strong>{cobertura.length}</strong>: {cobertura.map(u => `${nombreDe(i)} · ${u.nombre}`).slice(0, 3).join(', ')}{cobertura.length > 3 ? '…' : ''}, cada uno con los criterios de su unidad.</>
                         : ids.length === 0
-                          ? <span style={{ color: '#92400e' }}>Ningún criterio del instrumento habla de esto: se crearía vacío, para marcarlos a mano.</span>
+                          ? <span style={{ color: 'var(--aviso-tinta)' }}>Ningún criterio del instrumento habla de esto: se crearía vacío, para marcarlos a mano.</span>
                           : <>Criterios: <strong>{ids.join(' · ')}</strong></>}
                     </div>
                   </div>

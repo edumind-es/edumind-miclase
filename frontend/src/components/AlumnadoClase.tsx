@@ -534,7 +534,7 @@ export function EditarAlumno({ alumno, grupoId, onCerrar, onGuardado }: {
           <button className="btn-secondary" onClick={onCerrar} disabled={guardando}>Cancelar</button>
           <button onClick={quitar} disabled={guardando}
             style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
-                     color: 'var(--rojo-500, #b91c1c)', fontSize: 13, fontWeight: 600 }}>
+                     color: 'var(--rojo-500, var(--mal-fuerte))', fontSize: 13, fontWeight: 600 }}>
             Quitar de la clase
           </button>
         </div>

@@ -80,7 +80,7 @@ export default function PegarColumna({ instrumento, criterios, alumnos, trimestr
                 : r.porNombre
                   ? 'Hay nombres: cada nota va a su alumno, en el orden que sea. Lo que no casa se señala y no se asigna.'
                   : 'Sin nombres: las notas van por el orden de la lista. Comprueba la vista previa.'}
-              {r.escala100 && <div style={{ color: '#92400e', marginTop: 4 }}><strong>Hay valores por encima de 10:</strong> se toman como escala 0-100 y se dividen entre 10.</div>}
+              {r.escala100 && <div style={{ color: 'var(--aviso-tinta)', marginTop: 4 }}><strong>Hay valores por encima de 10:</strong> se toman como escala 0-100 y se dividen entre 10.</div>}
             </div>
           </div>
 
@@ -100,13 +100,13 @@ export default function PegarColumna({ instrumento, criterios, alumnos, trimestr
                   return (
                     <div key={i} data-pegar-fila data-ok={bien || undefined} style={{
                       display: 'grid', gridTemplateColumns: '1fr 44px', gap: 8, alignItems: 'center', fontSize: 12.5,
-                      padding: '4px 8px', borderRadius: 6, background: bien ? 'var(--verde-100)' : f.aviso ? '#fffbeb' : 'white',
+                      padding: '4px 8px', borderRadius: 6, background: bien ? 'var(--verde-100)' : f.aviso ? 'var(--aviso-fondo)' : 'white',
                     }}>
                       <div style={{ minWidth: 0 }}>
                         <div style={{ fontWeight: 600, color: 'var(--gris-900)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {f.alumno ? `${f.alumno.apellidos}, ${f.alumno.nombre}` : <span style={{ color: '#92400e' }}>{f.nombre ?? f.texto}</span>}
+                          {f.alumno ? `${f.alumno.apellidos}, ${f.alumno.nombre}` : <span style={{ color: 'var(--aviso-tinta)' }}>{f.nombre ?? f.texto}</span>}
                         </div>
-                        {f.aviso && <div style={{ fontSize: 11, color: '#92400e' }}>{f.aviso}</div>}
+                        {f.aviso && <div style={{ fontSize: 11, color: 'var(--aviso-tinta)' }}>{f.aviso}</div>}
                       </div>
                       <span style={{ textAlign: 'center', fontWeight: 800, borderRadius: 6, padding: '3px 0', color: f.valor == null ? 'var(--gris-500)' : 'white', background: f.valor == null ? 'var(--gris-100)' : c.color }}>
                         {f.valor ?? '—'}

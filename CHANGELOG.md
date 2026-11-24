@@ -25,6 +25,8 @@ sitios y sella esa sección con la versión y la fecha.
   (ancho, plegado con nombre corto y barra inferior con «Más» en el móvil),
   barra superior con la clase, el área y el trimestre en listas propias, y
   «Acerca de» con la versión, el idioma, el aspecto, la cuenta e «Instalar».
+- Con Lámina encendida, botones, campos, tarjetas, diálogos, pestañas y
+  títulos en papel, tinta y filete, y los avisos sin fondos pastel.
 
 ### Corregido
 - Asistencia en el móvil: el pase de lista quedaba en una columna de 78 px y

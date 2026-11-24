@@ -172,7 +172,7 @@ export default function TutoriasPage() {
               <div key={`${p.tutoria_id}:${p.acuerdo.clave}`} data-acuerdo-pendiente data-vencido={p.vencido ? '1' : undefined}
                 style={{ padding: '8px 0', borderBottom: '1px solid var(--gris-200)', fontSize: 13 }}>
                 <div style={{ fontWeight: 600 }}>{p.acuerdo.texto}</div>
-                <div style={{ fontSize: 12, color: p.vencido ? 'var(--rojo-500, #b91c1c)' : 'var(--gris-600)' }}>
+                <div style={{ fontSize: 12, color: p.vencido ? 'var(--rojo-500, var(--mal-fuerte))' : 'var(--gris-600)' }}>
                   {p.alumnos.map(id => nombreCorto(porId.get(id))).join(', ') || 'Grupo'}
                   {p.acuerdo.responsable ? ` · ${p.acuerdo.responsable}` : ''}
                   {p.acuerdo.fecha_prevista ? ` · ${p.vencido ? 'vencido el' : 'para el'} ${fechaLegible(p.acuerdo.fecha_prevista)}` : ''}

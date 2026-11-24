@@ -174,12 +174,12 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
                 Sustituir todos por el mismo código de {curso}
               </button>
             )}
-            {curso && !deOtro.length && <span style={{ fontSize: 12, color: 'var(--ambar-600, #b45309)' }}>No se han podido cargar los criterios de {curso}.</span>}
+            {curso && !deOtro.length && <span style={{ fontSize: 12, color: 'var(--ambar-600, var(--aviso-fuerte))' }}>No se han podido cargar los criterios de {curso}.</span>}
             {!cursos.length && !errorCurriculo && <span style={{ fontSize: 12, color: 'var(--gris-500)' }}>Sin otros cursos en el currículo: se puede escribir el criterio a mano.</span>}
           </div>
 
           {!programados.length ? (
-            <p style={{ fontSize: 13, color: 'var(--ambar-600, #b45309)', margin: 0 }}>El área aún no tiene criterios programados en ninguna unidad.</p>
+            <p style={{ fontSize: 13, color: 'var(--ambar-600, var(--aviso-fuerte))', margin: 0 }}>El área aún no tiene criterios programados en ninguna unidad.</p>
           ) : (
             <div style={{ display: 'grid', gap: 6 }}>
               {programados.map(id => {
@@ -188,7 +188,7 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
                 const otro = deOtro.find(x => x.id === id)
                 return (
                   <div key={id} data-adaptacion-criterio={id} data-modo={modo}
-                    style={{ borderTop: '1px solid var(--gris-200, #e5e7eb)', padding: '6px 0', display: 'grid', gap: 4, fontSize: 13, opacity: modo === 'excluido' ? .6 : 1 }}>
+                    style={{ borderTop: '1px solid var(--gris-200, var(--borde-suave))', padding: '6px 0', display: 'grid', gap: 4, fontSize: 13, opacity: modo === 'excluido' ? .6 : 1 }}>
                     <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
                       <strong style={{ color: 'var(--azul-900)', whiteSpace: 'nowrap' }}>{id}</strong>
                       <span style={{ flex: 1, color: 'var(--gris-600)', fontSize: 12.5 }}>{deClase.get(id) ?? ''}</span>
@@ -233,7 +233,7 @@ export default function MedidaAdaptacion({ alumno, asignatura, grupo, medida, on
 
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', fontSize: 12.5, color: 'var(--gris-600)' }}>
             <span data-adaptacion-resumen>{cuantos.sustituidos} sustituido{cuantos.sustituidos !== 1 ? 's' : ''} · {cuantos.excluidos} que no cuenta{cuantos.excluidos !== 1 ? 'n' : ''}</span>
-            <button type="button" style={{ marginLeft: 'auto', fontSize: 12.5, background: 'none', border: 'none', color: 'var(--rojo-500, #b91c1c)', cursor: 'pointer', fontWeight: 600 }} onClick={quitar} data-adaptacion-quitar>
+            <button type="button" style={{ marginLeft: 'auto', fontSize: 12.5, background: 'none', border: 'none', color: 'var(--rojo-500, var(--mal-fuerte))', cursor: 'pointer', fontWeight: 600 }} onClick={quitar} data-adaptacion-quitar>
               Quitar adaptación
             </button>
           </div>

@@ -1742,6 +1742,20 @@ edumind_miclase/
   interruptor de vuelta al aspecto de siempre. Decisiones de Luis sobre la
   maqueta (nov 2026). Los textos del marco están en `i18n/textos.ts`
   (`marco.*`, `acerca.*`), en castellano y galego.
+- **Los colores de aviso tienen nombre** (`index.css`: `--aviso-tinta`,
+  `--aviso-fuerte`, `--aviso-fondo`, `--aviso-borde`, `--bien-tinta`,
+  `--bien-fondo`, `--mal-tinta`, `--mal-fuerte`, `--mal-fondo`,
+  `--borde-suave`). Eran diez colores escritos a mano 255 veces en 46
+  pantallas (`#92400e`, `#fffbeb`…); con nombre valen lo mismo en el aspecto
+  de siempre y Lámina los cambia de una vez (sin fondos pastel: papel, y el
+  color en el filete y la tinta). Un aviso nuevo usa esos nombres, no un
+  color. Los de `ia/instrumentosConfig.ts` siguen en hexadecimal porque se
+  les añade transparencia por sufijo. Las piezas comunes de Lámina (botones,
+  campos, tarjetas, diálogos, pestañas, títulos) están al final de
+  `lamina.css`, escritas una vez sobre las clases de siempre
+  (`.btn-primary`, `.card`, `.dialogo`, `.tab-area`…). La regla de enlaces
+  solo alcanza a `.main-content a:not([class])`: pintarlos todos dejó la
+  entrada activa del menú en tinta sobre tinta.
 - **Un desplegable nuevo es una `Lista`** (`components/comunes/Lista`), no un
   `<select>`: el del sistema lo dibuja cada sistema a su manera. Hoja desde
   abajo en táctil o pantalla estrecha, bajo su campo con ratón; `listbox`

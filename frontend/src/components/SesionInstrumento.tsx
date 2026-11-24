@@ -203,7 +203,7 @@ function SesionDiario({
 
         <div style={{ padding: '12px 18px 18px' }}>
           {sinHerramienta && (
-            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', fontSize: 12.5, lineHeight: 1.5 }}>
+            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', fontSize: 12.5, lineHeight: 1.5 }}>
               <div style={{ fontWeight: 700, marginBottom: 6 }}>«{instrumento.nombre}» no tiene todavía herramienta de evaluación.</div>
               <div style={{ marginBottom: 8 }}>
                 Los cuatro niveles de abajo son el diario de observación. Si evalúas con rúbrica,

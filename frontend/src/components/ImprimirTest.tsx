@@ -103,26 +103,26 @@ export default function ImprimirTest({ instrumento, unidadId, unidadNombre, alum
           {prueba === undefined && <div style={{ color: 'var(--gris-600)', fontSize: 13 }}>Cargando…</div>}
 
           {prueba === null && (
-            <div data-sin-examen style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+            <div data-sin-examen style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', lineHeight: 1.5 }}>
               Este instrumento no tiene examen definido{unidadNombre ? ` para «${unidadNombre}»` : ''}. Defínelo desde la casilla de un alumno (📝 Definir examen) y vuelve aquí.
             </div>
           )}
 
           {def && def.tipo !== 'test' && (
-            <div data-no-test style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+            <div data-no-test style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', lineHeight: 1.5 }}>
               «{def.titulo}» es un examen de <strong>{def.tipo === 'puntos' ? 'puntos por pregunta' : 'preguntas por niveles'}</strong>. Solo los tests con opciones se imprimen con hoja de respuestas.
             </div>
           )}
 
           {def && def.tipo === 'test' && !conClave && (
-            <div data-sin-clave style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+            <div data-sin-clave style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', lineHeight: 1.5 }}>
               <strong>{faltan.length} de {def.preguntas.length} pregunta{def.preguntas.length !== 1 ? 's' : ''}</strong> sin opciones o sin la correcta
               {faltan.length <= 12 ? ` (${faltan.map(i => i + 1).join(', ')})` : ''}. Complétalas en el editor del examen: sin clave, la hoja no se podría corregir.
             </div>
           )}
 
           {def && def.tipo === 'test' && conClave && !cabe && (
-            <div data-no-cabe style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fee2e2', border: '1px solid #fca5a5', color: '#991b1b', lineHeight: 1.5 }}>
+            <div data-no-cabe style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--mal-fondo)', border: '1px solid #fca5a5', color: 'var(--mal-tinta)', lineHeight: 1.5 }}>
               La hoja admite hasta {MAX_PREGUNTAS_HOJA} preguntas con {MAX_OPCIONES_HOJA} opciones; este examen tiene {def.preguntas.length} preguntas y {nOpciones} opciones.
             </div>
           )}
