@@ -29,7 +29,7 @@ const p = await ctx.newPage()
 const errores = []
 p.on('pageerror', e => errores.push(e.message))
 const fuentesPedidas = []
-p.on('request', r => { if (/\/fonts\/.*\.woff2/.test(r.url())) fuentesPedidas.push(r.url()) })
+p.on('request', r => { if (/\/fonts\/.*\.woff2?/.test(r.url())) fuentesPedidas.push(r.url()) })
 
 // Lo que se mide: la raíz del documento y el peor radio de toda la página
 const medir = () => p.evaluate(() => {
@@ -38,7 +38,8 @@ const medir = () => p.evaluate(() => {
   return {
     atributo: document.documentElement.dataset.aspecto ?? null,
     fondo: raiz.backgroundColor,
-    fuente: raiz.fontFamily.split(',')[0].replace(/["']/g, '').trim(),
+    // La de texto: «Emoji Lamina», que con Lámina va delante, solo atiende a los emoji
+    fuente: raiz.fontFamily.split(',').map(f => f.replace(/["']/g, '').trim()).find(f => f !== 'Emoji Lamina'),
     radioMayor: Math.max(0, ...radios),
     elementos: radios.length,
     sistema: document.querySelector('meta[name="theme-color"]')?.content,
@@ -71,6 +72,32 @@ ok(lamina.atributo === 'lamina', '<html data-aspecto="lamina">')
 ok(lamina.fondo === 'rgb(236, 233, 225)', 'el fondo es papel', lamina.fondo)
 ok(lamina.fuente === 'Outfit Lamina', 'la fuente es Outfit', lamina.fuente)
 ok(await p.evaluate(() => document.fonts.check('16px "Outfit Lamina"')), 'Outfit está cargada, no es la de reserva')
+
+console.log('\n── Los emoji, como iconos de línea ──')
+// Se pinta cada emoji en un lienzo con la pila de Lámina y se miran los píxeles:
+// el del sistema trae color; el icono de línea, solo la tinta con que se pinta
+const pintado = (texto) => p.evaluate(async (t) => {
+  await document.fonts.load('40px "Emoji Lamina"', t)
+  const c = document.createElement('canvas'); c.width = 80; c.height = 80
+  const x = c.getContext('2d')
+  x.font = getComputedStyle(document.documentElement).fontFamily.replace(/^/, '40px ')
+  x.fillStyle = '#17181a'; x.textBaseline = 'middle'; x.fillText(t, 10, 40)
+  const d = x.getImageData(0, 0, 80, 80).data
+  let tinta = 0, color = 0
+  for (let i = 0; i < d.length; i += 4) {
+    if (d[i + 3] < 40) continue
+    tinta++
+    if (Math.max(d[i], d[i + 1], d[i + 2]) - Math.min(d[i], d[i + 1], d[i + 2]) > 24) color++
+  }
+  return { tinta, color }
+}, texto)
+const muestras = { portapapeles: await pintado('📋'), engranaje: await pintado('⚙️'), aviso: await pintado('⚠'), camara: await pintado('📷') }
+ok(Object.values(muestras).every(m => m.tinta > 60 && m.color === 0), 'un emoji se pinta como icono de una sola tinta, con y sin selector de variación', JSON.stringify(muestras))
+ok(await p.evaluate(() => document.fonts.check('40px "Emoji Lamina"', '📋')), 'con la fuente de iconos cargada')
+await p.evaluate(() => { const e = document.createElement('p'); e.id = 'muestra-emoji'; document.body.append(e) })
+await p.evaluate(() => { document.querySelector('#muestra-emoji').style.cssText = 'font-size:40px;padding:20px;background:#ece9e1'; document.querySelector('#muestra-emoji').textContent = '📋 📝 ⚙️ ⚠ ✅ ❌ ⬇ 📊 🖨 📷 🎙 ⭐ 🔒 🔑 🗑 👥 ⏳ 💾 📚 🤖 🎯 ⚖ 🌐' })
+await p.locator('#muestra-emoji').screenshot({ path: `${TIROS}/emoji-lamina.png` })
+await p.evaluate(() => document.querySelector('#muestra-emoji')?.remove())
 ok(fuentesPedidas.some(u => u.includes('Outfit')), 'la fuente se pide ahora, al encender')
 ok(lamina.radioMayor === 0, 'ni una esquina redondeada', `${lamina.radioMayor}px en ${lamina.elementos} elementos`)
 ok(lamina.sistema === '#f4f2ec', 'la barra del sistema pasa a papel', lamina.sistema)

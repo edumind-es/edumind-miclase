@@ -68,7 +68,8 @@ export default defineConfig({
         // comunidades (6 MB en el aparato, 0,75 MB por la red una vez; workbox
         // solo vuelve a bajar lo que cambia). Así, sin red, se puede crear una
         // clase de cualquier comunidad y calificar. Decisión de Luis (nov 2026).
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}', 'curriculo/**/*.json'],
+        // `woff`: la fuente de iconos de los emoji (EmojiLamina.woff), para que Lámina no dependa de la red
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,woff}', 'curriculo/**/*.json'],
         // El motor de IA local pesa 6 MB y solo se puede usar en Chrome o Edge
         // de escritorio. Precachearlo obligaba a TODA instalación de la PWA
         // —el iPad incluido, donde no hay WebGPU— a descargarlo para nada.

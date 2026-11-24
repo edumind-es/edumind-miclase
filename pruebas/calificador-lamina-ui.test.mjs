@@ -63,7 +63,7 @@ ok(Object.keys(tramos).every(c => filete[c]), 'hay casillas de insuficiente, suf
 ok(Object.values(filete).every(c => c.fondo === SIN_FONDO && c.tinta === TINTA), 'la cifra va en tinta sobre el papel, sin fondo de color', JSON.stringify(Object.values(filete)[0]))
 ok(Object.entries(tramos).every(([c, t]) => filete[c].raya === SEMAFORO[t] && filete[c].grosor === '4px'), 'y debajo, la raya del color de su tramo', JSON.stringify(filete['cal-7']))
 ok(Object.values(filete).every(c => c.alto >= 44), 'cada casilla mide 44 px o más', Object.values(filete).map(c => c.alto).join(' '))
-const fuente = await p.locator('.matriz .celda-btn.cal-7').first().evaluate(e => getComputedStyle(e).fontFamily.split(',')[0].replace(/["']/g, ''))
+const fuente = await p.locator('.matriz .celda-btn.cal-7').first().evaluate(e => getComputedStyle(e).fontFamily.split(',').map(f => f.replace(/["']/g, '').trim()).find(f => f !== 'Emoji Lamina'))
 ok(fuente === 'Plex Mono Lamina', 'en la letra de máquina', fuente)
 const m = await medirCortes(p)
 ok(m.desborda.length === 0 && m.sale.length === 0 && m.corta.length === 0, 'nada desborda, nada fuera, ningún texto cortado', [...m.desborda, ...m.sale, ...m.corta].slice(0, 3).join(' | '))

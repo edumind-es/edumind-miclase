@@ -1819,6 +1819,24 @@ edumind_miclase/
   foco entra cuando la lista ya se ve: mientras se coloca está oculta y a
   algo oculto no se le puede dar. Las pruebas esperan a `aria-current`
   tras navegar: el cambio de pantalla entra en una transición.
+- **Con Lámina, los emoji del código se ven como iconos de línea, y eso lo
+  hace una fuente.** `frontend/public/fonts/EmojiLamina.woff` (generada por
+  `scripts/generar_fuente_emoji.py` desde `scripts/emoji_lamina.json`, con
+  fontTools) dibuja cada emoji de la interfaz —75 distintos, unas 365
+  apariciones— como un icono de la familia, de una tinta y del color del
+  texto. Va la primera en `--f-display` y `--f-mono`, y su `@font-face`
+  (`src/emoji-lamina.css`, GENERADO, no se edita) lleva el `unicode-range`
+  exacto, así que solo atiende a esos caracteres y al selector de variación
+  U+FE0F. Con el aspecto de siempre no se usa ni se descarga: por eso los
+  emoji no hubo que quitarlos uno a uno, que habría cambiado también ese
+  aspecto. El generador convierte cada línea en su contorno (un rectángulo
+  por tramo con extremos cuadrados, un anillo por círculo) y solo sabe trazar
+  M L H V Z C S, sin arcos. **Un emoji nuevo en la interfaz necesita dibujo
+  en el JSON y regenerar la fuente**: `emoji-lamina.test.mjs` (rápida) falla
+  si alguno de `frontend/src` no lo tiene, y `aspecto-ui.test.mjs` comprueba
+  por píxeles que se pintan de una sola tinta. El service worker precachea
+  `woff` además de `woff2`. Comprobado en Chromium; **no en Safari**, donde
+  un emoji podría seguir saliendo en color (la app seguiría funcionando).
 - **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
   puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
   sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los

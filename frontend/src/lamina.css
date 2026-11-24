@@ -53,8 +53,10 @@
   --area-1: #5b4a8a;  --area-2: #2c6e8a;  --area-3: #8f4a2b;  --area-4: #457436;  --area-5: #846514;
   --area-6: #a23f5c;  --area-7: #1f6e63;  --area-8: #8e4a8c;  --area-9: #3c5a9c;  --area-10: #666a22;
 
-  --f-display: 'Outfit Lamina', 'Helvetica Neue', Arial, sans-serif;
-  --f-mono:    'Plex Mono Lamina', ui-monospace, Menlo, Consolas, monospace;
+  /* «Emoji Lamina» va la primera: solo atiende a los emoji de la interfaz
+     (emoji-lamina.css) y los dibuja como iconos de línea del color del texto */
+  --f-display: 'Emoji Lamina', 'Outfit Lamina', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:    'Emoji Lamina', 'Plex Mono Lamina', ui-monospace, Menlo, Consolas, monospace;
 
   /* La cabecera del menú y la barra superior miden lo mismo: su filete es continuo */
   --alto-barra: 56px;
