@@ -1725,6 +1725,17 @@ edumind_miclase/
   descarga fuentes; encendido da papel, Outfit y cero radios. Decisiones de
   Luis (nov 2026): paleta de la skill para todo, nada visible en producción
   hasta que esté entero.
+- **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
+  puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
+  sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los
+  números por poco operativos. Rejilla de 24, trazo de 1,5 sin relleno,
+  extremos cuadrados, `currentColor`; eso lo pone la pieza, no cada dibujo.
+  Junto a su palabra el icono es adorno (`aria-hidden`); si va solo lleva
+  `titulo`. `iconoSVG(nombre)` da el mismo dibujo como texto para lo que no
+  pasa por React. **Un emoji nuevo en la interfaz es un paso atrás**: se
+  dibuja el icono en `iconos.ts` con esas reglas. `iconos.test.ts` vigila
+  que quepan en la rejilla y que pieza y texto pinten lo mismo; se empaqueta
+  en CommonJS porque `react-dom/server` no arranca como módulo ES.
 - **La versión es un solo número y nadie lo escribe a mano.** Vive en el
   `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
   está (los otros dos `package.json`, los tres `package-lock.json` y el

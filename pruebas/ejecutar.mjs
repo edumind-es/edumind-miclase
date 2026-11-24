@@ -247,6 +247,12 @@ async function principal() {
     await paquete('pruebas/aspecto.test.ts', aspecto, ['--platform=node', '--format=esm'])
     await suite('aspecto: el interruptor de Lámina', 'node', [aspecto])
 
+    // En CommonJS: react-dom/server hace `require('util')` y empaquetado como
+    // módulo ES no arranca
+    const iconos = join(scratch, 'iconos.cjs')
+    await paquete('pruebas/iconos.test.ts', iconos, ['--platform=node', '--format=cjs'])
+    await suite('iconos: la familia y su pieza', 'node', [iconos])
+
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
     await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])

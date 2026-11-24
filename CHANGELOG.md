@@ -19,6 +19,8 @@ sitios y sella esa sección con la versión y la fecha.
   y se apaga con `?aspecto=clasico`. Encendido, los colores, radios, sombras y
   tipografía pasan a papel, tinta y filete; el interior de cada pantalla se
   irá haciendo por fases hasta la 2.0.0.
+- Familia de iconos propios, de línea y de un solo color, para sustituir a
+  los emoji. Todavía no se usan en ninguna pantalla.
 
 ## [1.9.0] — 2026-11-24
 
