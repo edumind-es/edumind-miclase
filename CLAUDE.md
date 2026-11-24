@@ -1776,10 +1776,14 @@ edumind_miclase/
   pestañas de áreas, que con diez áreas dejaban la mitad en «Más»; con el
   aspecto de siempre siguen las pestañas. `[data-examenes-hub]` con
   `[data-examenes-hub-area]`, y dentro de un área `[data-examenes-dentro]`
-  con `[data-examenes-todas]` para volver; `AreaDeExamenes` no cambia. La
-  cola «Por corregir» del prototipo NO está: la lista de exámenes
-  (`listarPruebas`) no trae cuántos alumnos lleva corregidos cada uno, y no
-  se pone una cifra que no sale de ningún sitio.
+  con `[data-examenes-todas]` para volver; `AreaDeExamenes` no cambia.
+  Encima del mosaico va la cola «Por corregir» (`[data-examenes-cola]`,
+  `getExamenesPorCorregir`): los exámenes de la clase a los que les faltan
+  alumnos, con «n de m corregidos» —la misma cuenta del informe de la
+  prueba, `respuestasDeExamen`; no calcula notas— y «Corregir». Entra uno a
+  medias sea del trimestre que sea, y uno sin empezar solo si es del
+  trimestre de la barra, para que un examen viejo sin corregir no se quede
+  ahí para siempre.
 - **Con Lámina, la nota se pinta en filete o en relleno, y lo elige el
   docente** (`src/notas.ts`, `miclase.notas`, sin sincronizar; conmutador en
   «Acerca de», `[data-notas-elegir]`). Filete, el valor por defecto: cifra en
