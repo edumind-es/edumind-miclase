@@ -284,3 +284,27 @@ Orden de arranque, cada paso con su visto bueno:
 2. Galego: commit de la fase 1 en su worktree, traer `main`, resolver y PR (sección 9).
 3. Poner esta rama al día con `main`.
 4. Fase 0: protocolo de versiones, tokens tras `data-aspecto`, fuentes, `Icono` y las dos pruebas nuevas (secciones 8 y 10).
+
+## 13. Decisiones del 24·11·2026 (cierran las propuestas abiertas)
+
+| Asunto | Decisión de Luis |
+|---|---|
+| Versión de lo que hay hoy | **1.9.0** (no 1.0.0): la app ha crecido mucho desde la primera. Lámina es la 2.0.0. iOS y Android se suben a mano en Xcode y Android Studio |
+| Qué se ve en producción durante las fases | **Nada hasta la 2.0.0**: aspecto nuevo tras `data-aspecto`, apagado por defecto; Luis lo enciende en su aparato |
+| Colores de área | **Valen los diez del prototipo** como paleta de partida; cada área se puede cambiar en Mis clases → Áreas |
+| «Instalar» y selector ES/GL | **Dentro de «Acerca de»**, junto a versión y notas en filete o relleno. El menú se queda en diez entradas |
+| Publicación | Solo GitHub (PR 134); sin dirección web para el prototipo |
+| Galego | Fusionado en `main` (PR 133) |
+
+Esto corrige la sección 8: el punto de partida es 1.9.0, no 1.0.0.
+
+Se da por buena la tipografía del prototipo aprobado (Outfit + IBM Plex Mono, las que la app ya empaqueta). Siguen abiertos, para la fase 6: icono de la app y splash, y modo noche.
+
+### Fase 0 en cuatro PR cortos
+
+| PR | Qué | Se ve en producción |
+|---|---|---|
+| **0a. Versiones** | `version` 1.9.0 en los tres `package.json`, `CHANGELOG.md`, `version.ts` leída al compilar, pie del menú sin número a mano, `version.test.ts`, etiqueta en `desplegar.sh` | El pie pasa de «v1.0» a «v1.9.0» |
+| **0b. Interruptor y tokens** | `data-aspecto` en `<html>` (preferencia del aparato), tokens de Lámina bajo `:root[data-aspecto="lamina"]`, fuentes declaradas | Nada |
+| **0c. Iconos** | Pieza `Icono` con la familia del prototipo | Nada |
+| **0d. Pruebas** | «Nada cortado» y trinquete | Nada |
