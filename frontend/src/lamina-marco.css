@@ -162,6 +162,10 @@
 .hub-casilla { position: relative; display: grid; align-content: start; gap: 12px; padding: 14px; background: var(--cp); border-top: 6px solid var(--c); border-right: 1px solid var(--pelo); border-bottom: 1px solid var(--pelo); transition: background .15s; }
 .hub-casilla:hover { background: var(--papel-2); }
 .hub-abre { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 100%; min-height: 44px; padding: 0; text-align: left; background: transparent; border: 0; color: var(--tinta); font: inherit; cursor: pointer; }
+/* Dentro de un área de exámenes: en cuál se está y cómo volver */
+.hub-dentro { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; padding: 10px 14px; background: var(--cp); border-left: 6px solid var(--c); border-bottom: 1px solid var(--pelo); }
+.hub-dentro b { flex: 1 1 160px; font: 700 18px/1.2 var(--f-display); }
+.hub-dentro .btn-secondary { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
 /* En la casilla el nombre va en columna: sin esto, sus 200 px de base pasaban a ser de alto */
 .hub-abre .hub-nombre { flex: none; }
 .hub-abre::after { content: ''; position: absolute; inset: 0; }   /* toda la casilla abre el área */
