@@ -905,7 +905,7 @@ export default function CeldaEvaluacion({
               dice que falta y deja elegirla aquí mismo. La parrilla 0-10 queda
               debajo como nota directa, sin disfrazarse de escala. */}
           {sinHerramienta && (
-            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', fontSize: 12.5, lineHeight: 1.5 }}>
+            <div data-sin-herramienta style={{ padding: '11px 14px', borderRadius: 9, marginBottom: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', fontSize: 12.5, lineHeight: 1.5 }}>
               <div style={{ fontWeight: 700, marginBottom: 6 }}>
                 «{instrumentoSel?.nombre}» no tiene todavía herramienta de evaluación.
               </div>
@@ -964,7 +964,7 @@ export default function CeldaEvaluacion({
                 </div>
               )}
               {niveles.length > 0 && indicadores.length === 0 && (
-                <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
+                <div style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 10 }}>
                   Esta rúbrica tiene niveles pero ningún indicador, así que no puede
                   calcular la nota. Añádeselos en <strong>📊 Rúbrica</strong> y se
                   calificará marcando cada uno.
@@ -1186,7 +1186,7 @@ export default function CeldaEvaluacion({
                   title={`${instrumentoSel.tiene_rubrica ? 'Ver o editar' : 'Crear'} la rúbrica de «${instrumentoSel.nombre}»`}
                   style={{
                     fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer',
-                    background: instrumentoSel.tiene_rubrica ? '#166534' : 'white',
+                    background: instrumentoSel.tiene_rubrica ? 'var(--bien-tinta)' : 'white',
                     color: instrumentoSel.tiene_rubrica ? 'white' : 'var(--gris-600)',
                     border: instrumentoSel.tiene_rubrica ? 'none' : '1px solid var(--gris-300)',
                   }}>

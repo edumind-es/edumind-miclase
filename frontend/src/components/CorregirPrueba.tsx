@@ -112,7 +112,7 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
         })}
       </div>
       {!(criterioActual in r.porCriterio) && (
-        <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 8 }}>
+        <div style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 8 }}>
           Este examen no tiene ninguna pregunta de <strong>{criterioActual}</strong>: corregirlo pone nota en los demás criterios, no en este.
         </div>
       )}
@@ -142,7 +142,7 @@ export default function CorregirPrueba({ def, respuestas, destinos, criterioActu
                 {/* La planilla de corrección, delante mientras se corrige: la
                     respuesta esperada y cómo se reparten los puntos. */}
                 {p.clave && (
-                  <div data-pregunta-clave style={{ fontSize: 11.5, color: '#166534', marginTop: 2 }}>
+                  <div data-pregunta-clave style={{ fontSize: 11.5, color: 'var(--bien-tinta)', marginTop: 2 }}>
                     <span aria-hidden="true">🔑 </span>{p.clave}
                   </div>
                 )}

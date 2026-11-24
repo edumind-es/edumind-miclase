@@ -13,9 +13,9 @@ type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null 
 type Estado  = 'presente' | 'ausente' | 'justificada' | 'retraso'
 
 const ESTADOS: { value: Estado; label: string; color: string; bg: string }[] = [
-  { value: 'presente',    label: 'P', color: '#166534', bg: '#dcfce7' },
-  { value: 'ausente',     label: 'A', color: '#991b1b', bg: '#fee2e2' },
-  { value: 'justificada', label: 'J', color: '#92400e', bg: '#fef3c7' },
+  { value: 'presente',    label: 'P', color: 'var(--bien-tinta)', bg: 'var(--bien-fondo)' },
+  { value: 'ausente',     label: 'A', color: 'var(--mal-tinta)', bg: 'var(--mal-fondo)' },
+  { value: 'justificada', label: 'J', color: 'var(--aviso-tinta)', bg: '#fef3c7' },
   { value: 'retraso',     label: 'R', color: '#1e40af', bg: '#dbeafe' },
 ]
 

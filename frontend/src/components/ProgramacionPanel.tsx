@@ -26,7 +26,7 @@ const TIPOS_UNIDAD = [
 
 const TRIM_CFG = [
   { n: 1, label: '1er trimestre', color: '#1d4ed8', bg: '#dbeafe', border: '#93c5fd' },
-  { n: 2, label: '2º trimestre',  color: '#166534', bg: '#dcfce7', border: '#86efac' },
+  { n: 2, label: '2º trimestre',  color: 'var(--bien-tinta)', bg: 'var(--bien-fondo)', border: '#86efac' },
   { n: 3, label: '3er trimestre', color: '#c2410c', bg: '#ffedd5', border: '#fed7aa' },
 ]
 
@@ -276,7 +276,7 @@ export default function ProgramacionPanel({
               <button className="btn-secondary" style={{ fontSize: 12, padding: '4px 10px' }} onClick={() => setEditId(null)}>Cancelar</button>
               <div style={{ flex: 1 }} />
               <button onClick={() => handleEliminar(u.id!, u.nombre)}
-                style={{ fontSize: 11, padding: '3px 8px', borderRadius: 5, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5' }}>
+                style={{ fontSize: 11, padding: '3px 8px', borderRadius: 5, cursor: 'pointer', background: 'var(--mal-fondo)', color: 'var(--mal-tinta)', border: '1px solid #fca5a5' }}>
                 Eliminar
               </button>
             </div>
@@ -298,7 +298,7 @@ export default function ProgramacionPanel({
                   border: `1px solid ${border}`, whiteSpace: 'nowrap',
                 }}>
                 {abierta ? '▼' : '▶'} {u.criterios.length} criterio{u.criterios.length !== 1 ? 's' : ''}
-                {faltan > 0 && <span style={{ marginLeft: 5, color: abierta ? '#fed7aa' : '#b45309' }}>· {faltan} sin instrumento</span>}
+                {faltan > 0 && <span style={{ marginLeft: 5, color: abierta ? '#fed7aa' : 'var(--aviso-fuerte)' }}>· {faltan} sin instrumento</span>}
               </button>
 
               <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
@@ -318,7 +318,7 @@ export default function ProgramacionPanel({
             {abierta && (
               <div style={{ borderTop: `1px solid ${border}`, background: '#fbfcfe', padding: '10px 12px' }}>
                 {sinInstrumentosCreados ? (
-                  <div style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 7, padding: '10px 12px' }}>
+                  <div style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', borderRadius: 7, padding: '10px 12px' }}>
                     Esta área todavía no tiene instrumentos de evaluación.{' '}
                     <button onClick={onIrAInstrumentos}
                       style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', fontSize: 12.5, padding: 0, textDecoration: 'underline' }}>
@@ -358,7 +358,7 @@ export default function ProgramacionPanel({
                           <div key={cr.id} style={{
                             display: 'flex', alignItems: 'flex-start', gap: 8, padding: '6px 8px',
                             borderRadius: 6, background: enUnidad ? 'white' : 'transparent',
-                            border: `1px solid ${enUnidad ? (asignados.length ? '#e5e7eb' : '#fed7aa') : 'transparent'}`,
+                            border: `1px solid ${enUnidad ? (asignados.length ? 'var(--borde-suave)' : '#fed7aa') : 'transparent'}`,
                             opacity: enUnidad ? 1 : .6,
                           }}>
                             <input type="checkbox" checked={!!enUnidad}
@@ -373,7 +373,7 @@ export default function ProgramacionPanel({
                               </div>
                               <ChipsCompetencias criterio={cr} />
                               {enUnidad?.minimo && (
-                                <div style={{ fontSize: 11, color: '#166534', marginTop: 3, lineHeight: 1.4 }} title="Mínimo de consecución de la programación">
+                                <div style={{ fontSize: 11, color: 'var(--bien-tinta)', marginTop: 3, lineHeight: 1.4 }} title="Mínimo de consecución de la programación">
                                   <strong>Mínimo:</strong> {enUnidad.minimo}
                                 </div>
                               )}
@@ -402,7 +402,7 @@ export default function ProgramacionPanel({
                                     )
                                   })}
                                   {asignados.length === 0 && (
-                                    <span style={{ fontSize: 10.5, color: '#b45309', fontWeight: 600, marginLeft: 2 }}>
+                                    <span style={{ fontSize: 10.5, color: 'var(--aviso-fuerte)', fontWeight: 600, marginLeft: 2 }}>
                                       ← elige con qué se evalúa
                                     </span>
                                   )}
@@ -610,7 +610,7 @@ export default function ProgramacionPanel({
           <span style={{ fontWeight: 600, color: 'var(--azul-700)' }}>Programación didáctica</span>
           {' · '}{unidades.length} unidades · {criteriosAsignados.size}/{criteriosCurr.length} criterios
           {critSinAsignar.length > 0 && (
-            <span style={{ color: '#b45309', marginLeft: 6 }}>({critSinAsignar.length} sin unidad)</span>
+            <span style={{ color: 'var(--aviso-fuerte)', marginLeft: 6 }}>({critSinAsignar.length} sin unidad)</span>
           )}
         </div>
         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -637,7 +637,7 @@ export default function ProgramacionPanel({
 
       {/* Aviso global de criterios sin instrumento */}
       {totalCriterios > 0 && sinInstrumento > 0 && (
-        <div style={{ marginBottom: 12, padding: '9px 13px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+        <div style={{ marginBottom: 12, padding: '9px 13px', borderRadius: 7, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
           <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento asignado.</strong>{' '}
           En el calificador aparecerán rayados: podrás verlos, pero no evaluarlos hasta decir con qué se evalúan.
         </div>
@@ -646,8 +646,8 @@ export default function ProgramacionPanel({
       {mensaje && (
         <div style={{
           marginBottom: 12, padding: '8px 14px', borderRadius: 6, fontSize: 13,
-          background: mensaje.startsWith('❌') ? '#fee2e2' : '#dcfce7',
-          color: mensaje.startsWith('❌') ? '#991b1b' : '#166534',
+          background: mensaje.startsWith('❌') ? 'var(--mal-fondo)' : 'var(--bien-fondo)',
+          color: mensaje.startsWith('❌') ? 'var(--mal-tinta)' : 'var(--bien-tinta)',
         }}>
           {mensaje}
         </div>
@@ -698,7 +698,7 @@ export default function ProgramacionPanel({
             <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setFormPlantilla(false)}>Cancelar</button>
           </div>
           {criteriosCurr.length === 0 && (
-            <div style={{ fontSize: 12, color: '#b45309', marginTop: 8 }}>
+            <div style={{ fontSize: 12, color: 'var(--aviso-fuerte)', marginTop: 8 }}>
               ⚠ No se encontraron criterios para «{asignaturaNombre}» en {grupoComunidad} · {grupoCurso}º {grupoEtapa}.
             </div>
           )}
@@ -776,7 +776,7 @@ export default function ProgramacionPanel({
       )}
 
       {critSinAsignar.length > 0 && unidades.length > 0 && (
-        <div style={{ padding: '8px 12px', borderRadius: 6, background: '#fffbeb', border: '1px solid #fde68a', fontSize: 12, color: '#92400e' }}>
+        <div style={{ padding: '8px 12px', borderRadius: 6, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', fontSize: 12, color: 'var(--aviso-tinta)' }}>
           <strong>{critSinAsignar.length} criterio{critSinAsignar.length !== 1 ? 's' : ''} sin unidad:</strong>{' '}
           {critSinAsignar.map(c => c.id).join(' · ')}
         </div>

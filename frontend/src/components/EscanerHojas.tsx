@@ -257,8 +257,8 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
         </div>
 
         <div style={{ padding: '12px 18px 18px' }}>
-          {prueba === null && <div style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>Este instrumento no tiene examen definido{unidadNombre ? ` para «${unidadNombre}»` : ''}.</div>}
-          {def && !listo && <div style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>«{def.titulo}» no es un test con clave completa: no hay con qué corregir las hojas.</div>}
+          {prueba === null && <div style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>Este instrumento no tiene examen definido{unidadNombre ? ` para «${unidadNombre}»` : ''}.</div>}
+          {def && !listo && <div style={{ padding: '10px 13px', borderRadius: 8, fontSize: 13, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>«{def.titulo}» no es un test con clave completa: no hay con qué corregir las hojas.</div>}
           {error && <div style={{ color: 'var(--rojo-500)', fontSize: 13, marginBottom: 8 }}>❌ {error}</div>}
 
           <canvas ref={lienzoRef} style={{ display: 'none' }} />
@@ -323,7 +323,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                   </div>
                   <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.4 }}>
                     {resultado.obtenido} / {resultado.maximo} puntos
-                    {dudosas > 0 && <div style={{ color: '#92400e', fontWeight: 700 }}>⚠ {dudosas} pregunta{dudosas !== 1 ? 's' : ''} dudosa{dudosas !== 1 ? 's' : ''}: revísala{dudosas !== 1 ? 's' : ''}</div>}
+                    {dudosas > 0 && <div style={{ color: 'var(--aviso-tinta)', fontWeight: 700 }}>⚠ {dudosas} pregunta{dudosas !== 1 ? 's' : ''} dudosa{dudosas !== 1 ? 's' : ''}: revísala{dudosas !== 1 ? 's' : ''}</div>}
                   </div>
                 </div>
                 <div style={{ maxHeight: '42vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -332,7 +332,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                     const m = capturada.marcadas[i]
                     const acierto = m != null && m === p.correcta
                     return (
-                      <div key={p.id} data-escaner-pregunta={i + 1} data-dudosa={q?.dudosa || undefined} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '3px 6px', borderRadius: 6, background: q?.dudosa ? '#fffbeb' : m == null ? 'transparent' : acierto ? 'var(--verde-100)' : 'var(--rojo-100)' }}>
+                      <div key={p.id} data-escaner-pregunta={i + 1} data-dudosa={q?.dudosa || undefined} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '3px 6px', borderRadius: 6, background: q?.dudosa ? 'var(--aviso-fondo)' : m == null ? 'transparent' : acierto ? 'var(--verde-100)' : 'var(--rojo-100)' }}>
                         <span style={{ width: 24, fontSize: 12, fontWeight: 700, color: 'var(--gris-600)', textAlign: 'right' }}>{i + 1}</span>
                         <div style={{ display: 'flex', gap: 3 }}>
                           {Array.from({ length: nOpciones }, (_, j) => (

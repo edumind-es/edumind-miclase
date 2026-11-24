@@ -327,7 +327,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
         {asignaturas.map(a => {
           const nInstr = a.instrumentos?.length || 0
           return (
-          <div key={a.id} style={{ border: '1px solid var(--gris-200, #e5e7eb)', borderRadius: 8 }}>
+          <div key={a.id} style={{ border: '1px solid var(--gris-200, var(--borde-suave))', borderRadius: 8 }}>
             <div
               onClick={() => setExpandida(expandida === a.id ? null : a.id)}
               style={{
@@ -379,13 +379,13 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                             const total = a.instrumentos!.reduce((s, i) => s + (i.peso || 0), 0)
                             const ok = total === 100
                             const over = total > 100
-                            const barColor = ok ? '#166534' : over ? '#dc2626' : '#b45309'
-                            const barBg = ok ? '#dcfce7' : over ? '#fee2e2' : '#fef3c7'
+                            const barColor = ok ? 'var(--bien-tinta)' : over ? '#dc2626' : 'var(--aviso-fuerte)'
+                            const barBg = ok ? 'var(--bien-fondo)' : over ? 'var(--mal-fondo)' : '#fef3c7'
                             return (
                               <div
                                 title="Reparto por defecto de los instrumentos en el área. Es el que se aplica a los criterios que no declaran el suyo propio en la programación."
                                 style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, padding: '6px 10px', background: barBg, borderRadius: 6 }}>
-                                <div style={{ flex: 1, height: 5, background: '#e5e7eb', borderRadius: 3 }}>
+                                <div style={{ flex: 1, height: 5, background: 'var(--borde-suave)', borderRadius: 3 }}>
                                   <div style={{ width: `${Math.min(total, 100)}%`, height: '100%', background: barColor, borderRadius: 3, transition: 'width .3s' }} />
                                 </div>
                                 <span style={{ fontSize: 12, fontWeight: 700, color: barColor, whiteSpace: 'nowrap' }}>
@@ -451,7 +451,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
                                   title="Editar la rúbrica de este instrumento"
                                   style={{
                                     fontSize: 11, padding: '3px 8px', borderRadius: 5, cursor: 'pointer',
-                                    background: ins.tipo === 'rubrica' ? '#166534' : 'white',
+                                    background: ins.tipo === 'rubrica' ? 'var(--bien-tinta)' : 'white',
                                     color: ins.tipo === 'rubrica' ? 'white' : 'var(--gris-600)',
                                     border: ins.tipo === 'rubrica' ? 'none' : '1px solid var(--gris-300)',
                                     fontWeight: 600, whiteSpace: 'nowrap',

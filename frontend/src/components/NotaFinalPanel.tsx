@@ -133,7 +133,7 @@ export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
                 ))}
               </div>
             )}
-            <p data-pesos-unidad-aviso style={{ fontSize: 12.5, margin: '6px 0 0', color: sinPeso.length ? 'var(--ambar-600, #b45309)' : 'var(--gris-600)' }}>
+            <p data-pesos-unidad-aviso style={{ fontSize: 12.5, margin: '6px 0 0', color: sinPeso.length ? 'var(--ambar-600, var(--aviso-fuerte))' : 'var(--gris-600)' }}>
               {unidades.length > 0 && sinPeso.length === unidades.length
                 ? 'Ninguna unidad tiene peso: mientras tanto, todas cuentan igual.'
                 : sinPeso.length
@@ -172,14 +172,14 @@ export default function NotaFinalPanel({ asignatura, onCambio }: Props) {
             </label>
           ))}
         </div>
-        <p style={{ fontSize: 12.5, margin: '6px 0 0', color: total === 100 ? 'var(--gris-600)' : 'var(--ambar-600, #b45309)' }} data-pesos-total>
+        <p style={{ fontSize: 12.5, margin: '6px 0 0', color: total === 100 ? 'var(--gris-600)' : 'var(--ambar-600, var(--aviso-fuerte))' }} data-pesos-total>
           {total === 100
             ? 'Suman 100.'
             : `Suman ${total}. El cálculo reparte proporcionalmente, pero conviene que sumen 100 para leerlos como porcentajes.`}
         </p>
       </div>
 
-      {guardado && <p role="status" style={{ fontSize: 12.5, color: 'var(--verde-600, #166534)', margin: 0 }}>{guardado}</p>}
+      {guardado && <p role="status" style={{ fontSize: 12.5, color: 'var(--verde-600, var(--bien-tinta))', margin: 0 }}>{guardado}</p>}
     </div>
   )
 }

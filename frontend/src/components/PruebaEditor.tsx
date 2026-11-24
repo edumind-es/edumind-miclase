@@ -567,7 +567,7 @@ export default function PruebaEditor({
             {msg && (
               <div data-mensaje={msg.tipo} style={{
                 marginBottom: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13,
-                background: msg.tipo === 'ok' ? '#dcfce7' : '#fee2e2', color: msg.tipo === 'ok' ? '#166534' : '#991b1b',
+                background: msg.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)', color: msg.tipo === 'ok' ? 'var(--bien-tinta)' : 'var(--mal-tinta)',
               }}>
                 {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
               </div>
@@ -622,7 +622,7 @@ export default function PruebaEditor({
                   </select>
                 </label>
               </div>
-              <div style={{ fontSize: 11.5, color: seMueve ? '#92400e' : 'var(--gris-500)', marginTop: 3 }}>
+              <div style={{ fontSize: 11.5, color: seMueve ? 'var(--aviso-tinta)' : 'var(--gris-500)', marginTop: 3 }}>
                 {seMueve
                   ? <>Al guardar, el examen se <strong>mueve</strong> ahí. Las notas ya puestas se quedan en su sitio de origen.</>
                   : <>Si cada unidad tiene su examen, déjalo en la suya: las demás tendrán el suyo.</>}
@@ -699,7 +699,7 @@ export default function PruebaEditor({
                   return (
                     <div data-estado-clave={faltan.length ? 'incompleta' : 'completa'}
                       style={{ marginTop: 8, padding: '8px 12px', borderRadius: 8, fontSize: 12, lineHeight: 1.5,
-                        background: faltan.length ? '#fffbeb' : '#dcfce7', border: `1px solid ${faltan.length ? '#fde68a' : '#86efac'}`, color: faltan.length ? '#92400e' : '#166534' }}>
+                        background: faltan.length ? 'var(--aviso-fondo)' : 'var(--bien-fondo)', border: `1px solid ${faltan.length ? 'var(--aviso-borde)' : '#86efac'}`, color: faltan.length ? 'var(--aviso-tinta)' : 'var(--bien-tinta)' }}>
                       {faltan.length
                         ? <><strong>{faltan.length} de {def.preguntas.length} pregunta{def.preguntas.length !== 1 ? 's' : ''}</strong> sin opciones o sin la correcta. Con todas completas, el test se podrá imprimir y corregir por cámara.{' '}
                             <button className="btn-secondary" style={{ fontSize: 11.5, marginLeft: 4 }} onClick={() => darOpcionesATodas(4)}>Dar 4 opciones a todas</button></>
@@ -761,7 +761,7 @@ export default function PruebaEditor({
                               ? <button className="btn-secondary" style={{ fontSize: 12.5 }} onClick={ai.cancelar}>✋ Detener</button>
                               : <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={generarConIA} disabled={!iaContexto.trim()}>⚡ Generar con IA local</button>
                           ) : (
-                            <button className="btn-primary" style={{ fontSize: 12.5, background: '#166534' }} onClick={ai.cargarModelo}
+                            <button className="btn-primary" style={{ fontSize: 12.5, background: 'var(--bien-tinta)' }} onClick={ai.cargarModelo}
                               disabled={ai.status === 'descargando' || ai.status === 'cargando'}>
                               {ai.status === 'descargando' && `⬇ Descargando Phi-3.5 (${ai.progress}%)`}
                               {ai.status === 'cargando' && '⏳ Cargando modelo…'}
@@ -780,7 +780,7 @@ export default function PruebaEditor({
                           ? 'Pega aquí el test. Formato:\n\n1. ¿Onde nace o río Miño?\n   a) Na serra de Meira *\n   b) Nos Ancares\n   c) No Courel\n\nLa correcta lleva un asterisco, o va al final en «Respuestas: 1-a, 2-c…».'
                           : 'Pega aquí la tabla que devuelve la IA. Formato:\n\n| Ítem | Pregunta | Criterio | Tipo | Máximo | Clave | Puntuación | Nivel 1 | … | Notas |\n|---|---|---|---|---|---|---|---|---|---|\n| 1 | Relaciona cada termo | CE1.1 | Respuesta cerrada | 1 | 1-d · 2-e · 3-a | 0,2 cada acerto | | | |\n\nTambién vale la tabla corta: | Pregunta | Puntos | Criterio | Clave | Corrección |'} />
                     </div>
-                    {iaError && <div style={{ color: '#991b1b', fontSize: 12.5 }}>❌ {iaError}</div>}
+                    {iaError && <div style={{ color: 'var(--mal-tinta)', fontSize: 12.5 }}>❌ {iaError}</div>}
                     <div style={{ display: 'flex', gap: 8 }}>
                       <button className="btn-primary" style={{ fontSize: 12.5 }} onClick={() => cargarRespuesta(iaRespuesta)} disabled={!iaRespuesta.trim()} data-ia-cargar>
                         📥 Cargar como examen
@@ -834,7 +834,7 @@ export default function PruebaEditor({
                 </label>
               </div>
               {def.reparto === 'unica' && criteriosActivos.length > 1 && (
-                <div data-aviso-reparto style={{ marginTop: 8, padding: '9px 13px', borderRadius: 8, fontSize: 12, lineHeight: 1.45, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+                <div data-aviso-reparto style={{ marginTop: 8, padding: '9px 13px', borderRadius: 8, fontSize: 12, lineHeight: 1.45, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
                   Con una sola nota, los {criteriosActivos.length} criterios de este examen y sus competencias clave reciben lo mismo. Para que cada pregunta cuente en su criterio, reparte por criterios.
                   <button type="button" className="btn-secondary" data-aviso-reparto-activar onClick={() => setReparto('criterios')} style={{ marginLeft: 8, fontSize: 12 }}>
                     Repartir por criterios
@@ -880,7 +880,7 @@ export default function PruebaEditor({
               </datalist>
             )}
             {unidadesSinPreguntas.length > 0 && (
-              <div data-unidad-sin-preguntas style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 8 }}>
+              <div data-unidad-sin-preguntas style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 8 }}>
                 {unidadesSinPreguntas.map(u => `«${u.nombre}»`).join(', ')} no {unidadesSinPreguntas.length === 1 ? 'tiene' : 'tienen'} ninguna pregunta: este examen no le{unidadesSinPreguntas.length === 1 ? '' : 's'} pondrá nota. Asígnale alguna o déjalas en «Todas».
               </div>
             )}
@@ -981,7 +981,7 @@ export default function PruebaEditor({
                         <td />
                         <td colSpan={(def.reparto === 'criterios' ? 4 : 3) + (unidadesDeEsteExamen.length > 1 ? 1 : 0) + (conAspectos ? 1 : 0) + (conPlanilla ? 2 : 0)} style={{ padding: '0 5px 8px' }}>
                           <button type="button" onClick={() => alternarOpciones(p.id)} aria-expanded={abierta}
-                            style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : '#92400e', cursor: 'pointer', fontWeight: 600 }}>
+                            style={{ background: 'none', border: 'none', padding: 0, fontSize: 11.5, color: p.correcta != null ? 'var(--verde-500)' : 'var(--aviso-tinta)', cursor: 'pointer', fontWeight: 600 }}>
                             {abierta ? '▾' : '▸'} {resumen}
                           </button>
                           {abierta && (
@@ -1019,7 +1019,7 @@ export default function PruebaEditor({
                 instrumento sí evalúa o a todos. La otra salida es arreglar la
                 programación, que es la que manda. */}
             {sinDestino.length > 0 && (
-              <div data-reasignar-criterios style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 10 }}>
+              <div data-reasignar-criterios style={{ padding: '9px 13px', borderRadius: 8, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 10 }}>
                 <div style={{ marginBottom: 6 }}>
                   <strong>{sinDestino.join(', ')}</strong> {sinDestino.length === 1 ? 'no está asignado' : 'no están asignados'} a «{nombreInstrumento}» en la
                   programación{nombreUnidad ? ` de «${nombreUnidad}»` : ''}: sus preguntas no pondrán nota en ningún sitio. Elige a cuál de los criterios del instrumento van, o asígnale el criterio al instrumento en 📋 Programación.
@@ -1095,12 +1095,12 @@ export default function PruebaEditor({
             flexShrink: 0, borderTop: '1px solid var(--gris-200)', background: 'var(--gris-50)',
             padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
           }}>
-            <div style={{ flex: 1, minWidth: 140, fontSize: 12, color: sucio ? '#92400e' : 'var(--gris-500)', fontWeight: sucio ? 700 : 400 }}>
+            <div style={{ flex: 1, minWidth: 140, fontSize: 12, color: sucio ? 'var(--aviso-tinta)' : 'var(--gris-500)', fontWeight: sucio ? 700 : 400 }}>
               {sucio ? '● Cambios sin guardar' : cargadaId != null ? '✅ Guardado en este dispositivo' : 'Todavía sin guardar'}
             </div>
             {cargadaId != null && (
               <button onClick={borrar}
-                style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
+                style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: 'var(--mal-fondo)', color: 'var(--mal-tinta)', border: '1px solid #fca5a5', fontWeight: 600 }}>
                 Eliminar examen
               </button>
             )}

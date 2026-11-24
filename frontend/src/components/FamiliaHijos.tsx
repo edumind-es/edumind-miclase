@@ -313,7 +313,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
       {error && <div style={{ color: 'var(--rojo-500)', fontSize: 12, marginBottom: 6 }}>{error}</div>}
 
       {escondidos.length > 0 && (
-        <div data-familia-escondidos style={{ marginBottom: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+        <div data-familia-escondidos style={{ marginBottom: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
           <div style={{ lineHeight: 1.5, marginBottom: 6 }}>
             <strong>«{familia.nombre}» guarda a su nombre {describeBloque({
               calificaciones: escondidos.reduce((n, b) => n + b.calificaciones, 0),
@@ -327,7 +327,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
               const k = claveBloque(b)
               return (
                 <div key={k} data-bloque-escondido data-unidad-id={b.unidad_id ?? ''} data-dia={b.dia ?? ''}
-                  style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', background: 'white', borderRadius: 6, padding: '6px 8px', border: '1px solid #fde68a' }}>
+                  style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', background: 'white', borderRadius: 6, padding: '6px 8px', border: '1px solid var(--aviso-borde)' }}>
                   <span style={{ flex: '1 1 240px', lineHeight: 1.45 }}>
                     <strong data-bloque-unidad>{b.unidad_nombre ?? (b.unidad_id ? `Unidad ${b.unidad_id}` : 'Sin unidad')}</strong>
                     {' · '}
@@ -419,7 +419,7 @@ export default function FamiliaHijos({ familia, asignaturaNombre, criterios, cap
                   )}
                   <button data-hijo-criterios onClick={() => setEditando(abierto ? null : h.id!)} aria-expanded={abierto}
                     title="Qué criterios del instrumento evalúa esta actividad, unidad por unidad"
-                    style={{ fontSize: 11, fontWeight: 600, padding: '4px 9px', borderRadius: 6, cursor: 'pointer', background: n === 0 ? '#fffbeb' : 'white', color: n === 0 ? '#92400e' : 'var(--gris-600)', border: `1px solid ${n === 0 ? '#fde68a' : 'var(--gris-300)'}` }}>
+                    style={{ fontSize: 11, fontWeight: 600, padding: '4px 9px', borderRadius: 6, cursor: 'pointer', background: n === 0 ? 'var(--aviso-fondo)' : 'white', color: n === 0 ? 'var(--aviso-tinta)' : 'var(--gris-600)', border: `1px solid ${n === 0 ? 'var(--aviso-borde)' : 'var(--gris-300)'}` }}>
                     {n} de {totalFamilia} criterios {abierto ? '▴' : '▾'}
                   </button>
                   {usos[h.id!] && (

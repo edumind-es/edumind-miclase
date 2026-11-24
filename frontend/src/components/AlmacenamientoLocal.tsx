@@ -46,7 +46,7 @@ function DesgloseEvidencias() {
         ))}
       </div>
       {r.noViajan.n > 0 && (
-        <div data-almacen-no-viajan style={{ color: '#92400e' }}>
+        <div data-almacen-no-viajan style={{ color: 'var(--aviso-tinta)' }}>
           ⚠️ {r.noViajan.n} ({tamanoLegible(r.noViajan.bytes)}) pasan de {enMB(LIMITE_EVIDENCIA_SINC)} MB: se quedan solo en este aparato.
         </div>
       )}

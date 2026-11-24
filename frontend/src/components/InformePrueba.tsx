@@ -281,7 +281,7 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
         </div>
 
         <div style={{ padding: '14px 18px', overflowY: 'auto', flex: 1, minHeight: 0, fontSize: 13, color: 'var(--gris-700)', lineHeight: 1.5 }}>
-          {error && <div style={{ color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8 }}>{error}</div>}
+          {error && <div style={{ color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', borderRadius: 8 }}>{error}</div>}
           {!error && !informe && <div style={{ color: 'var(--gris-500)' }}>Preparando el informe…</div>}
           {informe && def && informe.alumnos > 0 && (
             <div role="group" aria-label="De quién es el informe" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
@@ -342,7 +342,7 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
               )}
               {delAlumno && !(frente === 'parecidos' && conParecidos) && <VistaAlumno a={delAlumno} grupo="La clase" />}
               {delAlumno && (delAlumno.nota.grupo?.n ?? 0) < MINIMO_GRUPO && (
-                <p data-informe-pocos style={{ fontSize: 12, color: '#92400e', background: '#fffbeb', padding: '8px 10px', marginTop: 10 }}>
+                <p data-informe-pocos style={{ fontSize: 12, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', marginTop: 10 }}>
                   Hay menos de {MINIMO_GRUPO} exámenes corregidos: el documento saldrá sin las cifras de la clase, porque de tan pocas se deducen las de los compañeros.
                 </p>
               )}
@@ -400,7 +400,7 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
               )}
             </>
           )}
-          {msg && <div style={{ marginTop: 10, fontSize: 12.5, color: '#166534', background: '#dcfce7', padding: '8px 10px', borderRadius: 8 }}>✅ {msg}</div>}
+          {msg && <div style={{ marginTop: 10, fontSize: 12.5, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', padding: '8px 10px', borderRadius: 8 }}>✅ {msg}</div>}
         </div>
 
         <div style={{ display: 'flex', gap: 8, padding: '12px 18px', borderTop: '1px solid var(--gris-200)', background: 'var(--gris-50)', flexWrap: 'wrap' }}>

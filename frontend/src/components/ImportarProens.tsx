@@ -245,9 +245,9 @@ export default function ImportarProens({
   const aviso = (texto: React.ReactNode, tono: 'ambar' | 'rojo' = 'ambar') => (
     <div style={{
       fontSize: 12.5, padding: '8px 12px', borderRadius: 7, marginBottom: 8, lineHeight: 1.5,
-      background: tono === 'rojo' ? '#fee2e2' : '#fffbeb',
-      border: `1px solid ${tono === 'rojo' ? '#fca5a5' : '#fde68a'}`,
-      color: tono === 'rojo' ? '#991b1b' : '#92400e',
+      background: tono === 'rojo' ? 'var(--mal-fondo)' : 'var(--aviso-fondo)',
+      border: `1px solid ${tono === 'rojo' ? '#fca5a5' : 'var(--aviso-borde)'}`,
+      color: tono === 'rojo' ? 'var(--mal-tinta)' : 'var(--aviso-tinta)',
     }}>{texto}</div>
   )
 
@@ -260,7 +260,7 @@ export default function ImportarProens({
 
       {resultado ? (
         <>
-          <div style={{ fontSize: 13, color: '#166534', background: '#dcfce7', border: '1px solid #86efac', borderRadius: 7, padding: '10px 14px', lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', border: '1px solid #86efac', borderRadius: 7, padding: '10px 14px', lineHeight: 1.6 }}>
             <strong>Programación importada.</strong>{' '}
             {resultado.unidadesCreadas} unidades nuevas{resultado.unidadesActualizadas ? ` y ${resultado.unidadesActualizadas} actualizadas` : ''} ·{' '}
             {resultado.instrumentosCreados} instrumentos nuevos{resultado.instrumentosReutilizados ? ` y ${resultado.instrumentosReutilizados} reutilizados` : ''} ·{' '}
@@ -368,7 +368,7 @@ export default function ImportarProens({
           <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--gris-700)', margin: '10px 0 6px' }}>Instrumentos de evaluación</div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 12 }}>
             {prog.instrumentos.map((ins, i) => (
-              <div key={ins.abrev} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 170px 70px', gap: 6, alignItems: 'center', background: 'white', border: '1px solid #e5e7eb', borderRadius: 6, padding: '5px 8px' }}>
+              <div key={ins.abrev} style={{ display: 'grid', gridTemplateColumns: '44px 1fr 170px 70px', gap: 6, alignItems: 'center', background: 'white', border: '1px solid var(--borde-suave)', borderRadius: 6, padding: '5px 8px' }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--azul-700)' }}>{ins.abrev}</span>
                 <input value={ins.nombre} onChange={e => editarInstrumento(i, { nombre: e.target.value })} style={{ fontSize: 12 }} />
                 <select value={ins.tipo} onChange={e => editarInstrumento(i, { tipo: e.target.value })} style={{ fontSize: 12 }}>
@@ -383,7 +383,7 @@ export default function ImportarProens({
               </div>
             ))}
             {prog.instrumentos.length === 0 && (
-              <div style={{ fontSize: 12, color: '#92400e' }}>El documento no declara instrumentos: los criterios se importarán sin ninguno.</div>
+              <div style={{ fontSize: 12, color: 'var(--aviso-tinta)' }}>El documento no declara instrumentos: los criterios se importarán sin ninguno.</div>
             )}
           </div>
 
@@ -394,7 +394,7 @@ export default function ImportarProens({
               const abiertaEsta = abierta === i
               const fuera = u.criterios.filter(c => !conocidos.has(c.codigoCurriculo)).length
               return (
-                <div key={u.numero} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 6, overflow: 'hidden' }}>
+                <div key={u.numero} style={{ background: 'white', border: '1px solid var(--borde-suave)', borderRadius: 6, overflow: 'hidden' }}>
                   <div style={{ display: 'grid', gridTemplateColumns: '34px 1fr 96px 62px 62px auto', gap: 6, alignItems: 'center', padding: '5px 8px' }}>
                     <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gris-500)' }}>UD {u.numero}</span>
                     <input value={u.titulo} onChange={e => editarUnidad(i, { titulo: e.target.value })} style={{ fontSize: 12.5, fontWeight: 600 }} />
@@ -408,26 +408,26 @@ export default function ImportarProens({
                     <button onClick={() => setAbierta(abiertaEsta ? null : i)}
                       style={{ fontSize: 11.5, padding: '3px 10px', borderRadius: 12, cursor: 'pointer', fontWeight: 600, background: abiertaEsta ? 'var(--azul-700)' : 'white', color: abiertaEsta ? 'white' : 'var(--azul-700)', border: '1px solid #c7d2fe', whiteSpace: 'nowrap' }}>
                       {abiertaEsta ? '▼' : '▶'} {u.criterios.length} criterios
-                      {fuera > 0 && <span style={{ marginLeft: 5, color: abiertaEsta ? '#fed7aa' : '#b45309' }}>· {fuera} fuera</span>}
+                      {fuera > 0 && <span style={{ marginLeft: 5, color: abiertaEsta ? '#fed7aa' : 'var(--aviso-fuerte)' }}>· {fuera} fuera</span>}
                     </button>
                   </div>
                   {abiertaEsta && (
-                    <div style={{ borderTop: '1px solid #e5e7eb', background: '#fbfcfe', padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    <div style={{ borderTop: '1px solid var(--borde-suave)', background: '#fbfcfe', padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 4 }}>
                       {u.criterios.map((c, j) => {
                         const conocido = conocidos.has(c.codigoCurriculo)
                         return (
-                          <div key={c.codigo} style={{ display: 'grid', gridTemplateColumns: '1fr 150px', gap: 8, alignItems: 'start', padding: '5px 8px', borderRadius: 5, background: conocido ? 'white' : '#fef2f2', border: `1px solid ${conocido ? '#e5e7eb' : '#fca5a5'}` }}>
+                          <div key={c.codigo} style={{ display: 'grid', gridTemplateColumns: '1fr 150px', gap: 8, alignItems: 'start', padding: '5px 8px', borderRadius: 5, background: conocido ? 'white' : '#fef2f2', border: `1px solid ${conocido ? 'var(--borde-suave)' : '#fca5a5'}` }}>
                             <div style={{ minWidth: 0 }}>
                               <div style={{ fontSize: 11.5, lineHeight: 1.45 }}>
-                                <span style={{ fontWeight: 700, color: conocido ? 'var(--azul-700)' : '#991b1b', marginRight: 6 }}>{c.codigo} → {c.codigoCurriculo}</span>
+                                <span style={{ fontWeight: 700, color: conocido ? 'var(--azul-700)' : 'var(--mal-tinta)', marginRight: 6 }}>{c.codigo} → {c.codigoCurriculo}</span>
                                 <span style={{ color: 'var(--gris-600)' }}>{c.descripcion}</span>
                               </div>
                               {c.minimo && (
-                                <div style={{ fontSize: 11, color: '#166534', marginTop: 3, lineHeight: 1.4 }}>
+                                <div style={{ fontSize: 11, color: 'var(--bien-tinta)', marginTop: 3, lineHeight: 1.4 }}>
                                   <strong>Mínimo:</strong> {c.minimo}
                                 </div>
                               )}
-                              {!conocido && <div style={{ fontSize: 11, color: '#991b1b', marginTop: 3 }}>No existe en el currículo de esta clase: no se importa.</div>}
+                              {!conocido && <div style={{ fontSize: 11, color: 'var(--mal-tinta)', marginTop: 3 }}>No existe en el currículo de esta clase: no se importa.</div>}
                             </div>
                             <select value={c.instrumento ?? ''} disabled={!conocido}
                               onChange={e => editarCriterio(i, j, e.target.value || null)}
@@ -463,7 +463,7 @@ export default function ImportarProens({
             </button>
             <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => { setProg(null); setError('') }}>Elegir otro fichero</button>
             {sinInstrumento > 0 && (
-              <span style={{ fontSize: 11.5, color: '#92400e' }}>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento: saldrán rayados hasta que elijas uno.</span>
+              <span style={{ fontSize: 11.5, color: 'var(--aviso-tinta)' }}>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento: saldrán rayados hasta que elijas uno.</span>
             )}
           </div>
         </>

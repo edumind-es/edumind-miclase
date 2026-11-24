@@ -168,7 +168,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
         y se corrige apuntando la cámara a cada hoja.
       </p>
 
-      {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
+      {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
 
       {lista == null ? (
         <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Cargando…</div>

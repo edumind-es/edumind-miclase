@@ -219,7 +219,7 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, u
           <div style={{ color: 'var(--gris-600)', fontSize: 12.5 }}>Se añaden o quitan en «Qué evalúo» → Por unidad, o en el «Más» de su columna.</div>
         </div>
 
-        {aviso && <div data-ficha-aviso role="status" style={{ marginTop: 12, fontSize: 13, color: '#166534', background: '#dcfce7', padding: '8px 10px' }}>{aviso}</div>}
+        {aviso && <div data-ficha-aviso role="status" style={{ marginTop: 12, fontSize: 13, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', padding: '8px 10px' }}>{aviso}</div>}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 14 }}>
           <button type="button" className="btn-primary" data-ficha-hecho onClick={onCerrar} style={{ minHeight: 44, fontSize: 14 }}>Hecho</button>
         </div>

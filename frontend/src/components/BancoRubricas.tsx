@@ -127,7 +127,7 @@ export default function BancoRubricas({ instrumentoId, onElegir, onCerrar, refre
       {msg && (
         <div style={{
           marginBottom: 10, padding: '8px 12px', borderRadius: 8, fontSize: 12.5,
-          background: msg.tipo === 'ok' ? '#dcfce7' : '#fee2e2', color: msg.tipo === 'ok' ? '#166534' : '#991b1b',
+          background: msg.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)', color: msg.tipo === 'ok' ? 'var(--bien-tinta)' : 'var(--mal-tinta)',
         }}>
           {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
         </div>
@@ -164,7 +164,7 @@ export default function BancoRubricas({ instrumentoId, onElegir, onCerrar, refre
                     {r.generada_ia ? ' · generada con IA' : ''}
                   </div>
                   <div style={{ fontSize: 11.5, color: 'var(--gris-500)', marginTop: 2, lineHeight: 1.45 }}>
-                    {r.enBanco && <span style={{ color: '#166534', fontWeight: 700 }}>⭐ En el banco</span>}
+                    {r.enBanco && <span style={{ color: 'var(--bien-tinta)', fontWeight: 700 }}>⭐ En el banco</span>}
                     {r.enBanco && r.usos.length > 0 && ' · '}
                     {r.usos.length > 0 && <>En uso en: {r.usos.join(' — ')}</>}
                   </div>

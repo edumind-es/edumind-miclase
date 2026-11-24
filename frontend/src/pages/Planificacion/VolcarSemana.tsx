@@ -194,7 +194,7 @@ export default function VolcarSemana({ grupo, asignaturas, lunes, horario, onCer
                 <textarea data-ia-semana-horario value={horarioTexto} onChange={e => setHorarioTexto(e.target.value)} rows={Math.min(8, Math.max(3, horarioTexto.split('\n').length))}
                   placeholder={'1ª 9:00-9:50\n2ª 9:50-10:40\n3ª 10:40-11:30'} style={{ width: '100%', fontFamily: 'monospace', fontSize: 12 }} />
                 {franjasDeTexto(horarioTexto).length === 0 && (
-                  <span style={{ color: '#92400e' }}>Escribe las franjas de la clase: sin horario la IA se lo inventa y no casará con el tuyo.</span>
+                  <span style={{ color: 'var(--aviso-tinta)' }}>Escribe las franjas de la clase: sin horario la IA se lo inventa y no casará con el tuyo.</span>
                 )}
               </label>
               {areasPrompt && areasPrompt.length > 0 && (
@@ -221,7 +221,7 @@ export default function VolcarSemana({ grupo, asignaturas, lunes, horario, onCer
                 <button type="button" className="btn-primary" data-ia-semana-copiar disabled={!promptSemana} onClick={copiarPrompt}>
                   📋 Copiar prompt
                 </button>
-                {copiado && <span role="status" style={{ fontSize: 12.5, color: 'var(--verde-600, #166534)' }}>Copiado. Pega la respuesta abajo.</span>}
+                {copiado && <span role="status" style={{ fontSize: 12.5, color: 'var(--verde-600, var(--bien-tinta))' }}>Copiado. Pega la respuesta abajo.</span>}
               </div>
               <details>
                 <summary style={{ fontSize: 12.5, cursor: 'pointer' }}>Ver el prompt</summary>

@@ -114,17 +114,17 @@ export default function MoverColumna({ origen, instrumentos, columnas, unidadId,
                     {' '}pasan a «{destino?.nombre}», en los criterios que evalúa aquí: {previa.criteriosDestino.join(' · ')}.
                   </div>
                   {previa.noMovidos.sinCriterio > 0 && (
-                    <div style={{ color: '#92400e' }}>
+                    <div style={{ color: 'var(--aviso-tinta)' }}>
                       Se quedan {previa.noMovidos.sinCriterio} nota{previa.noMovidos.sinCriterio !== 1 ? 's' : ''} de {previa.criteriosSinDestino.join(' · ')}: «{destino?.nombre}» no evalúa {previa.criteriosSinDestino.length !== 1 ? 'esos criterios' : 'ese criterio'} en esta unidad. Asígnaselos en la programación y vuelve a mover.
                     </div>
                   )}
                   {previa.noMovidos.ocupadas > 0 && (
-                    <div style={{ color: '#92400e' }}>
+                    <div style={{ color: 'var(--aviso-tinta)' }}>
                       Se quedan {previa.noMovidos.ocupadas} nota{previa.noMovidos.ocupadas !== 1 ? 's' : ''} cuya casilla «{destino?.nombre}» ya tiene con nota: lo puesto en el destino manda.
                     </div>
                   )}
                   {previa.noMovidos.diario > 0 && (
-                    <div style={{ color: '#92400e' }}>
+                    <div style={{ color: 'var(--aviso-tinta)' }}>
                       Se quedan {previa.noMovidos.diario} registro{previa.noMovidos.diario !== 1 ? 's' : ''} del diario sin ningún criterio que el destino evalúe.
                     </div>
                   )}
