@@ -17,6 +17,10 @@ sitios y sella esa sección con la versión y la fecha.
 - Con Lámina encendida, «Exámenes y pruebas» entra por un **hub de áreas** en
   vez de por pestañas: una casilla por área con su sigla, su color y cuántos
   exámenes tiene, y «Todas las áreas» para volver.
+- Con Lámina encendida, las pestañas no se deslizan ni se cortan: las que no
+  caben pasan enteras a «Más · N» y la elegida queda siempre a la vista.
+- Con Lámina encendida, los desplegables que quedan se ven igual cerrados en
+  todos los sistemas, y el aspa de cerrar un diálogo es un icono de línea.
 
 ## [1.10.0] — 2026-11-24
 

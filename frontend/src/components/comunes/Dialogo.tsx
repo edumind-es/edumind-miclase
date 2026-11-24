@@ -8,6 +8,8 @@
  * las pruebas.
  */
 import { useEffect, useId, type CSSProperties, type HTMLAttributes, type ReactNode } from 'react'
+import { useAspecto } from '@/useAspecto'
+import Icono from './Icono'
 
 interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Lo que se lee en grande arriba. */
@@ -28,6 +30,8 @@ interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 
 export default function Dialogo({ titulo, antetitulo, subtitulo, onCerrar, ancho = 760, anidado, pie, children, style, ...resto }: Props) {
   const idTitulo = useId()
+  // Con Lámina, el aspa es un icono de línea; el carácter «✕» lo dibuja cada sistema a su manera
+  const lamina = useAspecto() === 'lamina'
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCerrar() }
@@ -47,7 +51,7 @@ export default function Dialogo({ titulo, antetitulo, subtitulo, onCerrar, ancho
             <h2 id={idTitulo} className="dialogo-titulo">{titulo}</h2>
             {subtitulo && <div className="dialogo-subtitulo">{subtitulo}</div>}
           </div>
-          <button type="button" className="modal-close" onClick={onCerrar} aria-label="Cerrar">✕</button>
+          <button type="button" className="modal-close" onClick={onCerrar} aria-label="Cerrar">{lamina ? <Icono nombre="cerrar" lado={20} /> : '✕'}</button>
         </div>
         <div className="dialogo-cuerpo">{children}</div>
         {pie && <div className="dialogo-pie">{pie}</div>}

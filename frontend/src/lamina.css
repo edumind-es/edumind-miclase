@@ -240,3 +240,19 @@
   background: var(--nota); color: #fff; border-bottom: 4px solid var(--nota);
 }
 :root[data-aspecto="lamina"] .cal-vacio { background: transparent; color: var(--tinta-3); }
+
+/* Pestañas que no se cortan: sin deslizar. Las que no caben están en «Más · N» */
+:root[data-aspecto="lamina"] .tabs-sin-cortes { overflow: visible; flex-wrap: nowrap; }
+:root[data-aspecto="lamina"] .tabs-sin-cortes [role="tab"][hidden] { display: none; }
+:root[data-aspecto="lamina"] .tabs-mas { margin-left: auto; border-right: 0; border-left: 1px solid var(--pelo); gap: 8px; white-space: nowrap; }
+
+/* Los desplegables del sistema que quedan dentro de las pantallas: cerrados
+   se ven igual en todos los sistemas (sin su flecha ni su relieve, con la
+   nuestra). La lista que abren sigue siendo la del sistema hasta que cada
+   uno pase a la pieza `Lista`. La flecha es un SVG en línea, no un degradado. */
+:root[data-aspecto="lamina"] select {
+  -webkit-appearance: none; appearance: none;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2317181a' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}

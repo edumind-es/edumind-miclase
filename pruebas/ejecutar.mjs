@@ -251,6 +251,10 @@ async function principal() {
     await paquete('pruebas/areas.test.ts', areas, ['--platform=node', '--format=esm'])
     await suite('áreas: sigla y color', 'node', [areas])
 
+    const reparto = join(scratch, 'reparto.mjs')
+    await paquete('pruebas/reparto.test.ts', reparto, ['--platform=node', '--format=esm'])
+    await suite('pestañas: las que no caben pasan a «Más»', 'node', [reparto])
+
     // En CommonJS: react-dom/server hace `require('util')` y empaquetado como
     // módulo ES no arranca
     const iconos = join(scratch, 'iconos.cjs')
