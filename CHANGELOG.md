@@ -13,6 +13,16 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Añadido
+- Con Lámina encendida, una clase con **una sola área entra directa** al
+  Calificador y a «Exámenes y pruebas»: el hub de áreas solo sale cuando hay
+  entre qué elegir.
+- Con Lámina encendida y sesión de EDUmind, el pie del menú dice «Conectado
+  con EDUmind».
+
+### Corregido
+- Con Lámina encendida, Ctrl+B no plegaba ni desplegaba el menú.
+
 ## [1.13.0] — 2026-11-24
 
 ### Añadido
