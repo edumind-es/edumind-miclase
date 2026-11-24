@@ -160,9 +160,9 @@ console.log('\n6. Móvil: barra inferior y «Más»')
   await p.locator('[data-marco-mas][aria-current="page"]').waitFor({ timeout: 4000 }).catch(() => {})
   ok(await p.locator('[data-marco-mas]').getAttribute('aria-current') === 'page', 'en una pantalla de «Más», «Más» queda marcado')
   await p.locator('.ml-inferior [data-entrada="calificador"]').tap()
-  await p.waitForURL('**/evaluacion')
+  await p.waitForURL('**/areas')
   await p.locator('.ml-inferior a[aria-current="page"][data-entrada="calificador"]').waitFor({ timeout: 4000 }).catch(() => {})
-  ok(await p.locator('.ml-inferior a[aria-current="page"]').getAttribute('data-entrada') === 'calificador', 'la barra lleva al Calificador y lo marca')
+  ok(await p.locator('.ml-inferior a[aria-current="page"]').getAttribute('data-entrada') === 'calificador', 'la barra lleva al Calificador, que entra por el hub de áreas, y lo marca')
   await ctx.close()
 }
 

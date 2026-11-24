@@ -14,7 +14,7 @@
  *    el aspecto, la cuenta e «Instalar».
  */
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import '@/lamina-marco.css'
 import Marca from '@/components/Marca'
 import Icono from '@/components/comunes/Icono'
@@ -22,6 +22,8 @@ import Lista from '@/components/comunes/Lista'
 import Dialogo from '@/components/comunes/Dialogo'
 import { useAuth } from '@/auth/AuthProvider'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { identidadDeAreas } from '@/db/areas'
+import Sigla from '@/components/comunes/Sigla'
 import { IDIOMAS, NOMBRE_IDIOMA, fijarIdioma, useIdioma, useT, type Clave } from '@/i18n'
 import { fijarAspecto } from '@/aspecto'
 import { fijarModoNotas } from '@/notas'
@@ -29,12 +31,13 @@ import { useModoNotas } from '@/useAspecto'
 import { VERSION } from '@/version'
 import type { NombreIcono } from '@/iconos'
 
-interface Entrada { to: string; clave: Clave; corto: Clave; icono: NombreIcono; bloque?: Clave }
+/** `tambien`: otras rutas que son esta misma entrada (el Calificador entra por el hub de áreas). */
+interface Entrada { to: string; clave: Clave; corto: Clave; icono: NombreIcono; bloque?: Clave; tambien?: string[] }
 
 const ENTRADAS: Entrada[] = [
   { to: '/',              clave: 'menu.inicio',        corto: 'marco.corto.inicio',        icono: 'inicio', bloque: 'menu.aula' },
   { to: '/planificacion', clave: 'menu.planificacion', corto: 'marco.corto.planificacion', icono: 'planificacion' },
-  { to: '/evaluacion',    clave: 'menu.calificador',   corto: 'marco.corto.calificador',   icono: 'calificador' },
+  { to: '/areas',         clave: 'menu.calificador',   corto: 'marco.corto.calificador',   icono: 'calificador', tambien: ['/evaluacion'] },
   { to: '/escanear',      clave: 'menu.examenes',      corto: 'marco.corto.examenes',      icono: 'examenes' },
   { to: '/sesiones',      clave: 'menu.asistencia',    corto: 'marco.corto.asistencia',    icono: 'asistencia' },
   { to: '/seguimiento',   clave: 'menu.seguimiento',   corto: 'marco.corto.seguimiento',   icono: 'seguimiento' },
@@ -44,7 +47,7 @@ const ENTRADAS: Entrada[] = [
   { to: '/sincronizar',   clave: 'menu.sincronizar',   corto: 'marco.corto.sincronizar',   icono: 'sincronizar' },
 ]
 /** Lo que cabe en la barra inferior del móvil; el resto va en «Más». */
-const EN_BARRA = ['/', '/evaluacion', '/escanear', '/sesiones']
+const EN_BARRA = ['/', '/areas', '/escanear', '/sesiones']
 
 export type Forma = 'ancho' | 'rail' | 'movil'
 const K_MENU = 'miclase.marco.menu'
@@ -73,7 +76,8 @@ function useForma(): [Forma, () => void] {
   return [forma, alternar]
 }
 
-const esActual = (pathname: string, to: string) => (to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/'))
+const enRuta = (pathname: string, to: string) => (to === '/' ? pathname === '/' : pathname === to || pathname.startsWith(to + '/'))
+const esActual = (pathname: string, e: Entrada) => enRuta(pathname, e.to) || !!e.tambien?.some(r => enRuta(pathname, r))
 
 export default function MarcoLamina({ barra, alExportar, children }: {
   /** Qué enseña la barra superior en esta pantalla, o null si no lleva clase. */
@@ -97,11 +101,14 @@ export default function MarcoLamina({ barra, alExportar, children }: {
   })
 
   const entrada = (e: Entrada) => (
-    <NavLink key={e.to} to={e.to} end={e.to === '/'} className="ml-entrada" data-entrada={e.icono}>
+    // `Link` y no `NavLink`: «estás aquí» lo decide el marco, porque una entrada
+    // puede ser varias rutas (el Calificador es el hub de áreas y la tabla)
+    <Link key={e.to} to={e.to} data-entrada={e.icono}
+      className="ml-entrada" aria-current={esActual(pathname, e) ? 'page' : undefined}>
       <Icono nombre={e.icono} />
       <span className="ml-largo">{t(e.clave)}</span>
       <span className="ml-corto">{t(e.corto)}</span>
-    </NavLink>
+    </Link>
   )
   const fueraDeBarra = ENTRADAS.filter(e => !EN_BARRA.includes(e.to))
 
@@ -161,7 +168,7 @@ export default function MarcoLamina({ barra, alExportar, children }: {
       <nav className="ml-inferior" aria-label={t('marco.principal')}>
         {ENTRADAS.filter(e => EN_BARRA.includes(e.to)).map(entrada)}
         <Lista<string> etiqueta={t('marco.mas')} className="ml-entrada" data-marco-mas
-          actual={fueraDeBarra.some(e => esActual(pathname, e.to))}
+          actual={fueraDeBarra.some(e => esActual(pathname, e))}
           opciones={[
             ...fueraDeBarra.map(e => ({ valor: e.to, texto: t(e.clave), icono: e.icono })),
             { valor: '#copia', texto: t('marco.copia'), icono: 'importar' as const },
@@ -182,8 +189,16 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
   const t = useT()
   const { grupos, grupoId, asignaturas, asignaturaId, trimestre, cargando, elegirGrupo, elegirAsignatura, elegirTrimestre } = useClaseActiva()
   const hayClase = !!barra && !cargando && grupos.length > 0
+  const navegar = useNavigate()
+  const { pathname } = useLocation()
+  const identidad = identidadDeAreas(asignaturas)
+  const conArea = hayClase && barra.conArea && asignaturas.length > 0
+  const suya = conArea && asignaturaId != null ? identidad.get(asignaturaId) : undefined
+  // «Todas las áreas» solo donde hay hub al que volver: en el Calificador
+  const conHub = pathname === '/evaluacion' || pathname.startsWith('/evaluacion/')
 
   return (
+    <>
     <div className="ml-superior" data-marco-superior>
       <span className="ml-superior-marca"><Marca lado={26} fondo="papel" /></span>
       {hayClase && (
@@ -194,12 +209,15 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
             alElegir={v => elegirGrupo(v)} />
         </div>
       )}
-      {hayClase && barra.conArea && asignaturas.length > 0 && (
+      {conArea && (
         <div className="ml-dato ml-dato--area">
           <span className="ml-rotulo">{t('marco.area')}</span>
           <Lista<number> etiqueta={t('marco.area')} data-marco-area valor={asignaturaId}
-            opciones={asignaturas.map(a => ({ valor: a.id!, texto: a.nombre_display }))}
-            alElegir={v => elegirAsignatura(v)} />
+            opciones={[
+              ...(conHub ? [{ valor: 0, texto: t('marco.todasLasAreas'), icono: 'rejilla' as const }] : []),
+              ...asignaturas.map(a => { const id = identidad.get(a.id!)!; return { valor: a.id!, texto: a.nombre_display, antes: <Sigla sigla={id.sigla} color={id.color} /> } }),
+            ]}
+            alElegir={v => (v === 0 ? navegar('/areas') : elegirAsignatura(v))} />
         </div>
       )}
       {hayClase && barra.conTrimestre && (
@@ -222,6 +240,9 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
         </Link>
       )}
     </div>
+    {/* El color del área, bajo el filete de la barra: «estás en esta área» */}
+    {suya && <div className="ml-franja-area" data-marco-franja data-sigla={suya.sigla} style={{ background: suya.color }} aria-hidden="true" />}
+    </>
   )
 }
 

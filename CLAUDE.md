@@ -1742,6 +1742,24 @@ edumind_miclase/
   interruptor de vuelta al aspecto de siempre. Decisiones de Luis sobre la
   maqueta (nov 2026). Los textos del marco están en `i18n/textos.ts`
   (`marco.*`, `acerca.*`), en castellano y galego.
+- **Con Lámina, el Calificador entra por el hub de áreas, y cada área tiene
+  sigla y color** (`pages/Areas/HubAreas`, ruta `/areas`; `db/areas.ts`,
+  puro, `areas.test.ts`). Petición de Luis (nov 2026): elegir el área a la
+  vista de todas simplifica la navegación y evita calificar en la
+  equivocada. La entrada «Calificador» del marco va a `/areas` y también se
+  marca en `/evaluacion` (`Entrada.tambien`; el marco usa `Link` y su propio
+  `aria-current`, no `NavLink`). Con el aspecto de siempre `/areas` redirige
+  a `/evaluacion`. El hub no calcula notas: `getResumenDeAreas` cuenta
+  unidades del trimestre, notas puestas y la fecha de la última. Sigla y
+  color salen de `identidadDeAreas`: los propios del área
+  (`Asignatura.color`, `.sigla`, sin índice ni esquema; todavía no hay
+  pantalla que los edite) o, si no, el color por orden entre las áreas de la
+  clase (`PALETA_AREAS`, diez tonos con 4,5:1 bajo la sigla en blanco) y la
+  sigla por el nombre (MAT, LG, LC, CN, CS, ING, EF…; dos áreas no la
+  comparten). **El color nunca va solo** —siempre con la pieza `Sigla`— y
+  **no entra en la tabla de notas**: vive en el hub, en la franja bajo la
+  barra superior (`[data-marco-franja]`) y en el selector de área, cuya
+  primera opción en el Calificador es «Todas las áreas».
 - **Con Lámina, la nota se pinta en filete o en relleno, y lo elige el
   docente** (`src/notas.ts`, `miclase.notas`, sin sincronizar; conmutador en
   «Acerca de», `[data-notas-elegir]`). Filete, el valor por defecto: cifra en
