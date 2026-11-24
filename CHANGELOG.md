@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [1.12.0] — 2026-11-24
+
 ### Añadido
 - Con Lámina encendida, el hub de «Exámenes y pruebas» lleva arriba la cola
   **«Por corregir»**: los exámenes de la clase a los que les faltan alumnos,
