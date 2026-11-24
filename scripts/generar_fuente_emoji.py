@@ -170,7 +170,13 @@ def principal():
 
     fb = FontBuilder(UPM, isTTF=True)
     fb.setupGlyphOrder(orden)
-    fb.setupCharacterMap(mapa)
+    # Cada emoji, también CON su selector de variación (tabla de secuencias). Sin
+    # esto, donde hay una fuente de emoji de color instalada —cualquier aparato
+    # real— el navegador entiende «⚠️» como «dibújame en color», ve que esta
+    # fuente no declara la secuencia y se va a la del sistema. Lo cazó el CI:
+    # en el servidor de desarrollo no hay fuente de color y no se veía.
+    secuencias = [(p, 0xFE0F, nombre) for p, nombre in mapa.items() if p != 0xFE0F]
+    fb.setupCharacterMap(mapa, uvs=secuencias)
     fb.setupGlyf(glifos)
     fb.setupHorizontalMetrics({g: ((0 if g == "nada" else UPM), 0) for g in orden})
     fb.setupHorizontalHeader(ascent=850, descent=-150)

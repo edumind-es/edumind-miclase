@@ -1846,8 +1846,13 @@ edumind_miclase/
   en el JSON y regenerar la fuente**: `emoji-lamina.test.mjs` (rápida) falla
   si alguno de `frontend/src` no lo tiene, y `aspecto-ui.test.mjs` comprueba
   por píxeles que se pintan de una sola tinta. El service worker precachea
-  `woff` además de `woff2`. Comprobado en Chromium; **no en Safari**, donde
-  un emoji podría seguir saliendo en color (la app seguiría funcionando).
+  `woff` además de `woff2`. La fuente declara cada emoji también CON su
+  selector de variación (tabla de secuencias, `uvs` al generarla): sin eso,
+  donde hay emoji de color instalados el navegador se iba a la fuente del
+  sistema con «⚠️», «⬇️» y los otros diez que lo llevan en el código. **Eso
+  solo se ve donde hay fuente de color: el CI y los aparatos reales, no el
+  servidor de desarrollo**, así que la prueba por píxeles es la del CI.
+  Comprobado en Chromium; **no en Safari**.
 - **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
   puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
   sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los

@@ -91,7 +91,11 @@ const pintado = (texto) => p.evaluate(async (t) => {
   }
   return { tinta, color }
 }, texto)
-const muestras = { portapapeles: await pintado('📋'), engranaje: await pintado('⚙️'), aviso: await pintado('⚠'), camara: await pintado('📷') }
+// Con selector de variación (U+FE0F) es donde falla si la fuente no declara la
+// secuencia: donde hay emoji de color instalados —el CI, cualquier aparato real—
+// el navegador se va a la fuente del sistema. Aquí, sin fuente de color, no se ve.
+const muestras = { portapapeles: await pintado('📋'), camara: await pintado('📷'), aviso: await pintado('⚠'),
+  engranajeConSelector: await pintado('⚙️'), avisoConSelector: await pintado('⚠️'), bajarConSelector: await pintado('⬇️'), lapizConSelector: await pintado('✏️') }
 ok(Object.values(muestras).every(m => m.tinta > 60 && m.color === 0), 'un emoji se pinta como icono de una sola tinta, con y sin selector de variación', JSON.stringify(muestras))
 ok(await p.evaluate(() => document.fonts.check('40px "Emoji Lamina"', '📋')), 'con la fuente de iconos cargada')
 await p.evaluate(() => { const e = document.createElement('p'); e.id = 'muestra-emoji'; document.body.append(e) })
