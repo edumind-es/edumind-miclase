@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [1.13.0] — 2026-11-24
+
 ### Añadido
 - Con Lámina encendida, **los emoji de toda la interfaz se ven como iconos de
   línea** de un solo color, iguales en todos los sistemas. Los dibuja una
