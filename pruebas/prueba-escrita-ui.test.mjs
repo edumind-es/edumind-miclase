@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -66,7 +66,9 @@ const bd = () => p.evaluate(async () => {
     notas: notasEn(ud1),
     /** Lo mismo en la otra unidad. */
     notasOtra: notasEn(otra),
-    examenes: rubricas.filter(r => r.tipo === 'prueba').map(r => ({ titulo: r.titulo, unidad_id: r.unidad_id, def: JSON.parse(r.prueba_json) })),
+    // Los del banco (instrumento 0) no son exámenes en uso: van aparte.
+    examenes: rubricas.filter(r => r.tipo === 'prueba' && r.instrumento_id !== 0).map(r => ({ id: r.id, titulo: r.titulo, unidad_id: r.unidad_id, def: JSON.parse(r.prueba_json) })),
+    banco: rubricas.filter(r => r.tipo === 'prueba' && r.instrumento_id === 0).map(r => r.titulo),
     rubricas: rubricas.filter(r => r.tipo !== 'prueba').length,
     ud1: ud1.id,
     ud1Nombre: ud1.nombre,
@@ -138,7 +140,7 @@ try {
   await p.getByRole('button', { name: /Importar 7 unidades/ }).click({ timeout: 20000 })
   await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno')
@@ -368,6 +370,16 @@ try {
     ok(await aparece(informe.locator('[data-informe-pocos]')), 'con dos exámenes avisa de que el documento va sin cifras de la clase')
     const [suyo] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
     ok(/^informe-examen-de-la-unidad-1-.+\.html$/.test(suyo.suggestedFilename()), 'el documento del alumno lleva su nombre en el fichero', suyo.suggestedFilename())
+    {
+      // Por defecto, la hoja de una página con el nivel de cada pregunta; «Completo», el de cuatro secciones.
+      const html = (await import('node:fs')).readFileSync(await suyo.path(), 'utf8')
+      ok(html.includes('data-informe-una-pagina') && html.includes('Nivel alcanzado') && (html.match(/class="hoja/g) ?? []).length === 1, 'sale en una página, con el nivel alcanzado en cada pregunta')
+      await informe.locator('[data-informe-formato]').selectOption('completo')
+      const [completo] = await Promise.all([p.waitForEvent('download'), informe.locator('[data-informe-guardar]').click()])
+      ok(!(await import('node:fs')).readFileSync(await completo.path(), 'utf8').includes('data-informe-una-pagina'), '«Completo» guarda el informe de siempre')
+      await informe.locator('[data-informe-formato]').selectOption('una')
+      ok(await informe.locator('[data-informe-imprimir-clase]').count() === 1, 'y se ofrecen los de toda la clase, una hoja por alumno')
+    }
     await foto('prueba-05b-informe-alumno')
     await informe.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
     await informe.waitFor({ state: 'detached', timeout: 5000 })
@@ -510,6 +522,155 @@ try {
     await foto('prueba-06b-por-unidad')
     await cerrarPanel()
     await abrirCelda(1, cA)
+  }
+
+  console.log('\n7e. Una unidad con examen propio no recibe el de otra que la vincula')
+  {
+    // El caso de Luis: la UD1 tiene su examen corregido, y el de la UD2
+    // «también cuenta en» la UD1. Corregir el de la UD2 no puede tocar la UD1.
+    // Aquí la «otra» unidad estrena examen propio y se corrige a Bruno con
+    // él; después se le corrige el examen de la primera, que la vincula.
+    const r = await p.evaluate(async ({ ud1, otra, criterios, otrosCriterios }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const vivo = (x) => !x.deleted_at
+      const ins = (await db.instrumentos.toArray()).filter(vivo).find(i => i.tipo === 'prueba-escrita')
+      const alumnos = (await db.alumnos.toArray()).filter(vivo).sort((a, b) => a.apellidos.localeCompare(b.apellidos))
+      const bruno = alumnos[1]
+      const deBruno = async (u) => (await db.calificaciones.where('instrumento_id').equals(ins.id).toArray())
+        .filter(c => vivo(c) && c.alumno_id === bruno.id && c.unidad_id === u)
+        .sort((a, b) => a.criterio_id.localeCompare(b.criterio_id))
+      const enUd1 = await deBruno(ud1)
+      const base = enUd1.find(c => Object.keys(c.niveles_rubrica || {}).length)
+      if (!base) return { error: 'Bruno no tiene el examen corregido en la primera unidad' }
+      const area = { asignatura: base.asignatura, curso: base.curso, etapa: base.etapa, comunidad: base.comunidad }
+      const vinculado = await q.getPrueba(ins.id, ud1)
+      // Examen propio de la otra unidad: una sola pregunta, sin vínculos.
+      const propio = { ...vinculado.def, titulo: 'Examen propio de la otra unidad', unidades_vinculadas: [],
+        preguntas: [{ ...vinculado.def.preguntas[0], unidad_id: undefined, criterio: undefined, criterios: undefined }] }
+      const propioId = await q.guardarPrueba(ins.id, otra, propio)
+      const defPropio = (await q.getPrueba(ins.id, otra)).def
+      await q.guardarExamenDeAlumno({
+        alumno_id: bruno.id, instrumento_id: ins.id, trimestre: base.trimestre, unidad_id: otra,
+        def: defPropio, respuestas: { [defPropio.preguntas[0].id]: defPropio.preguntas[0].puntos ?? 1 }, destinos: otrosCriterios, area,
+      })
+      const foto = async () => JSON.stringify((await deBruno(otra)).map(c => [c.criterio_id, c.valor, c.niveles_rubrica]))
+      const antes = await foto()
+      // Ahora el examen de la primera unidad, con lo que Bruno ya tenía.
+      const res = await q.guardarExamenDeAlumno({
+        alumno_id: bruno.id, instrumento_id: ins.id, trimestre: base.trimestre, unidad_id: ud1,
+        def: vinculado.def, respuestas: base.niveles_rubrica, destinos: criterios, area,
+      })
+      const despues = await foto()
+      // Se retira el examen propio: el resto de la suite espera uno solo.
+      await db.rubricas.update(propioId, { deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      return { antes, despues, tambien: res.tambien.map(t => t.unidad_id), vinculadas: vinculado.def.unidades_vinculadas ?? [] }
+    }, { ud1: inicio.ud1, otra: inicio.otraUnidad, criterios: inicio.criterios, otrosCriterios: inicio.otrosCriterios })
+    ok(!r.error, 'el caso se puede montar', r.error ?? '')
+    ok(r.vinculadas?.includes(inicio.otraUnidad), 'el examen de la primera unidad sigue vinculando la otra')
+    ok(r.antes !== '[]', 'Bruno tiene su examen propio corregido en la otra unidad', r.antes)
+    ok(r.antes === r.despues, 'corregir el examen que la vincula no toca ni su nota ni sus respuestas', `${r.antes} → ${r.despues}`)
+    ok(r.tambien?.length === 0, 'y no dice haber puesto nota allí', JSON.stringify(r.tambien))
+  }
+
+  console.log('\n7f. Cargar otro examen encima de uno corregido pregunta, y el anterior va al banco')
+  {
+    // Lo que le pasó a Luis: con el examen de la unidad ya corregido, cargó
+    // encima el fichero de otro y al guardar el primero desapareció sin aviso.
+    await p.evaluate(() => { window.__vistas = []; window.__confirmacionVista = t => { window.__vistas.push(t) } })
+    const antes = await bd()
+    const tituloAnterior = antes.examenes[0].titulo
+    const otroMd = `# Problemas de la unidad\n\n| Pregunta | Puntos |\n|---|---|\n| Problema uno | 5 |\n| Problema dos | 5 |\n`
+    const fichero = { name: 'problemas.md', mimeType: 'text/markdown', buffer: Buffer.from(otroMd) }
+    await panel.getByRole('button', { name: '📝 Examen' }).click()
+    await editor.waitFor({ timeout: 8000 })
+    await aparece(editor.getByLabel('Título del examen'))
+    // Primero se dice que no: nada cambia.
+    await rechazarSiguienteConfirmacion(p)
+    await editor.locator('input[data-uso="examen"]').setInputFiles(fichero)
+    await p.waitForTimeout(600)
+    const pregunta = (await p.evaluate(() => window.__vistas)).join('\n')
+    ok(/ya está guardado aquí y corregido para 2 alumnos/.test(pregunta), 'al cargar otro encima, pregunta y dice cuántos hay corregidos', pregunta.slice(0, 140))
+    ok(/SEGUNDO examen/.test(pregunta) && /otra actividad/.test(pregunta), 'y explica cómo tener un segundo examen en la unidad')
+    ok(await editor.getByText(/«Problemas de la unidad» importado/).count() === 0 && await editor.getByLabel('Título del examen').inputValue() === tituloAnterior,
+      'si se dice que no, el examen de pantalla sigue siendo el de antes')
+    // Ahora que sí, pero las notas se dejan como están (es OTRO examen).
+    await editor.locator('input[data-uso="examen"]').setInputFiles(fichero)
+    ok(await aparece(editor.getByText(/«Problemas de la unidad» importado: 2 preguntas/)), 'al aceptar, se carga el nuevo')
+    await rechazarSiguienteConfirmacion(p)
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    ok(await aparece(editor.getByText(/queda en tu banco de exámenes/)), 'al guardar dice que el anterior queda en el banco')
+    ok(await aparece(editor.getByText(/Las notas ya puestas se quedan como estaban/)), 'y las notas no se recalculan con un examen que no es el suyo')
+    const vistas = (await p.evaluate(() => window.__vistas)).join('\n')
+    ok(/¿Lo que vas a guardar es ese mismo examen, con cambios\?/.test(vistas), 'pregunta si es el mismo examen o es otro antes de guardar')
+    await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    d = await bd()
+    ok(d.examenes.length === 1 && d.examenes[0].titulo === 'Problemas de la unidad' && d.examenes[0].id !== antes.examenes[0].id,
+      'en la unidad queda el examen nuevo, con ficha propia', JSON.stringify(d.examenes.map(e => e.titulo)))
+    ok(d.banco.includes(tituloAnterior), 'y el anterior está en el banco de exámenes', JSON.stringify(d.banco))
+    ok(JSON.stringify(d.notas) === JSON.stringify(antes.notas), 'ninguna nota ha cambiado')
+
+    // Las correcciones del examen anterior ya no son del nuevo: llevan anotado el suyo.
+    const s = await p.evaluate(async ({ ud1, criterios, viejoId }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const vivo = (x) => !x.deleted_at
+      const ins = (await db.instrumentos.toArray()).filter(vivo).find(i => i.tipo === 'prueba-escrita')
+      const alumnos = (await db.alumnos.toArray()).filter(vivo).sort((a, b) => a.apellidos.localeCompare(b.apellidos))
+      const ana = alumnos[0]
+      const nuevo = await q.getPrueba(ins.id, ud1)
+      const deAna = async () => (await db.calificaciones.where('instrumento_id').equals(ins.id).toArray())
+        .filter(c => vivo(c) && c.alumno_id === ana.id && c.unidad_id === ud1 && Object.keys(c.niveles_rubrica || {}).length)
+      const antes = await deAna()
+      const corregidosAntes = await q.contarCorregidosDeExamen(ins.id, ud1, nuevo.def)
+      const respuestasAntes = await q.getRespuestasDeExamen(ana.id, ins.id, antes[0].trimestre, ud1, criterios, nuevo.id)
+      // Ahora se corrige a Ana con el examen nuevo.
+      const area = { asignatura: antes[0].asignatura, curso: antes[0].curso, etapa: antes[0].etapa, comunidad: antes[0].comunidad }
+      await q.guardarExamenDeAlumno({
+        alumno_id: ana.id, instrumento_id: ins.id, trimestre: antes[0].trimestre, unidad_id: ud1,
+        def: nuevo.def, respuestas: Object.fromEntries(nuevo.def.preguntas.map(x => [x.id, x.max])), destinos: criterios, area,
+      })
+      const despues = await deAna()
+      return {
+        selladas: antes.every(c => c.prueba_id === viejoId), corregidosAntes, respuestasAntes: Object.keys(respuestasAntes).length,
+        corregidosDespues: await q.contarCorregidosDeExamen(ins.id, ud1, nuevo.def),
+        despues: despues.map(c => ({ prueba_id: c.prueba_id, valor: c.valor, anterior: c.valor_anterior ?? null, motivo: c.anterior_motivo ?? null })),
+        nuevoId: nuevo.id, notaAntes: antes.map(c => c.valor),
+      }
+    }, { ud1: inicio.ud1, criterios: inicio.criterios, viejoId: antes.examenes[0].id })
+    ok(s.selladas, 'lo corregido con el examen anterior queda anotado como suyo')
+    ok(s.corregidosAntes === 0 && s.respuestasAntes === 0, 'el examen nuevo empieza sin nadie corregido y con las preguntas en blanco', JSON.stringify([s.corregidosAntes, s.respuestasAntes]))
+    ok(s.corregidosDespues === 1 && s.despues.length > 0 && s.despues.every(c => c.prueba_id === s.nuevoId && c.valor === 10), 'al corregir a Ana con él, su corrección lleva el examen nuevo', JSON.stringify(s.despues))
+    ok(s.despues.some(c => c.anterior != null && /examen que había antes/.test(c.motivo ?? '')) || s.notaAntes.every(v => v === 10),
+      'y la nota que tenía del examen anterior queda como fantasma', JSON.stringify(s.despues))
+  }
+
+  console.log('\n7g. Guardar un examen no revive el que se retiró de ese sitio')
+  {
+    const r = await p.evaluate(async ({ otra }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const ins = (await db.instrumentos.toArray()).filter(x => !x.deleted_at).find(i => i.tipo === 'prueba-escrita')
+      const def = (titulo) => ({ titulo, tipo: 'puntos', reparto: 'unica', preguntas: [{ id: 'p1', enunciado: 'Una', max: 10, criterio_id: null }] })
+      // X ocupa la otra unidad; Y nace como general y se mueve encima: X se retira.
+      const idX = await q.guardarPrueba(ins.id, otra, def('Examen X'))
+      const idY = await q.guardarPrueba(ins.id, null, def('Examen Y'))
+      await q.guardarPrueba(ins.id, otra, def('Examen Y'), { mover: idY })
+      // Un guardado normal del que quedó: antes revivía X y dejaba dos vivos.
+      const guardado = await q.guardarPrueba(ins.id, otra, def('Examen Y retocado'))
+      const vivos = (await db.rubricas.where('instrumento_id').equals(ins.id).toArray())
+        .filter(x => !x.deleted_at && x.tipo === 'prueba' && x.unidad_id === otra)
+      const enBanco = (await db.rubricas.where('instrumento_id').equals(0).toArray()).filter(x => !x.deleted_at).map(x => x.titulo)
+      // Se retira: el resto de la suite espera un solo examen.
+      for (const v of vivos) await db.rubricas.update(v.id, { deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      // Sin ninguno vivo en la plaza, uno nuevo estrena ficha: no revive una retirada.
+      const estrenado = await q.guardarPrueba(ins.id, otra, def('Examen Z'))
+      await q.eliminarPrueba(estrenado)
+      return { idX, idY, guardado, vivos: vivos.map(v => [v.id, v.titulo]), enBanco, reusa: [idX, idY].includes(estrenado) }
+    }, { otra: inicio.otraUnidad })
+    ok(r.reusa === false, 'y con la plaza vacía, un examen nuevo estrena ficha en vez de revivir una retirada')
+    ok(r.vivos.length === 1 && r.vivos[0][0] === r.idY && r.guardado === r.idY, 'queda un solo examen vivo, el que estaba', JSON.stringify(r.vivos))
+    ok(r.enBanco.includes('Examen X'), 'y el que se retiró al mover otro encima está en el banco', JSON.stringify(r.enBanco))
   }
 
   console.log('\n8. Quitar el examen conserva las notas')

@@ -138,6 +138,12 @@ input:focus, select:focus, textarea:focus {
   align-items: center;
   justify-content: center;
 }
+/* El scroll de un diálogo no sale de él. Al llegar al final, el gesto pasaba
+   a la página de detrás y, con dos dedos en el trackpad, al navegador
+   («página anterior»). La propiedad solo actúa en lo que tiene scroll, así
+   que ponerla en todo lo de dentro no cambia nada más. */
+.modal-overlay, .modal-overlay * { overscroll-behavior: contain; }
+html:has(.modal-overlay), html:has(.modal-overlay) body { overscroll-behavior: none; }
 .modal-close {
   background: none;
   border: none;
@@ -263,6 +269,18 @@ input:focus, select:focus, textarea:focus {
 }
 .sidebar-btn:hover { background: rgba(255,255,255,0.18); }
 .sidebar-btn--tenue { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
+/* Castellano / galego: dos botones al pie del panel del menú */
+.selector-idioma { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.selector-idioma-titulo { font-size: 14px; opacity: .6; }
+.selector-idioma-boton {
+  flex: 1; min-height: 32px; border-radius: var(--radio-sm); cursor: pointer;
+  font-size: 12px; font-weight: 700; letter-spacing: .04em;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6);
+}
+.selector-idioma-boton:hover { background: rgba(255,255,255,0.15); }
+.selector-idioma-boton.activo { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.45); color: var(--blanco); }
+.layout.plegado .selector-idioma { flex-direction: column; }
+.layout.plegado .selector-idioma-boton { width: 100%; font-size: 11px; }
 .sidebar-pie {
   padding: 8px 16px 14px;
   font-size: 10px;
@@ -697,6 +715,28 @@ a.accion-grande:hover { box-shadow: var(--sombra-md); transform: translateY(-1px
   line-height: 1.9;
 }
 
+/* ── Página «Instalar MiClase» ────────────────────────────────────────── */
+.instalar-opcion { margin-bottom: 16px; }
+.instalar-opcion p { font-size: 13.5px; color: var(--gris-600); line-height: 1.65; margin-bottom: 10px; max-width: 68ch; }
+.instalar-opcion-titulo { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--azul-900); margin-bottom: 8px; }
+.instalar-num {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 28px; height: 28px; border-radius: 50%; background: var(--azul-700); color: var(--blanco); font-size: 14px;
+}
+.instalar-opcion a.btn-primary,
+.instalar-opcion a.btn-secondary {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+  border-radius: 8px; font-size: 14px; font-weight: 600;
+}
+.instalar-subtitulo { font-size: 13.5px; font-weight: 700; color: var(--azul-900); margin: 6px 0 4px; }
+.instalar-lista { margin: 6px 0 10px 20px; font-size: 13px; color: var(--gris-600); line-height: 1.8; }
+.instalar-aviso { border-left: 3px solid var(--ambar-500); padding-left: 10px; }
+.instalar-ok { color: var(--verde-500) !important; font-weight: 600; }
+.instalar-codigo {
+  display: inline-block; background: var(--gris-100); border: 1px solid var(--gris-300);
+  border-radius: var(--radio-sm); padding: 6px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px;
+}
+
 /* ── Menú lateral en bloques ──────────────────────────────────────────── */
 .nav-bloque + .nav-bloque { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); }
 .nav-bloque-titulo {
@@ -1002,6 +1042,13 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 .tab-unidad-modo, .cabeceras-toggle { min-height: 44px; padding-left: 12px; padding-right: 12px; }
 .modal-close { min-width: 44px; min-height: 44px; }
 .instr-th-criterio button, .instr-th-lapiz { min-width: 32px; min-height: 32px; }
+/* El nombre del alumno en una fila del Calificador abre su ficha rápida. */
+.alumno-nombre {
+  background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit;
+  text-align: left; cursor: pointer; min-height: 32px;
+  text-decoration: underline dotted var(--gris-500); text-underline-offset: 3px;
+}
+.alumno-nombre:hover, .alumno-nombre:focus-visible { text-decoration-style: solid; color: var(--azul-700); }
 /* El lápiz de renombrar solo se veía bien al pasar el ratón: en un iPad no hay ratón. */
 .instr-th-lapiz { opacity: .8; }
 

@@ -30,13 +30,48 @@ export async function navegadorChromium() {
     '/var/www/pasos_v2/node_modules/playwright/index.mjs',
   ]
   for (const c of candidatos) {
-    try {
-      const mod = await import(c)
-      return mod.chromium
-    } catch { /* siguiente */ }
+    let mod
+    try { mod = await import(c) } catch { continue /* siguiente */ }
+    return conIdiomaElegido(mod.chromium)
   }
   throw new Error(
     'No se encuentra Playwright. Ejecuta `npm install` en la raíz del proyecto.')
+}
+
+/**
+ * La app pregunta el idioma la primera vez que se abre (`ElegirIdioma`), con
+ * un diálogo que tapa todo. Las pruebas abren siempre un navegador nuevo, así
+ * que cada página nace con el castellano ya elegido. Una prueba que quiera ver
+ * la pregunta añade después su propio `addInitScript` que borre
+ * `miclase.idioma`: los scripts de inicio corren en el orden en que se añaden.
+ */
+const IDIOMA_ELEGIDO = () => {
+  try { if (!localStorage.getItem('miclase.idioma')) localStorage.setItem('miclase.idioma', 'es') } catch { /* about:blank */ }
+}
+
+function conIdiomaElegido(chromium) {
+  return new Proxy(chromium, {
+    get(destino, prop) {
+      if (prop !== 'launch') return Reflect.get(destino, prop)
+      return async (...args) => {
+        const navegador = await destino.launch(...args)
+        const newContext = navegador.newContext.bind(navegador)
+        navegador.newContext = async (...a) => {
+          const ctx = await newContext(...a)
+          await ctx.addInitScript(IDIOMA_ELEGIDO)
+          return ctx
+        }
+        // `browser.newPage()` crea su propio contexto sin pasar por newContext
+        const newPage = navegador.newPage.bind(navegador)
+        navegador.newPage = async (...a) => {
+          const p = await newPage(...a)
+          await p.context().addInitScript(IDIOMA_ELEGIDO)
+          return p
+        }
+        return navegador
+      }
+    },
+  })
 }
 
 /**
@@ -178,4 +213,17 @@ export async function aceptarConfirmaciones(p, alVer) {
 /** La próxima pregunta de la app se cancela en vez de aceptarse. */
 export async function rechazarSiguienteConfirmacion(p) {
   await p.evaluate(() => { window.__rechazarSiguiente = true })
+}
+
+/**
+ * Abre el alumnado de la clase activa. Ya no hay entrada «Alumnado» en el
+ * menú: vive en la pestaña de su clase, en «Mis clases», y `/alumnos`
+ * redirige a ella. Se navega sin recargar, como hacía el enlace del menú.
+ */
+export async function irAlAlumnado(p) {
+  await p.evaluate(() => {
+    history.pushState({}, '', '/alumnos')
+    dispatchEvent(new PopStateEvent('popstate'))
+  })
+  await p.locator('[data-alumnado-clase]').waitFor()
 }

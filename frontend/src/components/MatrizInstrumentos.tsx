@@ -19,6 +19,7 @@ import type { Alumno } from '@/db/localDb'
 import { verNeae } from '@/db/datosSensibles'
 import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from './SelloMedida'
+import { NombreAlumno } from './FichaRapidaAlumno'
 
 export type Criterio = { id: string; descripcion: string }
 
@@ -150,6 +151,8 @@ interface Props {
   matriz: MatrizEvaluacion
   /** Pulsar el sello ACI/RE de un alumno abre sus medidas. */
   onMedidas?: (alumno: Alumno) => void
+  /** Abrir la ficha rápida del alumno desde su nombre. */
+  onAlumno?: (alumno: Alumno) => void
   columnas: ColumnaInstrumento[]
   alumnos: Alumno[]
   trimestre: number
@@ -196,7 +199,7 @@ interface Props {
   onQuitarCriterio?: (col: ColumnaInstrumento, criterio_id: string) => void
 }
 
-export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onInformeActividad, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas }: Props) {
+export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestre, onCelda, onSesion, onCorregir, onPegar, onDefinir, onNota, onRenombrar, onImprimir, onEscanear, onEditarExamen, onInforme, onInformeActividad, onVaciar, onMover, criteriosUnidad, onAsignarCriterio, onQuitarCriterio, onMedidas, onAlumno }: Props) {
   const grupos = gruposPorFamilia(columnas)
   const hayFamilias = grupos.some(g => !g.sola)
   const [detalles, setDetalles] = useState(cabecerasGuardadas)
@@ -280,7 +283,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                 const clase = enHoja ? 'hoja-accion' : 'instr-th-accion secundaria instr-th-detalle'
                 return (<>
                   <div className="instr-th-tipo instr-th-detalle">
-                    {cfg.label}{esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
+                    {cfg.label}{col.ins.recuperacion ? ` · recuperación de ${col.ins.familia_nombre}` : esHijo ? ` · ${col.ins.pct_familia} % de ${col.ins.familia_nombre}` : ` · ${col.ins.peso}%`}
                     {col.ins.tiene_prueba ? (col.ins.prueba_de_unidad ? ` · examen de «${col.ins.prueba_de_unidad}»` : ' · examen') : esExamen ? ' · examen sin definir' : col.ins.tiene_rubrica ? ' · rúbrica' : sinHerramienta ? ' · sin herramienta' : ` · diario (${etiquetaAgregacion(col.ins.agregacion).toLowerCase()})`}
                   </div>
                   {/* Los criterios que cubre; quien necesite la lista la lee de `data-criterios`
@@ -418,7 +421,15 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
                         onClick={() => setRenombrando({ id: col.ins.instrumento_id, texto: col.ins.nombre })}>✎</button>
                     </div>
                   )}
-                  {esExamen ? (
+                  {col.ins.recuperacion && !col.ins.tiene_prueba && !col.ins.tiene_rubrica && onNota ? (
+                    // Una recuperación sin examen ni rúbrica propios: la pasada que
+                    // propone los criterios suspensos de cada alumno.
+                    <button type="button" className="instr-th-accion" data-nota-abrir data-recuperacion-abrir
+                      onClick={() => onNota(col)}
+                      title="Poner la nota de la recuperación: la app marca los criterios suspensos de cada alumno y tú retocas">
+                      Calificar
+                    </button>
+                  ) : esExamen ? (
                     <button type="button" className="instr-th-accion" data-corregir-abrir
                       onClick={() => onCorregir(col)}
                       title={col.ins.tiene_prueba
@@ -492,7 +503,7 @@ export default function MatrizInstrumentos({ matriz, columnas, alumnos, trimestr
           {alumnos.map((al, idx) => (
             <tr key={al.id}>
               <td className="col-alumno">
-                {al.apellidos}, {al.nombre}
+                <NombreAlumno alumno={al} onAbrir={onAlumno} />
                 {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                 <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={onMedidas ? () => onMedidas(al) : undefined} />
               </td>

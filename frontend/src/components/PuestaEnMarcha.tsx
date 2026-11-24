@@ -8,6 +8,9 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import type { PasoEstado } from '@/db/queries'
+import { t as tGlobal, useT } from '@/i18n'
+
+type Traductor = typeof tGlobal
 
 export type Paso = {
   n: number
@@ -19,66 +22,66 @@ export type Paso = {
   detalle?: string
 }
 
-export function construirPasos(e: PasoEstado): Paso[] {
+export function construirPasos(e: PasoEstado, t: Traductor = tGlobal): Paso[] {
   const g = e.grupoPrincipalId
   // Los tres pasos de configuración llevan a su pestaña, no a un scroll largo
   const areas = g ? `/grupos/${g}?pestana=areas` : '/grupos'
   return [
     {
       n: 1,
-      titulo: 'Crea tu clase',
-      explicacion: 'Un grupo por cada clase que impartes: nombre, curso, etapa y comunidad autónoma. La comunidad determina qué currículo LOMLOE se carga.',
+      titulo: t('marcha.p1.titulo'),
+      explicacion: t('marcha.p1.texto'),
       hecho: e.grupos > 0,
-      cta: e.grupos > 0 ? 'Ver mis clases' : 'Crear la primera clase',
+      cta: t(e.grupos > 0 ? 'marcha.p1.ver' : 'marcha.p1.crear'),
       destino: e.grupos > 0 ? '/grupos' : '/grupos/nuevo',
-      detalle: e.grupos > 0 ? `${e.grupos} clase${e.grupos !== 1 ? 's' : ''}` : undefined,
+      detalle: e.grupos > 0 ? (e.grupos === 1 ? t('marcha.p1.una') : t('marcha.p1.varias', { n: e.grupos })) : undefined,
     },
     {
       n: 2,
-      titulo: 'Añade tu alumnado',
-      explicacion: 'Escribe la lista o pégala de un tirón desde tu documento. Cada alumno recibe un código anónimo para el QR de mesa; los nombres nunca salen de este dispositivo.',
+      titulo: t('marcha.p2.titulo'),
+      explicacion: t('marcha.p2.texto'),
       hecho: e.alumnos > 0,
-      cta: 'Gestionar alumnado',
+      cta: t('marcha.p2.cta'),
       destino: '/alumnos',
-      detalle: e.alumnos > 0 ? `${e.alumnos} alumnos` : undefined,
+      detalle: e.alumnos > 0 ? t('marcha.p2.detalle', { n: e.alumnos }) : undefined,
     },
     {
       n: 3,
-      titulo: 'Elige las áreas que impartes',
-      explicacion: 'Marca de una vez todas las áreas de esa clase. Aparecerán como pestañas en Evaluación, cada una con sus criterios LOMLOE ya cargados.',
+      titulo: t('marcha.p3.titulo'),
+      explicacion: t('marcha.p3.texto'),
       hecho: e.asignaturas > 0,
-      cta: 'Elegir áreas',
+      cta: t('marcha.p3.cta'),
       destino: areas,
-      detalle: e.asignaturas > 0 ? `${e.asignaturas} áreas` : undefined,
+      detalle: e.asignaturas > 0 ? t('marcha.p3.detalle', { n: e.asignaturas }) : undefined,
     },
     {
       n: 4,
-      titulo: 'Monta la programación',
-      explicacion: 'Reparte los criterios de evaluación entre tus unidades o situaciones de aprendizaje. Puedes generar la estructura automáticamente y ajustarla después.',
+      titulo: t('marcha.p4.titulo'),
+      explicacion: t('marcha.p4.texto'),
       hecho: e.unidades > 0 && e.criteriosVinculados > 0,
-      cta: 'Ir a programación',
+      cta: t('marcha.p4.cta'),
       destino: areas,
-      detalle: e.unidades > 0 ? `${e.unidades} unidades · ${e.criteriosVinculados} criterios` : undefined,
+      detalle: e.unidades > 0 ? t('marcha.p4.detalle', { unidades: e.unidades, criterios: e.criteriosVinculados }) : undefined,
     },
     {
       n: 5,
-      titulo: 'Di con qué evalúas cada criterio',
-      explicacion: 'Asigna a cada criterio su instrumento: prueba, rúbrica, observación, trabajo… Es lo que hará que al pulsar una casilla del calificador sepas exactamente con qué estás evaluando.',
+      titulo: t('marcha.p5.titulo'),
+      explicacion: t('marcha.p5.texto'),
       hecho: e.criteriosConInstrumento > 0,
-      cta: 'Asignar instrumentos',
+      cta: t('marcha.p5.cta'),
       destino: areas,
       detalle: e.criteriosConInstrumento > 0
-        ? `${e.criteriosConInstrumento} criterios con instrumento`
-        : (e.instrumentos > 0 ? `${e.instrumentos} instrumentos creados, sin asignar` : undefined),
+        ? t('marcha.p5.detalle', { n: e.criteriosConInstrumento })
+        : (e.instrumentos > 0 ? t('marcha.p5.sinAsignar', { n: e.instrumentos }) : undefined),
     },
     {
       n: 6,
-      titulo: 'Evalúa',
-      explicacion: 'Ya puedes calificar en la matriz, o imprimir el QR de cada mesa y evaluar desde el móvil escaneando: nota, observación y foto de la producción en pocos segundos.',
+      titulo: t('marcha.p6.titulo'),
+      explicacion: t('marcha.p6.texto'),
       hecho: e.calificaciones > 0,
-      cta: 'Abrir el calificador',
+      cta: t('marcha.p6.cta'),
       destino: '/evaluacion',
-      detalle: e.calificaciones > 0 ? `${e.calificaciones} calificaciones registradas` : undefined,
+      detalle: e.calificaciones > 0 ? t('marcha.p6.detalle', { n: e.calificaciones }) : undefined,
     },
   ]
 }
@@ -87,7 +90,8 @@ export default function PuestaEnMarcha({ estado, nombreClase }: {
   estado: PasoEstado
   nombreClase?: string
 }) {
-  const pasos = construirPasos(estado)
+  const t = useT()
+  const pasos = construirPasos(estado, t)
   const completados = pasos.filter(p => p.hecho).length
   const siguiente = pasos.find(p => !p.hecho)
   const todoListo = !siguiente
@@ -112,11 +116,11 @@ export default function PuestaEnMarcha({ estado, nombreClase }: {
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: 'block', fontWeight: 700, fontSize: 14.5, color: todoListo ? 'var(--verde-500)' : 'var(--azul-900)' }}>
             {todoListo
-              ? `${nombreClase ?? 'La clase'} está lista para evaluar`
-              : `Falta configurar ${nombreClase ?? 'esta clase'} — paso ${siguiente!.n} de ${pasos.length}`}
+              ? t('marcha.lista', { clase: nombreClase ?? t('marcha.laClase') })
+              : t('marcha.falta', { clase: nombreClase ?? t('marcha.estaClase'), paso: siguiente!.n, total: pasos.length })}
           </span>
           <span style={{ display: 'block', fontSize: 12.5, color: 'var(--gris-600)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {todoListo ? 'Puedes reabrir esta guía cuando quieras.' : siguiente!.titulo}
+            {todoListo ? t('marcha.reabrir') : siguiente!.titulo}
           </span>
         </span>
         <span style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>

@@ -10,7 +10,7 @@
  * app, con la única diferencia de quién elige la carpeta.
  */
 import { mkdirSync } from 'node:fs'
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -76,7 +76,7 @@ try {
   await p.locator('select').nth(2).selectOption('Galicia')
   await p.getByRole('button', { name: /Crear grupo/ }).click()
   await p.waitForURL(/\/grupos\/\d+/)
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno')

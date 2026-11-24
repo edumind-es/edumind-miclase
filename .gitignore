@@ -43,3 +43,6 @@ frontend/public/__sembrar-v3.html
 # Currículo empaquetado para la PWA: lo genera scripts/empaquetar_curriculo.mjs
 # en cada build (plugin de Vite), desde curriculum/.
 frontend/public/curriculo/
+
+# Versión descargable (scripts/empaquetar_descargable.sh): se publica en GitHub, no se versiona
+descargas/

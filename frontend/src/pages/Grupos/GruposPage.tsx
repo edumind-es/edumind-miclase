@@ -10,7 +10,8 @@ import { urlPublica } from '@/api'
 import QRModal from '@/components/QRModal'
 import AsignaturasPanel from '@/components/AsignaturasPanel'
 import PlanoClase from '@/components/PlanoClase'
-import { verNeae } from '@/db/datosSensibles'
+import AlumnadoClase from '@/components/AlumnadoClase'
+import EquiposClase from '@/components/EquiposClase'
 
 import { confirmar, avisar } from '@/utils/confirmar'
 import Pestanas from '@/components/comunes/Pestanas'
@@ -188,6 +189,7 @@ function NuevoGrupo() {
 const PESTANAS = [
   { id: 'datos',    label: 'Datos de la clase' },
   { id: 'alumnado', label: 'Alumnado' },
+  { id: 'equipos',  label: 'Equipos' },
   { id: 'areas',    label: 'Áreas y evaluación' },
   { id: 'plano',    label: 'Plano y QR de mesas' },
 ] as const
@@ -245,8 +247,12 @@ function DetalleGrupo() {
       )}
 
       {pestana === 'alumnado' && (
-        <ListaAlumnado grupo={grupo} modoAnon={modoAnon} onToggleAnon={toggleAnon} />
+        // El alumnado entero vive aquí: `/alumnos` redirige a esta pestaña.
+        <AlumnadoClase grupoId={grupoId} modoAnon={modoAnon} onToggleAnon={toggleAnon}
+          alCambiar={async () => { await recargar(); await recargarGrupos() }} />
       )}
+
+      {pestana === 'equipos' && <EquiposClase grupoId={grupoId} />}
 
       {pestana === 'areas' && (
         <AsignaturasPanel
@@ -393,61 +399,6 @@ function DatosClase({ grupo, onGuardado }: { grupo: any; onGuardado: () => Promi
         <button className="btn-danger" onClick={eliminar}>Eliminar clase</button>
       </div>
     </>
-  )
-}
-
-// ─── Pestaña: alumnado ──────────────────────────────────────────────────────
-
-function ListaAlumnado({ grupo, modoAnon, onToggleAnon }: {
-  grupo: any; modoAnon: boolean; onToggleAnon: () => void
-}) {
-  return (
-    <div className="card">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        <h2 style={{ fontSize: 16, fontWeight: 600 }}>Alumnado ({grupo.alumnos?.length || 0})</h2>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-          <button
-            onClick={onToggleAnon}
-            className={modoAnon ? 'btn-primary' : 'btn-secondary'}
-            style={{ fontSize: 13 }}
-            title="Oculta los nombres reales y muestra solo el código. Útil al proyectar en clase."
-          >
-            {modoAnon ? '🔐 Anon. activa' : '🔓 Anonimizar'}
-          </button>
-          <Link to="/alumnos" className="btn-primary"
-            style={{ fontSize: 13, padding: '8px 14px', borderRadius: 6, background: 'var(--azul-700)', color: 'white', fontWeight: 600 }}>
-            + Añadir o editar alumnado
-          </Link>
-        </div>
-      </div>
-
-      {!grupo.alumnos?.length && (
-        <p style={{ color: 'var(--gris-600)', fontSize: 14 }}>
-          Esta clase no tiene alumnado todavía. Puedes escribirlo uno a uno o pegar la lista entera.
-        </p>
-      )}
-
-      {modoAnon && grupo.alumnos?.length > 0 && (
-        <div style={{ fontSize: 12, color: 'var(--azul-700)', background: 'var(--azul-100)', padding: '6px 12px', borderRadius: 6, marginBottom: 12 }}>
-          Modo privacidad activo — se muestran solo códigos
-        </div>
-      )}
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
-        {grupo.alumnos?.map((a: any) => (
-          <div key={a.id} style={{ padding: '8px 12px', background: 'var(--gris-100)', borderRadius: 8, fontSize: 14 }}>
-            {modoAnon ? (
-              <div style={{ fontWeight: 700, fontFamily: 'monospace', color: 'var(--azul-700)', letterSpacing: 1 }}>
-                {a.codigo_cifrado || '—'}
-              </div>
-            ) : (
-              <div style={{ fontWeight: 600 }}>{a.apellidos}, {a.nombre}</div>
-            )}
-            {a.neae && verNeae() ? <span style={{ fontSize: 11, color: 'var(--ambar-500)', fontWeight: 600 }}>NEAE</span> : null}
-          </div>
-        ))}
-      </div>
-    </div>
   )
 }
 

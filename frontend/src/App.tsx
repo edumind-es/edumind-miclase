@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import Marca from '@/components/Marca'
-import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
-import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
+import { ClaseActivaProvider, useClaseActiva } from '@/contexto/ClaseActiva'
 import Dashboard from '@/pages/Dashboard/Dashboard'
 import GruposPage from '@/pages/Grupos/GruposPage'
-import AlumnosPage from '@/pages/Alumnos/AlumnosPage'
 import EvaluacionPage from '@/pages/Evaluacion/EvaluacionPage'
 import SeguimientoPage from '@/pages/Seguimiento/SeguimientoPage'
 import InformesPage from '@/pages/Informes/InformesPage'
@@ -22,31 +21,35 @@ import ActualizacionApp from '@/components/ActualizacionApp'
 import SyncAutomatica from '@/components/SyncAutomatica'
 import CopiaAutomatica from '@/components/CopiaAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
+import InstalarPage from '@/pages/Instalar/InstalarPage'
+import ElegirIdioma, { SelectorIdioma } from '@/components/ElegirIdioma'
+import { useT, type Clave } from '@/i18n'
 import { useDatosSensibles } from '@/db/datosSensibles'
 
 // El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
 // cada día con lo que se toca una vez por trimestre. Separarlo en dos bloques
 // dice de un vistazo dónde se trabaja y dónde se configura.
-const NAV = [
+// Las etiquetas son claves de `i18n/textos.ts`: el menú sale en el idioma elegido.
+const NAV: { bloque: Clave; entradas: { to: string; label: Clave; icon: string }[] }[] = [
   {
-    bloque: 'Aula',
+    bloque: 'menu.aula',
     entradas: [
-      { to: '/',            label: 'Inicio',      icon: '⊞' },
-      { to: '/planificacion', label: 'Planificación', icon: '🗓️' },
-      { to: '/evaluacion',  label: 'Calificador', icon: '📋' },
-      { to: '/escanear',    label: 'Exámenes y pruebas', icon: '📝' },
-      { to: '/sesiones',    label: 'Asistencia',  icon: '✅' },
-      { to: '/seguimiento', label: 'Seguimiento', icon: '📈' },
-      { to: '/tutorias',    label: 'Tutorías',    icon: '🤝' },
-      { to: '/informes',    label: 'Informes',    icon: '📄' },
+      { to: '/',            label: 'menu.inicio',      icon: '⊞' },
+      { to: '/planificacion', label: 'menu.planificacion', icon: '🗓️' },
+      { to: '/evaluacion',  label: 'menu.calificador', icon: '📋' },
+      { to: '/escanear',    label: 'menu.examenes',    icon: '📝' },
+      { to: '/sesiones',    label: 'menu.asistencia',  icon: '✅' },
+      { to: '/seguimiento', label: 'menu.seguimiento', icon: '📈' },
+      { to: '/tutorias',    label: 'menu.tutorias',    icon: '🤝' },
+      { to: '/informes',    label: 'menu.informes',    icon: '📄' },
     ],
   },
   {
-    bloque: 'Configuración',
+    bloque: 'menu.configuracion',
     entradas: [
-      { to: '/grupos',      label: 'Mis clases',  icon: '👥' },
-      { to: '/alumnos',     label: 'Alumnado',    icon: '🎒' },
-      { to: '/sincronizar', label: 'Sincronizar', icon: '🔄' },
+      { to: '/grupos',      label: 'menu.clases',      icon: '👥' },
+      { to: '/sincronizar', label: 'menu.sincronizar', icon: '🔄' },
+      { to: '/instalar',    label: 'menu.instalar',    icon: '📲' },
     ],
   },
 ]
@@ -57,16 +60,16 @@ const K_PLEGADO = 'miclase_sidebar_plegado'
 // de contexto. El escáner y la sincronización no: el escáner deduce el alumno
 // del propio código y la sincronización es de todo el dispositivo. La
 // configuración de la clase tampoco, porque ya lleva su propia cabecera.
-const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
+const CON_BARRA = ['/', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
 
 // El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
 // Informes lleva su propio «Periodo», que además ofrece el curso completo.
 // En Planificación manda la fecha, no el trimestre.
-const SIN_TRIMESTRE = ['/alumnos', '/informes', '/tutorias', '/planificacion']
+const SIN_TRIMESTRE = ['/informes', '/tutorias', '/planificacion']
 // El área no pinta nada donde se trabaja con la clase entera. En el
 // calificador sí: desde el rediseño (fase 2 · A) el área se elige aquí y no
 // en una fila de pestañas propia.
-const SIN_AREA = ['/alumnos', '/sesiones', '/informes', '/tutorias', '/planificacion']
+const SIN_AREA = ['/sesiones', '/informes', '/tutorias', '/planificacion']
 
 function usarBarra(pathname: string) {
   const raiz = '/' + (pathname.split('/')[1] ?? '')
@@ -74,8 +77,24 @@ function usarBarra(pathname: string) {
   return { conArea: !SIN_AREA.includes(raiz), conTrimestre: !SIN_TRIMESTRE.includes(raiz) }
 }
 
+/**
+ * `/alumnos` ya no es una pantalla: el alumnado vive en la pestaña «Alumnado»
+ * de su clase, dentro de «Mis clases». La dirección se conserva para los
+ * enlaces y marcadores de antes y lleva a la clase que diga `?grupo_id=` o,
+ * si no, a la activa; sin ninguna, a la lista de clases.
+ */
+function IrAlAlumnado() {
+  const { grupoId, cargando } = useClaseActiva()
+  const [params] = useSearchParams()
+  if (cargando) return null
+  const pedida = Number(params.get('grupo_id'))
+  const id = pedida > 0 ? pedida : grupoId
+  return <Navigate to={id ? `/grupos/${id}?pestana=alumnado` : '/grupos'} replace />
+}
+
 function Layout() {
   const { modo, nombre, iniciarLogin, cerrarSesion, loginDisponible } = useAuth()
+  const t = useT()
   const { pathname } = useLocation()
   const barra = usarBarra(pathname)
   const [exportOpen, setExportOpen] = useState(false)
@@ -113,8 +132,8 @@ function Layout() {
           <button
             className="sidebar-toggle"
             onClick={() => setPlegado(p => !p)}
-            title={`${plegado ? 'Desplegar' : 'Plegar'} el menú (Ctrl+B)`}
-            aria-label={plegado ? 'Desplegar el menú lateral' : 'Plegar el menú lateral'}
+            title={t(plegado ? 'menu.desplegar' : 'menu.plegar')}
+            aria-label={t(plegado ? 'menu.desplegarAria' : 'menu.plegarAria')}
             aria-expanded={!plegado}
           >
             {plegado ? '»' : '«'}
@@ -124,12 +143,12 @@ function Layout() {
         <nav>
           {NAV.map(({ bloque, entradas }) => (
             <div key={bloque} className="nav-bloque">
-              <div className="nav-bloque-titulo">{bloque}</div>
+              <div className="nav-bloque-titulo">{t(bloque)}</div>
               {entradas.map(({ to, label, icon }) => (
-                <NavLink key={to} to={to} end={to === '/'} title={label}
+                <NavLink key={to} to={to} end={to === '/'} title={t(label)}
                   className={({ isActive }) => isActive ? 'active' : ''}>
                   <span className="nav-icono" aria-hidden="true">{icon}</span>
-                  <span className="nav-texto">{label}</span>
+                  <span className="nav-texto">{t(label)}</span>
                 </NavLink>
               ))}
             </div>
@@ -139,20 +158,20 @@ function Layout() {
         {/* Panel de auth / backup en la parte baja del sidebar */}
         <div className="sidebar-panel">
           {modo === 'cargando' && (
-            <div className="sidebar-panel-texto" style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>Cargando…</div>
+            <div className="sidebar-panel-texto" style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)' }}>{t('menu.cargando')}</div>
           )}
 
           {modo === 'local' && (
             <div>
               <div className="sidebar-panel-texto" style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>
-                Modo local — datos solo en este dispositivo
+                {t('menu.modoLocal')}
               </div>
-              <button className="sidebar-btn" onClick={() => setExportOpen(true)} title="Exportar / Importar copia de seguridad">
-                📦 <span className="sidebar-panel-texto">Exportar / Importar</span>
+              <button className="sidebar-btn" onClick={() => setExportOpen(true)} title={t('menu.exportarTitulo')}>
+                📦 <span className="sidebar-panel-texto">{t('menu.exportar')}</span>
               </button>
               {loginDisponible && (
-                <button className="sidebar-btn sidebar-btn--tenue" onClick={iniciarLogin} title="Conectar con EDUmind">
-                  🔑 <span className="sidebar-panel-texto">Conectar EDUmind</span>
+                <button className="sidebar-btn sidebar-btn--tenue" onClick={iniciarLogin} title={t('menu.conectar')}>
+                  🔑 <span className="sidebar-panel-texto">{t('menu.conectar')}</span>
                 </button>
               )}
             </div>
@@ -164,20 +183,21 @@ function Layout() {
                 🟢 {nombre}
               </div>
               <div className="sidebar-panel-texto" style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 8 }}>
-                Conectado con EDUmind
+                {t('menu.conectado')}
               </div>
-              <button className="sidebar-btn" onClick={() => setExportOpen(true)} title="Exportar / Importar copia de seguridad">
-                📦 <span className="sidebar-panel-texto">Exportar / Importar</span>
+              <button className="sidebar-btn" onClick={() => setExportOpen(true)} title={t('menu.exportarTitulo')}>
+                📦 <span className="sidebar-panel-texto">{t('menu.exportar')}</span>
               </button>
               <button
                 onClick={cerrarSesion}
                 className="sidebar-panel-texto"
                 style={{ width: '100%', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: 11, cursor: 'pointer', textAlign: 'left', padding: '4px 0' }}
               >
-                Cerrar sesión
+                {t('menu.cerrarSesion')}
               </button>
             </div>
           )}
+          <SelectorIdioma />
         </div>
 
         <div className="sidebar-pie">
@@ -185,16 +205,16 @@ function Layout() {
           <br />
           © {new Date().getFullYear()} EDUmind® por Luis Vilela Acuña
           <br />
-          Software libre:{' '}
+          {t('menu.softwareLibre')}{' '}
           <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0-or-later</a>
           {' / '}
           <a href="https://eupl.eu/1.2/es/" target="_blank" rel="noopener noreferrer">EUPL-1.2</a>
           <br />
           <a href="https://github.com/edumind-es/edumind-miclase/blob/main/PRIVACIDAD.md"
-             target="_blank" rel="noopener noreferrer">Privacidad y datos</a>
+             target="_blank" rel="noopener noreferrer">{t('menu.privacidad')}</a>
           {' · '}
           <a href="https://github.com/edumind-es/edumind-miclase" target="_blank" rel="noopener noreferrer">
-            Código fuente
+            {t('menu.codigo')}
           </a>
         </div>
       </aside>
@@ -204,7 +224,7 @@ function Layout() {
         <Routes>
           <Route path="/"              element={<Dashboard />} />
           <Route path="/grupos/*"      element={<GruposPage />} />
-          <Route path="/alumnos/*"     element={<AlumnosPage />} />
+          <Route path="/alumnos/*"     element={<IrAlAlumnado />} />
           <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
           <Route path="/escanear"      element={<EscanearPage />} />
           <Route path="/sesiones/*"    element={<SesionesPage />} />
@@ -213,6 +233,7 @@ function Layout() {
           <Route path="/tutorias"      element={<TutoriasPage />} />
           <Route path="/informes"      element={<InformesPage />} />
           <Route path="/sincronizar"   element={<SincronizarPage />} />
+          <Route path="/instalar"      element={<InstalarPage />} />
           <Route path="/auth/callback" element={<CallbackPage />} />
           {/* Sin esto, una URL desconocida pintaba el marco con el contenido vacío */}
           <Route path="*"              element={<NoEncontrada />} />
@@ -224,6 +245,7 @@ function Layout() {
       <ActualizacionApp />
       <SyncAutomatica />
       <CopiaAutomatica />
+      <ElegirIdioma />
     </div>
   )
 }

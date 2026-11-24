@@ -8,7 +8,7 @@
  * ficha del alumno y el borrado lógico. Ver frontend/src/db/tutorias.ts.
  */
 import { readFileSync, mkdirSync } from 'node:fs'
-import { navegadorChromium, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
@@ -178,7 +178,7 @@ try {
   await p.locator('[data-filtro-desde]').fill('')
 
   console.log('\n8. Historial en la ficha del alumno')
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.getByRole('button', { name: /Editar Uxía Ferreiro/ }).click()
   const historial = p.locator('[data-historial-tutorias]')
   await historial.waitFor({ timeout: 5000 })

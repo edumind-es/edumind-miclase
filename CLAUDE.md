@@ -20,7 +20,7 @@ edumind_miclase/
 │   ├── src/db/conexiones.js ← competencia específica → descriptores operativos (puro; lo usa seed.js)
 │   └── src/routes/programacion.js ← RESERVA: PDF de PROENS → texto con columnas (pdftotext); solo si el docente lo acepta
 ├── frontend/         ← React + Vite + TypeScript
-│   ├── src/db/       ← localDb.ts (esquema Dexie v10) · queries.ts (única fuente de verdad)
+│   ├── src/db/       ← localDb.ts (esquema Dexie v11) · queries.ts (única fuente de verdad)
 │   │                   calculo.ts (notas ponderadas + perfil competencial)
 │   │                   competenciasClave.ts (nivel por descriptor operativo y competencia clave)
 │   │                   diario.ts (diario de evaluación: cómo varios registros dan una nota)
@@ -619,6 +619,73 @@ edumind_miclase/
   en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
   abre el editor directo con `[data-editar-examen]` (plegado tras
   `[data-cabeceras-toggle]`), además de «Editar» en «Exámenes y pruebas de evaluación».
+- **Un examen guardado no se sustituye sin decirlo, y el que se va queda en
+  el banco** (auditoría de nov 2026). Una actividad tiene UNA plaza de examen
+  por unidad: un segundo examen en la misma unidad es otra actividad. Cargar
+  un fichero, pegar texto o elegir del banco sobre un examen YA GUARDADO
+  pregunta antes (`puedeCargarEncima` en `PruebaEditor`: dice cuántos alumnos
+  hay corregidos y cómo tener un segundo examen); antes solo preguntaba si
+  había cambios sin guardar, y a Luis le desapareció el examen de la UD1 al
+  cargar encima el de problemas. Al guardar va `guardarPrueba(…, { sustituye:
+  true })`, que copia antes el anterior al banco (`conservarExamenEnBanco`),
+  igual que cuando un examen movido retira al que ocupaba su destino. Tras
+  sustituir no se ofrece recalcular sin más: se pregunta si es el MISMO
+  examen corregido, y Esc deja las notas como están. `guardarPrueba` escribe
+  en la ficha VIVA de la plaza y no reutiliza una retirada (antes la revivía
+  y dejaba dos exámenes vivos en el mismo sitio).
+- **Cada corrección anota de qué examen es** (`Calificacion.prueba_id`, sin
+  índice ni esquema; auditoría de nov 2026). Las respuestas viven en la
+  casilla (`niveles_rubrica`) y todas las preguntas se llaman p1, p2…: sin
+  dueño, cualquier examen que ocupara el sitio las leía como suyas. Lo
+  escriben `guardarExamenDeAlumno` y `recalcularNotasDeExamen`; lo leen
+  `correccionesDeExamen` (informe, recuento, recálculo) y
+  `getRespuestasDeExamen` (corrector), con `esDeEsteExamen` (`db/prueba.ts`,
+  puro): una corrección SIN examen anotado —las de antes— se da por buena
+  para el que ocupe el sitio. Para que eso no las regale al siguiente,
+  `sellarCorrecciones` les anota el suyo justo antes de que un examen deje
+  de ser el de esas casillas: se retira (`eliminarPrueba`), otro ocupa su
+  plaza, se mueve, o la unidad estrena examen propio. Por eso **una ficha
+  retirada no se reutiliza nunca** (llevaría sus correcciones a otro examen)
+  y «otro examen cargado encima» estrena ficha con id nuevo. Al guardar tras
+  cargar encima de un examen con correcciones, el editor pregunta si es el
+  MISMO examen con cambios (misma ficha, conserva correcciones, ofrece
+  recalcular) u OTRO (ficha nueva, sin corregir; Esc es «otro»). Corregir
+  sobre una nota que era de otro examen la deja como fantasma
+  (`MOTIVO_SUSTITUIDA_POR_OTRO_EXAMEN`). En `saveCalificaciones`, unas marcas
+  nuevas sin `prueba_id` son de rúbrica y borran el que hubiera. **Un aparato
+  sin actualizar corrige sin anotar el examen**: sus correcciones cuentan
+  como las de antes.
+- **«Qué examen toca en esta unidad» lo decide una sola función**,
+  `resolverExamen` (`db/prueba.ts`, puro): el propio; si no, el de otra
+  unidad que la vincula (si son varios, el de menor id); si no, el general.
+  La usan `getPrueba`, la matriz, el editor y `correccionesDeExamen`; antes
+  eran cuatro reglas y el editor ignoraba el vínculo. Dos exámenes vivos en
+  la misma plaza (dos aparatos que crearon uno cada uno) se resuelven con
+  `elQueCuenta`: el más reciente y, a igualdad, el de menor id; el otro
+  sigue listado en «Exámenes y pruebas». En una unidad que se corrige con el
+  examen de otra, el editor NO abre ese examen: lo dice
+  (`[data-examen-de-otra-unidad]`) y lo que se guarde será el propio.
+- **Al mover por bloques, un examen corregido va con sus notas** (auditoría
+  de nov 2026; matiza lo que la nota de los bloques dice de la fecha del
+  examen). `diaDeExamen` (`db/bloquesFamilia.ts`, puro) agrupa un examen de
+  unidad en el día con más correcciones suyas, no en el día en que se
+  definió; sin corregir, el general y la rúbrica siguen por `created_at`.
+  Fechado por la definición, mover el bloque de las notas dejaba el examen
+  escondido en el instrumento y las notas sin sus preguntas. Lo usan
+  `agruparEnBloques`, `convertirFamiliaEnHijo`, `conflictosAlMover` y
+  `moverDatosDeFamiliaAHijo`, que leen las notas ANTES de moverlas. Y
+  convertir UN bloque de una unidad en actividad nueva copia solo los
+  criterios de esa unidad: copiarlos todos le daba columna en todas y dejaba
+  sin columna lo que el instrumento guardaba en las demás.
+- **Dos avisos del Calificador que no existían** (misma auditoría).
+  `MatrizEvaluacion.notasSinColumna`: notas con valor cuyo criterio la
+  programación ya no asigna a su instrumento en lo que se mira; siguen
+  contando (cambiar la programación no borra notas) y ahora se dice, tras el
+  contador de avisos (`[data-notas-sin-columna]`). Y a la vista, no plegado,
+  `[data-unidad-otro-trimestre]` cuando la unidad es de un trimestre y la
+  barra está en otro, con `[data-ir-al-trimestre]`: la casilla lleva el
+  trimestre de la barra y calificar así crea un segundo juego de notas de la
+  misma unidad.
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras
@@ -636,7 +703,11 @@ edumind_miclase/
   casilla lleva el trimestre de la barra, no el de la unidad; replicar con
   el de la unidad dejó la otra unidad en blanco—; devuelve `tambien` y las
   pantallas lo dicen. Se corrige desde cualquiera de las unidades. Una
-  unidad con examen propio manda el suyo y el vínculo ajeno no le entra.
+  unidad con examen propio manda el suyo y el vínculo ajeno no le entra:
+  `guardarExamenDeAlumno` se la salta al replicar (no lo hacía, y corregir
+  el examen de la UD2 pisó notas y respuestas del de la UD1 de Luis, nov
+  2026), y la nota que sí sustituye en otra unidad queda como fantasma
+  (`MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO`).
   `correccionesDeExamen` cuenta las correcciones de todas las unidades del
   examen (y una unidad cubierta por vínculo no cae al general), así el
   recálculo y el informe ven la misma corrección una vez por alumno.
@@ -747,6 +818,62 @@ edumind_miclase/
   el teclado) salvo que el diálogo ya lo haya puesto dentro, el tabulador da
   la vuelta y al cerrar vuelve a quien abrió. Un diálogo nuevo que no lleve
   `.modal-overlay` se queda sin nada de esto.
+- **El alumnado vive en su clase, en un solo sitio** (nov 2026). Ya no hay
+  entrada «Alumnado» en el menú ni pantalla propia: es la pestaña «Alumnado»
+  de la clase en «Mis clases» (`components/AlumnadoClase.tsx`,
+  `[data-alumnado-clase]`), con todo lo que tenía la pantalla —buscador, alta,
+  importar lista, ficha (`EditarAlumno`), evidencias, claves de anonimización
+  y `AjustesDatosSensibles`— más el «Anonimizar» que solo tenía la pestaña
+  (`[data-anonimizar]`). Antes había dos listas del mismo alumnado y la
+  pestaña mandaba a la otra pantalla: a Luis le hacía dudar. El componente
+  recibe `grupoId` y NO lee la clase activa: la ficha puede ser de otra clase
+  que la de la barra. `/alumnos` se conserva como dirección (`IrAlAlumnado`
+  en `App.tsx`): redirige a `/grupos/<id>?pestana=alumnado` con la clase de
+  `?grupo_id=` o la activa, y sin ninguna a `/grupos`; los enlaces de dentro
+  de la app siguen apuntando a `/alumnos`. Donde otra nota de este fichero
+  dice «en Alumnado», es esa pestaña. Las pruebas entran con
+  `irAlAlumnado(p)` de `pruebas/lib/entorno.mjs`.
+- **Los equipos son de la clase y viven en su pestaña «Equipos»** (esquema
+  v11, tabla `agrupamientos`; `db/equipos.ts`, puro; `equipos.test.ts` y
+  `equipos-ui.test.mjs`). Un agrupamiento («Equipos de proyecto») lleva
+  `grupo_id` y, si el docente quiere, `asignatura_id` y `unidad_id`: sin
+  ellos vale para todas las áreas (`agrupamientosPara` los ordena del más
+  concreto al más general; la unidad no se guarda sin área). Decisión de
+  Luis (nov 2026): de la clase, con área y unidad opcionales. Los equipos
+  van DENTRO de la fila como array de verdad (`equipos: [{ clave, nombre,
+  alumnos }]`), igual que los acuerdos de una tutoría: la fusión los compara
+  como JSON, así que dos aparatos que mueven alumnos del mismo agrupamiento
+  a la vez se quedan con el reparto del más reciente. Un alumno va en un
+  solo equipo de cada agrupamiento (`normalizarAgrupamiento`, `moverAlumno`)
+  y quien deja la clase no se enseña (`sinBajas`, al leer; lo guardado no se
+  toca). La pantalla es `EquiposClase` (`[data-equipos-clase]`, recibe
+  `grupoId` y no lee la clase activa): `[data-agrupamiento]`, `[data-equipo]`,
+  reparto al azar (`[data-reparto-azar]`, pregunta si ya había alguien
+  colocado), `[data-sin-equipo]`. Tener equipos no pone ni cambia ninguna
+  nota. **Calificar por equipo es una copia que se pide**: el panel de la
+  casilla enseña, a la vista y no en «Más», la franja `[data-equipo-nota]`
+  (`NotaAlEquipo`) si el alumno tiene compañeros en un agrupamiento que vale
+  para esa área y unidad, con «Poner esta nota a su equipo»
+  (`[data-equipo-nota-poner]`, apagado sin nota). Copia con
+  `copiarNotaAlEquipo` (`queries.ts`): nota y marcas de rúbrica a los
+  criterios de la casilla (`destinosNota`), con `sinVinculos`; la
+  observación no viaja, que es de cada alumno; una casilla del compañero
+  que ya tenía nota se respeta y solo se sustituye tras `confirmar`. No se
+  ofrece en un examen. Borrar una clase se lleva sus agrupamientos. Una base v10 no pasa
+  por la puerta de migración: solo gana una tabla vacía. Tras desplegar,
+  reiniciar el backend: `agrupamientos` está en su lista blanca.
+- **Un diálogo solo se cierra «pulsando fuera» si la pulsación empezó y
+  terminó en el velo** (nov 2026). `utils/velo.ts` (`instalarVelo()` en
+  `main.tsx`) lo hace para TODO lo que lleve `.modal-overlay`, como
+  `foco.ts`: el navegador da por clic en el velo un arrastre que empieza en
+  la tarjeta y se suelta fuera (seleccionar texto deprisa), y a Luis se le
+  cerraba el diálogo a medio escribir. Ese clic se corta en captura antes de
+  React; uno sin puntero (`detail` 0: teclado, `.click()`) pasa. El scroll
+  tampoco sale del diálogo: `overscroll-behavior: contain` en el velo y lo de
+  dentro, y `none` en `html` mientras haya uno abierto (`:has`), para que el
+  gesto de dos dedos no llegue a «página anterior». Un diálogo nuevo no
+  necesita nada si lleva `.modal-overlay`. Prueba: `dialogos-velo-ui.test.mjs`.
+  En Safari y en el iPad reales no se ha probado todavía.
 - **El «Más» de una columna es una hoja que sube desde abajo** (nov 2026;
   sustituye a lo que la fase 2 (C) dice de «despliega solo esa columna»).
   `[data-columna-mas]` abre `[data-hoja-columna]` (portal a `body`, con
@@ -760,6 +887,24 @@ edumind_miclase/
   enseña ahí como antes; con él activo el «Más» de columna se desactiva. Una
   prueba que abra la hoja busca la acción dentro de `[data-hoja-columna]`,
   no en el `<th>`: con la hoja abierta el mismo `data-…` está dos veces.
+- **El nombre del alumno en el Calificador abre su ficha rápida** (nov 2026).
+  En las tres tablas (por instrumento, por criterio y «Todo el curso») el
+  nombre es un botón (`NombreAlumno`, `[data-alumno-abrir]` con el id): un
+  toque basta, así que valen el doble clic y mantener pulsado, que es lo que
+  pidió Luis. Abre `FichaRapidaAlumno` (`[data-ficha-rapida]`, con `Dialogo`
+  y `Pestanas`): «Esta área» (`[data-ficha-rapida-area]`: la nota del área
+  por trimestre y la final en `[data-ficha-nota-area]`, el desglose por
+  instrumento en `[data-ficha-nota-instrumento]`, las medidas y el análisis
+  frente al grupo) y «Todas las áreas» (`[data-ficha-rapida-todas]`: una
+  fila `[data-ficha-area]` por área, las observaciones y
+  `[data-ficha-rapida-editar]`). **No calcula ni guarda nada**: las notas
+  son las de `getResumenCurso` (las del boletín; las demás áreas solo se
+  calculan al pedir la segunda pestaña) y para editar abre `MedidasAlumno`,
+  `AnalisisAlumno` y `EditarAlumno` (exportado de `AlumnadoClase.tsx`), que
+  se enseñan EN LUGAR de la ficha, no encima, para que Esc cierre uno solo.
+  Las medidas van tras `verNeae`, como el sello. No hay observaciones por
+  área: son las del alumno, las de siempre. Prueba:
+  `ficha-rapida-ui.test.mjs`.
 - **El corrector por cámara vuelve solo a la cámara tras «Guardar y
   siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
   «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no
@@ -801,7 +946,19 @@ edumind_miclase/
   (`informes/informeAlumnoPrueba.ts`, Lámina) lleva nombre, vale para la
   familia, compara SOLO con la clase y calla sus cifras con menos de
   `MINIMO_GRUPO` exámenes (`[data-informe-pocos]` lo avisa); el grupo de
-  media parecida es solo de la pantalla del docente. Se entra además con
+  media parecida es solo de la pantalla del docente. **Al imprimir, por
+  defecto va en una hoja A4** (`[data-informe-formato]` = una · completo;
+  `documentoUnaPagina`): una tabla con cada pregunta, sus puntos y el
+  **nivel alcanzado** (`PreguntaAnalizada.nivel`, de `nivelAlcanzado` en
+  `db/prueba.ts`: nivel de corrección, escala o test; solo lee), con la
+  letra que baje `densidadUnaPagina` (de 9 a 6 pt; hasta ~35 preguntas con
+  rúbrica larga caben). **La hoja es personal: ninguna cifra de la clase**
+  (decisión de Luis, 23/11/2026), solo su corrección: el nivel marcado, la
+  respuesta correcta (`clave`, o la opción buena de un test) y, si no hay
+  nivel, el reparto (`correccion`); las `notas` de corrección no salen, son
+  del docente. Con todo eso caben unas 20 preguntas.
+  `[data-informe-imprimir-clase]` imprime una hoja por alumno corregido.
+  Se entra además con
   `alumnoInicial` desde el corrector de la casilla
   (`[data-informe-alumno-abrir]`) y desde Seguimiento → Por alumno
   (`[data-analisis-informe-examen]`). Para rúbricas, listas, escalas y
@@ -848,6 +1005,27 @@ edumind_miclase/
   varios registros; peso y criterios solo se enseñan. No guarda por su
   cuenta: `actualizarInstrumento` y el `RubricaEditor` de siempre. Luis: el
   desplegable pequeño de «Evaluar hoy» no dejaba editar el instrumento.
+- **El nombre de una actividad se cambia en la unidad que se mira, no en
+  todas** (nov 2026; Luis: «lo que se edita en una ud, se queda en esa ud
+  salvo que se indique lo contrario»). `Instrumento.nombre` es el general e
+  `Instrumento.nombres_unidad` (unidad → nombre, sin índice ni esquema)
+  guarda el propio de la unidad que lo llame distinto; `db/nombreActividad.ts`
+  (puro, `nombre-actividad.test.ts`: `nombreEnUnidad`, `tieneNombrePropio`,
+  `alRenombrar`). Se resuelve UNA vez en `getMatrizEvaluacion`
+  (`CeldaInstrumento.nombre` es el de la unidad, con `nombre_general` y
+  `nombre_propio`; `familia_nombre` igual), así que el Calificador, «Qué
+  evalúo → Por unidad» y «Exámenes y pruebas» dicen lo mismo; «Todo el
+  curso», «Pesos del área» y los informes enseñan el general. Se escribe
+  solo con `renombrarInstrumento(id, nombre, unidad?)`: con unidad, solo
+  ahí; sin ella, el general y se quitan los propios. Dentro de una unidad
+  el lápiz de la columna y la ficha «Editar» guardan solo en ella SIN
+  preguntar y lo dicen, con el botón que lo lleva a todas
+  (`[data-renombrar-todas]` en `[data-columna-aviso]`;
+  `[data-ficha-nombre-alcance="unidad"|"general"]`,
+  `[data-ficha-nombre-todas]` y `[data-ficha-nombre-general]` en la ficha):
+  un diálogo con dos salidas haría que Esc eligiera una. Renombrar en «Pesos
+  del área» cambia el general y deja los propios. Un aparato sin actualizar
+  enseña el nombre general en todas partes.
 - **«Qué evalúo» tiene dos pestañas: «Por unidad» y «Pesos del área»** (fase
   2 de la misma propuesta). `InstrumentosManager` abre «Por unidad»
   (`QueEvaluoPorUnidad`, `[data-que-por-unidad]`) en un área con unidades,
@@ -866,8 +1044,10 @@ edumind_miclase/
   (`crearInstrumentoHijo`) o trae una de otra unidad
   (`[data-unidad-anadir-cual]`), con los criterios del instrumento ya
   marcados; **la primera actividad de un instrumento con notas o herramienta
-  a su nombre no se crea ahí** (`[data-unidad-primera-con-datos]`): manda a
-  «Pesos del área», el único sitio que pregunta con `ConvertirFamilia`. Los
+  a su nombre también se crea ahí**, y al aceptar pregunta con
+  `ConvertirFamilia`, igual que «Pesos del área» (nada se crea hasta
+  contestar): antes mandaba a la otra pestaña (`[data-unidad-primera-con-datos]`,
+  que ya no existe) y Luis no podía añadir un segundo examen a la unidad. Los
   criterios de la unidad que nada evalúa van en `[data-unidad-sin-actividad]`.
   Las pruebas que trabajan con lo de toda el área llaman a
   `gestorEnPesosDelArea(p)` (`pruebas/lib/entorno.mjs`) antes de navegar. La
@@ -1008,7 +1188,48 @@ edumind_miclase/
   porcentajes solo se escribían al crear el área. Decisión de Luis: lo
   normal es la media de los tres, pero hay docentes que no lo hacen así. La
   recuperación automática de un criterio suspenso que una unidad posterior
-  supera NO está hecha: es otra regla, por criterio y entre unidades.
+  supera NO está hecha; la recuperación que hay es una actividad (nota siguiente).
+- **La recuperación es una actividad que mejora la nota de su instrumento, y
+  no escribe encima de nada** (nov 2026; `db/recuperacion.ts`, puro;
+  `recuperacion.test.ts` y `recuperacion-ui.test.mjs`). Decisiones de Luis
+  (23/11/2026): es una actividad propia dentro de un instrumento
+  (`Instrumento.recuperacion` = 'mejor' | 'sustituir' | 'tope', sin índice ni
+  esquema), con su columna en la unidad que se recupera; **recupera solo lo
+  de su instrumento** (examen 3 al 80 %, tabla 8 al 20 %, recuperación 6 →
+  el examen cuenta 6, la tabla sigue en 8, el criterio queda en 6,4); la
+  regla se elige en cada recuperación (la mejor de las dos · la de la
+  recuperación · la mejor con tope de 5, `notaRecuperada`); y entra quien
+  tiene nota en ella, criterio a criterio. `aplicarRecuperaciones(crudas,
+  instrumentos)` va ANTES de `fundirUnidades` y `fundirHijosEnFamilias`,
+  porque necesita la unidad de cada casilla: por alumno, criterio,
+  instrumento, trimestre y unidad compara la media ponderada de las demás
+  actividades con la de la recuperación; si la regla la cambia, esas
+  actividades entran todas con la nota recuperada (virtual) y la
+  recuperación no entra como una más; sin nada que recuperar en esa casilla,
+  cuenta como una actividad. Lo llaman TODOS los que funden
+  (`calcularNotaArea`, `getMatrizEvaluacion`, `getResumenPorCriterio`,
+  `ExplicacionNota`): si uno no lo hiciera, boletín y matriz discreparían.
+  En la matriz la columna de cada actividad enseña la nota que se le puso y
+  solo lo que resume el instrumento va recuperado (`MatrizEvaluacion.recuperaciones`
+  dice cuáles); `ExplicacionNota` lo cuenta en `[data-explicacion-recuperacion]`.
+  Una recuperación no reparte porcentaje: `pct_familia`, «Pesos del área»
+  (`[data-hijo-recuperacion]`, donde se cambia la regla) y el peso medio de
+  una actividad nueva la dejan fuera. Se crea en «Qué evalúo → Por unidad»
+  con «+ recuperación en esta unidad» (`[data-unidad-recuperacion]`,
+  `[data-unidad-anadir-regla]`; si ya hay una en otra unidad, propone
+  traerla: es la misma actividad). Su columna, sin examen ni rúbrica
+  propios, abre `SesionRecuperacion` (`[data-recuperacion-abrir]` →
+  `[data-recuperacion]`): salen los alumnos con algún criterio suspenso con
+  ese instrumento en la unidad (`notasParaRecuperar`, `notasARecuperar`;
+  `[data-recuperacion-todos]` enseña la clase entera), cada uno con sus
+  criterios (`[data-recuperar-criterio]`, marcados los suspensos, con «tenía
+  X → queda Y») y la nota va SOLO a los marcados, con `sinVinculos`.
+  Pendiente: con examen o rúbrica propios la recuperación se califica como
+  cualquier actividad y la nota va a todos sus criterios, sin la propuesta
+  por alumno; «Pegar columna» y el panel de la casilla por instrumento
+  tampoco la aplican. **Un aparato sin actualizar cuenta la recuperación
+  como una actividad más** (promedia en vez de aplicar la regla): hay que
+  actualizar todos antes de usarla.
 - **Una casilla tiene una sola fila que cuenta** (`masReciente` en
   `queries.ts`: la de `updated_at` más reciente y, a igualdad, menor id). Dos
   aparatos que califican la misma casilla antes de sincronizar crean dos
@@ -1267,6 +1488,38 @@ edumind_miclase/
   **antes de publicar en la App Store o en Google Play, confirmarlo con el
   autor**, porque las condiciones de la App Store chocan con la AGPL de
   código ajeno.
+- **Los equipos de MiClase se miran en el plano, y mirar no guarda** (nov
+  2026). En la vista de `PlanoClase`, con algún agrupamiento en la clase,
+  sale «Equipos a la vista» (`[data-plano-equipos]`; la primera opción deja
+  el plano como está) y una leyenda con el número de cada equipo
+  (`[data-plano-leyenda]`, `[data-plano-equipo]`). No se toca el código de
+  AulaMap: `conEquipos` (`db/planoAulaMap.ts`, puro) le da la clase con
+  `student.team` = el orden del equipo y `showTeams`, que es como AulaMap ya
+  pinta los suyos (color en el puesto y un número). Con equipos a la vista
+  el anfitrión no guarda nada (`guardar` vuelve sin hacer nada): si
+  guardase, pisaría los equipos que el docente tenga hechos en el propio
+  AulaMap. Al «Editar el aula» el selector se quita y mandan los de AulaMap.
+  El agrupamiento elegido se recuerda por clase en el aparato
+  (`miclase.plano.equipos`). Son dos cosas distintas con el mismo nombre:
+  los equipos de AulaMap viven en `Plano.aulamap`; los de MiClase, en
+  `agrupamientos`, y son los que sirven para calificar.
+- **De una copia se pueden recuperar notas sueltas sin importarla** (nov
+  2026). Importar sustituye todo; `db/recuperarDeCopia.ts` solo LEE la copia
+  y la compara con el aparato casilla a casilla, **por el `id` de la fila**
+  (es el mismo en todos los aparatos y sobrevive a convertir un instrumento
+  en actividad, que cambia `instrumento_id`). `ExportImport` → «Recuperar
+  notas de una copia, sin importarla» (`[data-recuperar-abrir]`): lista los
+  grupos de instrumento, unidad y trimestre con alguna nota o respuestas
+  distintas (`[data-recuperar-grupo]`, con `data-unidad` y
+  `data-instrumento`); el docente marca (`[data-recuperar-marcar]`) y solo
+  eso vuelve (`[data-recuperar-aplicar]`, con `confirmar`): valor, respuestas
+  y origen de la copia, `updated_at` nuevo para que viaje, y lo que había
+  como fantasma (`MOTIVO_RECUPERADA_DE_COPIA`). Las notas del grupo que la
+  copia no tenía se quitan solo si se pide (`[data-recuperar-quitar]`). Un
+  grupo con trabajo nuevo y nada distinto no sale. La lista incluye también
+  lo cambiado a propósito después de la copia: por eso elige el docente.
+  Nació de que el examen de la UD2 pisó el de la UD1 de Luis y solo el Mac
+  mini, sin sincronizar, lo conservaba. Prueba: `recuperar-copia-ui.test.mjs`.
 - **El mínimo de consecución se ve donde se califica y en el informe.**
   `unidad_criterios.minimo` (lo trae PROENS) sale en la franja del instrumento
   del panel de la casilla (`[data-minimo-criterio]`, dos líneas; al tocarlo,
@@ -1409,6 +1662,49 @@ edumind_miclase/
   enlaces (`trozosConEnlaces` en `exportar.ts`, solo http/https) en el detalle
   y en la lámina; lo guardado y el .md exportado no cambian.
 
+- **La app habla castellano o galego, y se traduce por fases** (nov 2026,
+  decisión de Luis: «el paso fundamental»). Sin librería: `src/i18n/textos.ts`
+  (puro) tiene los dos diccionarios —el castellano manda las claves y el
+  galego es `Record<Clave, string>`, así que no compila si falta una— y
+  `src/i18n/index.ts` da `useT()` (repinta al cambiar), `t()` fuera de React
+  y `localeAhora()` para fechas. El idioma es del aparato
+  (`miclase.idioma`, no se sincroniza); sin él, `ElegirIdioma` pregunta al
+  abrir, en los dos idiomas a la vez, proponiendo el del navegador
+  (`idiomaPropuesto`), y `SelectorIdioma` (`[data-selector-idioma]`, panel
+  bajo del menú) lo cambia sin recargar. `<html lang>` lo sigue
+  (`prepararIdioma` en `main.tsx`). **Fase 1 traducida**: menú, Inicio,
+  puesta en marcha, invitación a instalar, «Instalar MiClase» y página no
+  encontrada. El resto sigue en castellano escrito a mano: **una pantalla que
+  se toque pasa sus textos a `textos.ts`**, con su galego, y
+  `idiomas.test.ts` exige las mismas variables `{…}` en los dos. Vocabulario
+  en galego: Cualificador, cualificar, avaliar, titorías, cartafol, ligazón,
+  copia de seguranza. El navegador de pruebas (`navegadorChromium`) nace con
+  el castellano elegido para que la pregunta no tape nada;
+  `idioma-ui.test.mjs` la borra para verla. Los informes impresos y el
+  currículo no se traducen (el currículo ya viene en el idioma de cada
+  comunidad).
+- **MiClase se puede instalar sin EDUmind, para siempre** (nov 2026, como la
+  versión descargable de Liga de Valores). `/instalar` (`InstalarPage`,
+  entrada «Instalar MiClase» del menú) ofrece tres caminos: la PWA (el
+  service worker la abre sin red aunque el servidor desapareciera), la
+  **versión descargable** y el servidor del centro. La descargable la monta
+  `scripts/empaquetar_descargable.sh` (compila en una carpeta temporal, nunca
+  en `frontend/dist`) en `descargas/miclase.zip` (gitignored) con la app,
+  los lanzadores de `distribucion/` —`servidor.py` (macOS, Linux, Abalar) y
+  `servidor.ps1` con su `.bat` (Windows, PowerShell de serie; el `.ps1` va
+  con BOM para que PowerShell 5 lea bien los acentos)—, `docker-compose.yml`
+  con `nginx-miclase.conf`, `LEEME.txt` bilingüe, LICENSE y NOTICE. Los
+  lanzadores sirven SIEMPRE en `localhost:8765` (los datos van con el
+  origen: otro puerto = app vacía), devuelven `index.html` en las rutas de
+  la SPA y, con el puerto ocupado, solo dicen «ya está en marcha» si quien
+  responde es MiClase (su manifiesto). Sin servidor de EDUmind no hay buzón:
+  el paquete lleva `api/sync/disponible` = `{"abierto":false}`, porque un
+  404 contaría como abierto. Con `--publicar` sube el .zip como versión de
+  GitHub; la página enlaza `releases/latest/download/miclase.zip`, así que el
+  fichero se tiene que llamar así. El evento de instalar del navegador se
+  recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
+  `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
 - Empaquetar nativo: `npm run nativo:sync` (y `nativo:ios` / `nativo:android`
@@ -1420,6 +1716,7 @@ edumind_miclase/
 - Seed DB: `npm run seed`
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
+- Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar
 - `backend/data/miclase.db` — base de datos principal
@@ -1461,7 +1758,7 @@ Desplegada en https://miclase.edumind.es (verificado 2026-08-24):
 - No hacer `fetch` de `/api/curriculum` desde una pantalla: todo pasa por
   `src/curriculo/`, que lee el currículo empaquetado y deja el servidor de reserva
 - No añadir versiones nuevas al esquema Dexie sin un `upgrade()` que selle
-  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación). Una tabla nueva va además en
+  `updated_at` en los registros existentes (la v9 es la de tutorías y la v10 la de planificación y la v11 la de equipos). Una tabla nueva va además en
   `TABLAS_SINC`, en `exportarDatos`/`importarDatos`, en la lista blanca del
   backend (`routes/sync.js`) y en las pruebas que leen la versión
   (`migracion.test.mjs`, `e2e.test.mjs`, `diario-ui.test.mjs`)

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plan de diálogos, alumnado y equipos · EDUmind MiClase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== EDUmind-Lámina v1.0 — hoja base canónica ===== */
+:root{
+  --paper:#ece9e1; --paper-2:#e4e0d6; --card:#f4f2ec;
+  --ink:#17181a; --ink-2:#3d3f42; --ink-3:#5c5a55;
+  --rule:#17181a; --hair:#c9c4b8;
+  --m-emocional:#c05f3c; --m-social:#c19a2e; --m-fisico:#7ba24f;
+  --m-mental:#6c8fb3; --m-interior:#4a5f68;
+  --ok:#4f7a3f; --alert:#b03a2e;
+  --font-display:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-body:'Archivo','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0 !important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:400 16.5px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 288px;gap:52px;align-items:start}
+.aside{position:sticky;top:32px}
+
+.worlds-bar{display:grid;grid-template-columns:repeat(5,1fr);height:6px}
+.worlds-bar i:nth-child(1){background:var(--m-emocional)}
+.worlds-bar i:nth-child(2){background:var(--m-social)}
+.worlds-bar i:nth-child(3){background:var(--m-fisico)}
+.worlds-bar i:nth-child(4){background:var(--m-mental)}
+.worlds-bar i:nth-child(5){background:var(--m-interior)}
+
+.topbar{border-bottom:2px solid var(--rule);background:var(--paper)}
+.topbar .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:14px;padding-bottom:14px}
+.mono{font:400 11px/1.4 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3)}
+.mono-ink{color:var(--ink);font-weight:500}
+
+.eyebrow{font:500 13px/1 var(--font-mono);letter-spacing:.06em;color:var(--ink-2);margin:44px 0 14px;text-transform:uppercase}
+h1{font-family:var(--font-display);font-weight:800;letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(2.9rem,7vw,5.2rem);margin:0 0 18px;max-width:14ch}
+h1 .light{font-weight:400}
+.lede{font-size:19px;line-height:1.45;color:var(--ink-2);max-width:46ch;margin:0 0 28px}
+
+.btn{display:inline-block;background:var(--ink);color:var(--paper);text-decoration:none;
+  font:500 12px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;
+  padding:17px 22px;border:2px solid var(--ink);cursor:pointer;transition:background .15s ease,color .15s ease}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn-block{display:block;width:100%;text-align:center}
+.stamp{display:inline-block;border:1px solid var(--alert);color:var(--alert);
+  font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.11em;padding:11px 14px;margin-left:10px}
+
+.metastrip{display:flex;flex-wrap:wrap;border-top:1px solid var(--hair);margin-top:34px}
+.metastrip span{font:400 13px/1 var(--font-mono);color:var(--ink-2);padding:14px 22px 14px 0;
+  border-right:1px solid var(--hair);margin-right:22px}
+.metastrip span:last-child{border-right:0}
+
+.sec{margin:74px 0}
+.sec-head{display:flex;align-items:flex-start;gap:22px;margin-bottom:26px}
+.sec-num{font-family:var(--font-display);font-weight:800;font-size:40px;line-height:.9;
+  color:var(--m-mental);letter-spacing:-.03em}
+.sec-head h2{margin:0;font-family:var(--font-display);font-weight:700;font-size:26px;
+  letter-spacing:-.02em;padding-top:12px;border-top:2px solid var(--rule);flex:1}
+.sec-lede{font-size:20px;line-height:1.45;font-weight:500;margin:0 0 26px;max-width:60ch}
+.sec p{max-width:68ch}
+
+.rules{list-style:none;margin:0 0 30px;padding:0}
+.rules li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--hair);
+  font-size:16px;line-height:1.5}
+.rules li .dash{color:var(--ink-3);flex:none}
+
+.blabel{font:400 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;
+  color:var(--ink-3);margin:34px 0 12px}
+
+.spec{border-top:2px solid var(--rule);margin-top:26px}
+.spec div{padding:14px 0;border-bottom:1px solid var(--hair)}
+.spec dt{font:400 11px/1.3 var(--font-mono);text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin-bottom:5px}
+.spec dd{margin:0;font-weight:600;font-size:16px}
+
+.note{background:var(--card);border-left:3px solid var(--c,var(--ink));padding:20px 22px;margin:26px 0}
+.note .tag{display:inline-block;border:1px solid var(--c,var(--ink));color:var(--ink);
+  font:400 10px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.12em;padding:5px 8px;margin-bottom:10px}
+.note p{margin:0;color:var(--ink-2)}
+.note.alert{--c:var(--alert)}
+
+.panel{border:1px solid var(--hair);background:var(--card);padding:18px}
+.panel-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--hair);padding-bottom:10px;margin-bottom:14px}
+
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px}
+th{background:var(--ink);color:var(--paper);font:500 11px/1.3 var(--font-mono);
+  text-transform:uppercase;letter-spacing:.1em;text-align:left;padding:12px 14px}
+td{padding:13px 14px;border-bottom:1px solid var(--hair);vertical-align:top}
+td.num{font:500 15px/1.4 var(--font-mono);white-space:nowrap}
+
+footer{border-top:2px solid var(--rule);margin-top:90px;padding:34px 0 0}
+footer .tm{font-size:11.5px;line-height:1.6;color:var(--ink-3);max-width:70ch;margin:14px 0 34px}
+
+/* ── Ampliación de esta lámina: maquetas ─────────────────────────────── */
+.mock-par{display:grid;grid-template-columns:1fr;gap:14px;margin:22px 0 8px}
+.mock{border:1px solid var(--ink);background:var(--card)}
+.mock-cab{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-bottom:1px solid var(--ink)}
+.mock-cab.hoy{background:var(--paper-2)}
+.mock-cab.prop{background:var(--ink)}
+.mock-cab.prop .mono{color:var(--paper)}
+.mock-cuerpo{padding:12px}
+.mk-fila{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;align-items:center}
+.mk{border:1px solid var(--ink-3);font:400 11px/1 var(--font-mono);padding:6px 7px;color:var(--ink-2);background:var(--paper)}
+.mk.pri{background:var(--ink);color:var(--paper);border-color:var(--ink);padding:11px 14px;font-size:12px}
+.mk.gr{padding:11px 14px;font-size:12px}
+.mk.act{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk.aviso{border-color:var(--alert);color:var(--alert);width:100%}
+.mk-matriz{display:grid;gap:3px;margin-top:6px}
+.mk-matriz span{border:1px solid var(--hair);background:var(--paper);height:22px;font:400 10px/20px var(--font-mono);text-align:center;color:var(--ink-2)}
+.mk-matriz span.c{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mk-matriz span.n{text-align:left;padding-left:6px}
+.mk-nota{font:400 12px/1.45 var(--font-body);color:var(--ink-2);margin:8px 0 0}
+.mk-alumno{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--hair);padding:7px 0;font-size:13px}
+.mk-alumno.sel{border:2px solid var(--ink);padding:7px 8px;font-weight:600}
+.mk-niveles{display:flex;gap:4px}
+.mk-niveles span{border:1px solid var(--ink-3);font:500 11px/1 var(--font-mono);padding:8px 9px}
+.mk-niveles span.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.muestra{display:inline-block;width:64px;padding:8px 0;text-align:center;color:#fff;font:500 13px/1 var(--font-mono)}
+.fase{font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--ink);padding:5px 8px;white-space:nowrap}
+
+@media (max-width:900px){
+  .cols{grid-template-columns:1fr;gap:34px}
+  .aside{position:static}
+  .sec{margin:52px 0}
+  .mock-par{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+@media print{
+  .aside,.topbar{position:static}
+  body{background:#fff}
+  .btn{display:none}
+  .mock,.sec-head,tr{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="mono mono-ink">EDUMIND · LÁMINA DE APLICACIÓN</span>
+    <span class="mono">FIG. XX — DIÁLOGOS, ALUMNADO Y EQUIPOS · PLAN</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="eyebrow">Mundo mental · organización del trabajo docente</p>
+  <h1>Crecer<br><span class="light">sin romper</span></h1>
+  <p class="lede">Plan de intervención para cinco asuntos: diálogos que se cierran solos, el nombre de una actividad por unidad, Mis clases y Alumnado en un solo sitio, la ficha del alumno desde el Calificador y los equipos de trabajo con datos de EDUmind Hilo. Seis fases y cuatro decisiones. Nada de esto está implementado.</p>
+
+  <p><a class="btn" href="#s05">Ir a las decisiones →</a>
+     <span class="stamp">Plan · sin implementar · 20·11·2026</span></p>
+
+  <div class="metastrip">
+    <span>Petición del 20·11·2026</span><span>5 asuntos</span><span>6 fases</span><span>4 decisiones</span>
+  </div>
+
+  <div class="cols" style="margin-top:64px">
+
+    <div>
+
+      <section class="sec" id="s01">
+        <div class="sec-head"><span class="sec-num">01</span><h2>Lo que has pedido</h2></div>
+        <ul class="rules">
+          <li><span class="dash">1</span> Al crear un instrumento desde «Exámenes y pruebas», un scroll rápido o seleccionar texto deprisa cierra el diálogo y devuelve a la pantalla anterior. Pasa una vez, con casi todos los diálogos, y parece ligado al trackpad o al dedo.</li>
+          <li><span class="dash">2</span> Cambiar con el lápiz el nombre de una actividad dentro de una unidad lo cambia en todas. Lo que se edita en una unidad debe quedarse en ella salvo que se diga lo contrario.</li>
+          <li><span class="dash">3</span> «Mis clases» y «Alumnado» se duplican y hacen dudar. Todo debería estar en el mismo espacio.</li>
+          <li><span class="dash">4</span> Pendiente: doble clic o mantener pulsado el nombre de un alumno en un área para ver y editar su información de esa área o de todas.</li>
+          <li><span class="dash">5</span> Pendiente: equipos de trabajo, grupos y agrupamientos del alumnado, y poder volcar información de EDUmind Hilo.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s02">
+        <div class="sec-head"><span class="sec-num">02</span><h2>Qué pasa hoy en el código</h2></div>
+        <p class="sec-lede">Revisado el 20·11·2026, solo en lectura. El fallo de los diálogos no está reproducido todavía.</p>
+        <table>
+          <thead><tr><th>Asunto</th><th>Lo que hay</th><th>Consecuencia</th></tr></thead>
+          <tbody>
+            <tr><td>Diálogos · selección</td><td>Los 37 diálogos se cierran con un <code>click</code> sobre el velo oscuro (<code>e.target === e.currentTarget</code>).</td><td>Si se empieza a arrastrar dentro de la tarjeta y se suelta fuera, el navegador lo cuenta como un clic en el velo y el diálogo se cierra.</td></tr>
+            <tr><td>Diálogos · scroll</td><td>No hay <code>overscroll-behavior</code> en ningún sitio de la app, y los diálogos no están en el historial.</td><td>Al llegar al final, el gesto pasa a la página de detrás y al navegador. Con dos dedos en el trackpad puede ser «página anterior».</td></tr>
+            <tr><td>Nombre de actividad</td><td>El nombre vive en el instrumento (<code>FichaActividad</code> → <code>actualizarInstrumento</code>), uno para toda el área.</td><td>No existe un nombre por unidad: renombrar en una lo cambia en todas.</td></tr>
+            <tr><td>Mis clases y Alumnado</td><td>Dos entradas de menú y dos pantallas (<code>GruposPage</code>, <code>AlumnosPage</code>). La clase tiene su pestaña «Alumnado» con una lista y un enlace a la otra pantalla.</td><td>Dos listas del mismo alumnado; altas, importación y edición solo en una de ellas.</td></tr>
+            <tr><td>Ficha desde el área</td><td>En las matrices del Calificador el nombre no responde a doble clic ni a pulsación larga. Solo Seguimiento abre el análisis.</td><td>Las piezas existen sueltas: editar alumno, análisis, medidas, historial de tutorías.</td></tr>
+            <tr><td>Equipos</td><td>Ningún dato de equipos ni agrupamientos.</td><td>Hace falta tabla nueva. EDUmind Hilo es el sociograma, sin servidor y en otro origen: solo puede llegar por fichero.</td></tr>
+          </tbody>
+        </table>
+        <div class="note alert">
+          <span class="tag">Lo que no está explicado</span>
+          <p>Ninguna de las dos causas de los diálogos explica que ocurra «solo la primera vez». Por eso la fase 0 empieza con una prueba que lo reproduzca, antes de arreglar nada.</p>
+        </div>
+      </section>
+
+      <section class="sec" id="s03">
+        <div class="sec-head"><span class="sec-num">03</span><h2>Las seis fases</h2></div>
+        <table>
+          <thead><tr><th>Fase</th><th>Qué</th><th>Tamaño</th><th>Toca datos</th></tr></thead>
+          <tbody>
+            <tr><td class="num">0</td><td>Diálogos que no se cierran solos</td><td>Pequeño</td><td>No</td></tr>
+            <tr><td class="num">1</td><td>Nombre de actividad por unidad</td><td>Pequeño</td><td>Un campo nuevo, sin esquema</td></tr>
+            <tr><td class="num">2</td><td>Ficha rápida del alumno desde el Calificador</td><td>Medio</td><td>Depende de la decisión 2</td></tr>
+            <tr><td class="num">3</td><td>Mis clases y Alumnado en un solo sitio</td><td>Medio</td><td>No</td></tr>
+            <tr><td class="num">4</td><td>Equipos y agrupamientos</td><td>Grande</td><td>Esquema v11</td></tr>
+            <tr><td class="num">5</td><td>Volcar desde EDUmind Hilo</td><td>Medio</td><td>Depende de la fase 4</td></tr>
+          </tbody>
+        </table>
+
+        <p class="blabel">Fase 0 · Diálogos</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Primero dos pruebas: arrastrar desde un campo hasta el velo, y scroll hasta el final con inercia.</li>
+          <li><span class="dash">—</span> El arreglo va en un solo sitio, como <code>utils/foco.ts</code>: el velo solo cierra si la pulsación empezó y terminó en él. No se tocan los 37 diálogos.</li>
+          <li><span class="dash">—</span> <code>overscroll-behavior: contain</code> en el velo y en las tarjetas con scroll.</li>
+        </ul>
+
+        <p class="blabel">Fase 1 · Nombre por unidad</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Un campo sin índice en el instrumento con el nombre de cada unidad; sin él, vale el general.</li>
+          <li><span class="dash">—</span> Se resuelve una vez en <code>getMatrizEvaluacion</code>, como el color, para que todas las pantallas lean lo mismo.</li>
+          <li><span class="dash">—</span> La ficha pregunta: «solo en esta unidad» (por defecto) o «en todas».</li>
+          <li><span class="dash">—</span> Hay que actualizar todos los aparatos antes de usarlo.</li>
+        </ul>
+
+        <p class="blabel">Fase 2 · Ficha rápida del alumno</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Un diálogo único con dos pestañas: «Esta área» y «Todas las áreas».</li>
+          <li><span class="dash">—</span> Reúne lo que ya existe: nota, medidas, análisis, tutorías y editar.</li>
+          <li><span class="dash">—</span> Se abre con doble clic, pulsación larga y un botón visible: la pulsación larga no se descubre sola y en el iPad selecciona texto.</li>
+        </ul>
+
+        <p class="blabel">Fase 3 · Un solo sitio para el alumnado</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Empieza con un inventario de qué hace cada pantalla, para no perder nada.</li>
+          <li><span class="dash">—</span> Una sola entrada, «Mis clases», con el alumnado completo dentro de cada clase: alta, importar, ficha y ajustes de NEAE y evidencias.</li>
+          <li><span class="dash">—</span> <code>/alumnos</code> redirige, para no romper enlaces.</li>
+        </ul>
+
+        <p class="blabel">Fase 4 · Equipos y agrupamientos</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Un agrupamiento es de la clase, con nombre y sus equipos.</li>
+          <li><span class="dash">—</span> Primer uso: ordenar y filtrar las pasadas por equipo y poner una nota a todo el equipo.</li>
+          <li><span class="dash">—</span> Recorrido completo de una tabla nueva: migración que sella <code>updated_at</code>, <code>TABLAS_SINC</code>, copia, lista blanca del backend y pruebas que leen la versión.</li>
+        </ul>
+
+        <p class="blabel">Fase 5 · Desde EDUmind Hilo</p>
+        <ul class="rules">
+          <li><span class="dash">—</span> Antes de diseñar: mirar qué exporta Hilo exactamente.</li>
+          <li><span class="dash">—</span> Leer el fichero en el aparato, casar alumnado por nombre y proponer equipos que el docente confirma.</li>
+          <li><span class="dash">—</span> Si entran afinidades, se actualiza PRIVACIDAD.md con fecha.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s04">
+        <div class="sec-head"><span class="sec-num">04</span><h2>Cómo se trabaja cada fase</h2></div>
+        <ul class="rules">
+          <li><span class="dash">—</span> Una rama y un PR por fase; nada se mezcla.</li>
+          <li><span class="dash">—</span> La prueba que falla va antes del arreglo. Entre pasos, solo las suites afectadas; la tanda completa al cerrar la fase.</li>
+          <li><span class="dash">—</span> Lo que cambia de reglas queda escrito en CLAUDE.md.</li>
+          <li><span class="dash">—</span> Despliegue a mano con <code>./desplegar.sh</code>, y aviso cuando haya que actualizar todos los aparatos o reiniciar el backend.</li>
+        </ul>
+      </section>
+
+      <section class="sec" id="s05">
+        <div class="sec-head"><span class="sec-num">05</span><h2>Decisiones pendientes</h2></div>
+        <table>
+          <thead><tr><th>N.º</th><th>Fase</th><th>Pregunta</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>0</td><td>¿En qué aparato y navegador pasa más (Mac con trackpad en Safari o Chrome, iPad con el dedo)? Al cerrarse, ¿sigues en la misma pantalla sin el diálogo o cambia de pantalla?</td></tr>
+            <tr><td class="num">2</td><td>2</td><td>¿Observaciones del alumno por área (dato nuevo) o basta con ver y editar lo que ya existe?</td></tr>
+            <tr><td class="num">3</td><td>4</td><td>¿Los agrupamientos son de la clase entera, o distintos por área o por unidad?</td></tr>
+            <tr><td class="num">4</td><td>5</td><td>¿De Hilo solo los equipos ya formados, o también las afinidades para que MiClase los proponga? Lo segundo mete datos sociométricos en MiClase.</td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="--c:var(--m-mental)">
+          <span class="tag">Lo que no espera</span>
+          <p>Las fases 0 y 3 pueden empezar sin ninguna respuesta. La decisión 1 solo afina la prueba de la fase 0.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="aside">
+      <a class="btn btn-block" href="#s05">Ver las decisiones</a>
+      <dl class="spec">
+        <div><dt>Estado</dt><dd>Sin implementar</dd></div>
+        <div><dt>Primera fase</dt><dd>0 · Diálogos</dd></div>
+        <div><dt>Cambia el esquema</dt><dd>Solo la fase 4 (v11)</dd></div>
+        <div><dt>Actualizar todos los aparatos</dt><dd>Fases 1 y 4</dd></div>
+        <div><dt>Reiniciar el backend</dt><dd>Fase 4</dd></div>
+      </dl>
+    </aside>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="mono mono-ink">EDUmind® · Luis Vilela Acuña</p>
+    <p class="tm">EDUmind® es una marca registrada en España (OEPM M4319166), titularidad de
+    Luis Vilela Acuña. EDUmind MiClase · plan de diálogos, alumnado y equipos · verificado contra el código el 20·11·2026.</p>
+  </div>
+  <div class="worlds-bar" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+</footer>
+
+</body>
+</html>

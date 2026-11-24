@@ -15,7 +15,16 @@ export interface ExportCifrado {
 }
 
 function b64(buf: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)))
+  // Por trozos: pasar todos los bytes de golpe como argumentos desborda la
+  // pila en cuanto la copia pesa unos MB («Maximum call stack size exceeded»,
+  // le pasó a Luis en el Mac mini, nov 2026).
+  const bytes = new Uint8Array(buf)
+  const TROZO = 0x8000
+  let texto = ''
+  for (let i = 0; i < bytes.length; i += TROZO) {
+    texto += String.fromCharCode(...bytes.subarray(i, i + TROZO))
+  }
+  return btoa(texto)
 }
 
 function desb64(str: string): Uint8Array {

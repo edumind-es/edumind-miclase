@@ -14,9 +14,10 @@
  * peso y los criterios se enseñan, y se cambian donde ya se cambiaban («Qué
  * evalúo» y el «Más» de la columna).
  */
+import { REGLAS_RECUPERACION } from '@/db/recuperacion'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { actualizarInstrumento, type CeldaInstrumento, type DatosDeArea } from '@/db/queries'
+import { actualizarInstrumento, renombrarInstrumento, type CeldaInstrumento, type DatosDeArea } from '@/db/queries'
 import RubricaEditor from './RubricaEditor'
 import { BotonesHerramienta, esDeObservacion } from './ElegirHerramienta'
 import type { HerramientaSimple } from '@/ia/rubricaPlantillas'
@@ -72,10 +73,19 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, u
     try { await actualizarInstrumento(instrumento.instrumento_id, campos); setAviso(dicho); onCambio() }
     catch (e) { setAviso(`No se pudo guardar: ${(e as Error).message}`) }
   }
+  // Dentro de una unidad el nombre cambia solo en ella («lo que se edita en
+  // una unidad se queda en esa unidad»); llevarlo a todas es un botón aparte.
+  const renombrar = async (texto: string, unidad: number | null, dicho: string) => {
+    try { await renombrarInstrumento(instrumento.instrumento_id, texto, unidad); setAviso(dicho); onCambio() }
+    catch (e) { setAviso(`No se pudo guardar: ${(e as Error).message}`) }
+  }
   const guardarNombre = () => {
     const limpio = nombre.trim()
     if (!limpio) { setNombre(instrumento.nombre); return }
-    if (limpio !== instrumento.nombre) void guardar({ nombre: limpio }, 'Nombre guardado.')
+    if (limpio === instrumento.nombre) return
+    void renombrar(limpio, unidadId || null, unidadId
+      ? `Nombre guardado solo en ${unidadNombre ? `«${unidadNombre}»` : 'esta unidad'}.`
+      : 'Nombre guardado.')
   }
 
   if (editor) {
@@ -116,6 +126,25 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, u
             <span style={rotulo}>Nombre</span>
             <input data-ficha-nombre value={nombre} onChange={e => setNombre(e.target.value)} onBlur={guardarNombre}
               onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur() }} style={campo} />
+            {unidadId ? (
+              <span data-ficha-nombre-alcance={instrumento.nombre_propio ? 'unidad' : 'general'} style={{ display: 'block', fontSize: 12.5, color: 'var(--gris-600)', marginTop: 4 }}>
+                {instrumento.nombre_propio
+                  ? <>Se llama así solo en {unidadNombre ? `«${unidadNombre}»` : 'esta unidad'}. En las demás, «{instrumento.nombre_general}».</>
+                  : <>Si lo cambias aquí, cambia solo en {unidadNombre ? `«${unidadNombre}»` : 'esta unidad'}.</>}
+              </span>
+            ) : null}
+            {unidadId && instrumento.nombre_propio ? (
+              <span style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6 }}>
+                <button type="button" className="btn-secondary" data-ficha-nombre-todas style={{ minHeight: 44, fontSize: 13 }}
+                  onClick={() => void renombrar(instrumento.nombre, null, `«${instrumento.nombre}» se llama así en todas las unidades.`)}>
+                  Ponerlo en todas las unidades
+                </button>
+                <button type="button" className="btn-secondary" data-ficha-nombre-general style={{ minHeight: 44, fontSize: 13 }}
+                  onClick={() => { setNombre(instrumento.nombre_general); void renombrar(instrumento.nombre_general, unidadId, 'Vuelve a llamarse como en las demás unidades.') }}>
+                  Volver a «{instrumento.nombre_general}»
+                </button>
+              </span>
+            ) : null}
           </label>
           <label>
             <span style={rotulo}>Tipo</span>
@@ -128,7 +157,9 @@ export default function FichaActividad({ instrumento, criterios, unidadNombre, u
 
         <div data-ficha-peso style={{ marginTop: 12, fontSize: 13.5, color: 'var(--gris-700)' }}>
           <span style={rotulo}>Cuánto pesa</span>
-          {esActividad
+          {esActividad && instrumento.recuperacion
+            ? <span data-ficha-recuperacion>No reparte porcentaje: es la <strong>recuperación</strong> de «{instrumento.familia_nombre}». Queda {REGLAS_RECUPERACION.find(r => r.id === instrumento.recuperacion)?.nombre.toLowerCase()}.</span>
+            : esActividad
             ? <>{instrumento.pct_familia != null ? <><strong>{instrumento.pct_familia} %</strong> dentro de </> : 'Dentro de '}«{instrumento.familia_nombre}», que vale el <strong>{instrumento.familia_peso} %</strong> del área.</>
             : <><strong>{instrumento.peso} %</strong> del área.</>}
           <span style={{ color: 'var(--gris-600)' }}> Se cambia en «Qué evalúo».</span>

@@ -25,6 +25,9 @@ import { BotonEditarActividad } from './FichaActividad'
 import { esDeObservacion } from './ElegirHerramienta'
 import { TIPOS_INSTRUMENTO, abreviatura } from '@/ia/instrumentosConfig'
 import { confirmar } from '@/utils/confirmar'
+import ConvertirFamilia from './ConvertirFamilia'
+import { REGLAS_RECUPERACION, esRecuperacion, type ReglaRecuperacion } from '@/db/recuperacion'
+import type { DatosDirectosDeFamilia } from '@/db/queries'
 
 interface Props {
   asignaturaId: number
@@ -37,7 +40,7 @@ interface Props {
   onIrAPesos: () => void
 }
 
-type Anadir = { familia: number; cual: string; nombre: string; tipo: string; criterios: string[] }
+type Anadir = { familia: number; cual: string; nombre: string; tipo: string; criterios: string[]; recuperacion: ReglaRecuperacion | null }
 
 const boton = { minHeight: 44, fontSize: 14 } as const
 const chip = { display: 'inline-block', fontWeight: 700, fontSize: 12.5, color: 'var(--azul-700)', background: 'var(--gris-100)', border: '1px solid var(--gris-300)', padding: '2px 8px', margin: '0 5px 4px 0', borderRadius: 10 } as const
@@ -55,6 +58,8 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
   const [actividades, setActividades] = useState<Record<number, Instrumento[]>>({})
   /** Instrumentos sin actividades que ya guardan notas, diario, examen o rúbrica a su nombre. */
   const [conDatos, setConDatos] = useState<Record<number, boolean>>({})
+  // La primera actividad de un instrumento con notas a su nombre: se pregunta antes.
+  const [conversion, setConversion] = useState<{ familia: Instrumento; datos: DatosDirectosDeFamilia } | null>(null)
   const [anadir, setAnadir] = useState<Anadir | null>(null)
   const [editando, setEditando] = useState<number | null>(null)
   const [aviso, setAviso] = useState<string | null>(null)
@@ -125,20 +130,46 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
     if (ultimo) setEditando(null)
   }
 
-  const abrirAnadir = (f: Instrumento, delInstrumento: string[]) => {
+  const abrirAnadir = (f: Instrumento, delInstrumento: string[], recuperacion: ReglaRecuperacion | null = null) => {
     setAviso(null); setError(null)
     // Lo normal es que la actividad evalúe lo que su instrumento evalúa en la unidad.
-    setAnadir({ familia: f.id!, cual: 'nueva', nombre: '', tipo: f.tipo, criterios: delInstrumento.length ? delInstrumento : [] })
+    // Una recuperación que ya existe en otra unidad se trae: es la misma actividad.
+    const yaHay = recuperacion ? (actividades[f.id!] ?? []).find(h => esRecuperacion(h)) : undefined
+    setAnadir({
+      familia: f.id!, cual: yaHay ? String(yaHay.id) : 'nueva', nombre: recuperacion ? 'Recuperación' : '', tipo: f.tipo,
+      criterios: delInstrumento.length ? delInstrumento : [], recuperacion,
+    })
   }
 
+  /**
+   * La primera actividad deja al instrumento sin columna propia. Si ya tiene
+   * notas, diario, examen o rúbrica a su nombre, se pregunta aquí mismo con
+   * `ConvertirFamilia`, igual que en «Pesos del área»: Luis quería añadir un
+   * segundo examen a la unidad y esta pestaña lo mandaba a la otra.
+   */
   const aceptarAnadir = async () => {
+    if (!anadir) return
+    const a = anadir
+    if (a.cual === 'nueva' && a.nombre.trim() && a.criterios.length > 0
+        && (actividades[a.familia] ?? []).length === 0 && conDatos[a.familia]) {
+      const familia = familias.find(f => f.id === a.familia)
+      if (familia) {
+        try { setConversion({ familia, datos: await datosDirectosDeFamilia(a.familia) }) }
+        catch (e) { setError((e as Error).message) }
+        return
+      }
+    }
+    await anadirDeVerdad()
+  }
+
+  const anadirDeVerdad = async () => {
     if (!anadir) return
     const a = anadir
     const existente = a.cual === 'nueva' ? null : (actividades[a.familia] ?? []).find(h => String(h.id) === a.cual)
     const nombre = existente?.nombre ?? a.nombre.trim()
     if (!nombre || a.criterios.length === 0) return
     await hacer(async () => {
-      const id = existente?.id ?? await crearInstrumentoHijo(a.familia, { nombre, tipo: a.tipo })
+      const id = existente?.id ?? await crearInstrumentoHijo(a.familia, { nombre, tipo: a.tipo, recuperacion: a.recuperacion })
       for (const c of a.criterios) await asignarCriterioAColumna(id, unidad.id!, c)
       setAnadir(null)
     }, `«${nombre}» se usa ahora en «${unidad.nombre}» con ${a.criterios.length} criterio${a.criterios.length !== 1 ? 's' : ''}.`)
@@ -146,6 +177,11 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
 
   return (
     <div data-que-por-unidad>
+      {conversion && anadir && (
+        <ConvertirFamilia familia={conversion.familia} datos={conversion.datos} accion={`«${anadir.nombre.trim()}»`} capa={capa}
+          onCancelar={() => setConversion(null)}
+          onSeguir={() => { setConversion(null); void anadirDeVerdad() }} />
+      )}
       <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
         <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, fontWeight: 700 }}>
           Unidad
@@ -176,7 +212,6 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
           const enUso = new Set(cols.map(c => c.ins.instrumento_id))
           const deOtras = (actividades[f.id!] ?? []).filter(h => !enUso.has(h.id!))
           const form = anadir?.familia === f.id ? anadir : null
-          const primeraConDatos = (actividades[f.id!] ?? []).length === 0 && conDatos[f.id!]
           return (
             <section key={f.id} data-unidad-instrumento data-nombre={f.nombre}
               style={{ border: '1px solid var(--gris-300)', borderRadius: 10, padding: '10px 12px', background: 'var(--blanco)' }}>
@@ -205,6 +240,7 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
                           <span data-unidad-herramienta>{herramientaDe(ins)}</span>
                           {ins.familia_id == null
                             ? ' · se califica directamente con el instrumento'
+                            : ins.recuperacion ? <> · <strong data-unidad-recuperacion-regla={ins.recuperacion}>recuperación</strong>: {REGLAS_RECUPERACION.find(r => r.id === ins.recuperacion)?.nombre.toLowerCase()}</>
                             : ins.pct_familia != null ? <> · <strong data-unidad-pct>{ins.pct_familia} %</strong> del instrumento</> : null}
                         </div>
                       </div>
@@ -251,7 +287,25 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
                       </select>
                     </>}
                   </div>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--gris-600)', margin: '10px 0 2px' }}>Qué criterios evalúa en esta unidad</div>
+                  {form.recuperacion && (
+                    <div data-unidad-anadir-recuperacion style={{ marginTop: 8, fontSize: 13 }}>
+                      {form.cual === 'nueva' ? (
+                        <label style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', fontWeight: 700 }}>
+                          Qué nota queda
+                          <select data-unidad-anadir-regla value={form.recuperacion} aria-label="Qué nota queda al recuperar" style={{ ...boton, padding: '6px 8px', fontWeight: 400 }}
+                            onChange={e => setAnadir({ ...form, recuperacion: e.target.value as ReglaRecuperacion })}>
+                            {REGLAS_RECUPERACION.map(r => <option key={r.id} value={r.id}>{r.nombre}</option>)}
+                          </select>
+                        </label>
+                      ) : null}
+                      <p style={{ margin: '6px 0 0', color: 'var(--gris-700)' }}>
+                        {form.cual === 'nueva' ? REGLAS_RECUPERACION.find(r => r.id === form.recuperacion)?.descripcion + ' ' : ''}
+                        Mejora solo lo que el alumno sacó con «{f.nombre}» en esta unidad, criterio a criterio, y solo a quien le pongas nota.
+                        Las notas de las otras actividades no se tocan.
+                      </p>
+                    </div>
+                  )}
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--gris-600)', margin: '10px 0 2px' }}>{form.recuperacion ? 'Qué criterios se pueden recuperar en esta unidad' : 'Qué criterios evalúa en esta unidad'}</div>
                   {deLaUnidad.length === 0 && <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>La unidad no tiene criterios: añádelos en 📋 Programación.</div>}
                   {deLaUnidad.map(c => {
                     const marcado = form.criterios.includes(c.id)
@@ -269,16 +323,18 @@ export default function QueEvaluoPorUnidad({ asignaturaId, criterios, unidadInic
                     <button type="button" className="btn-secondary" style={boton} onClick={() => setAnadir(null)}>Cancelar</button>
                   </div>
                 </div>
-              ) : primeraConDatos ? (
-                // La primera actividad deja al instrumento sin columna propia: eso se pregunta, y se pregunta en un solo sitio.
-                <p data-unidad-primera-con-datos style={{ fontSize: 13, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', padding: '8px 10px', margin: '10px 0 0' }}>
-                  «{f.nombre}» ya tiene notas o herramienta a su nombre. Su primera actividad se crea en «Pesos del área», que pregunta antes qué hacer con ellas.{' '}
-                  <button type="button" className="btn-secondary" style={boton} onClick={onIrAPesos}>Ir a «Pesos del área»</button>
-                </p>
               ) : (
-                <button type="button" className="btn-secondary" data-unidad-anadir style={{ ...boton, marginTop: 10 }} onClick={() => abrirAnadir(f, delInstrumento)}>
-                  + actividad en esta unidad
-                </button>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 10 }}>
+                  <button type="button" className="btn-secondary" data-unidad-anadir style={boton} onClick={() => abrirAnadir(f, delInstrumento)}>
+                    + actividad en esta unidad
+                  </button>
+                  {cols.length > 0 && !cols.some(c => c.ins.recuperacion) && (
+                    <button type="button" className="btn-secondary" data-unidad-recuperacion style={boton}
+                      onClick={() => abrirAnadir(f, [...new Set(cols.flatMap(c => c.criterios.map(x => x.id)))], 'mejor')}>
+                      + recuperación en esta unidad
+                    </button>
+                  )}
+                </div>
               )}
             </section>
           )

@@ -17,7 +17,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getPrueba, getResumenCurso, getUnidades, respuestasDeExamen } from '@/db/queries'
 import { analizarExamen, alumnosDeMediaParecida, MINIMO_GRUPO, type AnalisisExamen, type ExamenDeArea } from '@/db/analisisAlumno'
-import { documentoInformeAlumnoPrueba } from '@/informes/informeAlumnoPrueba'
+import { documentoInformeAlumnoPrueba, documentoUnaPagina, type DatosInformeAlumnoPrueba } from '@/informes/informeAlumnoPrueba'
 import { competenciasDeLaPrueba, informeDePrueba, radialSVG, type InformePrueba as Informe } from '@/db/informePrueba'
 import type { ConexionCriterio } from '@/db/competenciasClave'
 import type { Asignatura, Grupo } from '@/db/localDb'
@@ -132,6 +132,8 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
   const [de, setDe] = useState<'grupo' | 'alumno'>(alumnoInicial != null ? 'alumno' : 'grupo')
   const [alumnoId, setAlumnoId] = useState<number | null>(alumnoInicial ?? null)
   const [frente, setFrente] = useState<'clase' | 'parecidos'>('clase')
+  // Lo que se imprime de un alumno: una hoja A4 con el nivel de cada pregunta, o el informe completo.
+  const [formato, setFormato] = useState<'una' | 'completo'>('una')
   /** alumno → nota del área (la del curso hasta hoy), para buscar a los de media parecida. */
   const [notasArea, setNotasArea] = useState<Map<number, number | null> | null>(null)
 
@@ -217,8 +219,9 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
     if (!def || !informe) return null
     if (!individual) return { html: documentoInformePrueba(informe, def, ctx), fichero: nombreFichero }
     if (!delAlumno) return null
+    const datos: DatosInformeAlumnoPrueba = { alumno: nombreAlumno, clase: grupoNombre, area: areaNombre, unidad: ctx.unidad, def, analisis: delAlumno }
     return {
-      html: documentoInformeAlumnoPrueba({ alumno: nombreAlumno, clase: grupoNombre, area: areaNombre, unidad: ctx.unidad, def, analisis: delAlumno }),
+      html: formato === 'una' ? documentoUnaPagina(`Informe · ${def.titulo} · ${nombreAlumno}`, [datos]) : documentoInformeAlumnoPrueba(datos),
       fichero: nombreFichero.replace(/\.html$/, `-${nombreAlumno.replace(/[,.]/g, '').replace(/\s+/g, '-').toLowerCase()}.html`),
     }
   }
@@ -232,6 +235,27 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
       setMsg(hecho ? 'Informe enviado a imprimir.' : 'No se ha imprimido nada: la vista previa se cerró sin imprimir ni compartir.')
     }
     catch { setMsg('No se pudo imprimir.') }
+    finally { setOcupado(false) }
+  }
+  /** Una hoja A4 por alumno corregido, en orden de lista, siempre frente a toda la clase. */
+  const documentoDeLaClase = (): { html: string; fichero: string } | null => {
+    if (!def || !examen) return null
+    const datos = corregidos.flatMap(r => {
+      const analisis = analizarExamen(examen, r.alumno_id)
+      return analisis ? [{ alumno: r.nombre, clase: grupoNombre, area: areaNombre, unidad: ctx.unidad, def, analisis }] : []
+    })
+    if (!datos.length) return null
+    return { html: documentoUnaPagina(`Informes · ${def.titulo} · ${grupoNombre}`, datos), fichero: nombreFichero.replace(/\.html$/, '-toda-la-clase.html') }
+  }
+  const aImprimirClase = async () => {
+    const doc = documentoDeLaClase()
+    if (!doc) return
+    setOcupado(true)
+    try {
+      const hecho = await imprimir(doc.html, doc.fichero.replace(/\.html$/, ''))
+      setMsg(hecho ? `Informes de ${corregidos.length} alumnos enviados a imprimir, uno por hoja.` : 'No se ha imprimido nada: la vista previa se cerró sin imprimir ni compartir.')
+    }
+    catch { setMsg('No se pudieron imprimir los informes.') }
     finally { setOcupado(false) }
   }
   const aGuardar = async () => {
@@ -279,6 +303,14 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
                       style={{ minHeight: 44, fontSize: 14 }}>
                       <option value="clase">La clase</option>
                       <option value="parecidos" disabled={!conParecidos}>Media parecida</option>
+                    </select>
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
+                    Al imprimir
+                    <select data-informe-formato aria-label="Formato del informe impreso" value={formato} onChange={e => setFormato(e.target.value as 'una' | 'completo')}
+                      style={{ minHeight: 44, fontSize: 14 }}>
+                      <option value="una">Una página, con la rúbrica</option>
+                      <option value="completo">Completo</option>
                     </select>
                   </label>
                 </>
@@ -373,6 +405,10 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
 
         <div style={{ display: 'flex', gap: 8, padding: '12px 18px', borderTop: '1px solid var(--gris-200)', background: 'var(--gris-50)', flexWrap: 'wrap' }}>
           <button className="btn-primary" data-informe-imprimir onClick={aImprimir} disabled={!informe || ocupado || (individual && !delAlumno)} style={{ fontSize: 13 }}>🖨 Imprimir{individual ? ' el del alumno' : ''}</button>
+          {individual && corregidos.length > 1 && (
+            <button className="btn-secondary" data-informe-imprimir-clase onClick={aImprimirClase} disabled={!informe || ocupado} style={{ fontSize: 13 }}
+              title="Una hoja A4 por alumno, con el nivel de la rúbrica de cada pregunta">🖨 Los de toda la clase ({corregidos.length})</button>
+          )}
           <button className="btn-secondary" data-informe-guardar onClick={aGuardar} disabled={!informe || ocupado || (individual && !delAlumno)} style={{ fontSize: 13 }}>⬇ Guardar .html</button>
           <div style={{ flex: 1 }} />
           <button className="btn-secondary" onClick={onCerrar} style={{ fontSize: 13 }}>Cerrar</button>

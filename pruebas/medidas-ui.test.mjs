@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -124,7 +124,7 @@ try {
   await p.getByRole('button', { name: /Importar 7 unidades/ }).click({ timeout: 20000 })
   await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno')
@@ -135,7 +135,7 @@ try {
   await p.getByRole('button', { name: 'Cerrar' }).click()
 
   const prog = await programacion()
-  ok(prog.version === 100, 'la base está en la versión 10 del esquema', `idb v${prog.version}`)
+  ok(prog.version === 110, 'la base está en la versión 11 del esquema', `idb v${prog.version}`)
   // Una unidad con un criterio evaluado por una familia y otro por otra
   // distinta (en la programación de PROENS cada criterio lleva una familia).
   let eleccion = null
@@ -164,7 +164,7 @@ try {
   ok(await p.locator('[data-sello-medida]').count() === 0, 'nadie lleva sello de medida todavía')
 
   console.log('\n3. Refuerzo desde la ficha de Ana: «' + famA + '» no cuenta')
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(600)
   await p.getByRole('button', { name: /Editar Ana Abad/ }).click()
   await p.getByRole('dialog', { name: 'Editar alumno' }).waitFor({ timeout: 5000 })
@@ -251,7 +251,7 @@ try {
   await p.waitForTimeout(500)
   ok(await p.locator('[data-sello-medida]').count() === 0, 'el sello desaparece')
   ok((await areaDe(0).textContent()).trim() === '10', 'el área de Ana sigue siendo 10: la medida se aplica igual')
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(600)
   await p.getByRole('button', { name: /Editar Ana Abad/ }).click()
   await p.getByRole('dialog', { name: 'Editar alumno' }).waitFor({ timeout: 5000 })
