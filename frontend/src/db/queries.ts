@@ -22,7 +22,7 @@ import type {
   GrupoAlumno, UnidadCriterio, Medida, Tutoria, ModeloTutoria, AcuerdoTutoria, Agrupamiento,
   SesionPlan, EventoCalendario,
 } from './localDb'
-import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeRubrica, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
+import { agruparEnBloques, enBloque, diaDeNota, diaDeRegistro, diaDeExamen, type BloqueDirecto, type FiltroBloque } from './bloquesFamilia'
 import { medidaDe } from './medidas'
 import { nombreEnUnidad, tieneNombrePropio, alRenombrar } from './nombreActividad'
 import { normalizarTutoria, normalizarModelo, conAcuerdoCambiado } from './tutorias'
@@ -824,16 +824,23 @@ export async function convertirFamiliaEnHijo(
       const alHijo = tocado({ instrumento_id: hijo_id })
       const vivo = (r: { deleted_at?: string | null }) => !r.deleted_at
       const { bloque } = opciones
+      // Las notas tal como están ANTES de moverlas: el examen se agrupa con
+      // sus correcciones (`diaDeExamen`) y va en el mismo bloque que ellas.
+      const notasDeFamilia = await db.calificaciones.where('instrumento_id').equals(familia_id).toArray()
       const calificaciones = await db.calificaciones.where('instrumento_id').equals(familia_id)
         .filter(c => vivo(c) && enBloque(bloque, c.unidad_id, diaDeNota(c))).modify(alHijo)
       const diario = await db.diario.where('instrumento_id').equals(familia_id)
         .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeRegistro(r))).modify(alHijo)
       const rubricas = await db.rubricas.where('instrumento_id').equals(familia_id)
-        .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeRubrica(r))).modify(alHijo)
+        .filter(r => vivo(r) && enBloque(bloque, r.unidad_id, diaDeExamen(r, notasDeFamilia))).modify(alHijo)
 
       // Las filas de la programación se copian: la familia sigue siendo el
-      // techo de lo que puede evaluar cualquiera de sus hijos.
+      // techo de lo que puede evaluar cualquiera de sus hijos. Con un bloque
+      // de UNA unidad, solo las de esa unidad: copiarlas todas daba a la
+      // actividad nueva columna en todas las unidades y dejaba sin columna
+      // lo que el instrumento guardaba en las demás.
       const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(familia_id).toArray())
+        .filter(f => !bloque || bloque.unidad_id == null || f.unidad_id === bloque.unidad_id)
       for (const f of filas) {
         await db.criterio_instrumentos.add(nuevo({
           unidad_id: f.unidad_id, criterio_id: f.criterio_id, instrumento_id: hijo_id, peso: 1.0,
@@ -942,11 +949,12 @@ const mismaUnidadDePrueba = (a: Rubrica, b: Rubrica) => (a.unidad_id ?? null) ==
  * preguntar al docente; nunca se decide por él.
  */
 export async function conflictosAlMover(familia_id: number, hijo_id: number, bloque?: FiltroBloque): Promise<ConflictosMovimiento> {
-  const [deFamilia, deHijo] = await Promise.all([
+  const [deFamilia, deHijo, notas] = await Promise.all([
     db.rubricas.where('instrumento_id').equals(familia_id).toArray(),
     db.rubricas.where('instrumento_id').equals(hijo_id).toArray(),
+    db.calificaciones.where('instrumento_id').equals(familia_id).toArray(),
   ])
-  const f = vivos(deFamilia).filter(r => enBloque(bloque, r.unidad_id, diaDeRubrica(r))), h = vivos(deHijo)
+  const f = vivos(deFamilia).filter(r => enBloque(bloque, r.unidad_id, diaDeExamen(r, notas))), h = vivos(deHijo)
   return {
     examenes: f.filter(r => r.tipo === 'prueba' && h.some(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))).length,
     // Una rúbrica solo choca con la del hijo de su misma unidad (o con la general, si es general).
@@ -1013,7 +1021,9 @@ export async function moverDatosDeFamiliaAHijo(
       // parte: el gestor lo ofrece bloque a bloque para que cada uno vaya al
       // hijo que lo hizo de verdad.
       const { bloque } = opciones
-      for (const c of (await db.calificaciones.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
+      // Tal como están antes de moverlas: deciden el bloque de cada examen.
+      const notasDeFamilia = await db.calificaciones.where('instrumento_id').equals(familia_id).toArray()
+      for (const c of notasDeFamilia.filter(vivo)) {
         if (!enBloque(bloque, c.unidad_id, diaDeNota(c))) continue
         if (c.valor != null && delHijo.has(claveCelda(c))) { noMovidos.calificaciones++; continue }
         await db.calificaciones.update(c.id!, tocado({ instrumento_id: hijo_id }))
@@ -1033,7 +1043,7 @@ export async function moverDatosDeFamiliaAHijo(
       const delHijoRub = (await db.rubricas.where('instrumento_id').equals(hijo_id).toArray()).filter(vivo)
       let rubricas = 0
       for (const r of (await db.rubricas.where('instrumento_id').equals(familia_id).toArray()).filter(vivo)) {
-        if (!enBloque(bloque, r.unidad_id, diaDeRubrica(r))) continue
+        if (!enBloque(bloque, r.unidad_id, diaDeExamen(r, notasDeFamilia))) continue
         const choca = r.tipo === 'prueba'
           ? delHijoRub.filter(x => x.tipo === 'prueba' && mismaUnidadDePrueba(r, x))
           : delHijoRub.filter(x => esRubrica(x) && mismaUnidadDePrueba(r, x))
@@ -3847,6 +3857,13 @@ export type MatrizEvaluacion = {
    * gestor lo mueve a un hijo (`moverDatosDeFamiliaAHijo`); la matriz avisa.
    */
   familiasConDatosEscondidos: FamiliaConDatosEscondidos[]
+  /**
+   * Notas que cuentan pero no tienen columna en lo que se mira: la
+   * programación ya no asigna ese criterio a ese instrumento (se desmarcó, o
+   * la nota se quedó ahí al mover un examen). Cambiar la programación no
+   * borra notas y el cálculo las sigue contando: al menos, que se sepa.
+   */
+  notasSinColumna: NotasSinColumna[]
   /** Las recuperaciones que han contado en lo que se mira (`db/recuperacion.ts`). */
   recuperaciones: RecuperacionAplicada[]
   /** Criterios de la unidad activa (vacío = todos los de la asignatura) */
@@ -3862,6 +3879,9 @@ export type MatrizEvaluacion = {
  * `unidad_id` a null significa «toda la asignatura»: entonces el mapa de
  * instrumentos es la unión de los de todas sus unidades.
  */
+/** Las notas de un instrumento que cuentan sin columna, y en qué criterios. */
+export type NotasSinColumna = { instrumento_id: number; nombre: string; notas: number; criterios: string[] }
+
 export async function getMatrizEvaluacion(
   asignatura_id: number,
   unidad_id: number | null,
@@ -4039,6 +4059,23 @@ export async function getMatrizEvaluacion(
     if (fila.calificaciones + fila.diario + fila.examenes > 0) familiasConDatosEscondidos.push(fila)
   }
 
+  // Notas con valor cuyo criterio la programación no asigna (ya) a su
+  // instrumento en lo que se mira: cuentan, pero ninguna columna las enseña.
+  const asignado = new Set<string>()
+  for (const [criterio, lista] of crudo) for (const v of lista) asignado.add(`${criterio}|${v.instrumento_id}`)
+  const sueltas = new Map<number, NotasSinColumna>()
+  for (const c of crudas) {
+    if (c.valor == null || asignado.has(`${c.criterio_id}|${c.instrumento_id}`)) continue
+    const ins = instrById.get(c.instrumento_id)
+    if (!ins) continue
+    const fila = sueltas.get(c.instrumento_id) ?? { instrumento_id: c.instrumento_id, nombre: nombreEnUnidad(ins, unidad_id), notas: 0, criterios: [] }
+    fila.notas++
+    if (!fila.criterios.includes(c.criterio_id)) fila.criterios.push(c.criterio_id)
+    sueltas.set(c.instrumento_id, fila)
+  }
+  const notasSinColumna = [...sueltas.values()]
+    .map(f => ({ ...f, criterios: f.criterios.sort((a, b) => a.localeCompare(b, 'es', { numeric: true })) }))
+
   let criteriosDeUnidad: Set<string> | null = null
   if (unidad_id) {
     const ucs = vivos(await db.unidad_criterios.where('unidad_id').equals(unidad_id).toArray())
@@ -4048,7 +4085,7 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
-    familiasConDatosEscondidos, medidas, recuperaciones: aplicadas,
+    familiasConDatosEscondidos, notasSinColumna, medidas, recuperaciones: aplicadas,
   }
 }
 

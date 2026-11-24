@@ -273,6 +273,37 @@ try {
   d = await bd()
   ok(d.proba === inicio.proba, 'cancelar no borra nada')
 
+  console.log('\n7. Las notas que cuentan sin columna se dicen, y calificar en otro trimestre se avisa')
+  // Tras retirar la prueba de la unidad, sus notas siguen contando sin columna.
+  await gestor.getByRole('button', { name: 'Cerrar' }).first().click()
+  await gestor.waitFor({ state: 'hidden', timeout: 5000 })
+  const conmutador = p.locator('[data-avisos-toggle]')
+  await conmutador.waitFor({ timeout: 6000 })
+  if (await conmutador.getAttribute('aria-expanded') !== 'true') await conmutador.click()
+  const sinColumna = p.locator('[data-notas-sin-columna]')
+  ok(await sinColumna.waitFor({ timeout: 6000 }).then(() => true, () => false), 'el Calificador avisa de las notas que cuentan sin columna en la unidad')
+  const textoSinColumna = await sinColumna.textContent().catch(() => '')
+  ok(textoSinColumna.includes(`«${inicio.proba}»`) && /\d+ de «/.test(textoSinColumna), 'dice de qué instrumento son y cuántas', textoSinColumna.slice(0, 160))
+  // La barra en otro trimestre que el de la unidad: se dice a la vista y se ofrece volver.
+  const trimestreUnidad = await p.evaluate(async (id) => {
+    const { db } = await import('/src/db/localDb.ts')
+    return (await db.unidades.get(id))?.trimestre ?? null
+  }, inicio.ud.id)
+  const barra = p.getByLabel('Trimestre')
+  const otroAviso = p.locator('[data-unidad-otro-trimestre]')
+  if (trimestreUnidad != null) {
+    await barra.selectOption(String(trimestreUnidad))
+    await p.waitForTimeout(400)
+    ok(await otroAviso.count() === 0, 'con la barra en el trimestre de la unidad no hay aviso')
+    await barra.selectOption(String(trimestreUnidad === 1 ? 2 : 1))
+    ok(await otroAviso.waitFor({ timeout: 5000 }).then(() => true, () => false), 'con la barra en otro trimestre, avisa de dónde se guardará lo que se califique')
+    await otroAviso.locator('[data-ir-al-trimestre]').click()
+    await p.waitForTimeout(400)
+    ok(await otroAviso.count() === 0 && await barra.inputValue() === String(trimestreUnidad), 'y el botón devuelve la barra al trimestre de la unidad')
+  } else {
+    ok(await otroAviso.count() === 0, 'una unidad sin trimestre no avisa')
+  }
+
   ok(erroresConsola.length === 0, 'sin errores de JavaScript', erroresConsola.join(' | '))
 } catch (e) {
   fallos++

@@ -665,6 +665,27 @@ edumind_miclase/
   sigue listado en «Exámenes y pruebas». En una unidad que se corrige con el
   examen de otra, el editor NO abre ese examen: lo dice
   (`[data-examen-de-otra-unidad]`) y lo que se guarde será el propio.
+- **Al mover por bloques, un examen corregido va con sus notas** (auditoría
+  de nov 2026; matiza lo que la nota de los bloques dice de la fecha del
+  examen). `diaDeExamen` (`db/bloquesFamilia.ts`, puro) agrupa un examen de
+  unidad en el día con más correcciones suyas, no en el día en que se
+  definió; sin corregir, el general y la rúbrica siguen por `created_at`.
+  Fechado por la definición, mover el bloque de las notas dejaba el examen
+  escondido en el instrumento y las notas sin sus preguntas. Lo usan
+  `agruparEnBloques`, `convertirFamiliaEnHijo`, `conflictosAlMover` y
+  `moverDatosDeFamiliaAHijo`, que leen las notas ANTES de moverlas. Y
+  convertir UN bloque de una unidad en actividad nueva copia solo los
+  criterios de esa unidad: copiarlos todos le daba columna en todas y dejaba
+  sin columna lo que el instrumento guardaba en las demás.
+- **Dos avisos del Calificador que no existían** (misma auditoría).
+  `MatrizEvaluacion.notasSinColumna`: notas con valor cuyo criterio la
+  programación ya no asigna a su instrumento en lo que se mira; siguen
+  contando (cambiar la programación no borra notas) y ahora se dice, tras el
+  contador de avisos (`[data-notas-sin-columna]`). Y a la vista, no plegado,
+  `[data-unidad-otro-trimestre]` cuando la unidad es de un trimestre y la
+  barra está en otro, con `[data-ir-al-trimestre]`: la casilla lleva el
+  trimestre de la barra y calificar así crea un segundo juego de notas de la
+  misma unidad.
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras

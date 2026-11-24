@@ -7,7 +7,7 @@
  * `enBloque` deja pasar exactamente lo del bloque y todo si no hay filtro.
  */
 import {
-  agruparEnBloques, diaDe, enBloque, etiquetaDia, etiquetaHora, describeBloque,
+  agruparEnBloques, diaDe, diaDeExamen, enBloque, etiquetaDia, etiquetaHora, describeBloque,
 } from '../frontend/src/db/bloquesFamilia'
 
 let fallos = 0
@@ -53,6 +53,31 @@ console.log('\n2. Agrupar por unidad y día, con la fecha que toca a cada dato')
   ok(b[3].unidad_id === 9 && b[3].dia === '2026-10-16' && b[3].calificaciones === 1, 'UD9 · 16 oct: la nota sin fecha cae por updated_at')
   ok(b[4].unidad_id === null && b[4].rubricas === 1 && b[4].diario === 1 && b[4].criterios.length === 0, 'sin unidad al final: la rúbrica y el registro con criterios_json roto')
   ok(agruparEnBloques([], [], []).length === 0, 'sin nada, sin bloques')
+}
+
+console.log('\n2b. Un examen corregido va en el bloque de sus notas')
+{
+  // El examen se definió el 14 y se corrigió el 15 (tres notas) y el 16 (una):
+  // fechado por el 14 se quedaba atrás al mover el bloque de las notas.
+  const d14 = local(2026, 10, 14, 11, 0), d15 = local(2026, 10, 15, 17, 0), d16 = local(2026, 10, 16, 9, 0)
+  const respuestas = { p1: 1, p2: 0 }
+  const examen = { id: 50, unidad_id: 7, tipo: 'prueba', created_at: d14, updated_at: d14 }
+  const cals = [
+    { criterio_id: 'CE1.1', unidad_id: 7, valor: 6, fecha: d15, updated_at: d15, niveles_rubrica: respuestas },
+    { criterio_id: 'CE1.2', unidad_id: 7, valor: 6, fecha: d15, updated_at: d15, niveles_rubrica: respuestas },
+    { criterio_id: 'CE1.1', unidad_id: 7, valor: 8, fecha: d15, updated_at: d15, niveles_rubrica: respuestas, prueba_id: 50 },
+    { criterio_id: 'CE1.1', unidad_id: 7, valor: 4, fecha: d16, updated_at: d16, niveles_rubrica: respuestas },
+    { criterio_id: 'CE1.1', unidad_id: 9, valor: 4, fecha: d16, updated_at: d16, niveles_rubrica: respuestas },   // otra unidad
+    { criterio_id: 'CE1.3', unidad_id: 7, valor: 9, fecha: d16, updated_at: d16 },                                // a mano
+  ]
+  ok(diaDeExamen(examen, cals) === '2026-10-15', 'el día del examen es el de la mayoría de sus correcciones')
+  const b = agruparEnBloques(cals, [], [examen])
+  const del15 = b.find(x => x.unidad_id === 7 && x.dia === '2026-10-15')
+  ok(del15?.examenes === 1 && del15.calificaciones === 3 && !b.some(x => x.dia === '2026-10-14'), 'y sale en el bloque de esas notas, no en uno suyo')
+  ok(diaDeExamen(examen, []) === '2026-10-14', 'sin corregir, el día en que se definió')
+  ok(diaDeExamen({ ...examen, unidad_id: null }, cals) === '2026-10-14' && diaDeExamen({ ...examen, tipo: null }, cals) === '2026-10-14', 'el general y la rúbrica, también')
+  const deOtro = cals.map(c => ({ ...c, prueba_id: 99 }))
+  ok(diaDeExamen(examen, deOtro) === '2026-10-14', 'lo corregido con otro examen no decide el día de este')
 }
 
 console.log('\n3. enBloque deja pasar lo justo')

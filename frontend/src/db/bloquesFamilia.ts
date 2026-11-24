@@ -12,7 +12,12 @@
  *  - nota (`calificaciones`): `fecha`, que `saveCalificaciones` sella al
  *    poner la nota (y al cambiarla); si falta, `updated_at`;
  *  - registro del diario: `fecha` de la observación;
- *  - examen o rúbrica: `created_at`, cuando se definió; si falta, `updated_at`.
+ *  - rúbrica, o examen sin corregir: `created_at`, cuando se definió; si
+ *    falta, `updated_at`;
+ *  - examen ya corregido: el día de sus correcciones (`diaDeExamen`), para
+ *    que vaya en el mismo bloque que sus notas. Fechado por el día en que se
+ *    definió, mover el bloque de las notas dejaba el examen atrás, escondido
+ *    en el instrumento, y las notas sin sus preguntas (auditoría de nov 2026).
  * El día es el local del aparato, no el UTC: una nota puesta a las 00:30
  * es de esa noche, no de la víspera.
  *
@@ -33,9 +38,12 @@ export type BloqueDirecto = FiltroBloque & {
 }
 
 type Fila = { deleted_at?: string | null; unidad_id?: number | null; updated_at?: string }
-type FilaNota = Fila & { valor?: number | null; fecha?: string | null; criterio_id: string }
+type FilaNota = Fila & {
+  valor?: number | null; fecha?: string | null; criterio_id: string
+  niveles_rubrica?: Record<string, number> | null; prueba_id?: number | null
+}
 type FilaDiario = Fila & { fecha?: string | null; criterios_json?: string | null }
-type FilaRubrica = Fila & { tipo?: string | null; created_at?: string | null }
+type FilaRubrica = Fila & { id?: number; tipo?: string | null; created_at?: string | null }
 
 const dos = (n: number) => String(n).padStart(2, '0')
 
@@ -50,6 +58,31 @@ export function diaDe(iso?: string | null): string | null {
 export const diaDeNota = (c: Pick<FilaNota, 'fecha' | 'updated_at'>) => diaDe(c.fecha ?? c.updated_at)
 export const diaDeRegistro = (r: Pick<FilaDiario, 'fecha' | 'updated_at'>) => diaDe(r.fecha ?? r.updated_at)
 export const diaDeRubrica = (r: Pick<FilaRubrica, 'created_at' | 'updated_at'>) => diaDe(r.created_at ?? r.updated_at)
+
+/**
+ * El día con el que se agrupa un examen: el de sus correcciones en su
+ * unidad —el día con más notas que guardan respuestas suyas; a igualdad, el
+ * primero—. Sin corregir, o si es el general o una rúbrica, el día en que se
+ * definió. `cals` son las notas del mismo instrumento.
+ */
+export function diaDeExamen(r: FilaRubrica, cals: FilaNota[]): string | null {
+  const definido = diaDeRubrica(r)
+  if (r.tipo !== 'prueba' || r.unidad_id == null) return definido
+  const porDia = new Map<string, number>()
+  for (const c of cals) {
+    if (c.deleted_at || (c.unidad_id ?? null) !== r.unidad_id) continue
+    if (!c.niveles_rubrica || !Object.keys(c.niveles_rubrica).length) continue
+    // Lo anotado con otro examen no decide el día de este.
+    if (c.prueba_id != null && r.id != null && c.prueba_id !== r.id) continue
+    const dia = diaDeNota(c)
+    if (dia) porDia.set(dia, (porDia.get(dia) ?? 0) + 1)
+  }
+  let mejor: string | null = null, cuantas = 0
+  for (const [dia, n] of [...porDia].sort(([a], [b]) => a.localeCompare(b))) {
+    if (n > cuantas) { mejor = dia; cuantas = n }
+  }
+  return mejor ?? definido
+}
 
 /** Si una fila cae en el bloque pedido. Sin filtro, todas caen. */
 export function enBloque(filtro: FiltroBloque | undefined, unidad_id: number | null | undefined, dia: string | null): boolean {
@@ -104,7 +137,7 @@ export function agruparEnBloques(cals: FilaNota[], regs: FilaDiario[], rubs: Fil
   }
   for (const r of rubs) {
     if (r.deleted_at) continue
-    if (r.tipo === 'prueba') toma(r.unidad_id, diaDeRubrica(r), r.created_at ?? r.updated_at).examenes++
+    if (r.tipo === 'prueba') toma(r.unidad_id, diaDeExamen(r, cals), r.created_at ?? r.updated_at).examenes++
     else if (esRubricaPropia(r)) toma(r.unidad_id, diaDeRubrica(r), r.created_at ?? r.updated_at).rubricas++
   }
   return [...bloques.values()]
