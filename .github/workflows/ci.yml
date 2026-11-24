@@ -72,6 +72,51 @@ jobs:
           path: /tmp/miclase-pruebas-*/tiros/
           if-no-files-found: ignore
 
+  # La misma tanda con el aspecto Lámina puesto por defecto (VITE_ASPECTO).
+  # Lámina va apagada hasta la 2.0.0, así que la tanda de arriba no la mira:
+  # sin esto, un cambio podía romperla sin que nadie lo viera hasta el día de
+  # encenderla. El 24·11·2026 pasaban las 103 suites con Lámina; esto lo guarda.
+  #
+  # Va aparte y NO es un check obligatorio de main (el obligatorio es
+  # «pruebas», y por eso no se hace con una matriz, que le cambiaría el
+  # nombre): si falla se ve en rojo en el PR, pero no bloquea un arreglo
+  # urgente del aspecto de siempre, que es el que está en uso.
+  pruebas-lamina:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      VITE_ASPECTO: lamina
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+            backend/package-lock.json
+      - name: Instalar dependencias
+        run: |
+          npm ci
+          npm --prefix frontend ci
+          npm --prefix backend ci
+      - name: Instalar poppler-utils
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Instalar el navegador
+        run: npx playwright install --with-deps chromium
+      - name: Preparar la base de datos de pruebas
+        run: npm run seed
+      - name: Pruebas con Lámina por defecto
+        run: npm test
+      - name: Guardar capturas si ha fallado
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: capturas-lamina
+          path: /tmp/miclase-pruebas-*/tiros/
+          if-no-files-found: ignore
+
   # Avisos de seguridad de lo que llega a producción: el backend que corre en
   # el servidor y lo que el frontend mete en la app. Las herramientas de
   # compilación (--omit=dev) no salen del ordenador que compila.

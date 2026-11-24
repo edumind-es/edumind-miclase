@@ -356,3 +356,38 @@ Arreglos que salieron por el camino y afectan también al aspecto de siempre: As
 ### Lo que no se ha podido comprobar
 
 Todo se ha visto en Chromium (escritorio, iPad horizontal y vertical, móvil) y en la web publicada. No en un iPad real, ni en Safari, ni en la app instalada en la pantalla de inicio, ni con lector de pantalla.
+
+## 15. Estado al cierre del 24·11·2026
+
+En producción, **versión 1.13.0**, con Lámina apagada para todos. Se enciende en un aparato con `?aspecto=lamina`.
+
+### Lo añadido desde la sección 14
+
+| Qué | PR | Versión |
+|---|---|---|
+| Cola «Por corregir» en el hub de exámenes y color de área en Planificación | 146 | 1.12.0 |
+| **Los emoji como iconos de línea**, con una fuente propia (`EmojiLamina.woff`) | 147 | 1.13.0 |
+| Lo escrito en línea en las pantallas: blanco → papel, sin sombras, notas en filete | 147 | 1.13.0 |
+| Con una sola área se entra directo; Ctrl+B en el marco nuevo; sesión en el pie del menú | siguiente | siguiente |
+| Las pruebas de pantalla valen para los dos marcos, y el CI pasa también la tanda con Lámina | siguiente | siguiente |
+
+### El criterio para encender Lámina a todos (2.0.0)
+
+1. **Que la tanda completa pase con Lámina por defecto**: `VITE_ASPECTO=lamina npm test`. **Cumplido el 24·11·2026: 103 de 103** (al empezar a medir eran 73). El trabajo `pruebas-lamina` del CI lo guarda.
+2. **Que Luis la haya probado en su iPad.** Pendiente. Lo primero que conviene mirar: que los emoji salgan como iconos de línea en Safari (comprobado en Chromium y en el CI, que tiene emoji de color instalados; no en Safari).
+
+Encenderla es cambiar `ASPECTO_POR_DEFECTO` en `src/aspecto.ts`, subir la versión a 2.0.0 y desplegar. Ese mismo día: icono de la app, pantalla de arranque y `theme_color` del manifiesto en papel y tinta (cambian para todos, así que no pueden ir antes), y avisar de que iOS no cambia el icono de una app ya instalada hasta quitarla y volver a añadirla.
+
+### Lo que dejaron ver las pruebas
+
+Tres fallos reales que solo aparecieron al medir, ninguno visible a simple vista:
+
+- **Asistencia en el móvil** dejaba el pase de lista en 78 px. Lo tapaba el marco de siempre; lo cazó «nada cortado».
+- **Los emoji con selector de variación** salían en color donde hay fuente de emoji instalada. Lo cazó el CI; en el servidor de desarrollo no hay fuente de color.
+- **Ctrl+B no hacía nada en el marco nuevo** con una pulsación de verdad. Lo cazó la prueba general al pasarla con Lámina.
+
+### Lo que sigue pendiente y no bloquea
+
+- Los 95 `<select>` de dentro de las pantallas: cerrados ya se ven igual en todos los sistemas; pasarlos a `Lista`, pantalla a pantalla.
+- Los ~2.700 estilos en línea: se ven bien en Lámina por las reglas generales del final de `lamina.css`; lo correcto a la larga es pasarlos a clases y piezas.
+- La prueba «escáner sin detector nativo» es inestable por su cuenta (falló dos veces en el CI el 24·11 y pasó al relanzar).

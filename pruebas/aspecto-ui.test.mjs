@@ -53,7 +53,9 @@ const abrir = async (ruta) => { await p.goto(BASE + ruta, { waitUntil: 'networki
 console.log('\n── Apagado: lo que ve todo el mundo ──')
 // Dos veces: la primera apertura pasa por la puesta en marcha y la segunda ya
 // es la pantalla que se va a comparar al final
-await abrir('/')
+// Se pide expresamente el de siempre: esta prueba vale también cuando el
+// aspecto por defecto sea Lámina, y entonces «/» a secas ya no lo sería
+await abrir('/?aspecto=clasico')
 await abrir('/')
 const antes = await medir()
 await p.screenshot({ path: `${TIROS}/aspecto-clasico.png` })

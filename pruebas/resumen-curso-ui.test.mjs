@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado, elegirTrimestre } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -125,7 +125,7 @@ try {
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-vista="criterios"]').click()
   // El selector de la barra en el trimestre de las unidades, para calificar en él.
-  await p.getByLabel('Trimestre').selectOption(String(T))
+  await elegirTrimestre(p, T)
   await elegirUnidad(p, udA.pestana)
   await p.waitForTimeout(1200)
   const enA = await calificar(criterio, 8)
@@ -189,12 +189,11 @@ try {
   await ficha.waitFor({ state: 'hidden', timeout: 5000 })
 
   console.log('\n5. El selector de trimestre de la barra no manda en el resumen')
-  const selectorTrimestre = p.getByLabel('Trimestre')
-  await selectorTrimestre.selectOption(String(otros[0]))
+  await elegirTrimestre(p, otros[0])
   await p.waitForTimeout(1200)
   ok((await celdaT(T).textContent()).trim() === '7', `cambiar la barra al ${otros[0]}º trimestre no mueve la casilla ${T}T`)
   ok(await p.locator(`[data-criterio-th="${criterio}"]`).count() === 1, 'ni cambia las columnas')
-  await selectorTrimestre.selectOption(String(T))
+  await elegirTrimestre(p, T)
   await p.waitForTimeout(800)
 
   console.log('\n6. Por familia: una columna por familia y trimestre, con los hijos dentro')

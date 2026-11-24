@@ -9,7 +9,7 @@
  * No calcula ninguna nota: cuenta lo que hay (`getResumenDeAreas`).
  */
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { getResumenDeAreas, type ResumenDeArea } from '@/db/queries'
 import { identidadDeAreas } from '@/db/areas'
@@ -29,6 +29,10 @@ export default function HubAreas() {
     return () => { vigente = false }
   }, [grupoId, trimestre, asignaturas])
 
+  // Con una sola área (o ninguna) el hub sobra: es un paso de más para elegir
+  // entre una opción. Se entra directo al Calificador, que ya sabe decir que
+  // faltan áreas. El hub es para cuando hay entre qué elegir.
+  if (!cargando && asignaturas.length <= 1) return <Navigate to="/evaluacion" replace />
   if (cargando || areas == null) return <p className="hub-nota">{t('inicio.cargando')}</p>
 
   const identidad = identidadDeAreas(areas.map(a => a.asignatura))

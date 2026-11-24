@@ -13,7 +13,7 @@
  *  · la versión tiene su fila y abre «Acerca de», donde van también el idioma,
  *    el aspecto, la cuenta e «Instalar».
  */
-import { Fragment, useEffect, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import '@/lamina-marco.css'
 import Marca from '@/components/Marca'
@@ -88,17 +88,25 @@ export default function MarcoLamina({ barra, alExportar, children }: {
   const t = useT()
   const [forma, alternarMenu] = useForma()
   const [acerca, setAcerca] = useState(false)
+  // Con sesión de EDUmind, el pie del menú lo dice: es parte del estado de este aparato
+  const { modo, nombre } = useAuth()
   const { pathname } = useLocation()
   const navegar = useNavigate()
 
-  // Atajo de siempre: Ctrl/Cmd + B pliega y despliega
+  // Atajo de siempre: Ctrl/Cmd + B pliega y despliega. Se registra UNA vez y
+  // lee la función por referencia: registrado en cada pintado, se perdía con
+  // una pulsación de verdad, porque el marco de siempre (que sigue escuchando
+  // por debajo) repinta en mitad de la pulsación y el escuchador se quitaba y
+  // se volvía a poner justo entonces, ya tarde para esa tecla.
+  const alternar = useRef(alternarMenu)
+  alternar.current = alternarMenu
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); alternarMenu() }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); alternar.current() }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  })
+  }, [])
 
   const entrada = (e: Entrada) => (
     // `Link` y no `NavLink`: «estás aquí» lo decide el marco, porque una entrada
@@ -128,9 +136,14 @@ export default function MarcoLamina({ barra, alExportar, children }: {
           ))}
         </nav>
         <div className="ml-estado">
-          <button type="button" className="ml-entrada" onClick={alExportar} data-marco-copia>
+          <button type="button" className="ml-entrada" onClick={alExportar} data-marco-copia title={t('menu.exportarTitulo')}>
             <Icono nombre="importar" /><span className="ml-largo">{t('marco.copia')}</span><span className="ml-corto">{t('marco.copiaCorto')}</span>
           </button>
+          {modo === 'authentik' && (
+            <button type="button" className="ml-entrada" onClick={() => setAcerca(true)} aria-haspopup="dialog" data-marco-cuenta title={nombre ?? undefined}>
+              <Icono nombre="alumnado" /><span className="ml-largo">{t('menu.conectado')}</span><span className="ml-corto">EDUmind</span>
+            </button>
+          )}
           <button type="button" className="ml-entrada ml-version" onClick={() => setAcerca(true)} aria-haspopup="dialog" data-marco-version
             aria-label={`${t('marco.acerca')} · ${VERSION}`}>
             <b><span className="ml-largo">MiClase </span>{VERSION}</b>
@@ -194,8 +207,8 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
   const identidad = identidadDeAreas(asignaturas)
   const conArea = hayClase && barra.conArea && asignaturas.length > 0
   const suya = conArea && asignaturaId != null ? identidad.get(asignaturaId) : undefined
-  // «Todas las áreas» solo donde hay hub al que volver: en el Calificador
-  const conHub = pathname === '/evaluacion' || pathname.startsWith('/evaluacion/')
+  // «Todas las áreas» solo donde hay hub al que volver: en el Calificador, y con más de un área
+  const conHub = asignaturas.length > 1 && (pathname === '/evaluacion' || pathname.startsWith('/evaluacion/'))
 
   return (
     <>

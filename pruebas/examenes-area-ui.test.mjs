@@ -9,7 +9,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
+import { navegadorChromium, aceptarConfirmaciones, irAlAlumnado, enLamina } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -92,7 +92,8 @@ try {
   const area = tarjeta.locator('[data-area-examenes]')
   await area.locator('[data-unidad-bloque]').first().waitFor({ timeout: 10000 })
   ok((await tarjeta.locator('[data-examenes-clase]').textContent()).includes('6ºA'), 'dice de qué clase son las pestañas')
-  ok(await tarjeta.getByRole('tab').count() === 1 && await tarjeta.getByRole('tab').first().getAttribute('aria-selected') === 'true', 'una pestaña por área de la clase, elegida')
+  // Con Lámina las áreas no son pestañas: con una sola se entra directo, y con varias hay un hub
+  ok(await enLamina(p) ? await tarjeta.getByRole('tab').count() === 0 : await tarjeta.getByRole('tab').count() === 1 && await tarjeta.getByRole('tab').first().getAttribute('aria-selected') === 'true', 'una pestaña por área de la clase, elegida (o ninguna, con Lámina)')
   ok(await area.getAttribute('data-area-examenes') === 'Ciencias Sociales', 'el área es la de la clase', await area.getAttribute('data-area-examenes'))
   const bloques = area.locator('[data-unidad-bloque]')
   ok(await bloques.count() === 7, 'un bloque por unidad', String(await bloques.count()))

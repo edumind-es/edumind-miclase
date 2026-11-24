@@ -1771,6 +1771,23 @@ edumind_miclase/
   línea y no lo necesitan. Una pestaña escondida lleva `hidden`: las pruebas
   que busquen una pestaña por su nombre en pantalla estrecha con Lámina
   pasan antes por «Más».
+- **El hub de áreas solo sale con dos áreas o más.** Con una (o ninguna),
+  `/areas` redirige a `/evaluacion` y «Exámenes y pruebas» entra directo a
+  sus unidades: elegir entre una opción es un paso de más. Y **las pruebas
+  de pantalla valen para los dos marcos**: `VITE_ASPECTO=lamina npm test`
+  pasa la tanda entera con Lámina por defecto (`ASPECTO_POR_DEFECTO` en
+  `aspecto.ts`, que es el valor que cambiará la 2.0.0). Para eso
+  `pruebas/lib/entorno.mjs` trae ayudas que hacen lo mismo en los dos:
+  `enLamina`, `menuPrincipal`, `menuLateral`, `botonPlegar`,
+  `elegirTrimestre`, `trimestreElegido`, `elegirIdioma`, `idiomaMarcado`,
+  `irAInstalar`, `irAlCalificador` (pasa por el hub si lo hay) y
+  `areasEnLaBarra`. Una prueba nueva no busca `.sidebar`, ni
+  `getByLabel('Trimestre')`, ni el color de fondo de una casilla: usa las
+  ayudas. Un escuchador de teclado del marco Lámina se registra una vez y
+  lee su función por referencia: el marco de siempre sigue montando sus
+  ganchos por debajo y repinta en mitad de una pulsación de verdad, lo que
+  quitaba y reponía un escuchador registrado en cada pintado (Ctrl+B no
+  hacía nada; un evento sintético no lo reproduce).
 - **Con Lámina, «Exámenes y pruebas» también entra por un hub de áreas**
   (`ExamenesConHoja`: `enHub` mientras `areaId` es null). Sustituye a las
   pestañas de áreas, que con diez áreas dejaban la mitad en «Más»; con el

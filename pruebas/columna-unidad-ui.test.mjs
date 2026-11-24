@@ -15,7 +15,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, gestorEnPesosDelArea, irAlAlumnado } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, rechazarSiguienteConfirmacion, gestorEnPesosDelArea, irAlAlumnado, elegirTrimestre, trimestreElegido } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -289,17 +289,16 @@ try {
     const { db } = await import('/src/db/localDb.ts')
     return (await db.unidades.get(id))?.trimestre ?? null
   }, inicio.ud.id)
-  const barra = p.getByLabel('Trimestre')
   const otroAviso = p.locator('[data-unidad-otro-trimestre]')
   if (trimestreUnidad != null) {
-    await barra.selectOption(String(trimestreUnidad))
+    await elegirTrimestre(p, trimestreUnidad)
     await p.waitForTimeout(400)
     ok(await otroAviso.count() === 0, 'con la barra en el trimestre de la unidad no hay aviso')
-    await barra.selectOption(String(trimestreUnidad === 1 ? 2 : 1))
+    await elegirTrimestre(p, trimestreUnidad === 1 ? 2 : 1)
     ok(await otroAviso.waitFor({ timeout: 5000 }).then(() => true, () => false), 'con la barra en otro trimestre, avisa de dónde se guardará lo que se califique')
     await otroAviso.locator('[data-ir-al-trimestre]').click()
     await p.waitForTimeout(400)
-    ok(await otroAviso.count() === 0 && await barra.inputValue() === String(trimestreUnidad), 'y el botón devuelve la barra al trimestre de la unidad')
+    ok(await otroAviso.count() === 0 && await trimestreElegido(p) === String(trimestreUnidad), 'y el botón devuelve la barra al trimestre de la unidad')
   } else {
     ok(await otroAviso.count() === 0, 'una unidad sin trimestre no avisa')
   }
