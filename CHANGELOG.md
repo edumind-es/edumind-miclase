@@ -13,6 +13,14 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Añadido
+- Con Lámina encendida, la marca del menú lleva los Cinco Mundos desaturados
+  de la skill y el círculo central en tinta.
+- `scripts/generar_iconos.py --lamina` genera el icono de la app y la pantalla
+  de arranque en papel y tinta. No se aplican todavía: el icono lo ve todo el
+  mundo, así que cambia el día en que Lámina se encienda para todos.
+  `MAQUETA_LAMINA_ICONO.png` es la vista previa.
+
 ## [1.14.0] — 2026-11-24
 
 ### Añadido

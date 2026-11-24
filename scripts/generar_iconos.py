@@ -75,7 +75,7 @@ def dibujar_marca(d: ImageDraw.ImageDraw, cx: float, cy: float, lado: float) -> 
 def lienzo(
     tam: int,
     *,
-    fondo: str | None = FONDO,
+    fondo: str | None = "el-de-la-identidad",
     radio_pct: float = 0.0,
     ocupacion: float = 0.72,
 ) -> Image.Image:
@@ -86,6 +86,10 @@ def lienzo(
     `ocupacion`  cuánto del lado ocupa la marca: baja para iconos enmascarables,
                  donde el sistema recorta los bordes.
     """
+    # El fondo por defecto se lee aquí y no en la firma: así vale el de la
+    # identidad que se haya elegido al lanzar el guion (--lamina)
+    if fondo == "el-de-la-identidad":
+        fondo = FONDO
     s = tam * SUPER
     modo = "RGBA" if fondo is None else "RGB"
     img = Image.new(modo, (s, s), (0, 0, 0, 0) if fondo is None else _hex(fondo))
@@ -152,7 +156,36 @@ def favicon_svg() -> str:
     return FAVICON_SVG.format(fondo=FONDO, celdas="\n".join(lineas))
 
 
+def identidad_lamina() -> None:
+    """
+    La identidad con el aspecto Lámina: papel claro de fondo, los Cinco Mundos
+    desaturados de la skill y el círculo central —la clase— en tinta.
+
+    El icono lo ve todo el mundo, tenga el aspecto que tenga, así que no se
+    cambia hasta el día en que Lámina se encienda para todos (la 2.0.0). Hasta
+    entonces esto solo sirve para verlo: `--lamina --salida <carpeta>`.
+    """
+    global FONDO, PAPEL, MUNDOS, MUNDOS_SOBRE_OSCURO
+    FONDO = "#f4f2ec"
+    PAPEL = "#17181a"
+    MUNDOS = ["#c05f3c", "#c19a2e", "#7ba24f", "#6c8fb3", "#4a5f68"]
+    MUNDOS_SOBRE_OSCURO = MUNDOS   # sobre papel no hace falta aclarar el mundo interior
+
+
 def main() -> None:
+    global RAIZ, PUBLICO, IOS, ANDROID
+    import argparse
+    args = argparse.ArgumentParser(description="Genera los iconos de EDUmind MiClase.")
+    args.add_argument("--lamina", action="store_true", help="con la identidad del aspecto Lámina (papel y tinta)")
+    args.add_argument("--salida", type=Path, help="escribe en esta carpeta en vez de en el proyecto (para verlos sin tocar nada)")
+    opciones = args.parse_args()
+    if opciones.lamina:
+        identidad_lamina()
+    if opciones.salida:
+        RAIZ = opciones.salida.resolve()
+        PUBLICO, IOS, ANDROID = RAIZ / "frontend/public", RAIZ / "frontend/ios/App/App/Assets.xcassets", RAIZ / "frontend/android/app/src/main/res"
+        PUBLICO.mkdir(parents=True, exist_ok=True)
+
     print("Web / PWA")
     # «any»: la PWA lo muestra tal cual, así que lleva sus propias esquinas
     for tam in (32, 180, 192, 512):
