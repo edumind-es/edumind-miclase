@@ -24,6 +24,8 @@ import { useAuth } from '@/auth/AuthProvider'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import { IDIOMAS, NOMBRE_IDIOMA, fijarIdioma, useIdioma, useT, type Clave } from '@/i18n'
 import { fijarAspecto } from '@/aspecto'
+import { fijarModoNotas } from '@/notas'
+import { useModoNotas } from '@/useAspecto'
 import { VERSION } from '@/version'
 import type { NombreIcono } from '@/iconos'
 
@@ -227,6 +229,7 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
 function Acerca({ onCerrar }: { onCerrar: () => void }) {
   const t = useT()
   const idioma = useIdioma()
+  const notas = useModoNotas()
   const { modo, nombre, iniciarLogin, cerrarSesion, loginDisponible } = useAuth()
   const fila = (rotulo: string, contenido: ReactNode, dato: string) => (
     <div data-acerca={dato}><dt className="ml-rotulo">{rotulo}</dt><dd>{contenido}</dd></div>
@@ -243,6 +246,15 @@ function Acerca({ onCerrar }: { onCerrar: () => void }) {
             ))}
           </div>
         ), 'idioma')}
+        {fila(t('acerca.notas'), (
+          <div className="ml-seg" role="group" aria-label={t('acerca.notas')}>
+            {(['filete', 'relleno'] as const).map(n => (
+              <button key={n} type="button" data-notas-elegir={n} aria-pressed={n === notas} onClick={() => fijarModoNotas(n)}>
+                {t(n === 'filete' ? 'acerca.notasFilete' : 'acerca.notasRelleno')}
+              </button>
+            ))}
+          </div>
+        ), 'notas')}
         {fila(t('acerca.aspecto'), (
           <>
             <div className="ml-seg" role="group" aria-label={t('acerca.aspecto')}>

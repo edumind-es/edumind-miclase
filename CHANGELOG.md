@@ -27,6 +27,8 @@ sitios y sella esa sección con la versión y la fecha.
   «Acerca de» con la versión, el idioma, el aspecto, la cuenta e «Instalar».
 - Con Lámina encendida, botones, campos, tarjetas, diálogos, pestañas y
   títulos en papel, tinta y filete, y los avisos sin fondos pastel.
+- Con Lámina encendida, la tabla del Calificador sobre papel y las **notas en
+  filete o en relleno**, a elegir en «Acerca de» (filete por defecto).
 
 ### Corregido
 - Asistencia en el móvil: el pase de lista quedaba en una columna de 78 px y

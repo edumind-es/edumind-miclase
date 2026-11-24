@@ -13,11 +13,13 @@ import { instalarFoco } from './utils/foco'
 import { instalarVelo } from './utils/velo'
 import { prepararIdioma } from './i18n'
 import { prepararAspecto } from './aspecto'
+import { prepararNotas } from './notas'
 
 // `<html lang>` con el idioma de este aparato antes de pintar nada
 prepararIdioma()
 // Y con su aspecto: el de siempre, salvo que este aparato haya encendido Lámina
 prepararAspecto()
+prepararNotas()
 
 // El foco se queda dentro del diálogo abierto, sea cual sea.
 instalarFoco()

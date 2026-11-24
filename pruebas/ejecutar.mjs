@@ -358,6 +358,7 @@ async function principal() {
     await suite('aspecto Lámina: apagado no cambia nada','node', ['pruebas/aspecto-ui.test.mjs'], entorno)
     await suite('marco Lámina: menú, barra, lista y Acerca de','node', ['pruebas/marco-lamina-ui.test.mjs'], entorno)
     await suite('nada cortado en cuatro tamaños','node', ['pruebas/nada-cortado-ui.test.mjs'], entorno)
+    await suite('Calificador en Lámina: filete y relleno','node', ['pruebas/calificador-lamina-ui.test.mjs'], entorno)
     await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
