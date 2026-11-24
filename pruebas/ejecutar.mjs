@@ -245,6 +245,7 @@ async function principal() {
 
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
+    await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])
   }
 
   // ── Con navegador, pero sin servidor ───────────────────────────────

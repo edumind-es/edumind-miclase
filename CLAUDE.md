@@ -1704,6 +1704,21 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **La versión es un solo número y nadie lo escribe a mano.** Vive en el
+  `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
+  está (los otros dos `package.json`, los tres `package-lock.json` y el
+  `versionName` de Android) y `npm run version:subir -- parche|menor|mayor`
+  los sube todos y sella «Sin publicar» del `CHANGELOG.md` con número y
+  fecha. La app la lee al compilar (`__VERSION__` en `vite.config.ts` →
+  `src/version.ts`; también `<meta name="miclase-version">` en el HTML).
+  Cada PR anota su cambio en «Sin publicar» y NO toca el número, para que dos
+  PR a la vez no choquen; se sube antes de desplegar. `desplegar.sh`
+  comprueba que la web servida dice ese número, pone la etiqueta `vX.Y.Z` y
+  no publica otro commit con una etiqueta que ya existe.
+  `pruebas/version.test.mjs` (rápida) es el candado. iOS se sube en Xcode y
+  la prueba solo avisa. Hasta nov 2026 no había nada de esto: 0.1.0 en los
+  `package.json`, «v1.0» a mano en el pie, sin CHANGELOG ni etiquetas. Luis
+  fijó lo que había como 1.9.0; el aspecto Lámina será la 2.0.0.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
@@ -1716,6 +1731,7 @@ edumind_miclase/
 - Seed DB: `npm run seed`
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
+- Subir la versión antes de desplegar: `npm run version:subir -- parche` (o `menor`, `mayor`)
 - Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar

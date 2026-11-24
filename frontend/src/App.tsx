@@ -24,6 +24,7 @@ import NoEncontrada from '@/pages/NoEncontrada'
 import InstalarPage from '@/pages/Instalar/InstalarPage'
 import ElegirIdioma, { SelectorIdioma } from '@/components/ElegirIdioma'
 import { useT, type Clave } from '@/i18n'
+import { VERSION } from '@/version'
 import { useDatosSensibles } from '@/db/datosSensibles'
 
 // El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
@@ -201,7 +202,7 @@ function Layout() {
         </div>
 
         <div className="sidebar-pie">
-          EDUmind MiClase v1.0
+          EDUmind MiClase v{VERSION}
           <br />
           © {new Date().getFullYear()} EDUmind® por Luis Vilela Acuña
           <br />
