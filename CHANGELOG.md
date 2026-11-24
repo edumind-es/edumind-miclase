@@ -17,6 +17,8 @@ sitios y sella esa sección con la versión y la fecha.
 - Con Lámina encendida, el hub de «Exámenes y pruebas» lleva arriba la cola
   **«Por corregir»**: los exámenes de la clase a los que les faltan alumnos,
   con cuántos lleva corregidos cada uno y el botón «Corregir».
+- Con Lámina encendida, cada sesión de Planificación lleva el color y la
+  sigla de su área.
 
 ## [1.11.0] — 2026-11-24
 

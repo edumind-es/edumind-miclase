@@ -25,6 +25,9 @@ import EditarSesion from './EditarSesion'
 import EditarEvento, { iconoEvento } from './EditarEvento'
 
 import { confirmar } from '@/utils/confirmar'
+import { useAspecto } from '@/useAspecto'
+import { identidadDeAreas } from '@/db/areas'
+import Sigla from '@/components/comunes/Sigla'
 type Vista = 'semana' | 'mes'
 const CLAVE_VISTA = 'miclase.planificacion.vista'
 
@@ -52,6 +55,9 @@ const eventosDelDia = (eventos: EventoCalendario[], d: string) => eventos.filter
 export default function PlanificacionPage() {
   useParametrosClase()
   const { grupo, grupoId, asignaturas, cargando } = useClaseActiva()
+  // Con Lámina, cada sesión de un área de la clase lleva el color y la sigla de esa área
+  const lamina = useAspecto() === 'lamina'
+  const identidad = identidadDeAreas(asignaturas)
   const [params, setParams] = useSearchParams()
   const [vista, setVista] = useState<Vista>(vistaGuardada)
   const ancla = params.get('fecha') && /^\d{4}-\d{2}-\d{2}$/.test(params.get('fecha')!) ? params.get('fecha')! : hoyIso()
@@ -206,17 +212,19 @@ export default function PlanificacionPage() {
                       const aqui = sesiones.filter(s => s.fecha === d && s.hora_inicio === fr.hora_inicio && s.hora_fin === fr.hora_fin)
                       return (
                         <td key={d} className={d === hoyIso() ? 'plan-hoy' : ''}>
-                          {aqui.map(s => (
-                            <button key={s.id} className={`plan-sesion plan-sesion--${s.tipo}`} data-sesion-plan
-                              data-fecha={s.fecha} data-franja={s.franja ?? ''} style={{ borderLeftColor: tonoDe(s.area) }}
+                          {aqui.map(s => { const suya = lamina && s.asignatura_id != null ? identidad.get(s.asignatura_id) : undefined; return (
+                            <button key={s.id} className={`plan-sesion plan-sesion--${s.tipo}`} data-sesion-plan data-sigla={suya?.sigla}
+                              data-fecha={s.fecha} data-franja={s.franja ?? ''}
+                              style={suya ? { borderLeftColor: suya.color, background: suya.papel } : { borderLeftColor: tonoDe(s.area) }}
                               onClick={() => setDetalle(s)}>
+                              {suya && <><Sigla sigla={suya.sigla} color={suya.color} />{' '}</>}
                               <b>{s.area}</b>{s.evaluable ? <span className="plan-evaluable" title="Evaluable"> ■</span> : null}
                               <span className="plan-sesion-sub">
                                 {s.tipo === 'especialista' ? 'Especialista' : s.tipo === 'centro' ? 'Actividad de centro'
                                   : [/^UD\s*\d+/i.exec(s.unidad_texto ?? '')?.[0], s.titulo].filter(Boolean).join(' · ')}
                               </span>
                             </button>
-                          ))}
+                          ) })}
                           {!aqui.length && (
                             <button className="plan-hueco" aria-label={`Añadir sesión el ${diaLargo(d)} a las ${fr.hora_inicio}`}
                               onClick={() => setEditar({ fecha: d, franja: fr.franja, hora_inicio: fr.hora_inicio, hora_fin: fr.hora_fin })}>+</button>
