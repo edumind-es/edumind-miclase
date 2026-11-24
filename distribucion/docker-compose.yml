@@ -1,0 +1,20 @@
+# EDUmind MiClase en el servidor del centro.
+#
+#   docker compose up -d
+#
+# Abre http://<ip-del-equipo>:8080 desde cualquier aparato de la red del
+# centro. El servidor solo entrega la app: los datos de cada docente se
+# guardan en SU navegador, nunca aquí.
+#
+# Ojo: para instalar la app y usar la cámara (QR, corrección de exámenes) los
+# navegadores exigen HTTPS fuera de «localhost». Pon delante el proxy con
+# certificado que ya use el centro.
+services:
+  miclase:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/usr/share/nginx/html:ro
+      - ./nginx-miclase.conf:/etc/nginx/conf.d/default.conf:ro

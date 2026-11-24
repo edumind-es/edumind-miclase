@@ -10,6 +10,10 @@ import { asegurarContador } from './db/ids'
 import { maxIdLocal } from './db/queries'
 import { instalarFoco } from './utils/foco'
 import { instalarVelo } from './utils/velo'
+import { prepararIdioma } from './i18n'
+
+// `<html lang>` con el idioma de este aparato antes de pintar nada
+prepararIdioma()
 
 // El foco se queda dentro del diálogo abierto, sea cual sea.
 instalarFoco()

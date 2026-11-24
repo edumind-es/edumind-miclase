@@ -9,6 +9,8 @@
  * justo donde vive el caso de uso de evaluar en el aula.
  */
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useT } from '@/i18n'
 
 const K_OCULTO = 'miclase_instalar_oculto'
 
@@ -18,7 +20,45 @@ type EventoInstalacion = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-function yaInstalada(): boolean {
+// El navegador avisa UNA vez, al cargar, de que se puede instalar. Se recoge
+// aquí, al importar el módulo, y no dentro de un componente: la página
+// «Instalar MiClase» se abre más tarde y se habría perdido el aviso.
+let eventoGuardado: EventoInstalacion | null = null
+const AVISO = 'miclase:instalable'
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', e => {
+    // Sin esto el navegador enseña su propia barra, que aparece y desaparece
+    // sin control; guardándolo, el botón «Instalar» la lanza cuando toca.
+    e.preventDefault()
+    eventoGuardado = e as EventoInstalacion
+    window.dispatchEvent(new Event(AVISO))
+  })
+}
+
+/** El diálogo nativo de instalar, si este navegador lo ofrece ahora. */
+export function useEventoInstalacion(): EventoInstalacion | null {
+  const [evento, setEvento] = useState(eventoGuardado)
+  useEffect(() => {
+    const alCambiar = () => setEvento(eventoGuardado)
+    window.addEventListener(AVISO, alCambiar)
+    return () => window.removeEventListener(AVISO, alCambiar)
+  }, [])
+  return evento
+}
+
+/** Lanza el diálogo nativo. Devuelve si el docente aceptó. */
+export async function lanzarInstalacion(): Promise<boolean> {
+  const e = eventoGuardado
+  if (!e) return false
+  await e.prompt()
+  const { outcome } = await e.userChoice
+  // Un aviso solo sirve una vez
+  eventoGuardado = null
+  window.dispatchEvent(new Event(AVISO))
+  return outcome === 'accepted'
+}
+
+export function yaInstalada(): boolean {
   if (typeof window === 'undefined') return true
   // Contenedor nativo (Capacitor): ya es una app, no hay nada que instalar
   if ((window as any).Capacitor?.isNativePlatform?.()) return true
@@ -27,7 +67,7 @@ function yaInstalada(): boolean {
   return (window.navigator as any).standalone === true
 }
 
-function esIOS(): boolean {
+export function esIOS(): boolean {
   const ua = navigator.userAgent
   if (/iphone|ipad|ipod/i.test(ua)) return true
   // El iPad con iPadOS 13+ se anuncia como un Mac; se distingue por el táctil
@@ -35,21 +75,11 @@ function esIOS(): boolean {
 }
 
 export default function InstalarApp() {
-  const [evento, setEvento] = useState<EventoInstalacion | null>(null)
+  const evento = useEventoInstalacion()
   const [oculto, setOculto] = useState(() => localStorage.getItem(K_OCULTO) === '1')
   const [instalada] = useState(yaInstalada)
   const [instrucciones, setInstrucciones] = useState(false)
-
-  useEffect(() => {
-    const alPoder = (e: Event) => {
-      // Sin esto el navegador enseña su propia barra, que aparece y desaparece
-      // sin control; guardándolo, el botón de abajo la lanza cuando toca.
-      e.preventDefault()
-      setEvento(e as EventoInstalacion)
-    }
-    window.addEventListener('beforeinstallprompt', alPoder)
-    return () => window.removeEventListener('beforeinstallprompt', alPoder)
-  }, [])
+  const t = useT()
 
   const ios = esIOS()
   if (instalada || oculto) return null
@@ -60,11 +90,7 @@ export default function InstalarApp() {
   const ocultar = () => { localStorage.setItem(K_OCULTO, '1'); setOculto(true) }
 
   const instalar = async () => {
-    if (!evento) return
-    await evento.prompt()
-    const { outcome } = await evento.userChoice
-    setEvento(null)
-    if (outcome === 'accepted') ocultar()
+    if (await lanzarInstalacion()) ocultar()
   }
 
   return (
@@ -72,32 +98,31 @@ export default function InstalarApp() {
       <div className="instalar-app-cuerpo">
         <span className="instalar-app-icono" aria-hidden="true">📲</span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="instalar-app-titulo">Instala MiClase en este dispositivo</div>
+          <div className="instalar-app-titulo">{t('instalarApp.titulo')}</div>
           <p className="instalar-app-texto">
-            Se abre desde el icono, a pantalla completa y sin barra del navegador, y
-            funciona sin conexión: podrás pasar lista y calificar en el gimnasio, en el
-            patio o en una salida.
+            {t('instalarApp.texto')}{' '}
+            <Link to="/instalar" data-instalar-otras>{t('instalarApp.otrasFormas')}</Link>
           </p>
         </div>
         <div className="instalar-app-botones">
           {evento && (
-            <button className="btn-primary" onClick={instalar}>Instalar</button>
+            <button className="btn-primary" onClick={instalar}>{t('instalarApp.instalar')}</button>
           )}
           {!evento && ios && (
             <button className="btn-primary" onClick={() => setInstrucciones(v => !v)}>
-              Cómo se hace
+              {t('instalarApp.comoSeHace')}
             </button>
           )}
-          <button className="btn-secondary" onClick={ocultar}>Ahora no</button>
+          <button className="btn-secondary" onClick={ocultar}>{t('instalarApp.ahoraNo')}</button>
         </div>
       </div>
 
       {instrucciones && ios && (
         <ol className="instalar-app-pasos">
-          <li>Abre esta página en <strong>Safari</strong> (desde otro navegador iOS no deja).</li>
-          <li>Pulsa el botón <strong>Compartir</strong> — el cuadrado con la flecha hacia arriba.</li>
-          <li>Baja y elige <strong>Añadir a pantalla de inicio</strong>.</li>
-          <li>Confirma con <strong>Añadir</strong>. El icono de MiClase aparece junto al resto de tus apps.</li>
+          <li>{t('instalarApp.ios1')}</li>
+          <li>{t('instalarApp.ios2')}</li>
+          <li>{t('instalarApp.ios3')}</li>
+          <li>{t('instalarApp.ios4')}</li>
         </ol>
       )}
     </div>

@@ -1,0 +1,342 @@
+/**
+ * Textos de la app en castellano y en galego (puro, sin React ni navegador).
+ *
+ * El castellano es el diccionario de referencia: sus claves son las que
+ * existen. El galego se declara como `Record<Clave, string>`, así que
+ * TypeScript no compila si le falta una. `idiomas.test.ts` comprueba además
+ * que cada traducción lleva las mismas variables `{…}` que el original.
+ *
+ * La traducción es por fases: lo que aún no tiene clave sigue escrito en
+ * castellano en su pantalla. Una pantalla nueva o que se toque pasa sus
+ * textos aquí. Las claves van por pantalla (`menu.`, `inicio.`…).
+ */
+
+export const IDIOMAS = ['es', 'gl'] as const
+export type Idioma = typeof IDIOMAS[number]
+
+/** Nombre de cada idioma escrito en ese mismo idioma, como lo reconoce quien lo habla. */
+export const NOMBRE_IDIOMA: Record<Idioma, string> = { es: 'Castellano', gl: 'Galego' }
+
+/** Para `toLocaleDateString` y compañía. */
+export const LOCALE: Record<Idioma, string> = { es: 'es-ES', gl: 'gl-ES' }
+
+const es = {
+  // ── Elegir idioma ──
+  'idioma.titulo': 'Elige el idioma de la aplicación',
+  'idioma.texto': 'Podrás cambiarlo cuando quieras desde el menú lateral. Tus datos no cambian: solo el idioma de la app.',
+  'idioma.continuar': 'Continuar',
+  'idioma.menu': 'Idioma',
+
+  // ── Menú ──
+  'menu.aula': 'Aula',
+  'menu.configuracion': 'Configuración',
+  'menu.inicio': 'Inicio',
+  'menu.planificacion': 'Planificación',
+  'menu.calificador': 'Calificador',
+  'menu.examenes': 'Exámenes y pruebas',
+  'menu.asistencia': 'Asistencia',
+  'menu.seguimiento': 'Seguimiento',
+  'menu.tutorias': 'Tutorías',
+  'menu.informes': 'Informes',
+  'menu.clases': 'Mis clases',
+  'menu.sincronizar': 'Sincronizar',
+  'menu.instalar': 'Instalar MiClase',
+  'menu.plegar': 'Plegar el menú (Ctrl+B)',
+  'menu.desplegar': 'Desplegar el menú (Ctrl+B)',
+  'menu.plegarAria': 'Plegar el menú lateral',
+  'menu.desplegarAria': 'Desplegar el menú lateral',
+  'menu.cargando': 'Cargando…',
+  'menu.modoLocal': 'Modo local — datos solo en este dispositivo',
+  'menu.exportar': 'Exportar / Importar',
+  'menu.exportarTitulo': 'Exportar / Importar copia de seguridad',
+  'menu.conectar': 'Conectar EDUmind',
+  'menu.conectado': 'Conectado con EDUmind',
+  'menu.cerrarSesion': 'Cerrar sesión',
+  'menu.softwareLibre': 'Software libre:',
+  'menu.privacidad': 'Privacidad y datos',
+  'menu.codigo': 'Código fuente',
+
+  // ── Inicio ──
+  'inicio.cargando': 'Cargando…',
+  'inicio.buenosDias': 'Buenos días',
+  'inicio.buenasTardes': 'Buenas tardes',
+  'inicio.buenasNoches': 'Buenas noches',
+  'inicio.primaria': 'Primaria',
+  'inicio.secundaria': 'Secundaria',
+  'inicio.alumnos': '{n} alumnos',
+  'inicio.areas': '{n} áreas',
+  'inicio.trimestre1': '1er trimestre',
+  'inicio.trimestre2': '2º trimestre',
+  'inicio.trimestre3': '3er trimestre',
+  'inicio.hoy': 'Hoy',
+  'inicio.pasarLista': 'Pasar lista',
+  'inicio.sesionHecha': 'Ya hay sesión de hoy — revisar',
+  'inicio.sesionPendiente': 'Sin sesión de hoy todavía',
+  'inicio.faltaAlumnado': 'Añade alumnado a esta clase primero',
+  'inicio.calificar': 'Calificar',
+  'inicio.criteriosSinInstrumento': '{n} criterios sin instrumento',
+  'inicio.matriz': 'Matriz de alumnado × criterios',
+  'inicio.faltanAreas': 'Elige las áreas de esta clase primero',
+  'inicio.examenes': 'Exámenes y pruebas de evaluación',
+  'inicio.examenesPie': 'Corregir por cámara o evaluar con el QR de la mesa',
+  'inicio.misClases': 'Mis clases',
+  'inicio.nuevaClase': 'Nueva clase',
+  'inicio.bienvenida': 'Bienvenido a EDUmind MiClase',
+  'inicio.bienvenidaTexto': 'Tu cuaderno de evaluación competencial LOMLOE. Todo lo que escribas —clases, alumnado, calificaciones, evidencias— se guarda en este dispositivo y funciona sin conexión. El servidor no puede leer nada de eso.',
+  'inicio.comoFunciona': 'Cómo funciona',
+  'inicio.paso1': 'Creas una clase y eliges tu comunidad autónoma: se carga su currículo LOMLOE.',
+  'inicio.paso2': 'Añades el alumnado y marcas las áreas que impartes.',
+  'inicio.paso3': 'Repartes los criterios entre tus unidades y dices con qué evalúas cada uno.',
+  'inicio.paso4': 'Calificas en la matriz, o escaneando el QR de la mesa desde el móvil.',
+  'inicio.primeraClase': 'Crear mi primera clase →',
+
+  // ── Puesta en marcha ──
+  'marcha.p1.titulo': 'Crea tu clase',
+  'marcha.p1.texto': 'Un grupo por cada clase que impartes: nombre, curso, etapa y comunidad autónoma. La comunidad determina qué currículo LOMLOE se carga.',
+  'marcha.p1.ver': 'Ver mis clases',
+  'marcha.p1.crear': 'Crear la primera clase',
+  'marcha.p1.una': '1 clase',
+  'marcha.p1.varias': '{n} clases',
+  'marcha.p2.titulo': 'Añade tu alumnado',
+  'marcha.p2.texto': 'Escribe la lista o pégala de un tirón desde tu documento. Cada alumno recibe un código anónimo para el QR de mesa; los nombres nunca salen de este dispositivo.',
+  'marcha.p2.cta': 'Gestionar alumnado',
+  'marcha.p2.detalle': '{n} alumnos',
+  'marcha.p3.titulo': 'Elige las áreas que impartes',
+  'marcha.p3.texto': 'Marca de una vez todas las áreas de esa clase. Aparecerán en el Calificador, cada una con sus criterios LOMLOE ya cargados.',
+  'marcha.p3.cta': 'Elegir áreas',
+  'marcha.p3.detalle': '{n} áreas',
+  'marcha.p4.titulo': 'Monta la programación',
+  'marcha.p4.texto': 'Reparte los criterios de evaluación entre tus unidades o situaciones de aprendizaje. Puedes generar la estructura automáticamente y ajustarla después.',
+  'marcha.p4.cta': 'Ir a programación',
+  'marcha.p4.detalle': '{unidades} unidades · {criterios} criterios',
+  'marcha.p5.titulo': 'Di con qué evalúas cada criterio',
+  'marcha.p5.texto': 'Asigna a cada criterio su instrumento: prueba, rúbrica, observación, trabajo… Es lo que hará que al pulsar una casilla del calificador sepas exactamente con qué estás evaluando.',
+  'marcha.p5.cta': 'Asignar instrumentos',
+  'marcha.p5.detalle': '{n} criterios con instrumento',
+  'marcha.p5.sinAsignar': '{n} instrumentos creados, sin asignar',
+  'marcha.p6.titulo': 'Evalúa',
+  'marcha.p6.texto': 'Ya puedes calificar en la matriz, o imprimir el QR de cada mesa y evaluar desde el móvil escaneando: nota, observación y foto de la producción en pocos segundos.',
+  'marcha.p6.cta': 'Abrir el calificador',
+  'marcha.p6.detalle': '{n} calificaciones registradas',
+  'marcha.lista': '{clase} está lista para evaluar',
+  'marcha.laClase': 'La clase',
+  'marcha.falta': 'Falta configurar {clase} — paso {paso} de {total}',
+  'marcha.estaClase': 'esta clase',
+  'marcha.reabrir': 'Puedes reabrir esta guía cuando quieras.',
+
+  // ── Invitación a instalar ──
+  'instalarApp.titulo': 'Instala MiClase en este dispositivo',
+  'instalarApp.texto': 'Se abre desde el icono, a pantalla completa y sin barra del navegador, y funciona sin conexión: podrás pasar lista y calificar en el gimnasio, en el patio o en una salida.',
+  'instalarApp.instalar': 'Instalar',
+  'instalarApp.comoSeHace': 'Cómo se hace',
+  'instalarApp.ahoraNo': 'Ahora no',
+  'instalarApp.otrasFormas': 'Otras formas de instalar',
+  'instalarApp.ios1': 'Abre esta página en Safari (desde otro navegador iOS no deja).',
+  'instalarApp.ios2': 'Pulsa el botón Compartir — el cuadrado con la flecha hacia arriba.',
+  'instalarApp.ios3': 'Baja y elige «Añadir a pantalla de inicio».',
+  'instalarApp.ios4': 'Confirma con «Añadir». El icono de MiClase aparece junto al resto de tus apps.',
+
+  // ── Página «Instalar MiClase» ──
+  'instalar.titulo': 'Instalar MiClase',
+  'instalar.intro': 'MiClase no depende de ningún servidor para funcionar: todo lo que escribes vive en tu dispositivo. Por eso puedes instalarla de varias formas, y cualquiera de ellas sigue funcionando aunque EDUmind dejara de existir mañana.',
+  'instalar.a.titulo': 'Desde el navegador, en un toque',
+  'instalar.a.texto': 'La forma más rápida. La app queda en tu dispositivo con su icono, se abre a pantalla completa y funciona sin conexión. Si este servidor desapareciera, la app ya instalada seguiría abriéndose con tus datos.',
+  'instalar.a.ya': 'Ya estás usando MiClase instalada en este dispositivo.',
+  'instalar.a.boton': 'Instalar ahora',
+  'instalar.a.chrome': 'En Chrome o Edge (ordenador, Android, Abalar): menú ⋮ → «Instalar MiClase» o «Añadir a pantalla de inicio».',
+  'instalar.a.ios': 'En iPad o iPhone: abre la página en Safari → Compartir → «Añadir a pantalla de inicio».',
+  'instalar.b.titulo': 'Tu propia copia, para siempre',
+  'instalar.b.texto': 'Descarga la app completa en un fichero .zip. Dentro hay un lanzador de doble clic para Windows, macOS y Linux que la abre en tu navegador desde tu propio ordenador, sin internet y sin EDUmind. Es software libre: puedes guardarla, copiarla al resto del claustro o publicarla en la web de tu centro.',
+  'instalar.b.descargar': 'Descargar MiClase (.zip)',
+  'instalar.b.github': 'Todas las versiones en GitHub',
+  'instalar.b.pasosTitulo': 'Cómo se usa',
+  'instalar.b.paso1': 'Descomprime el .zip en una carpeta que no vayas a borrar (Documentos, por ejemplo).',
+  'instalar.b.paso2': 'Windows: doble clic en «Abrir MiClase (Windows).bat». macOS: doble clic en «Abrir MiClase (Mac).command». Linux y Abalar: ejecuta «abrir-miclase.sh».',
+  'instalar.b.paso3': 'Se abre el navegador en http://localhost:8765. Instálala desde ahí como en la opción 1 y ya no necesitas el lanzador.',
+  'instalar.b.aviso': 'Usa siempre el mismo lanzador y el mismo navegador: los datos se guardan en el navegador, asociados a esa dirección.',
+  'instalar.c.titulo': 'En el servidor del centro',
+  'instalar.c.texto': 'Si el centro tiene un equipo siempre encendido, el .zip trae un docker-compose.yml que sirve MiClase a toda la red del centro. También se puede copiar la carpeta «app» a cualquier hosting web estático. Cada docente sigue guardando sus datos en su propio dispositivo.',
+  'instalar.datosTitulo': 'Tus datos, siempre contigo',
+  'instalar.datosTexto': 'Cambies de forma de instalar o de dispositivo, tus datos viajan con una copia de seguridad cifrada (Exportar / Importar) o con la sincronización directa por QR. Ninguna de las dos pasa por EDUmind.',
+  'instalar.exportar': 'Hacer una copia ahora',
+
+  // ── Página no encontrada ──
+  'noEncontrada.titulo': 'Esta página no existe',
+  'noEncontrada.texto': 'Puede que el enlace esté mal escrito o que sea de una versión anterior de la aplicación. Tus datos siguen donde estaban, en este dispositivo.',
+  'noEncontrada.volver': 'Volver al inicio',
+} as const
+
+export type Clave = keyof typeof es
+
+const gl: Record<Clave, string> = {
+  'idioma.titulo': 'Escolle o idioma da aplicación',
+  'idioma.texto': 'Poderás cambialo cando queiras desde o menú lateral. Os teus datos non cambian: só o idioma da app.',
+  'idioma.continuar': 'Continuar',
+  'idioma.menu': 'Idioma',
+
+  'menu.aula': 'Aula',
+  'menu.configuracion': 'Configuración',
+  'menu.inicio': 'Inicio',
+  'menu.planificacion': 'Planificación',
+  'menu.calificador': 'Cualificador',
+  'menu.examenes': 'Exames e probas',
+  'menu.asistencia': 'Asistencia',
+  'menu.seguimiento': 'Seguimento',
+  'menu.tutorias': 'Titorías',
+  'menu.informes': 'Informes',
+  'menu.clases': 'As miñas clases',
+  'menu.sincronizar': 'Sincronizar',
+  'menu.instalar': 'Instalar MiClase',
+  'menu.plegar': 'Pregar o menú (Ctrl+B)',
+  'menu.desplegar': 'Despregar o menú (Ctrl+B)',
+  'menu.plegarAria': 'Pregar o menú lateral',
+  'menu.desplegarAria': 'Despregar o menú lateral',
+  'menu.cargando': 'Cargando…',
+  'menu.modoLocal': 'Modo local — datos só neste dispositivo',
+  'menu.exportar': 'Exportar / Importar',
+  'menu.exportarTitulo': 'Exportar / Importar copia de seguranza',
+  'menu.conectar': 'Conectar EDUmind',
+  'menu.conectado': 'Conectado con EDUmind',
+  'menu.cerrarSesion': 'Pechar sesión',
+  'menu.softwareLibre': 'Software libre:',
+  'menu.privacidad': 'Privacidade e datos',
+  'menu.codigo': 'Código fonte',
+
+  'inicio.cargando': 'Cargando…',
+  'inicio.buenosDias': 'Bos días',
+  'inicio.buenasTardes': 'Boas tardes',
+  'inicio.buenasNoches': 'Boas noites',
+  'inicio.primaria': 'Primaria',
+  'inicio.secundaria': 'Secundaria',
+  'inicio.alumnos': '{n} alumnos',
+  'inicio.areas': '{n} áreas',
+  'inicio.trimestre1': '1º trimestre',
+  'inicio.trimestre2': '2º trimestre',
+  'inicio.trimestre3': '3º trimestre',
+  'inicio.hoy': 'Hoxe',
+  'inicio.pasarLista': 'Pasar lista',
+  'inicio.sesionHecha': 'Xa hai sesión de hoxe — revisar',
+  'inicio.sesionPendiente': 'Aínda sen sesión de hoxe',
+  'inicio.faltaAlumnado': 'Engade antes alumnado a esta clase',
+  'inicio.calificar': 'Cualificar',
+  'inicio.criteriosSinInstrumento': '{n} criterios sen instrumento',
+  'inicio.matriz': 'Matriz de alumnado × criterios',
+  'inicio.faltanAreas': 'Escolle antes as áreas desta clase',
+  'inicio.examenes': 'Exames e probas de avaliación',
+  'inicio.examenesPie': 'Corrixir coa cámara ou avaliar co QR da mesa',
+  'inicio.misClases': 'As miñas clases',
+  'inicio.nuevaClase': 'Nova clase',
+  'inicio.bienvenida': 'Benvida/o a EDUmind MiClase',
+  'inicio.bienvenidaTexto': 'O teu caderno de avaliación competencial LOMLOE. Todo o que escribas —clases, alumnado, cualificacións, evidencias— gárdase neste dispositivo e funciona sen conexión. O servidor non pode ler nada diso.',
+  'inicio.comoFunciona': 'Como funciona',
+  'inicio.paso1': 'Creas unha clase e escolles a túa comunidade autónoma: cárgase o seu currículo LOMLOE.',
+  'inicio.paso2': 'Engades o alumnado e marcas as áreas que impartes.',
+  'inicio.paso3': 'Repartes os criterios entre as túas unidades e dis con que avalías cada un.',
+  'inicio.paso4': 'Cualificas na matriz, ou escaneando o QR da mesa desde o móbil.',
+  'inicio.primeraClase': 'Crear a miña primeira clase →',
+
+  'marcha.p1.titulo': 'Crea a túa clase',
+  'marcha.p1.texto': 'Un grupo por cada clase que impartes: nome, curso, etapa e comunidade autónoma. A comunidade determina que currículo LOMLOE se carga.',
+  'marcha.p1.ver': 'Ver as miñas clases',
+  'marcha.p1.crear': 'Crear a primeira clase',
+  'marcha.p1.una': '1 clase',
+  'marcha.p1.varias': '{n} clases',
+  'marcha.p2.titulo': 'Engade o teu alumnado',
+  'marcha.p2.texto': 'Escribe a lista ou pégaa dunha vez desde o teu documento. Cada alumno recibe un código anónimo para o QR de mesa; os nomes nunca saen deste dispositivo.',
+  'marcha.p2.cta': 'Xestionar alumnado',
+  'marcha.p2.detalle': '{n} alumnos',
+  'marcha.p3.titulo': 'Escolle as áreas que impartes',
+  'marcha.p3.texto': 'Marca dunha vez todas as áreas desa clase. Aparecerán no Cualificador, cada unha cos seus criterios LOMLOE xa cargados.',
+  'marcha.p3.cta': 'Escoller áreas',
+  'marcha.p3.detalle': '{n} áreas',
+  'marcha.p4.titulo': 'Monta a programación',
+  'marcha.p4.texto': 'Reparte os criterios de avaliación entre as túas unidades ou situacións de aprendizaxe. Podes xerar a estrutura automaticamente e axustala despois.',
+  'marcha.p4.cta': 'Ir á programación',
+  'marcha.p4.detalle': '{unidades} unidades · {criterios} criterios',
+  'marcha.p5.titulo': 'Di con que avalías cada criterio',
+  'marcha.p5.texto': 'Asigna a cada criterio o seu instrumento: proba, rúbrica, observación, traballo… É o que fará que ao premer nunha casa do cualificador saibas exactamente con que estás avaliando.',
+  'marcha.p5.cta': 'Asignar instrumentos',
+  'marcha.p5.detalle': '{n} criterios con instrumento',
+  'marcha.p5.sinAsignar': '{n} instrumentos creados, sen asignar',
+  'marcha.p6.titulo': 'Avalía',
+  'marcha.p6.texto': 'Xa podes cualificar na matriz, ou imprimir o QR de cada mesa e avaliar desde o móbil escaneando: nota, observación e foto da produción en poucos segundos.',
+  'marcha.p6.cta': 'Abrir o cualificador',
+  'marcha.p6.detalle': '{n} cualificacións rexistradas',
+  'marcha.lista': '{clase} está lista para avaliar',
+  'marcha.laClase': 'A clase',
+  'marcha.falta': 'Falta configurar {clase} — paso {paso} de {total}',
+  'marcha.estaClase': 'esta clase',
+  'marcha.reabrir': 'Podes volver abrir esta guía cando queiras.',
+
+  'instalarApp.titulo': 'Instala MiClase neste dispositivo',
+  'instalarApp.texto': 'Ábrese desde a icona, a pantalla completa e sen barra do navegador, e funciona sen conexión: poderás pasar lista e cualificar no ximnasio, no patio ou nunha saída.',
+  'instalarApp.instalar': 'Instalar',
+  'instalarApp.comoSeHace': 'Como se fai',
+  'instalarApp.ahoraNo': 'Agora non',
+  'instalarApp.otrasFormas': 'Outras formas de instalar',
+  'instalarApp.ios1': 'Abre esta páxina en Safari (desde outro navegador de iOS non deixa).',
+  'instalarApp.ios2': 'Preme o botón Compartir — o cadrado coa frecha cara arriba.',
+  'instalarApp.ios3': 'Baixa e escolle «Engadir á pantalla de inicio».',
+  'instalarApp.ios4': 'Confirma con «Engadir». A icona de MiClase aparece xunto ao resto das túas apps.',
+
+  'instalar.titulo': 'Instalar MiClase',
+  'instalar.intro': 'MiClase non depende de ningún servidor para funcionar: todo o que escribes vive no teu dispositivo. Por iso podes instalala de varias formas, e calquera delas segue funcionando aínda que EDUmind deixase de existir mañá.',
+  'instalar.a.titulo': 'Desde o navegador, nun toque',
+  'instalar.a.texto': 'A forma máis rápida. A app queda no teu dispositivo coa súa icona, ábrese a pantalla completa e funciona sen conexión. Se este servidor desaparecese, a app xa instalada seguiría abríndose cos teus datos.',
+  'instalar.a.ya': 'Xa estás usando MiClase instalada neste dispositivo.',
+  'instalar.a.boton': 'Instalar agora',
+  'instalar.a.chrome': 'En Chrome ou Edge (ordenador, Android, Abalar): menú ⋮ → «Instalar MiClase» ou «Engadir á pantalla de inicio».',
+  'instalar.a.ios': 'En iPad ou iPhone: abre a páxina en Safari → Compartir → «Engadir á pantalla de inicio».',
+  'instalar.b.titulo': 'A túa propia copia, para sempre',
+  'instalar.b.texto': 'Descarga a app completa nun ficheiro .zip. Dentro hai un lanzador de dobre clic para Windows, macOS e Linux que a abre no teu navegador desde o teu propio ordenador, sen internet e sen EDUmind. É software libre: podes gardala, copiala ao resto do claustro ou publicala na web do teu centro.',
+  'instalar.b.descargar': 'Descargar MiClase (.zip)',
+  'instalar.b.github': 'Todas as versións en GitHub',
+  'instalar.b.pasosTitulo': 'Como se usa',
+  'instalar.b.paso1': 'Descomprime o .zip nun cartafol que non vaias borrar (Documentos, por exemplo).',
+  'instalar.b.paso2': 'Windows: dobre clic en «Abrir MiClase (Windows).bat». macOS: dobre clic en «Abrir MiClase (Mac).command». Linux e Abalar: executa «abrir-miclase.sh».',
+  'instalar.b.paso3': 'Ábrese o navegador en http://localhost:8765. Instálaa desde aí como na opción 1 e xa non necesitas o lanzador.',
+  'instalar.b.aviso': 'Usa sempre o mesmo lanzador e o mesmo navegador: os datos gárdanse no navegador, asociados a ese enderezo.',
+  'instalar.c.titulo': 'No servidor do centro',
+  'instalar.c.texto': 'Se o centro ten un equipo sempre aceso, o .zip trae un docker-compose.yml que serve MiClase a toda a rede do centro. Tamén se pode copiar o cartafol «app» a calquera hosting web estático. Cada docente segue gardando os seus datos no seu propio dispositivo.',
+  'instalar.datosTitulo': 'Os teus datos, sempre contigo',
+  'instalar.datosTexto': 'Aínda que cambies de forma de instalar ou de dispositivo, os teus datos viaxan cunha copia de seguranza cifrada (Exportar / Importar) ou coa sincronización directa por QR. Ningunha das dúas pasa por EDUmind.',
+  'instalar.exportar': 'Facer unha copia agora',
+
+  'noEncontrada.titulo': 'Esta páxina non existe',
+  'noEncontrada.texto': 'Pode que a ligazón estea mal escrita ou que sexa dunha versión anterior da aplicación. Os teus datos seguen onde estaban, neste dispositivo.',
+  'noEncontrada.volver': 'Volver ao inicio',
+}
+
+export const TEXTOS: Record<Idioma, Record<Clave, string>> = { es, gl }
+
+export type Variables = Record<string, string | number>
+
+/** El texto de `clave` en `idioma`, con `{variable}` sustituidas. Sin traducción, el castellano. */
+export function traducir(idioma: Idioma, clave: Clave, vars?: Variables): string {
+  const plantilla = TEXTOS[idioma]?.[clave] ?? TEXTOS.es[clave] ?? clave
+  if (!vars) return plantilla
+  return plantilla.replace(/\{(\w+)\}/g, (todo, nombre) =>
+    nombre in vars ? String(vars[nombre]) : todo)
+}
+
+/** Las variables `{…}` que lleva un texto, para comprobar que las traducciones no pierden ninguna. */
+export function variablesDe(texto: string): string[] {
+  return [...texto.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort()
+}
+
+export function esIdioma(v: unknown): v is Idioma {
+  return typeof v === 'string' && (IDIOMAS as readonly string[]).includes(v)
+}
+
+/**
+ * El idioma que se propone la primera vez, según los del navegador: galego si
+ * el aparato lo tiene entre sus idiomas antes que el castellano.
+ */
+export function idiomaPropuesto(preferidos: readonly string[]): Idioma {
+  for (const p of preferidos) {
+    const base = p.toLowerCase().split('-')[0]
+    if (base === 'gl') return 'gl'
+    if (base === 'es') return 'es'
+  }
+  return 'es'
+}
