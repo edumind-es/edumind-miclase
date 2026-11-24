@@ -6,8 +6,17 @@
  *
  * Dos aspectos, los que ya había: `area` (las grandes, subrayadas) y
  * `unidad` (las pastillas).
+ *
+ * Con Lámina encendida, las de `area` no se deslizan ni se cortan: las que no
+ * caben pasan ENTERAS a «Más · N», y la elegida se queda siempre a la vista
+ * (lo que Luis pidió cuidar: nada entrecortado). Las de `unidad` ya saltan de
+ * línea, así que no lo necesitan.
  */
-import { useRef, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
+import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react'
+import { useAspecto } from '@/useAspecto'
+import Lista from './Lista'
+import Icono from './Icono'
+import { pestanasQueNoCaben } from '@/utils/reparto'
 
 export interface Pestana<T extends string> {
   id: T
@@ -24,8 +33,39 @@ interface Props<T extends string> {
   style?: CSSProperties
 }
 
+const ANCHO_MAS = 104
+
 export default function Pestanas<T extends string>({ pestanas, activa, alCambiar, etiqueta, aspecto = 'unidad', style }: Props<T>) {
   const fila = useRef<HTMLDivElement>(null)
+  const sinCortes = useAspecto() === 'lamina' && aspecto === 'area'
+  const [fuera, setFuera] = useState<number[]>([])
+  const anchos = useRef<number[]>([])
+  const elegida = pestanas.findIndex(p => p.id === activa)
+  const firma = pestanas.map(p => p.id).join('|')
+
+  // Se miden una vez con todas a la vista (su ancho no depende del hueco) y
+  // se reparte cada vez que cambia el hueco o la elegida
+  useLayoutEffect(() => {
+    const el = fila.current
+    if (!sinCortes || !el) { setFuera(f => (f.length ? [] : f)); return }
+    const repartir = () => setFuera(antes => {
+      const ahora = pestanasQueNoCaben(anchos.current, el.clientWidth, elegida, ANCHO_MAS)
+      return ahora.join() === antes.join() ? antes : ahora
+    })
+    const medir = () => {
+      const tabs = [...el.querySelectorAll<HTMLElement>('[role="tab"]')]
+      const ocultas = tabs.map(b => b.hidden)
+      tabs.forEach(b => { b.hidden = false })
+      anchos.current = tabs.map(b => b.offsetWidth)
+      tabs.forEach((b, i) => { b.hidden = ocultas[i] })
+      repartir()
+    }
+    medir()
+    const ro = new ResizeObserver(repartir)
+    ro.observe(el)
+    document.fonts?.ready.then(medir)
+    return () => ro.disconnect()
+  }, [sinCortes, firma, elegida])
 
   const alTeclear = (e: KeyboardEvent<HTMLDivElement>) => {
     const i = pestanas.findIndex(p => p.id === activa)
@@ -43,16 +83,23 @@ export default function Pestanas<T extends string>({ pestanas, activa, alCambiar
   }
 
   return (
-    <div ref={fila} role="tablist" aria-label={etiqueta} className={aspecto === 'area' ? 'tabs-area' : 'tabs-unidad'}
+    <div ref={fila} role="tablist" aria-label={etiqueta} className={`${aspecto === 'area' ? 'tabs-area' : 'tabs-unidad'}${sinCortes ? ' tabs-sin-cortes' : ''}`}
       style={style} onKeyDown={alTeclear}>
-      {pestanas.map(p => (
+      {pestanas.map((p, i) => (
         <button key={p.id} type="button" role="tab" aria-selected={p.id === activa} tabIndex={p.id === activa ? 0 : -1}
-          data-pestana={p.id}
+          data-pestana={p.id} hidden={fuera.includes(i)}
           className={`${aspecto === 'area' ? 'tab-area' : 'tab-unidad'}${p.id === activa ? ' activa' : ''}`}
           onClick={() => alCambiar(p.id)}>
           {p.etiqueta}
         </button>
       ))}
+      {sinCortes && fuera.length > 0 && (
+        <Lista<number> etiqueta={`Más pestañas: ${etiqueta}`} className="tab-area tabs-mas" data-pestanas-mas
+          opciones={fuera.map(i => ({ valor: i, texto: fila.current?.querySelectorAll('[role="tab"]')[i]?.textContent ?? String(pestanas[i].id) }))}
+          alElegir={i => alCambiar(pestanas[i].id)}>
+          Más · {fuera.length} <Icono nombre="mas" lado={18} />
+        </Lista>
+      )}
     </div>
   )
 }

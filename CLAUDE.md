@@ -1761,6 +1761,16 @@ edumind_miclase/
   **no entra en la tabla de notas**: vive en el hub, en la franja bajo la
   barra superior (`[data-marco-franja]`) y en el selector de área, cuya
   primera opción en el Calificador es «Todas las áreas».
+- **Con Lámina, las pestañas de `Pestanas` con aspecto `area` no se cortan**:
+  las que no caben pasan enteras a «Más · N» (`[data-pestanas-mas]`, una
+  `Lista`) y la elegida queda siempre a la vista. El reparto es
+  `pestanasQueNoCaben` (`utils/reparto.ts`, puro, `reparto.test.ts`): una vez
+  que una no cabe, las siguientes tampoco entran, para no desordenarlas. Los
+  anchos se miden una vez con todas a la vista y se reparte al cambiar el
+  hueco (`ResizeObserver`) o la elegida. Las de aspecto `unidad` saltan de
+  línea y no lo necesitan. Una pestaña escondida lleva `hidden`: las pruebas
+  que busquen una pestaña por su nombre en pantalla estrecha con Lámina
+  pasan antes por «Más».
 - **Con Lámina, «Exámenes y pruebas» también entra por un hub de áreas**
   (`ExamenesConHoja`: `enHub` mientras `areaId` es null). Sustituye a las
   pestañas de áreas, que con diez áreas dejaban la mitad en «Más»; con el
