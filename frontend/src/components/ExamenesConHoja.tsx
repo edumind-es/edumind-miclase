@@ -25,6 +25,10 @@ import {
 } from '@/db/queries'
 import { useClaseActiva } from '@/contexto/ClaseActiva'
 import Pestanas from './comunes/Pestanas'
+import Sigla from './comunes/Sigla'
+import Icono from './comunes/Icono'
+import { useAspecto } from '@/useAspecto'
+import { identidadDeAreas } from '@/db/areas'
 import { BotonEditarActividad } from './FichaActividad'
 import { herramientaDe } from './QueEvaluoPorUnidad'
 import { abreviatura } from '@/ia/instrumentosConfig'
@@ -101,6 +105,12 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
   const { grupo, asignaturas, asignaturaId } = useClaseActiva()
   const [areaId, setAreaId] = useState<number | null>(null)
   const [verOtras, setVerOtras] = useState(false)
+  // Con Lámina se entra por un hub de áreas (como en el Calificador) en vez de
+  // por pestañas: con diez áreas, la mitad acababa escondida. Mientras no se
+  // elige ninguna, se ve el hub.
+  const aspecto = useAspecto()
+  const enHub = aspecto === 'lamina' && areaId == null
+  const identidad = identidadDeAreas(asignaturas)
   const areaElegida = asignaturas.find(a => a.id === areaId) ?? asignaturas.find(a => a.id === asignaturaId) ?? asignaturas[0] ?? null
 
   useEffect(() => {
@@ -168,7 +178,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
         y se corrige apuntando la cámara a cada hoja.
       </p>
 
-      {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
+      {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
 
       {lista == null ? (
         <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Cargando…</div>
@@ -186,17 +196,47 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
         return (
           <>
             <div data-examenes-clase style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--gris-700)', marginBottom: 4 }}>{grupo.nombre}</div>
-            <Pestanas
-              pestanas={asignaturas.map(a => ({ id: String(a.id), etiqueta: a.nombre_display }))}
-              activa={String(areaElegida.id)} alCambiar={id => setAreaId(Number(id))}
-              etiqueta="Área de la que se ven las actividades" aspecto="area" style={{ marginBottom: 10 }}
-            />
-            <AreaDeExamenes
-              key={areaElegida.id} grupo={grupo} asig={areaElegida} recarga={recarga} ocupado={ocupado}
-              examenes={lista.filter(f => f.asig.id === areaElegida.id)}
-              onEditarExamen={(ins, unidad) => abrirEditor(ins, areaElegida, grupo, unidad)}
-              onAbrir={abrir} onCambio={() => setRecarga(n => n + 1)} onError={setAviso}
-            />
+            {aspecto !== 'lamina' && (
+              <Pestanas
+                pestanas={asignaturas.map(a => ({ id: String(a.id), etiqueta: a.nombre_display }))}
+                activa={String(areaElegida.id)} alCambiar={id => setAreaId(Number(id))}
+                etiqueta="Área de la que se ven las actividades" aspecto="area" style={{ marginBottom: 10 }}
+              />
+            )}
+            {enHub && (
+              <>
+                <p className="hub-rotulo"><span>Por área · {asignaturas.length}</span><span>Toca un área para ver sus unidades</span></p>
+                <ol className="hub-mosaico" data-examenes-hub>
+                  {asignaturas.map(a => { const id = identidad.get(a.id!)!; const n = lista.filter(f => f.asig.id === a.id).length; return (
+                    <li key={a.id} className="hub-casilla" data-examenes-hub-area={a.id} data-sigla={id.sigla}
+                      style={{ '--c': id.color, '--cp': id.papel } as React.CSSProperties}>
+                      <button type="button" className="hub-abre" onClick={() => setAreaId(a.id!)}>
+                        <Sigla sigla={id.sigla} color={id.color} />
+                        <span className="hub-nombre"><b>{a.nombre_display}</b>
+                          <span className="hub-dato">{n === 0 ? 'Sin exámenes definidos' : n === 1 ? '1 examen' : `${n} exámenes`}</span></span>
+                      </button>
+                    </li>
+                  ) })}
+                </ol>
+              </>
+            )}
+            {aspecto === 'lamina' && !enHub && (() => { const id = identidad.get(areaElegida.id!); return (
+              <div className="hub-dentro" data-examenes-dentro style={{ '--c': id?.color, '--cp': id?.papel } as React.CSSProperties}>
+                {id && <Sigla sigla={id.sigla} color={id.color} />}
+                <b>{areaElegida.nombre_display}</b>
+                <button type="button" className="btn-secondary" data-examenes-todas onClick={() => setAreaId(null)}>
+                  <Icono nombre="rejilla" lado={18} /> Todas las áreas
+                </button>
+              </div>
+            ) })()}
+            {!enHub && (
+              <AreaDeExamenes
+                key={areaElegida.id} grupo={grupo} asig={areaElegida} recarga={recarga} ocupado={ocupado}
+                examenes={lista.filter(f => f.asig.id === areaElegida.id)}
+                onEditarExamen={(ins, unidad) => abrirEditor(ins, areaElegida, grupo, unidad)}
+                onAbrir={abrir} onCambio={() => setRecarga(n => n + 1)} onError={setAviso}
+              />
+            )}
             {otras.length > 0 && (
               <div style={{ marginTop: 14 }}>
                 <button type="button" className="btn-secondary" data-examenes-otras-toggle aria-expanded={verOtras}

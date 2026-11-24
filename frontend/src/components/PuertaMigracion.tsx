@@ -116,7 +116,7 @@ function Puerta({ instalada, alTerminar }: { instalada: number; alTerminar: () =
           cifrada</strong> de todos tus datos, tal y como están ahora: si algo saliera mal, se restaura
           desde «Exportar / Importar copia de seguridad», en el menú lateral.
         </p>
-        <div style={{ background: 'var(--ambar-50, #fffbeb)', border: '1px solid var(--ambar-500, #d97706)', borderRadius: 8, padding: '10px 14px', margin: '14px 0', fontSize: 15 }}>
+        <div style={{ background: 'var(--ambar-50, var(--aviso-fondo))', border: '1px solid var(--ambar-500, #d97706)', borderRadius: 8, padding: '10px 14px', margin: '14px 0', fontSize: 15 }}>
           <strong>Importante:</strong> actualiza <em>todos</em> tus aparatos (iPad, ordenador, móvil) antes
           de volver a calificar. Un aparato con la versión anterior que sincronice con este podría
           retirar notas que aquí ya están separadas por unidad.
@@ -131,7 +131,7 @@ function Puerta({ instalada, alTerminar }: { instalada: number; alTerminar: () =
           <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} autoComplete="new-password"
             data-migracion-confirmar style={{ display: 'block', width: '100%', marginTop: 4, padding: 8, fontSize: 16 }} />
         </label>
-        {error && <p role="alert" style={{ color: 'var(--rojo-600, #b91c1c)', fontSize: 14 }}>{error}</p>}
+        {error && <p role="alert" style={{ color: 'var(--rojo-600, var(--mal-fuerte))', fontSize: 14 }}>{error}</p>}
         {fichero && <p style={{ fontSize: 14 }}>Copia guardada: <code>{fichero}</code></p>}
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" className="btn-primary" onClick={copiarYSeguir} disabled={trabajando} data-migracion-copiar style={{ fontSize: 16, padding: '10px 18px' }}>

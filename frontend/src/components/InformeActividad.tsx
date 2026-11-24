@@ -229,7 +229,7 @@ export default function InformeActividad({ asignaturaId, instrumentoId, instrume
         </>
       )}>
       <div style={{ fontSize: 13, color: 'var(--gris-700)', lineHeight: 1.5 }}>
-        {error && <div data-informe-error style={{ color: '#92400e', background: '#fffbeb', padding: '8px 10px' }}>{error}</div>}
+        {error && <div data-informe-error style={{ color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px' }}>{error}</div>}
         {!error && !actividad && <div style={{ color: 'var(--gris-600)' }}>Preparando el informe…</div>}
         {actividad && (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
@@ -259,7 +259,7 @@ export default function InformeActividad({ asignaturaId, instrumentoId, instrume
         )}
         {delAlumno && !(frente === 'parecidos' && conParecidos) && <Vista a={delAlumno} grupo="La clase" />}
         {delAlumno && (delAlumno.nota.grupo?.n ?? 0) < MINIMO_GRUPO && (
-          <p data-informe-pocos style={{ fontSize: 12, color: '#92400e', background: '#fffbeb', padding: '8px 10px', marginTop: 10 }}>
+          <p data-informe-pocos style={{ fontSize: 12, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', marginTop: 10 }}>
             Hay menos de {MINIMO_GRUPO} notas en esta actividad: el documento saldrá sin las cifras de la clase, porque de tan pocas se deducen las de los compañeros.
           </p>
         )}
@@ -269,7 +269,7 @@ export default function InformeActividad({ asignaturaId, instrumentoId, instrume
             Imprimir también mis observaciones (si no, se quedan en la app)
           </label>
         )}
-        {msg && <div data-informe-msg role="status" style={{ marginTop: 10, fontSize: 12.5, color: '#166534', background: '#dcfce7', padding: '8px 10px' }}>{msg}</div>}
+        {msg && <div data-informe-msg role="status" style={{ marginTop: 10, fontSize: 12.5, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', padding: '8px 10px' }}>{msg}</div>}
       </div>
     </Dialogo>
   )

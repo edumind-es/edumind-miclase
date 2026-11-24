@@ -176,7 +176,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
           <button type="button" className="btn-secondary" style={{ fontSize: 13 }} onClick={activar} data-refuerzo-activar disabled={!instrumentos.length}>
             Activar refuerzo
           </button>
-          {!instrumentos.length && <span style={{ fontSize: 12, color: 'var(--ambar-600, #b45309)' }}>El área aún no tiene instrumentos.</span>}
+          {!instrumentos.length && <span style={{ fontSize: 12, color: 'var(--ambar-600, var(--aviso-fuerte))' }}>El área aún no tiene instrumentos.</span>}
         </div>
       ) : (
         <>
@@ -193,7 +193,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
 
           <div>
             {familias.map(f => (
-              <div key={f.id} style={{ borderTop: '1px solid var(--gris-200, #e5e7eb)' }}>
+              <div key={f.id} style={{ borderTop: '1px solid var(--gris-200, var(--borde-suave))' }}>
                 {filaPeso(f, pctFamilias.get(f.id!) ?? 0, v => fijarFamiliaPct(f, v), false)}
                 {hijosDe(f).length > 0 && (() => {
                   const hs = hijosDe(f)
@@ -202,7 +202,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
                 })()}
               </div>
             ))}
-            <p data-refuerzo-total style={{ fontSize: 12, margin: '6px 0 0', color: totalFamilias === 100 ? 'var(--gris-600)' : 'var(--ambar-600, #b45309)' }}>
+            <p data-refuerzo-total style={{ fontSize: 12, margin: '6px 0 0', color: totalFamilias === 100 ? 'var(--gris-600)' : 'var(--ambar-600, var(--aviso-fuerte))' }}>
               {totalFamilias === 100 ? 'Los instrumentos suman 100.' : `Los instrumentos suman ${totalFamilias}. El cálculo reparte proporcionalmente; conviene que sumen 100 para leerlos como porcentajes.`}
             </p>
           </div>
@@ -252,7 +252,7 @@ export default function MedidaRefuerzo({ alumno, asignatura, medida, onCambio }:
                 onClick={() => setNuevo({ nombre: '', tipo: 'oral', familia_id: null, en_lugar_de: null })}>
                 + Instrumento propio
               </button>
-              <button type="button" style={{ fontSize: 12.5, background: 'none', border: 'none', color: 'var(--rojo-500, #b91c1c)', cursor: 'pointer', fontWeight: 600 }} onClick={quitar} data-refuerzo-quitar>
+              <button type="button" style={{ fontSize: 12.5, background: 'none', border: 'none', color: 'var(--rojo-500, var(--mal-fuerte))', cursor: 'pointer', fontWeight: 600 }} onClick={quitar} data-refuerzo-quitar>
                 Quitar refuerzo
               </button>
             </div>

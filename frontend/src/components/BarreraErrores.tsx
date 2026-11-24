@@ -48,7 +48,7 @@ export default class BarreraErrores extends Component<Props, Estado> {
         </p>
         <pre style={{
           fontSize: 12, lineHeight: 1.45, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-          background: '#fee2e2', color: '#991b1b', padding: '10px 12px', borderRadius: 8, maxHeight: 220, overflow: 'auto', margin: '0 0 14px',
+          background: 'var(--mal-fondo)', color: 'var(--mal-tinta)', padding: '10px 12px', borderRadius: 8, maxHeight: 220, overflow: 'auto', margin: '0 0 14px',
         }}>{error.name}: {error.message}</pre>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           <button className="btn-primary" onClick={() => location.reload()} style={{ fontSize: 13 }}>↻ Recargar la app</button>

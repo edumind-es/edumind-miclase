@@ -51,7 +51,7 @@ export default function MedidasAlumno({ alumno, grupo, asignaturaId, onCerrar, o
     <div className="modal-overlay" role="dialog" aria-modal="true" aria-label="Medidas de atención a la diversidad"
       onClick={e => { if (e.target === e.currentTarget) onCerrar() }} data-medidas-alumno>
       <div className="card" style={{ width: 'min(720px, 96vw)', maxHeight: '92vh', overflow: 'auto', padding: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 18px', borderBottom: '1px solid var(--gris-200, #e5e7eb)', position: 'sticky', top: 0, background: 'white', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 18px', borderBottom: '1px solid var(--gris-200, var(--borde-suave))', position: 'sticky', top: 0, background: 'white', zIndex: 1 }}>
           <div style={{ flex: 1 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, margin: 0 }}>Medidas de atención a la diversidad</h2>
             <div style={{ fontSize: 13, color: 'var(--gris-600)' }}>{alumno.apellidos}, {alumno.nombre} · {grupo.nombre}</div>
@@ -71,7 +71,7 @@ export default function MedidasAlumno({ alumno, grupo, asignaturaId, onCerrar, o
             const re = medidaDe(lista, 'refuerzo')
             const estaAbierta = abierta === a.id
             return (
-              <div key={a.id} data-medidas-area={a.id} style={{ border: '1px solid var(--gris-200, #e5e7eb)', borderRadius: 10 }}>
+              <div key={a.id} data-medidas-area={a.id} style={{ border: '1px solid var(--gris-200, var(--borde-suave))', borderRadius: 10 }}>
                 <button type="button" onClick={() => setAbierta(estaAbierta ? null : a.id!)} data-medidas-area-toggle
                   style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontSize: 14, fontWeight: 600 }}>
                   <span style={{ flex: 1 }}>{a.nombre_display || a.nombre}</span>

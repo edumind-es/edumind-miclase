@@ -48,7 +48,7 @@ function Celda({ c }: { c: Comparacion }) {
       <div style={{ fontWeight: 700, color: c.valor == null ? 'var(--gris-500)' : cal.color }}>{formato(c.valor)}</div>
       {c.grupo && (
         <div style={{ fontSize: 11.5, color: 'var(--gris-600)' }}>
-          med. {formato(c.grupo.mediana)}{c.diferencia != null && <span style={{ color: c.diferencia < 0 ? '#b91c1c' : c.diferencia > 0 ? '#166534' : undefined }}> ({signo(c.diferencia)})</span>}
+          med. {formato(c.grupo.mediana)}{c.diferencia != null && <span style={{ color: c.diferencia < 0 ? 'var(--mal-fuerte)' : c.diferencia > 0 ? 'var(--bien-tinta)' : undefined }}> ({signo(c.diferencia)})</span>}
         </div>
       )}
     </td>
@@ -166,7 +166,7 @@ export default function AnalisisAlumno({ alumno, grupoId, asignaturaId, onCerrar
             Imprimir informe
           </button>
         </div>
-        {aviso && <div role="alert" style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>{aviso}</div>}
+        {aviso && <div role="alert" style={{ padding: '8px 12px', borderRadius: 8, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>{aviso}</div>}
 
         {cargando && <p style={{ color: 'var(--gris-600)' }}>Calculando…</p>}
         {!cargando && !areas.length && <p style={{ color: 'var(--gris-600)' }}>La clase todavía no tiene áreas.</p>}

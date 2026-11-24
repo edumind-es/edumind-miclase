@@ -383,7 +383,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
                         border: '2px solid', minHeight: 42,
                         borderColor: activo ? 'var(--azul-700)' : conInstr ? 'var(--gris-300)' : '#fed7aa',
                         background: activo ? 'var(--azul-700)' : 'white',
-                        color: activo ? 'white' : conInstr ? 'var(--gris-600)' : '#b45309',
+                        color: activo ? 'white' : conInstr ? 'var(--gris-600)' : 'var(--aviso-fuerte)',
                       }}>
                       {c.id}
                       {!conInstr && <span style={{ marginLeft: 4, fontSize: 10 }}>⚠</span>}
@@ -433,7 +433,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
                 </div>
               </div>
             ) : (
-              <div style={{ marginBottom: 12, padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
+              <div style={{ marginBottom: 12, padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)' }}>
                 Esta área no tiene instrumentos de evaluación todavía.{' '}
                 <button onClick={() => setManagerAbierto(true)}
                   style={{ background: 'none', border: 'none', color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', fontSize: 12.5, padding: 0, textDecoration: 'underline' }}>
@@ -589,7 +589,7 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
           )}
 
           {asignaturas.length === 0 && (
-            <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', marginBottom: 12 }}>
+            <div style={{ padding: '10px 14px', borderRadius: 8, fontSize: 12.5, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', color: 'var(--aviso-tinta)', marginBottom: 12 }}>
               Esta clase no tiene áreas configuradas.{' '}
               <Link to={`/grupos/${grupo.id}?pestana=areas`} style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Configurarla →</Link>
             </div>

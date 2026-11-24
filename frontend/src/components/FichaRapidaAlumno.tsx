@@ -103,7 +103,7 @@ export default function FichaRapidaAlumno({ alumno, grupo, asignaturaId, onCerra
       <Pestanas etiqueta="Qué se enseña del alumno" activa={pestana} alCambiar={setPestana}
         pestanas={[{ id: 'area', etiqueta: area ? `Esta área · ${area.nombre_display}` : 'Esta área' }, { id: 'todas', etiqueta: 'Todas las áreas' }]} />
 
-      {aviso && <div role="alert" style={{ margin: '10px 0', fontSize: 13, color: '#991b1b' }}>{aviso}</div>}
+      {aviso && <div role="alert" style={{ margin: '10px 0', fontSize: 13, color: 'var(--mal-tinta)' }}>{aviso}</div>}
 
       {pestana === 'area' && (
         <div data-ficha-rapida-area style={{ marginTop: 12 }}>

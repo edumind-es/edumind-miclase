@@ -187,8 +187,8 @@ export default function CompartirPaquete({ onCambio, desbloqueado }: {
       </p>
 
       {tieneClave === false && !pendiente && (
-        <div style={{ marginBottom: 14, padding: 14, background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8 }}>
-          <p style={{ fontSize: 13, color: '#92400e', lineHeight: 1.55, marginBottom: 10 }}>
+        <div style={{ marginBottom: 14, padding: 14, background: 'var(--aviso-fondo)', border: '1px solid var(--aviso-borde)', borderRadius: 8 }}>
+          <p style={{ fontSize: 13, color: 'var(--aviso-tinta)', lineHeight: 1.55, marginBottom: 10 }}>
             <strong>Este dispositivo aún no tiene contraseña de sincronización.</strong>{' '}
             Si ya la creaste en el otro, no crees otra: pulsa «Recibir un paquete» con uno
             generado allí y escribe aquella. Si no la tienes en ninguno, créala aquí.

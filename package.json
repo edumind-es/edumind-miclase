@@ -1,6 +1,6 @@
 {
   "name": "edumind-miclase",
-  "version": "0.1.0",
+  "version": "1.10.0",
   "author": "Luis Vilela Acuña <contacto@edumind.es>",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "test:prod": "node pruebas/ejecutar.mjs --produccion",
     "seed": "cd backend && npm run seed",
     "curriculo": "node scripts/empaquetar_curriculo.mjs",
+    "version:subir": "node scripts/version.mjs subir",
     "build": "cd frontend && npm run build",
     "nativo:sync": "npm run build && cd frontend && npx cap sync",
     "nativo:ios": "npm run nativo:sync && cd frontend && npx cap open ios",

@@ -1,0 +1,258 @@
+/* ============================================================
+   EDUmind MiClase — aspecto Lámina (fase 0: cimientos)
+
+   Papel, tinta y filete. La paleta es la de la skill edumind-lamina,
+   que manda para todo (decisión de Luis, 23·11·2026).
+
+   Todo lo que CAMBIA algo cuelga de :root[data-aspecto="lamina"], que
+   pone src/aspecto.ts. Sin ese atributo la app es la de siempre: aquí
+   arriba solo se declaran nombres nuevos y fuentes, que nadie usa aún.
+
+   Sin `@container`, `:has()` ni `color-mix()`: la app nativa admite
+   iOS 15 y ahí no existen.
+   ============================================================ */
+
+/* Las fuentes ya viajan en la app (public/fonts, las de los informes) y el
+   service worker las guarda: funcionan sin red. Solo se descargan si se usan.
+
+   Llevan nombre propio («… Lamina») a propósito: el canon vendorizado nombra
+   «Outfit» como reserva en `--lm-display`, y declararla con ese nombre hacía
+   que pantallas del aspecto de siempre la descargasen y cambiasen de letra
+   con el interruptor apagado. */
+@font-face {
+  font-family: 'Outfit Lamina'; font-style: normal; font-weight: 100 900;
+  font-display: swap; src: url('/fonts/Outfit-Variable.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Plex Mono Lamina'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/IBMPlexMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Plex Mono Lamina'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('/fonts/IBMPlexMono-SemiBold.woff2') format('woff2');
+}
+
+:root {
+  /* Papel y tinta */
+  --papel:   #ece9e1;
+  --papel-2: #f4f2ec;
+  --tinta:   #17181a;
+  --tinta-2: #3d3f42;
+  --tinta-3: #5c5a55;   /* 4,5:1 o más sobre los dos papeles */
+  --pelo:    #c9c4b8;   /* el filete fino */
+
+  /* Los Cinco Mundos, desaturados: filetes y marcas, nunca texto de cuerpo */
+  --mundo-fisico:    #c05f3c;
+  --mundo-social:    #c19a2e;
+  --mundo-emocional: #7ba24f;
+  --mundo-mental:    #6c8fb3;
+  --mundo-interior:  #4a5f68;
+
+  /* Colores de área: diez tonos apagados, 4,5:1 o más bajo la sigla en blanco.
+     El color nunca va solo (siempre con la sigla) ni entra en la tabla de notas. */
+  --area-1: #5b4a8a;  --area-2: #2c6e8a;  --area-3: #8f4a2b;  --area-4: #457436;  --area-5: #846514;
+  --area-6: #a23f5c;  --area-7: #1f6e63;  --area-8: #8e4a8c;  --area-9: #3c5a9c;  --area-10: #666a22;
+
+  --f-display: 'Outfit Lamina', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:    'Plex Mono Lamina', ui-monospace, Menlo, Consolas, monospace;
+
+  /* La cabecera del menú y la barra superior miden lo mismo: su filete es continuo */
+  --alto-barra: 56px;
+  /* Zonas del sistema (hora, batería, indicador de inicio) */
+  --seg-arriba: env(safe-area-inset-top, 0px);
+  --seg-abajo:  env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Con el aspecto encendido ─────────────────────────────────────────── */
+
+/* Los nombres que la app ya usa pasan a papel y tinta. Cambia de golpe todo
+   lo que tira de ellos (menú, botones con clase, tarjetas, diálogos); lo que
+   cada pantalla lleva escrito a mano se va haciendo fase a fase. */
+:root[data-aspecto="lamina"] {
+  --azul-900: var(--tinta);
+  --azul-700: var(--tinta);
+  --azul-500: var(--tinta-2);
+  --azul-300: var(--pelo);
+  --azul-100: var(--papel-2);
+
+  --gris-900: var(--tinta);
+  --gris-600: var(--tinta-2);
+  --gris-500: var(--tinta-3);
+  --gris-300: var(--pelo);
+  --gris-100: var(--papel);
+  --blanco:   var(--papel-2);
+
+  --radio-sm: 0;
+  --radio-md: 0;
+  --radio-lg: 0;
+  --sombra:    none;
+  --sombra-md: none;
+
+  --fuente: var(--f-display);
+
+  /* El canon vendorizado (lamina-v1.css) todavía trae los mundos vivos: aquí
+     se corrige a la paleta de la skill. Las variantes «-deep» para texto se
+     dejan: son las que cumplen contraste. */
+  --lm-fisico:    var(--mundo-fisico);
+  --lm-social:    var(--mundo-social);
+  --lm-emocional: var(--mundo-emocional);
+  --lm-mental:    var(--mundo-mental);
+  --lm-interior:  var(--mundo-interior);
+  --lm-paper:   var(--papel);
+  --lm-paper-2: var(--papel-2);
+  --lm-ink:     var(--tinta);
+  --lm-ink-2:   var(--tinta-2);
+  --lm-ink-3:   var(--tinta-3);
+  --lm-rule:        var(--pelo);
+  --lm-rule-strong: var(--tinta);
+  --lm-display: var(--f-display);
+  --lm-body:    var(--f-display);
+  --lm-mono:    var(--f-mono);
+
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Cero radios, también en lo que cada pantalla lleva escrito en línea.
+   Es la regla más visible del canon y no admite excepciones. */
+:root[data-aspecto="lamina"] *,
+:root[data-aspecto="lamina"] *::before,
+:root[data-aspecto="lamina"] *::after { border-radius: 0 !important; }
+
+/* Transiciones cortas y solo de color: nada se mueve */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-aspecto="lamina"] * { transition: none !important; }
+}
+
+/* ============================================================
+   Fase 2 — las piezas comunes, con el aspecto encendido
+
+   Botones, campos, tarjetas, diálogos, pestañas y títulos se escriben
+   aquí UNA vez sobre las clases que la app ya usa: cambia el aire de
+   todas las pantallas sin tocar ninguna. Lo que una pantalla lleve
+   escrito en línea sigue mandando sobre esto hasta que se le quite.
+   ============================================================ */
+
+:root[data-aspecto="lamina"] {
+  /* Avisos: sin fondos pastel. Papel, y el color en el filete y en la tinta */
+  --aviso-fondo:  var(--papel-2);
+  --aviso-borde:  #a8811f;
+  --aviso-tinta:  #6a5015;
+  --aviso-fuerte: #6a5015;
+  --bien-fondo:   var(--papel-2);
+  --bien-tinta:   #17663a;
+  --mal-fondo:    var(--papel-2);
+  --mal-tinta:    #991b1b;
+  --mal-fuerte:   #991b1b;
+  --borde-suave:  var(--pelo);
+  --verde-100: var(--papel-2);
+  --rojo-100:  var(--papel-2);
+  --ambar-100: var(--papel-2);
+  --verde-500: #17663a;
+  --rojo-500:  #b3261e;
+  --ambar-500: #8a5a00;
+}
+
+/* ── Botones: tinta sobre papel, y al revés al pasar ── */
+:root[data-aspecto="lamina"] .btn-primary { background: var(--tinta); color: var(--papel); border: 2px solid var(--tinta); font-weight: 600; }
+:root[data-aspecto="lamina"] .btn-primary:hover:not(:disabled) { background: transparent; color: var(--tinta); }
+:root[data-aspecto="lamina"] .btn-secondary { background: transparent; color: var(--tinta); border: 1px solid var(--tinta); }
+:root[data-aspecto="lamina"] .btn-secondary:hover:not(:disabled) { background: var(--tinta); color: var(--papel); }
+:root[data-aspecto="lamina"] .btn-danger { background: transparent; color: var(--mal-tinta); border: 2px solid var(--mal-tinta); font-weight: 600; }
+:root[data-aspecto="lamina"] .btn-danger:hover:not(:disabled) { background: var(--mal-tinta); color: var(--papel); }
+:root[data-aspecto="lamina"] button { transition: background .15s, color .15s, border-color .15s; }
+:root[data-aspecto="lamina"] .boton-enlace { color: var(--tinta); text-underline-offset: 3px; }
+
+/* ── Campos: papel claro y filete de tinta debajo ── */
+:root[data-aspecto="lamina"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+:root[data-aspecto="lamina"] select,
+:root[data-aspecto="lamina"] textarea {
+  border: 0; border-bottom: 2px solid var(--tinta); background: var(--papel-2); color: var(--tinta);
+}
+:root[data-aspecto="lamina"] input:focus, :root[data-aspecto="lamina"] select:focus, :root[data-aspecto="lamina"] textarea:focus {
+  box-shadow: none; outline: 2px solid var(--tinta); outline-offset: 2px;
+}
+:root[data-aspecto="lamina"] input[type="checkbox"], :root[data-aspecto="lamina"] input[type="radio"] { accent-color: var(--tinta); }
+:root[data-aspecto="lamina"] :where(a, button, [role="button"], [tabindex]):focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+/* ── Tarjetas y diálogos: filete en vez de sombra ── */
+:root[data-aspecto="lamina"] .card { background: var(--papel-2); border: 1px solid var(--pelo); box-shadow: none; }
+:root[data-aspecto="lamina"] .modal-overlay { background: rgba(23, 24, 26, .6); }
+:root[data-aspecto="lamina"] .modal-overlay > .card,
+:root[data-aspecto="lamina"] .dialogo { background: var(--papel); border: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .dialogo-cabecera { align-items: center; padding: 12px 16px; border-bottom: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .dialogo-titulo { margin: 0; font: 800 22px/1.1 var(--f-display); letter-spacing: -.02em; }
+:root[data-aspecto="lamina"] .dialogo-antetitulo { font: 400 12px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
+:root[data-aspecto="lamina"] .dialogo-cuerpo { padding: 16px; }
+:root[data-aspecto="lamina"] .dialogo-pie { border-top: 1px solid var(--pelo); padding: 12px 16px; }
+:root[data-aspecto="lamina"] .modal-close { color: var(--tinta); }
+:root[data-aspecto="lamina"] .modal-close:hover { background: var(--tinta); color: var(--papel); }
+
+/* ── Títulos ── */
+:root[data-aspecto="lamina"] .page-title { font: 800 clamp(1.6rem, 3.2vw, 2.4rem)/1.05 var(--f-display); letter-spacing: -.03em; color: var(--tinta); }
+:root[data-aspecto="lamina"] h1, :root[data-aspecto="lamina"] h2, :root[data-aspecto="lamina"] h3 { letter-spacing: -.01em; }
+/* Solo los enlaces de texto de las pantallas. Los del marco y los que hacen de
+   botón llevan su propia clase: pintarlos todos dejó la entrada activa del
+   menú en tinta sobre tinta. */
+:root[data-aspecto="lamina"] .main-content a:not([class]) { color: var(--tinta); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Pestañas: la elegida es un bloque de tinta apoyado en el filete ── */
+:root[data-aspecto="lamina"] .tabs-area { gap: 0; border-bottom: 2px solid var(--tinta); }
+:root[data-aspecto="lamina"] .tab-area { margin-bottom: 0; border-bottom: 0; border-right: 1px solid var(--pelo); color: var(--tinta); font-weight: 500; }
+:root[data-aspecto="lamina"] .tab-area:hover { background: var(--papel-2); color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-area.activa, :root[data-aspecto="lamina"] .tab-area[aria-selected="true"] { background: var(--tinta); color: var(--papel); font-weight: 600; border-right-color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad { border: 1px solid var(--tinta); background: transparent; color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad:hover { background: var(--papel-2); border-color: var(--tinta); color: var(--tinta); }
+:root[data-aspecto="lamina"] .tab-unidad.activa, :root[data-aspecto="lamina"] .tab-unidad[aria-selected="true"] { background: var(--tinta); color: var(--papel); }
+
+/* ── Etiquetas: filete, no pastilla ── */
+:root[data-aspecto="lamina"] .badge { border: 1px solid currentColor; font-family: var(--f-mono); letter-spacing: .04em; }
+
+/* ============================================================
+   Fase 3 — el Calificador: la tabla y las notas
+   ============================================================ */
+
+/* La tabla: papel liso y filetes. Sin cebra: las rayas ya las dan los filetes */
+:root[data-aspecto="lamina"] .matriz-wrap { border: 0; border-top: 2px solid var(--tinta); border-bottom: 2px solid var(--tinta); background: var(--papel); }
+:root[data-aspecto="lamina"] .matriz tbody tr, :root[data-aspecto="lamina"] .matriz tbody tr:nth-child(even) { background: var(--papel); }
+:root[data-aspecto="lamina"] .matriz tbody tr:hover { background: var(--papel-2); }
+:root[data-aspecto="lamina"] .matriz th, :root[data-aspecto="lamina"] .matriz td { border-bottom: 1px solid var(--pelo); }
+:root[data-aspecto="lamina"] .matriz tbody td.col-alumno { border-right: 1px solid var(--tinta); }
+
+/* La casilla: cifra en la letra de máquina, 44 px para el dedo */
+:root[data-aspecto="lamina"] .celda-btn { min-height: 44px; background: transparent; color: var(--tinta-3); border: 0; border-bottom: 4px solid transparent; font-family: var(--f-mono); font-weight: 600; }
+:root[data-aspecto="lamina"] .celda-btn:hover { background: var(--papel-2); }
+:root[data-aspecto="lamina"] .celda-btn:focus-visible { outline: 2px solid var(--tinta); outline-offset: -2px; }
+
+/* El color de cada tramo, una vez; filete y relleno lo usan a su manera */
+:root[data-aspecto="lamina"] .cal-10, :root[data-aspecto="lamina"] .cal-9 { --nota: var(--cal-sobresaliente); }
+:root[data-aspecto="lamina"] .cal-8, :root[data-aspecto="lamina"] .cal-7 { --nota: var(--cal-notable); }
+:root[data-aspecto="lamina"] .cal-6 { --nota: var(--cal-bien); }
+:root[data-aspecto="lamina"] .cal-5 { --nota: var(--cal-suficiente); }
+:root[data-aspecto="lamina"] .cal-4, :root[data-aspecto="lamina"] .cal-3, :root[data-aspecto="lamina"] .cal-2,
+:root[data-aspecto="lamina"] .cal-1, :root[data-aspecto="lamina"] .cal-0 { --nota: var(--cal-insuficiente); }
+
+/* Filete (por defecto): cifra en tinta y raya del color del semáforo */
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) :is(.cal-10, .cal-9, .cal-8, .cal-7, .cal-6, .cal-5, .cal-4, .cal-3, .cal-2, .cal-1, .cal-0) {
+  background: transparent; color: var(--tinta); border-bottom: 4px solid var(--nota);
+}
+/* Relleno: la casilla del color del semáforo, con la cifra en blanco */
+:root[data-aspecto="lamina"][data-notas="relleno"] :is(.cal-10, .cal-9, .cal-8, .cal-7, .cal-6, .cal-5, .cal-4, .cal-3, .cal-2, .cal-1, .cal-0) {
+  background: var(--nota); color: #fff; border-bottom: 4px solid var(--nota);
+}
+:root[data-aspecto="lamina"] .cal-vacio { background: transparent; color: var(--tinta-3); }
+
+/* Pestañas que no se cortan: sin deslizar. Las que no caben están en «Más · N» */
+:root[data-aspecto="lamina"] .tabs-sin-cortes { overflow: visible; flex-wrap: nowrap; }
+:root[data-aspecto="lamina"] .tabs-sin-cortes [role="tab"][hidden] { display: none; }
+:root[data-aspecto="lamina"] .tabs-mas { margin-left: auto; border-right: 0; border-left: 1px solid var(--pelo); gap: 8px; white-space: nowrap; }
+
+/* Los desplegables del sistema que quedan dentro de las pantallas: cerrados
+   se ven igual en todos los sistemas (sin su flecha ni su relieve, con la
+   nuestra). La lista que abren sigue siendo la del sistema hasta que cada
+   uno pase a la pieza `Lista`. La flecha es un SVG en línea, no un degradado. */
+:root[data-aspecto="lamina"] select {
+  -webkit-appearance: none; appearance: none;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2317181a' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+}

@@ -9,7 +9,7 @@
 export function AvisoContextoIA() {
   return (
     <div data-aviso-contexto-ia
-      style={{ marginTop: 4, fontSize: 11, color: '#92400e' }}>
+      style={{ marginTop: 4, fontSize: 11, color: 'var(--aviso-tinta)' }}>
       🔒 No escribas nombres ni datos del alumnado: este texto va en el prompt,
       y si lo copias a una IA externa sale de este equipo.
     </div>

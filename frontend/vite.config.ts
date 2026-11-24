@@ -2,7 +2,7 @@ import { defineConfig, searchForWorkspaceRoot } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
-import { realpathSync } from 'fs'
+import { readFileSync, realpathSync } from 'fs'
 import type { Plugin } from 'vite'
 import { escribirPaquetes } from '../scripts/empaquetar_curriculo.mjs'
 
@@ -30,9 +30,26 @@ function curriculoEmpaquetado(): Plugin {
   }
 }
 
+/**
+ * La versión sale del package.json de la raíz, la única fuente (scripts/version.mjs).
+ * Entra en el código como `__VERSION__` (src/version.ts) y en el HTML como
+ * `<meta name="miclase-version">`, que es lo que desplegar.sh comprueba en la
+ * web ya publicada.
+ */
+const VERSION: string = JSON.parse(readFileSync(resolve(import.meta.dirname, '../package.json'), 'utf8')).version
+
+function versionEnElHtml(): Plugin {
+  return {
+    name: 'miclase-version',
+    transformIndexHtml: () => [{ tag: 'meta', attrs: { name: 'miclase-version', content: VERSION }, injectTo: 'head' }],
+  }
+}
+
 export default defineConfig({
+  define: { __VERSION__: JSON.stringify(VERSION) },
   plugins: [
     curriculoEmpaquetado(),
+    versionEnElHtml(),
     react(),
     VitePWA({
       // El registro del service worker lo hace ActualizacionApp.tsx, no la

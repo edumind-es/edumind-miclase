@@ -229,9 +229,9 @@ export default function CapturaEvidencia({ onCapturada, compacto, deshabilitado 
       {aviso && (
         <div style={{
           marginTop: 8, padding: '8px 12px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5,
-          background: aviso.nivel === 'error' ? 'var(--rojo-100)' : '#fffbeb',
-          color: aviso.nivel === 'error' ? 'var(--rojo-500)' : '#92400e',
-          border: aviso.nivel === 'error' ? 'none' : '1px solid #fde68a',
+          background: aviso.nivel === 'error' ? 'var(--rojo-100)' : 'var(--aviso-fondo)',
+          color: aviso.nivel === 'error' ? 'var(--rojo-500)' : 'var(--aviso-tinta)',
+          border: aviso.nivel === 'error' ? 'none' : '1px solid var(--aviso-borde)',
         }}>
           {aviso.nivel === 'error' ? '❌ ' : '⚠️ '}{aviso.texto}
         </div>

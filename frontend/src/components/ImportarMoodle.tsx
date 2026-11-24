@@ -134,7 +134,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
               </label>
 
               {lectura && lectura.avisos.map((a, i) => (
-                <div key={i} data-importar-aviso style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8 }}>{a}</div>
+                <div key={i} data-importar-aviso style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', background: 'var(--aviso-fondo)', padding: '8px 10px', borderRadius: 8 }}>{a}</div>
               ))}
 
               {lectura && lectura.columnas.length > 0 && (
@@ -145,7 +145,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                       Alumnado · {reconocidos.length} de {lectura.filas.length} fila{lectura.filas.length !== 1 ? 's' : ''} reconocida{lectura.filas.length !== 1 ? 's' : ''}
                     </div>
                     {noReconocidos.length > 0 && (
-                      <div data-importar-sin-alumno style={{ fontSize: 12.5, color: '#92400e', lineHeight: 1.5 }}>
+                      <div data-importar-sin-alumno style={{ fontSize: 12.5, color: 'var(--aviso-tinta)', lineHeight: 1.5 }}>
                         <strong>No están en esta clase:</strong>{' '}
                         {noReconocidos.map(f => `${etiquetaAlumno(f) || `fila ${f.fila}`} (${f.aviso})`).join(' · ')}. Sus notas no se guardan.
                       </div>
@@ -178,7 +178,7 @@ export default function ImportarMoodle({ columnas, alumnos, trimestre, unidadId,
                               <div style={{ fontWeight: 600, color: 'var(--gris-900)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={c.etiqueta}>
                                 {c.titulo}
                               </div>
-                              <div style={{ fontSize: 11, color: c.sinNumeros ? '#92400e' : 'var(--gris-600)' }}>
+                              <div style={{ fontSize: 11, color: c.sinNumeros ? 'var(--aviso-tinta)' : 'var(--gris-600)' }}>
                                 {c.actividad ? `${c.actividad} · ` : ''}
                                 {c.sinNumeros ? 'sin notas numéricas: no se puede importar'
                                   : `${n} nota${n !== 1 ? 's' : ''} para alumnos de la clase${
@@ -251,7 +251,7 @@ function ResumenImportacion({ resumen }: { resumen: Resumen }) {
         <div style={{ color: 'var(--gris-600)' }}><strong>Columnas ignoradas:</strong> {resumen.ignoradas.join(' · ')}</div>
       )}
       {resumen.sinAlumno.length > 0 && (
-        <div style={{ color: '#92400e' }}><strong>Alumnos del CSV que no están en la clase:</strong> {resumen.sinAlumno.join(' · ')}. Sus notas no se han guardado.</div>
+        <div style={{ color: 'var(--aviso-tinta)' }}><strong>Alumnos del CSV que no están en la clase:</strong> {resumen.sinAlumno.join(' · ')}. Sus notas no se han guardado.</div>
       )}
       {resumen.sinFila.length > 0 && (
         <div style={{ color: 'var(--gris-600)' }}><strong>Alumnos de la clase sin fila en el CSV:</strong> {resumen.sinFila.join(' · ')}. Se quedan como estaban.</div>

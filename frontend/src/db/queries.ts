@@ -502,6 +502,37 @@ export async function getAsignaturas(grupo_id: number): Promise<Asignatura[]> {
   return asigs
 }
 
+/** Lo que el hub de áreas enseña de cada una en un trimestre. */
+export interface ResumenDeArea {
+  asignatura: Asignatura
+  /** Unidades del trimestre, en su orden. */
+  unidades: { id: number; nombre: string }[]
+  /** Casillas con nota en esas unidades (cada alumno, criterio e instrumento cuenta una). */
+  notas: number
+  /** Cuándo se puso o cambió la última, o null si no hay ninguna. */
+  ultima: string | null
+}
+
+/**
+ * Un resumen de cada área de la clase para el hub: cuántas unidades tiene el
+ * trimestre, cuántas notas hay puestas y cuándo fue la última. Solo cuenta:
+ * no calcula ninguna nota.
+ */
+export async function getResumenDeAreas(grupo_id: number, trimestre: number): Promise<ResumenDeArea[]> {
+  const areas = await getAsignaturas(grupo_id)
+  const unidades = vivos(await db.unidades.where('asignatura_id').anyOf(areas.map(a => a.id!)).toArray())
+    .filter(u => (u.trimestre ?? 1) === trimestre).sort((a, b) => a.orden - b.orden)
+  const deArea = new Map<number, number>(unidades.map(u => [u.id!, u.asignatura_id]))
+  // `calificaciones` no tiene índice por unidad: se filtra en memoria, que para un cuaderno sobra
+  const cals = sinDuplicados(vivos(await db.calificaciones.toArray()))
+    .filter(c => c.valor != null && c.trimestre === trimestre && deArea.has(c.unidad_id))
+  return areas.map(asignatura => {
+    const suyas = cals.filter(c => deArea.get(c.unidad_id) === asignatura.id)
+    const ultima = suyas.reduce<string | null>((m, c) => (c.updated_at && (!m || c.updated_at > m) ? c.updated_at : m), null)
+    return { asignatura, unidades: unidades.filter(u => u.asignatura_id === asignatura.id).map(u => ({ id: u.id!, nombre: u.nombre })), notas: suyas.length, ultima }
+  })
+}
+
 export async function getAsignatura(id: number): Promise<Asignatura | undefined> {
   const a = await db.asignaturas.get(id)
   return a && !a.deleted_at ? a : undefined

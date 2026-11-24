@@ -1704,6 +1704,157 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **El aspecto Lámina va tras un interruptor apagado hasta la 2.0.0**
+  (`src/aspecto.ts`, `src/lamina.css`; plan en `LAMINA_APP_ARQUITECTURA.md`,
+  PR 134). Es preferencia del aparato (`miclase.aspecto`, sin sincronizar):
+  `prepararAspecto()` en `main.tsx` pone `<html data-aspecto="lamina">` y el
+  `theme-color`; sin el atributo la app es la de siempre. Hasta que exista
+  «Acerca de» se enciende con `?aspecto=lamina` y se apaga con
+  `?aspecto=clasico` (el parámetro se limpia de la dirección). **Todo lo que
+  cambie el aspecto cuelga de `:root[data-aspecto="lamina"]`**; fuera de ese
+  selector `lamina.css` solo declara nombres nuevos (`--papel`, `--tinta`,
+  `--pelo`, `--mundo-*`, `--area-1…10`, `--f-display`, `--f-mono`).
+  Encendido, los tokens de siempre (`--azul-*`, `--gris-*`, `--blanco`,
+  `--radio-*`, `--sombra*`, `--fuente`) y los `--lm-*` del canon vendorizado
+  pasan a la paleta de la skill, y `border-radius` es 0 con `!important`
+  para todo. Las fuentes se llaman «Outfit Lamina» y «Plex Mono Lamina» a
+  propósito: con el nombre «Outfit», las pantallas que la tenían de reserva
+  en `--lm-display` la descargaban con el interruptor apagado. Sin
+  `@container`, `:has()` ni `color-mix()`: la app nativa admite iOS 15.
+  `aspecto-ui.test.mjs` vigila los dos lados: apagado no cambia nada ni
+  descarga fuentes; encendido da papel, Outfit y cero radios. Decisiones de
+  Luis (nov 2026): paleta de la skill para todo, nada visible en producción
+  hasta que esté entero.
+- **Con Lámina encendida el marco es otro** (`components/marco/MarcoLamina`,
+  `lamina-marco.css`, clases `ml-…`); con Lámina apagada sigue montándose
+  `Layout` de `App.tsx`, que no se toca hasta la 2.0.0. `Layout` prepara las
+  rutas y lo que flota (`rutas`, `flotantes`) y se las da a uno u otro, así
+  que una pantalla o un aviso nuevo se añade una vez. El marco nuevo ocupa
+  la ventana (100dvh) y lo que se desplaza es `[data-marco-desplaza]`, no el
+  documento. Su forma (`data-forma`: ancho · rail · movil) sale de
+  `formaDe(ancho, elegido)`: menos de 700 px es móvil (menú fuera, barra
+  inferior con cuatro destinos y «Más»), menos de 1100 plegado con icono y
+  nombre corto, y el docente puede fijar ancho o plegado
+  (`miclase.marco.menu`). La cabecera del menú y la barra superior miden
+  `--alto-barra` para que su filete sea continuo. «Instalar» y el idioma no
+  están en el menú: van en «Acerca de» (la fila de la versión,
+  `[data-marco-version]` → `[data-acerca-dialogo]`), con la cuenta y el
+  interruptor de vuelta al aspecto de siempre. Decisiones de Luis sobre la
+  maqueta (nov 2026). Los textos del marco están en `i18n/textos.ts`
+  (`marco.*`, `acerca.*`), en castellano y galego.
+- **Con Lámina, el Calificador entra por el hub de áreas, y cada área tiene
+  sigla y color** (`pages/Areas/HubAreas`, ruta `/areas`; `db/areas.ts`,
+  puro, `areas.test.ts`). Petición de Luis (nov 2026): elegir el área a la
+  vista de todas simplifica la navegación y evita calificar en la
+  equivocada. La entrada «Calificador» del marco va a `/areas` y también se
+  marca en `/evaluacion` (`Entrada.tambien`; el marco usa `Link` y su propio
+  `aria-current`, no `NavLink`). Con el aspecto de siempre `/areas` redirige
+  a `/evaluacion`. El hub no calcula notas: `getResumenDeAreas` cuenta
+  unidades del trimestre, notas puestas y la fecha de la última. Sigla y
+  color salen de `identidadDeAreas`: los propios del área
+  (`Asignatura.color`, `.sigla`, sin índice ni esquema; se eligen en Mis
+  clases → Áreas con `ColorDeArea`, `[data-color-area]`, solo con Lámina
+  encendida y solo entre los diez tonos de la paleta) o, si no, el color por orden entre las áreas de la
+  clase (`PALETA_AREAS`, diez tonos con 4,5:1 bajo la sigla en blanco) y la
+  sigla por el nombre (MAT, LG, LC, CN, CS, ING, EF…; dos áreas no la
+  comparten). **El color nunca va solo** —siempre con la pieza `Sigla`— y
+  **no entra en la tabla de notas**: vive en el hub, en la franja bajo la
+  barra superior (`[data-marco-franja]`) y en el selector de área, cuya
+  primera opción en el Calificador es «Todas las áreas».
+- **Con Lámina, las pestañas de `Pestanas` con aspecto `area` no se cortan**:
+  las que no caben pasan enteras a «Más · N» (`[data-pestanas-mas]`, una
+  `Lista`) y la elegida queda siempre a la vista. El reparto es
+  `pestanasQueNoCaben` (`utils/reparto.ts`, puro, `reparto.test.ts`): una vez
+  que una no cabe, las siguientes tampoco entran, para no desordenarlas. Los
+  anchos se miden una vez con todas a la vista y se reparte al cambiar el
+  hueco (`ResizeObserver`) o la elegida. Las de aspecto `unidad` saltan de
+  línea y no lo necesitan. Una pestaña escondida lleva `hidden`: las pruebas
+  que busquen una pestaña por su nombre en pantalla estrecha con Lámina
+  pasan antes por «Más».
+- **Con Lámina, «Exámenes y pruebas» también entra por un hub de áreas**
+  (`ExamenesConHoja`: `enHub` mientras `areaId` es null). Sustituye a las
+  pestañas de áreas, que con diez áreas dejaban la mitad en «Más»; con el
+  aspecto de siempre siguen las pestañas. `[data-examenes-hub]` con
+  `[data-examenes-hub-area]`, y dentro de un área `[data-examenes-dentro]`
+  con `[data-examenes-todas]` para volver; `AreaDeExamenes` no cambia. La
+  cola «Por corregir» del prototipo NO está: la lista de exámenes
+  (`listarPruebas`) no trae cuántos alumnos lleva corregidos cada uno, y no
+  se pone una cifra que no sale de ningún sitio.
+- **Con Lámina, la nota se pinta en filete o en relleno, y lo elige el
+  docente** (`src/notas.ts`, `miclase.notas`, sin sincronizar; conmutador en
+  «Acerca de», `[data-notas-elegir]`). Filete, el valor por defecto: cifra en
+  tinta sobre el papel y raya de 4 px del color del semáforo. Relleno: la
+  casilla de ese color con la cifra en blanco. `prepararNotas()` pone
+  `<html data-notas>` y `lamina.css` cuelga de ahí; solo cambia cómo se ve,
+  la nota y su tramo salen de `calculo.ts`. Lo obedecen las casillas que
+  usan las clases `.cal-N` (la tabla del Calificador y las parrillas 0-10);
+  las notas que un diálogo pinta en línea con `calificativo().color` siguen
+  en relleno hasta que se pasen a clases. `calificador-lamina-ui.test.mjs`
+  lo comprueba sobre una clase sembrada con `pruebas/lib/sembrar.mjs`
+  (6ºA, PROENS, tres alumnos y notas de varios tramos), que es la siembra a
+  reutilizar en las pruebas de aspecto. Decisión de Luis (nov 2026).
+- **Los colores de aviso tienen nombre** (`index.css`: `--aviso-tinta`,
+  `--aviso-fuerte`, `--aviso-fondo`, `--aviso-borde`, `--bien-tinta`,
+  `--bien-fondo`, `--mal-tinta`, `--mal-fuerte`, `--mal-fondo`,
+  `--borde-suave`). Eran diez colores escritos a mano 255 veces en 46
+  pantallas (`#92400e`, `#fffbeb`…); con nombre valen lo mismo en el aspecto
+  de siempre y Lámina los cambia de una vez (sin fondos pastel: papel, y el
+  color en el filete y la tinta). Un aviso nuevo usa esos nombres, no un
+  color. Los de `ia/instrumentosConfig.ts` siguen en hexadecimal porque se
+  les añade transparencia por sufijo. Las piezas comunes de Lámina (botones,
+  campos, tarjetas, diálogos, pestañas, títulos) están al final de
+  `lamina.css`, escritas una vez sobre las clases de siempre
+  (`.btn-primary`, `.card`, `.dialogo`, `.tab-area`…). La regla de enlaces
+  solo alcanza a `.main-content a:not([class])`: pintarlos todos dejó la
+  entrada activa del menú en tinta sobre tinta.
+- **Un desplegable nuevo es una `Lista`** (`components/comunes/Lista`), no un
+  `<select>`: el del sistema lo dibuja cada sistema a su manera. Hoja desde
+  abajo en táctil o pantalla estrecha, bajo su campo con ratón; `listbox`
+  con flechas, Inicio y Fin, Intro, Esc y escribir para buscar; el foco
+  vuelve al campo. Va en un portal a `body` con `[data-lista-abierta]`. El
+  foco entra cuando la lista ya se ve: mientras se coloca está oculta y a
+  algo oculto no se le puede dar. Las pruebas esperan a `aria-current`
+  tras navegar: el cambio de pantalla entra en una transición.
+- **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
+  puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
+  sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los
+  números por poco operativos. Rejilla de 24, trazo de 1,5 sin relleno,
+  extremos cuadrados, `currentColor`; eso lo pone la pieza, no cada dibujo.
+  Junto a su palabra el icono es adorno (`aria-hidden`); si va solo lleva
+  `titulo`. `iconoSVG(nombre)` da el mismo dibujo como texto para lo que no
+  pasa por React. **Un emoji nuevo en la interfaz es un paso atrás**: se
+  dibuja el icono en `iconos.ts` con esas reglas. `iconos.test.ts` vigila
+  que quepan en la rejilla y que pieza y texto pinten lo mismo; se empaqueta
+  en CommonJS porque `react-dom/server` no arranca como módulo ES.
+- **Dos pruebas guardan el camino a Lámina.** `trinquete.test.mjs` (rápida)
+  cuenta en `frontend/src` —sin `informes/`— radios, sombras, degradados y
+  emoji, y falla si alguno SUBE sobre `pruebas/trinquete.json`: lo nuevo no
+  puede traer lo que se está retirando. Desplegables, colores a mano y
+  estilos en línea se cuentan pero no se exigen hasta que existan sus piezas
+  (fase 2): se activan quitando `desde` a la medida. El tope se baja al
+  cerrar cada fase con `node pruebas/trinquete.test.mjs --fijar`, no en cada
+  PR, para que dos PR a la vez no choquen en ese fichero.
+  `nada-cortado-ui.test.mjs` (`lib/nadaCortado.mjs`) abre cada pantalla del
+  menú con Lámina encendida en cuatro tamaños (1440, iPad horizontal y
+  vertical, 390) y exige a TODAS que nada desborde de lado, nada asome fuera
+  y ningún texto de botón se corte —hoy se cumple—; los 44 px de lo que se
+  toca solo se exigen a las pantallas de `HECHAS`, que empieza vacía (hoy
+  hay 691 cosas más bajas, casi todas del menú) y crece con cada fase.
+- **La versión es un solo número y nadie lo escribe a mano.** Vive en el
+  `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
+  está (los otros dos `package.json`, los tres `package-lock.json` y el
+  `versionName` de Android) y `npm run version:subir -- parche|menor|mayor`
+  los sube todos y sella «Sin publicar» del `CHANGELOG.md` con número y
+  fecha. La app la lee al compilar (`__VERSION__` en `vite.config.ts` →
+  `src/version.ts`; también `<meta name="miclase-version">` en el HTML).
+  Cada PR anota su cambio en «Sin publicar» y NO toca el número, para que dos
+  PR a la vez no choquen; se sube antes de desplegar. `desplegar.sh`
+  comprueba que la web servida dice ese número, pone la etiqueta `vX.Y.Z` y
+  no publica otro commit con una etiqueta que ya existe.
+  `pruebas/version.test.mjs` (rápida) es el candado. iOS se sube en Xcode y
+  la prueba solo avisa. Hasta nov 2026 no había nada de esto: 0.1.0 en los
+  `package.json`, «v1.0» a mano en el pie, sin CHANGELOG ni etiquetas. Luis
+  fijó lo que había como 1.9.0; el aspecto Lámina será la 2.0.0.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
@@ -1716,6 +1867,7 @@ edumind_miclase/
 - Seed DB: `npm run seed`
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
+- Subir la versión antes de desplegar: `npm run version:subir -- parche` (o `menor`, `mayor`)
 - Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar

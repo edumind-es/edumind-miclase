@@ -378,7 +378,7 @@ export default function InstrumentosManager({ asignaturaId, asignaturaNombre, ni
                     <button onClick={() => setRubricaDe(ins)}
                       style={{
                         fontSize: 11, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
-                        background: ins.tipo === 'rubrica' ? '#166534' : 'white',
+                        background: ins.tipo === 'rubrica' ? 'var(--bien-tinta)' : 'white',
                         color: ins.tipo === 'rubrica' ? 'white' : 'var(--gris-600)',
                         border: ins.tipo === 'rubrica' ? 'none' : '1px solid var(--gris-300)',
                       }}>

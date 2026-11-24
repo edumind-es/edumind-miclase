@@ -97,6 +97,12 @@ export interface Asignatura extends Sincronizable {
    * declarar vale 'iguales'. Sin índice.
    */
   regla_unidades?: ReglaUnidades | null
+  /**
+   * Color (#rrggbb) y sigla propios del área, para reconocerla al calificar.
+   * Sin ellos, los que le tocan por orden y por nombre (`db/areas.ts`). Sin índice.
+   */
+  color?: string | null
+  sigla?: string | null
   orden?: number
   created_at?: string
 }

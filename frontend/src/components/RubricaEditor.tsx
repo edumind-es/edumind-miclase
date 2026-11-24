@@ -565,7 +565,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         {modo === 'elegir' && (
           <div style={{ overflowY: 'auto', flex: 1, minHeight: 0 }}>
           {msg?.tipo === 'error' && (
-            <div style={{ margin: '16px 24px 0', padding: '10px 14px', borderRadius: 8, fontSize: 13, background: '#fee2e2', color: '#991b1b' }}>
+            <div style={{ margin: '16px 24px 0', padding: '10px 14px', borderRadius: 8, fontSize: 13, background: 'var(--mal-fondo)', color: 'var(--mal-tinta)' }}>
               ❌ {msg.texto}
             </div>
           )}
@@ -610,8 +610,8 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           {msg && (
             <div style={{
               marginBottom: 14, padding: '10px 14px', borderRadius: 8, fontSize: 13,
-              background: msg.tipo === 'ok' ? '#dcfce7' : '#fee2e2',
-              color: msg.tipo === 'ok' ? '#166534' : '#991b1b',
+              background: msg.tipo === 'ok' ? 'var(--bien-fondo)' : 'var(--mal-fondo)',
+              color: msg.tipo === 'ok' ? 'var(--bien-tinta)' : 'var(--mal-tinta)',
             }}>
               {msg.tipo === 'ok' ? '✅ ' : '❌ '}{msg.texto}
             </div>
@@ -833,7 +833,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                         </button>
                       )
                     ) : (
-                      <button className="btn-primary" style={{ fontSize: 13, background: '#166534' }}
+                      <button className="btn-primary" style={{ fontSize: 13, background: 'var(--bien-tinta)' }}
                         onClick={ai.cargarModelo}
                         disabled={ai.status === 'descargando' || ai.status === 'cargando'}>
                         {ai.status === 'descargando' && `⬇ Descargando Phi-3.5 (${ai.progress}%)`}
@@ -866,7 +866,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
                   reintentar» y el docente no sabía si era su navegador, la
                   red o el servidor. */}
               {ai.status === 'error' && ai.error && (
-                <div style={{ padding: '10px 14px', background: 'var(--rojo-100)', borderRadius: 8, fontSize: 12, color: '#991b1b', border: '1px solid var(--rojo-500)' }}>
+                <div style={{ padding: '10px 14px', background: 'var(--rojo-100)', borderRadius: 8, fontSize: 12, color: 'var(--mal-tinta)', border: '1px solid var(--rojo-500)' }}>
                   <strong>No se pudo cargar el modelo.</strong> {ai.error}
                   <div style={{ marginTop: 4, color: 'var(--gris-600)' }}>
                     Puedes seguir copiando el prompt y pegándolo en una IA externa: el
@@ -876,14 +876,14 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
               )}
 
               {!hasWebGPU() && (
-                <div style={{ padding: '10px 14px', background: '#fef3c7', borderRadius: 8, fontSize: 12, color: '#92400e' }}>
+                <div style={{ padding: '10px 14px', background: '#fef3c7', borderRadius: 8, fontSize: 12, color: 'var(--aviso-tinta)' }}>
                   ⚠️ Tu navegador no soporta IA local (requiere Chrome o Edge con WebGPU). Copia el prompt y pégalo en cualquier IA externa.
                 </div>
               )}
 
               {/* Información sobre el modelo */}
               {hasWebGPU() && !ai.isReady && ai.status === 'idle' && (
-                <div style={{ padding: '10px 14px', background: '#f0fdf4', borderRadius: 8, fontSize: 12, color: '#166534', border: '1px solid #bbf7d0' }}>
+                <div style={{ padding: '10px 14px', background: '#f0fdf4', borderRadius: 8, fontSize: 12, color: 'var(--bien-tinta)', border: '1px solid #bbf7d0' }}>
                   ℹ️ <strong>Phi-3.5-mini</strong> de Microsoft — se descarga una vez (~2 GB) desde
                   Hugging Face y queda guardado en tu navegador. A partir de ahí genera rúbricas sin
                   conexión y sin pasar por ningún servidor: ni el texto que escribes ni la rúbrica
@@ -906,7 +906,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
               </div>
 
               {iaError && (
-                <div style={{ padding: '8px 12px', background: '#fee2e2', borderRadius: 6, fontSize: 12, color: '#991b1b' }}>
+                <div style={{ padding: '8px 12px', background: 'var(--mal-fondo)', borderRadius: 6, fontSize: 12, color: 'var(--mal-tinta)' }}>
                   ❌ {iaError}
                 </div>
               )}
@@ -931,7 +931,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
         }}>
           <div style={{
             flex: 1, minWidth: 140, fontSize: 12,
-            color: msg?.tipo === 'error' ? '#991b1b' : sucio ? '#92400e' : 'var(--gris-500)',
+            color: msg?.tipo === 'error' ? 'var(--mal-tinta)' : sucio ? 'var(--aviso-tinta)' : 'var(--gris-500)',
             fontWeight: msg?.tipo === 'error' || sucio ? 700 : 400,
           }}>
             {msg?.tipo === 'error'
@@ -942,7 +942,7 @@ export default function RubricaEditor({ instrumentoId, instrumentoNombre, asigna
           </div>
           {tieneDatos && (
             <button onClick={borrar}
-              style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', fontWeight: 600 }}>
+              style={{ fontSize: 12, padding: '6px 12px', borderRadius: 6, cursor: 'pointer', background: 'var(--mal-fondo)', color: 'var(--mal-tinta)', border: '1px solid #fca5a5', fontWeight: 600 }}>
               Eliminar rúbrica
             </button>
           )}

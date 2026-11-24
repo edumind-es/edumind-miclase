@@ -13,9 +13,9 @@ type Sesion  = { id: number; fecha: string; tipo: string; notas?: string | null 
 type Estado  = 'presente' | 'ausente' | 'justificada' | 'retraso'
 
 const ESTADOS: { value: Estado; label: string; color: string; bg: string }[] = [
-  { value: 'presente',    label: 'P', color: '#166534', bg: '#dcfce7' },
-  { value: 'ausente',     label: 'A', color: '#991b1b', bg: '#fee2e2' },
-  { value: 'justificada', label: 'J', color: '#92400e', bg: '#fef3c7' },
+  { value: 'presente',    label: 'P', color: 'var(--bien-tinta)', bg: 'var(--bien-fondo)' },
+  { value: 'ausente',     label: 'A', color: 'var(--mal-tinta)', bg: 'var(--mal-fondo)' },
+  { value: 'justificada', label: 'J', color: 'var(--aviso-tinta)', bg: '#fef3c7' },
   { value: 'retraso',     label: 'R', color: '#1e40af', bg: '#dbeafe' },
 ]
 
@@ -154,7 +154,7 @@ export default function SesionesPage() {
       {formNueva && (
         <div className="card" style={{ marginBottom: 20, background: 'var(--azul-100)', border: '1px solid var(--azul-300)' }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 14, color: 'var(--azul-700)' }}>Nueva sesión</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '160px 140px 1fr', gap: 10, marginBottom: 12 }}>
+          <div className="sesiones-nueva">
             <div>
               <label style={{ fontSize: 12, fontWeight: 500, display: 'block', marginBottom: 4 }}>Fecha *</label>
               <input type="date" value={nuevaSesion.fecha}
@@ -189,7 +189,7 @@ export default function SesionesPage() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 20, alignItems: 'start' }}>
+      <div className="sesiones-dos">
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           <div style={{ padding: '12px 14px', borderBottom: '1px solid var(--gris-200)', fontWeight: 600, fontSize: 14, color: 'var(--azul-700)' }}>
             Historial ({sesiones.length})
