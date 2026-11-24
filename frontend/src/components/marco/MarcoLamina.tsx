@@ -126,7 +126,7 @@ export default function MarcoLamina({ barra, alExportar, children }: {
       <div className="ml-mundos" aria-hidden="true"><i /><i /><i /><i /><i /></div>
 
       <aside className="ml-menu">
-        <div className="ml-menu-cab"><Marca lado={26} fondo="papel" /><span>MiClase</span></div>
+        <div className="ml-menu-cab"><Marca lado={26} fondo="lamina" /><span>MiClase</span></div>
         <nav aria-label={t('marco.principal')}>
           {ENTRADAS.map((e, i) => (
             <Fragment key={e.to}>
@@ -213,7 +213,7 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
   return (
     <>
     <div className="ml-superior" data-marco-superior>
-      <span className="ml-superior-marca"><Marca lado={26} fondo="papel" /></span>
+      <span className="ml-superior-marca"><Marca lado={26} fondo="lamina" /></span>
       {hayClase && (
         <div className="ml-dato">
           <span className="ml-rotulo">{t('marco.clase')}</span>

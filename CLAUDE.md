@@ -1555,6 +1555,15 @@ edumind_miclase/
   de la matriz descarta la respuesta que llega tarde (`vigente`): abrir
   directamente en una unidad dejaba que la de todo el curso, más lenta, la
   pisara.
+- **La identidad de Lámina está preparada y sin aplicar.**
+  `scripts/generar_iconos.py --lamina` genera icono, favicon y splash con
+  papel claro de fondo, los mundos desaturados y la clase en tinta;
+  `--salida <carpeta>` los escribe fuera del proyecto para verlos
+  (`MAQUETA_LAMINA_ICONO.png` es esa vista previa). Sin `--lamina` el guion
+  da exactamente los iconos de hoy. El icono, el splash y el `theme_color`
+  del manifiesto los ve todo el mundo, con el aspecto que sea, así que se
+  cambian el día de la 2.0.0 y no antes. La marca del menú sí cambia ya con
+  Lámina encendida (`circulosDeMarca(lado, 'lamina')`).
 - **Los iconos se generan, no se editan a mano**: `scripts/generar_iconos.py`
   produce los de web, iOS y Android desde una única definición.
   La marca es un **corro de clase**: cinco círculos (Los Cinco Mundos)

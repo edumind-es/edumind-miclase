@@ -18,7 +18,12 @@ const MUNDOS = ['#e8613f', '#e8a92e', '#6ea94a', '#3f7d99', '#2c5c66']
 /** Sobre fondo oscuro, el mundo interior va aclarado: si no, se pierde. */
 const INTERIOR_SOBRE_OSCURO = '#5b9aa6'
 
-export type FondoMarca = 'oscuro' | 'papel'
+/** Los Cinco Mundos desaturados y la tinta de la skill: los de la interfaz con el aspecto Lámina. */
+const MUNDOS_LAMINA = ['#c05f3c', '#c19a2e', '#7ba24f', '#6c8fb3', '#4a5f68']
+const TINTA_LAMINA = '#17181a'
+
+/** `lamina`: sobre el papel de la interfaz Lámina, con su paleta desaturada. */
+export type FondoMarca = 'oscuro' | 'papel' | 'lamina'
 
 export type CirculoMarca = { cx: number; cy: number; r: number; color: string }
 
@@ -32,7 +37,7 @@ const redondo = (n: number) => Math.round(n * 100) / 100
 export function circulosDeMarca(lado: number, fondo: FondoMarca): CirculoMarca[] {
   const c = lado / 2
   const cy = c + lado * BAJADA
-  const mundos = MUNDOS.map((color, k) => {
+  const mundos = (fondo === 'lamina' ? MUNDOS_LAMINA : MUNDOS).map((color, k) => {
     const angulo = ((-90 + 72 * k) * Math.PI) / 180
     return {
       cx: redondo(c + lado * ANILLO * Math.cos(angulo)),
@@ -41,7 +46,7 @@ export function circulosDeMarca(lado: number, fondo: FondoMarca): CirculoMarca[]
       color: k === 4 && fondo === 'oscuro' ? INTERIOR_SOBRE_OSCURO : color,
     }
   })
-  return [...mundos, { cx: redondo(c), cy: redondo(cy), r: redondo(lado * RADIO_CLASE), color: fondo === 'oscuro' ? '#e9e6dd' : '#1c1a16' }]
+  return [...mundos, { cx: redondo(c), cy: redondo(cy), r: redondo(lado * RADIO_CLASE), color: fondo === 'oscuro' ? '#e9e6dd' : fondo === 'lamina' ? TINTA_LAMINA : '#1c1a16' }]
 }
 
 /** La marca como SVG en texto, para los documentos que se montan como HTML. */
