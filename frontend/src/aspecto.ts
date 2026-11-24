@@ -22,8 +22,18 @@ export const EVENTO_ASPECTO = 'miclase:aspecto'
 /** El color de la barra del sistema con cada aspecto (`<meta name="theme-color">`). */
 export const COLOR_SISTEMA: Record<Aspecto, string> = { clasico: '#0f2d4a', lamina: '#f4f2ec' }
 
-/** Cualquier cosa que no sea «lamina» es el aspecto de siempre. */
-export const normalizarAspecto = (v: unknown): Aspecto => (v === 'lamina' ? 'lamina' : 'clasico')
+/**
+ * El aspecto de un aparato que no ha elegido ninguno. Hoy, el de siempre.
+ * Pasar a Lámina para todos —la versión 2.0.0— es cambiar este valor; se
+ * puede adelantar al compilar con `VITE_ASPECTO=lamina`, que es como se pasa
+ * la tanda de pruebas entera con Lámina para saber qué falta.
+ */
+const entorno = (import.meta as { env?: Record<string, string | undefined> }).env
+export const ASPECTO_POR_DEFECTO: Aspecto = entorno?.VITE_ASPECTO === 'lamina' ? 'lamina' : 'clasico'
+
+/** Lo que el aparato guardó, o el aspecto por defecto si no guardó nada (o guardó otra cosa). */
+export const normalizarAspecto = (v: unknown, defecto: Aspecto = ASPECTO_POR_DEFECTO): Aspecto =>
+  (v === 'lamina' || v === 'clasico' ? v : defecto)
 
 /** El aspecto que pide la dirección, o null si no pide ninguno (o pide uno que no existe). */
 export function aspectoDeUrl(busqueda: string): Aspecto | null {
