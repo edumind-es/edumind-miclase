@@ -1118,3 +1118,10 @@ td.plan-hoy { background: var(--azul-100); border-radius: var(--radio-sm); }
 }
 .hoja-accion:hover { background: var(--azul-100); border-color: var(--azul-300); }
 .hoja-accion.peligro { color: var(--cal-insuficiente); }
+
+/* Asistencia: historial a la izquierda y pase de lista a la derecha. En una
+   pantalla estrecha van uno debajo del otro: con las columnas fijas, la
+   segunda se quedaba en 78 px en el móvil y su contenido se salía. */
+.sesiones-dos { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items: start; }
+.sesiones-nueva { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 12px; }
+@media (max-width: 700px) { .sesiones-dos { grid-template-columns: minmax(0, 1fr); } }
