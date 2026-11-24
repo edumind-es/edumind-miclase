@@ -14,7 +14,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
-  getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento,
+  getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento, renombrarInstrumento,
   contarColumna, vaciarColumna, deshacerVaciado, asignarCriterioAColumna, quitarCriterioDeColumna, type Vaciado,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
@@ -32,6 +32,7 @@ import InformePrueba from '@/components/InformePrueba'
 import InformeActividad from '@/components/InformeActividad'
 import MatrizInstrumentos, { columnasPorInstrumento, familiasSinCriterio, type ColumnaInstrumento } from '@/components/MatrizInstrumentos'
 import SesionNota from '@/components/SesionNota'
+import SesionRecuperacion from '@/components/SesionRecuperacion'
 import SesionInstrumento from '@/components/SesionInstrumento'
 import ElegirHerramienta from '@/components/ElegirHerramienta'
 import PegarColumna from '@/components/PegarColumna'
@@ -48,6 +49,7 @@ import { verNeae } from '@/db/datosSensibles'
 import type { ConexionDeCriterio } from '@/db/competenciasClave'
 import { estadoCasilla } from '@/db/medidasVista'
 import SelloMedida from '@/components/SelloMedida'
+import FichaRapidaAlumno, { NombreAlumno } from '@/components/FichaRapidaAlumno'
 import MedidasAlumno from '@/components/MedidasAlumno'
 
 import { confirmar } from '@/utils/confirmar'
@@ -163,7 +165,7 @@ export default function EvaluacionPage() {
   useParametrosClase()
   const {
     grupos, grupo, grupoId, asignaturas, asignatura: asigActual, asignaturaId,
-    trimestre, elegirAsignatura, cargando: cargandoClase,
+    trimestre, elegirAsignatura, elegirTrimestre, cargando: cargandoClase,
   } = useClaseActiva()
 
   const [unidades, setUnidades] = useState<UnidadConCriterios[]>([])
@@ -175,6 +177,8 @@ export default function EvaluacionPage() {
   const [managerAbierto, setManagerAbierto] = useState(false)
   /** Alumno cuyas medidas de atención a la diversidad se editan (desde el sello de la fila). */
   const [medidasDe, setMedidasDe] = useState<Alumno | null>(null)
+  /** Alumno con la ficha rápida abierta (se abre desde su nombre). */
+  const [fichaDe, setFichaDe] = useState<Alumno | null>(null)
   const [refresco, setRefresco] = useState(0)
   /**
    * Casilla abierta. Con `instrumentoId`, se entró desde la vista por
@@ -207,7 +211,7 @@ export default function EvaluacionPage() {
    * poder deshacerlo mientras la pantalla siga abierta. Las notas vaciadas
    * quedan además como fantasma, recuperables casilla a casilla.
    */
-  const [columnaAviso, setColumnaAviso] = useState<{ texto: string; vaciado?: Vaciado } | null>(null)
+  const [columnaAviso, setColumnaAviso] = useState<{ texto: string; vaciado?: Vaciado; renombrado?: { id: number; nombre: string } } | null>(null)
   /** Importador del CSV de Edixgal (Moodle) abierto. */
   const [importarMoodle, setImportarMoodle] = useState(false)
   const [imprimirEn, setImprimirEn] = useState<ColumnaInstrumento | null>(null)
@@ -436,6 +440,7 @@ export default function EvaluacionPage() {
   const nAvisos = (sinInstrumento > 0 ? 1 : 0) + (fueraDeTrimestre > 0 ? 1 : 0)
     + (vista === 'instrumentos' && sinColumna.length > 0 ? 1 : 0)
     + (vista === 'instrumentos' && matriz?.familiasConDatosEscondidos.length ? 1 : 0)
+    + (matriz?.notasSinColumna.length ? 1 : 0)
 
   /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
   const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
@@ -653,6 +658,21 @@ export default function EvaluacionPage() {
             </div>
           )}
 
+          {/* A la vista, no tras el contador: lleva a calificar en el trimestre equivocado. */}
+          {unidadActual?.trimestre != null && unidadActual.trimestre !== trimestre && (
+            <div data-unidad-otro-trimestre role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ flex: '1 1 320px' }}>
+                <strong>«{unidadActual.nombre}» es del {unidadActual.trimestre}º trimestre y la barra está en el {trimestre}º.</strong>{' '}
+                Lo que califiques ahora se guarda en el {trimestre}º trimestre, aparte de lo que la unidad
+                tenga en el {unidadActual.trimestre}º, y cuenta en la nota del {trimestre}º.
+              </span>
+              <button type="button" className="btn-secondary" data-ir-al-trimestre
+                onClick={() => elegirTrimestre(unidadActual.trimestre!)}>
+                Ir al {unidadActual.trimestre}º trimestre
+              </button>
+            </div>
+          )}
+
           {avisosAbiertos && sinInstrumento > 0 && (
             <div data-aviso-sin-instrumento style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e' }}>
               <strong>{sinInstrumento} criterio{sinInstrumento !== 1 ? 's' : ''} sin instrumento</strong> — salen rayados.
@@ -678,6 +698,17 @@ export default function EvaluacionPage() {
           {columnaAviso && (
             <div data-columna-aviso role="status" style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)', display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
               <span style={{ flex: 1 }}>{columnaAviso.texto}</span>
+              {columnaAviso.renombrado && (
+                <button type="button" data-renombrar-todas className="btn-secondary" style={{ fontSize: 12, minHeight: 44 }}
+                  onClick={async () => {
+                    const { id, nombre } = columnaAviso.renombrado!
+                    await renombrarInstrumento(id, nombre, null)
+                    setColumnaAviso({ texto: `«${nombre}» se llama así en todas las unidades.` })
+                    setRefresco(r => r + 1)
+                  }}>
+                  Ponerlo en todas las unidades
+                </button>
+              )}
               {columnaAviso.vaciado && (
                 <button type="button" data-vaciado-deshacer className="btn-secondary" style={{ fontSize: 12 }} onClick={deshacerVaciadoActual}>
                   ↩ Deshacer
@@ -693,7 +724,7 @@ export default function EvaluacionPage() {
               {matriz.familiasConDatosEscondidos.map(f => (
                 <div key={f.id}>
                   <strong>«{f.nombre}» guarda a su nombre {[
-                    f.examenes ? `${f.examenes} examen${f.examenes !== 1 ? 'es' : ''}` : '',
+                    f.examenes ? `${f.examenes} ${f.examenes !== 1 ? 'exámenes' : 'examen'}` : '',
                     f.calificaciones ? `${f.calificaciones} nota${f.calificaciones !== 1 ? 's' : ''}` : '',
                     f.diario ? `${f.diario} registro${f.diario !== 1 ? 's' : ''} del diario` : '',
                   ].filter(Boolean).join(', ')}</strong> que ninguna columna enseña: con actividades dentro, el instrumento solo resume.
@@ -704,6 +735,19 @@ export default function EvaluacionPage() {
                 style={{ background: 'none', border: 0, padding: 0, color: 'var(--azul-500)', fontWeight: 700, cursor: 'pointer', font: 'inherit' }}>
                 ⚙ Instrumentos →
               </button>
+            </div>
+          )}
+
+          {avisosAbiertos && !!matriz?.notasSinColumna.length && (
+            <div data-notas-sin-columna style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+              <strong>Hay notas que cuentan y no tienen columna {unidadId ? 'en esta unidad' : 'en el área'}:</strong>{' '}
+              {matriz.notasSinColumna.map((f, i) => (
+                <span key={f.instrumento_id} data-sin-columna-instrumento={f.instrumento_id}>
+                  {i > 0 ? '; ' : ''}{f.notas} de «{f.nombre}» ({f.criterios.join(', ')})
+                </span>
+              ))}. La programación ya no asigna {matriz.notasSinColumna.some(f => f.criterios.length > 1) || matriz.notasSinColumna.length > 1 ? 'esos criterios' : 'ese criterio'} a
+              ese instrumento aquí, pero las notas siguen entrando en el cálculo. Para verlas, vuelve a asignarle
+              el criterio desde el «Más» de su columna («+ criterio»); si sobran, vacíalas desde ahí.
             </div>
           )}
 
@@ -798,6 +842,7 @@ export default function EvaluacionPage() {
             ) : resumen ? (
               <ResumenCurso
                 onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                 datos={resumen}
                 criterios={columnas}
                 vista={vista}
@@ -817,6 +862,7 @@ export default function EvaluacionPage() {
               ) : (
                 <MatrizInstrumentos
                   onMedidas={al => setMedidasDe(al)}
+                onAlumno={al => setFichaDe(al)}
                   matriz={matriz}
                   columnas={columnasInstr}
                   alumnos={alumnos}
@@ -827,7 +873,19 @@ export default function EvaluacionPage() {
                   onPegar={col => setPegarEn(col)}
                   onDefinir={col => setDefinirEn(col)}
                   onNota={unidadId ? col => setNotaEn(col) : undefined}
-                  onRenombrar={async (col, nombre) => { await actualizarInstrumento(col.ins.instrumento_id, { nombre }); setRefresco(r => r + 1) }}
+                  onRenombrar={async (col, nombre) => {
+                    // Dentro de una unidad el nombre cambia solo en ella; el aviso ofrece llevarlo a todas.
+                    try {
+                      await renombrarInstrumento(col.ins.instrumento_id, nombre, unidadId)
+                      if (unidadId) {
+                        const limpio = nombre.trim()
+                        setColumnaAviso(limpio === col.ins.nombre_general
+                          ? { texto: `«${limpio}» vuelve a llamarse igual que en las demás unidades.` }
+                          : { texto: `Ahora se llama «${limpio}» solo en «${unidadActual?.nombre ?? 'esta unidad'}». En las demás sigue siendo «${col.ins.nombre_general}».`, renombrado: { id: col.ins.instrumento_id, nombre: limpio } })
+                      }
+                    } catch (e) { setColumnaAviso({ texto: e instanceof Error ? e.message : 'No se pudo cambiar el nombre' }) }
+                    setRefresco(r => r + 1)
+                  }}
                   onImprimir={col => setImprimirEn(col)}
                   onEscanear={col => setEscanearEn(col)}
                   onEditarExamen={col => setEditarExamenEn(col)}
@@ -939,7 +997,7 @@ export default function EvaluacionPage() {
                     {alumnos.map((al, idx) => (
                       <tr key={al.id}>
                         <td className="col-alumno">
-                          {al.apellidos}, {al.nombre}
+                          <NombreAlumno alumno={al} onAbrir={setFichaDe} />
                           {al.neae && verNeae() ? <span style={{ marginLeft: 6, fontSize: 9.5, color: 'var(--ambar-500)', fontWeight: 700 }}>NEAE</span> : null}
                           <SelloMedida medidas={matriz.medidas.get(al.id!)} onClick={() => setMedidasDe(al)} />
                         </td>
@@ -1149,6 +1207,11 @@ export default function EvaluacionPage() {
         )
       })()}
 
+      {fichaDe && asignaturaId && grupo && (
+        <FichaRapidaAlumno alumno={fichaDe} grupo={grupo} asignaturaId={asignaturaId}
+          onCerrar={() => setFichaDe(null)} onCambio={() => setRefresco(r => r + 1)} />
+      )}
+
       {medidasDe && matriz && (
         <MedidasAlumno alumno={medidasDe} grupo={matriz.grupo} asignaturaId={asignaturaId}
           onCerrar={() => setMedidasDe(null)} onCambio={() => setRefresco(r => r + 1)} />
@@ -1182,7 +1245,21 @@ export default function EvaluacionPage() {
         />
       )}
 
-      {notaEn && matriz && (
+      {notaEn && matriz && notaEn.ins.recuperacion && (
+        <SesionRecuperacion
+          columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
+          matriz={matriz}
+          alumnos={alumnos}
+          trimestre={trimestre}
+          unidadId={unidadId}
+          unidadNombre={unidadActual?.nombre}
+          area={{ asignatura: matriz.asig.nombre, curso: matriz.grupo.curso, etapa: matriz.grupo.etapa, comunidad: matriz.asig.comunidad || matriz.grupo.comunidad }}
+          onCambio={() => setRefresco(r => r + 1)}
+          onCerrar={() => setNotaEn(null)}
+        />
+      )}
+
+      {notaEn && matriz && !notaEn.ins.recuperacion && (
         <SesionNota
           columna={columnasInstr.find(c => c.ins.instrumento_id === notaEn.ins.instrumento_id) ?? notaEn}
           matriz={matriz}

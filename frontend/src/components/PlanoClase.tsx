@@ -14,10 +14,11 @@
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPlano, guardarPlanoAulaMap, type PlanoDetalle } from '@/db/queries'
-import type { Alumno } from '@/db/localDb'
+import { getPlano, guardarPlanoAulaMap, getAgrupamientos, type PlanoDetalle } from '@/db/queries'
+import type { Agrupamiento, Alumno } from '@/db/localDb'
+import { sinBajas } from '@/db/equipos'
 import {
-  claseParaAulaMap, claseParaGuardar, alumnoDeIdAulaMap, resumenPlano,
+  claseParaAulaMap, claseParaGuardar, alumnoDeIdAulaMap, resumenPlano, conEquipos,
   type ClaseAulaMap,
 } from '@/db/planoAulaMap'
 
@@ -45,6 +46,18 @@ export const URL_AULAMAP = 'https://aulamap.github.io'
 export const URL_AUTOR_AULAMAP = 'https://github.com/jjdeharo'
 const URL_FUENTE = 'https://github.com/edumind-es/edumind-miclase/tree/main/frontend/public/aulamap'
 const ESPERA_GUARDADO = 400
+/** Qué agrupamiento se mira en el plano de cada clase: comodidad del aparato, no dato. */
+const CLAVE_EQUIPOS = 'miclase.plano.equipos'
+const recordado = (grupoId: number): number | null => {
+  try { const v = JSON.parse(localStorage.getItem(CLAVE_EQUIPOS) || '{}')[grupoId]; return typeof v === 'number' ? v : null } catch { return null }
+}
+const recordar = (grupoId: number, id: number | null) => {
+  try {
+    const todo = JSON.parse(localStorage.getItem(CLAVE_EQUIPOS) || '{}')
+    if (id == null) delete todo[grupoId]; else todo[grupoId] = id
+    localStorage.setItem(CLAVE_EQUIPOS, JSON.stringify(todo))
+  } catch { /* sin almacenamiento, no se recuerda */ }
+}
 
 export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAnon }: Props) {
   const navigate = useNavigate()
@@ -52,6 +65,9 @@ export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAno
   const [modo, setModo] = useState<Modo>('vista')
   const [detalle, setDetalle] = useState<PlanoDetalle | null>(null)
   const [estado, setEstado] = useState('')
+  /** Los agrupamientos de la clase y el que se enseña en la vista (null = el plano tal cual). */
+  const [agrupamientos, setAgrupamientos] = useState<Agrupamiento[]>([])
+  const [equiposDe, setEquiposDe] = useState<number | null>(() => recordado(grupoId))
   const pendiente = useRef<string | null>(null)
   const temporizador = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -64,7 +80,10 @@ export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAno
 
   const cargar = useCallback(async () => {
     setDetalle(await getPlano(grupoId))
+    setAgrupamientos(await getAgrupamientos(grupoId).catch(() => []))
   }, [grupoId])
+
+  useEffect(() => { setEquiposDe(recordado(grupoId)) }, [grupoId])
 
   useEffect(() => { if (visible) cargar() }, [visible, cargar])
 
@@ -92,13 +111,22 @@ export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAno
     asientos: detalle.asientos,
   }), [detalle, grupoId, nombreGrupo, alumnosPlano])
 
+  // En la vista se pueden mirar los equipos de un agrupamiento de MiClase.
+  // Es solo lo que se enseña: con ellos a la vista no se guarda nada.
+  const agrupamiento = modo === 'vista' ? agrupamientos.find(a => a.id === equiposDe) ?? null : null
+  const equipos = useMemo(() => agrupamiento
+    ? sinBajas(agrupamiento.equipos, alumnosPlano.map(a => a.id)).filter(e => e.alumnos.length > 0)
+    : null, [agrupamiento, alumnosPlano])
+  const enPantalla = useMemo(() => (clase && equipos ? conEquipos(clase, equipos) : clase), [clase, equipos])
+
   // El anfitrión tiene que estar puesto ANTES de que el iframe cargue.
   useLayoutEffect(() => {
-    if (!visible || !clase) return
+    if (!visible || !enPantalla) return
     window.MiClaseAulaMap = {
       modo,
-      cargar: () => clase,
+      cargar: () => enPantalla,
       guardar: (c) => {
+        if (equipos) return
         pendiente.current = claseParaGuardar(c)
         if (temporizador.current) clearTimeout(temporizador.current)
         temporizador.current = setTimeout(() => { void volcar() }, ESPERA_GUARDADO)
@@ -112,7 +140,7 @@ export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAno
       void volcar()
       delete window.MiClaseAulaMap
     }
-  }, [visible, clase, modo, navigate, volcar])
+  }, [visible, enPantalla, equipos, modo, navigate, volcar])
 
   const cambiarModo = async (nuevo: Modo) => {
     await volcar()
@@ -161,8 +189,27 @@ export default function PlanoClase({ grupoId, nombreGrupo = '', alumnos, modoAno
                 : 'Pulsa «Editar el aula» para colocar las mesas y sentar al alumnado.'}`}
           </div>
 
+          {modo === 'vista' && agrupamientos.length > 0 && (
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', margin: '0 0 10px' }}>
+              <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 13.5, fontWeight: 600 }}>
+                Equipos a la vista
+                <select data-plano-equipos value={agrupamiento ? String(agrupamiento.id) : ''} style={{ minHeight: 44, fontSize: 13.5, maxWidth: 260 }}
+                  onChange={e => { const id = e.target.value ? Number(e.target.value) : null; setEquiposDe(id); recordar(grupoId, id) }}>
+                  <option value="">Sin equipos de MiClase</option>
+                  {agrupamientos.map(a => <option key={a.id} value={String(a.id)}>{a.nombre}</option>)}
+                </select>
+              </label>
+              {equipos && (
+                <span data-plano-leyenda style={{ fontSize: 13, color: 'var(--gris-700)' }}>
+                  {equipos.length === 0 ? 'Este agrupamiento no tiene a nadie colocado.'
+                    : equipos.map((e, i) => <span key={e.clave} data-plano-equipo={i + 1} style={{ marginRight: 12, whiteSpace: 'nowrap' }}><strong>{i + 1}</strong> {e.nombre}</span>)}
+                </span>
+              )}
+            </div>
+          )}
+
           <iframe
-            key={`${grupoId}-${modo}`}
+            key={`${grupoId}-${modo}-${agrupamiento?.id ?? 'plano'}`}
             title="Plano de clase (AulaMap)"
             src={`${import.meta.env.BASE_URL}aulamap/index.html`}
             data-aulamap={modo}

@@ -6,7 +6,7 @@
  */
 import {
   claseParaAulaMap, claseParaGuardar, claseDesdeCuadricula, alumnoDeIdAulaMap, resumenPlano,
-  leerPlanoGuardado,
+  leerPlanoGuardado, conEquipos,
 } from '../frontend/src/db/planoAulaMap'
 
 let fallos = 0
@@ -103,6 +103,20 @@ ok(leerPlanoGuardado('{no es json') === null && leerPlanoGuardado('{"a":1}') ===
 {
   const c = claseParaAulaMap({ grupoId: 1, nombreGrupo: 'X', guardado: '{roto', alumnos, filas: 1, cols: 1, asientos: [] })
   ok(c.objects.filter(o => o.type === 'desk1').length === 1, 'cae a la cuadrícula')
+}
+
+console.log('\n6. Los equipos de MiClase a la vista')
+{
+  const ids = alumnos.map(a => a.id)
+  const guardado = JSON.stringify({ id: 'x', room: { w: 600, h: 600 }, objects: [], students: [{ id: `a${ids[0]}`, team: 7 }] })
+  const c = claseParaAulaMap({ grupoId: 1, nombreGrupo: 'X', guardado, alumnos, filas: 1, cols: 1, asientos: [] })
+  const v = conEquipos(c, [{ alumnos: [ids[1]] }, { alumnos: [ids[0], ids[1]] }])
+  const equipoDe = (id: number) => v.students.find(s => s.id === `a${id}`)?.team
+  ok(equipoDe(ids[1]) === 1 && equipoDe(ids[0]) === 2, 'cada alumno lleva el número de su equipo, por orden; el primero en el que sale manda')
+  ok(ids.slice(2).every(id => equipoDe(id) === undefined), 'quien no está en ninguno va sin equipo')
+  ok(v.showTeams === true, 'y AulaMap los pinta')
+  ok(c.students.find(s => s.id === `a${ids[0]}`)?.team === 7, 'la clase de partida no se toca: los equipos del propio AulaMap siguen ahí')
+  ok(conEquipos(c, []).students.every(s => s.team === undefined), 'un agrupamiento vacío no deja equipos a la vista')
 }
 
 console.log(`\n${fallos === 0 ? '✅ TODO CORRECTO' : `❌ ${fallos} FALLO(S)`}\n`)

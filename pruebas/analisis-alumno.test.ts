@@ -10,7 +10,7 @@
 import { mediana, modaDeCalificativos, resumenEstadistico, textoDeModa } from '../frontend/src/db/estadistica'
 import { analizarAlumno, analizarExamen, alumnosDeMediaParecida, grupoPublicable, MINIMO_GRUPO, type ExamenDeArea } from '../frontend/src/db/analisisAlumno'
 import { documentoAnalisisAlumno } from '../frontend/src/informes/analisisAlumno'
-import { documentoInformeAlumnoPrueba } from '../frontend/src/informes/informeAlumnoPrueba'
+import { documentoInformeAlumnoPrueba, documentoUnaPagina, densidadUnaPagina } from '../frontend/src/informes/informeAlumnoPrueba'
 import { normalizarPrueba, ACIERTO, FALLO, EN_BLANCO } from '../frontend/src/db/prueba'
 import type { NotaArea } from '../frontend/src/db/calculo'
 
@@ -130,6 +130,41 @@ console.log('\n4. Un examen: lo que él falla y la mayoría acierta')
   // Con preguntas por unidad, en la unidad del examen cuentan las suyas.
   const porUnidad = { ...ex, def: { ...def, preguntas: def.preguntas.map((p, i) => i < 2 ? { ...p, unidad_id: 3 } : { ...p, unidad_id: 4 }) } }
   ok(analizarExamen(porUnidad, 1)!.preguntas.length === 2, 'un examen con preguntas por unidad se analiza con las de su unidad')
+}
+
+console.log('\n4a. El informe de una página, con la rúbrica de cada pregunta')
+{
+  // Un examen de puntos con niveles de corrección, como la planilla de Luis.
+  const def = normalizarPrueba({
+    titulo: 'Potencias', tipo: 'puntos', reparto: 'unico',
+    preguntas: [
+      { id: 'p1', enunciado: 'Yogures: potencia', max: 2, criterio_id: 'CE1.3', clave: '5 × 5 × 5 = 5³', correccion: 'a) 0,75 · b) 0,5 · c) 0,75', notas: 'COMPROBAR CON EL ENUNCIADO' },
+      { id: 'p2', enunciado: 'Explica el error', max: 0.5, niveles: [
+        { puntos: 0.5, texto: 'Explica que se ha multiplicado la base por el exponente' },
+        { puntos: 0.25, texto: 'Solo da 125 sin explicar el error' },
+        { puntos: 0, texto: 'Nada correcto o sin respuesta' },
+      ] },
+      { id: 'p3', enunciado: 'Sin anotar', max: 1 },
+    ],
+  })
+  const ex: ExamenDeArea = {
+    instrumento: 'Proba escrita', unidad_id: 3, unidad: 'UD3', def, destinos: ['CE1.3'],
+    respuestas: [1, 2, 3, 4, 5].map(id => ({ alumno_id: id, nombre: `Alumno ${id}`, respuestas: id === 1 ? { p1: 1.5, p2: 0.25 } : { p1: 2, p2: 0.5, p3: 1 } })),
+  }
+  const a = analizarExamen(ex, 1)!
+  ok(a.preguntas[1].nivel === 'Solo da 125 sin explicar el error' && a.preguntas[1].anotada, 'el análisis dice qué nivel de la rúbrica se marcó')
+  ok(a.preguntas[0].nivel === null && a.preguntas[0].anotada && !a.preguntas[2].anotada, 'sin niveles, no inventa texto; sin anotar, lo dice')
+  const doc = documentoUnaPagina('Potencias', [{ alumno: 'Javier', clase: '6.º A', area: 'Matemáticas', def, analisis: a }])
+  ok(doc.includes('data-informe-una-pagina') && doc.includes('Solo da 125 sin explicar el error') && doc.includes('Sin anotar') && doc.includes('Nivel alcanzado'), 'la hoja lleva el nivel de cada pregunta')
+  ok(!doc.includes('Preguntas falladas') && (doc.match(/class="hoja/g) ?? []).length === 1, 'una sola hoja, sin las secciones del informe completo')
+  ok(doc.includes('5 × 5 × 5 = 5³') && doc.includes('a) 0,75 · b) 0,5 · c) 0,75'), 'lleva la respuesta correcta y el reparto de la corrección')
+  ok(!doc.includes('COMPROBAR'), 'pero no las notas de corrección, que son del docente')
+  ok(a.nota.grupo!.n === 5 && !/clase \d|Media de la clase|>Clase</.test(doc), 'es personal: ninguna cifra de la clase, aunque haya cinco exámenes')
+  const clase = documentoUnaPagina('Potencias', [1, 2, 3].map(id => ({ alumno: `A${id}`, clase: '6.º A', area: 'Mat', def, analisis: analizarExamen(ex, id)! })))
+  ok((clase.match(/data-informe-una-pagina/g) ?? []).length === 3, 'la de toda la clase: una hoja por alumno')
+  const corta = densidadUnaPagina(a.preguntas)
+  const larga = densidadUnaPagina(Array.from({ length: 40 }, (_, i) => ({ enunciado: `Pregunta ${i} con un enunciado bastante largo para ocupar dos líneas`, nivel: 'Nivel con una descripción larga que también ocupa más de una línea', criterio_id: 'CE1.1' })))
+  ok(corta === 9 && larga < corta && larga >= 6, 'la letra baja con más texto, sin bajar de 6 pt', `${corta} · ${larga}`)
 }
 
 console.log('\n4b. Compañeros de media parecida')

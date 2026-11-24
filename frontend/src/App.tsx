@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import Marca from '@/components/Marca'
-import { Routes, Route, NavLink, useLocation } from 'react-router-dom'
+import { Routes, Route, NavLink, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/auth/AuthProvider'
-import { ClaseActivaProvider } from '@/contexto/ClaseActiva'
+import { ClaseActivaProvider, useClaseActiva } from '@/contexto/ClaseActiva'
 import Dashboard from '@/pages/Dashboard/Dashboard'
 import GruposPage from '@/pages/Grupos/GruposPage'
-import AlumnosPage from '@/pages/Alumnos/AlumnosPage'
 import EvaluacionPage from '@/pages/Evaluacion/EvaluacionPage'
 import SeguimientoPage from '@/pages/Seguimiento/SeguimientoPage'
 import InformesPage from '@/pages/Informes/InformesPage'
@@ -49,7 +48,6 @@ const NAV: { bloque: Clave; entradas: { to: string; label: Clave; icon: string }
     bloque: 'menu.configuracion',
     entradas: [
       { to: '/grupos',      label: 'menu.clases',      icon: '👥' },
-      { to: '/alumnos',     label: 'menu.alumnado',    icon: '🎒' },
       { to: '/sincronizar', label: 'menu.sincronizar', icon: '🔄' },
       { to: '/instalar',    label: 'menu.instalar',    icon: '📲' },
     ],
@@ -62,21 +60,36 @@ const K_PLEGADO = 'miclase_sidebar_plegado'
 // de contexto. El escáner y la sincronización no: el escáner deduce el alumno
 // del propio código y la sincronización es de todo el dispositivo. La
 // configuración de la clase tampoco, porque ya lleva su propia cabecera.
-const CON_BARRA = ['/', '/alumnos', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
+const CON_BARRA = ['/', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
 
 // El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
 // Informes lleva su propio «Periodo», que además ofrece el curso completo.
 // En Planificación manda la fecha, no el trimestre.
-const SIN_TRIMESTRE = ['/alumnos', '/informes', '/tutorias', '/planificacion']
+const SIN_TRIMESTRE = ['/informes', '/tutorias', '/planificacion']
 // El área no pinta nada donde se trabaja con la clase entera. En el
 // calificador sí: desde el rediseño (fase 2 · A) el área se elige aquí y no
 // en una fila de pestañas propia.
-const SIN_AREA = ['/alumnos', '/sesiones', '/informes', '/tutorias', '/planificacion']
+const SIN_AREA = ['/sesiones', '/informes', '/tutorias', '/planificacion']
 
 function usarBarra(pathname: string) {
   const raiz = '/' + (pathname.split('/')[1] ?? '')
   if (!CON_BARRA.includes(raiz)) return null
   return { conArea: !SIN_AREA.includes(raiz), conTrimestre: !SIN_TRIMESTRE.includes(raiz) }
+}
+
+/**
+ * `/alumnos` ya no es una pantalla: el alumnado vive en la pestaña «Alumnado»
+ * de su clase, dentro de «Mis clases». La dirección se conserva para los
+ * enlaces y marcadores de antes y lleva a la clase que diga `?grupo_id=` o,
+ * si no, a la activa; sin ninguna, a la lista de clases.
+ */
+function IrAlAlumnado() {
+  const { grupoId, cargando } = useClaseActiva()
+  const [params] = useSearchParams()
+  if (cargando) return null
+  const pedida = Number(params.get('grupo_id'))
+  const id = pedida > 0 ? pedida : grupoId
+  return <Navigate to={id ? `/grupos/${id}?pestana=alumnado` : '/grupos'} replace />
 }
 
 function Layout() {
@@ -211,7 +224,7 @@ function Layout() {
         <Routes>
           <Route path="/"              element={<Dashboard />} />
           <Route path="/grupos/*"      element={<GruposPage />} />
-          <Route path="/alumnos/*"     element={<AlumnosPage />} />
+          <Route path="/alumnos/*"     element={<IrAlAlumnado />} />
           <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
           <Route path="/escanear"      element={<EscanearPage />} />
           <Route path="/sesiones/*"    element={<SesionesPage />} />

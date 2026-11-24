@@ -44,7 +44,7 @@ export default function ConvertirFamilia({ familia, datos, accion, capa, bloque,
   const partes: string[] = []
   if (datos.calificaciones) partes.push(`${datos.calificaciones} nota${datos.calificaciones !== 1 ? 's' : ''}`)
   if (datos.diario) partes.push(`${datos.diario} registro${datos.diario !== 1 ? 's' : ''} del diario`)
-  if (datos.examenes) partes.push(`${datos.examenes} examen${datos.examenes !== 1 ? 'es' : ''}`)
+  if (datos.examenes) partes.push(`${datos.examenes} ${datos.examenes !== 1 ? 'exámenes' : 'examen'}`)
   if (datos.rubricas) partes.push('su rúbrica')
   const lista = partes.length > 1 ? partes.slice(0, -1).join(', ') + ' y ' + partes[partes.length - 1] : partes[0] ?? ''
 
@@ -72,7 +72,7 @@ export default function ConvertirFamilia({ familia, datos, accion, capa, bloque,
           <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--azul-900)' }}>«{familia.nombre}» ya tiene {lista}</div>
           <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.55, marginTop: 4 }}>
             En cuanto metas algo dentro, el instrumento pasa a ser solo el resumen de sus actividades: lo que ya
-            calificaste con ella seguiría contando, pero sin columna propia en el Calificador. Si lo conviertes
+            calificaste con él seguiría contando, pero sin columna propia en el Calificador. Si lo conviertes
             en una actividad propia, tendrás dos columnas: una con lo de ahora y otra para {accion}.
           </div>
         </div>

@@ -48,6 +48,7 @@ const TABLAS = new Set([
   'medidas',  // medidas de atención a la diversidad (esquema Dexie v8)
   'tutorias', 'modelos_tutoria',  // seguimiento de tutorías y sus modelos (esquema Dexie v9)
   'planificacion', 'eventos',  // planificación semanal y calendario (esquema Dexie v10)
+  'agrupamientos',  // equipos y agrupamientos de la clase (esquema Dexie v11)
 ])
 
 export default async function syncRoutes(app) {

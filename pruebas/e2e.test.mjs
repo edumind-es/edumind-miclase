@@ -1,4 +1,4 @@
-import { navegadorChromium, elegirUnidad } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
@@ -74,11 +74,12 @@ ok(await p.getByRole('tab', { name: 'Áreas y evaluación' }).isVisible(), 'la c
 
 // ── 4 · Alumnado ────────────────────────────────────────────────────────
 console.log('\n4. Alumnado')
-await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+await irAlAlumnado(p)
 await p.waitForTimeout(500)
-// La clase ya no se elige aquí: la manda la barra de contexto, compartida
-const selClase = p.locator('.barra-clase select').first()
-ok((await selClase.inputValue()) !== '', 'la barra de contexto lleva la clase activa a Alumnado')
+// El alumnado ya no tiene pantalla propia: `/alumnos` lleva a la pestaña de la clase activa
+ok(/\/grupos\/\d+\?pestana=alumnado/.test(p.url()), '/alumnos lleva a la pestaña «Alumnado» de la clase activa', p.url())
+ok(await p.getByRole('link', { name: 'Alumnado', exact: true }).count() === 0, 'el menú ya no tiene una entrada «Alumnado» aparte')
+ok(await p.getByRole('tab', { name: 'Alumnado' }).getAttribute('aria-selected') === 'true', 'y la pestaña queda elegida')
 
 await p.getByRole('button', { name: /Importar lista/ }).click()
 await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill(
@@ -507,8 +508,9 @@ const fBackup = await descargaBackup
 const rutaBackup = process.env.SCRATCH + '/backup.json'
 await fBackup.saveAs(rutaBackup)
 const backup = JSON.parse(readFileSync(rutaBackup, 'utf8'))
-ok(backup.version === 10, 'el backup es de la versión 10, la del esquema actual (planificación)')
+ok(backup.version === 11, 'el backup es de la versión 11, la del esquema actual (equipos)')
 ok(Array.isArray(backup.planificacion) && Array.isArray(backup.eventos), 'incluye la planificación y el calendario')
+ok(Array.isArray(backup.agrupamientos), 'incluye los equipos')
 ok(Array.isArray(backup.diario), 'incluye la tabla del diario de evaluación')
 ok(Array.isArray(backup.medidas), 'incluye la tabla de medidas de atención a la diversidad')
 ok(Array.isArray(backup.tutorias) && Array.isArray(backup.modelos_tutoria), 'incluye las tablas de tutorías y de sus modelos')

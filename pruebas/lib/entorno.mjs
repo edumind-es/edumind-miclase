@@ -214,3 +214,16 @@ export async function aceptarConfirmaciones(p, alVer) {
 export async function rechazarSiguienteConfirmacion(p) {
   await p.evaluate(() => { window.__rechazarSiguiente = true })
 }
+
+/**
+ * Abre el alumnado de la clase activa. Ya no hay entrada «Alumnado» en el
+ * menú: vive en la pestaña de su clase, en «Mis clases», y `/alumnos`
+ * redirige a ella. Se navega sin recargar, como hacía el enlace del menú.
+ */
+export async function irAlAlumnado(p) {
+  await p.evaluate(() => {
+    history.pushState({}, '', '/alumnos')
+    dispatchEvent(new PopStateEvent('popstate'))
+  })
+  await p.locator('[data-alumnado-clase]').waitFor()
+}

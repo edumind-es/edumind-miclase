@@ -13,7 +13,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, gestorEnPesosDelArea } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, gestorEnPesosDelArea, irAlAlumnado } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -96,7 +96,7 @@ try {
   await p.getByRole('button', { name: /Importar 7 unidades/ }).click({ timeout: 20000 })
   await p.getByText(/Programación importada/).waitFor({ timeout: 15000 })
   await p.getByRole('button', { name: 'Cerrar' }).click()
-  await p.getByRole('link', { name: 'Alumnado', exact: true }).click()
+  await irAlAlumnado(p)
   await p.waitForTimeout(500)
   await p.getByRole('button', { name: /Importar lista/ }).click()
   await p.getByPlaceholder('Pega aquí la lista de alumnado…').fill('Abad Ríos, Ana\nBello Souto, Bruno')
@@ -333,6 +333,56 @@ try {
   ok(textos.some(t => t.startsWith('5')), 'la columna de la oficial enseña el 5 movido', textos.join(' | '))
   const thOficial = p.locator('[data-instr-th]').nth(iOficial2)
   ok(await thOficial.getAttribute('data-con-examen') === 'true', 'y su cabecera sabe que el examen es suyo')
+
+  console.log('\n12. Un examen definido otro día va en el bloque de sus correcciones, y la actividad nueva solo en esa unidad')
+  {
+    // El examen se define hace diez días y se corrige hoy. Fechado por el día
+    // en que se definió, mover el bloque de hoy se llevaba las notas y dejaba
+    // el examen atrás, escondido en el instrumento.
+    const r = await p.evaluate(async () => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const { diaDe } = await import('/src/db/bloquesFamilia.ts')
+      const vivo = (x) => !x.deleted_at
+      const fam = (await db.instrumentos.toArray()).filter(vivo).find(i => i.tipo === 'prueba-escrita' && i.familia_id == null)
+      const filas = (await db.criterio_instrumentos.where('instrumento_id').equals(fam.id).toArray()).filter(vivo)
+      const unidades = [...new Set(filas.map(f => f.unidad_id))]
+      // Una unidad en la que el instrumento no tenga ya examen a su nombre.
+      const conExamen = new Set((await db.rubricas.where('instrumento_id').equals(fam.id).toArray()).filter(x => vivo(x) && x.tipo === 'prueba').map(x => x.unidad_id))
+      const u = unidades.find(x => !conExamen.has(x))
+      if (u == null) return { error: 'no queda unidad libre para el examen' }
+      const criterios = filas.filter(f => f.unidad_id === u).map(f => f.criterio_id)
+      const alumno = (await db.alumnos.toArray()).filter(vivo)[0]
+      const muestra = (await db.calificaciones.toArray()).filter(vivo)[0]
+      const area = { asignatura: muestra.asignatura, curso: muestra.curso, etapa: muestra.etapa, comunidad: muestra.comunidad }
+      const def = { titulo: 'Examen de hace días', tipo: 'puntos', reparto: 'unica', preguntas: [{ id: 'p1', enunciado: 'Una', max: 10, criterio_id: null }] }
+      const idExamen = await q.guardarPrueba(fam.id, u, def)
+      const haceDias = new Date(Date.now() - 10 * 864e5).toISOString()
+      await db.rubricas.update(idExamen, { created_at: haceDias })
+      const guardado = await q.getPrueba(fam.id, u)
+      await q.guardarExamenDeAlumno({
+        alumno_id: alumno.id, instrumento_id: fam.id, trimestre: muestra.trimestre, unidad_id: u,
+        def: guardado.def, respuestas: { p1: 7 }, destinos: criterios, area,
+      })
+      const hoy = diaDe(new Date().toISOString())
+      const bloques = (await q.bloquesDirectosDeFamilia(fam.id)).filter(b => b.unidad_id === u)
+      const res = await q.convertirFamiliaEnHijo(fam.id, { nombre_hijo: 'Bloque de hoy', bloque: { unidad_id: u, dia: hoy } })
+      const fila = await db.rubricas.get(idExamen)
+      const delHijo = (await db.criterio_instrumentos.where('instrumento_id').equals(res.hijo_id).toArray()).filter(vivo)
+      const enHijo = await q.getPrueba(res.hijo_id, u)
+      return {
+        bloques: bloques.map(b => [b.dia === hoy ? 'hoy' : 'otro', b.examenes, b.calificaciones]),
+        movidas: res.calificaciones, examenMovido: fila.instrumento_id === res.hijo_id,
+        unidadesDelHijo: [...new Set(delHijo.map(f => f.unidad_id))], u, variasUnidades: unidades.length > 1,
+        corregidos: enHijo ? await q.contarCorregidosDeExamen(res.hijo_id, u, enHijo.def) : -1,
+      }
+    })
+    ok(!r.error, 'el caso se puede montar', r.error ?? '')
+    ok(r.bloques?.length === 1 && r.bloques[0][0] === 'hoy' && r.bloques[0][1] === 1 && r.bloques[0][2] >= 1,
+      'el examen sale en el bloque de hoy, con sus notas, y no en uno aparte', JSON.stringify(r.bloques))
+    ok(r.movidas >= 1 && r.examenMovido && r.corregidos === 1, 'al mover el bloque, el examen va con sus notas y sigue corregido', JSON.stringify([r.movidas, r.examenMovido, r.corregidos]))
+    ok(r.unidadesDelHijo?.length === 1 && r.unidadesDelHijo[0] === r.u, 'y la actividad nueva solo tiene columna en esa unidad', JSON.stringify(r.unidadesDelHijo))
+  }
 
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
