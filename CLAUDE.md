@@ -1704,6 +1704,67 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **El aspecto Lámina va tras un interruptor apagado hasta la 2.0.0**
+  (`src/aspecto.ts`, `src/lamina.css`; plan en `LAMINA_APP_ARQUITECTURA.md`,
+  PR 134). Es preferencia del aparato (`miclase.aspecto`, sin sincronizar):
+  `prepararAspecto()` en `main.tsx` pone `<html data-aspecto="lamina">` y el
+  `theme-color`; sin el atributo la app es la de siempre. Hasta que exista
+  «Acerca de» se enciende con `?aspecto=lamina` y se apaga con
+  `?aspecto=clasico` (el parámetro se limpia de la dirección). **Todo lo que
+  cambie el aspecto cuelga de `:root[data-aspecto="lamina"]`**; fuera de ese
+  selector `lamina.css` solo declara nombres nuevos (`--papel`, `--tinta`,
+  `--pelo`, `--mundo-*`, `--area-1…10`, `--f-display`, `--f-mono`).
+  Encendido, los tokens de siempre (`--azul-*`, `--gris-*`, `--blanco`,
+  `--radio-*`, `--sombra*`, `--fuente`) y los `--lm-*` del canon vendorizado
+  pasan a la paleta de la skill, y `border-radius` es 0 con `!important`
+  para todo. Las fuentes se llaman «Outfit Lamina» y «Plex Mono Lamina» a
+  propósito: con el nombre «Outfit», las pantallas que la tenían de reserva
+  en `--lm-display` la descargaban con el interruptor apagado. Sin
+  `@container`, `:has()` ni `color-mix()`: la app nativa admite iOS 15.
+  `aspecto-ui.test.mjs` vigila los dos lados: apagado no cambia nada ni
+  descarga fuentes; encendido da papel, Outfit y cero radios. Decisiones de
+  Luis (nov 2026): paleta de la skill para todo, nada visible en producción
+  hasta que esté entero.
+- **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
+  puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
+  sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los
+  números por poco operativos. Rejilla de 24, trazo de 1,5 sin relleno,
+  extremos cuadrados, `currentColor`; eso lo pone la pieza, no cada dibujo.
+  Junto a su palabra el icono es adorno (`aria-hidden`); si va solo lleva
+  `titulo`. `iconoSVG(nombre)` da el mismo dibujo como texto para lo que no
+  pasa por React. **Un emoji nuevo en la interfaz es un paso atrás**: se
+  dibuja el icono en `iconos.ts` con esas reglas. `iconos.test.ts` vigila
+  que quepan en la rejilla y que pieza y texto pinten lo mismo; se empaqueta
+  en CommonJS porque `react-dom/server` no arranca como módulo ES.
+- **Dos pruebas guardan el camino a Lámina.** `trinquete.test.mjs` (rápida)
+  cuenta en `frontend/src` —sin `informes/`— radios, sombras, degradados y
+  emoji, y falla si alguno SUBE sobre `pruebas/trinquete.json`: lo nuevo no
+  puede traer lo que se está retirando. Desplegables, colores a mano y
+  estilos en línea se cuentan pero no se exigen hasta que existan sus piezas
+  (fase 2): se activan quitando `desde` a la medida. El tope se baja al
+  cerrar cada fase con `node pruebas/trinquete.test.mjs --fijar`, no en cada
+  PR, para que dos PR a la vez no choquen en ese fichero.
+  `nada-cortado-ui.test.mjs` (`lib/nadaCortado.mjs`) abre cada pantalla del
+  menú con Lámina encendida en cuatro tamaños (1440, iPad horizontal y
+  vertical, 390) y exige a TODAS que nada desborde de lado, nada asome fuera
+  y ningún texto de botón se corte —hoy se cumple—; los 44 px de lo que se
+  toca solo se exigen a las pantallas de `HECHAS`, que empieza vacía (hoy
+  hay 691 cosas más bajas, casi todas del menú) y crece con cada fase.
+- **La versión es un solo número y nadie lo escribe a mano.** Vive en el
+  `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
+  está (los otros dos `package.json`, los tres `package-lock.json` y el
+  `versionName` de Android) y `npm run version:subir -- parche|menor|mayor`
+  los sube todos y sella «Sin publicar» del `CHANGELOG.md` con número y
+  fecha. La app la lee al compilar (`__VERSION__` en `vite.config.ts` →
+  `src/version.ts`; también `<meta name="miclase-version">` en el HTML).
+  Cada PR anota su cambio en «Sin publicar» y NO toca el número, para que dos
+  PR a la vez no choquen; se sube antes de desplegar. `desplegar.sh`
+  comprueba que la web servida dice ese número, pone la etiqueta `vX.Y.Z` y
+  no publica otro commit con una etiqueta que ya existe.
+  `pruebas/version.test.mjs` (rápida) es el candado. iOS se sube en Xcode y
+  la prueba solo avisa. Hasta nov 2026 no había nada de esto: 0.1.0 en los
+  `package.json`, «v1.0» a mano en el pie, sin CHANGELOG ni etiquetas. Luis
+  fijó lo que había como 1.9.0; el aspecto Lámina será la 2.0.0.
 
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
@@ -1716,6 +1777,7 @@ edumind_miclase/
 - Seed DB: `npm run seed`
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
+- Subir la versión antes de desplegar: `npm run version:subir -- parche` (o `menor`, `mayor`)
 - Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar

@@ -142,6 +142,32 @@ Política (noviembre 2026; configuración en `.github/dependabot.yml`):
 - Node: el servidor y el CI usan Node 22. Si una dependencia exigiera otra
   versión mayor, se decide aparte: no se sube Node del sistema de paso.
 
+## Versiones
+
+La app tiene **un número de versión** (mayor.menor.parche) y vive en el
+`package.json` de la raíz. De ahí lo copian los otros dos `package.json`, sus
+`package-lock.json` y el `versionName` de Android; Vite lo mete en la app al
+compilar (pie del menú) y en el HTML (`<meta name="miclase-version">`).
+
+- **En cada PR**: anotar el cambio en «Sin publicar» de `CHANGELOG.md`. El
+  número no se toca en el PR: así dos PR a la vez no chocan por él.
+- **Antes de desplegar algo nuevo**: `npm run version:subir -- parche` (o
+  `menor`, o `mayor`), revisar el `CHANGELOG.md` y guardar con un commit. El
+  guion se niega si «Sin publicar» está vacío.
+- **Al desplegar**: `desplegar.sh` comprueba que la web servida dice ese
+  número y pone la etiqueta `vX.Y.Z`. Si la etiqueta ya existe en otro commit,
+  no publica: hay que subir la versión. Volver a desplegar el mismo commit sí
+  se puede. La etiqueta se sube a GitHub a mano: `git push origin vX.Y.Z`.
+- **Regla**: mayor = cambia cómo se usa la app o exige actualizar todos los
+  aparatos; menor = función nueva; parche = arreglo.
+- **iOS**: «Version» y «Build» se suben en Xcode (el `project.pbxproj` no se
+  edita a mano); `pruebas/version.test.mjs` avisa si no coincide. En Android,
+  `versionCode` se sube a mano cuando se publique en la tienda.
+
+`pruebas/version.test.mjs` corre en cada commit y en cada despliegue, y falla
+si el número no coincide en todos sus sitios, si no es la primera entrada del
+`CHANGELOG.md` o si alguien lo vuelve a escribir a mano en una pantalla.
+
 ## Desplegar
 
 ```bash

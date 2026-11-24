@@ -40,13 +40,16 @@ publicar() {
 }
 
 # ── ¿Responde la app y sirve lo que acabamos de publicar? ───────────────
+# Se miran dos cosas en el HTML servido: el paquete recién compilado y el
+# número de versión que anuncia (<meta name="miclase-version">).
 comprobar() {
-  local esperado="$1" intento
+  local esperado="$1" version="$2" intento
   for intento in 1 2 3 4 5 6; do
     sleep 2
     local html
     html="$(curl -fsS --max-time 15 "$URL/?despliegue=$(date +%s)" || true)"
-    if [ -n "$html" ] && grep -q "$esperado" <<<"$html"; then return 0; fi
+    if [ -n "$html" ] && grep -q "$esperado" <<<"$html" &&
+       grep -q "name=\"miclase-version\" content=\"$version\"" <<<"$html"; then return 0; fi
   done
   return 1
 }
@@ -78,6 +81,22 @@ commit="$(git rev-parse --short HEAD)"
 anterior_commit=""
 [ -L "$VIVA" ] && [ -f "$(readlink -f "$VIVA")/.commit" ] &&
   anterior_commit="$(cat "$(readlink -f "$VIVA")/.commit")"
+
+# ── Versión: un número por cada cosa publicada ──────────────────────────
+# La etiqueta vX.Y.Z se pone al publicar. Si ya existe y apunta a otro commit,
+# se está intentando publicar algo distinto con el mismo número: hay que
+# subirlo antes (scripts/version.mjs), que es lo que nunca se hacía.
+numero="$(node scripts/version.mjs)"
+etiqueta="v$numero"
+if git rev-parse -q --verify "refs/tags/$etiqueta" >/dev/null &&
+   [ "$(git rev-parse "refs/tags/$etiqueta^{commit}")" != "$(git rev-parse HEAD)" ]; then
+  rojo "La versión $numero ya se publicó con otro commit ($(git rev-parse --short "refs/tags/$etiqueta^{commit}"))."
+  echo "Anota los cambios en «Sin publicar» del CHANGELOG.md y sube la versión:"
+  echo "  npm run version:subir -- parche     (o menor, o mayor)"
+  echo "  git commit -am \"Versión nueva\""
+  exit 1
+fi
+gris "Versión $numero"
 
 # ── Pruebas ─────────────────────────────────────────────────────────────
 if [ "${1:-}" = "--sin-pruebas" ]; then
@@ -120,10 +139,16 @@ fi
 # ── Publicar y comprobar ────────────────────────────────────────────────
 paquete="$(basename "$(ls -1 "$destino"/assets/index-*.js | head -1)")"
 publicar "$destino"
-gris "Publicado. Comprobando que $URL sirve $paquete…"
+gris "Publicado. Comprobando que $URL sirve $paquete y dice $numero…"
 
-if comprobar "$paquete"; then
-  verde "✓ Desplegado $version"
+if comprobar "$paquete" "$numero"; then
+  verde "✓ Desplegado $numero ($version)"
+  # La etiqueta se pone cuando ya está en el aire, no antes: una versión que
+  # no llegó a publicarse no se queda con el número.
+  if ! git rev-parse -q --verify "refs/tags/$etiqueta" >/dev/null; then
+    git tag -a "$etiqueta" -m "MiClase $numero"
+    gris "Etiqueta $etiqueta creada. Para subirla a GitHub: git push origin $etiqueta"
+  fi
 else
   rojo "✗ La comprobación ha fallado. Volviendo atrás."
   "$RAIZ/desplegar.sh" --volver
