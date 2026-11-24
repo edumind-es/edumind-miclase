@@ -227,3 +227,64 @@ export async function irAlAlumnado(p) {
   })
   await p.locator('[data-alumnado-clase]').waitFor()
 }
+
+// ── Los dos marcos ───────────────────────────────────────────────────────
+// Mientras conviven el marco de siempre y el de Lámina, estas ayudas hacen lo
+// mismo en los dos, para que una prueba valga con cualquiera (se pasa la tanda
+// entera con Lámina con `VITE_ASPECTO=lamina npm test`).
+
+/** ¿Está montado el marco de Lámina? */
+export async function enLamina(p) {
+  return await p.locator('[data-marco-lamina]').count() > 0
+}
+
+/** El menú principal, con el marco que haya. */
+export function menuPrincipal(p) {
+  return p.locator('.sidebar nav, .ml-menu nav')
+}
+
+/** El menú lateral entero y el botón que lo pliega. */
+export function menuLateral(p) {
+  return p.locator('aside.sidebar, aside.ml-menu')
+}
+export function botonPlegar(p) {
+  return p.locator('.sidebar-toggle, [data-marco-plegar]')
+}
+
+/** Elige el trimestre en la barra de la clase: desplegable en un marco, conmutador en el otro. */
+export async function elegirTrimestre(p, n) {
+  if (await enLamina(p)) await p.locator(`[data-marco-trimestre] button[aria-label="Trimestre ${n}"]`).click()
+  else await p.getByLabel('Trimestre').selectOption(String(n))
+}
+
+/** El trimestre que marca la barra, como texto («1», «2», «3»). */
+export async function trimestreElegido(p) {
+  if (await enLamina(p)) return (await p.locator('[data-marco-trimestre] button[aria-pressed="true"]').innerText()).replace(/\D/g, '')
+  return p.getByLabel('Trimestre').inputValue()
+}
+
+/** Cambia el idioma: en el menú con el marco de siempre, en «Acerca de» con Lámina. */
+export async function elegirIdioma(p, idioma) {
+  if (await p.locator('[data-selector-idioma]').count()) return p.locator(`[data-selector-idioma] [data-idioma="${idioma}"]`).click()
+  await p.locator('[data-marco-version]').click()
+  await p.locator(`[data-acerca-dialogo] [data-idioma="${idioma}"]`).click()
+  await p.keyboard.press('Escape')
+  await p.locator('[data-acerca-dialogo]').waitFor({ state: 'detached' })
+}
+
+/** ¿Marca el selector ese idioma como elegido? */
+export async function idiomaMarcado(p, idioma) {
+  if (await p.locator('[data-selector-idioma]').count()) return await p.locator(`[data-selector-idioma] [data-idioma="${idioma}"][aria-pressed="true"]`).count() === 1
+  await p.locator('[data-marco-version]').click()
+  const si = await p.locator(`[data-acerca-dialogo] [data-idioma="${idioma}"][aria-pressed="true"]`).count() === 1
+  await p.keyboard.press('Escape')
+  await p.locator('[data-acerca-dialogo]').waitFor({ state: 'detached' })
+  return si
+}
+
+/** Va a «Instalar MiClase»: entrada del menú en un marco, enlace de «Acerca de» en el otro. */
+export async function irAInstalar(p) {
+  if (await enLamina(p)) await p.locator('[data-marco-version]').click()
+  await p.getByRole('link', { name: /Instalar MiClase/ }).click()
+}
+

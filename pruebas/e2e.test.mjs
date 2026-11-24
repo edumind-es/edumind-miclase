@@ -1,4 +1,4 @@
-import { navegadorChromium, elegirUnidad, irAlAlumnado } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, irAlAlumnado, menuLateral, botonPlegar } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
@@ -41,20 +41,20 @@ await foto('01-inicio')
 
 // ── 2 · Sidebar plegable ────────────────────────────────────────────────
 console.log('\n2. Menú lateral plegable')
-const anchoAntes = await p.locator('aside.sidebar').evaluate(e => e.getBoundingClientRect().width)
-await p.locator('.sidebar-toggle').click()
+const anchoAntes = await menuLateral(p).evaluate(e => e.getBoundingClientRect().width)
+await botonPlegar(p).click()
 await p.waitForTimeout(350)
-const anchoDespues = await p.locator('aside.sidebar').evaluate(e => e.getBoundingClientRect().width)
+const anchoDespues = await menuLateral(p).evaluate(e => e.getBoundingClientRect().width)
 ok(anchoDespues < anchoAntes - 100, 'el menú se pliega a rail de iconos', `${Math.round(anchoAntes)}px → ${Math.round(anchoDespues)}px`)
 await foto('02-plegado')
 await p.keyboard.press('Control+b')
 await p.waitForTimeout(350)
-const anchoVuelta = await p.locator('aside.sidebar').evaluate(e => e.getBoundingClientRect().width)
+const anchoVuelta = await menuLateral(p).evaluate(e => e.getBoundingClientRect().width)
 ok(Math.abs(anchoVuelta - anchoAntes) < 5, 'Ctrl+B lo despliega otra vez')
 
 await p.reload({ waitUntil: 'networkidle' })
 await p.waitForTimeout(400)
-const anchoTrasRecarga = await p.locator('aside.sidebar').evaluate(e => e.getBoundingClientRect().width)
+const anchoTrasRecarga = await menuLateral(p).evaluate(e => e.getBoundingClientRect().width)
 ok(Math.abs(anchoTrasRecarga - anchoAntes) < 5, 'el estado del menú se recuerda entre recargas')
 
 // ── 3 · Crear clase ─────────────────────────────────────────────────────

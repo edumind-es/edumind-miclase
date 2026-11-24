@@ -9,7 +9,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, unidadElegida } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, unidadElegida, trimestreElegido } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -196,7 +196,7 @@ try {
   await p.goto(BASE + '/evaluacion', { waitUntil: 'networkidle' })
   await p.waitForTimeout(1200)
   ok(await p.locator('[data-resumen-curso]').isVisible(), 'la primera vez se abre en «Todo el curso»')
-  const trimestreBarra = await p.getByLabel('Trimestre').inputValue()
+  const trimestreBarra = await trimestreElegido(p)
   const rotulos = await p.locator('[data-unidad-select] option').allTextContents()
   let delTrimestre = -1, deOtro = -1
   for (let i = 1; i < rotulos.length; i++) {

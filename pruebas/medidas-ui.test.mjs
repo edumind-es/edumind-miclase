@@ -10,7 +10,7 @@
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, aceptarConfirmaciones, irAlAlumnado, elegirTrimestre } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 process.env.SCRATCH ||= '/tmp/miclase-pruebas'
@@ -153,7 +153,7 @@ try {
   await p.waitForTimeout(1500)
   await p.locator('[data-presentacion-entendido]').click({ timeout: 5000 }).catch(() => {})
   await p.locator('[data-vista="criterios"]').click()
-  await p.getByLabel('Trimestre').selectOption(String(T))
+  await elegirTrimestre(p, T)
   await elegirUnidad(p, unidad.pestana)
   await p.waitForTimeout(1200)
   const ana1 = await calificar(0, c1, [[famA, 4]])
@@ -195,7 +195,7 @@ try {
   await p.getByRole('link', { name: 'Calificador', exact: true }).click()
   await p.waitForTimeout(1500)
   await p.locator('[data-vista="criterios"]').click()
-  await p.getByLabel('Trimestre').selectOption(String(T))
+  await elegirTrimestre(p, T)
   await elegirUnidad(p, unidad.pestana)
   await p.waitForTimeout(1200)
   const filaAna = p.locator('tbody tr').first()

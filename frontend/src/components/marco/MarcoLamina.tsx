@@ -128,7 +128,7 @@ export default function MarcoLamina({ barra, alExportar, children }: {
           ))}
         </nav>
         <div className="ml-estado">
-          <button type="button" className="ml-entrada" onClick={alExportar} data-marco-copia>
+          <button type="button" className="ml-entrada" onClick={alExportar} data-marco-copia title={t('menu.exportarTitulo')}>
             <Icono nombre="importar" /><span className="ml-largo">{t('marco.copia')}</span><span className="ml-corto">{t('marco.copiaCorto')}</span>
           </button>
           <button type="button" className="ml-entrada ml-version" onClick={() => setAcerca(true)} aria-haspopup="dialog" data-marco-version
@@ -194,8 +194,8 @@ function BarraLamina({ barra, forma }: { barra: { conArea: boolean; conTrimestre
   const identidad = identidadDeAreas(asignaturas)
   const conArea = hayClase && barra.conArea && asignaturas.length > 0
   const suya = conArea && asignaturaId != null ? identidad.get(asignaturaId) : undefined
-  // «Todas las áreas» solo donde hay hub al que volver: en el Calificador
-  const conHub = pathname === '/evaluacion' || pathname.startsWith('/evaluacion/')
+  // «Todas las áreas» solo donde hay hub al que volver: en el Calificador, y con más de un área
+  const conHub = asignaturas.length > 1 && (pathname === '/evaluacion' || pathname.startsWith('/evaluacion/'))
 
   return (
     <>

@@ -10,7 +10,7 @@
  * Con BASE apuntando a la versión descargable servida por su lanzador
  * (`MICLASE_PUERTO=8766 python3 servidor.py`) prueba también ese paquete.
  */
-import { navegadorChromium } from './lib/entorno.mjs'
+import { navegadorChromium, menuPrincipal, elegirIdioma, idiomaMarcado, irAInstalar } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 const BASE = process.env.BASE || 'http://127.0.0.1:5173'
@@ -49,23 +49,23 @@ try {
   await dialogo.waitFor({ state: 'detached' })
   ok(await p.evaluate(() => localStorage.getItem('miclase.idioma')) === 'gl', 'queda guardado en miclase.idioma')
   ok(await p.evaluate(() => document.documentElement.lang) === 'gl', '<html lang="gl">')
-  const menu = await p.locator('.sidebar nav').innerText()
+  const menu = await menuPrincipal(p).innerText()
   ok(/Cualificador/.test(menu) && /Titorías/.test(menu) && /As miñas clases/.test(menu), 'el menú sale en galego', menu.replace(/\s+/g, ' ').slice(0, 120))
   ok(await p.getByText('Benvida/o a EDUmind MiClase').count() === 1, 'la bienvenida sale en galego')
 
   await p.reload({ waitUntil: 'networkidle' })
   ok(await p.locator('[data-elegir-idioma]').count() === 0, 'al recargar no vuelve a preguntar')
-  ok(/Cualificador/.test(await p.locator('.sidebar nav').innerText()), 'y sigue en galego')
+  ok(/Cualificador/.test(await menuPrincipal(p).innerText()), 'y sigue en galego')
 
   console.log('\n3. Volver al castellano desde el menú')
-  await p.locator('[data-selector-idioma] [data-idioma="es"]').click()
-  await p.locator('.sidebar nav', { hasText: 'Calificador' }).waitFor()
+  await elegirIdioma(p, 'es')
+  await menuPrincipal(p).filter({ hasText: 'Calificador' }).waitFor()
   ok(await p.evaluate(() => document.documentElement.lang) === 'es', '<html lang="es">')
   ok(await p.getByText('Bienvenido a EDUmind MiClase').count() === 1, 'el Inicio cambia sin recargar')
-  ok(await p.locator('[data-selector-idioma] [data-idioma="es"][aria-pressed="true"]').count() === 1, 'el selector marca el castellano')
+  ok(await idiomaMarcado(p, 'es'), 'el selector marca el castellano')
 
   console.log('\n4. Instalar MiClase')
-  await p.getByRole('link', { name: /Instalar MiClase/ }).click()
+  await irAInstalar(p)
   await p.locator('[data-instalar-pagina]').waitFor()
   for (const o of ['navegador', 'descargable', 'centro']) {
     ok(await p.locator(`[data-instalar-opcion="${o}"]`).count() === 1, `enseña la opción «${o}»`)
@@ -73,7 +73,7 @@ try {
   const href = await p.locator('[data-instalar-descargar]').getAttribute('href')
   ok(href === 'https://github.com/edumind-es/edumind-miclase/releases/latest/download/miclase.zip',
     'la descarga apunta a la última versión de GitHub', href)
-  await p.locator('[data-selector-idioma] [data-idioma="gl"]').click()
+  await elegirIdioma(p, 'gl')
   await p.getByText('A túa propia copia, para sempre').waitFor()
   ok(true, 'la página de instalar también cambia a galego')
 

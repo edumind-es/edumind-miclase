@@ -109,7 +109,9 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
   // por pestañas: con diez áreas, la mitad acababa escondida. Mientras no se
   // elige ninguna, se ve el hub.
   const aspecto = useAspecto()
-  const enHub = aspecto === 'lamina' && areaId == null
+  // Con una sola área no hay entre qué elegir: se entra directo a sus unidades
+  const conHub = aspecto === 'lamina' && asignaturas.length > 1
+  const enHub = conHub && areaId == null
   const identidad = identidadDeAreas(asignaturas)
   // La cola de lo que espera corrección, de toda la clase. Solo se pide para el hub
   const [porCorregir, setPorCorregir] = useState<ExamenPorCorregir[]>([])
@@ -243,7 +245,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
                 </ol>
               </>
             )}
-            {aspecto === 'lamina' && !enHub && (() => { const id = identidad.get(areaElegida.id!); return (
+            {conHub && !enHub && (() => { const id = identidad.get(areaElegida.id!); return (
               <div className="hub-dentro" data-examenes-dentro style={{ '--c': id?.color, '--cp': id?.papel } as React.CSSProperties}>
                 {id && <Sigla sigla={id.sigla} color={id.color} />}
                 <b>{areaElegida.nombre_display}</b>
