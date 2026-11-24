@@ -86,6 +86,14 @@ export default function PruebaEditor({
   /** Criterios del destino elegido cuando no es el de apertura: se leen de la programación. */
   const [criteriosDeDestino, setCriteriosDeDestino] = useState<{ id: string; descripcion: string }[] | null>(null)
   const [sucio, setSucio] = useState(false)
+  /**
+   * Sobre el examen guardado se ha cargado OTRO (fichero, texto, banco): al
+   * guardar no es una edición, es una sustitución. Se pregunta al cargar y
+   * el anterior va al banco al guardar.
+   */
+  const [sustituye, setSustituye] = useState(false)
+  /** El examen tal como está guardado en la fila `cargadaId`: lo que una carga encima sustituiría. */
+  const [guardadoDef, setGuardadoDef] = useState<PruebaDef | null>(null)
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [ayuda, setAyuda] = useState(false)
@@ -137,6 +145,7 @@ export default function PruebaEditor({
         setConAspectos(elegida.def.preguntas.some(p => p.aspecto))
         setConPlanilla(tienePlanilla(elegida.def))
         setCargadaId(elegida.id)
+        setGuardadoDef(elegida.def)
         setCargadaEn({ instrumentoId, unidadId: elegida.unidad_id })
         setDestino({ instrumentoId, unidadId: elegida.unidad_id })
         setGenN(elegida.def.preguntas.length)
@@ -184,6 +193,33 @@ export default function PruebaEditor({
   const seMueve = cargadaId != null && !mismoDestino(destino, cargadaEn)
 
   const editar = (fn: (d: PruebaDef) => PruebaDef) => { setSucio(true); setDef(fn) }
+
+  /**
+   * Antes de cargar otro examen encima del que hay en pantalla. Si el de
+   * pantalla ya está guardado, cargar otro lo SUSTITUYE: se dice, con cuántos
+   * alumnos tiene corregidos, y se explica cómo tener los dos. Antes solo se
+   * preguntaba si había cambios sin guardar, y un examen corregido se perdía
+   * al cargar encima el fichero de otro (le pasó a Luis, nov 2026).
+   */
+  const puedeCargarEncima = async (preguntarSiSucio: boolean): Promise<boolean> => {
+    const guardado = cargadaId != null && !sustituye ? guardadoDef : null
+    if (!guardado) {
+      return !(preguntarSiSucio && sucio) || confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')
+    }
+    let corregidos = 0
+    try { corregidos = await contarCorregidosDeExamen(cargadaEn.instrumentoId, cargadaEn.unidadId, guardado) } catch { /* sin la cuenta se pregunta igual */ }
+    const ok = await confirmar({
+      titulo: `«${guardado.titulo}» ya está guardado aquí${corregidos ? ` y corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}` : ''}. ¿Sustituirlo por el que vas a cargar?`,
+      texto: 'Cargar otro examen encima lo sustituye: sus preguntas dejan de estar en esta actividad.'
+        + (corregidos ? ' Las notas ya puestas se conservan, pero lo anotado en cada pregunta era del examen anterior.' : '')
+        + (sucio ? ' Los cambios sin guardar se pierden.' : '')
+        + '\n\nAl guardar, el examen de ahora queda en tu banco de exámenes.'
+        + '\n\nSi lo que quieres es un SEGUNDO examen en esta unidad, no lo cargues aquí: crea otra actividad en «Qué evalúo → Por unidad» («+ actividad en esta unidad») y define el examen en ella.',
+      aceptar: 'Sustituir el examen', cancelar: 'No cargar', peligro: corregidos > 0,
+    })
+    if (ok) setSustituye(true)
+    return ok
+  }
 
   const setTipo = (tipo: TipoPrueba) => editar(d => ({
     ...d, tipo,
@@ -291,11 +327,13 @@ export default function PruebaEditor({
     setTimeout(() => setPromptCopiado(false), 2000)
   }
   /** La respuesta de la IA —pegada o generada aquí— pasa a ser el examen en pantalla. */
-  const cargarRespuesta = (texto: string) => {
+  const cargarRespuesta = async (texto: string) => {
     setIaError('')
     try {
       // La respuesta puede venir como test escrito, como tabla o como JSON: se lee lo que sea.
       const leida = pruebaDeTexto(texto, def.titulo || instrumentoNombre)
+      // Leída sin error: ahora sí, antes de ponerla encima de un examen guardado.
+      if (!await puedeCargarEncima(false)) return
       const { prueba, avisos } = conUnidadesCasadas(leida.prueba, leida.avisos)
       setDef({ ...prueba, titulo: prueba.titulo || def.titulo, penalizacion: prueba.tipo === 'test' ? def.penalizacion ?? prueba.penalizacion : undefined, generada_ia: true })
       setSucio(true)
@@ -316,7 +354,7 @@ export default function PruebaEditor({
     try {
       const respuesta = await ai.generate(prompt, setIaRespuesta)
       if (!respuesta.trim()) { setIaError('Generación detenida: no dio tiempo a escribir nada.'); return }
-      cargarRespuesta(respuesta)
+      await cargarRespuesta(respuesta)
     } catch (e: any) {
       setIaError(e.message || 'La IA local no ha podido generar el test.')
     }
@@ -330,7 +368,7 @@ export default function PruebaEditor({
    * quedan en «Todos» (si el examen viene de otra área, ninguno casará).
    */
   const cargarDelBanco = async (origen: PruebaDeBanco) => {
-    if (sucio && !await confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
+    if (!await puedeCargarEncima(true)) return
     const conocidos = new Set(criteriosActivos.map(c => c.id))
     let sueltas = 0
     // La unidad de cada pregunta es de la clase de origen: aquí no vale.
@@ -383,7 +421,7 @@ export default function PruebaEditor({
     const enDestino = idInstrumentoDestino === instrumentoId ? guardadas : await getPruebasDeInstrumento(idInstrumentoDestino)
     const yaHay = enDestino.find(p => p.unidad_id === unidadDestino)
     if (yaHay && yaHay.id !== cargadaId && !await confirmar(
-      `Ya hay un examen ${unidadDestino == null ? `general de «${nombreInstrumento}»` : `de «${nombreInstrumento}» para ${nombreUnidad ? `«${nombreUnidad}»` : 'esa unidad'}`} («${yaHay.def.titulo}»).\n\n¿Sustituirlo por este?`)) return
+      `Ya hay un examen ${unidadDestino == null ? `general de «${nombreInstrumento}»` : `de «${nombreInstrumento}» para ${nombreUnidad ? `«${nombreUnidad}»` : 'esa unidad'}`} («${yaHay.def.titulo}»).\n\n¿Sustituirlo por este?\n\nEl que hay se guarda antes en tu banco de exámenes.`)) return
     // Mover un examen ya corregido: las notas se quedan donde se pusieron.
     if (seMueve) {
       const corregidosOrigen = await contarCorregidosDeExamen(cargadaEn.instrumentoId, cargadaEn.unidadId, def)
@@ -393,9 +431,15 @@ export default function PruebaEditor({
     setGuardando(true)
     try {
       const limpia = normalizarPrueba(def)
-      const id = await guardarPrueba(idInstrumentoDestino, unidadDestino, limpia, seMueve ? { mover: cargadaId! } : {})
+      // Con otro examen cargado encima, el que había va antes al banco.
+      const anterior = sustituye && cargadaId != null ? guardadoDef : null
+      const id = await guardarPrueba(idInstrumentoDestino, unidadDestino, limpia, {
+        ...(seMueve ? { mover: cargadaId! } : {}), ...(anterior ? { sustituye: true } : {}),
+      })
       setDef(limpia)
       setCargadaId(id)
+      setGuardadoDef(limpia)
+      setSustituye(false)
       const movido = seMueve
       setCargadaEn({ instrumentoId: idInstrumentoDestino, unidadId: unidadDestino })
       setGuardadas(await getPruebasDeInstrumento(instrumentoId))
@@ -404,16 +448,25 @@ export default function PruebaEditor({
       // nuevo. Se ofrece recalcularlas; no se hace sin preguntar, porque son
       // notas ya puestas.
       const corregidos = await contarCorregidosDeExamen(idInstrumentoDestino, unidadDestino, limpia)
-      let recalculo = ''
-      if (corregidos > 0) {
-        if (await confirmar({ texto: `Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`, aceptar: 'Recalcular las notas', cancelar: 'Dejarlas como están' })) {
+      let recalculo = anterior ? ` «${anterior.titulo}», el que había, queda en tu banco de exámenes.` : ''
+      // Tras cargar otro encima, lo anotado en cada pregunta era del examen
+      // anterior: recalcular solo tiene sentido si es el mismo examen
+      // corregido. Esc (cancelar) deja las notas como están.
+      if (corregidos > 0 && anterior && !await confirmar({
+        titulo: `Hay ${corregidos} alumno${corregidos !== 1 ? 's' : ''} corregido${corregidos !== 1 ? 's' : ''} con «${anterior.titulo}». ¿El que acabas de guardar es ese mismo examen, corregido?`,
+        texto: 'Si es OTRO examen, deja las notas como están: lo anotado en cada pregunta era del anterior y recalcular daría notas sin sentido.\n\nSi es el mismo con cambios (puntos, reparto, una errata), puedes recalcular: cada nota que cambie deja la anterior a la vista, en gris y sin contar.',
+        aceptar: 'Es el mismo: recalcular', cancelar: 'Es otro: dejar las notas',
+      })) {
+        recalculo += ' Las notas ya puestas se quedan como estaban.'
+      } else if (corregidos > 0) {
+        if (anterior || await confirmar({ texto: `Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`, aceptar: 'Recalcular las notas', cancelar: 'Dejarlas como están' })) {
           const hoy = new Date().toLocaleDateString('es-ES')
           const r = await recalcularNotasDeExamen(idInstrumentoDestino, unidadDestino, limpia,
             `Nota de «${limpia.titulo}» antes de cambiar el examen el ${hoy}`)
-          recalculo = ` Notas recalculadas para ${r.alumnos} alumno${r.alumnos !== 1 ? 's' : ''}.`
+          recalculo += ` Notas recalculadas para ${r.alumnos} alumno${r.alumnos !== 1 ? 's' : ''}.`
             + (r.fantasmas ? ` ${r.fantasmas} nota${r.fantasmas !== 1 ? 's' : ''} anterior${r.fantasmas !== 1 ? 'es quedan' : ' queda'} a la vista en el calificador, sin contar.` : '')
         } else {
-          recalculo = ' Las notas ya puestas se quedan como estaban.'
+          recalculo += ' Las notas ya puestas se quedan como estaban.'
         }
       }
       const donde = movido ? ` Movido a «${nombreInstrumento}»${unidadDestino == null ? ' (general)' : nombreUnidad ? ` · ${nombreUnidad}` : ''}; las notas ya puestas se quedan donde estaban.` : ''
@@ -430,6 +483,8 @@ export default function PruebaEditor({
     setGuardadas(await getPruebasDeInstrumento(instrumentoId))
     setDef(pruebaVacia(instrumentoNombre))
     setCargadaId(null)
+    setGuardadoDef(null)
+    setSustituye(false)
     setSucio(false)
     setMsg({ tipo: 'ok', texto: 'Examen eliminado.' })
   }
@@ -440,7 +495,7 @@ export default function PruebaEditor({
     const file = e.target.files?.[0]
     e.target.value = ''
     if (!file) return
-    if (sucio && !await confirmar('Tienes cambios sin guardar en este examen. Si cargas otro encima se pierden.\n\n¿Cargarlo de todos modos?')) return
+    if (!await puedeCargarEncima(true)) return
     try {
       const leida = await importarPrueba(file.name, await file.arrayBuffer())
       const { prueba, avisos } = conUnidadesCasadas(leida.prueba, leida.avisos)

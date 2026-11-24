@@ -619,6 +619,20 @@ edumind_miclase/
   en ESA unidad (`criteriosQueEvalua`). La cabecera de la columna del examen
   abre el editor directo con `[data-editar-examen]` (plegado tras
   `[data-cabeceras-toggle]`), además de «Editar» en «Exámenes y pruebas de evaluación».
+- **Un examen guardado no se sustituye sin decirlo, y el que se va queda en
+  el banco** (auditoría de nov 2026). Una actividad tiene UNA plaza de examen
+  por unidad: un segundo examen en la misma unidad es otra actividad. Cargar
+  un fichero, pegar texto o elegir del banco sobre un examen YA GUARDADO
+  pregunta antes (`puedeCargarEncima` en `PruebaEditor`: dice cuántos alumnos
+  hay corregidos y cómo tener un segundo examen); antes solo preguntaba si
+  había cambios sin guardar, y a Luis le desapareció el examen de la UD1 al
+  cargar encima el de problemas. Al guardar va `guardarPrueba(…, { sustituye:
+  true })`, que copia antes el anterior al banco (`conservarExamenEnBanco`),
+  igual que cuando un examen movido retira al que ocupaba su destino. Tras
+  sustituir no se ofrece recalcular sin más: se pregunta si es el MISMO
+  examen corregido, y Esc deja las notas como están. `guardarPrueba` escribe
+  en la ficha VIVA de la plaza; una retirada solo se reutiliza si no hay
+  ninguna viva (antes revivía la retirada y dejaba dos exámenes vivos).
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras
