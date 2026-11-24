@@ -311,6 +311,16 @@ export interface Calificacion extends Sincronizable {
    */
   niveles_rubrica?: Record<string, number> | null
   /**
+   * Si `niveles_rubrica` son respuestas de un examen, el id de ese examen
+   * (su fila de `rubricas`). Sin índice, así que no hay versión de esquema.
+   *
+   * Las respuestas vivían en la casilla sin decir de qué examen eran, y todas
+   * las preguntas se llaman p1, p2…: cualquier examen que ocupara el sitio
+   * las leía como suyas (auditoría de nov 2026). Una corrección anterior no
+   * lo trae; ver `esDeEsteExamen` en `db/prueba.ts`.
+   */
+  prueba_id?: number | null
+  /**
    * Nota «fantasma»: la que había en esta casilla antes de que un recálculo
    * (cambiar un examen ya corregido) la sustituyera o la dejara sin nota.
    *

@@ -215,8 +215,9 @@ export default function EvaluacionRapida({ alumno, onCerrar, onSiguiente }: Prop
       const c = await getCalificacionUnica(alumno.id!, instrumentoId, criterioId, trimestre, claveUnidad(unidadId))
       let marcas = c?.niveles_rubrica ?? {}
       // El examen puede estar corregido aunque este criterio no tenga nota suya.
-      if (prueba && Object.keys(marcas).length === 0) {
-        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), destinosPrueba)
+      // Y solo las de ESTE examen, no las del que ocupó antes el sitio.
+      if (prueba) {
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), [criterioId, ...destinosPrueba], prueba.id)
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)
