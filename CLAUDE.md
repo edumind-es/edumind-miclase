@@ -1792,11 +1792,22 @@ edumind_miclase/
   `<html data-notas>` y `lamina.css` cuelga de ahí; solo cambia cómo se ve,
   la nota y su tramo salen de `calculo.ts`. Lo obedecen las casillas que
   usan las clases `.cal-N` (la tabla del Calificador y las parrillas 0-10);
-  las notas que un diálogo pinta en línea con `calificativo().color` siguen
-  en relleno hasta que se pasen a clases. `calificador-lamina-ui.test.mjs`
+  y también las notas que un diálogo pinta en línea con
+  `calificativo().color` de fondo: `lamina.css` las alcanza por el texto de
+  su estilo (`[style*="background: var(--cal-…)"]`). `calificador-lamina-ui.test.mjs`
   lo comprueba sobre una clase sembrada con `pruebas/lib/sembrar.mjs`
   (6ºA, PROENS, tres alumnos y notas de varios tramos), que es la siembra a
   reutilizar en las pruebas de aspecto. Decisión de Luis (nov 2026).
+- **Lámina alcanza lo escrito en línea por el texto del estilo.** Al final de
+  `lamina.css` hay reglas `[style*="…"]` (el estilo tal como lo serializa
+  React) con `!important`, porque un estilo en línea gana a cualquier hoja:
+  blanco puro → papel claro (`background: white` y `rgb(255, 255, 255)`),
+  ninguna sombra (`box-shadow`), y las notas con el semáforo de fondo → en
+  filete salvo que el aparato pida relleno. Sirven para no tocar los ~2.700
+  estilos en línea uno a uno; lo correcto a la larga sigue siendo pasarlos a
+  clases y piezas. Si React cambiase cómo escribe un estilo (un espacio, el
+  orden) dejarían de casar: `calificador-lamina-ui.test.mjs` lo vigila
+  (nota del panel en filete, ningún fondo blanco).
 - **Los colores de aviso tienen nombre** (`index.css`: `--aviso-tinta`,
   `--aviso-fuerte`, `--aviso-fondo`, `--aviso-borde`, `--bien-tinta`,
   `--bien-fondo`, `--mal-tinta`, `--mal-fuerte`, `--mal-fondo`,
