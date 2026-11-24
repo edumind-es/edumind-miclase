@@ -1736,6 +1736,20 @@ edumind_miclase/
   dibuja el icono en `iconos.ts` con esas reglas. `iconos.test.ts` vigila
   que quepan en la rejilla y que pieza y texto pinten lo mismo; se empaqueta
   en CommonJS porque `react-dom/server` no arranca como módulo ES.
+- **Dos pruebas guardan el camino a Lámina.** `trinquete.test.mjs` (rápida)
+  cuenta en `frontend/src` —sin `informes/`— radios, sombras, degradados y
+  emoji, y falla si alguno SUBE sobre `pruebas/trinquete.json`: lo nuevo no
+  puede traer lo que se está retirando. Desplegables, colores a mano y
+  estilos en línea se cuentan pero no se exigen hasta que existan sus piezas
+  (fase 2): se activan quitando `desde` a la medida. El tope se baja al
+  cerrar cada fase con `node pruebas/trinquete.test.mjs --fijar`, no en cada
+  PR, para que dos PR a la vez no choquen en ese fichero.
+  `nada-cortado-ui.test.mjs` (`lib/nadaCortado.mjs`) abre cada pantalla del
+  menú con Lámina encendida en cuatro tamaños (1440, iPad horizontal y
+  vertical, 390) y exige a TODAS que nada desborde de lado, nada asome fuera
+  y ningún texto de botón se corte —hoy se cumple—; los 44 px de lo que se
+  toca solo se exigen a las pantallas de `HECHAS`, que empieza vacía (hoy
+  hay 691 cosas más bajas, casi todas del menú) y crece con cada fase.
 - **La versión es un solo número y nadie lo escribe a mano.** Vive en el
   `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
   está (los otros dos `package.json`, los tres `package-lock.json` y el

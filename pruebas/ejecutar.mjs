@@ -255,6 +255,7 @@ async function principal() {
 
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
+    await suite('trinquete de Lámina: lo que se retira no vuelve', 'node', ['pruebas/trinquete.test.mjs'])
     await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])
   }
 
@@ -355,6 +356,7 @@ async function principal() {
     await suite('diálogos que no se cierran solos', 'node', ['pruebas/dialogos-velo-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel','node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
     await suite('aspecto Lámina: apagado no cambia nada','node', ['pruebas/aspecto-ui.test.mjs'], entorno)
+    await suite('nada cortado en cuatro tamaños','node', ['pruebas/nada-cortado-ui.test.mjs'], entorno)
     await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
