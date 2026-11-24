@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [1.11.0] — 2026-11-24
+
 ### Añadido
 - Con Lámina encendida, «Exámenes y pruebas» entra por un **hub de áreas** en
   vez de por pestañas: una casilla por área con su sigla, su color y cuántos
