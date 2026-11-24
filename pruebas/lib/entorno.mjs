@@ -288,3 +288,29 @@ export async function irAInstalar(p) {
   await p.getByRole('link', { name: /Instalar MiClase/ }).click()
 }
 
+/**
+ * Entra en el Calificador por el menú. Con Lámina y varias áreas el menú lleva
+ * al hub de áreas: se entra en la que la clase tiene activa, que es donde
+ * aterriza el marco de siempre.
+ */
+export async function irAlCalificador(p) {
+  await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+  if (!await enLamina(p)) return
+  const hub = p.locator('[data-hub-areas] [data-hub-area]')
+  await Promise.race([hub.first().waitFor({ timeout: 4000 }), p.waitForURL('**/evaluacion', { timeout: 4000 })]).catch(() => {})
+  if (!await hub.count()) return
+  const activa = await p.evaluate(() => { const g = localStorage.getItem('miclase_clase_activa'); return g ? localStorage.getItem(`miclase_area_activa_${g}`) : null })
+  const suya = p.locator(`[data-hub-areas] [data-hub-area="${activa}"] .hub-abre`)
+  await (await suya.count() ? suya : p.locator('[data-hub-areas] .hub-abre').first()).click()
+  await p.waitForURL('**/evaluacion')
+}
+
+/** Cuántas áreas ofrece la barra de la clase: opciones de un desplegable o de la lista propia. */
+export async function areasEnLaBarra(p) {
+  if (!await enLamina(p)) return p.getByLabel('Área').locator('option').count()
+  await p.locator('[data-marco-area]').click()
+  const n = await p.locator('[data-lista-abierta] [role="option"] .sigla-area').count()
+  await p.keyboard.press('Escape')
+  return n
+}
+

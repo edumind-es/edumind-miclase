@@ -1,4 +1,4 @@
-import { navegadorChromium, elegirUnidad, irAlAlumnado, menuLateral, botonPlegar } from './lib/entorno.mjs'
+import { navegadorChromium, elegirUnidad, irAlAlumnado, menuLateral, botonPlegar, irAlCalificador, areasEnLaBarra } from './lib/entorno.mjs'
 
 const chromium = await navegadorChromium()
 import { mkdirSync } from 'node:fs'
@@ -171,12 +171,12 @@ if (await chip.count()) {
 
 // ── 9 · Matriz de evaluación ────────────────────────────────────────────
 console.log('\n9. Calificador: pestañas, subpestañas y matriz')
-await p.getByRole('link', { name: 'Calificador', exact: true }).click()
+await irAlCalificador(p)
 // Esta suite mira la matriz por criterio; la vista por defecto es ya por instrumento.
 await p.locator('[data-vista="criterios"]').click({ timeout: 8000 }).catch(() => {})
 await p.waitForTimeout(2000)
 
-const pestanasArea = await p.getByLabel('Área').locator('option').count()
+const pestanasArea = await areasEnLaBarra(p)
 ok(pestanasArea === 3, 'las 3 áreas salen en el selector de área de la barra', `${pestanasArea} áreas`)
 const subpestanas = await p.locator('[data-unidad-select] option').count()
 ok(subpestanas > 1, 'las unidades salen en el selector de unidad', `${subpestanas} opciones`)
@@ -335,8 +335,10 @@ await p.keyboard.press('Escape')
 await p.waitForTimeout(800)
 
 ok(await p.locator('.celda-btn.cal-8').count() > 0, 'la casilla recibe la clase del semáforo')
-const fondoNota = await p.locator('.celda-btn.cal-8').first().evaluate(e => getComputedStyle(e).backgroundColor)
-ok(fondoNota === 'rgb(31, 111, 165)', 'y se pinta del color Notable, no del gris de fondo', fondoNota)
+// El color de Notable va de fondo (aspecto de siempre, o Lámina en relleno) o en
+// la raya de debajo (Lámina en filete): en los dos casos es ese color y no gris
+const fondoNota = await p.locator('.celda-btn.cal-8').first().evaluate(e => { const s = getComputedStyle(e); return [s.backgroundColor, s.borderBottomColor] })
+ok(fondoNota.includes('rgb(31, 111, 165)'), 'y se pinta del color Notable, no del gris de fondo', fondoNota.join(' / '))
 await foto('12-matriz-con-nota')
 
 // ── 10b · Calificar sobre la rúbrica, indicador a indicador ─────────────
