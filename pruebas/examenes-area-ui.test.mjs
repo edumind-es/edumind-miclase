@@ -164,6 +164,47 @@ try {
   ok((await tarjeta.locator('[data-examen]').first().textContent()).includes('6ºA'), 'y cada uno dice de qué clase es')
   await foto('examenes-area-03-otra-clase')
 
+  console.log('\n6. Dos exámenes en el mismo sitio: se dice cuál se usa y se elige con cuál quedarse')
+  {
+    // Lo que deja la sincronización cuando dos aparatos crean un examen cada
+    // uno en la misma actividad y unidad: dos fichas vivas en la misma plaza.
+    const montado = await p.evaluate(async () => {
+      const { db } = await import('/src/db/localDb.ts')
+      const { nuevoId } = await import('/src/db/ids.ts')
+      const original = (await db.rubricas.toArray()).find(r => !r.deleted_at && r.tipo === 'prueba' && r.titulo === 'Exame UD1')
+      if (!original) return { error: 'no está «Exame UD1»' }
+      const def = { ...JSON.parse(original.prueba_json), titulo: 'Exame do outro aparello' }
+      const id = nuevoId()
+      // Más reciente que el original: es el que la app usa.
+      await db.rubricas.add({ ...original, id, titulo: def.titulo, prueba_json: JSON.stringify(def), updated_at: new Date(Date.now() + 60000).toISOString() })
+      // Una corrección hecha con el del otro aparato.
+      const nota = (await db.calificaciones.toArray()).find(c => !c.deleted_at)
+      return { original: original.id, otro: id, instrumento: original.instrumento_id, unidad: original.unidad_id, hayNotas: !!nota }
+    })
+    ok(!montado.error, 'el caso se puede montar', montado.error ?? '')
+    await p.reload({ waitUntil: 'networkidle' })
+    const dup = tarjeta.locator('[data-examenes-duplicados]')
+    ok(await aparece(dup), '«Exámenes y pruebas» avisa de que hay dos exámenes en el mismo sitio')
+    ok(await dup.locator('[data-duplicado-examen]').count() === 2
+      && await dup.locator('[data-duplicado-examen="Exame do outro aparello"][data-usado]').count() === 1
+      && await dup.locator('[data-duplicado-examen="Exame UD1"][data-usado]').count() === 0,
+      'y dice que se usa el más reciente', (await dup.textContent().catch(() => '')).slice(0, 200))
+    await dup.locator('[data-duplicado-examen="Exame UD1"] [data-duplicado-quedarse]').click()
+    ok(await aparece(tarjeta.locator('[data-examenes-aviso]').filter({ hasText: /queda «Exame UD1»/ })), 'al elegir, dice lo que ha quedado')
+    await dup.waitFor({ state: 'detached', timeout: 6000 }).catch(() => {})
+    ok(await dup.count() === 0, 'y el aviso desaparece')
+    const tras = await p.evaluate(async ({ instrumento, unidad }) => {
+      const { db } = await import('/src/db/localDb.ts')
+      const todas = (await db.rubricas.toArray()).filter(r => !r.deleted_at && r.tipo === 'prueba')
+      return {
+        enPlaza: todas.filter(r => r.instrumento_id === instrumento && r.unidad_id === unidad).map(r => r.titulo),
+        banco: todas.filter(r => r.instrumento_id === 0).map(r => r.titulo),
+      }
+    }, montado)
+    ok(tras.enPlaza.length === 1 && tras.enPlaza[0] === 'Exame UD1', 'en la plaza queda solo el elegido', JSON.stringify(tras.enPlaza))
+    ok(tras.banco.includes('Exame do outro aparello'), 'y el otro está en el banco de exámenes', JSON.stringify(tras.banco))
+  }
+
   ok(erroresConsola.length === 0, 'sin errores de página', erroresConsola.join(' | '))
 } catch (e) {
   await foto('examenes-area-error').catch(() => {})

@@ -3045,6 +3045,109 @@ export async function eliminarPrueba(id: number): Promise<void> {
   await db.rubricas.update(id, tocado({ deleted_at: sello() }))
 }
 
+/** Lo que ha pasado al quedarse con uno de varios exámenes de la misma plaza. */
+export type ResultadoQuedarse = {
+  /** Exámenes retirados de la plaza (quedan en el banco). */
+  retirados: string[]
+  /** Correcciones que pasan al examen que queda, porque el retirado decía lo mismo. */
+  pasadas: number
+  /** Correcciones hechas con un examen distinto del que queda: conservan su nota, pero ya no son de ningún examen de aquí. */
+  sueltas: number
+}
+
+/**
+ * Dos aparatos crearon un examen cada uno en la misma actividad y unidad
+ * antes de sincronizar: hay dos fichas vivas en la misma plaza. La app
+ * corrige con la más reciente (`elQueCuenta`), y la otra sigue ahí sin
+ * usarse. Esto deja SOLO la elegida: las demás se retiran con una copia en
+ * el banco. Las correcciones anotadas a nombre de una retirada pasan a la
+ * elegida si las dos decían lo mismo (el mismo examen creado dos veces); si
+ * eran exámenes distintos se quedan con su nota y sin examen aquí, y se
+ * cuenta. Nunca se llama sola: siempre tras elegir el docente.
+ */
+export async function quedarseConExamen(id: number): Promise<ResultadoQuedarse> {
+  const elegido = await db.rubricas.get(id)
+  if (!elegido || elegido.deleted_at || elegido.tipo !== 'prueba') throw new Error('Ese examen ya no está')
+  const pElegido = aPrueba(elegido)
+  if (!pElegido) throw new Error('Ese examen no se puede leer')
+  const otros = vivos(await db.rubricas.where('instrumento_id').equals(elegido.instrumento_id).toArray())
+    .filter(r => r.tipo === 'prueba' && r.id !== id && (r.unidad_id ?? null) === (elegido.unidad_id ?? null))
+  const res: ResultadoQuedarse = { retirados: [], pasadas: 0, sueltas: 0 }
+  if (!otros.length) return res
+  const notas = vivos(await db.calificaciones.where('instrumento_id').equals(elegido.instrumento_id).toArray())
+  for (const r of otros) {
+    const p = aPrueba(r)
+    await conservarExamenEnBanco(r)
+    const suyas = notas.filter(c => c.prueba_id === r.id)
+    const elMismo = !!p && firmaPrueba(p.def) === firmaPrueba(pElegido.def)
+    if (elMismo) {
+      for (const c of suyas) await db.calificaciones.update(c.id!, tocado({ prueba_id: id }))
+      res.pasadas += suyas.length
+    } else {
+      res.sueltas += suyas.length
+    }
+    await db.rubricas.update(r.id!, tocado({ deleted_at: sello() }))
+    res.retirados.push(r.titulo)
+  }
+  // El elegido pasa a ser el más reciente: lo mismo decidirán los demás
+  // aparatos aunque les llegue antes que las retiradas.
+  await db.rubricas.update(id, tocado({}))
+  return res
+}
+
+/** Motivo del fantasma de una nota que el docente decidió que no contara por no tener columna. */
+export const MOTIVO_SIN_COLUMNA = 'Sin columna en la unidad: el docente decidió que no contara'
+
+/**
+ * Las notas de un instrumento que cuentan sin columna en UNA unidad y UN
+ * trimestre dejan de contar: cada una se queda viva, sin `valor`, con el que
+ * tenía como fantasma (`valor_anterior`), igual que al vaciar una columna.
+ * Solo toca los criterios que la programación NO asigna a ese instrumento en
+ * esa unidad. Si después se le vuelve a asignar el criterio, la casilla sale
+ * con su fantasma y se recupera desde el panel. Nunca se llama sola.
+ *
+ * Las notas que DERIVA el diario de evaluación no se tocan: mientras existan
+ * sus registros, `materializarDiario` las volvería a escribir en el siguiente
+ * repaso. Se cuentan aparte (`delDiario`) para decirlo.
+ */
+export async function dejarDeContarSinColumna(
+  instrumento_id: number, unidad_id: number, trimestre: number,
+): Promise<{ quitadas: number; delDiario: number }> {
+  const asignados = new Set(vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
+  const { cals } = await filasDeColumna(instrumento_id, unidad_id, trimestre)
+  let quitadas = 0, delDiario = 0
+  await db.transaction('rw', db.calificaciones, async () => {
+    for (const c of cals) {
+      if (c.valor == null || asignados.has(c.criterio_id)) continue
+      if (c.origen === 'diario') { delDiario++; continue }
+      await db.calificaciones.update(c.id!, tocado({
+        valor: null, valor_anterior: c.valor, anterior_motivo: MOTIVO_SIN_COLUMNA,
+      }))
+      quitadas++
+    }
+  })
+  return { quitadas, delDiario }
+}
+
+/**
+ * Lo contrario: la programación vuelve a asignar a ese instrumento, en esa
+ * unidad, los criterios de sus notas sin columna (`asignarCriterioAColumna`,
+ * lo mismo que «+ criterio» en la cabecera). Las notas no se tocan: vuelven
+ * a tener columna. Devuelve los criterios asignados.
+ */
+export async function reasignarCriteriosSinColumna(
+  instrumento_id: number, unidad_id: number, trimestre: number,
+): Promise<string[]> {
+  const asignados = new Set(vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(f => f.unidad_id === unidad_id).map(f => f.criterio_id))
+  const { cals } = await filasDeColumna(instrumento_id, unidad_id, trimestre)
+  const faltan = [...new Set(cals.filter(c => c.valor != null && !asignados.has(c.criterio_id)).map(c => c.criterio_id))]
+    .sort((a, b) => a.localeCompare(b, 'es', { numeric: true }))
+  for (const c of faltan) await asignarCriterioAColumna(instrumento_id, unidad_id, c)
+  return faltan
+}
+
 // ─── BANCO DE RÚBRICAS ────────────────────────────────────────────────────────
 
 /** Una rúbrica del banco, con dónde se está usando. */
@@ -3858,6 +3961,12 @@ export type MatrizEvaluacion = {
    */
   familiasConDatosEscondidos: FamiliaConDatosEscondidos[]
   /**
+   * Instrumentos cuyo examen para lo que se mira comparte plaza con otro
+   * (dos aparatos crearon uno cada uno): se corrige con el más reciente y
+   * hay que elegir en «Exámenes y pruebas».
+   */
+  examenesRepetidos: { instrumento_id: number; nombre: string; titulos: string[] }[]
+  /**
    * Notas que cuentan pero no tienen columna en lo que se mira: la
    * programación ya no asigna ese criterio a ese instrumento (se desmarcó, o
    * la nota se quedó ahí al mover un examen). Cambiar la programación no
@@ -3918,10 +4027,19 @@ export async function getMatrizEvaluacion(
     if (!p || !p.def.preguntas.length) continue
     examenesPorInstrumento.set(r.instrumento_id, [...(examenesPorInstrumento.get(r.instrumento_id) ?? []), p])
   }
+  const examenesRepetidos: MatrizEvaluacion['examenesRepetidos'] = []
   for (const [instrumento_id, lista] of examenesPorInstrumento) {
     const toca = resolverExamen(lista, unidad_id || null)
     if (!toca) continue
     conPrueba.add(instrumento_id)
+    const enSuPlaza = lista.filter(p => (p.unidad_id ?? null) === (toca.prueba.unidad_id ?? null))
+    const ins = instrById.get(instrumento_id)
+    if (enSuPlaza.length > 1 && ins) {
+      examenesRepetidos.push({
+        instrumento_id, nombre: nombreEnUnidad(ins, unidad_id),
+        titulos: [toca.prueba.def.titulo, ...enSuPlaza.filter(p => p.id !== toca.prueba.id).map(p => p.def.titulo)],
+      })
+    }
     if (toca.via === 'vinculado') {
       const origen = await db.unidades.get(toca.prueba.unidad_id!)
       pruebaVinculada.set(instrumento_id, origen?.nombre ?? 'otra unidad')
@@ -4085,7 +4203,7 @@ export async function getMatrizEvaluacion(
   return {
     grupo, asig, alumnos, instrumentos, porCriterio,
     criteriosFueraDeTrimestre, calificaciones, evidencias, diario, criteriosDeUnidad,
-    familiasConDatosEscondidos, notasSinColumna, medidas, recuperaciones: aplicadas,
+    familiasConDatosEscondidos, examenesRepetidos, notasSinColumna, medidas, recuperaciones: aplicadas,
   }
 }
 
