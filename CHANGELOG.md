@@ -13,6 +13,12 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [1.10.0] — 2026-11-24
+
+El interruptor, el marco y los iconos (fases 0 y 1 de Lámina) se desplegaron
+ya el mismo día con la etiqueta 1.9.0, antes de que el paso de subir versión
+estuviera en uso; se anotan aquí, que es donde quedaron escritos.
+
 ### Añadido
 - Interruptor del aspecto Lámina, **apagado por defecto**: la app se ve igual
   que antes. Se enciende en un aparato abriendo la app con `?aspecto=lamina`
