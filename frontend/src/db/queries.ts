@@ -2516,8 +2516,31 @@ export async function getPrueba(instrumento_id: number, unidad_id: number | null
  * instrumento y la unidad de origen, y mover un examen no mueve
  * calificaciones, igual que cambiar la programación no las borra.
  */
+/**
+ * Antes de que un examen deje de estar donde estaba —porque otro ocupa su
+ * sitio o porque se carga otro encima—, una copia suya va al banco de
+ * exámenes. Sin esto la definición se perdía sin dejar rastro: a Luis le
+ * desapareció el examen de la UD1 al cargar encima el de problemas (nov 2026).
+ */
+async function conservarExamenEnBanco(r: Rubrica): Promise<void> {
+  const prueba = aPrueba(r)
+  if (!prueba || !prueba.def.preguntas.length) return
+  const ins = await db.instrumentos.get(r.instrumento_id)
+  const asig = ins ? await db.asignaturas.get(ins.asignatura_id) : undefined
+  const grupo = asig ? await db.grupos.get(asig.grupo_id) : undefined
+  await guardarPruebaEnBanco(prueba.def, {
+    area: asig?.nombre_display, nivel: grupo ? `${grupo.curso}º ${grupo.etapa}` : undefined,
+  })
+}
+
 export async function guardarPrueba(
-  instrumento_id: number, unidad_id: number | null, def: PruebaDef, opciones: { mover?: number } = {},
+  instrumento_id: number, unidad_id: number | null, def: PruebaDef,
+  /**
+   * `sustituye`: lo que se guarda no es una edición del examen que había sino
+   * OTRO examen cargado encima (fichero, texto pegado, banco). El que había
+   * se copia antes al banco.
+   */
+  opciones: { mover?: number; sustituye?: boolean } = {},
 ): Promise<number> {
   let limpia = normalizarPrueba(def)
   // Un examen no se vincula a su propia unidad, y el general no vincula nada.
@@ -2527,19 +2550,27 @@ export async function guardarPrueba(
   // tiene sentido si cuenta en más de una: si no, se quita.
   limpia = sinUnidadesAjenas(limpia, vinculadas.length ? unidadesDelExamen(unidad_id, limpia) : [])
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
-  const existente = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
-    .find(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
+  const delAmbito = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
+  // La ficha viva manda; una retirada solo se reutiliza si no queda ninguna
+  // viva. Antes se tomaba la primera, viva o no: tras sustituir un examen
+  // moviendo otro encima, el siguiente «Guardar» revivía la ficha retirada y
+  // dejaba dos exámenes vivos en el mismo sitio.
+  const existente = delAmbito.find(r => !r.deleted_at) ?? delAmbito[0]
   if (opciones.mover != null && existente?.id !== opciones.mover) {
     const origen = await db.rubricas.get(opciones.mover)
     if (origen && origen.tipo === 'prueba' && !origen.deleted_at) {
       if (existente?.id != null && !existente.deleted_at) {
+        await conservarExamenEnBanco(existente)
         await db.rubricas.update(existente.id, tocado({ deleted_at: sello() }))
       }
+      if (opciones.sustituye) await conservarExamenEnBanco(origen)
       await db.rubricas.update(origen.id!, tocado({ ...campos, instrumento_id }))
       return origen.id!
     }
   }
   if (existente?.id != null) {
+    if (opciones.sustituye && !existente.deleted_at) await conservarExamenEnBanco(existente)
     await db.rubricas.update(existente.id, tocado({ ...campos, deleted_at: null }))
     return existente.id
   }
