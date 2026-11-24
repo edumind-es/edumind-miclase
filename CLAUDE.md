@@ -1761,6 +1761,15 @@ edumind_miclase/
   **no entra en la tabla de notas**: vive en el hub, en la franja bajo la
   barra superior (`[data-marco-franja]`) y en el selector de área, cuya
   primera opción en el Calificador es «Todas las áreas».
+- **Con Lámina, «Exámenes y pruebas» también entra por un hub de áreas**
+  (`ExamenesConHoja`: `enHub` mientras `areaId` es null). Sustituye a las
+  pestañas de áreas, que con diez áreas dejaban la mitad en «Más»; con el
+  aspecto de siempre siguen las pestañas. `[data-examenes-hub]` con
+  `[data-examenes-hub-area]`, y dentro de un área `[data-examenes-dentro]`
+  con `[data-examenes-todas]` para volver; `AreaDeExamenes` no cambia. La
+  cola «Por corregir» del prototipo NO está: la lista de exámenes
+  (`listarPruebas`) no trae cuántos alumnos lleva corregidos cada uno, y no
+  se pone una cifra que no sale de ningún sitio.
 - **Con Lámina, la nota se pinta en filete o en relleno, y lo elige el
   docente** (`src/notas.ts`, `miclase.notas`, sin sincronizar; conmutador en
   «Acerca de», `[data-notas-elegir]`). Filete, el valor por defecto: cifra en

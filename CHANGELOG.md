@@ -13,6 +13,11 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Añadido
+- Con Lámina encendida, «Exámenes y pruebas» entra por un **hub de áreas** en
+  vez de por pestañas: una casilla por área con su sigla, su color y cuántos
+  exámenes tiene, y «Todas las áreas» para volver.
+
 ## [1.10.0] — 2026-11-24
 
 El interruptor, el marco y los iconos (fases 0 y 1 de Lámina) se desplegaron
