@@ -2539,6 +2539,29 @@ export async function listarPruebas(): Promise<PruebaConContexto[]> {
   return salida
 }
 
+/** Un examen de la clase al que le faltan alumnos por corregir. */
+export interface ExamenPorCorregir { fila: PruebaConContexto; corregidos: number; total: number }
+
+/**
+ * Los exámenes de una clase que esperan corrección, para la cola del hub de
+ * «Exámenes y pruebas». Cuenta alumnos con el examen corregido
+ * (`respuestasDeExamen`, la misma cuenta del informe de la prueba); no calcula
+ * ninguna nota. Entra un examen a medias, sea del trimestre que sea, y uno
+ * sin empezar solo si es del trimestre que se mira: si no, un examen viejo
+ * que nunca se corrigió se quedaría ahí para siempre. Primero los empezados.
+ */
+export async function getExamenesPorCorregir(grupo_id: number, trimestre: number): Promise<ExamenPorCorregir[]> {
+  const total = (await getAlumnosByGrupo(grupo_id)).length
+  if (!total) return []
+  const salida: ExamenPorCorregir[] = []
+  for (const fila of (await listarPruebas()).filter(f => f.grupo.id === grupo_id)) {
+    const corregidos = (await respuestasDeExamen(fila.instrumento.id!, fila.prueba.unidad_id, fila.prueba.def)).length
+    const delTrimestre = !fila.unidad || (fila.unidad.trimestre ?? 1) === trimestre
+    if (corregidos < total && (corregidos > 0 || delTrimestre)) salida.push({ fila, corregidos, total })
+  }
+  return salida.sort((a, b) => b.corregidos - a.corregidos)
+}
+
 /** Todos los exámenes de un instrumento: el general y los de cada unidad. */
 export async function getPruebasDeInstrumento(instrumento_id: number): Promise<PruebaGuardada[]> {
   return vivos(await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())

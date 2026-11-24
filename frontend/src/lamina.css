@@ -256,3 +256,9 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2317181a' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 10px center;
 }
+
+/* Planificación: la sesión es una ficha de papel con el filete de su área */
+:root[data-aspecto="lamina"] .plan-sesion { box-shadow: none; border-left-width: 6px; background: var(--papel-2); }
+:root[data-aspecto="lamina"] .plan-sesion:hover { box-shadow: none; background: var(--papel-2) !important; }
+:root[data-aspecto="lamina"] .plan-sesion .sigla-area { margin-bottom: 4px; }
+:root[data-aspecto="lamina"] .plan-evaluable { color: var(--tinta); }

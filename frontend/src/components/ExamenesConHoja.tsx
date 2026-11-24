@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getPruebaConContexto, listarPruebas, getMatrizEvaluacion, getAlumnosByGrupo,
+  getPruebaConContexto, listarPruebas, getExamenesPorCorregir, type ExamenPorCorregir, getMatrizEvaluacion, getAlumnosByGrupo,
   getGrupos, getAsignaturas, getUnidades, getInstrumentos, getBancoRubricas, getBancoPruebas,
   type PruebaConContexto, type DatosDeArea, type GrupoConCount, type UnidadConCriterios, type MatrizEvaluacion,
 } from '@/db/queries'
@@ -111,6 +111,14 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
   const aspecto = useAspecto()
   const enHub = aspecto === 'lamina' && areaId == null
   const identidad = identidadDeAreas(asignaturas)
+  // La cola de lo que espera corrección, de toda la clase. Solo se pide para el hub
+  const [porCorregir, setPorCorregir] = useState<ExamenPorCorregir[]>([])
+  useEffect(() => {
+    let vigente = true
+    if (aspecto !== 'lamina' || !grupo?.id) { setPorCorregir([]); return }
+    getExamenesPorCorregir(grupo.id, trimestre).then(l => { if (vigente) setPorCorregir(l) }).catch(() => { if (vigente) setPorCorregir([]) })
+    return () => { vigente = false }
+  }, [aspecto, grupo?.id, trimestre, recarga, lista])
   const areaElegida = asignaturas.find(a => a.id === areaId) ?? asignaturas.find(a => a.id === asignaturaId) ?? asignaturas[0] ?? null
 
   useEffect(() => {
@@ -205,6 +213,21 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
             )}
             {enHub && (
               <>
+                {porCorregir.length > 0 && (
+                  <>
+                    <p className="hub-rotulo"><span>Por corregir · {porCorregir.length}</span></p>
+                    <ol className="hub-cola" data-examenes-cola>
+                      {porCorregir.map(({ fila: f, corregidos, total }) => { const id = identidad.get(f.asig.id!); return (
+                        <li key={f.prueba.id} data-examenes-cola-examen={f.prueba.id} style={{ '--c': id?.color, '--cp': id?.papel } as React.CSSProperties}>
+                          {id && <Sigla sigla={id.sigla} color={id.color} />}
+                          <span className="hub-nombre"><b>{f.prueba.def.titulo || f.instrumento.nombre}{f.unidad ? ` · ${f.unidad.nombre}` : ''}</b>
+                            <span className="hub-dato">{f.asig.nombre_display} · {corregidos} de {total} corregidos</span></span>
+                          <button type="button" className="btn-primary" disabled={ocupado === f.prueba.id} onClick={() => abrir(f.prueba.id, 'corregir')}>Corregir</button>
+                        </li>
+                      ) })}
+                    </ol>
+                  </>
+                )}
                 <p className="hub-rotulo"><span>Por área · {asignaturas.length}</span><span>Toca un área para ver sus unidades</span></p>
                 <ol className="hub-mosaico" data-examenes-hub>
                   {asignaturas.map(a => { const id = identidad.get(a.id!)!; const n = lista.filter(f => f.asig.id === a.id).length; return (

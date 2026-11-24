@@ -147,6 +147,31 @@ ok(me.desborda.length === 0 && me.sale.length === 0 && me.corta.length === 0, 'n
 await p.locator('[data-examenes-todas]').click()
 await hubEx.waitFor({ timeout: 6000 })
 ok(await p.locator('[data-examenes-dentro]').count() === 0, '«Todas las áreas» vuelve al hub')
+ok(await p.locator('[data-examenes-cola]').count() === 0, 'sin exámenes definidos no hay cola «Por corregir»')
+
+console.log('\n8. La cola «Por corregir»')
+// Se define el examen de la primera unidad y se corrige a uno de los tres alumnos
+await p.evaluate(async (b) => {
+  const q = await import('/src/db/queries.ts')
+  const als = await q.getAlumnosByGrupo(b.grupo)
+  const def = { titulo: 'Examen del relieve', tipo: 'puntos', reparto: 'unica', preguntas: [{ id: 'p1', enunciado: 'Una', max: 10, criterio_id: null }] }
+  await q.guardarPrueba(b.examen, b.unidad, def)
+  const guardado = await q.getPrueba(b.examen, b.unidad)
+  await q.guardarExamenDeAlumno({ alumno_id: als[0].id, instrumento_id: b.examen, trimestre: b.trimestre, unidad_id: b.unidad, def: guardado.def,
+    respuestas: { p1: 8 }, destinos: b.criterios, area: { asignatura: 'ciencias_sociales', curso: '6', etapa: 'primaria', comunidad: 'Galicia' } })
+}, base)
+await p.reload({ waitUntil: 'networkidle' })
+const cola = p.locator('[data-examenes-cola]')
+await cola.waitFor({ timeout: 10000 })
+await p.screenshot({ path: `${TIROS}/examenes-cola.png` })
+ok(await cola.locator('[data-examenes-cola-examen]').count() === 1, 'el examen a medias sale en la cola')
+// El dato va en mayúsculas por estilo: se compara sin distinguir
+ok(/1 de 3 corregidos/i.test(await cola.innerText()) && (await cola.innerText()).includes('Examen del relieve'), 'con su título y cuántos alumnos lleva corregidos', (await cola.innerText()).replace(/\s+/g, ' ').slice(0, 120))
+const mc = await medirCortes(p)
+ok(mc.desborda.length === 0 && mc.sale.length === 0 && mc.corta.length === 0, 'nada desborda, nada fuera, ningún texto cortado', [...mc.sale, ...mc.corta].slice(0, 3).join(' | '))
+await cola.getByRole('button', { name: 'Corregir' }).click()
+await p.getByRole('dialog').first().waitFor({ timeout: 8000 })
+ok(await p.getByRole('dialog').count() >= 1, '«Corregir» abre el corrector de ese examen')
 
 ok(errores.length === 0, 'sin errores en la página', errores.slice(0, 3).join(' | '))
 await navegador.close()
