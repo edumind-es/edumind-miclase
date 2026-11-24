@@ -21,6 +21,10 @@ sitios y sella esa sección con la versión y la fecha.
   irá haciendo por fases hasta la 2.0.0.
 - Familia de iconos propios, de línea y de un solo color, para sustituir a
   los emoji. Todavía no se usan en ninguna pantalla.
+- Con Lámina encendida, **marco nuevo**: menú con iconos en tres formas
+  (ancho, plegado con nombre corto y barra inferior con «Más» en el móvil),
+  barra superior con la clase, el área y el trimestre en listas propias, y
+  «Acerca de» con la versión, el idioma, el aspecto, la cuenta e «Instalar».
 
 ## [1.9.0] — 2026-11-24
 

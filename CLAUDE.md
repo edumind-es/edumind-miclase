@@ -1725,6 +1725,31 @@ edumind_miclase/
   descarga fuentes; encendido da papel, Outfit y cero radios. Decisiones de
   Luis (nov 2026): paleta de la skill para todo, nada visible en producción
   hasta que esté entero.
+- **Con Lámina encendida el marco es otro** (`components/marco/MarcoLamina`,
+  `lamina-marco.css`, clases `ml-…`); con Lámina apagada sigue montándose
+  `Layout` de `App.tsx`, que no se toca hasta la 2.0.0. `Layout` prepara las
+  rutas y lo que flota (`rutas`, `flotantes`) y se las da a uno u otro, así
+  que una pantalla o un aviso nuevo se añade una vez. El marco nuevo ocupa
+  la ventana (100dvh) y lo que se desplaza es `[data-marco-desplaza]`, no el
+  documento. Su forma (`data-forma`: ancho · rail · movil) sale de
+  `formaDe(ancho, elegido)`: menos de 700 px es móvil (menú fuera, barra
+  inferior con cuatro destinos y «Más»), menos de 1100 plegado con icono y
+  nombre corto, y el docente puede fijar ancho o plegado
+  (`miclase.marco.menu`). La cabecera del menú y la barra superior miden
+  `--alto-barra` para que su filete sea continuo. «Instalar» y el idioma no
+  están en el menú: van en «Acerca de» (la fila de la versión,
+  `[data-marco-version]` → `[data-acerca-dialogo]`), con la cuenta y el
+  interruptor de vuelta al aspecto de siempre. Decisiones de Luis sobre la
+  maqueta (nov 2026). Los textos del marco están en `i18n/textos.ts`
+  (`marco.*`, `acerca.*`), en castellano y galego.
+- **Un desplegable nuevo es una `Lista`** (`components/comunes/Lista`), no un
+  `<select>`: el del sistema lo dibuja cada sistema a su manera. Hoja desde
+  abajo en táctil o pantalla estrecha, bajo su campo con ratón; `listbox`
+  con flechas, Inicio y Fin, Intro, Esc y escribir para buscar; el foco
+  vuelve al campo. Va en un portal a `body` con `[data-lista-abierta]`. El
+  foco entra cuando la lista ya se ve: mientras se coloca está oculta y a
+  algo oculto no se le puede dar. Las pruebas esperan a `aria-current`
+  tras navegar: el cambio de pantalla entra en una transición.
 - **Los iconos son propios, de línea y de un solo color** (`src/iconos.ts`,
   puro; pieza `components/comunes/Icono`). Sustituyen a los emoji, que cada
   sistema dibuja a su manera: decisión de Luis (nov 2026), que descartó los

@@ -38,7 +38,7 @@ const MEDIDAS = {
   radios:       { en: /\.(tsx|css)$/, que: /border-?radius|borderRadius|border(?:Top|Bottom)(?:Left|Right)Radius/g, nota: 'esquinas redondeadas' },
   sombras:      { en: /\.(tsx|css)$/, que: /box-shadow|boxShadow/g, nota: 'sombras' },
   degradados:   { en: /\.(tsx|css)$/, que: /gradient\(/g, nota: 'degradados' },
-  emoji:        { en: /\.(tsx|ts)$/,  que: /\p{Extended_Pictographic}/gu, nota: 'emoji: cada sistema los dibuja a su manera' },
+  emoji:        { en: /\.(tsx|ts)$/,  que: /(?![©®™])\p{Extended_Pictographic}/gu, nota: 'emoji: cada sistema los dibuja a su manera' },   // ©, ® y ™ son texto, no dibujos
   desplegables: { en: /\.tsx$/,       que: /<select\b/g, nota: 'desplegables del sistema', desde: 'la pieza Lista (fase 2)' },
   coloresAMano: { en: /\.tsx$/,       que: /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b|rgba?\(/g, nota: 'colores escritos en la pantalla en vez de por nombre', desde: 'las piezas comunes (fase 2)' },
   estilosEnLinea: { en: /\.tsx$/,     que: /style=\{\{/g, nota: 'estilos en línea: los tokens no los alcanzan', desde: 'las piezas comunes (fase 2)' },
