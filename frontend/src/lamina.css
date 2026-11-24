@@ -206,3 +206,37 @@
 
 /* ── Etiquetas: filete, no pastilla ── */
 :root[data-aspecto="lamina"] .badge { border: 1px solid currentColor; font-family: var(--f-mono); letter-spacing: .04em; }
+
+/* ============================================================
+   Fase 3 — el Calificador: la tabla y las notas
+   ============================================================ */
+
+/* La tabla: papel liso y filetes. Sin cebra: las rayas ya las dan los filetes */
+:root[data-aspecto="lamina"] .matriz-wrap { border: 0; border-top: 2px solid var(--tinta); border-bottom: 2px solid var(--tinta); background: var(--papel); }
+:root[data-aspecto="lamina"] .matriz tbody tr, :root[data-aspecto="lamina"] .matriz tbody tr:nth-child(even) { background: var(--papel); }
+:root[data-aspecto="lamina"] .matriz tbody tr:hover { background: var(--papel-2); }
+:root[data-aspecto="lamina"] .matriz th, :root[data-aspecto="lamina"] .matriz td { border-bottom: 1px solid var(--pelo); }
+:root[data-aspecto="lamina"] .matriz tbody td.col-alumno { border-right: 1px solid var(--tinta); }
+
+/* La casilla: cifra en la letra de máquina, 44 px para el dedo */
+:root[data-aspecto="lamina"] .celda-btn { min-height: 44px; background: transparent; color: var(--tinta-3); border: 0; border-bottom: 4px solid transparent; font-family: var(--f-mono); font-weight: 600; }
+:root[data-aspecto="lamina"] .celda-btn:hover { background: var(--papel-2); }
+:root[data-aspecto="lamina"] .celda-btn:focus-visible { outline: 2px solid var(--tinta); outline-offset: -2px; }
+
+/* El color de cada tramo, una vez; filete y relleno lo usan a su manera */
+:root[data-aspecto="lamina"] .cal-10, :root[data-aspecto="lamina"] .cal-9 { --nota: var(--cal-sobresaliente); }
+:root[data-aspecto="lamina"] .cal-8, :root[data-aspecto="lamina"] .cal-7 { --nota: var(--cal-notable); }
+:root[data-aspecto="lamina"] .cal-6 { --nota: var(--cal-bien); }
+:root[data-aspecto="lamina"] .cal-5 { --nota: var(--cal-suficiente); }
+:root[data-aspecto="lamina"] .cal-4, :root[data-aspecto="lamina"] .cal-3, :root[data-aspecto="lamina"] .cal-2,
+:root[data-aspecto="lamina"] .cal-1, :root[data-aspecto="lamina"] .cal-0 { --nota: var(--cal-insuficiente); }
+
+/* Filete (por defecto): cifra en tinta y raya del color del semáforo */
+:root[data-aspecto="lamina"]:not([data-notas="relleno"]) :is(.cal-10, .cal-9, .cal-8, .cal-7, .cal-6, .cal-5, .cal-4, .cal-3, .cal-2, .cal-1, .cal-0) {
+  background: transparent; color: var(--tinta); border-bottom: 4px solid var(--nota);
+}
+/* Relleno: la casilla del color del semáforo, con la cifra en blanco */
+:root[data-aspecto="lamina"][data-notas="relleno"] :is(.cal-10, .cal-9, .cal-8, .cal-7, .cal-6, .cal-5, .cal-4, .cal-3, .cal-2, .cal-1, .cal-0) {
+  background: var(--nota); color: #fff; border-bottom: 4px solid var(--nota);
+}
+:root[data-aspecto="lamina"] .cal-vacio { background: transparent; color: var(--tinta-3); }

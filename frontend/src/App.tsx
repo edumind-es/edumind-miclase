@@ -22,6 +22,7 @@ import SyncAutomatica from '@/components/SyncAutomatica'
 import CopiaAutomatica from '@/components/CopiaAutomatica'
 import NoEncontrada from '@/pages/NoEncontrada'
 import InstalarPage from '@/pages/Instalar/InstalarPage'
+import HubAreas from '@/pages/Areas/HubAreas'
 import ElegirIdioma, { SelectorIdioma } from '@/components/ElegirIdioma'
 import { useT, type Clave } from '@/i18n'
 import { VERSION } from '@/version'
@@ -63,7 +64,7 @@ const K_PLEGADO = 'miclase_sidebar_plegado'
 // de contexto. El escáner y la sincronización no: el escáner deduce el alumno
 // del propio código y la sincronización es de todo el dispositivo. La
 // configuración de la clase tampoco, porque ya lleva su propia cabecera.
-const CON_BARRA = ['/', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
+const CON_BARRA = ['/', '/areas', '/evaluacion', '/sesiones', '/seguimiento', '/tutorias', '/informes', '/planificacion']
 
 // El trimestre solo manda donde hay notas de por medio; en Alumnado sobra.
 // Informes lleva su propio «Periodo», que además ofrece el curso completo.
@@ -72,7 +73,7 @@ const SIN_TRIMESTRE = ['/informes', '/tutorias', '/planificacion']
 // El área no pinta nada donde se trabaja con la clase entera. En el
 // calificador sí: desde el rediseño (fase 2 · A) el área se elige aquí y no
 // en una fila de pestañas propia.
-const SIN_AREA = ['/sesiones', '/informes', '/tutorias', '/planificacion']
+const SIN_AREA = ['/areas', '/sesiones', '/informes', '/tutorias', '/planificacion']
 
 function usarBarra(pathname: string) {
   const raiz = '/' + (pathname.split('/')[1] ?? '')
@@ -129,6 +130,8 @@ function Layout() {
       <Route path="/"              element={<Dashboard />} />
       <Route path="/grupos/*"      element={<GruposPage />} />
       <Route path="/alumnos/*"     element={<IrAlAlumnado />} />
+      {/* El hub de áreas es de Lámina; con el aspecto de siempre lleva al Calificador */}
+      <Route path="/areas"         element={aspecto === 'lamina' ? <HubAreas /> : <Navigate to="/evaluacion" replace />} />
       <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
       <Route path="/escanear"      element={<EscanearPage />} />
       <Route path="/sesiones/*"    element={<SesionesPage />} />

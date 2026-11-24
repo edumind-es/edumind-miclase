@@ -51,7 +51,7 @@
 }
 .ml-entrada:hover { background: var(--papel); text-decoration: none; }
 /* Estás aquí: inversión de tinta, nunca un color */
-.ml-entrada.active, .ml-entrada[aria-current="page"] { background: var(--tinta); color: var(--papel); font-weight: 600; }
+.ml-entrada[aria-current="page"] { background: var(--tinta); color: var(--papel); font-weight: 600; }
 .ml-corto { display: none; }
 /* Plegado: icono con su nombre corto debajo */
 .ml-app[data-forma="rail"] .ml-menu-cab { justify-content: center; padding: 0; }
@@ -137,5 +137,30 @@
 .lista-capa li[aria-selected="true"] { background: var(--tinta); color: var(--papel); font-weight: 600; }
 .lista-capa li[aria-selected="true"] .lista-opcion-meta { color: var(--papel); }
 .lista-capa li[aria-selected="true"].cursor { outline-color: var(--papel); outline-offset: -5px; }
+
+/* ── Área: sigla y color ── */
+.sigla-area { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 26px; padding: 0 6px; background: var(--c, var(--tinta)); color: #fff; font: 600 12px/1 var(--f-mono); letter-spacing: .04em; }
+.ml-franja-area { flex: none; height: 6px; }
+
+/* ── Hub de áreas: casillas separadas por filetes, no tarjetas ── */
+.hub-rotulo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 26px 0 8px; font: 400 12px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
+.hub-nota { margin-top: 12px; font-size: 13.5px; color: var(--tinta-3); max-width: 70ch; }
+.hub-nombre { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1 1 200px; }
+.hub-nombre b { font: 600 17px/1.2 var(--f-display); }
+.hub-dato { font: 400 12px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
+.hub-seguir { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 14px 16px; border: 2px solid var(--tinta); border-left: 6px solid var(--c); background: var(--cp); }
+.hub-seguir .btn-primary { min-height: 44px; padding: 0 16px; }
+.hub-mosaico { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(236px, 1fr)); border-left: 1px solid var(--pelo); }
+.hub-casilla { position: relative; display: grid; align-content: start; gap: 12px; padding: 14px; background: var(--cp); border-top: 6px solid var(--c); border-right: 1px solid var(--pelo); border-bottom: 1px solid var(--pelo); transition: background .15s; }
+.hub-casilla:hover { background: var(--papel-2); }
+.hub-abre { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 100%; min-height: 44px; padding: 0; text-align: left; background: transparent; border: 0; color: var(--tinta); font: inherit; cursor: pointer; }
+/* En la casilla el nombre va en columna: sin esto, sus 200 px de base pasaban a ser de alto */
+.hub-abre .hub-nombre { flex: none; }
+.hub-abre::after { content: ''; position: absolute; inset: 0; }   /* toda la casilla abre el área */
+.hub-abre:focus-visible { outline: 0; }
+.hub-abre:focus-visible::after { outline: 2px solid var(--tinta); outline-offset: -2px; }
+.hub-estado { font-size: 13.5px; color: var(--tinta-3); }
+.hub-estado--pide { color: var(--tinta); font-weight: 600; display: flex; gap: 8px; align-items: baseline; }
+.hub-estado--pide::before { content: ''; flex: none; width: 8px; height: 8px; background: var(--tinta); }
 
 @media (prefers-reduced-motion: reduce) { .ml-app * { transition: none !important; } }
