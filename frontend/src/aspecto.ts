@@ -9,12 +9,16 @@
  * Todo lo que cambia con el aspecto cuelga de `<html data-aspecto="lamina">`
  * (lamina.css). Con el atributo ausente, la app es exactamente la de antes.
  *
- * Hasta que exista «Acerca de» (fase 1), se elige por la dirección:
- * `?aspecto=lamina` lo enciende y `?aspecto=clasico` lo apaga. Queda recordado.
+ * Se enciende por la dirección: `?aspecto=lamina` (y `?aspecto=clasico` lo
+ * apaga). Queda recordado. Con Lámina encendida, «Acerca de» ofrece volver al
+ * aspecto de siempre; al revés no hay botón todavía, a propósito: nadie debe
+ * encontrárselo sin buscarlo.
  */
 export type Aspecto = 'clasico' | 'lamina'
 
 export const CLAVE_ASPECTO = 'miclase.aspecto'
+/** Se lanza en `window` al cambiar el aspecto, para que el marco se repinte. */
+export const EVENTO_ASPECTO = 'miclase:aspecto'
 /** El color de la barra del sistema con cada aspecto (`<meta name="theme-color">`). */
 export const COLOR_SISTEMA: Record<Aspecto, string> = { clasico: '#0f2d4a', lamina: '#f4f2ec' }
 
@@ -50,6 +54,7 @@ function marcarDocumento(a: Aspecto) {
 export function fijarAspecto(a: Aspecto) {
   try { localStorage.setItem(CLAVE_ASPECTO, a) } catch { /* sin almacenamiento, vale para esta sesión */ }
   marcarDocumento(a)
+  window.dispatchEvent(new Event(EVENTO_ASPECTO))
 }
 
 /**

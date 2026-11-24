@@ -41,6 +41,7 @@ export const ICONOS = {
   anterior:      [linea('M15 5l-7 7 7 7')],
   siguiente:     [linea('M9 5l7 7-7 7')],
   cerrar:        [linea('M5.5 5.5l13 13M18.5 5.5l-13 13')],
+  abajo:         [linea('M5 9l7 7 7-7')],
   // ── Acciones ──
   importar:      [linea('M12 3.5v11.5M7 10.5l5 5 5-5M4 20.5h16')],
   camara:        [linea('M3.5 7.5h4l1.5-2.5h6l1.5 2.5h4v12h-17z'), circulo(12, 13.5, 3.5)],

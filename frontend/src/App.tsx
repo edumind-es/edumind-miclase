@@ -25,6 +25,8 @@ import InstalarPage from '@/pages/Instalar/InstalarPage'
 import ElegirIdioma, { SelectorIdioma } from '@/components/ElegirIdioma'
 import { useT, type Clave } from '@/i18n'
 import { VERSION } from '@/version'
+import { useAspecto } from '@/useAspecto'
+import MarcoLamina from '@/components/marco/MarcoLamina'
 import { useDatosSensibles } from '@/db/datosSensibles'
 
 // El menú iba plano: nueve entradas al mismo nivel mezclando lo que se usa
@@ -98,6 +100,7 @@ function Layout() {
   const t = useT()
   const { pathname } = useLocation()
   const barra = usarBarra(pathname)
+  const aspecto = useAspecto()
   const [exportOpen, setExportOpen] = useState(false)
   const [plegado, setPlegado] = useState(() => localStorage.getItem(K_PLEGADO) === '1')
   // Resuelve al arrancar si NEAE y evidencias van encendidos en este aparato,
@@ -119,6 +122,46 @@ function Layout() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  // Las pantallas y lo que flota sobre ellas son los mismos con los dos marcos
+  const rutas = (
+    <Routes>
+      <Route path="/"              element={<Dashboard />} />
+      <Route path="/grupos/*"      element={<GruposPage />} />
+      <Route path="/alumnos/*"     element={<IrAlAlumnado />} />
+      <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
+      <Route path="/escanear"      element={<EscanearPage />} />
+      <Route path="/sesiones/*"    element={<SesionesPage />} />
+      <Route path="/planificacion" element={<PlanificacionPage />} />
+      <Route path="/seguimiento"   element={<SeguimientoPage />} />
+      <Route path="/tutorias"      element={<TutoriasPage />} />
+      <Route path="/informes"      element={<InformesPage />} />
+      <Route path="/sincronizar"   element={<SincronizarPage />} />
+      <Route path="/instalar"      element={<InstalarPage />} />
+      <Route path="/auth/callback" element={<CallbackPage />} />
+      {/* Sin esto, una URL desconocida pintaba el marco con el contenido vacío */}
+      <Route path="*"              element={<NoEncontrada />} />
+    </Routes>
+  )
+  const flotantes = (
+    <>
+      {exportOpen && <ExportImport onClose={() => setExportOpen(false)} />}
+      <EstadoConexion />
+      <ActualizacionApp />
+      <SyncAutomatica />
+      <CopiaAutomatica />
+      <ElegirIdioma />
+    </>
+  )
+
+  // Con el aspecto Lámina encendido en este aparato, el marco es otro; el de
+  // siempre, que es lo que sigue, no se toca hasta la 2.0.0
+  if (aspecto === 'lamina') return (
+    <>
+      <MarcoLamina barra={barra} alExportar={() => setExportOpen(true)}>{rutas}</MarcoLamina>
+      {flotantes}
+    </>
+  )
 
   return (
     <div className={`layout${plegado ? ' plegado' : ''}`}>
@@ -222,31 +265,10 @@ function Layout() {
 
       <main className="main-content">
         {barra && <BarraClase conArea={barra.conArea} conTrimestre={barra.conTrimestre} />}
-        <Routes>
-          <Route path="/"              element={<Dashboard />} />
-          <Route path="/grupos/*"      element={<GruposPage />} />
-          <Route path="/alumnos/*"     element={<IrAlAlumnado />} />
-          <Route path="/evaluacion/*"  element={<EvaluacionPage />} />
-          <Route path="/escanear"      element={<EscanearPage />} />
-          <Route path="/sesiones/*"    element={<SesionesPage />} />
-          <Route path="/planificacion" element={<PlanificacionPage />} />
-          <Route path="/seguimiento"   element={<SeguimientoPage />} />
-          <Route path="/tutorias"      element={<TutoriasPage />} />
-          <Route path="/informes"      element={<InformesPage />} />
-          <Route path="/sincronizar"   element={<SincronizarPage />} />
-          <Route path="/instalar"      element={<InstalarPage />} />
-          <Route path="/auth/callback" element={<CallbackPage />} />
-          {/* Sin esto, una URL desconocida pintaba el marco con el contenido vacío */}
-          <Route path="*"              element={<NoEncontrada />} />
-        </Routes>
+        {rutas}
       </main>
 
-      {exportOpen && <ExportImport onClose={() => setExportOpen(false)} />}
-      <EstadoConexion />
-      <ActualizacionApp />
-      <SyncAutomatica />
-      <CopiaAutomatica />
-      <ElegirIdioma />
+      {flotantes}
     </div>
   )
 }
