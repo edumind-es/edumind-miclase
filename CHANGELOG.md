@@ -32,7 +32,8 @@ sitios y sella esa sección con la versión y la fecha.
 - Con Lámina encendida, **hub de áreas**: el Calificador entra por una
   pantalla con todas las áreas de la clase, cada una con su sigla y su color,
   y «seguir donde lo dejaste». Dentro de un área, una franja de su color bajo
-  la barra y la sigla en el selector.
+  la barra y la sigla en el selector. El color y la sigla de cada área se
+  cambian en Mis clases → Áreas.
 
 ### Corregido
 - Asistencia en el móvil: el pase de lista quedaba en una columna de 78 px y

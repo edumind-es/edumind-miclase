@@ -142,6 +142,14 @@
 .sigla-area { flex: none; display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 26px; padding: 0 6px; background: var(--c, var(--tinta)); color: #fff; font: 600 12px/1 var(--f-mono); letter-spacing: .04em; }
 .ml-franja-area { flex: none; height: 6px; }
 
+/* Elegir el color y la sigla de un área (Mis clases → Áreas) */
+.color-area { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; padding: 12px 14px; border-bottom: 1px solid var(--pelo); }
+.color-area-sigla { display: inline-flex; align-items: center; gap: 8px; }
+.color-area-sigla input { width: 84px; min-height: 44px; font-family: var(--f-mono); text-transform: uppercase; }
+.color-area-muestras { display: flex; flex-wrap: wrap; gap: 6px; }
+.color-area-muestra { width: 44px; height: 44px; padding: 0; border: 2px solid var(--papel); outline: 1px solid var(--pelo); cursor: pointer; }
+.color-area-muestra[aria-pressed="true"] { outline: 3px solid var(--tinta); }
+
 /* ── Hub de áreas: casillas separadas por filetes, no tarjetas ── */
 .hub-rotulo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin: 26px 0 8px; font: 400 12px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--tinta-3); }
 .hub-nota { margin-top: 12px; font-size: 13.5px; color: var(--tinta-3); max-width: 70ch; }

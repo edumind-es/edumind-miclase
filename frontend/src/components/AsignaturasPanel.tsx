@@ -13,6 +13,11 @@ import * as curriculo from '@/curriculo'
 import { NOMBRES_AREAS } from './nombresAreas'
 
 import { confirmar } from '@/utils/confirmar'
+import { useAspecto } from '@/useAspecto'
+import { useClaseActiva } from '@/contexto/ClaseActiva'
+import { identidadDeAreas } from '@/db/areas'
+import ColorDeArea from './ColorDeArea'
+import Sigla from './comunes/Sigla'
 // Mapa de slugs curriculares → nombres legibles
 const NOMBRES: Record<string, string> = {
   'ciencias-naturales':               'Ciencias de la Naturaleza',
@@ -54,6 +59,9 @@ interface Asignatura {
   id: number
   nombre: string
   nombre_display: string
+  /** Color y sigla propios del área (Lámina). Sin ellos, los que le tocan. */
+  color?: string | null
+  sigla?: string | null
   pesos_trimestres?: string
   regla_final?: ReglaFinal | null
   regla_area?: ReglaArea | null
@@ -85,6 +93,10 @@ function humanizarSlug(slug: string): string {
 
 export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onCambio }: Props) {
   const [asignaturas, setAsignaturas] = useState<Asignatura[]>([])
+  // El color y la sigla de área solo se ven (y se editan) con el aspecto Lámina
+  const aspecto = useAspecto()
+  const { recargarAsignaturas } = useClaseActiva()
+  const identidad = identidadDeAreas(asignaturas)
   const [disponibles, setDisponibles] = useState<string[]>([])
   // `?area=<id>&seccion=programacion|instrumentos` abre esa área por la
   // sección pedida: es como llega el calificador cuando avisa de que una
@@ -338,6 +350,7 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
               }}
             >
               <div style={{ minWidth: 0 }}>
+                {aspecto === 'lamina' && identidad.get(a.id) && <><Sigla sigla={identidad.get(a.id)!.sigla} color={identidad.get(a.id)!.color} />{' '}</>}
                 <span style={{ fontWeight: 600, fontSize: 14 }}>{a.nombre_display}</span>
                 <span style={{ marginLeft: 10, fontSize: 12, color: nInstr ? 'var(--gris-600)' : 'var(--ambar-500)' }}>
                   {nInstr} instrumento{nInstr !== 1 ? 's' : ''}
@@ -356,6 +369,10 @@ export default function AsignaturasPanel({ grupoId, etapa, curso, comunidad, onC
 
             {expandida === a.id && (
               <div style={{ borderTop: '1px solid var(--gris-300)' }}>
+                {aspecto === 'lamina' && identidad.get(a.id) && (
+                  <ColorDeArea areaId={a.id} nombre={a.nombre_display} identidad={identidad.get(a.id)!} siglaPropia={a.sigla}
+                    alCambiar={async () => { await cargar(); await recargarAsignaturas() }} />
+                )}
                 <div style={{ display: 'flex', borderBottom: '1px solid var(--gris-300)', background: 'var(--gris-100)' }}>
                   {(['programacion', 'instrumentos', 'final'] as const).map(tab => (
                     <button key={tab} onClick={() => setTab(a.id, tab)}

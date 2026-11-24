@@ -1752,8 +1752,9 @@ edumind_miclase/
   a `/evaluacion`. El hub no calcula notas: `getResumenDeAreas` cuenta
   unidades del trimestre, notas puestas y la fecha de la última. Sigla y
   color salen de `identidadDeAreas`: los propios del área
-  (`Asignatura.color`, `.sigla`, sin índice ni esquema; todavía no hay
-  pantalla que los edite) o, si no, el color por orden entre las áreas de la
+  (`Asignatura.color`, `.sigla`, sin índice ni esquema; se eligen en Mis
+  clases → Áreas con `ColorDeArea`, `[data-color-area]`, solo con Lámina
+  encendida y solo entre los diez tonos de la paleta) o, si no, el color por orden entre las áreas de la
   clase (`PALETA_AREAS`, diez tonos con 4,5:1 bajo la sigla en blanco) y la
   sigla por el nombre (MAT, LG, LC, CN, CS, ING, EF…; dos áreas no la
   comparten). **El color nunca va solo** —siempre con la pieza `Sigla`— y
