@@ -15,7 +15,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import {
   getUnidades, getMatrizEvaluacion, getResumenCurso, actualizarInstrumento, renombrarInstrumento,
-  contarColumna, vaciarColumna, deshacerVaciado, asignarCriterioAColumna, quitarCriterioDeColumna, type Vaciado,
+  contarColumna, vaciarColumna, dejarDeContarSinColumna, reasignarCriteriosSinColumna, deshacerVaciado, asignarCriterioAColumna, quitarCriterioDeColumna, type Vaciado,
   type MatrizEvaluacion, type UnidadConCriterios, type CeldaInstrumento, type ResumenCurso as DatosResumen,
 } from '@/db/queries'
 import { calificativo } from '@/db/calculo'
@@ -400,6 +400,35 @@ export default function EvaluacionPage() {
   // Cambiar de unidad o de área deja el aviso sin sentido.
   useEffect(() => { setColumnaAviso(null) }, [asignaturaId, unidadId, trimestre])
 
+  /**
+   * Notas que cuentan sin columna en la unidad que se mira: o la programación
+   * vuelve a asignar sus criterios al instrumento (y vuelven a verse), o
+   * dejan de contar y quedan como nota anterior. Nada sin que el docente lo pida.
+   */
+  const resolverSinColumna = async (f: { instrumento_id: number; nombre: string; notas: number; criterios: string[] }, que: 'asignar' | 'quitar') => {
+    if (!unidadId || !unidadActual) return
+    try {
+      if (que === 'asignar') {
+        const hechos = await reasignarCriteriosSinColumna(f.instrumento_id, unidadId, trimestre)
+        setColumnaAviso({ texto: `«${f.nombre}» vuelve a evaluar ${hechos.join(', ')} en «${unidadActual.nombre}»: sus notas ya tienen columna.` })
+      } else {
+        if (!await confirmar({
+          titulo: `¿Que las ${f.notas} nota${f.notas !== 1 ? 's' : ''} de «${f.nombre}» sin columna dejen de contar?`,
+          texto: `Solo en «${unidadActual.nombre}» (${trimestre}º trimestre), en ${f.criterios.join(', ')}.\n\nNo se borran: quedan como nota anterior, sin contar. Si más adelante vuelves a asignar el criterio al instrumento, saldrán en su columna y podrás recuperarlas desde la casilla.`,
+          aceptar: 'Que dejen de contar', peligro: true,
+        })) return
+        const { quitadas: n, delDiario } = await dejarDeContarSinColumna(f.instrumento_id, unidadId, trimestre)
+        setColumnaAviso({
+          texto: `${n} nota${n !== 1 ? 's' : ''} de «${f.nombre}» ya no cuenta${n !== 1 ? 'n' : ''} en «${unidadActual.nombre}». Sigue${n !== 1 ? 'n' : ''} guardada${n !== 1 ? 's' : ''} como nota anterior.`
+            + (delDiario ? ` ${delDiario} sale${delDiario !== 1 ? 'n' : ''} del diario de evaluación y sigue${delDiario !== 1 ? 'n' : ''} contando: mientras existan sus registros la nota se vuelve a calcular. Vuelve a asignar el criterio para verla${delDiario !== 1 ? 's' : ''} y gestionar los registros.` : ''),
+        })
+      }
+      setRefresco(r => r + 1)
+    } catch (e) {
+      setColumnaAviso({ texto: `No se ha podido: ${e instanceof Error ? e.message : String(e)}` })
+    }
+  }
+
   /** Abrir el panel de un alumno centrado en un instrumento. */
   const abrirPorInstrumento = (alumnoIdx: number, col: ColumnaInstrumento) =>
     setCelda({ alumnoIdx, criterio: col.criterios[0], instrumentoId: col.ins.instrumento_id })
@@ -441,6 +470,7 @@ export default function EvaluacionPage() {
     + (vista === 'instrumentos' && sinColumna.length > 0 ? 1 : 0)
     + (vista === 'instrumentos' && matriz?.familiasConDatosEscondidos.length ? 1 : 0)
     + (matriz?.notasSinColumna.length ? 1 : 0)
+    + (matriz?.examenesRepetidos.length ? 1 : 0)
 
   /** Nota fantasma de una casilla (la anterior a un recálculo), si la tiene. */
   const fantasmaCelda = (alumnoId: number, criterioId: string, instrs: CeldaInstrumento[]) => {
@@ -738,16 +768,42 @@ export default function EvaluacionPage() {
             </div>
           )}
 
+          {avisosAbiertos && !!matriz?.examenesRepetidos.length && (
+            <div data-examenes-repetidos style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
+              <strong>Hay más de un examen en el mismo sitio:</strong>{' '}
+              {matriz.examenesRepetidos.map((e, i) => (
+                <span key={e.instrumento_id} data-repetido-instrumento={e.instrumento_id}>
+                  {i > 0 ? '; ' : ''}«{e.nombre}» se corrige con «{e.titulos[0]}», el más reciente, y no con {e.titulos.slice(1).map(t => `«${t}»`).join(' ni ')}
+                </span>
+              ))}. Suele pasar cuando dos aparatos crean un examen cada uno antes de sincronizar. Elige con cuál te quedas
+              en <Link to="/escanear" style={{ color: 'var(--azul-500)', fontWeight: 700 }}>Exámenes y pruebas →</Link>
+            </div>
+          )}
+
           {avisosAbiertos && !!matriz?.notasSinColumna.length && (
             <div data-notas-sin-columna style={{ marginBottom: 12, padding: '9px 14px', borderRadius: 7, fontSize: 12.5, background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', lineHeight: 1.5 }}>
-              <strong>Hay notas que cuentan y no tienen columna {unidadId ? 'en esta unidad' : 'en el área'}:</strong>{' '}
-              {matriz.notasSinColumna.map((f, i) => (
-                <span key={f.instrumento_id} data-sin-columna-instrumento={f.instrumento_id}>
-                  {i > 0 ? '; ' : ''}{f.notas} de «{f.nombre}» ({f.criterios.join(', ')})
-                </span>
-              ))}. La programación ya no asigna {matriz.notasSinColumna.some(f => f.criterios.length > 1) || matriz.notasSinColumna.length > 1 ? 'esos criterios' : 'ese criterio'} a
-              ese instrumento aquí, pero las notas siguen entrando en el cálculo. Para verlas, vuelve a asignarle
-              el criterio desde el «Más» de su columna («+ criterio»); si sobran, vacíalas desde ahí.
+              <strong>Hay notas que cuentan y no tienen columna {unidadId ? 'en esta unidad' : 'en el área'}.</strong>{' '}
+              La programación ya no asigna esos criterios a su instrumento aquí, pero las notas siguen entrando en el
+              cálculo.{unidadId ? ' Decide en cada caso:' : ' Entra en cada unidad para decidir qué hacer con ellas.'}
+              <ul style={{ listStyle: 'none', margin: '8px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {matriz.notasSinColumna.map(f => (
+                  <li key={f.instrumento_id} data-sin-columna-instrumento={f.instrumento_id} style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span style={{ flex: '1 1 260px' }}>{f.notas} nota{f.notas !== 1 ? 's' : ''} de «{f.nombre}» ({f.criterios.join(', ')})</span>
+                    {!!unidadId && (
+                      <>
+                        <button type="button" className="btn-secondary" data-sin-columna-asignar style={{ minHeight: 44, fontSize: 12.5 }}
+                          onClick={() => void resolverSinColumna(f, 'asignar')}>
+                          Volver a asignar {f.criterios.length !== 1 ? 'los criterios' : 'el criterio'}
+                        </button>
+                        <button type="button" className="btn-secondary" data-sin-columna-quitar style={{ minHeight: 44, fontSize: 12.5 }}
+                          onClick={() => void resolverSinColumna(f, 'quitar')}>
+                          Que dejen de contar
+                        </button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

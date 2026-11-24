@@ -283,7 +283,41 @@ try {
   const sinColumna = p.locator('[data-notas-sin-columna]')
   ok(await sinColumna.waitFor({ timeout: 6000 }).then(() => true, () => false), 'el Calificador avisa de las notas que cuentan sin columna en la unidad')
   const textoSinColumna = await sinColumna.textContent().catch(() => '')
-  ok(textoSinColumna.includes(`«${inicio.proba}»`) && /\d+ de «/.test(textoSinColumna), 'dice de qué instrumento son y cuántas', textoSinColumna.slice(0, 160))
+  ok(textoSinColumna.includes(`«${inicio.proba}»`) && /\d+ notas? de «/.test(textoSinColumna), 'dice de qué instrumento son y cuántas', textoSinColumna.slice(0, 200))
+  // Dos salidas, las dos pedidas. Primera: la programación vuelve a asignar los criterios.
+  const conNota = (lista) => lista.filter(n => n.valor != null).length
+  const notasAntes = conNota((await bd()).notasProba)
+  await sinColumna.locator('[data-sin-columna-asignar]').first().click()
+  await p.locator('[data-columna-aviso]').filter({ hasText: /vuelve a evaluar/ }).waitFor({ timeout: 6000 }).catch(() => {})
+  d = await bd()
+  ok(d.criteriosProba.length > 0 && conNota(d.notasProba) === notasAntes, '«Volver a asignar» devuelve los criterios al instrumento y no toca las notas', `${d.criteriosProba.join(',')} · ${conNota(d.notasProba)}/${notasAntes}`)
+  ok(await columna(inicio.proba).waitFor({ timeout: 6000 }).then(() => true, () => false) && await sinColumna.count() === 0, 'las notas vuelven a tener columna y el aviso se va')
+  // Segunda: se retira otra vez y se pide que dejen de contar.
+  await p.evaluate(async (unidad) => {
+    const q = await import('/src/db/queries.ts')
+    const { db } = await import('/src/db/localDb.ts')
+    const proba = (await db.instrumentos.toArray()).find(i => !i.deleted_at && i.tipo === 'prueba-escrita')
+    await q.retirarInstrumentoDeUnidad(proba.id, unidad)
+  }, inicio.ud.id)
+  // Cambiar de trimestre y volver recarga la matriz.
+  const barraT = p.getByLabel('Trimestre')
+  const tAhora = await barraT.inputValue()
+  await barraT.selectOption(tAhora === '1' ? '2' : '1')
+  await p.waitForTimeout(400)
+  await barraT.selectOption(tAhora)
+  await conmutador.waitFor({ timeout: 6000 })
+  if (await conmutador.getAttribute('aria-expanded') !== 'true') await conmutador.click()
+  await sinColumna.waitFor({ timeout: 6000 }).catch(() => {})
+  const antesDeQuitar = dialogos.length
+  await sinColumna.locator('[data-sin-columna-quitar]').first().click()
+  await p.locator('[data-columna-aviso]').filter({ hasText: /ya no cuenta/ }).waitFor({ timeout: 6000 }).catch(() => {})
+  const preguntaQuitar = dialogos.slice(antesDeQuitar).join('\n')
+  ok(preguntaQuitar.includes(`«${inicio.ud.nombre}»`) && /No se borran/.test(preguntaQuitar), 'antes de quitar pregunta, nombra la unidad y dice que no se borran', preguntaQuitar.split('\n')[0])
+  d = await bd()
+  ok(conNota(d.notasProba) === 0 && d.notasProba.filter(n => n.anterior != null && /Sin columna/.test(n.motivo ?? '')).length === notasAntes,
+    '«Que dejen de contar» las deja como nota anterior, sin contar', `${conNota(d.notasProba)} con nota · ${d.notasProba.filter(n => n.anterior != null).length} fantasmas de ${notasAntes}`)
+  ok(d.notasProbaOtra.length === otrasAntes && conNota(d.notasProbaOtra) > 0, 'y la otra unidad no se toca')
+  ok(await sinColumna.count() === 0, 'el aviso desaparece')
   // La barra en otro trimestre que el de la unidad: se dice a la vista y se ofrece volver.
   const trimestreUnidad = await p.evaluate(async (id) => {
     const { db } = await import('/src/db/localDb.ts')

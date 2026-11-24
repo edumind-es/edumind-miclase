@@ -686,6 +686,31 @@ edumind_miclase/
   barra está en otro, con `[data-ir-al-trimestre]`: la casilla lleva el
   trimestre de la barra y calificar así crea un segundo juego de notas de la
   misma unidad.
+- **Dos exámenes en la misma plaza se dicen y se resuelven a mano** (nov
+  2026). Dos aparatos que crean un examen cada uno en la misma actividad y
+  unidad dejan dos fichas vivas; `elQueCuenta` hace que todos usen la más
+  reciente, y ahora además se avisa: en «Exámenes y pruebas»
+  (`[data-examenes-duplicados]`, `[data-duplicado-examen]` con `data-usado`
+  en el que se usa) y en el Calificador tras el contador
+  (`[data-examenes-repetidos]`, de `MatrizEvaluacion.examenesRepetidos`).
+  «Quedarme con este» (`[data-duplicado-quedarse]`, con `confirmar`) llama a
+  `quedarseConExamen`: los demás se retiran con copia en el banco y el
+  elegido se sella como el más reciente. Las correcciones anotadas a nombre
+  de un retirado pasan al elegido solo si los dos decían lo mismo
+  (`firmaPrueba`); si eran exámenes distintos conservan la nota y quedan sin
+  examen, y se cuenta. No se reconcilia solo tras sincronizar: elegir cuál
+  sobra es del docente.
+- **Las notas sin columna se resuelven desde su aviso, caso a caso** (nov
+  2026). `[data-notas-sin-columna]` lleva, dentro de una unidad, dos botones
+  por instrumento: «Volver a asignar» (`[data-sin-columna-asignar]`,
+  `reasignarCriteriosSinColumna`: lo mismo que «+ criterio», las notas
+  vuelven a tener columna) y «Que dejen de contar»
+  (`[data-sin-columna-quitar]`, `dejarDeContarSinColumna`, con `confirmar`):
+  la nota queda viva, sin `valor`, como fantasma (`MOTIVO_SIN_COLUMNA`).
+  **El cálculo NO las ignora por su cuenta**: hacerlo cambiaría notas ya
+  calculadas al desplegar sin que el docente lo viera, y Luis no lo ha
+  pedido. Las que deriva el diario no se quitan desde ahí —
+  `materializarDiario` las volvería a escribir— y el mensaje lo dice.
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras

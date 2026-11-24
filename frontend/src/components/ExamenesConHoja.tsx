@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  getPruebaConContexto, listarPruebas, getMatrizEvaluacion, getAlumnosByGrupo,
+  getPruebaConContexto, listarPruebas, getMatrizEvaluacion, getAlumnosByGrupo, quedarseConExamen,
   getGrupos, getAsignaturas, getUnidades, getInstrumentos, getBancoRubricas, getBancoPruebas,
   type PruebaConContexto, type DatosDeArea, type GrupoConCount, type UnidadConCriterios, type MatrizEvaluacion,
 } from '@/db/queries'
@@ -28,7 +28,8 @@ import Pestanas from './comunes/Pestanas'
 import { BotonEditarActividad } from './FichaActividad'
 import { herramientaDe } from './QueEvaluoPorUnidad'
 import { abreviatura } from '@/ia/instrumentosConfig'
-import { unidadesDelExamen } from '@/db/prueba'
+import { unidadesDelExamen, elQueCuenta } from '@/db/prueba'
+import { confirmar } from '@/utils/confirmar'
 import { MODELOS_DE_SERIE } from '@/db/modelosDeSerie'
 import { columnasPorInstrumento, type ColumnaInstrumento } from './MatrizInstrumentos'
 import { criteriosDeArea } from '@/informes/datos'
@@ -133,6 +134,37 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
 
   const cerrarCorrector = () => { setCorregir(null); setRecarga(n => n + 1); onCorrectorCerrado?.() }
 
+  // Exámenes que comparten plaza (la misma actividad y unidad): pasa cuando
+  // dos aparatos crean uno cada uno antes de sincronizar. Se corrige con el
+  // más reciente; aquí se dice y se elige con cuál quedarse.
+  const duplicados = (() => {
+    const plazas = new Map<string, PruebaConContexto[]>()
+    for (const f of lista ?? []) {
+      const k = `${f.instrumento.id}:${f.prueba.unidad_id ?? 'general'}`
+      plazas.set(k, [...(plazas.get(k) ?? []), f])
+    }
+    return [...plazas.values()].filter(l => l.length > 1).map(l => ({ lista: l, usado: elQueCuenta(l.map(f => f.prueba))?.id ?? null }))
+  })()
+  const dondeEsta = (f: PruebaConContexto) => `${f.grupo.nombre} · ${f.asig.nombre_display} · ${f.instrumento.nombre} · ${f.unidad ? f.unidad.nombre : 'general'}`
+
+  const quedarse = async (f: PruebaConContexto, otros: PruebaConContexto[]) => {
+    if (!await confirmar({
+      titulo: `¿Quedarte con «${f.prueba.def.titulo}» en ${f.instrumento.nombre} · ${f.unidad ? f.unidad.nombre : 'general'}?`,
+      texto: `${otros.map(o => `«${o.prueba.def.titulo}»`).join(' y ')} se retira${otros.length !== 1 ? 'n' : ''} de aquí y queda${otros.length !== 1 ? 'n' : ''} en tu banco de exámenes.\n\nNinguna nota cambia. Lo corregido con un examen retirado que fuera distinto conserva su nota, pero dejará de salir pregunta a pregunta.`,
+      aceptar: 'Quedarme con este',
+    })) return
+    setAviso(null)
+    try {
+      const r = await quedarseConExamen(f.prueba.id)
+      setAviso(`En ${dondeEsta(f)} queda «${f.prueba.def.titulo}». ${r.retirados.map(t => `«${t}»`).join(' y ')} está${r.retirados.length !== 1 ? 'n' : ''} en tu banco de exámenes.`
+        + (r.pasadas ? ` Sus correcciones (${r.pasadas} casilla${r.pasadas !== 1 ? 's' : ''}) siguen con el que queda: era el mismo examen.` : '')
+        + (r.sueltas ? ` ${r.sueltas} casilla${r.sueltas !== 1 ? 's' : ''} corregida${r.sueltas !== 1 ? 's' : ''} con el retirado conserva${r.sueltas !== 1 ? 'n' : ''} su nota, sin examen.` : ''))
+      setRecarga(n => n + 1)
+    } catch (e) {
+      setAviso(`No se ha podido: ${mensajeDe(e)}`)
+    }
+  }
+
   /** Abrir el editor de un examen de la lista (o de un instrumento recién elegido). */
   const abrirEditor = async (instrumento: Instrumento, asig: Asignatura, grupo: { id?: number; nombre: string; curso: string; etapa: string; comunidad: string }, unidad: UnidadConCriterios | null) => {
     setAviso(null)
@@ -169,6 +201,34 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
       </p>
 
       {aviso && <div data-examenes-aviso style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', padding: '8px 10px', borderRadius: 8, marginBottom: 8 }}>{aviso}</div>}
+
+      {duplicados.length > 0 && (
+        <div data-examenes-duplicados style={{ fontSize: 12.5, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', padding: '10px 12px', borderRadius: 8, marginBottom: 10, lineHeight: 1.5 }}>
+          <strong>Hay más de un examen en el mismo sitio.</strong> Suele pasar cuando dos aparatos crean un examen
+          cada uno antes de sincronizar. Se corrige con el más reciente; elige con cuál te quedas y el otro irá a tu
+          banco de exámenes.
+          {duplicados.map(d => (
+            <div key={`${d.lista[0].instrumento.id}:${d.lista[0].prueba.unidad_id}`} data-duplicado style={{ marginTop: 8 }}>
+              <div style={{ fontWeight: 700 }}>{dondeEsta(d.lista[0])}</div>
+              <ul style={{ listStyle: 'none', margin: '4px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {d.lista.map(f => (
+                  <li key={f.prueba.id} data-duplicado-examen={f.prueba.def.titulo} data-usado={f.prueba.id === d.usado || undefined}
+                    style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span style={{ flex: '1 1 240px' }}>
+                      «{f.prueba.def.titulo}» · {f.prueba.def.preguntas.length} pregunta{f.prueba.def.preguntas.length !== 1 ? 's' : ''}
+                      {f.prueba.id === d.usado ? ' — es el que se usa ahora' : ' — no se usa'}
+                    </span>
+                    <button type="button" className="btn-secondary" data-duplicado-quedarse style={{ minHeight: 44, fontSize: 12.5 }}
+                      onClick={() => void quedarse(f, d.lista.filter(o => o.prueba.id !== f.prueba.id))}>
+                      Quedarme con este
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
 
       {lista == null ? (
         <div style={{ fontSize: 12.5, color: 'var(--gris-500)' }}>Cargando…</div>
