@@ -13,6 +13,13 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Añadido
+- Interruptor del aspecto Lámina, **apagado por defecto**: la app se ve igual
+  que antes. Se enciende en un aparato abriendo la app con `?aspecto=lamina`
+  y se apaga con `?aspecto=clasico`. Encendido, los colores, radios, sombras y
+  tipografía pasan a papel, tinta y filete; el interior de cada pantalla se
+  irá haciendo por fases hasta la 2.0.0.
+
 ## [1.9.0] — 2026-11-24
 
 Primera versión numerada con este protocolo. Recoge lo que la app es hoy, tras

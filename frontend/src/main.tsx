@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
+import './lamina.css'
 
 import PuertaMigracion from './components/PuertaMigracion'
 import BarreraErrores from './components/BarreraErrores'
@@ -11,9 +12,12 @@ import { maxIdLocal } from './db/queries'
 import { instalarFoco } from './utils/foco'
 import { instalarVelo } from './utils/velo'
 import { prepararIdioma } from './i18n'
+import { prepararAspecto } from './aspecto'
 
 // `<html lang>` con el idioma de este aparato antes de pintar nada
 prepararIdioma()
+// Y con su aspecto: el de siempre, salvo que este aparato haya encendido Lámina
+prepararAspecto()
 
 // El foco se queda dentro del diálogo abierto, sea cual sea.
 instalarFoco()

@@ -1704,6 +1704,27 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **El aspecto Lámina va tras un interruptor apagado hasta la 2.0.0**
+  (`src/aspecto.ts`, `src/lamina.css`; plan en `LAMINA_APP_ARQUITECTURA.md`,
+  PR 134). Es preferencia del aparato (`miclase.aspecto`, sin sincronizar):
+  `prepararAspecto()` en `main.tsx` pone `<html data-aspecto="lamina">` y el
+  `theme-color`; sin el atributo la app es la de siempre. Hasta que exista
+  «Acerca de» se enciende con `?aspecto=lamina` y se apaga con
+  `?aspecto=clasico` (el parámetro se limpia de la dirección). **Todo lo que
+  cambie el aspecto cuelga de `:root[data-aspecto="lamina"]`**; fuera de ese
+  selector `lamina.css` solo declara nombres nuevos (`--papel`, `--tinta`,
+  `--pelo`, `--mundo-*`, `--area-1…10`, `--f-display`, `--f-mono`).
+  Encendido, los tokens de siempre (`--azul-*`, `--gris-*`, `--blanco`,
+  `--radio-*`, `--sombra*`, `--fuente`) y los `--lm-*` del canon vendorizado
+  pasan a la paleta de la skill, y `border-radius` es 0 con `!important`
+  para todo. Las fuentes se llaman «Outfit Lamina» y «Plex Mono Lamina» a
+  propósito: con el nombre «Outfit», las pantallas que la tenían de reserva
+  en `--lm-display` la descargaban con el interruptor apagado. Sin
+  `@container`, `:has()` ni `color-mix()`: la app nativa admite iOS 15.
+  `aspecto-ui.test.mjs` vigila los dos lados: apagado no cambia nada ni
+  descarga fuentes; encendido da papel, Outfit y cero radios. Decisiones de
+  Luis (nov 2026): paleta de la skill para todo, nada visible en producción
+  hasta que esté entero.
 - **La versión es un solo número y nadie lo escribe a mano.** Vive en el
   `package.json` de la raíz; `scripts/version.mjs` sabe en qué otros sitios
   está (los otros dos `package.json`, los tres `package-lock.json` y el

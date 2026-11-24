@@ -243,6 +243,10 @@ async function principal() {
     await paquete('pruebas/idiomas.test.ts', idiomas, ['--platform=node', '--format=esm'])
     await suite('idiomas: castellano y galego', 'node', [idiomas])
 
+    const aspecto = join(scratch, 'aspecto.mjs')
+    await paquete('pruebas/aspecto.test.ts', aspecto, ['--platform=node', '--format=esm'])
+    await suite('aspecto: el interruptor de Lámina', 'node', [aspecto])
+
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
     await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])
@@ -344,6 +348,7 @@ async function principal() {
     await suite('convertir lo que ya hay en una familia en su primer hijo', 'node', ['pruebas/familias-convertir-ui.test.mjs'], entorno)
     await suite('diálogos que no se cierran solos', 'node', ['pruebas/dialogos-velo-ui.test.mjs'], entorno)
     await suite('aterrizaje desde Excel','node', ['pruebas/aterrizaje-ui.test.mjs'], entorno)
+    await suite('aspecto Lámina: apagado no cambia nada','node', ['pruebas/aspecto-ui.test.mjs'], entorno)
     await suite('datos sensibles (NEAE y evidencias) apagados por defecto', 'node', ['pruebas/datos-sensibles-ui.test.mjs'], entorno)
     await suite('plegado por competencia y cobertura', 'node', ['pruebas/cobertura-ui.test.mjs'], entorno)
     await suite('«Todo el curso»: los tres trimestres a la vez', 'node', ['pruebas/resumen-curso-ui.test.mjs'], entorno)
