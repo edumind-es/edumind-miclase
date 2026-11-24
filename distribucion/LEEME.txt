@@ -1,0 +1,60 @@
+EDUmind MiClase — versión descargable
+=====================================
+
+MiClase es un cuaderno de evaluación LOMLOE que guarda todo en tu dispositivo.
+Esta carpeta contiene la aplicación completa: funciona sin internet y sin
+EDUmind, para siempre. Es software libre (AGPL-3.0-or-later / EUPL-1.2).
+
+CÓMO ABRIRLA
+  Windows ........ doble clic en «Abrir MiClase (Windows).bat»
+  macOS .......... doble clic en «Abrir MiClase (Mac).command»
+                   (la primera vez: clic derecho → Abrir → Abrir)
+  Linux, Abalar .. ejecuta «abrir-miclase.sh»
+
+Se abre el navegador en http://localhost:8765. Deja la ventana negra abierta
+mientras la uses. Mejor aún: instálala desde el navegador (icono de instalar en
+la barra de direcciones) y desde entonces se abre desde su propio icono, sin la
+ventana negra y sin conexión.
+
+IMPORTANTE
+  · Usa siempre el mismo navegador y el mismo lanzador: los datos viven en el
+    navegador, asociados a http://localhost:8765.
+  · Haz copias de seguridad (menú → Exportar / Importar). Una copia sirve para
+    pasar tus datos a otro equipo o a otra forma de instalar.
+  · No borres la carpeta si usas el lanzador.
+
+EN EL SERVIDOR DEL CENTRO
+  Con Docker:  docker compose up -d   →  http://<ip-del-equipo>:8080
+  O copia la carpeta «app» a cualquier hosting web estático (con HTTPS) y haz
+  que toda ruta desconocida devuelva index.html.
+
+
+EDUmind MiClase — versión descargable (galego)
+==============================================
+
+MiClase é un caderno de avaliación LOMLOE que garda todo no teu dispositivo.
+Este cartafol contén a aplicación completa: funciona sen internet e sen
+EDUmind, para sempre. É software libre (AGPL-3.0-or-later / EUPL-1.2).
+
+COMO ABRILA
+  Windows ........ dobre clic en «Abrir MiClase (Windows).bat»
+  macOS .......... dobre clic en «Abrir MiClase (Mac).command»
+                   (a primeira vez: clic dereito → Abrir → Abrir)
+  Linux, Abalar .. executa «abrir-miclase.sh»
+
+Ábrese o navegador en http://localhost:8765. Deixa a xanela negra aberta
+mentres a uses. Mellor aínda: instálaa desde o navegador (icona de instalar na
+barra de enderezos) e desde entón ábrese desde a súa propia icona, sen a xanela
+negra e sen conexión.
+
+IMPORTANTE
+  · Usa sempre o mesmo navegador e o mesmo lanzador: os datos viven no
+    navegador, asociados a http://localhost:8765.
+  · Fai copias de seguranza (menú → Exportar / Importar). Unha copia serve para
+    pasar os teus datos a outro equipo ou a outra forma de instalar.
+  · Non borres o cartafol se usas o lanzador.
+
+NO SERVIDOR DO CENTRO
+  Con Docker:  docker compose up -d   →  http://<ip-do-equipo>:8080
+  Ou copia o cartafol «app» a calquera hosting web estático (con HTTPS) e fai
+  que toda ruta descoñecida devolva index.html.

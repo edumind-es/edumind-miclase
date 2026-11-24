@@ -229,6 +229,10 @@ async function principal() {
     await paquete('pruebas/plano-aulamap.test.ts', planoAulaMap, ['--platform=node', '--format=esm'])
     await suite('plano de clase con AulaMap', 'node', [planoAulaMap])
 
+    const idiomas = join(scratch, 'idiomas.mjs')
+    await paquete('pruebas/idiomas.test.ts', idiomas, ['--platform=node', '--format=esm'])
+    await suite('idiomas: castellano y galego', 'node', [idiomas])
+
     await suite('lector de QR', 'node', ['pruebas/lectorqr.test.mjs'])
     await suite('empaquetado nativo', 'node', ['pruebas/empaquetado-nativo.test.mjs'])
   }
@@ -341,6 +345,7 @@ async function principal() {
     await suite('corregir por cámara desde la interfaz', 'node', ['pruebas/escaner-ui.test.mjs'], { ...entorno, HOJA_DEMO: hojaDemoUi })
     await suite('evaluación rápida: vínculos y examen', 'node', ['pruebas/evaluacion-rapida-examen.test.mjs'], entorno)
     await suite('plano de clase con AulaMap desde la interfaz', 'node', ['pruebas/plano-aulamap-ui.test.mjs'], entorno)
+    await suite('castellano o galego, e instalar MiClase', 'node', ['pruebas/idioma-ui.test.mjs'], entorno)
     await suite('interfaz', 'node', ['pruebas/e2e.test.mjs'], entorno)
     await suite('migración de esquema', 'node', ['pruebas/migracion.test.mjs'], entorno)
     await suite('escáner sin detector nativo', 'node', ['pruebas/escaner-sin-detector.test.mjs'], entorno)

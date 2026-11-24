@@ -1409,6 +1409,49 @@ edumind_miclase/
   enlaces (`trozosConEnlaces` en `exportar.ts`, solo http/https) en el detalle
   y en la lámina; lo guardado y el .md exportado no cambian.
 
+- **La app habla castellano o galego, y se traduce por fases** (nov 2026,
+  decisión de Luis: «el paso fundamental»). Sin librería: `src/i18n/textos.ts`
+  (puro) tiene los dos diccionarios —el castellano manda las claves y el
+  galego es `Record<Clave, string>`, así que no compila si falta una— y
+  `src/i18n/index.ts` da `useT()` (repinta al cambiar), `t()` fuera de React
+  y `localeAhora()` para fechas. El idioma es del aparato
+  (`miclase.idioma`, no se sincroniza); sin él, `ElegirIdioma` pregunta al
+  abrir, en los dos idiomas a la vez, proponiendo el del navegador
+  (`idiomaPropuesto`), y `SelectorIdioma` (`[data-selector-idioma]`, panel
+  bajo del menú) lo cambia sin recargar. `<html lang>` lo sigue
+  (`prepararIdioma` en `main.tsx`). **Fase 1 traducida**: menú, Inicio,
+  puesta en marcha, invitación a instalar, «Instalar MiClase» y página no
+  encontrada. El resto sigue en castellano escrito a mano: **una pantalla que
+  se toque pasa sus textos a `textos.ts`**, con su galego, y
+  `idiomas.test.ts` exige las mismas variables `{…}` en los dos. Vocabulario
+  en galego: Cualificador, cualificar, avaliar, titorías, cartafol, ligazón,
+  copia de seguranza. El navegador de pruebas (`navegadorChromium`) nace con
+  el castellano elegido para que la pregunta no tape nada;
+  `idioma-ui.test.mjs` la borra para verla. Los informes impresos y el
+  currículo no se traducen (el currículo ya viene en el idioma de cada
+  comunidad).
+- **MiClase se puede instalar sin EDUmind, para siempre** (nov 2026, como la
+  versión descargable de Liga de Valores). `/instalar` (`InstalarPage`,
+  entrada «Instalar MiClase» del menú) ofrece tres caminos: la PWA (el
+  service worker la abre sin red aunque el servidor desapareciera), la
+  **versión descargable** y el servidor del centro. La descargable la monta
+  `scripts/empaquetar_descargable.sh` (compila en una carpeta temporal, nunca
+  en `frontend/dist`) en `descargas/miclase.zip` (gitignored) con la app,
+  los lanzadores de `distribucion/` —`servidor.py` (macOS, Linux, Abalar) y
+  `servidor.ps1` con su `.bat` (Windows, PowerShell de serie; el `.ps1` va
+  con BOM para que PowerShell 5 lea bien los acentos)—, `docker-compose.yml`
+  con `nginx-miclase.conf`, `LEEME.txt` bilingüe, LICENSE y NOTICE. Los
+  lanzadores sirven SIEMPRE en `localhost:8765` (los datos van con el
+  origen: otro puerto = app vacía), devuelven `index.html` en las rutas de
+  la SPA y, con el puerto ocupado, solo dicen «ya está en marcha» si quien
+  responde es MiClase (su manifiesto). Sin servidor de EDUmind no hay buzón:
+  el paquete lleva `api/sync/disponible` = `{"abierto":false}`, porque un
+  404 contaría como abierto. Con `--publicar` sube el .zip como versión de
+  GitHub; la página enlaza `releases/latest/download/miclase.zip`, así que el
+  fichero se tiene que llamar así. El evento de instalar del navegador se
+  recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
+  `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+
 ## Comandos habituales
 - Dev completo: `./start-dev.sh`
 - Empaquetar nativo: `npm run nativo:sync` (y `nativo:ios` / `nativo:android`
@@ -1420,6 +1463,7 @@ edumind_miclase/
 - Seed DB: `npm run seed`
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
+- Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar
 - `backend/data/miclase.db` — base de datos principal
