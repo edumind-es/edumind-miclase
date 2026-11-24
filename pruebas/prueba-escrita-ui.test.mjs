@@ -602,13 +602,47 @@ try {
     ok(await aparece(editor.getByText(/queda en tu banco de exámenes/)), 'al guardar dice que el anterior queda en el banco')
     ok(await aparece(editor.getByText(/Las notas ya puestas se quedan como estaban/)), 'y las notas no se recalculan con un examen que no es el suyo')
     const vistas = (await p.evaluate(() => window.__vistas)).join('\n')
-    ok(/¿El que acabas de guardar es ese mismo examen, corregido\?/.test(vistas), 'pregunta si es el mismo examen antes de recalcular nada')
+    ok(/¿Lo que vas a guardar es ese mismo examen, con cambios\?/.test(vistas), 'pregunta si es el mismo examen o es otro antes de guardar')
     await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
     d = await bd()
-    ok(d.examenes.length === 1 && d.examenes[0].titulo === 'Problemas de la unidad' && d.examenes[0].id === antes.examenes[0].id,
-      'en la unidad queda el examen nuevo', JSON.stringify(d.examenes.map(e => e.titulo)))
+    ok(d.examenes.length === 1 && d.examenes[0].titulo === 'Problemas de la unidad' && d.examenes[0].id !== antes.examenes[0].id,
+      'en la unidad queda el examen nuevo, con ficha propia', JSON.stringify(d.examenes.map(e => e.titulo)))
     ok(d.banco.includes(tituloAnterior), 'y el anterior está en el banco de exámenes', JSON.stringify(d.banco))
     ok(JSON.stringify(d.notas) === JSON.stringify(antes.notas), 'ninguna nota ha cambiado')
+
+    // Las correcciones del examen anterior ya no son del nuevo: llevan anotado el suyo.
+    const s = await p.evaluate(async ({ ud1, criterios, viejoId }) => {
+      const q = await import('/src/db/queries.ts')
+      const { db } = await import('/src/db/localDb.ts')
+      const vivo = (x) => !x.deleted_at
+      const ins = (await db.instrumentos.toArray()).filter(vivo).find(i => i.tipo === 'prueba-escrita')
+      const alumnos = (await db.alumnos.toArray()).filter(vivo).sort((a, b) => a.apellidos.localeCompare(b.apellidos))
+      const ana = alumnos[0]
+      const nuevo = await q.getPrueba(ins.id, ud1)
+      const deAna = async () => (await db.calificaciones.where('instrumento_id').equals(ins.id).toArray())
+        .filter(c => vivo(c) && c.alumno_id === ana.id && c.unidad_id === ud1 && Object.keys(c.niveles_rubrica || {}).length)
+      const antes = await deAna()
+      const corregidosAntes = await q.contarCorregidosDeExamen(ins.id, ud1, nuevo.def)
+      const respuestasAntes = await q.getRespuestasDeExamen(ana.id, ins.id, antes[0].trimestre, ud1, criterios, nuevo.id)
+      // Ahora se corrige a Ana con el examen nuevo.
+      const area = { asignatura: antes[0].asignatura, curso: antes[0].curso, etapa: antes[0].etapa, comunidad: antes[0].comunidad }
+      await q.guardarExamenDeAlumno({
+        alumno_id: ana.id, instrumento_id: ins.id, trimestre: antes[0].trimestre, unidad_id: ud1,
+        def: nuevo.def, respuestas: Object.fromEntries(nuevo.def.preguntas.map(x => [x.id, x.max])), destinos: criterios, area,
+      })
+      const despues = await deAna()
+      return {
+        selladas: antes.every(c => c.prueba_id === viejoId), corregidosAntes, respuestasAntes: Object.keys(respuestasAntes).length,
+        corregidosDespues: await q.contarCorregidosDeExamen(ins.id, ud1, nuevo.def),
+        despues: despues.map(c => ({ prueba_id: c.prueba_id, valor: c.valor, anterior: c.valor_anterior ?? null, motivo: c.anterior_motivo ?? null })),
+        nuevoId: nuevo.id, notaAntes: antes.map(c => c.valor),
+      }
+    }, { ud1: inicio.ud1, criterios: inicio.criterios, viejoId: antes.examenes[0].id })
+    ok(s.selladas, 'lo corregido con el examen anterior queda anotado como suyo')
+    ok(s.corregidosAntes === 0 && s.respuestasAntes === 0, 'el examen nuevo empieza sin nadie corregido y con las preguntas en blanco', JSON.stringify([s.corregidosAntes, s.respuestasAntes]))
+    ok(s.corregidosDespues === 1 && s.despues.length > 0 && s.despues.every(c => c.prueba_id === s.nuevoId && c.valor === 10), 'al corregir a Ana con él, su corrección lleva el examen nuevo', JSON.stringify(s.despues))
+    ok(s.despues.some(c => c.anterior != null && /examen que había antes/.test(c.motivo ?? '')) || s.notaAntes.every(v => v === 10),
+      'y la nota que tenía del examen anterior queda como fantasma', JSON.stringify(s.despues))
   }
 
   console.log('\n7g. Guardar un examen no revive el que se retiró de ese sitio')
@@ -629,8 +663,12 @@ try {
       const enBanco = (await db.rubricas.where('instrumento_id').equals(0).toArray()).filter(x => !x.deleted_at).map(x => x.titulo)
       // Se retira: el resto de la suite espera un solo examen.
       for (const v of vivos) await db.rubricas.update(v.id, { deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-      return { idX, idY, guardado, vivos: vivos.map(v => [v.id, v.titulo]), enBanco }
+      // Sin ninguno vivo en la plaza, uno nuevo estrena ficha: no revive una retirada.
+      const estrenado = await q.guardarPrueba(ins.id, otra, def('Examen Z'))
+      await q.eliminarPrueba(estrenado)
+      return { idX, idY, guardado, vivos: vivos.map(v => [v.id, v.titulo]), enBanco, reusa: [idX, idY].includes(estrenado) }
     }, { otra: inicio.otraUnidad })
+    ok(r.reusa === false, 'y con la plaza vacía, un examen nuevo estrena ficha en vez de revivir una retirada')
     ok(r.vivos.length === 1 && r.vivos[0][0] === r.idY && r.guardado === r.idY, 'queda un solo examen vivo, el que estaba', JSON.stringify(r.vivos))
     ok(r.enBanco.includes('Examen X'), 'y el que se retiró al mover otro encima está en el banco', JSON.stringify(r.enBanco))
   }

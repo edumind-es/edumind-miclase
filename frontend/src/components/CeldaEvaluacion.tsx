@@ -256,8 +256,10 @@ export default function CeldaEvaluacion({
       // este: entonces aquí no hay nota, pero el examen sí está corregido. Se
       // traen las respuestas de otro de sus criterios, o parecería sin
       // corregir y anotar una pregunta borraría las demás.
-      if (prueba && Object.keys(marcas).length === 0) {
-        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), hermanos.map(h => h.id))
+      // Y solo las de ESTE examen: lo anotado con el que ocupó antes el sitio
+      // no se enseña como suyo.
+      if (prueba) {
+        marcas = await getRespuestasDeExamen(alumno.id!, instrumentoId, trimestre, claveUnidad(unidadId), [criterio.id, ...hermanos.map(h => h.id)], prueba.id)
       }
       if (!vigente) return
       setValorActual(c?.valor ?? null)

@@ -11,6 +11,7 @@ import {
   notaDePrueba, normalizarPrueba, puntosTotales, unidadesDelExamen, criteriosSinDestino, preguntasIguales,
   idDePreguntaNueva, ACIERTO, FALLO, EN_BLANCO, respuestaDeMarca, tieneClave, preguntasSinClave, escalonesDePregunta, reasignarCriterio, type PruebaDef,
   pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas, casarUnidades, unidadDeTexto,
+  resolverExamen, elQueCuenta, esDeEsteExamen,
 } from '../frontend/src/db/prueba'
 import { readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
@@ -428,6 +429,26 @@ console.log('\n12. Preguntas por unidad: cada unidad recibe la nota de las suyas
   ok(!/Unidad/.test(generarPromptPlanilla({ asignatura: 'C', nivel: '6º', examen: 'x', unidades: ['UD1'] })), 'con una sola unidad no se pide nada')
   const planillaIA = pruebaDeTexto('# Examen\n\n| Ítem | Pregunta | Criterio | Unidad | Tipo | Máximo | Clave | Puntuación |\n|---|---|---|---|---|---|---|---|\n| 1 | Uno | | UD2 · Os ríos de Galicia | Desarrollo | 1 | x | y |\n| 2 | Dos | | | Desarrollo | 1 | x | y |', 't').prueba
   ok(unidadesDe(casarUnidades(planillaIA, alli, 71).def) === '[72,null]', 'y la tabla que devuelve la IA con «Unidad» se lee')
+}
+
+console.log('\nQué examen toca en cada unidad, y de qué examen es cada corrección')
+{
+  const def = (vinculadas: number[] = []): PruebaDef => normalizarPrueba({ ...PRUEBA_EJEMPLO, unidades_vinculadas: vinculadas })
+  const ex = (id: number, unidad_id: number | null, vinculadas: number[] = [], actualizado = '2026-11-01') => ({ id, unidad_id, def: def(vinculadas), actualizado })
+  const ud1 = ex(10, 1), ud2 = ex(20, 2, [1, 3]), general = ex(30, null)
+  ok(resolverExamen([ud1, ud2, general], 1)?.prueba.id === 10 && resolverExamen([ud1, ud2, general], 1)?.via === 'propio', 'la unidad con examen propio usa el suyo, aunque otro la vincule')
+  ok(resolverExamen([ud2, general], 1)?.prueba.id === 20 && resolverExamen([ud2, general], 1)?.via === 'vinculado', 'sin propio, el de la unidad que la vincula va antes que el general')
+  ok(resolverExamen([ud2, general], 3)?.prueba.id === 20 && resolverExamen([ud2, general], 4)?.via === 'general', 'y una unidad que nadie vincula cae al general')
+  ok(resolverExamen([ud1, ud2], 4) === null && resolverExamen([ud1, ud2], null) === null, 'sin general, «Todo el curso» y una unidad suelta no tienen examen')
+  ok(resolverExamen([ud1, ud2, general], null)?.prueba.id === 30, 'sin unidad, solo el general')
+  ok(resolverExamen([ex(50, 5, [1]), ex(40, 4, [1])], 1)?.prueba.id === 40, 'si dos exámenes vinculan la misma unidad, el de menor id (siempre el mismo)')
+  // Dos aparatos crearon un examen cada uno en la misma plaza.
+  const viejo = ex(11, 1, [], '2026-11-01'), nuevo = ex(12, 1, [], '2026-11-05')
+  ok(elQueCuenta([viejo, nuevo])?.id === 12 && elQueCuenta([nuevo, viejo])?.id === 12, 'de dos en la misma plaza cuenta el más reciente, se lean en el orden que se lean')
+  ok(elQueCuenta([ex(13, 1), ex(11, 1)])?.id === 11, 'y con el mismo sello, el de menor id')
+  ok(resolverExamen([viejo, nuevo], 1)?.prueba.id === 12, 'la unidad se corrige con ese')
+  ok(esDeEsteExamen({ prueba_id: 10 }, 10) && !esDeEsteExamen({ prueba_id: 10 }, 20), 'una corrección es del examen que anota')
+  ok(esDeEsteExamen({}, 20) && esDeEsteExamen({ prueba_id: null }, 20), 'y una de antes, sin examen anotado, se da por buena para el que ocupa el sitio')
 }
 
 console.log('\nLa marca de IA de un examen (AI Act, art. 50.2)')

@@ -20,7 +20,7 @@ import type { Instrumento, Unidad } from '@/db/localDb'
 import {
   pruebaVacia, normalizarPrueba, puntosTotales, criteriosSinDestino, reasignarCriterio, idDePreguntaNueva, preguntasSinClave,
   TIPOS_PRUEBA, ESCALA_POR_DEFECTO, LETRAS, MAX_OPCIONES,
-  unidadesDelExamen, casarUnidades, pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas,
+  unidadesDelExamen, casarUnidades, pruebaDeUnidad, tieneUnidadesPorPregunta, sinUnidadesAjenas, resolverExamen,
   type PruebaDef, type PreguntaPrueba, type TipoPrueba, type RepartoPrueba,
 } from '@/db/prueba'
 import {
@@ -94,6 +94,8 @@ export default function PruebaEditor({
   const [sustituye, setSustituye] = useState(false)
   /** El examen tal como está guardado en la fila `cargadaId`: lo que una carga encima sustituiría. */
   const [guardadoDef, setGuardadoDef] = useState<PruebaDef | null>(null)
+  /** La unidad no tiene examen propio y se corrige con el de otra que la vincula. */
+  const [deOtraUnidad, setDeOtraUnidad] = useState<PruebaGuardada | null>(null)
   const [guardando, setGuardando] = useState(false)
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
   const [ayuda, setAyuda] = useState(false)
@@ -138,8 +140,12 @@ export default function PruebaEditor({
   useEffect(() => {
     getPruebasDeInstrumento(instrumentoId).then(todas => {
       setGuardadas(todas)
-      const suya = unidadId != null ? todas.find(p => p.unidad_id === unidadId) : undefined
-      const elegida = suya ?? todas.find(p => p.unidad_id == null)
+      // Con la misma regla que el corrector. El de otra unidad que vincula a
+      // esta NO se abre aquí —editarlo desde aquí invitaría a moverlo—: se
+      // dice, y lo que se guarde será el examen propio de la unidad.
+      const toca = resolverExamen(todas, unidadId)
+      setDeOtraUnidad(toca?.via === 'vinculado' ? toca.prueba : null)
+      const elegida = toca && toca.via !== 'vinculado' ? toca.prueba : undefined
       if (elegida) {
         setDef(elegida.def)
         setConAspectos(elegida.def.preguntas.some(p => p.aspecto))
@@ -214,6 +220,7 @@ export default function PruebaEditor({
         + (corregidos ? ' Las notas ya puestas se conservan, pero lo anotado en cada pregunta era del examen anterior.' : '')
         + (sucio ? ' Los cambios sin guardar se pierden.' : '')
         + '\n\nAl guardar, el examen de ahora queda en tu banco de exámenes.'
+        + (corregidos ? ' Si lo que cargas es el mismo examen con cambios, al guardar podrás decirlo y conservará sus correcciones.' : '')
         + '\n\nSi lo que quieres es un SEGUNDO examen en esta unidad, no lo cargues aquí: crea otra actividad en «Qué evalúo → Por unidad» («+ actividad en esta unidad») y define el examen en ella.',
       aceptar: 'Sustituir el examen', cancelar: 'No cargar', peligro: corregidos > 0,
     })
@@ -428,11 +435,23 @@ export default function PruebaEditor({
       if (corregidosOrigen > 0 && !await confirmar(
         `Este examen ya está corregido para ${corregidosOrigen} alumno${corregidosOrigen !== 1 ? 's' : ''} donde estaba.\n\nAl moverlo, esas notas se quedan en su instrumento y unidad de origen (no se pierden ni se mueven) y en el nuevo sitio el examen empieza sin corregir.\n\n¿Mover el examen?`)) return
     }
+    // Con otro examen cargado encima: ¿es OTRO examen, o el mismo con cambios
+    // (una errata, los puntos, el reparto)? Sin correcciones hechas da igual
+    // y cuenta como otro. Con ellas se pregunta, porque de eso depende que
+    // sigan siendo suyas. Esc (cancelar) es «otro»: no toca ninguna nota.
+    let anterior = sustituye && cargadaId != null ? guardadoDef : null
+    let corregidosDelAnterior = 0
+    if (anterior) {
+      try { corregidosDelAnterior = await contarCorregidosDeExamen(cargadaEn.instrumentoId, cargadaEn.unidadId, anterior) } catch { /* sin la cuenta, es otro examen */ }
+      if (corregidosDelAnterior > 0 && await confirmar({
+        titulo: `Hay ${corregidosDelAnterior} alumno${corregidosDelAnterior !== 1 ? 's' : ''} corregido${corregidosDelAnterior !== 1 ? 's' : ''} con «${anterior.titulo}». ¿Lo que vas a guardar es ese mismo examen, con cambios?`,
+        texto: 'Si es el MISMO examen (has corregido una errata, los puntos o el reparto), sus correcciones siguen con él y después podrás recalcular las notas.\n\nSi es OTRO examen, el anterior queda en tu banco de exámenes, sus notas se quedan como están y el nuevo empieza sin corregir.',
+        aceptar: 'Es el mismo examen', cancelar: 'Es otro examen',
+      })) anterior = null
+    }
     setGuardando(true)
     try {
       const limpia = normalizarPrueba(def)
-      // Con otro examen cargado encima, el que había va antes al banco.
-      const anterior = sustituye && cargadaId != null ? guardadoDef : null
       const id = await guardarPrueba(idInstrumentoDestino, unidadDestino, limpia, {
         ...(seMueve ? { mover: cargadaId! } : {}), ...(anterior ? { sustituye: true } : {}),
       })
@@ -448,18 +467,14 @@ export default function PruebaEditor({
       // nuevo. Se ofrece recalcularlas; no se hace sin preguntar, porque son
       // notas ya puestas.
       const corregidos = await contarCorregidosDeExamen(idInstrumentoDestino, unidadDestino, limpia)
-      let recalculo = anterior ? ` «${anterior.titulo}», el que había, queda en tu banco de exámenes.` : ''
-      // Tras cargar otro encima, lo anotado en cada pregunta era del examen
-      // anterior: recalcular solo tiene sentido si es el mismo examen
-      // corregido. Esc (cancelar) deja las notas como están.
-      if (corregidos > 0 && anterior && !await confirmar({
-        titulo: `Hay ${corregidos} alumno${corregidos !== 1 ? 's' : ''} corregido${corregidos !== 1 ? 's' : ''} con «${anterior.titulo}». ¿El que acabas de guardar es ese mismo examen, corregido?`,
-        texto: 'Si es OTRO examen, deja las notas como están: lo anotado en cada pregunta era del anterior y recalcular daría notas sin sentido.\n\nSi es el mismo con cambios (puntos, reparto, una errata), puedes recalcular: cada nota que cambie deja la anterior a la vista, en gris y sin contar.',
-        aceptar: 'Es el mismo: recalcular', cancelar: 'Es otro: dejar las notas',
-      })) {
-        recalculo += ' Las notas ya puestas se quedan como estaban.'
-      } else if (corregidos > 0) {
-        if (anterior || await confirmar({ texto: `Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`, aceptar: 'Recalcular las notas', cancelar: 'Dejarlas como están' })) {
+      // Otro examen: estrena ficha y empieza sin corregir; el de antes queda
+      // en el banco y sus notas, donde estaban.
+      let recalculo = anterior
+        ? ` «${anterior.titulo}», el que había, queda en tu banco de exámenes.`
+          + (corregidosDelAnterior ? ' Las notas ya puestas se quedan como estaban y este empieza sin corregir.' : '')
+        : ''
+      if (corregidos > 0) {
+        if (await confirmar({ texto: `Este examen ya está corregido para ${corregidos} alumno${corregidos !== 1 ? 's' : ''}.\n\n¿Recalcular sus notas con el examen tal como queda ahora?\n\nNo se pierde nada: lo anotado en cada pregunta no se toca, y cada nota que cambie deja la anterior a la vista, en gris y sin contar.`, aceptar: 'Recalcular las notas', cancelar: 'Dejarlas como están' })) {
           const hoy = new Date().toLocaleDateString('es-ES')
           const r = await recalcularNotasDeExamen(idInstrumentoDestino, unidadDestino, limpia,
             `Nota de «${limpia.titulo}» antes de cambiar el examen el ${hoy}`)
@@ -575,6 +590,15 @@ export default function PruebaEditor({
 
             {/* Dónde vive el examen. Cambiarlo y guardar lo MUEVE: misma fila,
                 otro instrumento o unidad; las notas ya puestas no se mueven. */}
+            {deOtraUnidad && cargadaId == null && (
+              <div data-examen-de-otra-unidad style={{ marginBottom: 14, padding: '9px 12px', borderRadius: 7, fontSize: 12.5, lineHeight: 1.5, background: 'var(--azul-100)', border: '1px solid var(--azul-500)', color: 'var(--azul-700)' }}>
+                <strong>Esta unidad se corrige ahora con «{deOtraUnidad.def.titulo}»</strong>, el examen
+                de {unidades.find(u => u.id === deOtraUnidad.unidad_id)?.nombre ? `«${unidades.find(u => u.id === deOtraUnidad.unidad_id)!.nombre}»` : 'otra unidad'}, que
+                también cuenta aquí. Para cambiar ese examen, ábrelo desde su unidad. Si guardas uno aquí,
+                esta unidad pasará a corregirse con el suyo y el otro dejará de contar en ella; las notas ya
+                puestas se conservan.
+              </div>
+            )}
             <div style={{ marginBottom: 14 }} data-destino-examen>
               <span style={etiqueta}>Este examen es de</span>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', fontSize: 13 }}>

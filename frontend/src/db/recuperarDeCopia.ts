@@ -142,6 +142,7 @@ export async function recuperarNotasDeCopia(
         await db.calificaciones.update(actual.id!, {
           valor: c.valor ?? null,
           niveles_rubrica: c.niveles_rubrica ?? null,
+          prueba_id: c.prueba_id ?? null,
           origen: c.origen ?? null,
           ...(cambia ? { valor_anterior: actual.valor, anterior_motivo: MOTIVO_RECUPERADA_DE_COPIA } : {}),
           deleted_at: null,
@@ -152,7 +153,7 @@ export async function recuperarNotasDeCopia(
       if (!e.quitarNuevas) continue
       for (const n of g.nuevas) {
         await db.calificaciones.update(n.id!, {
-          valor: null, niveles_rubrica: null, origen: null,
+          valor: null, niveles_rubrica: null, prueba_id: null, origen: null,
           valor_anterior: n.valor, anterior_motivo: MOTIVO_NO_ESTABA_EN_COPIA,
           updated_at: sello(),
         })

@@ -631,8 +631,40 @@ edumind_miclase/
   igual que cuando un examen movido retira al que ocupaba su destino. Tras
   sustituir no se ofrece recalcular sin más: se pregunta si es el MISMO
   examen corregido, y Esc deja las notas como están. `guardarPrueba` escribe
-  en la ficha VIVA de la plaza; una retirada solo se reutiliza si no hay
-  ninguna viva (antes revivía la retirada y dejaba dos exámenes vivos).
+  en la ficha VIVA de la plaza y no reutiliza una retirada (antes la revivía
+  y dejaba dos exámenes vivos en el mismo sitio).
+- **Cada corrección anota de qué examen es** (`Calificacion.prueba_id`, sin
+  índice ni esquema; auditoría de nov 2026). Las respuestas viven en la
+  casilla (`niveles_rubrica`) y todas las preguntas se llaman p1, p2…: sin
+  dueño, cualquier examen que ocupara el sitio las leía como suyas. Lo
+  escriben `guardarExamenDeAlumno` y `recalcularNotasDeExamen`; lo leen
+  `correccionesDeExamen` (informe, recuento, recálculo) y
+  `getRespuestasDeExamen` (corrector), con `esDeEsteExamen` (`db/prueba.ts`,
+  puro): una corrección SIN examen anotado —las de antes— se da por buena
+  para el que ocupe el sitio. Para que eso no las regale al siguiente,
+  `sellarCorrecciones` les anota el suyo justo antes de que un examen deje
+  de ser el de esas casillas: se retira (`eliminarPrueba`), otro ocupa su
+  plaza, se mueve, o la unidad estrena examen propio. Por eso **una ficha
+  retirada no se reutiliza nunca** (llevaría sus correcciones a otro examen)
+  y «otro examen cargado encima» estrena ficha con id nuevo. Al guardar tras
+  cargar encima de un examen con correcciones, el editor pregunta si es el
+  MISMO examen con cambios (misma ficha, conserva correcciones, ofrece
+  recalcular) u OTRO (ficha nueva, sin corregir; Esc es «otro»). Corregir
+  sobre una nota que era de otro examen la deja como fantasma
+  (`MOTIVO_SUSTITUIDA_POR_OTRO_EXAMEN`). En `saveCalificaciones`, unas marcas
+  nuevas sin `prueba_id` son de rúbrica y borran el que hubiera. **Un aparato
+  sin actualizar corrige sin anotar el examen**: sus correcciones cuentan
+  como las de antes.
+- **«Qué examen toca en esta unidad» lo decide una sola función**,
+  `resolverExamen` (`db/prueba.ts`, puro): el propio; si no, el de otra
+  unidad que la vincula (si son varios, el de menor id); si no, el general.
+  La usan `getPrueba`, la matriz, el editor y `correccionesDeExamen`; antes
+  eran cuatro reglas y el editor ignoraba el vínculo. Dos exámenes vivos en
+  la misma plaza (dos aparatos que crearon uno cada uno) se resuelven con
+  `elQueCuenta`: el más reciente y, a igualdad, el de menor id; el otro
+  sigue listado en «Exámenes y pruebas». En una unidad que se corrige con el
+  examen de otra, el editor NO abre ese examen: lo dice
+  (`[data-examen-de-otra-unidad]`) y lo que se guarde será el propio.
 - **Un examen puede contar en varias unidades, y la lista vive en el examen.**
   `PruebaDef.unidades_vinculadas` (dentro de `prueba_json`, sin índice ni
   esquema; `unidadesDelExamen` en `db/prueba.ts`, puro) dice en qué otras

@@ -13,7 +13,7 @@ import { criteriosVinculados } from './vinculos'
 import { criteriosDe, derivarNotas, ordenarRegistros, type NotaDerivada, nivelDeNota } from './diario'
 import type { ExamenDeArea } from './analisisAlumno'
 import { tieneDatos as tieneDatosDeActividad, type ActividadDeUnidad } from './informeActividad'
-import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
+import { normalizarPrueba, notaDePrueba, unidadesDelExamen, pruebaDeUnidad, sinUnidadesAjenas, resolverExamen, elQueCuenta, esDeEsteExamen, type ViaExamen, type PruebaDef, type ResultadoPrueba, tieneClave } from './prueba'
 import type { RespuestasAlumno } from './informePrueba'
 import type {
   Grupo, Alumno, Asignatura, Instrumento,
@@ -70,6 +70,11 @@ export type CalItem = {
    * delante la justificación. Para vaciarla se manda `{}` o `null`.
    */
   niveles_rubrica?: Record<string, number> | null
+  /**
+   * El examen del que son esas respuestas (`Calificacion.prueba_id`). Sin
+   * darlo, unas marcas nuevas se guardan como de rúbrica (sin examen).
+   */
+  prueba_id?: number | null
   /** Nota fantasma (ver `Calificacion.valor_anterior`). `undefined` = no tocarla. */
   valor_anterior?: number | null
   anterior_motivo?: string | null
@@ -1121,6 +1126,7 @@ export async function contarColumna(instrumento_id: number, unidad_id: number, t
 
 export const MOTIVO_COLUMNA_VACIADA = 'Columna vaciada por el docente'
 export const MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO = 'Sustituida al corregir el examen de otra unidad que también cuenta en esta'
+export const MOTIVO_SUSTITUIDA_POR_OTRO_EXAMEN = 'Nota del examen que había antes en esta actividad y unidad'
 
 /**
  * Lo que `vaciarColumna` ha cambiado, tal como estaba antes: es lo que
@@ -1135,6 +1141,7 @@ export type Vaciado = {
     id: number
     valor: number | null
     niveles_rubrica: Record<string, number> | null
+    prueba_id?: number | null
     origen: 'diario' | null
     valor_anterior: number | null
     anterior_motivo: string | null
@@ -1168,12 +1175,13 @@ export async function vaciarColumna(instrumento_id: number, unidad_id: number, t
       const sinNada = c.valor == null && !(c.niveles_rubrica && Object.keys(c.niveles_rubrica).length) && c.origen !== 'diario'
       if (sinNada) continue
       vaciado.calificaciones.push({
-        id: c.id!, valor: c.valor ?? null, niveles_rubrica: c.niveles_rubrica ?? null, origen: c.origen ?? null,
+        id: c.id!, valor: c.valor ?? null, niveles_rubrica: c.niveles_rubrica ?? null, prueba_id: c.prueba_id ?? null, origen: c.origen ?? null,
         valor_anterior: c.valor_anterior ?? null, anterior_motivo: c.anterior_motivo ?? null,
       })
       await db.calificaciones.update(c.id!, tocado({
         valor: null,
         niveles_rubrica: null,
+        prueba_id: null,
         origen: null,
         // Sin nota que guardar, el fantasma que hubiera se queda.
         ...(c.valor != null ? { valor_anterior: c.valor, anterior_motivo: MOTIVO_COLUMNA_VACIADA } : {}),
@@ -1192,7 +1200,7 @@ export async function deshacerVaciado(v: Vaciado): Promise<void> {
   await db.transaction('rw', [db.calificaciones, db.diario], async () => {
     for (const c of v.calificaciones) {
       await db.calificaciones.update(c.id, tocado({
-        valor: c.valor, niveles_rubrica: c.niveles_rubrica, origen: c.origen,
+        valor: c.valor, niveles_rubrica: c.niveles_rubrica, prueba_id: c.prueba_id ?? null, origen: c.origen,
         valor_anterior: c.valor_anterior, anterior_motivo: c.anterior_motivo, deleted_at: null,
       }))
     }
@@ -1789,7 +1797,7 @@ export async function copiarNotasACriterios(p: {
         alumno_id, instrumento_id: p.instrumento_id, criterio_id: destino,
         asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
         trimestre: p.trimestre, valor: src.valor, observacion: src.observacion ?? null,
-        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null,
+        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null, prueba_id: src.prueba_id ?? null,
       })
       copiadas++
     }
@@ -1829,7 +1837,7 @@ export async function copiarNotaAlEquipo(p: {
         alumno_id, instrumento_id: p.instrumento_id, criterio_id: criterio,
         asignatura: src.asignatura, curso: src.curso, etapa: src.etapa, comunidad: src.comunidad,
         trimestre: p.trimestre, valor: src.valor, observacion: ya?.observacion ?? null,
-        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null,
+        unidad_id: p.unidad_id, niveles_rubrica: src.niveles_rubrica ?? null, prueba_id: src.prueba_id ?? null,
       })
       total.copiadas++
     }
@@ -1901,6 +1909,11 @@ export async function saveCalificaciones(
           niveles_rubrica: item.niveles_rubrica !== undefined
             ? item.niveles_rubrica
             : existing.niveles_rubrica ?? null,
+          // Con las respuestas va su examen; unas marcas nuevas que no dicen
+          // examen son de rúbrica y borran el que hubiera.
+          prueba_id: item.prueba_id !== undefined
+            ? item.prueba_id
+            : item.niveles_rubrica !== undefined ? null : existing.prueba_id ?? null,
           ...(item.valor_anterior !== undefined
             ? { valor_anterior: item.valor_anterior, anterior_motivo: item.anterior_motivo ?? null }
             : {}),
@@ -2432,10 +2445,12 @@ export type PruebaGuardada = {
   /** Unidad del examen, o null si es el general del instrumento. */
   unidad_id: number | null
   def: PruebaDef
+  /** Sello de la última modificación: decide entre dos exámenes en la misma plaza (`elQueCuenta`). */
+  actualizado?: string
 }
 
 function aPrueba(r: Rubrica): PruebaGuardada | null {
-  try { return { id: r.id!, unidad_id: r.unidad_id ?? null, def: normalizarPrueba(JSON.parse(r.prueba_json || 'null')) } }
+  try { return { id: r.id!, unidad_id: r.unidad_id ?? null, def: normalizarPrueba(JSON.parse(r.prueba_json || 'null')), actualizado: r.updated_at } }
   catch { return null }
 }
 
@@ -2498,11 +2513,35 @@ export async function getPruebasDeInstrumento(instrumento_id: number): Promise<P
  * general: no se puede adivinar de cuál de los exámenes por unidad se trata.
  */
 export async function getPrueba(instrumento_id: number, unidad_id: number | null): Promise<PruebaGuardada | null> {
-  const todas = await getPruebasDeInstrumento(instrumento_id)
-  return (unidad_id != null ? todas.find(p => p.unidad_id === unidad_id) : undefined)
-    ?? (unidad_id != null ? todas.find(p => p.unidad_id != null && unidadesDelExamen(p.unidad_id, p.def).includes(unidad_id)) : undefined)
-    ?? todas.find(p => p.unidad_id == null)
-    ?? null
+  return resolverExamen(await getPruebasDeInstrumento(instrumento_id), unidad_id)?.prueba ?? null
+}
+
+/** Lo mismo que `getPrueba`, diciendo además por qué camino llega (propio, vinculado o general). */
+export async function getPruebaConVia(
+  instrumento_id: number, unidad_id: number | null,
+): Promise<{ prueba: PruebaGuardada; via: ViaExamen } | null> {
+  return resolverExamen(await getPruebasDeInstrumento(instrumento_id), unidad_id)
+}
+
+/**
+ * Anota en las correcciones sin examen (`prueba_id` vacío: las de antes de
+ * que existiera) el examen con el que se hicieron. Se llama justo ANTES de
+ * que un examen deje de ser el de esas casillas —se retira, se sustituye, se
+ * mueve, o la unidad estrena uno propio—: sin esto el examen que ocupe
+ * después el sitio las leería como suyas. `enUnidad` limita a unas unidades.
+ */
+async function sellarCorrecciones(r: Rubrica, enUnidad?: (unidad_id: number) => boolean): Promise<number> {
+  const p = aPrueba(r)
+  if (!p || r.id == null) return 0
+  let selladas = 0
+  for (const grupo of await correccionesDeExamen(r.instrumento_id, r.unidad_id ?? null, p.def)) {
+    for (const c of grupo) {
+      if (c.prueba_id != null || c.id == null || (enUnidad && !enUnidad(c.unidad_id))) continue
+      await db.calificaciones.update(c.id, tocado({ prueba_id: r.id }))
+      selladas++
+    }
+  }
+  return selladas
 }
 
 /**
@@ -2550,29 +2589,58 @@ export async function guardarPrueba(
   // tiene sentido si cuenta en más de una: si no, se quita.
   limpia = sinUnidadesAjenas(limpia, vinculadas.length ? unidadesDelExamen(unidad_id, limpia) : [])
   const campos = { titulo: limpia.titulo, prueba_json: JSON.stringify(limpia), unidad_id }
-  const delAmbito = (await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
-    .filter(r => r.tipo === 'prueba' && (r.unidad_id ?? null) === unidad_id)
-  // La ficha viva manda; una retirada solo se reutiliza si no queda ninguna
-  // viva. Antes se tomaba la primera, viva o no: tras sustituir un examen
-  // moviendo otro encima, el siguiente «Guardar» revivía la ficha retirada y
-  // dejaba dos exámenes vivos en el mismo sitio.
-  const existente = delAmbito.find(r => !r.deleted_at) ?? delAmbito[0]
-  if (opciones.mover != null && existente?.id !== opciones.mover) {
-    const origen = await db.rubricas.get(opciones.mover)
-    if (origen && origen.tipo === 'prueba' && !origen.deleted_at) {
-      if (existente?.id != null && !existente.deleted_at) {
-        await conservarExamenEnBanco(existente)
-        await db.rubricas.update(existente.id, tocado({ deleted_at: sello() }))
-      }
-      if (opciones.sustituye) await conservarExamenEnBanco(origen)
+  const todasLasFilas = vivos(await db.rubricas.where('instrumento_id').equals(instrumento_id).toArray())
+    .filter(r => r.tipo === 'prueba')
+  // La ficha VIVA de la plaza (si dos aparatos dejaron dos, la que cuenta).
+  // Una retirada no se reutiliza nunca: las correcciones hechas con ella
+  // llevan su id, y revivirla con otro examen se las daría por suyas. Antes
+  // se tomaba la primera, viva o no, y tras sustituir un examen moviendo otro
+  // encima el siguiente «Guardar» dejaba dos vivos en el mismo sitio.
+  const enLaPlaza = todasLasFilas.filter(r => (r.unidad_id ?? null) === unidad_id)
+  const cuenta = elQueCuenta(enLaPlaza.map(aPrueba).filter((x): x is PruebaGuardada => !!x))
+  const existente = cuenta ? enLaPlaza.find(r => r.id === cuenta.id) : enLaPlaza[0]
+
+  /** Un examen que deja de estar: copia al banco, sus correcciones anotadas, y fuera. */
+  const retirar = async (r: Rubrica) => {
+    await conservarExamenEnBanco(r)
+    await sellarCorrecciones(r)
+    await db.rubricas.update(r.id!, tocado({ deleted_at: sello() }))
+  }
+
+  /**
+   * La unidad estrena examen propio: lo ya corregido en ella con el que usaba
+   * hasta ahora (el de otra unidad que la vincula, o el general) se queda
+   * anotado como de aquel.
+   */
+  const sellarLoPrevioDeLaUnidad = async () => {
+    if (unidad_id == null) return
+    const previo = resolverExamen(todasLasFilas.map(aPrueba).filter((x): x is PruebaGuardada => !!x), unidad_id)
+    const fila = previo ? todasLasFilas.find(r => r.id === previo.prueba.id) : undefined
+    if (fila) await sellarCorrecciones(fila, u => u === unidad_id)
+  }
+
+  const origen = opciones.mover != null && existente?.id !== opciones.mover ? await db.rubricas.get(opciones.mover) : undefined
+  if (origen && origen.tipo === 'prueba' && !origen.deleted_at) {
+    if (existente) await retirar(existente)
+    else await sellarLoPrevioDeLaUnidad()
+    if (!opciones.sustituye) {
+      // Se mueve la MISMA ficha. Lo corregido se queda en el sitio de origen,
+      // anotado como suyo: en el destino el examen empieza sin corregir.
+      await sellarCorrecciones(origen)
       await db.rubricas.update(origen.id!, tocado({ ...campos, instrumento_id }))
       return origen.id!
     }
-  }
-  if (existente?.id != null) {
-    if (opciones.sustituye && !existente.deleted_at) await conservarExamenEnBanco(existente)
-    await db.rubricas.update(existente.id, tocado({ ...campos, deleted_at: null }))
-    return existente.id
+    await retirar(origen)
+  } else if (existente) {
+    if (!opciones.sustituye) {
+      await db.rubricas.update(existente.id!, tocado(campos))
+      return existente.id!
+    }
+    // Otro examen cargado encima: el de antes se retira y el nuevo estrena
+    // ficha, con otro id, para que no herede sus correcciones.
+    await retirar(existente)
+  } else {
+    await sellarLoPrevioDeLaUnidad()
   }
   const reg = nuevo({
     ...campos, instrumento_id, tipo: 'prueba' as const,
@@ -2644,11 +2712,22 @@ export async function guardarExamenDeAlumno(p: {
   const propia = pruebaDeUnidad(p.def, p.unidad_id)
   const r = notaDePrueba(propia, p.respuestas, p.destinos)
   const criterios = propia.preguntas.length ? p.destinos.filter(c => c in r.porCriterio) : []
-  await saveCalificaciones(criterios.map(c => ({
-    alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
-    trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas,
-    ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
-  })), { sinVinculos: true })
+  // Cada corrección anota de qué examen es: el que toca en esta unidad.
+  const prueba_id = (await getPrueba(p.instrumento_id, p.unidad_id))?.id ?? null
+  const propios: CalItem[] = []
+  for (const c of criterios) {
+    // Una nota que venía de OTRO examen (el que ocupó antes este sitio) no se
+    // pisa sin más: queda como fantasma.
+    const previa = prueba_id != null ? await getCalificacionUnica(p.alumno_id, p.instrumento_id, c, p.trimestre, p.unidad_id) : undefined
+    const deOtro = previa?.valor != null && previa.prueba_id != null && previa.prueba_id !== prueba_id && previa.valor !== r.porCriterio[c]
+    propios.push({
+      alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
+      trimestre: p.trimestre, valor: r.porCriterio[c], unidad_id: p.unidad_id, niveles_rubrica: p.respuestas, prueba_id,
+      ...(deOtro ? { valor_anterior: previa!.valor, anterior_motivo: MOTIVO_SUSTITUIDA_POR_OTRO_EXAMEN } : {}),
+      ...(p.observacion?.criterio_id === c ? { observacion: p.observacion.texto } : {}),
+    })
+  }
+  await saveCalificaciones(propios, { sinVinculos: true })
   // El mismo examen cuenta también en las unidades que tenga vinculadas (y
   // desde una vinculada, en la suya): misma corrección —las respuestas van
   // enteras a todas—, con los criterios que el instrumento evalúa en cada
@@ -2681,7 +2760,7 @@ export async function guardarExamenDeAlumno(p: {
       const cambia = previa?.valor != null && previa.valor !== ru.porCriterio[c]
       items.push({
         alumno_id: p.alumno_id, instrumento_id: p.instrumento_id, criterio_id: c, ...p.area,
-        trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas,
+        trimestre: p.trimestre, valor: ru.porCriterio[c], unidad_id: u, niveles_rubrica: p.respuestas, prueba_id,
         ...(cambia ? { valor_anterior: previa!.valor, anterior_motivo: MOTIVO_SUSTITUIDA_POR_EXAMEN_VINCULADO } : {}),
       })
     }
@@ -2802,10 +2881,13 @@ export type UnidadTambienCorregida = {
  * corregido, y enseñarlo en blanco haría que anotar una pregunta borrase las demás.
  */
 export async function getRespuestasDeExamen(
-  alumno_id: number, instrumento_id: number, trimestre: number, unidad_id: number, criterios: string[]
+  alumno_id: number, instrumento_id: number, trimestre: number, unidad_id: number, criterios: string[],
+  /** El examen que se está corrigiendo: lo anotado con otro no se enseña como suyo. */
+  prueba_id?: number | null,
 ): Promise<Record<string, number>> {
   for (const c of criterios) {
     const cal = await getCalificacionUnica(alumno_id, instrumento_id, c, trimestre, unidad_id)
+    if (prueba_id != null && cal && !esDeEsteExamen(cal, prueba_id)) continue
     if (cal?.niveles_rubrica && Object.keys(cal.niveles_rubrica).length) return cal.niveles_rubrica
   }
   return {}
@@ -2819,18 +2901,21 @@ export async function getRespuestasDeExamen(
  * examen general son las de las unidades que no tienen examen propio.
  */
 async function correccionesDeExamen(instrumento_id: number, unidad_id: number | null, def: PruebaDef) {
-  const porUnidad = (await getPruebasDeInstrumento(instrumento_id)).filter(p => p.unidad_id != null)
-  // Unidades con examen propio: ni caen al general ni las cubre un vínculo ajeno.
-  const propias = new Set(porUnidad.map(p => p.unidad_id!))
-  // Las cubiertas por el examen de otra unidad que las vincula.
-  const cubiertas = new Set(porUnidad.flatMap(p => unidadesDelExamen(p.unidad_id, p.def)))
-  const deEste = new Set(unidad_id != null
-    ? unidadesDelExamen(unidad_id, def).filter(u => u === unidad_id || !propias.has(u))
-    : [])
+  const todas = await getPruebasDeInstrumento(instrumento_id)
+  // El examen guardado en esa plaza. Puede no haberlo todavía (el editor
+  // pregunta antes de guardar): entonces valen las casillas sin examen.
+  const este = elQueCuenta(todas.filter(p => (p.unidad_id ?? null) === unidad_id))
   const esRespuesta = (clave: string) => /^p\d+$/.test(clave) || def.preguntas.some(q => q.id === clave)
-  const cals = vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray())
+  // Una casilla es de este examen si es el que toca en SU unidad
+  // (`resolverExamen`, la misma regla que el corrector) y lo anotado en ella
+  // no dice ser de otro (`esDeEsteExamen`).
+  const cals = sinDuplicados(vivos(await db.calificaciones.where('instrumento_id').equals(instrumento_id).toArray()))
     .filter(c => c.niveles_rubrica && Object.keys(c.niveles_rubrica).some(esRespuesta))
-    .filter(c => unidad_id != null ? deEste.has(c.unidad_id) : !cubiertas.has(c.unidad_id))
+    .filter(c => {
+      const toca = resolverExamen(todas, c.unidad_id)?.prueba ?? null
+      if (este) return toca?.id === este.id && esDeEsteExamen(c, este.id)
+      return !toca && c.prueba_id == null && (unidad_id == null || c.unidad_id === unidad_id)
+    })
   const grupos = new Map<string, Calificacion[]>()
   for (const c of cals) {
     const k = `${c.alumno_id}:${c.trimestre}:${c.unidad_id}`
@@ -2881,6 +2966,7 @@ export async function recalcularNotasDeExamen(
 ): Promise<{ alumnos: number; fantasmas: number }> {
   const grupos = await correccionesDeExamen(instrumento_id, unidad_id, def)
   const filas = vivos(await db.criterio_instrumentos.where('instrumento_id').equals(instrumento_id).toArray())
+  const prueba_id = elQueCuenta((await getPruebasDeInstrumento(instrumento_id)).filter(p => (p.unidad_id ?? null) === unidad_id))?.id ?? null
   const items: CalItem[] = []
   const alumnos = new Set<number>()
   let fantasmas = 0
@@ -2908,7 +2994,7 @@ export async function recalcularNotasDeExamen(
       const cambia = previa?.valor != null && previa.valor !== valor
       if (cambia) fantasmas++
       items.push({
-        ...comun, criterio_id: c, valor, niveles_rubrica: respuestas,
+        ...comun, criterio_id: c, valor, niveles_rubrica: respuestas, prueba_id,
         ...(cambia ? { valor_anterior: previa!.valor, anterior_motivo: motivo } : {}),
       })
     }
@@ -2943,6 +3029,9 @@ export async function descartarNotaAnterior(calificacion_id: number): Promise<vo
 export async function eliminarPrueba(id: number): Promise<void> {
   const r = await db.rubricas.get(id)
   if (!r || r.tipo !== 'prueba') return
+  // Lo corregido con él queda anotado como suyo: el examen que venga después
+  // a este sitio no lo tomará por propio.
+  if (!r.deleted_at) await sellarCorrecciones(r)
   await db.rubricas.update(id, tocado({ deleted_at: sello() }))
 }
 
@@ -3799,19 +3888,23 @@ export async function getMatrizEvaluacion(
   const conRubricaPropia = new Set(rubricas.filter(r => !!unidad_id && r.unidad_id === unidad_id).map(r => r.instrumento_id))
   // Con examen definido para lo que se está viendo: el de la unidad, el de
   // otra unidad que la vincula, o el general.
-  const conPrueba = new Set(delosInstrumentos
-    .filter(r => r.tipo === 'prueba' && (r.unidad_id == null || r.unidad_id === unidad_id))
-    .map(r => r.instrumento_id))
+  // Con la misma regla que el corrector (`resolverExamen`).
+  const conPrueba = new Set<number>()
   const pruebaVinculada = new Map<number, string>()
-  if (unidad_id) {
-    for (const r of delosInstrumentos) {
-      if (r.tipo !== 'prueba' || r.unidad_id == null || r.unidad_id === unidad_id || pruebaVinculada.has(r.instrumento_id)) continue
-      if (delosInstrumentos.some(x => x.tipo === 'prueba' && x.instrumento_id === r.instrumento_id && x.unidad_id === unidad_id)) continue
-      const p = aPrueba(r)
-      if (!p || !unidadesDelExamen(p.unidad_id, p.def).includes(unidad_id)) continue
-      const origen = await db.unidades.get(r.unidad_id)
-      pruebaVinculada.set(r.instrumento_id, origen?.nombre ?? 'otra unidad')
-      conPrueba.add(r.instrumento_id)
+  const examenesPorInstrumento = new Map<number, PruebaGuardada[]>()
+  for (const r of delosInstrumentos) {
+    if (r.tipo !== 'prueba') continue
+    const p = aPrueba(r)
+    if (!p || !p.def.preguntas.length) continue
+    examenesPorInstrumento.set(r.instrumento_id, [...(examenesPorInstrumento.get(r.instrumento_id) ?? []), p])
+  }
+  for (const [instrumento_id, lista] of examenesPorInstrumento) {
+    const toca = resolverExamen(lista, unidad_id || null)
+    if (!toca) continue
+    conPrueba.add(instrumento_id)
+    if (toca.via === 'vinculado') {
+      const origen = await db.unidades.get(toca.prueba.unidad_id!)
+      pruebaVinculada.set(instrumento_id, origen?.nombre ?? 'otra unidad')
     }
   }
 

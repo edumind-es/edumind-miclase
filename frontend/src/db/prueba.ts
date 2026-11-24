@@ -337,6 +337,75 @@ export function unidadesDelExamen(unidad_id: number | null, def: PruebaDef): num
   return [unidad_id, ...(def.unidades_vinculadas ?? []).filter(u => u !== unidad_id)]
 }
 
+// ─── Qué examen toca en cada unidad, y de qué examen es cada corrección ─────
+
+/** Un examen guardado, con lo justo para saber dónde está y cuál es. */
+export type ExamenEnSuSitio = {
+  id: number
+  /** Unidad del examen, o null si es el general del instrumento. */
+  unidad_id: number | null
+  def: PruebaDef
+  /** Sello de la última modificación de su ficha. */
+  actualizado?: string
+}
+
+/** Por qué camino llega un examen a una unidad. */
+export type ViaExamen = 'propio' | 'vinculado' | 'general'
+
+/**
+ * De varios exámenes vivos en la MISMA plaza (dos aparatos que crearon uno
+ * cada uno antes de sincronizar), el que cuenta: el más reciente y, a
+ * igualdad, el de menor id. La misma regla que con las notas duplicadas,
+ * para que todos los aparatos elijan el mismo.
+ */
+export function elQueCuenta<T extends ExamenEnSuSitio>(lista: T[]): T | undefined {
+  let mejor: T | undefined
+  for (const p of lista) {
+    if (!mejor) { mejor = p; continue }
+    const a = p.actualizado ?? '', b = mejor.actualizado ?? ''
+    if (a > b || (a === b && p.id < mejor.id)) mejor = p
+  }
+  return mejor
+}
+
+/**
+ * El examen con el que se corrige en una unidad, de entre los de UN
+ * instrumento: el suyo; si no, el de otra unidad que la vincula
+ * (`unidades_vinculadas`; si son varios, el de menor id); si no, el general.
+ * Sin unidad («Todo el curso»), solo el general.
+ *
+ * Es la ÚNICA regla: la usan el corrector, la matriz, el editor y la cuenta
+ * de correcciones. Antes cada uno tenía la suya y el editor ignoraba el
+ * vínculo (auditoría de nov 2026).
+ */
+export function resolverExamen<T extends ExamenEnSuSitio>(
+  todas: T[], unidad_id: number | null | undefined,
+): { prueba: T; via: ViaExamen } | null {
+  const enPlaza = (u: number | null) => elQueCuenta(todas.filter(p => (p.unidad_id ?? null) === u))
+  if (unidad_id != null) {
+    const propio = enPlaza(unidad_id)
+    if (propio) return { prueba: propio, via: 'propio' }
+    const plazas = [...new Set(todas.filter(p => p.unidad_id != null).map(p => p.unidad_id!))]
+    const vinculado = plazas.map(u => enPlaza(u)!)
+      .filter(p => unidadesDelExamen(p.unidad_id, p.def).includes(unidad_id))
+      .sort((a, b) => a.id - b.id)[0]
+    if (vinculado) return { prueba: vinculado, via: 'vinculado' }
+  }
+  const general = enPlaza(null)
+  return general ? { prueba: general, via: 'general' } : null
+}
+
+/**
+ * ¿Lo anotado en una casilla es de ESTE examen? Cada corrección guarda el id
+ * del examen con el que se hizo (`Calificacion.prueba_id`). Las de antes de
+ * que eso existiera no lo traen y se dan por buenas para el examen que ocupe
+ * su sitio, que es lo que pasaba siempre; cuando un examen deja su sitio se
+ * les anota el suyo para que el siguiente no las tome por propias.
+ */
+export function esDeEsteExamen(c: { prueba_id?: number | null }, prueba_id: number): boolean {
+  return c.prueba_id == null || c.prueba_id === prueba_id
+}
+
 /**
  * Lo que anota una marca en un test con clave: la letra marcada contra la
  * correcta. `null` es dejar la pregunta en blanco. Así la corrección por

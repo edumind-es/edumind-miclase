@@ -367,7 +367,7 @@ export type OpcionesFusion = {
 }
 
 /** Lo que el docente ha puesto en una casilla. */
-const CAMPOS_DE_NOTA = ['valor', 'observacion', 'niveles_rubrica']
+const CAMPOS_DE_NOTA = ['valor', 'observacion', 'niveles_rubrica', 'prueba_id']
 
 const notaDistinta = (a: any, b: any): boolean =>
   CAMPOS_DE_NOTA.some(c => !iguales(a[c], b[c]))
