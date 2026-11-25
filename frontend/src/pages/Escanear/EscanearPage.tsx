@@ -19,6 +19,7 @@
  *   /escanear?alumno=12    ← toque en el plano de clase
  */
 import { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
 import { getAlumnoPorCodigo } from '@/db/queries'
 import { db } from '@/db/localDb'
@@ -103,11 +104,15 @@ export default function EscanearPage() {
         audio: false,
       })
       streamRef.current = stream
-      setCamaraActiva(true)
-      // El <video> se monta al cambiar el estado; conectar en el siguiente tick
+      // El <video> se monta al cambiar el estado, y hay que montarlo YA: tras un
+      // `await`, React deja el pintado para más tarde y en Safari el fotograma
+      // siguiente llegaba antes que el <video>. Entonces no había a quién darle
+      // la cámara y se salía en silencio: recuadro negro y «Buscando código
+      // QR…» para siempre. Luis lo vio en el iPad con Lámina (25/11/2026).
+      flushSync(() => setCamaraActiva(true))
       requestAnimationFrame(async () => {
         try {
-          if (!videoRef.current) return
+          if (!videoRef.current) throw new Error('sin vídeo')
           videoRef.current.srcObject = stream
           // `playsInline` es obligatorio en iOS: sin él el vídeo se abre a
           // pantalla completa y no se puede escanear
@@ -205,7 +210,7 @@ export default function EscanearPage() {
           {tieneDetector ? (
             camaraActiva ? (
               <>
-                <video ref={videoRef} playsInline muted
+                <video ref={videoRef} playsInline muted autoPlay
                   style={{ width: '100%', maxHeight: 380, borderRadius: 10, background: '#000', objectFit: 'cover' }} />
                 <div style={{ fontSize: 13, color: 'var(--gris-600)', margin: '10px 0' }}>
                   Buscando código QR…

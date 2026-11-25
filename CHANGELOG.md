@@ -13,6 +13,16 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.0.1] — 2026-11-25
+
+### Arreglado
+- **La cámara de «Exámenes y pruebas» se quedaba en negro en el iPad**, con
+  «Buscando código QR…» puesto y sin leer nada: la cámara se conectaba antes
+  de que el recuadro del vídeo existiera. Ahora se monta primero, y si aun
+  así no se pudiera conectar, se dice en vez de callar.
+- En el iPad, la franja de colores de arriba ya no queda bajo el difuminado
+  que iPadOS 26 pone junto a la hora y la batería.
+
 ## [2.0.0] — 2026-11-25
 
 ### Cambiado
