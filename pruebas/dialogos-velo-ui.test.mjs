@@ -79,6 +79,12 @@ try {
   ok(estilos.velo === 'contain', 'el velo retiene el scroll', estilos.velo)
   ok(estilos.tarjeta === 'contain', 'la tarjeta retiene el scroll', estilos.tarjeta)
   ok(estilos.raizX === 'none', 'con un diálogo abierto el gesto lateral no llega al navegador', estilos.raizX)
+  // Lo de dentro NO la lleva: un botón que recorta su texto cuenta como algo con
+  // scroll propio y, con la propiedad puesta, se quedaba el gesto. Luis no podía
+  // deslizar la pasada con rúbrica con el cursor sobre los niveles.
+  const dentroLibres = await p.evaluate(() =>
+    [...document.querySelectorAll('.modal-overlay > * *')].filter(e => getComputedStyle(e).overscrollBehaviorY !== 'auto').length)
+  ok(dentroLibres === 0, 'nada de dentro de la tarjeta retiene el gesto', `${dentroLibres} elementos`)
 
   console.log('\n4. Pulsar fuera sigue cerrando')
   await abrir()

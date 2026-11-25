@@ -154,9 +154,13 @@ input:focus, select:focus, textarea:focus {
 }
 /* El scroll de un diálogo no sale de él. Al llegar al final, el gesto pasaba
    a la página de detrás y, con dos dedos en el trackpad, al navegador
-   («página anterior»). La propiedad solo actúa en lo que tiene scroll, así
-   que ponerla en todo lo de dentro no cambia nada más. */
-.modal-overlay, .modal-overlay * { overscroll-behavior: contain; }
+   («página anterior»). Va SOLO en el velo y en la tarjeta, no en todo lo de
+   dentro: un botón que recorta su texto (`overflow: hidden`) cuenta para el
+   navegador como algo con scroll propio, y con la propiedad puesta se quedaba
+   el gesto. Luis no podía deslizar la pasada con rúbrica con el cursor sobre
+   los niveles (25/11/2026). Lo que se desplace más adentro pasa el gesto a la
+   tarjeta, y de la página se encarga la regla de `html`. */
+.modal-overlay, .modal-overlay > * { overscroll-behavior: contain; }
 html:has(.modal-overlay), html:has(.modal-overlay) body { overscroll-behavior: none; }
 .modal-close {
   background: none;
