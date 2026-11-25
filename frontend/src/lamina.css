@@ -61,7 +61,10 @@
   /* La cabecera del menú y la barra superior miden lo mismo: su filete es continuo */
   --alto-barra: 56px;
   /* Zonas del sistema (hora, batería, indicador de inicio) */
-  --seg-arriba: env(safe-area-inset-top, 0px);
+  /* Arriba, la zona segura y un poco más (hasta 12 px, y nada si no hay zona
+     segura): iPadOS 26 difumina lo que queda justo bajo la hora y la batería,
+     y la franja de mundos, pegada al borde de la zona, salía emborronada. */
+  --seg-arriba: calc(env(safe-area-inset-top, 0px) + min(env(safe-area-inset-top, 0px) * 0.5, 12px));
   --seg-abajo:  env(safe-area-inset-bottom, 0px);
 }
 
