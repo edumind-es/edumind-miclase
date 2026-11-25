@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.0.2] — 2026-11-25
+
 ### Arreglado
 - **En un diálogo no se podía deslizar con el cursor encima de algunos
   botones** (los niveles de la pasada con rúbrica, por ejemplo): el gesto se
