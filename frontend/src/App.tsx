@@ -26,6 +26,7 @@ import HubAreas from '@/pages/Areas/HubAreas'
 import ElegirIdioma, { SelectorIdioma } from '@/components/ElegirIdioma'
 import { useT, type Clave } from '@/i18n'
 import { VERSION } from '@/version'
+import { fijarAspecto } from '@/aspecto'
 import { useAspecto } from '@/useAspecto'
 import MarcoLamina from '@/components/marco/MarcoLamina'
 import { useDatosSensibles } from '@/db/datosSensibles'
@@ -245,6 +246,16 @@ function Layout() {
             </div>
           )}
           <SelectorIdioma />
+          {/* Desde la 2.0.0 el aspecto por defecto es Lámina: quien eligió el de siempre vuelve desde aquí */}
+          <button
+            type="button"
+            data-aspecto-elegir="lamina"
+            onClick={() => fijarAspecto('lamina')}
+            className="sidebar-panel-texto"
+            style={{ width: '100%', minHeight: 44, background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: 12, cursor: 'pointer', textAlign: 'left', padding: '4px 0', textDecoration: 'underline' }}
+          >
+            {t('menu.aspectoLamina')}
+          </button>
         </div>
 
         <div className="sidebar-pie">

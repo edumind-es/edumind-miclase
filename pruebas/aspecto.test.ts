@@ -11,10 +11,11 @@ const ok = (cond: boolean, msg: string, extra = '') => {
   if (!cond) fallos++
 }
 
-console.log('\n── Apagado salvo que se pida ──')
-ok(normalizarAspecto(null) === 'clasico', 'un aparato que no ha elegido ve el aspecto de siempre')
-ok(normalizarAspecto('lamina') === 'lamina', '«lamina» enciende Lámina')
-ok(normalizarAspecto('Lamina') === 'clasico' && normalizarAspecto('') === 'clasico' && normalizarAspecto(1) === 'clasico', 'cualquier otra cosa es el aspecto de siempre')
+console.log('\n── Lámina por defecto desde la 2.0.0 ──')
+ok(normalizarAspecto(null) === 'lamina', 'un aparato que no ha elegido ve Lámina')
+ok(normalizarAspecto('clasico') === 'clasico', '«clasico» deja el aspecto de siempre')
+ok(normalizarAspecto('Lamina') === 'lamina' && normalizarAspecto('') === 'lamina' && normalizarAspecto(1) === 'lamina', 'cualquier otra cosa es el aspecto por defecto')
+ok(normalizarAspecto(null, 'clasico') === 'clasico', 'el aspecto por defecto se puede pasar')
 
 console.log('\n── Lo que pide la dirección ──')
 ok(aspectoDeUrl('?aspecto=lamina') === 'lamina', '?aspecto=lamina lo enciende')

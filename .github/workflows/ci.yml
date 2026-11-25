@@ -72,20 +72,19 @@ jobs:
           path: /tmp/miclase-pruebas-*/tiros/
           if-no-files-found: ignore
 
-  # La misma tanda con el aspecto Lámina puesto por defecto (VITE_ASPECTO).
-  # Lámina va apagada hasta la 2.0.0, así que la tanda de arriba no la mira:
-  # sin esto, un cambio podía romperla sin que nadie lo viera hasta el día de
-  # encenderla. El 24·11·2026 pasaban las 103 suites con Lámina; esto lo guarda.
+  # La misma tanda con el aspecto de siempre puesto por defecto (VITE_ASPECTO).
+  # Desde la 2.0.0 la tanda de arriba pasa con Lámina, que es lo que ve todo el
+  # mundo; el aspecto de siempre se conserva para quien lo elija, y sin esto un
+  # cambio podía romperlo sin que nadie lo viera.
   #
   # Va aparte y NO es un check obligatorio de main (el obligatorio es
   # «pruebas», y por eso no se hace con una matriz, que le cambiaría el
-  # nombre): si falla se ve en rojo en el PR, pero no bloquea un arreglo
-  # urgente del aspecto de siempre, que es el que está en uso.
-  pruebas-lamina:
+  # nombre): si falla se ve en rojo en el PR, pero no bloquea.
+  pruebas-clasico:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      VITE_ASPECTO: lamina
+      VITE_ASPECTO: clasico
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -107,13 +106,13 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Preparar la base de datos de pruebas
         run: npm run seed
-      - name: Pruebas con Lámina por defecto
+      - name: Pruebas con el aspecto de siempre por defecto
         run: npm test
       - name: Guardar capturas si ha fallado
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: capturas-lamina
+          name: capturas-clasico
           path: /tmp/miclase-pruebas-*/tiros/
           if-no-files-found: ignore
 

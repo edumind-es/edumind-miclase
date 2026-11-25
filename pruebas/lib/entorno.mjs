@@ -231,7 +231,7 @@ export async function irAlAlumnado(p) {
 // ── Los dos marcos ───────────────────────────────────────────────────────
 // Mientras conviven el marco de siempre y el de Lámina, estas ayudas hacen lo
 // mismo en los dos, para que una prueba valga con cualquiera (se pasa la tanda
-// entera con Lámina con `VITE_ASPECTO=lamina npm test`).
+// entera con el de siempre con `VITE_ASPECTO=clasico npm test`).
 
 /** ¿Está montado el marco de Lámina? */
 export async function enLamina(p) {

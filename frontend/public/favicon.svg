@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EDUmind MiClase">
-  <rect width="512" height="512" rx="112" fill="#0f2d4a"/>
+  <rect width="512" height="512" rx="112" fill="#f4f2ec"/>
   <g>
-    <circle cx="256.0" cy="129.2" r="44.2" fill="#e8613f"/>
-    <circle cx="389.2" cy="226.0" r="44.2" fill="#e8a92e"/>
-    <circle cx="338.3" cy="382.6" r="44.2" fill="#6ea94a"/>
-    <circle cx="173.7" cy="382.6" r="44.2" fill="#3f7d99"/>
-    <circle cx="122.8" cy="226.0" r="44.2" fill="#5b9aa6"/>
-    <circle cx="256" cy="269.3" r="38.7" fill="#e9e6dd"/>
+    <circle cx="256.0" cy="129.2" r="44.2" fill="#c05f3c"/>
+    <circle cx="389.2" cy="226.0" r="44.2" fill="#c19a2e"/>
+    <circle cx="338.3" cy="382.6" r="44.2" fill="#7ba24f"/>
+    <circle cx="173.7" cy="382.6" r="44.2" fill="#6c8fb3"/>
+    <circle cx="122.8" cy="226.0" r="44.2" fill="#4a5f68"/>
+    <circle cx="256" cy="269.3" r="38.7" fill="#17181a"/>
   </g>
 </svg>
