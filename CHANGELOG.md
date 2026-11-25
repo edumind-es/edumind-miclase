@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.0.1] — 2026-11-25
+
 ### Arreglado
 - **La cámara de «Exámenes y pruebas» se quedaba en negro en el iPad**, con
   «Buscando código QR…» puesto y sin leer nada: la cámara se conectaba antes
