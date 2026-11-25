@@ -13,6 +13,13 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.0.2] — 2026-11-25
+
+### Arreglado
+- **En un diálogo no se podía deslizar con el cursor encima de algunos
+  botones** (los niveles de la pasada con rúbrica, por ejemplo): el gesto se
+  quedaba en el botón. Ahora desliza el diálogo esté donde esté el cursor.
+
 ## [2.0.1] — 2026-11-25
 
 ### Arreglado
