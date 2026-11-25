@@ -13,13 +13,23 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
-### Añadido
-- Con Lámina encendida, la marca del menú lleva los Cinco Mundos desaturados
-  de la skill y el círculo central en tinta.
-- `scripts/generar_iconos.py --lamina` genera el icono de la app y la pantalla
-  de arranque en papel y tinta. No se aplican todavía: el icono lo ve todo el
-  mundo, así que cambia el día en que Lámina se encienda para todos.
-  `MAQUETA_LAMINA_ICONO.png` es la vista previa.
+## [2.0.0] — 2026-11-25
+
+### Cambiado
+- **El aspecto de MiClase es EDUmind-Lámina para todos**: papel, tinta y
+  filete, marco nuevo con menú plegable y barra inferior en el móvil, hub de
+  áreas para calificar y para los exámenes, sigla y color por área, notas en
+  filete o relleno e iconos de línea en vez de emoji. Luis la probó en el iPad
+  el 25/11/2026.
+- **El aspecto de siempre se conserva**: «Acerca de» (la fila de la versión,
+  al pie del menú) → Aspecto → «El de siempre». Se vuelve con «Cambiar al
+  aspecto Lámina», al pie del menú. Es una preferencia de cada aparato.
+- **Icono, pantalla de arranque y color de la barra del sistema nuevos**: el
+  corro de clase sobre papel, con los Cinco Mundos desaturados y la clase en
+  tinta. Una app ya instalada puede tardar en enseñar el icono nuevo, o pedir
+  reinstalarla: depende del sistema.
+- La tanda de pruebas pasa con Lámina; GitHub pasa además la del aspecto de
+  siempre (`VITE_ASPECTO=clasico`).
 
 ## [1.14.0] — 2026-11-24
 

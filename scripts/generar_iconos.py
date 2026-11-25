@@ -161,9 +161,8 @@ def identidad_lamina() -> None:
     La identidad con el aspecto Lámina: papel claro de fondo, los Cinco Mundos
     desaturados de la skill y el círculo central —la clase— en tinta.
 
-    El icono lo ve todo el mundo, tenga el aspecto que tenga, así que no se
-    cambia hasta el día en que Lámina se encienda para todos (la 2.0.0). Hasta
-    entonces esto solo sirve para verlo: `--lamina --salida <carpeta>`.
+    Es la identidad de la app desde la 2.0.0 (25/11/2026) y lo que el guion
+    genera por defecto; `--clasico` da los iconos azules de antes.
     """
     global FONDO, PAPEL, MUNDOS, MUNDOS_SOBRE_OSCURO
     FONDO = "#f4f2ec"
@@ -176,10 +175,11 @@ def main() -> None:
     global RAIZ, PUBLICO, IOS, ANDROID
     import argparse
     args = argparse.ArgumentParser(description="Genera los iconos de EDUmind MiClase.")
-    args.add_argument("--lamina", action="store_true", help="con la identidad del aspecto Lámina (papel y tinta)")
+    args.add_argument("--lamina", action="store_true", help="la identidad de Lámina (papel y tinta); es la de por defecto desde la 2.0.0")
+    args.add_argument("--clasico", action="store_true", help="la identidad azul anterior a la 2.0.0")
     args.add_argument("--salida", type=Path, help="escribe en esta carpeta en vez de en el proyecto (para verlos sin tocar nada)")
     opciones = args.parse_args()
-    if opciones.lamina:
+    if not opciones.clasico:
         identidad_lamina()
     if opciones.salida:
         RAIZ = opciones.salida.resolve()

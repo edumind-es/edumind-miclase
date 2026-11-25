@@ -1,18 +1,16 @@
 /**
- * El aspecto de la interfaz: el de siempre («clasico») o EDUmind-Lámina.
+ * El aspecto de la interfaz: EDUmind-Lámina (el de la 2.0.0, por defecto) o el
+ * de siempre («clasico»), que se conserva para quien lo prefiera.
  *
- * Lámina se construye por fases y no se enseña a nadie hasta que esté entera
- * (versión 2.0.0): mientras tanto va apagada, y se enciende aparato a aparato
- * para probarla. Es una preferencia del aparato, como la vista del Calificador:
- * vive en `localStorage` y no se sincroniza.
+ * Es una preferencia del aparato, como la vista del Calificador: vive en
+ * `localStorage` y no se sincroniza.
  *
  * Todo lo que cambia con el aspecto cuelga de `<html data-aspecto="lamina">`
- * (lamina.css). Con el atributo ausente, la app es exactamente la de antes.
+ * (lamina.css). Con el atributo ausente, la app es la de antes de la 2.0.0.
  *
- * Se enciende por la dirección: `?aspecto=lamina` (y `?aspecto=clasico` lo
- * apaga). Queda recordado. Con Lámina encendida, «Acerca de» ofrece volver al
- * aspecto de siempre; al revés no hay botón todavía, a propósito: nadie debe
- * encontrárselo sin buscarlo.
+ * Se cambia en «Acerca de» (con Lámina) o en el pie del menú (con el de
+ * siempre), y también por la dirección: `?aspecto=lamina` y `?aspecto=clasico`.
+ * Queda recordado.
  */
 export type Aspecto = 'clasico' | 'lamina'
 
@@ -23,13 +21,13 @@ export const EVENTO_ASPECTO = 'miclase:aspecto'
 export const COLOR_SISTEMA: Record<Aspecto, string> = { clasico: '#0f2d4a', lamina: '#f4f2ec' }
 
 /**
- * El aspecto de un aparato que no ha elegido ninguno. Hoy, el de siempre.
- * Pasar a Lámina para todos —la versión 2.0.0— es cambiar este valor; se
- * puede adelantar al compilar con `VITE_ASPECTO=lamina`, que es como se pasa
- * la tanda de pruebas entera con Lámina para saber qué falta.
+ * El aspecto de un aparato que no ha elegido ninguno: Lámina desde la 2.0.0
+ * (25/11/2026, tras probarla Luis en el iPad). `VITE_ASPECTO=clasico` al
+ * compilar lo deja en el de siempre, que es como se pasa la tanda de pruebas
+ * entera con el aspecto antiguo mientras se conserve.
  */
 const entorno = (import.meta as { env?: Record<string, string | undefined> }).env
-export const ASPECTO_POR_DEFECTO: Aspecto = entorno?.VITE_ASPECTO === 'lamina' ? 'lamina' : 'clasico'
+export const ASPECTO_POR_DEFECTO: Aspecto = entorno?.VITE_ASPECTO === 'clasico' ? 'clasico' : 'lamina'
 
 /** Lo que el aparato guardó, o el aspecto por defecto si no guardó nada (o guardó otra cosa). */
 export const normalizarAspecto = (v: unknown, defecto: Aspecto = ASPECTO_POR_DEFECTO): Aspecto =>
@@ -50,7 +48,7 @@ export function sinAspecto(busqueda: string): string {
 }
 
 export function aspectoAhora(): Aspecto {
-  try { return normalizarAspecto(localStorage.getItem(CLAVE_ASPECTO)) } catch { return 'clasico' }
+  try { return normalizarAspecto(localStorage.getItem(CLAVE_ASPECTO)) } catch { return ASPECTO_POR_DEFECTO }
 }
 
 function marcarDocumento(a: Aspecto) {

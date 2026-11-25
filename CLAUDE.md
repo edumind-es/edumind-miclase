@@ -1713,6 +1713,18 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **Desde la 2.0.0 (25/11/2026) el aspecto por defecto es Lámina**, tras
+  probarla Luis en el iPad. Manda sobre lo que las notas siguientes dicen de
+  «apagado hasta la 2.0.0», «Lámina encendida» como excepción o
+  `VITE_ASPECTO=lamina`: `ASPECTO_POR_DEFECTO` es `'lamina'` y
+  `VITE_ASPECTO=clasico` compila con el de siempre. `npm test` pasa con
+  Lámina y el CI pasa además `pruebas-clasico` (no obligatorio). El aspecto
+  de siempre se CONSERVA —`Layout` de `App.tsx` y todo lo que no cuelga de
+  `:root[data-aspecto="lamina"]`— para quien lo elija: «Acerca de» → «El de
+  siempre», y se vuelve con `[data-aspecto-elegir="lamina"]` al pie del menú
+  clásico o `?aspecto=lamina`. Retirarlo es otra decisión de Luis, no tomada.
+  Icono, splash, favicon y `theme_color` son ya los de Lámina:
+  `generar_iconos.py` los da por defecto y `--clasico` da los azules.
 - **El aspecto Lámina va tras un interruptor apagado hasta la 2.0.0**
   (`src/aspecto.ts`, `src/lamina.css`; plan en `LAMINA_APP_ARQUITECTURA.md`,
   PR 134). Es preferencia del aparato (`miclase.aspecto`, sin sincronizar):
