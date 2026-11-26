@@ -18,6 +18,11 @@
  *     para que una foto con sombra no cuente como todo marcado. Una pregunta
  *     con dos burbujas oscuras, o una a medias, se devuelve como dudosa: el
  *     docente decide, el escáner no adivina.
+ *  5. La geometría dice dónde DEBERÍA estar cada burbuja, pero el papel se
+ *     comba y la lente deforma: en una foto real la tinta cae a uno o dos
+ *     milímetros de ahí, y medir al lado da media oscuridad (todo «dudoso»).
+ *     Por eso antes de medir se busca la tinta alrededor de cada pregunta
+ *     (`DESFASE_MAXIMO`) y se mide donde está.
  *
  * Puro salvo jsQR. Se prueba en `pruebas/hoja-escaner.test.mjs` con la hoja
  * que imprime la propia app, fotografiada de mentira (girada y sobre fondo).
@@ -220,6 +225,8 @@ export type LecturaPregunta = {
   dudosa: boolean
   /** Oscuridad relativa de cada opción, 0 (papel) a 1 (tinta). */
   oscuridad: number[]
+  /** Lo que se ha corrido la medida respecto a la geometría, en mm de la hoja: ahí están sus burbujas en la foto. */
+  desfase: Punto
 }
 
 /** Umbrales de oscuridad relativa: marcada a partir de 0,4; entre 0,22 y 0,4, dudosa. */
@@ -227,10 +234,9 @@ export const UMBRAL_MARCADA = 0.4
 export const UMBRAL_DUDA = 0.22
 
 /** Oscuridad relativa de una burbuja: su interior frente al papel de alrededor. */
-function oscuridadBurbuja(g: Gris, H: Homografia, cx: number, cy: number): number {
+function oscuridadBurbuja(g: Gris, H: Homografia, cx: number, cy: number, paso = 0.3): number {
   const r = BURBUJA.diametro / 2
   let dentro = 0, nDentro = 0, fuera = 0, nFuera = 0
-  const paso = 0.3
   for (let dy = -r * 1.8; dy <= r * 1.8; dy += paso) for (let dx = -r * 1.8; dx <= r * 1.8; dx += paso) {
     const d = Math.hypot(dx, dy)
     if (d <= r * 0.72) { dentro += muestra(g, aplicar(H, { x: cx + dx, y: cy + dy })); nDentro++ }
@@ -242,13 +248,67 @@ function oscuridadBurbuja(g: Gris, H: Homografia, cx: number, cy: number): numbe
   return Math.max(0, Math.min(1, 1 - tinta / papel))
 }
 
+/**
+ * Hasta dónde se busca una burbuja alrededor de donde la pone la geometría,
+ * en mm. La burbuja de al lado está a 8 mm: con 2,5 la zona que se mide no
+ * llega a su tinta.
+ */
+export const DESFASE_MAXIMO = 2.5
+const PASO_DESFASE = 0.5
+
+/**
+ * Dónde está la tinta de una pregunta: el corrimiento, común a sus burbujas,
+ * con el que la más oscura da más. Una burbuja rellena es más ancha que lo
+ * que se mide, así que el máximo es una meseta: se devuelve su centro, que es
+ * el de la marca. `pico` es esa oscuridad máxima: con poca, no había tinta
+ * que buscar y el corrimiento no significa nada.
+ */
+function buscarTinta(g: Gris, H: Homografia, centros: { cx: number; cy: number }[]): { desfase: Punto; pico: number } {
+  const probados: { dx: number; dy: number; v: number }[] = []
+  let pico = 0
+  for (let dy = -DESFASE_MAXIMO; dy <= DESFASE_MAXIMO + 1e-9; dy += PASO_DESFASE) {
+    for (let dx = -DESFASE_MAXIMO; dx <= DESFASE_MAXIMO + 1e-9; dx += PASO_DESFASE) {
+      let v = 0
+      for (const c of centros) v = Math.max(v, oscuridadBurbuja(g, H, c.cx + dx, c.cy + dy, 0.45))
+      probados.push({ dx, dy, v })
+      if (v > pico) pico = v
+    }
+  }
+  let sx = 0, sy = 0, n = 0
+  for (const p of probados) if (p.v >= pico * 0.93) { sx += p.dx; sy += p.dy; n++ }
+  return { desfase: n ? { x: sx / n, y: sy / n } : { x: 0, y: 0 }, pico }
+}
+
 export function leerBurbujas(g: Gris, H: Homografia, nPreguntas: number, nOpciones: number): LecturaPregunta[] {
+  const centros = Array.from({ length: nPreguntas }, (_, i) => Array.from({ length: nOpciones }, (_, j) => centroBurbuja(i, j)))
+  // Las preguntas con tinta dicen dónde cae su fila en la foto. Las demás
+  // —en blanco, o con una marca floja— se leen con el corrimiento de las dos
+  // más cercanas que sí la tienen: la deformación cambia poco de una fila a
+  // la siguiente. Buscarles el máximo a ellas mismas sería dejarles encontrar
+  // el número de la pregunta o el borde del círculo.
+  const tinta = centros.map(c => buscarTinta(g, H, c))
+  let anclas = tinta.map((t, i) => ({ ...t, i })).filter(t => t.pico >= UMBRAL_MARCADA)
+  // Una hoja entera a lápiz flojo: mejor encontrar sus marcas y darlas por
+  // dudosas que leerla en blanco sin decir nada.
+  if (!anclas.length) anclas = tinta.map((t, i) => ({ ...t, i })).filter(t => t.pico >= UMBRAL_DUDA)
+  const propias = new Map(anclas.map(a => [a.i, a.desfase]))
+  const desfaseDe = (i: number): Punto => {
+    const suyo = propias.get(i)
+    if (suyo) return suyo
+    if (!anclas.length) return { x: 0, y: 0 }
+    const aqui = centros[i][0]
+    const cerca = [...anclas]
+      .sort((a, b) => Math.hypot(centros[a.i][0].cx - aqui.cx, centros[a.i][0].cy - aqui.cy) - Math.hypot(centros[b.i][0].cx - aqui.cx, centros[b.i][0].cy - aqui.cy))
+      .slice(0, 2)
+    return { x: cerca.reduce((s, a) => s + a.desfase.x, 0) / cerca.length, y: cerca.reduce((s, a) => s + a.desfase.y, 0) / cerca.length }
+  }
+
   const salida: LecturaPregunta[] = []
   for (let i = 0; i < nPreguntas; i++) {
+    const d = desfaseDe(i)
     const oscuridad: number[] = []
-    for (let j = 0; j < nOpciones; j++) {
-      const c = centroBurbuja(i, j)
-      oscuridad.push(Math.round(oscuridadBurbuja(g, H, c.cx, c.cy) * 100) / 100)
+    for (const c of centros[i]) {
+      oscuridad.push(Math.round(oscuridadBurbuja(g, H, c.cx + d.x, c.cy + d.y) * 100) / 100)
     }
     const orden = oscuridad.map((o, j) => ({ o, j })).sort((a, b) => b.o - a.o)
     const [primera, segunda] = orden
@@ -262,7 +322,7 @@ export function leerBurbujas(g: Gris, H: Homografia, nPreguntas: number, nOpcion
       marcada = primera.j
       dudosa = true
     }
-    salida.push({ pregunta: i, marcada, dudosa, oscuridad })
+    salida.push({ pregunta: i, marcada, dudosa, oscuridad, desfase: { x: Math.round(d.x * 100) / 100, y: Math.round(d.y * 100) / 100 } })
   }
   return salida
 }

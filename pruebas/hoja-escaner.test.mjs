@@ -8,6 +8,11 @@
  * que encuentre las marcas con la hoja torcida y del revés, que lea el QR,
  * que acierte las burbujas limpias, que marque como dudosas las que lo son
  * y que una foto sin hoja no invente nada.
+ *
+ * Y lo que pasa con una foto de verdad: el papel se comba y la lente deforma,
+ * así que la parrilla cae a milímetro y medio de donde dicen las marcas. El
+ * lector tiene que encontrar la tinta ahí y no dar por dudoso lo que está
+ * bien relleno (a Luis le salían 13 dudosas de 15, nov 2026).
  */
 import { createRequire } from 'node:module'
 import { navegadorChromium } from './lib/entorno.mjs'
@@ -46,10 +51,21 @@ try {
     pinta(A_MEDIAS.pregunta, A_MEDIAS.opcion, { background: 'radial-gradient(circle, #333 0 1.2mm, transparent 1.3mm)' })
   }, { K, RELLENAS, TACHADA, DOBLE, A_MEDIAS })
   const captura = (await p.screenshot({ fullPage: true })).toString('base64')
+  // La misma hoja con la parrilla corrida respecto a las marcas de las
+  // esquinas, y cada fila un poco más que la anterior: lo que hacen el papel
+  // combado y la lente. Números y letras van con sus burbujas, como en el papel.
+  const CORRIDA = { x: -1.6, y0: 0.8, porFila: -0.07 }
+  await p.evaluate(({ K, CORRIDA }) => {
+    const corre = (el, fila) => { el.style.transform = `translate(${CORRIDA.x}mm, ${(CORRIDA.y0 + CORRIDA.porFila * fila).toFixed(2)}mm)` }
+    document.querySelectorAll('.burbuja').forEach((b, i) => corre(b, Math.floor(i / K) % 25))
+    document.querySelectorAll('.numero').forEach((n, i) => corre(n, i % 25))
+    document.querySelectorAll('.letra').forEach(l => corre(l, 0))
+  }, { K, CORRIDA })
+  const capturaCorrida = (await p.screenshot({ fullPage: true })).toString('base64')
 
   // La «foto»: la hoja girada y en perspectiva sobre un escritorio oscuro, y el lector encima.
   await p.setContent(`<!doctype html><html><body><script>${await (await import('node:fs/promises')).readFile(BUNDLE, 'utf8')}</script></body></html>`)
-  const fotografiar = (opciones) => p.evaluate(async ({ captura, opciones }) => {
+  const fotografiar = (opciones, deCual = captura) => p.evaluate(async ({ captura, opciones }) => {
     const img = new Image()
     img.src = 'data:image/png;base64,' + captura
     await img.decode()
@@ -68,28 +84,51 @@ try {
     const t0 = performance.now()
     const r = LectorHoja.leerHoja(gris)
     return { r, ms: Math.round(performance.now() - t0) }
-  }, { captura, opciones })
+  }, { captura: deCual, opciones })
+
+  /** Lo que tiene que salir de la hoja rellena, esté como esté fotografiada. */
+  const comprobar = (r, ms) => {
+    ok(r.estado === 'leida', 'se lee la hoja', r.estado)
+    if (r.estado !== 'leida') return null
+    const l = r.lectura
+    ok(l.payload.prueba_id === 4242 && l.payload.alumno_id === 99 && l.payload.nPreguntas === N && l.payload.nOpciones === K, 'el QR dice prueba, alumno y parrilla', JSON.stringify(l.payload))
+    const errores = []
+    for (const q of l.preguntas) {
+      const n = q.pregunta + 1
+      const esperada = RELLENAS[n]?.[0] ?? null
+      if ([TACHADA.pregunta, DOBLE.pregunta, A_MEDIAS.pregunta].includes(n)) continue
+      if (q.marcada !== esperada || q.dudosa) errores.push(`${n}: ${q.marcada} (esperada ${esperada})${q.dudosa ? ' dudosa' : ''} ${q.oscuridad.join('/')}`)
+    }
+    ok(errores.length === 0, 'las burbujas limpias y las vacías se leen bien', errores.join(' · '))
+    const t = l.preguntas[TACHADA.pregunta - 1], d = l.preguntas[DOBLE.pregunta - 1], m = l.preguntas[A_MEDIAS.pregunta - 1]
+    ok(t.dudosa, 'tachada y corregida: dudosa', t.oscuridad.join('/'))
+    ok(d.dudosa, 'dos rellenas: dudosa', d.oscuridad.join('/'))
+    ok(m.dudosa && m.marcada === A_MEDIAS.opcion, 'rellena a medias: dudosa, pero propone la opción', m.oscuridad.join('/'))
+    ok(ms < 3000, `tarda lo razonable (${ms} ms)`)
+    return l
+  }
 
   console.log('\n1. Hoja derecha, un poco girada, sobre fondo oscuro')
   {
     const { r, ms } = await fotografiar({ ancho: 1400, alto: 1900, fondo: '#3a3a3a', giro: 4, sesgo: 0.03, escala: 0.78 })
-    ok(r.estado === 'leida', 'se lee la hoja', r.estado)
-    if (r.estado === 'leida') {
-      const l = r.lectura
-      ok(l.payload.prueba_id === 4242 && l.payload.alumno_id === 99 && l.payload.nPreguntas === N && l.payload.nOpciones === K, 'el QR dice prueba, alumno y parrilla', JSON.stringify(l.payload))
-      const errores = []
-      for (const q of l.preguntas) {
-        const n = q.pregunta + 1
-        const esperada = RELLENAS[n]?.[0] ?? null
-        if ([TACHADA.pregunta, DOBLE.pregunta, A_MEDIAS.pregunta].includes(n)) continue
-        if (q.marcada !== esperada || q.dudosa) errores.push(`${n}: ${q.marcada} (esperada ${esperada})${q.dudosa ? ' dudosa' : ''} ${q.oscuridad.join('/')}`)
-      }
-      ok(errores.length === 0, 'las burbujas limpias y las vacías se leen bien', errores.join(' · '))
-      const t = l.preguntas[TACHADA.pregunta - 1], d = l.preguntas[DOBLE.pregunta - 1], m = l.preguntas[A_MEDIAS.pregunta - 1]
-      ok(t.dudosa, 'tachada y corregida: dudosa', t.oscuridad.join('/'))
-      ok(d.dudosa, 'dos rellenas: dudosa', d.oscuridad.join('/'))
-      ok(m.dudosa && m.marcada === A_MEDIAS.opcion, 'rellena a medias: dudosa, pero propone la opción', m.oscuridad.join('/'))
-      ok(ms < 3000, `tarda lo razonable (${ms} ms)`)
+    const l = comprobar(r, ms)
+    if (l) {
+      const corridas = l.preguntas.filter(q => Math.hypot(q.desfase.x, q.desfase.y) > 0.6).map(q => `${q.pregunta + 1}: ${q.desfase.x}, ${q.desfase.y}`)
+      ok(corridas.length === 0, 'con la parrilla en su sitio, se mide en su sitio', corridas.join(' · '))
+    }
+  }
+
+  console.log('\n1b. La parrilla a milímetro y medio de donde dicen las marcas (papel combado, lente)')
+  {
+    const { r, ms } = await fotografiar({ ancho: 1400, alto: 1900, fondo: '#3a3a3a', giro: 4, sesgo: 0.03, escala: 0.78 }, capturaCorrida)
+    const l = comprobar(r, ms)
+    if (l) {
+      const limpias = Object.keys(RELLENAS).map(Number).map(n => l.preguntas[n - 1])
+      const flojas = limpias.filter(q => Math.max(...q.oscuridad) < 0.6).map(q => `${q.pregunta + 1}: ${Math.max(...q.oscuridad)}`)
+      ok(flojas.length === 0, 'las rellenas se miden donde está la tinta, no al lado', flojas.join(' · '))
+      const q1 = l.preguntas[0], q25 = l.preguntas[24]
+      ok(Math.abs(q1.desfase.x - CORRIDA.x) < 0.5 && Math.abs(q1.desfase.y - CORRIDA.y0) < 0.5, 'la 1 dice cuánto se ha corrido', `${q1.desfase.x}, ${q1.desfase.y}`)
+      ok(Math.abs(q25.desfase.y - (CORRIDA.y0 + CORRIDA.porFila * 24)) < 0.5, 'y la 25, que se ha corrido distinto', `${q25.desfase.x}, ${q25.desfase.y}`)
     }
   }
 
