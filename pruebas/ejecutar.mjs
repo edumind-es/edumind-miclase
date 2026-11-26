@@ -266,6 +266,7 @@ async function principal() {
     await suite('trinquete de Lámina: lo que se retira no vuelve', 'node', ['pruebas/trinquete.test.mjs'])
     await suite('emoji de Lámina: todos tienen icono de línea', 'node', ['pruebas/emoji-lamina.test.mjs'])
     await suite('versión: un número, con su entrada en el CHANGELOG', 'node', ['pruebas/version.test.mjs'])
+    await suite('versión descargable: página, lanzadores y guion coinciden', 'node', ['pruebas/descargable.test.mjs'])
   }
 
   // ── Con navegador, pero sin servidor ───────────────────────────────
@@ -403,6 +404,8 @@ async function principal() {
   if (soloProduccion) {
     console.log('Contra producción')
     await suite('emparejamiento en producción', 'node', ['pruebas/emparejar-produccion.test.mjs'])
+    // El .zip de «Instalar MiClase» vive en GitHub: que responda y sea de esta versión
+    await suite('versión descargable publicada en GitHub', 'bash', ['scripts/empaquetar_descargable.sh', '--comprobar'])
   }
 }
 

@@ -25,6 +25,7 @@ CONSERVAR=5
 rojo()  { printf '\033[31m%s\033[0m\n' "$*"; }
 verde() { printf '\033[32m%s\033[0m\n' "$*"; }
 gris()  { printf '\033[90m%s\033[0m\n' "$*"; }
+amarillo() { printf '\033[33m%s\033[0m\n' "$*"; }
 
 [ "$(id -u)" -eq 0 ] && { rojo "No lo lances como root."; exit 1; }
 
@@ -154,6 +155,16 @@ else
   "$RAIZ/desplegar.sh" --volver
   rojo "Producción ha vuelto a la versión anterior. Revisa antes de reintentar."
   exit 1
+fi
+
+# ── La versión descargable ──────────────────────────────────────────────
+# El .zip de «Instalar MiClase» vive en GitHub y se publica aparte, con la
+# etiqueta ya subida. Aquí solo se avisa si no es el de esta versión: no para
+# el despliegue. Estuvo seis versiones sin publicarse porque nada lo decía.
+if ! "$RAIZ/scripts/empaquetar_descargable.sh" --comprobar >/dev/null 2>&1; then
+  amarillo "Falta publicar la versión descargable de la $numero (la de «Instalar MiClase»):"
+  amarillo "  git push origin $etiqueta"
+  amarillo "  ./scripts/empaquetar_descargable.sh --publicar"
 fi
 
 # ── Limpiar versiones viejas, conservando la viva ───────────────────────

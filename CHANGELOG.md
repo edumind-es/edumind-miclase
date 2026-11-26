@@ -13,6 +13,13 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Arreglado
+- **«Descargar MiClase (.zip)», en Instalar MiClase, llevaba a una página «no
+  encontrado» de GitHub**: la versión descargable estaba hecha pero nunca se
+  había publicado. Ahora se publica con cada versión, con el mismo número que
+  la app, y se prueba con su lanzador antes de subirla. El despliegue avisa si
+  falta y `npm run test:prod` lo comprueba.
+
 ## [2.0.3] — 2026-11-26
 
 ### Arreglado
