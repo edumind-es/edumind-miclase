@@ -157,7 +157,8 @@ compilar (pie del menú) y en el HTML (`<meta name="miclase-version">`).
 - **Al desplegar**: `desplegar.sh` comprueba que la web servida dice ese
   número y pone la etiqueta `vX.Y.Z`. Si la etiqueta ya existe en otro commit,
   no publica: hay que subir la versión. Volver a desplegar el mismo commit sí
-  se puede. La etiqueta se sube a GitHub a mano: `git push origin vX.Y.Z`.
+  se puede. La etiqueta se sube a GitHub a mano: `git push origin vX.Y.Z`, y
+  después se publica la versión descargable (ver «Después de desplegar»).
 - **Regla**: mayor = cambia cómo se usa la app o exige actualizar todos los
   aparatos; menor = función nueva; parche = arreglo.
 - **iOS**: «Version» y «Build» se suben en Xcode (el `project.pbxproj` no se
@@ -194,6 +195,31 @@ Qué hace, y por qué así:
 
 `frontend/dist` es un enlace simbólico a la versión publicada. nginx lo
 resuelve en cada petición, así que el cambio no necesita recargar nginx.
+
+### Después de desplegar: la versión descargable
+
+La página «Instalar MiClase» ofrece un .zip con la app y sus lanzadores. Ese
+fichero **no lo sirve este servidor**: vive en GitHub
+(`releases/latest/download/miclase.zip`), para que la descarga siga viva
+aunque EDUmind cierre. Se publica aparte, con la versión ya desplegada:
+
+```bash
+git push origin vX.Y.Z                            # la etiqueta que puso desplegar.sh
+./scripts/empaquetar_descargable.sh --publicar    # compila, prueba el .zip y lo sube
+./scripts/empaquetar_descargable.sh --comprobar   # ¿responde la descarga y es esta versión?
+```
+
+- Lleva **el mismo número que la app** y se publica sobre su etiqueta
+  `vX.Y.Z`; el guion no crea etiquetas. Se niega si la etiqueta no está en
+  GitHub o si lo que hay en la carpeta no es esa versión.
+- Antes de subir **prueba el paquete con su propio lanzador** (portada, una
+  ruta, manifiesto, service worker, currículo y buzón cerrado).
+- Volver a lanzarlo con la misma versión sustituye el .zip, no duplica nada.
+- `desplegar.sh` avisa al terminar si la descargable publicada no es la que
+  acaba de desplegar, y `npm run test:prod` falla por lo mismo.
+
+Hasta noviembre de 2026 no se había publicado ninguna: el botón de la página
+daba «no encontrado» en GitHub y nada lo vigilaba.
 
 ## Cerrar el buzón de sincronización
 

@@ -1728,9 +1728,19 @@ edumind_miclase/
   la SPA y, con el puerto ocupado, solo dicen «ya está en marcha» si quien
   responde es MiClase (su manifiesto). Sin servidor de EDUmind no hay buzón:
   el paquete lleva `api/sync/disponible` = `{"abierto":false}`, porque un
-  404 contaría como abierto. Con `--publicar` sube el .zip como versión de
-  GitHub; la página enlaza `releases/latest/download/miclase.zip`, así que el
-  fichero se tiene que llamar así. El evento de instalar del navegador se
+  404 contaría como abierto. La página enlaza
+  `releases/latest/download/miclase.zip`, así que el fichero se tiene que
+  llamar así, y **ese enlace solo existe si alguien publica**: `--publicar`
+  sube el .zip a GitHub con el MISMO número que la app, sobre la etiqueta
+  `vX.Y.Z` que pone `desplegar.sh` (no crea etiquetas; se niega si la etiqueta
+  no está en GitHub o si la carpeta no es esa versión), después de probar el
+  paquete con su lanzador. Va después de cada despliegue, tras
+  `git push origin vX.Y.Z`; `--comprobar` dice si la descarga responde y de
+  qué versión es, y lo usan `desplegar.sh` (avisa, no para) y
+  `npm run test:prod`. `descargable.test.mjs` (rápida) vigila que la página,
+  los lanzadores y el guion nombren los mismos ficheros y el mismo puerto.
+  Estuvo sin publicar de la 1.9.0 a la 2.0.3: el botón daba «no encontrado» y
+  nada lo decía (Luis lo vio el 26/11/2026). El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
 - **Desde la 2.0.0 (25/11/2026) el aspecto por defecto es Lámina**, tras
@@ -1964,7 +1974,8 @@ edumind_miclase/
 - Empaquetar el currículo para la app a mano: `npm run curriculo` (el build lo hace solo)
 - Build: `npm run build`
 - Subir la versión antes de desplegar: `npm run version:subir -- parche` (o `menor`, `mayor`)
-- Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub)
+- Versión descargable: `./scripts/empaquetar_descargable.sh` (`--publicar` la sube a GitHub
+  tras desplegar y subir la etiqueta; `--comprobar` dice si la descarga responde)
 
 ## Archivos críticos — pedir confirmación SIEMPRE antes de tocar
 - `backend/data/miclase.db` — base de datos principal
