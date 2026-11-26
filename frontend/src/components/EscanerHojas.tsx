@@ -13,7 +13,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getPrueba, guardarExamenDeAlumno, type CeldaInstrumento, type DatosDeArea, type PruebaGuardada } from '@/db/queries'
-import { tieneClave, respuestaDeMarca, notaDePrueba, pruebaDeUnidad, LETRAS, type PruebaDef } from '@/db/prueba'
+import { tieneClave, respuestaDeMarca, notaDePrueba, pruebaDeUnidad, ACIERTO, FALLO, EN_BLANCO, LETRAS, type PruebaDef } from '@/db/prueba'
 import { aGris, leerHoja, aplicar, type LecturaHoja, type Homografia } from '@/utils/lectorHoja'
 import { centroBurbuja, BURBUJA } from '@/db/hojaOMR'
 import { sePuedeEscanear } from '@/utils/lectorQR'
@@ -52,7 +52,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
   const [aviso, setAviso] = useState<string | null>(null)
   const [capturada, setCapturada] = useState<Capturada | null>(null)
   const [guardando, setGuardando] = useState(false)
-  const [corregidos, setCorregidos] = useState<{ alumno: Alumno; nota: number | null }[]>([])
+  const [corregidos, setCorregidos] = useState<{ alumno: Alumno; nota: number | null; tambien: { nombre: string; nota: number | null }[] }[]>([])
   const [camaraActiva, setCamaraActiva] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lienzoRef = useRef<HTMLCanvasElement>(null)
@@ -195,8 +195,10 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
       const p = def.preguntas[q.pregunta]
       if (!p) continue
       for (let j = 0; j < (lectura.payload.nOpciones); j++) {
+        // Donde se ha medido, que es donde está la burbuja en la foto: la
+        // geometría sola la pone a uno o dos milímetros si el papel se comba.
         const c0 = centroBurbuja(q.pregunta, j)
-        const centro = aplicar(lectura.H, { x: c0.cx, y: c0.cy })
+        const centro = aplicar(lectura.H, { x: c0.cx + q.desfase.x, y: c0.cy + q.desfase.y })
         const elegida = marcadas[q.pregunta] === j
         const correcta = p.correcta === j
         if (!elegida && !correcta) continue
@@ -218,7 +220,29 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     def.preguntas.forEach((p, i) => { r[p.id] = respuestaDeMarca(p, capturada.marcadas[i]) })
     return r
   }, [capturada, def])
-  const resultado = useMemo(() => def ? notaDePrueba(pruebaDeUnidad(def, unidadId), respuestas, criterios.map(c => c.id)) : null, [def, respuestas, criterios, unidadId])
+  // La nota es la de la unidad que se mira: en un examen que cuenta en varias
+  // unidades, cada pregunta puede ser de una y solo esas (y las comunes)
+  // entran aquí. La lista enseña las de todo el examen, así que hay que decir
+  // cuáles cuentan: Luis vio un 8,75 con un solo fallo en 15 preguntas, y un
+  // 10 con cuatro, sin nada que explicara que la nota salía de 8.
+  const propia = useMemo(() => def ? pruebaDeUnidad(def, unidadId) : null, [def, unidadId])
+  const deEstaUnidad = useMemo(() => new Set(propia?.preguntas.map(p => p.id)), [propia])
+  const reparte = !!def && !!propia && propia.preguntas.length < def.preguntas.length
+  const resultado = useMemo(() => propia ? notaDePrueba(propia, respuestas, criterios.map(c => c.id)) : null, [propia, respuestas, criterios])
+  /** El examen entero, pregunta a pregunta: lo que el docente cuenta mirando la hoja. */
+  const recuento = useMemo(() => {
+    const de = (ids: (id: string) => boolean) => {
+      const suyas = (def?.preguntas ?? []).filter(p => ids(p.id))
+      return {
+        total: suyas.length,
+        aciertos: suyas.filter(p => respuestas[p.id] === ACIERTO).length,
+        fallos: suyas.filter(p => respuestas[p.id] === FALLO).length,
+        blanco: suyas.filter(p => respuestas[p.id] === EN_BLANCO).length,
+      }
+    }
+    return { entero: de(() => true), unidad: de(id => deEstaUnidad.has(id)) }
+  }, [def, respuestas, deEstaUnidad])
+  const notaEntera = useMemo(() => def && reparte ? notaDePrueba(def, respuestas, []).nota : null, [def, reparte, respuestas])
 
   const elegir = (i: number, j: number | null) => setCapturada(c => c && { ...c, marcadas: c.marcadas.map((m, k) => k === i ? (m === j ? null : j) : m) })
 
@@ -230,7 +254,8 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
         alumno_id: capturada.alumno.id!, instrumento_id: instrumento.instrumento_id, trimestre, unidad_id: claveUnidad(unidadId),
         def, respuestas, destinos: criterios.map(c => c.id), area,
       })
-      setCorregidos(l => [...l.filter(x => x.alumno.id !== capturada.alumno!.id), { alumno: capturada.alumno!, nota: r.nota }])
+      setCorregidos(l => [...l.filter(x => x.alumno.id !== capturada.alumno!.id),
+        { alumno: capturada.alumno!, nota: r.nota, tambien: r.tambien.filter(t => t.criterios.length > 0).map(t => ({ nombre: t.nombre, nota: t.nota })) }])
       recienGuardadaRef.current = { alumno_id: capturada.alumno.id!, hasta: Date.now() + 4000 }
       setCapturada(null)
       onGuardado()
@@ -274,7 +299,12 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                   const u = corregidos[corregidos.length - 1]
                   return (
                     <div data-escaner-guardada role="status" style={{ padding: '8px 12px', marginBottom: 8, borderRadius: 8, fontSize: 13.5, background: 'var(--verde-100)', color: 'var(--gris-900)' }}>
-                      ✓ Guardada la de <strong>{u.alumno.apellidos}, {u.alumno.nombre}</strong> · nota {u.nota ?? '—'}.{' '}
+                      ✓ Guardada la de <strong>{u.alumno.apellidos}, {u.alumno.nombre}</strong> · nota {u.nota != null ? coma(u.nota) : '—'}
+                      {u.tambien.length > 0 && (
+                        <span data-escaner-guardada-unidades>
+                          {unidadNombre ? ` en «${unidadNombre}»` : ''}{u.tambien.map(t => ` · ${t.nota != null ? coma(t.nota) : '—'} en «${t.nombre}»`).join('')}
+                        </span>
+                      )}.{' '}
                       {faltan.length > 0 ? 'Enseña la hoja siguiente.' : 'Ya están todas: puedes cerrar.'}
                     </div>
                   )
@@ -322,7 +352,22 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                     {resultado.nota ?? '—'}
                   </div>
                   <div style={{ fontSize: 12.5, color: 'var(--gris-600)', lineHeight: 1.4 }}>
-                    {resultado.obtenido} / {resultado.maximo} puntos
+                    {reparte ? (
+                      <>
+                        <div data-escaner-unidad style={{ fontWeight: 700, color: 'var(--gris-900)' }}>
+                          Nota de {unidadNombre ? `«${unidadNombre}»` : 'esta unidad'}: cuentan {recuento.unidad.total} de las {recuento.entero.total} preguntas
+                        </div>
+                        <div>{coma(resultado.obtenido)} / {coma(resultado.maximo)} puntos · {recuento.unidad.aciertos} aciertos, {recuento.unidad.fallos} fallos, {recuento.unidad.blanco} en blanco</div>
+                        <div data-escaner-entero>
+                          Examen entero: {recuento.entero.aciertos} aciertos de {recuento.entero.total}{notaEntera != null ? ` (sería un ${coma(notaEntera)})` : ''}. Cada unidad guarda la nota de sus preguntas.
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div>{coma(resultado.obtenido)} / {coma(resultado.maximo)} puntos</div>
+                        <div data-escaner-recuento>{recuento.entero.aciertos} aciertos, {recuento.entero.fallos} fallos, {recuento.entero.blanco} en blanco</div>
+                      </>
+                    )}
                     {dudosas > 0 && <div style={{ color: 'var(--aviso-tinta)', fontWeight: 700 }}>⚠ {dudosas} pregunta{dudosas !== 1 ? 's' : ''} dudosa{dudosas !== 1 ? 's' : ''}: revísala{dudosas !== 1 ? 's' : ''}</div>}
                   </div>
                 </div>
@@ -331,8 +376,9 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                     const q = capturada.lectura.preguntas[i]
                     const m = capturada.marcadas[i]
                     const acierto = m != null && m === p.correcta
+                    const cuenta = deEstaUnidad.has(p.id)
                     return (
-                      <div key={p.id} data-escaner-pregunta={i + 1} data-dudosa={q?.dudosa || undefined} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '3px 6px', borderRadius: 6, background: q?.dudosa ? 'var(--aviso-fondo)' : m == null ? 'transparent' : acierto ? 'var(--verde-100)' : 'var(--rojo-100)' }}>
+                      <div key={p.id} data-escaner-pregunta={i + 1} data-dudosa={q?.dudosa || undefined} data-escaner-otra-unidad={cuenta ? undefined : ''} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '3px 6px', borderRadius: 6, background: q?.dudosa ? 'var(--aviso-fondo)' : m == null ? 'transparent' : acierto ? 'var(--verde-100)' : 'var(--rojo-100)' }}>
                         <span style={{ width: 24, fontSize: 12, fontWeight: 700, color: 'var(--gris-600)', textAlign: 'right' }}>{i + 1}</span>
                         <div style={{ display: 'flex', gap: 3 }}>
                           {Array.from({ length: nOpciones }, (_, j) => (
@@ -346,7 +392,7 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
                           ))}
                         </div>
                         <span style={{ fontSize: 10.5, color: 'var(--gris-500)', marginLeft: 'auto', whiteSpace: 'nowrap' }}>
-                          {m == null ? 'en blanco' : acierto ? '✓' : '✗'}{q?.dudosa ? ' · duda' : ''}
+                          {m == null ? 'en blanco' : acierto ? '✓' : '✗'}{q?.dudosa ? ' · duda' : ''}{cuenta ? '' : ' · otra unidad'}
                         </span>
                       </div>
                     )
@@ -367,6 +413,9 @@ export default function EscanerHojas({ instrumento, unidadId, unidadNombre, trim
     </div>
   )
 }
+
+/** Una cifra como se escribe aquí: con coma. */
+const coma = (n: number) => String(n).replace('.', ',')
 
 /** Píxeles por milímetro en la foto, a partir de la homografía. */
 function escalaDe(H: Homografia): number {

@@ -9,6 +9,11 @@
  * foto» y se guarda. Lo que se vigila: que el escáner reconozca prueba y
  * alumno, calcule la nota con la clave, deje corregir una duda con el dedo,
  * y que lo guardado sea lo mismo que deja la corrección a mano.
+ *
+ * Y con un examen que cuenta en dos unidades y reparte sus preguntas: la nota
+ * es la de la unidad que se mira, así que el corrector tiene que decir cuántas
+ * preguntas cuentan, cuáles no y qué nota queda en cada unidad. Luis vio un 10
+ * con cuatro fallos a la vista y nada que lo explicara (nov 2026).
  */
 import { mkdirSync } from 'node:fs'
 import { join } from 'node:path'
@@ -190,6 +195,67 @@ try {
   const r = d1.notas[0][0]?.respuestas ?? {}
   ok(r.p1 === 1 && r.p6 === -1 && r.p7 === 0 && r.p8 === 1, 'las respuestas guardadas son acierto, fallo o en blanco, como a mano', JSON.stringify(r))
   ok(d1.notas[1].length === 0, 'Bruno sigue sin nota')
+
+  console.log('\n4b. Un examen con preguntas de dos unidades: el corrector dice cuáles cuentan')
+  {
+    // Otra unidad del trimestre en la que la prueba escrita también evalúa algo.
+    const otra = await p.evaluate(async () => {
+      const db = await new Promise((res) => { const r = indexedDB.open('miclase_db'); r.onsuccess = () => res(r.result) })
+      const leer = (tabla) => new Promise((res) => {
+        const tx = db.transaction(tabla, 'readonly').objectStore(tabla).getAll()
+        tx.onsuccess = () => res(tx.result.filter(r => !r.deleted_at))
+      })
+      const [unidades, cis, instrumentos, rubricas] = await Promise.all(['unidades', 'criterio_instrumentos', 'instrumentos', 'rubricas'].map(leer))
+      const prueba = instrumentos.find(i => i.tipo === 'prueba-escrita')
+      const examen = rubricas.find(r => r.tipo === 'prueba' && r.instrumento_id === prueba.id)
+      const suya = unidades.find(u => u.id === examen.unidad_id)
+      const u = unidades.sort((a, b) => a.orden - b.orden)
+        .find(u => u.id !== suya.id && u.trimestre === suya.trimestre && cis.some(c => c.unidad_id === u.id && c.instrumento_id === prueba.id))
+      return u ? { id: u.id, nombre: u.nombre } : null
+    })
+    ok(!!otra, 'hay otra unidad del trimestre en la que la prueba escrita evalúa', otra?.nombre)
+    // Las preguntas 1 a 5 se quedan en «Todas»; la 6, la 7 y la 8 pasan a la otra unidad.
+    await colExamen.locator('[data-columna-mas]').click()
+    await p.locator('[data-hoja-columna] [data-editar-examen]').click()
+    await editor.waitFor({ timeout: 8000 })
+    await aparece(editor.getByLabel('Título del examen'))
+    await editor.locator(`[data-unidades-vinculadas] input[data-unidad-id="${otra.id}"]`).check()
+    for (const n of [6, 7, 8]) await editor.getByLabel(`Unidad de la pregunta ${n}`).selectOption(String(otra.id))
+    await editor.getByRole('button', { name: /Guardar examen/ }).click()
+    ok(await aparece(editor.getByText(/Examen guardado/).first()), 'el examen se guarda con tres preguntas de la otra unidad')
+    await editor.getByRole('button', { name: 'Cerrar', exact: true }).last().click()
+    await editor.waitFor({ state: 'hidden', timeout: 5000 })
+    await p.waitForTimeout(900)
+
+    await colExamen.locator('[data-columna-mas]').click()
+    await p.locator('[data-hoja-columna] [data-escanear-abrir]').click()
+    await escaner.waitFor({ timeout: 8000 })
+    await escaner.locator('[data-escaner-fichero]').setInputFiles({ name: 'hoja.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') })
+    ok(await aparece(escaner.locator('[data-escaner-capturada]')), 'la misma foto se reconoce')
+    // En esta unidad cuentan las cinco comunes, todas acertadas: un 10 con el fallo de la 6 a la vista.
+    const notaUnidad = (await escaner.locator('[data-escaner-nota]').textContent()).trim()
+    ok(notaUnidad === '10', 'la nota es la de las preguntas de esta unidad: 5 de 5 → 10', notaUnidad)
+    const deQue = await escaner.locator('[data-escaner-unidad]').textContent().catch(() => '')
+    ok(/cuentan 5 de las 8 preguntas/.test(deQue), 'y lo dice: cuentan 5 de las 8 preguntas', deQue)
+    const ajenas = await escaner.locator('[data-escaner-pregunta][data-escaner-otra-unidad]').evaluateAll(fs => fs.map(f => f.getAttribute('data-escaner-pregunta')))
+    ok(JSON.stringify(ajenas) === JSON.stringify(['6', '7', '8']), 'la 6, la 7 y la 8 salen marcadas como de otra unidad', ajenas.join(', '))
+    ok((await escaner.locator('[data-escaner-pregunta="6"]').textContent()).includes('otra unidad'), 'con sus palabras, junto al fallo')
+    await escaner.locator('[data-escaner-pregunta="8"]').getByRole('button', { name: 'D', exact: true }).click()
+    await p.waitForTimeout(200)
+    const entero = await escaner.locator('[data-escaner-entero]').textContent()
+    ok(/6 aciertos de 8/.test(entero) && /7,5/.test(entero), 'y el examen entero aparte: 6 aciertos de 8, que sería un 7,5', entero)
+    ok((await escaner.locator('[data-escaner-nota]').textContent()).trim() === '10', 'acertar la 8, que es de la otra unidad, no mueve la nota de esta')
+    await foto('escaner-01b-dos-unidades')
+    await escaner.locator('[data-escaner-guardar]').click()
+    await aparece(escaner.locator('[data-escaner-guardada]'))
+    const guardadaDos = await escaner.locator('[data-escaner-guardada]').textContent()
+    ok(/nota 10/.test(guardadaDos) && guardadaDos.includes(`7,5 en «${otra.nombre}»`), 'al guardar dice la nota de cada unidad', guardadaDos)
+    await p.keyboard.press('Escape')
+    await escaner.waitFor({ state: 'hidden', timeout: 5000 })
+    await p.waitForTimeout(900)
+    const d2 = await bd()
+    ok(d2.notas[0].some(n => n.valor === 10) && d2.notas[0].some(n => n.valor === 7.5), 'y eso es lo guardado: 10 en esta unidad y 7,5 en la otra', JSON.stringify(d2.notas[0].map(n => [n.criterio, n.valor])))
+  }
 
   console.log('\n5. «Exámenes y pruebas de evaluación»: el examen está a la vista y se corrige desde ahí')
   await p.getByRole('link', { name: /Exámenes y pruebas/ }).click()

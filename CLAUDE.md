@@ -909,6 +909,26 @@ edumind_miclase/
   siguiente»** y dice qué guardó (`[data-escaner-guardada]`: alumno, nota y
   «Enseña la hoja siguiente», o que ya están todas). Corrigiendo a mano no
   se avanza solo: decisión de Luis (nov 2026).
+- **El lector de hojas busca la tinta antes de medir, y el corrector por
+  cámara dice de qué es la nota** (nov 2026). En una foto real el papel se
+  comba y la lente deforma: la parrilla cae a 1,3–1,8 mm de donde la pone la
+  homografía de las cuatro marcas, y medir al lado daba 0,30–0,45 donde la
+  tinta da 0,70 (a Luis, 13 dudosas de 15). `leerBurbujas` busca por
+  pregunta el corrimiento común a sus burbujas con el que la más oscura da
+  más (`buscarTinta`, hasta `DESFASE_MAXIMO` = 2,5 mm, centro de la meseta);
+  las preguntas con tinta (≥ `UMBRAL_MARCADA`) usan el suyo y las demás el de
+  las dos más cercanas que la tienen, nunca su propio máximo (encontrarían el
+  número de la pregunta o el borde del círculo). Los umbrales no cambian.
+  `LecturaPregunta.desfase` (mm) dice dónde se midió y `EscanerHojas` pinta
+  ahí los aros. Y la nota: `EscanerHojas` enseña la de la unidad que se mira
+  (`pruebaDeUnidad`), que con preguntas etiquetadas por unidad sale de menos
+  preguntas de las que lista; ahora lo dice (`[data-escaner-unidad]`:
+  «cuentan 8 de las 15»), marca las ajenas (`[data-escaner-otra-unidad]`),
+  da los aciertos del examen entero (`[data-escaner-entero]`) y al guardar la
+  nota de cada unidad (`[data-escaner-guardada-unidades]`). No calcula nada
+  nuevo ni cambia lo guardado. Probado con la foto de una captura de Luis y
+  con la parrilla corrida en `hoja-escaner.test.mjs` (caso 1b); **con la
+  cámara del iPad, todavía no**.
 - **El análisis de un alumno lo compara con su grupo y no calcula ninguna
   nota.** `db/analisisAlumno.ts` y `db/estadistica.ts` (puros,
   `analisis-alumno.test.ts`) parten de las `NotaArea` de toda la clase que

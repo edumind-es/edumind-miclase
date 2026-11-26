@@ -13,6 +13,20 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.0.3] — 2026-11-26
+
+### Arreglado
+- **Corregir por cámara daba casi todas las preguntas por dudosas** en una
+  foto real: el papel se comba y la lente deforma, y la app medía cada
+  burbuja a milímetro y medio de donde estaba la tinta. Ahora busca la tinta
+  alrededor de cada pregunta y mide ahí; los aros se pintan donde se mide.
+- **En un examen que cuenta en varias unidades, el corrector por cámara no
+  decía que la nota era solo de las preguntas de la unidad que se mira**: un
+  8,75 con un fallo en 15 preguntas, o un 10 con cuatro. Ahora dice cuántas
+  preguntas cuentan, marca las de otra unidad, enseña los aciertos del examen
+  entero y, al guardar, la nota que queda en cada unidad. El cálculo y lo que
+  se guarda no cambian.
+
 ## [2.0.2] — 2026-11-25
 
 ### Arreglado
