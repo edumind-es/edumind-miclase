@@ -13,6 +13,8 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+## [2.1.0] — 2026-11-27
+
 ### Añadido
 - **Permisos de cámara y micrófono en «Acerca de»**: dice cómo está cada uno
   en este aparato, deja volver a pedirlo y, si el aparato lo tiene bloqueado,
