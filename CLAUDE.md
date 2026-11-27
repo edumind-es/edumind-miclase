@@ -1733,6 +1733,24 @@ edumind_miclase/
   fichero se tiene que llamar así. El evento de instalar del navegador se
   recoge al importar `InstalarApp.tsx` (`useEventoInstalacion`,
   `lanzarInstalacion`), no en un componente: llega una vez, al cargar.
+- **Peticiones de Luis del 27/11/2026 (2.1.0).** (1) **Permisos del
+  aparato en «Acerca de»** (`components/PermisosAparato.tsx`,
+  `[data-permisos]`, `[data-permiso="camera"|"microphone"]` con `data-estado`
+  y `[data-permiso-pedir]`): una web NO puede desbloquear un permiso negado;
+  se dice el estado (`navigator.permissions`, «desconocido» si el navegador
+  no lo da), «Pedir permiso» abre la cámara un instante y la suelta, y con
+  bloqueo se explica dónde se cambia (`[data-permisos-como]`). Solo en el
+  marco Lámina. (2) La fila `[data-marco-version]` dice «Configuración» con
+  el icono `ajustes` y debajo la versión. (3) **Orden del hub de «Exámenes y
+  pruebas»**: áreas (`[data-examenes-hub]`), modelos (`[data-modelos]`, que
+  en el hub va en medio y fuera de él sigue al final) y el acceso rápido
+  (`[data-examenes-cola]`), que lleva además `[data-examenes-cola-informe]`
+  (apagado sin ningún corregido). (4) **Prompt de repaso**
+  (`ia/repasoPrompt.ts`, puro; `[data-repaso-abrir]` → `[data-repaso]`,
+  `[data-repaso-prompt]`, `[data-repaso-copiar]` en `InformePrueba`): del
+  grupo, las preguntas con menos del 60 % de acierto (hasta 8; si ninguna
+  baja, las tres más flojas); de un alumno, sus falladas, sin su nombre. No
+  llama a ninguna IA: se copia. Nunca lleva alumnado.
 - **Desde la 2.0.0 (25/11/2026) el aspecto por defecto es Lámina**, tras
   probarla Luis en el iPad. Manda sobre lo que las notas siguientes dicen de
   «apagado hasta la 2.0.0», «Lámina encendida» como excepción o

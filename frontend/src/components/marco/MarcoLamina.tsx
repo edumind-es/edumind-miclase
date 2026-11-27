@@ -26,6 +26,7 @@ import { identidadDeAreas } from '@/db/areas'
 import Sigla from '@/components/comunes/Sigla'
 import { IDIOMAS, NOMBRE_IDIOMA, fijarIdioma, useIdioma, useT, type Clave } from '@/i18n'
 import { fijarAspecto } from '@/aspecto'
+import PermisosAparato from '@/components/PermisosAparato'
 import { fijarModoNotas } from '@/notas'
 import { useModoNotas } from '@/useAspecto'
 import { VERSION } from '@/version'
@@ -145,8 +146,13 @@ export default function MarcoLamina({ barra, alExportar, children }: {
             </button>
           )}
           <button type="button" className="ml-entrada ml-version" onClick={() => setAcerca(true)} aria-haspopup="dialog" data-marco-version
-            aria-label={`${t('marco.acerca')} · ${VERSION}`}>
-            <b><span className="ml-largo">MiClase </span>{VERSION}</b>
+            aria-label={`${t('marco.configuracion')} · ${t('marco.acerca')} · ${VERSION}`}>
+            {/* Dice lo que hay detrás: la versión sola no invitaba a pulsar (Luis, 27/11/2026) */}
+            <Icono nombre="ajustes" />
+            <span className="ml-version-texto">
+              <span className="ml-largo">{t('marco.configuracion')}</span><span className="ml-corto">{t('marco.configuracionCorto')}</span>
+              <b><span className="ml-largo">MiClase </span>{VERSION}</b>
+            </span>
           </button>
           <button type="button" className="ml-entrada" onClick={alternarMenu} data-marco-plegar
             aria-label={t(forma === 'rail' ? 'menu.desplegarAria' : 'menu.plegarAria')} aria-expanded={forma !== 'rail'}>
@@ -298,6 +304,7 @@ function Acerca({ onCerrar }: { onCerrar: () => void }) {
             <p className="ml-nota">{t('acerca.aspectoNota')}</p>
           </>
         ), 'aspecto')}
+        {fila(t('acerca.permisos'), <PermisosAparato />, 'permisos')}
         {fila(t('acerca.cuenta'), (
           modo === 'authentik'
             ? <>{nombre} · {t('menu.conectado')} <button type="button" className="boton-enlace" onClick={cerrarSesion}>{t('menu.cerrarSesion')}</button></>

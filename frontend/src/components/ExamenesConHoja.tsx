@@ -215,21 +215,8 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
             )}
             {enHub && (
               <>
-                {porCorregir.length > 0 && (
-                  <>
-                    <p className="hub-rotulo"><span>Por corregir · {porCorregir.length}</span></p>
-                    <ol className="hub-cola" data-examenes-cola>
-                      {porCorregir.map(({ fila: f, corregidos, total }) => { const id = identidad.get(f.asig.id!); return (
-                        <li key={f.prueba.id} data-examenes-cola-examen={f.prueba.id} style={{ '--c': id?.color, '--cp': id?.papel } as React.CSSProperties}>
-                          {id && <Sigla sigla={id.sigla} color={id.color} />}
-                          <span className="hub-nombre"><b>{f.prueba.def.titulo || f.instrumento.nombre}{f.unidad ? ` · ${f.unidad.nombre}` : ''}</b>
-                            <span className="hub-dato">{f.asig.nombre_display} · {corregidos} de {total} corregidos</span></span>
-                          <button type="button" className="btn-primary" disabled={ocupado === f.prueba.id} onClick={() => abrir(f.prueba.id, 'corregir')}>Corregir</button>
-                        </li>
-                      ) })}
-                    </ol>
-                  </>
-                )}
+                {/* Orden pedido por Luis (27/11/2026): primero las áreas, después los
+                    modelos y al final el acceso rápido a lo que queda por corregir */}
                 <p className="hub-rotulo"><span>Por área · {asignaturas.length}</span><span>Toca un área para ver sus unidades</span></p>
                 <ol className="hub-mosaico" data-examenes-hub>
                   {asignaturas.map(a => { const id = identidad.get(a.id!)!; const n = lista.filter(f => f.asig.id === a.id).length; return (
@@ -243,6 +230,27 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
                     </li>
                   ) })}
                 </ol>
+                <Modelos recarga={recarga} />
+                {porCorregir.length > 0 && (
+                  <>
+                    <p className="hub-rotulo"><span>Acceso rápido · por corregir · {porCorregir.length}</span><span>Corregir o ver el informe sin entrar en el área</span></p>
+                    <ol className="hub-cola" data-examenes-cola>
+                      {porCorregir.map(({ fila: f, corregidos, total }) => { const id = identidad.get(f.asig.id!); return (
+                        <li key={f.prueba.id} data-examenes-cola-examen={f.prueba.id} style={{ '--c': id?.color, '--cp': id?.papel } as React.CSSProperties}>
+                          {id && <Sigla sigla={id.sigla} color={id.color} />}
+                          <span className="hub-nombre"><b>{f.prueba.def.titulo || f.instrumento.nombre}{f.unidad ? ` · ${f.unidad.nombre}` : ''}</b>
+                            <span className="hub-dato">{f.asig.nombre_display} · {corregidos} de {total} corregidos</span></span>
+                          <span className="hub-cola-acciones">
+                            <button type="button" className="btn-secondary" data-examenes-cola-informe disabled={ocupado === f.prueba.id || corregidos === 0}
+                              title={corregidos === 0 ? 'Todavía no hay ningún alumno corregido' : 'El informe de la prueba, con lo corregido hasta ahora'}
+                              onClick={() => abrir(f.prueba.id, 'informe')}>Informe</button>
+                            <button type="button" className="btn-primary" disabled={ocupado === f.prueba.id} onClick={() => abrir(f.prueba.id, 'corregir')}>Corregir</button>
+                          </span>
+                        </li>
+                      ) })}
+                    </ol>
+                  </>
+                )}
               </>
             )}
             {conHub && !enHub && (() => { const id = identidad.get(areaElegida.id!); return (
@@ -279,7 +287,7 @@ export default function ExamenesConHoja({ trimestre, abrirCorrectorDe, onCorrect
         )
       })()}
 
-      <Modelos recarga={recarga} />
+      {!enHub && <Modelos recarga={recarga} />}
 
       {nuevo && (
         <ElegirInstrumentoDePrueba
