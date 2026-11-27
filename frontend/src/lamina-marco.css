@@ -65,6 +65,15 @@
 .ml-estado .ml-entrada { border-bottom: 1px solid var(--pelo); }
 .ml-estado .ml-entrada:last-child { border-bottom: 0; }
 .ml-version b { font: 600 12px/1.2 var(--f-mono); letter-spacing: .04em; }
+/* La fila de la versión dice «Configuración» y debajo, en pequeño, el número */
+.ml-version-texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ml-version-texto b { color: var(--tinta-3); }
+.ml-app[data-forma="rail"] .ml-version-texto { align-items: center; }
+/* Permisos del aparato, en «Acerca de» */
+.ml-permiso { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 4px 0; }
+.ml-permiso > span { flex: 1 1 160px; }
+.ml-permiso .btn-secondary { min-height: 44px; }
+.ml-permiso .ml-nota { flex: 1 1 100%; margin: 0; }
 
 /* ── Columna principal ── */
 .ml-principal { grid-area: main; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
@@ -165,7 +174,10 @@
 /* La cola de lo que espera corrección */
 .hub-cola { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--tinta); }
 .hub-cola li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 60px; padding: 8px 8px 8px 14px; background: var(--cp); border-left: 6px solid var(--c, var(--pelo)); border-bottom: 1px solid var(--pelo); }
-.hub-cola .btn-primary { min-height: 44px; padding: 0 16px; }
+.hub-cola .btn-primary, .hub-cola .btn-secondary { min-height: 44px; padding: 0 16px; }
+.hub-cola-acciones { display: inline-flex; gap: 8px; }
+/* El acceso rápido va tras las áreas y los modelos: su rótulo se separa de ellos */
+[data-modelos] + .hub-rotulo { margin-top: 22px; }
 /* Dentro de un área de exámenes: en cuál se está y cómo volver */
 .hub-dentro { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 14px; padding: 10px 14px; background: var(--cp); border-left: 6px solid var(--c); border-bottom: 1px solid var(--pelo); }
 .hub-dentro b { flex: 1 1 160px; font: 700 18px/1.2 var(--f-display); }

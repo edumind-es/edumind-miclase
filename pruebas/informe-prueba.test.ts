@@ -11,6 +11,7 @@
 import { competenciasDeLaPrueba, informeDePrueba, radialSVG } from '../frontend/src/db/informePrueba'
 import { normalizarPrueba, notaDePrueba, ACIERTO, FALLO, EN_BLANCO, preguntasIguales } from '../frontend/src/db/prueba'
 import { documentoInformePrueba } from '../frontend/src/informes/informePrueba'
+import { generarPromptRepaso, preguntasParaRepasar, MAXIMO_REPASO } from '../frontend/src/ia/repasoPrompt'
 import { pruebaDeFilas, pruebaAMarkdown, pruebaDeJson, pruebaAJson, pruebaDeExamenMarkdown, examenAMarkdown } from '../frontend/src/ia/pruebaImportar'
 
 let fallos = 0
@@ -142,6 +143,23 @@ console.log('\n6. Competencias clave de cada pregunta')
   const html = documentoInformePrueba(inf, def, { grupo: '6ºA', area: 'X', conexiones })
   ok(html.includes('data-prueba-competencia="STEM"') && html.includes('STEM2'), 'el documento lo enseña por pregunta y por competencia')
   ok(!documentoInformePrueba(inf, def, { grupo: '6ºA', area: 'X' }).includes('competencia clave'), 'sin conexiones no hay bloque')
+}
+
+console.log('\n── Prompt de repaso ──')
+{
+  const dif = [10, 30, 55, 70, 90].map((pctAcierto, i) => ({ numero: i + 1, pctAcierto }))
+  ok(preguntasParaRepasar(dif).map(p => p.numero).join() === '1,2,3', 'entran las que bajan del 60 % de acierto, de la más fallada a la menos')
+  ok(preguntasParaRepasar([{ numero: 1, pctAcierto: 80 }, { numero: 2, pctAcierto: 90 }]).length === 2, 'si ninguna baja, las más flojas: siempre hay algo que repasar')
+  ok(preguntasParaRepasar(Array.from({ length: 20 }, (_, i) => ({ numero: i + 1, pctAcierto: 5 }))).length === MAXIMO_REPASO, 'con tope: un repaso no es el examen entero')
+  const prompt = generarPromptRepaso({
+    titulo: 'Examen del relieve', area: 'Ciencias Sociales', nivel: '6º de primaria', unidad: 'O mundo que nos rodea', para: 'grupo',
+    preguntas: [{ numero: 4, enunciado: '  Sitúa   el meridiano de Greenwich ', clave: 'longitud 0°', criterio: 'CE2.1 — Interpretar mapas', aspecto: 'Mapas', pctAcierto: 21.6 }],
+  })
+  ok(prompt.includes('«Examen del relieve»') && prompt.includes('Ciencias Sociales de 6º de primaria') && prompt.includes('O mundo que nos rodea'), 'dice de qué prueba, área, nivel y unidad es')
+  ok(prompt.includes('4. Sitúa el meridiano de Greenwich') && prompt.includes('Respuesta esperada: longitud 0°') && prompt.includes('CE2.1 — Interpretar mapas'), 'lleva la pregunta, su respuesta y su criterio')
+  ok(prompt.includes('Acierto del grupo: 22 %') && prompt.includes('toda la clase'), 'para el grupo: su acierto y una sesión de clase')
+  const uno = generarPromptRepaso({ titulo: 'T', area: 'A', para: 'alumno', preguntas: [{ numero: 1, enunciado: 'x', pctAcierto: 0 }] })
+  ok(uno.includes('refuerzo individual') && uno.includes('no se dice quién es') && !uno.includes('Acierto del grupo'), 'para un alumno: refuerzo individual y sin decir quién es')
 }
 
 console.log(fallos ? `\n${fallos} fallo(s)` : '\nTodo correcto')

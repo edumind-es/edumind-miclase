@@ -120,6 +120,11 @@ console.log('\n1. Escritorio: el menú entero')
   await p.screenshot({ path: `${TIROS}/marco-acerca.png` })
   ok((await p.locator('[data-marco-version]').innerText()).includes(VERSION), 'la fila del menú dice la versión del package.json', VERSION)
   ok((await acerca.locator('[data-acerca="version"] dd').innerText()).trim() === VERSION, '«Acerca de» también')
+  ok(/Configuración/.test(await p.locator('[data-marco-version]').innerText()), 'y dice «Configuración»: la versión sola no invitaba a pulsar')
+  // Los permisos del aparato: la app no puede cambiarlos, pero dice cómo están y deja volver a pedirlos
+  ok(await acerca.locator('[data-permiso="camera"] [data-permiso-pedir]').count() === 1 && await acerca.locator('[data-permiso="microphone"] [data-permiso-pedir]').count() === 1,
+    '«Acerca de» lleva los permisos de cámara y micrófono, con su botón')
+  ok(['granted', 'denied', 'prompt', 'desconocido'].includes(await acerca.locator('[data-permiso="camera"]').getAttribute('data-estado')), 'y dice cómo está el de la cámara')
   ok((await acerca.locator('[data-acerca="autoria"] dd').innerText()).trim() === 'EDUmind® · Luis Vilela Acuña', 'la autoría, con su fórmula')
   await acerca.locator('[data-idioma="gl"]').click()
   ok((await p.locator('.ml-menu [data-entrada="calificador"] .ml-largo').innerText()) === 'Cualificador', 'cambiar a galego traduce el menú al momento')

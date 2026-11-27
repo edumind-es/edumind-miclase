@@ -13,6 +13,22 @@ sitios y sella esa sección con la versión y la fecha.
 
 ## [Sin publicar]
 
+### Añadido
+- **Permisos de cámara y micrófono en «Acerca de»**: dice cómo está cada uno
+  en este aparato, deja volver a pedirlo y, si el aparato lo tiene bloqueado,
+  explica dónde se cambia (la app no puede desbloquearlo por su cuenta).
+- **Prompt de repaso** en el informe de una prueba: con lo que más falló el
+  grupo, o lo que falló un alumno, monta el texto para pedir a una IA tareas
+  de repaso o refuerzo. Lleva el examen y cifras, nunca nombres.
+- En «Exámenes y pruebas», el acceso rápido a lo que queda por corregir abre
+  también el **informe** de cada prueba.
+
+### Cambiado
+- **«Exámenes y pruebas» se ordena así**: primero las áreas, después los
+  modelos y al final el acceso rápido a lo que queda por corregir.
+- La fila de la versión, al pie del menú, dice **«Configuración»** con su
+  icono, y debajo el número.
+
 ## [2.0.3] — 2026-11-26
 
 ### Arreglado

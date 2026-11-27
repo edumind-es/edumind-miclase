@@ -26,6 +26,8 @@ import { useAppStore } from '@/store/useAppStore'
 import { pruebaDeUnidad, tieneUnidadesPorPregunta, unidadesDelExamen, type PruebaDef } from '@/db/prueba'
 import { documentoInformePrueba } from '@/informes/informePrueba'
 import { imprimir, descargarHTML } from '@/informes/lamina'
+import { generarPromptRepaso, preguntasParaRepasar, type PreguntaDeRepaso } from '@/ia/repasoPrompt'
+import { AvisoContextoIA } from './AvisoIA'
 
 interface Props {
   instrumentoId: number
@@ -126,6 +128,9 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
   const [error, setError] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
   const [ocupado, setOcupado] = useState(false)
+  /** El prompt de repaso, a la vista cuando se pide. */
+  const [repaso, setRepaso] = useState(false)
+  const [copiado, setCopiado] = useState(false)
   const [conexiones, setConexiones] = useState<Map<string, ConexionCriterio>>()
   const headers = useAppStore(s => s._headers)
   /** De quién es el informe: del grupo (sin nombres) o de un alumno. */
@@ -210,6 +215,34 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
     curriculoDeArea(grupo, asig, headers).then(c => { if (vigente) setConexiones(c.conexiones) })
     return () => { vigente = false }
   }, [grupo, asig, headers])
+
+  // El prompt de repaso: lo más fallado por el grupo o, con un alumno elegido,
+  // lo que falló él. Sin nombres: a la IA va el examen, no el alumnado.
+  const promptRepaso = useMemo(() => {
+    if (!def || !informe) return ''
+    const porNumero = new Map(def.preguntas.map((q, i) => [i + 1, q]))
+    const textoCriterio = (id: string | null) => id ? [id, criterios.find(c => c.id === id)?.descripcion].filter(Boolean).join(' — ') : null
+    const claveDe = (n: number) => {
+      const q = porNumero.get(n)
+      if (!q) return null
+      if (q.opciones?.length && q.correcta != null) return q.opciones[q.correcta] ?? null
+      return q.clave ?? null
+    }
+    const preguntas: PreguntaDeRepaso[] = individual
+      ? (delAlumno?.falladas ?? []).slice().sort((a, b) => a.pctAlumno - b.pctAlumno).slice(0, 8)
+          .map(q => ({ numero: q.numero, enunciado: q.enunciado, clave: q.clave ?? claveDe(q.numero), criterio: textoCriterio(q.criterio_id), aspecto: q.aspecto, pctAcierto: q.pctAlumno }))
+      : preguntasParaRepasar(informe.porDificultad)
+          .map(q => ({ numero: q.numero, enunciado: q.enunciado, clave: claveDe(q.numero), criterio: textoCriterio(q.criterio_id), aspecto: q.aspecto, pctAcierto: q.pctAcierto }))
+    if (!preguntas.length) return ''
+    return generarPromptRepaso({
+      titulo: def.titulo || instrumentoNombre, area: areaNombre,
+      nivel: grupo ? `${grupo.curso}º de ${grupo.etapa}` : null,
+      unidad: nombreParte ?? unidadNombre ?? null, para: individual ? 'alumno' : 'grupo', preguntas,
+    })
+  }, [def, informe, individual, delAlumno, criterios, instrumentoNombre, areaNombre, grupo, nombreParte, unidadNombre])
+  const copiarRepaso = async () => {
+    try { await navigator.clipboard.writeText(promptRepaso); setCopiado(true) } catch { setCopiado(false) }
+  }
 
   const ctx = { grupo: grupoNombre, area: areaNombre, unidad: nombreParte ? `${nombreParte} (solo sus preguntas)` : unidadNombre, descripciones: new Map(criterios.map(c => [c.id, c.descripcion])), conexiones }
   const nombreFichero = `informe-${(def?.titulo ?? instrumentoNombre).replace(/\s+/g, '-').toLowerCase()}.html`
@@ -400,6 +433,32 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
               )}
             </>
           )}
+          {repaso && (
+            <div data-repaso style={{ marginTop: 12, borderTop: '1px solid var(--gris-300)', paddingTop: 10 }}>
+              <h3 style={{ fontSize: 13.5, fontWeight: 700, margin: '0 0 4px' }}>
+                Prompt de repaso: {individual ? 'lo que falló este alumno' : 'lo que más falló el grupo'}
+              </h3>
+              {promptRepaso ? (
+                <>
+                  <p style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: '0 0 6px' }}>
+                    Cópialo y pégalo en la IA que uses: pide tareas nuevas de repaso o refuerzo sobre esas preguntas.
+                    Lleva el examen y cifras{individual ? ' de sus respuestas, sin su nombre' : ' del grupo, sin nombres'}.
+                  </p>
+                  <AvisoContextoIA />
+                  <textarea data-repaso-prompt readOnly value={promptRepaso} rows={10} aria-label="Prompt de repaso"
+                    style={{ width: '100%', fontFamily: 'var(--f-mono, monospace)', fontSize: 12, padding: 8, marginTop: 6, boxSizing: 'border-box' }} />
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 6 }}>
+                    <button type="button" className="btn-primary" data-repaso-copiar onClick={copiarRepaso} style={{ minHeight: 44, fontSize: 13 }}>Copiar prompt</button>
+                    {copiado && <span role="status" style={{ fontSize: 12.5, color: 'var(--bien-tinta)' }}>Copiado.</span>}
+                  </div>
+                </>
+              ) : (
+                <p data-repaso-vacio style={{ fontSize: 12.5, color: 'var(--gris-600)', margin: 0 }}>
+                  {individual ? 'Este alumno no ha fallado ninguna pregunta: no hay nada que reforzar de esta prueba.' : 'Todavía no hay preguntas corregidas con las que montarlo.'}
+                </p>
+              )}
+            </div>
+          )}
           {msg && <div style={{ marginTop: 10, fontSize: 12.5, color: 'var(--bien-tinta)', background: 'var(--bien-fondo)', padding: '8px 10px', borderRadius: 8 }}>✅ {msg}</div>}
         </div>
 
@@ -410,6 +469,9 @@ export default function InformePrueba({ instrumentoId, instrumentoNombre, unidad
               title="Una hoja A4 por alumno, con el nivel de la rúbrica de cada pregunta">🖨 Los de toda la clase ({corregidos.length})</button>
           )}
           <button className="btn-secondary" data-informe-guardar onClick={aGuardar} disabled={!informe || ocupado || (individual && !delAlumno)} style={{ fontSize: 13 }}>⬇ Guardar .html</button>
+          <button className="btn-secondary" data-repaso-abrir aria-expanded={repaso} onClick={() => { setRepaso(v => !v); setCopiado(false) }}
+            disabled={!informe || (individual && !delAlumno)} style={{ fontSize: 13 }}
+            title="Un prompt para pedir a una IA tareas de repaso sobre lo más fallado">Prompt de repaso</button>
           <div style={{ flex: 1 }} />
           <button className="btn-secondary" onClick={onCerrar} style={{ fontSize: 13 }}>Cerrar</button>
         </div>
